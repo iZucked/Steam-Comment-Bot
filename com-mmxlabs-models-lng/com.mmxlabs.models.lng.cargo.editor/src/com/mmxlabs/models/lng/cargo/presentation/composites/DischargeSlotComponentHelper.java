@@ -10,10 +10,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
@@ -21,16 +17,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -85,6 +71,8 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 		add_FOBSaleEditor(detailComposite, topClass);
 		add_PurchaseDeliveryTypeEditor(detailComposite, topClass);
 		add_transferToEditor(detailComposite, topClass);
+		add_minCvValueEditor(detailComposite, topClass);
+		add_maxCvValueEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -125,6 +113,24 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO));
 	}
 
+	/**
+	 * Create the editor for the minCvValue feature on DischargeSlot
+	 *
+	 * @generated
+	 */
+	protected void add_minCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__MIN_CV_VALUE));
+	}
+
+	/**
+	 * Create the editor for the maxCvValue feature on DischargeSlot
+	 *
+	 * @generated
+	 */
+	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE));
+	}
+
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
 
@@ -141,6 +147,7 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 			if (dischargeSlot.getTransferTo() != null) {
 				external.add(dischargeSlot.getTransferTo());
 			}
+			external.addAll(dischargeSlot.getExtensions());
 		}
 		external.addAll(super.getExternalEditingRange(root, value));
 

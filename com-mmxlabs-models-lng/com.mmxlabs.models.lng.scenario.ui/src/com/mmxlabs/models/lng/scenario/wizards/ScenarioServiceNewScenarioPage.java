@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.IDialogPage;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -26,6 +27,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
+import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
@@ -39,11 +41,18 @@ import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
 
 public class ScenarioServiceNewScenarioPage extends WizardPage {
 
+	private static final String SECTION_NAME = "CSVImportMainPage.section";
+	private static final String ScenarioName_KEY = null;
+	private static final String DefaultScenarioNameRoot = "CSVimport";
+	private static int counter = 0;
+	
+
 	private ScenarioServiceSelectionGroup scenarioServiceSelectionGroup;
 
 	private Text fileText;
 
 	private final ISelection selection;
+
 
 	/**
 	 * Constructor for SampleNewWizardPage.
@@ -127,8 +136,22 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 				scenarioServiceSelectionGroup.setSelectedContainer((Container) obj);
 			}
 		}
+		
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 
-		fileText.setText("");
+		String scenarioName = "";
+		if (section == null) {
+			section = dialogSettings.addNewSection(SECTION_NAME);
+		}
+		else{
+			scenarioName = section.get(ScenarioName_KEY);
+		}
+		if(scenarioName == null){
+			scenarioName = DefaultScenarioNameRoot + ++counter;			
+		}
+		
+		fileText.setText(scenarioName);		
 	}
 
 	/**
@@ -148,7 +171,16 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 			updateStatus("A name for the scenario must be specified");
 			return;
 		}
-
+		
+		if (scenarioName.length() > 0 && !scenarioName.startsWith(DefaultScenarioNameRoot)){
+			final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+			IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+			if(section==null) {
+				section = dialogSettings.addNewSection(SECTION_NAME);
+			}
+			section.put(ScenarioName_KEY, scenarioName);
+		}
+		
 		// Check for naming conflicts
 		final Set<String> existing = new HashSet<String>();
 		for (final Container e : c.getElements()) {

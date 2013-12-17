@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getProfitAndLoss <em>Profit And Loss</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}</li>
  * </ul>
  * </p>
  *
@@ -61,6 +62,26 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * @ordered
 	 */
 	protected long profitAndLoss = PROFIT_AND_LOSS_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProfitAndLossPreTax()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final long PROFIT_AND_LOSS_PRE_TAX_EDEFAULT = 0L;
+
+	/**
+	 * The cached value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProfitAndLossPreTax()
+	 * @generated
+	 * @ordered
+	 */
+	protected long profitAndLossPreTax = PROFIT_AND_LOSS_PRE_TAX_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -145,6 +166,27 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public long getProfitAndLossPreTax() {
+		return profitAndLossPreTax;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setProfitAndLossPreTax(long newProfitAndLossPreTax) {
+		long oldProfitAndLossPreTax = profitAndLossPreTax;
+		profitAndLossPreTax = newProfitAndLossPreTax;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX, oldProfitAndLossPreTax, profitAndLossPreTax));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -153,6 +195,8 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 				return basicGetEntity();
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				return getProfitAndLoss();
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
+				return getProfitAndLossPreTax();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -170,6 +214,9 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 				return;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				setProfitAndLoss((Long)newValue);
+				return;
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
+				setProfitAndLossPreTax((Long)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -189,6 +236,9 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				setProfitAndLoss(PROFIT_AND_LOSS_EDEFAULT);
 				return;
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
+				setProfitAndLossPreTax(PROFIT_AND_LOSS_PRE_TAX_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -205,6 +255,8 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 				return entity != null;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				return profitAndLoss != PROFIT_AND_LOSS_EDEFAULT;
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
+				return profitAndLossPreTax != PROFIT_AND_LOSS_PRE_TAX_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -221,6 +273,8 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (profitAndLoss: ");
 		result.append(profitAndLoss);
+		result.append(", profitAndLossPreTax: ");
+		result.append(profitAndLossPreTax);
 		result.append(')');
 		return result.toString();
 	}

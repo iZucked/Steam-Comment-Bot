@@ -64,7 +64,6 @@ public class OptimiserSettingsItemProvider
 
 			addNamePropertyDescriptor(object);
 			addSeedPropertyDescriptor(object);
-			addRewirePropertyDescriptor(object);
 			addGenerateCharterOutsPropertyDescriptor(object);
 			addShippingOnlyPropertyDescriptor(object);
 		}
@@ -111,28 +110,6 @@ public class OptimiserSettingsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Rewire feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addRewirePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_OptimiserSettings_rewire_feature"),
-				 getString("_UI_OptimiserSettings_rewire_description"),
-				 ParametersPackage.Literals.OPTIMISER_SETTINGS__REWIRE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -256,7 +233,6 @@ public class OptimiserSettingsItemProvider
 		switch (notification.getFeatureID(OptimiserSettings.class)) {
 			case ParametersPackage.OPTIMISER_SETTINGS__NAME:
 			case ParametersPackage.OPTIMISER_SETTINGS__SEED:
-			case ParametersPackage.OPTIMISER_SETTINGS__REWIRE:
 			case ParametersPackage.OPTIMISER_SETTINGS__GENERATE_CHARTER_OUTS:
 			case ParametersPackage.OPTIMISER_SETTINGS__SHIPPING_ONLY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

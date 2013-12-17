@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.ui.validation.AbstractFeatureRangeConstraint;
 
 public class PortCVConstraint extends AbstractFeatureRangeConstraint {
+	@Override
 	public void createConstraints() {
 		setRange(PortPackage.Literals.PORT__CV_VALUE, 1.0, 40.0, "Port CV");
 	}

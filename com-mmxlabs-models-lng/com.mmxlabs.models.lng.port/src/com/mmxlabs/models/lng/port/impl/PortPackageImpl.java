@@ -193,7 +193,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_CvValue() {
+	public EAttribute getPort_Berths() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -202,7 +202,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultStartTime() {
+	public EAttribute getPort_CvValue() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -211,7 +211,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_AllowCooldown() {
+	public EAttribute getPort_DefaultStartTime() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -220,7 +220,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_DefaultWindowSize() {
+	public EAttribute getPort_AllowCooldown() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -229,8 +229,17 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getPort_DefaultWindowSize() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getPort_Location() {
-		return (EReference)portEClass.getEStructuralFeatures().get(8);
+		return (EReference)portEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -240,7 +249,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_AtobviacCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -250,16 +259,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	public EAttribute getPort_DataloyCode() {
-		return (EAttribute)portEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 7.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getPort_VesonCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -269,7 +268,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_ExternalCode() {
+	public EAttribute getPort_VesonCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -279,8 +278,18 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getPort_UNLocode() {
+	public EAttribute getPort_ExternalCode() {
 		return (EAttribute)portEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 7.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPort_UNLocode() {
+		return (EAttribute)portEClass.getEStructuralFeatures().get(14);
 	}
 
 	/**
@@ -515,6 +524,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEAttribute(portEClass, PORT__TIME_ZONE);
 		createEAttribute(portEClass, PORT__LOAD_DURATION);
 		createEAttribute(portEClass, PORT__DISCHARGE_DURATION);
+		createEAttribute(portEClass, PORT__BERTHS);
 		createEAttribute(portEClass, PORT__CV_VALUE);
 		createEAttribute(portEClass, PORT__DEFAULT_START_TIME);
 		createEAttribute(portEClass, PORT__ALLOW_COOLDOWN);
@@ -612,6 +622,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEAttribute(getPort_TimeZone(), ecorePackage.getEString(), "timeZone", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_LoadDuration(), ecorePackage.getEInt(), "loadDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DischargeDuration(), ecorePackage.getEInt(), "dischargeDuration", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPort_Berths(), ecorePackage.getEInt(), "berths", "1", 0, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_DefaultStartTime(), ecorePackage.getEInt(), "defaultStartTime", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPort_AllowCooldown(), ecorePackage.getEBoolean(), "allowCooldown", null, 1, 1, Port.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

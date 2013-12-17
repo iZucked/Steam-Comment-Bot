@@ -89,12 +89,12 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Laden Consumption Rate</em>' attribute.
-	 * @see #setLadenConsumptionRate(int)
+	 * @see #setLadenConsumptionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_LadenConsumptionRate()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getLadenConsumptionRate();
+	double getLadenConsumptionRate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenConsumptionRate <em>Laden Consumption Rate</em>}' attribute.
@@ -104,7 +104,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #getLadenConsumptionRate()
 	 * @generated
 	 */
-	void setLadenConsumptionRate(int value);
+	void setLadenConsumptionRate(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Laden NBO Rate</b></em>' attribute.
@@ -115,12 +115,12 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Laden NBO Rate</em>' attribute.
-	 * @see #setLadenNBORate(int)
+	 * @see #setLadenNBORate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_LadenNBORate()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getLadenNBORate();
+	double getLadenNBORate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getLadenNBORate <em>Laden NBO Rate</em>}' attribute.
@@ -130,7 +130,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #getLadenNBORate()
 	 * @generated
 	 */
-	void setLadenNBORate(int value);
+	void setLadenNBORate(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Ballast Consumption Rate</b></em>' attribute.
@@ -141,12 +141,12 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast Consumption Rate</em>' attribute.
-	 * @see #setBallastConsumptionRate(int)
+	 * @see #setBallastConsumptionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_BallastConsumptionRate()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getBallastConsumptionRate();
+	double getBallastConsumptionRate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastConsumptionRate <em>Ballast Consumption Rate</em>}' attribute.
@@ -156,7 +156,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #getBallastConsumptionRate()
 	 * @generated
 	 */
-	void setBallastConsumptionRate(int value);
+	void setBallastConsumptionRate(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Ballast NBO Rate</b></em>' attribute.
@@ -167,12 +167,12 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ballast NBO Rate</em>' attribute.
-	 * @see #setBallastNBORate(int)
+	 * @see #setBallastNBORate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_BallastNBORate()
 	 * @model required="true"
 	 * @generated
 	 */
-	int getBallastNBORate();
+	double getBallastNBORate();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClassRouteParameters#getBallastNBORate <em>Ballast NBO Rate</em>}' attribute.
@@ -182,7 +182,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #getBallastNBORate()
 	 * @generated
 	 */
-	void setBallastNBORate(int value);
+	void setBallastNBORate(double value);
 
 } // end of  VesselClassRouteParameters
 

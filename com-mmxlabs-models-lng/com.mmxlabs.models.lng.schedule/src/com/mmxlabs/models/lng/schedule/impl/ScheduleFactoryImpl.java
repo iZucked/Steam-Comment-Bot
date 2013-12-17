@@ -71,7 +71,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 */
 	public static ScheduleFactory init() {
 		try {
-			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory(SchedulePackage.eNS_URI);
+			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/schedule/1/"); 
 			if (theScheduleFactory != null) {
 				return theScheduleFactory;
 			}

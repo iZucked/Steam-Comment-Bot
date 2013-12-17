@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.commercial.validation;
 
-import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;

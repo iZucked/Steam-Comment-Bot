@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -17,15 +18,14 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 
-//	private static final String CONTRACT_RESTRICTION = "The contract for %s slot %s is not permitted by the %s slot for this cargo.";
-	private static final String CONTRACT_RESTRICTION = "[Cargo|'%s'] Contract '%s' does not permit %s contract '%s'.";
-//	private static final String PORT_RESTRICTION = "The port for %s slot %s is not permitted by the %s slot for this cargo.";
-	private static final String PORT_RESTRICTION = "[Cargo|'%s'] Contract '%s' does not permit %s port '%s'.";
+	private static final String CONTRACT_RESTRICTION = "[Cargo|'%s'] '%s' does not permit %s contract '%s'.";
+	private static final String PORT_RESTRICTION = "[Cargo|'%s] '%s' does not permit %s port '%s'.";
 	private static final String LOAD = "load";
 	private static final String DISCHARGE = "discharge";
 
@@ -43,7 +43,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 					}
 					final Slot slotI = cargo.getSlots().get(i);
 					final Slot slotJ = cargo.getSlots().get(j);
-					checkSlot(ctx, slotI.getContract(), slotJ, cargo.getName(), statuses);
+					checkSlotAgainstSlotAndContract(ctx, slotI, slotJ, cargo.getName(), statuses);
 				}
 			}
 		}
@@ -51,46 +51,70 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 		return Activator.PLUGIN_ID;
 	}
 
-	private void checkSlot(final IValidationContext ctx, final Contract contract, final Slot slot, String cargoName, final List<IStatus> statuses) {
-		if (contract == null) {
-			return;
-		}
+	/**
+	 * Check slot2 can be paired to slot1 based on slot1's restrictions
+	 * 
+	 * @param ctx
+	 * @param slot1
+	 * @param slot2
+	 * @param cargoName
+	 * @param statuses
+	 */
+	private void checkSlotAgainstSlotAndContract(final IValidationContext ctx, final Slot slot1, final Slot slot2, final String cargoName, final List<IStatus> statuses) {
 
-		final String contractName = contract.getName();
 		final String typeA;
-//		final String typeB;
 
-		if (slot instanceof LoadSlot) {
+		if (slot2 instanceof LoadSlot) {
 			typeA = LOAD;
-//			typeB = DISCHARGE;
 		} else {
-//			typeB = LOAD;
 			typeA = DISCHARGE;
 		}
 
-		Contract slotContract = slot.getContract();
-		boolean restrictedListsArePermissive = contract.isRestrictedListsArePermissive();
-		if (slotContract != null) {
-			if (!contract.getRestrictedContracts().isEmpty()) {
-				boolean contains = contract.getRestrictedContracts().contains(slotContract);
-				if ((restrictedListsArePermissive && !contains) // Whitelist
-					|| !restrictedListsArePermissive && contains){ // Blacklist
-						final String msg = String.format(CONTRACT_RESTRICTION, cargoName, contractName, typeA, slotContract.getName());
-						final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-						d.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-						statuses.add(d);
+		final List<Contract> restrictedContracts;
+		final List<? extends EObject> restrictedPorts;
+		boolean restrictedListsArePermissive = false;
+		final String cause;
+		if (slot1.isSetRestrictedContracts() || slot1.isSetRestrictedListsArePermissive() || slot1.isSetRestrictedPorts()) {
+			restrictedListsArePermissive = slot1.isRestrictedListsArePermissive();
+			restrictedContracts = slot1.getRestrictedContracts();
+			restrictedPorts = slot1.getRestrictedPorts();
+			cause = "Slot " + slot1.getName();
+		} else {
+			final Contract contract = slot1.getContract();
+			if (contract == null) {
+				restrictedListsArePermissive = false;
+				restrictedContracts = Collections.emptyList();
+				restrictedPorts = Collections.emptyList();
+				cause = "Slot " + slot1.getName();
+			} else {
+				restrictedListsArePermissive = contract.isRestrictedListsArePermissive();
+				restrictedContracts = contract.getRestrictedContracts();
+				restrictedPorts = contract.getRestrictedPorts();
+				cause = "Contract " + contract.getName();
+			}
+		}
+
+		final Contract contract2 = slot2.getContract();
+		if (contract2 != null) {
+			if (!restrictedContracts.isEmpty()) {
+				if (restrictedContracts.contains(contract2) != restrictedListsArePermissive) {
+					final String msg = String.format(CONTRACT_RESTRICTION, cargoName, cause, typeA, contract2.getName());
+					final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+					d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Contract());
+					statuses.add(d);
 				}
 			}
 		}
-		if (slot.getPort() != null) {
-			if (!contract.getRestrictedPorts().isEmpty()) {
-				boolean contains = contract.getRestrictedPorts().contains(slot.getPort());
+		final Port port2 = slot2.getPort();
+		if (slot2.getPort() != null) {
+			if (!restrictedPorts.isEmpty()) {
+				final boolean contains = restrictedPorts.contains(slot2.getPort());
 				if ((restrictedListsArePermissive && !contains) // Whitelist
-						|| !restrictedListsArePermissive && contains){ // Blacklist
-						final String msg = String.format(PORT_RESTRICTION, cargoName, contractName, typeA, slot.getPort().getName());
-						final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-						d.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
-						statuses.add(d);
+						|| !restrictedListsArePermissive && contains) { // Blacklist
+					final String msg = String.format(PORT_RESTRICTION, cargoName, cause, typeA, slot2.getPort().getName());
+					final DetailConstraintStatusDecorator d = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+					d.addEObjectAndFeature(slot2, CargoPackage.eINSTANCE.getSlot_Port());
+					statuses.add(d);
 				}
 			}
 		}

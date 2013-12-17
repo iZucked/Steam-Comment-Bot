@@ -155,4 +155,18 @@
           id="com.mmxlabs.models.lng.schedule.ui.commands.ScheduleModelCommandProvider">
     </ModelCommandProvider>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.properties.DetailPropertyFactory">
+    <DetailPropertyFactory
+          EClass="com.mmxlabs.models.lng.schedule.ProfitAndLossContainer"
+          category="pnl"
+          factory="com.mmxlabs.models.lng.schedule.properties.BasicPNLProperties">
+    </DetailPropertyFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.properties.DetailPropertyCategory">
+    <DetailPropertyCategory
+          category="pnl">
+    </DetailPropertyCategory>
+ </extension>
 </plugin>

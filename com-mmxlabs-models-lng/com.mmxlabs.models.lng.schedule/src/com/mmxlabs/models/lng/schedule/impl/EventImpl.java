@@ -365,7 +365,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 */
 	public Sequence getSequence() {
 		if (eContainerFeatureID() != SchedulePackage.EVENT__SEQUENCE) return null;
-		return (Sequence)eInternalContainer();
+		return (Sequence)eContainer();
 	}
 
 	/**

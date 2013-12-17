@@ -72,7 +72,7 @@ public interface CargoPackage extends EPackage {
 	int CARGO = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -99,13 +99,49 @@ public interface CargoPackage extends EPackage {
 	int CARGO__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__ASSIGNMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__SPOT_INDEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__SEQUENCE_HINT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -114,7 +150,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
@@ -124,7 +160,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -133,7 +169,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -201,7 +237,7 @@ public interface CargoPackage extends EPackage {
 	int SLOT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -228,13 +264,49 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__ASSIGNMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SPOT_INDEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SEQUENCE_HINT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int SLOT__CONTRACT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -243,7 +315,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SLOT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
@@ -252,7 +324,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SLOT__WINDOW_START = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Window Start Time</b></em>' attribute.
@@ -261,7 +333,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int SLOT__WINDOW_START_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -270,7 +342,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SLOT__WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -279,7 +351,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SLOT__DURATION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -288,7 +360,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int SLOT__MIN_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -297,7 +369,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int SLOT__MAX_QUANTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -306,7 +378,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int SLOT__OPTIONAL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -316,7 +388,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int SLOT__PRICE_EXPRESSION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -326,7 +398,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int SLOT__CARGO = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
@@ -336,7 +408,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICING_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int SLOT__PRICING_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
@@ -346,7 +418,52 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -355,7 +472,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -448,13 +565,49 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 6;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATED_ENTITY = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 8;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 9;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 7;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -467,7 +620,7 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -492,6 +645,42 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__NAME = SLOT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ASSIGNMENT = SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SPOT_INDEX = SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SEQUENCE_HINT = SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -612,6 +801,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__NOTES = SLOT__NOTES;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SHIPPING_DAYS_RESTRICTION = SLOT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ENTITY = SLOT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_CONTRACTS = SLOT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_PORTS = SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -750,13 +984,49 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Port CV</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT___GET_SLOT_OR_PORT_CV = SLOT_OPERATION_COUNT + 0;
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = SLOT_OPERATION_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
@@ -778,7 +1048,7 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -803,6 +1073,42 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__NAME = SLOT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__ASSIGNMENT = SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SPOT_INDEX = SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SEQUENCE_HINT = SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__LOCKED = SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -925,6 +1231,51 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__NOTES = SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__SHIPPING_DAYS_RESTRICTION = SLOT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__ENTITY = SLOT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_CONTRACTS = SLOT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_PORTS = SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -954,13 +1305,31 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__TRANSFER_TO = SLOT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__MIN_CV_VALUE = SLOT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__MAX_CV_VALUE = SLOT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1053,13 +1422,76 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MIN_CV = SLOT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Max Cv</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV = SLOT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = SLOT_OPERATION_COUNT + 2;
+
+	/**
 	 * The number of operations of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 0;
+	int DISCHARGE_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.
@@ -1072,7 +1504,7 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL = 4;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1181,7 +1613,7 @@ public interface CargoPackage extends EPackage {
 	int SPOT_SLOT = 5;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1254,7 +1686,7 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1279,6 +1711,42 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__NAME = LOAD_SLOT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__ASSIGNMENT = LOAD_SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SPOT_INDEX = LOAD_SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SEQUENCE_HINT = LOAD_SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__LOCKED = LOAD_SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -1399,6 +1867,51 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__NOTES = LOAD_SLOT__NOTES;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SHIPPING_DAYS_RESTRICTION = LOAD_SLOT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__ENTITY = LOAD_SLOT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_CONTRACTS = LOAD_SLOT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_PORTS = LOAD_SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -1546,13 +2059,49 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = LOAD_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
-	 * The operation id for the '<em>Get Slot Or Port CV</em>' operation.
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT___GET_SLOT_OR_PORT_CV = LOAD_SLOT___GET_SLOT_OR_PORT_CV;
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = LOAD_SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV;
 
 	/**
 	 * The number of operations of the '<em>Spot Load Slot</em>' class.
@@ -1574,7 +2123,7 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT = 7;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1599,6 +2148,42 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__NAME = DISCHARGE_SLOT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__ASSIGNMENT = DISCHARGE_SLOT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SPOT_INDEX = DISCHARGE_SLOT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SEQUENCE_HINT = DISCHARGE_SLOT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__LOCKED = DISCHARGE_SLOT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -1721,6 +2306,51 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NOTES = DISCHARGE_SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__SHIPPING_DAYS_RESTRICTION = DISCHARGE_SLOT__SHIPPING_DAYS_RESTRICTION;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__ENTITY = DISCHARGE_SLOT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_CONTRACTS = DISCHARGE_SLOT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_PORTS = DISCHARGE_SLOT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1748,6 +2378,24 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__TRANSFER_TO = DISCHARGE_SLOT__TRANSFER_TO;
+
+	/**
+	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__MIN_CV_VALUE = DISCHARGE_SLOT__MIN_CV_VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__MAX_CV_VALUE = DISCHARGE_SLOT__MAX_CV_VALUE;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1859,6 +2507,69 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = DISCHARGE_SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_ENTITY;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MIN_CV = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MIN_CV;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Max Cv</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE;
+
+	/**
 	 * The number of operations of the '<em>Spot Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1878,7 +2589,7 @@ public interface CargoPackage extends EPackage {
 	int CARGO_GROUP = 8;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2194,6 +2905,61 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Notes();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Shipping Days Restriction</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_ShippingDaysRestriction();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getEntity()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_Entity();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Contracts</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_RestrictedContracts();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Ports</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_RestrictedPorts();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Lists Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_RestrictedListsArePermissive();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2254,6 +3020,46 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrPortWindowSize();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedEntity() <em>Get Slot Or Delegated Entity</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegated Entity</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedEntity()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegatedEntity();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedContracts() <em>Get Slot Or Contract Restricted Contracts</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedContracts()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrContractRestrictedContracts();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedPorts() <em>Get Slot Or Contract Restricted Ports</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedPorts()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrContractRestrictedPorts();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedListsArePermissive() <em>Get Slot Or Contract Restricted Lists Are Permissive</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedListsArePermissive()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2309,14 +3115,14 @@ public interface CargoPackage extends EPackage {
 	EReference getLoadSlot_TransferFrom();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrPortCV() <em>Get Slot Or Port CV</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV() <em>Get Slot Or Delegated CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Slot Or Port CV</em>' operation.
-	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrPortCV()
+	 * @return the meta object for the '<em>Get Slot Or Delegated CV</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV()
 	 * @generated
 	 */
-	EOperation getLoadSlot__GetSlotOrPortCV();
+	EOperation getLoadSlot__GetSlotOrDelegatedCV();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.DischargeSlot <em>Discharge Slot</em>}'.
@@ -2362,6 +3168,58 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDischargeSlot_TransferTo();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue <em>Min Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue()
+	 * @see #getDischargeSlot()
+	 * @generated
+	 */
+	EAttribute getDischargeSlot_MinCvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue <em>Max Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue()
+	 * @see #getDischargeSlot()
+	 * @generated
+	 */
+	EAttribute getDischargeSlot_MaxCvValue();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMinCv() <em>Get Slot Or Contract Min Cv</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Min Cv</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMinCv()
+	 * @generated
+	 */
+	EOperation getDischargeSlot__GetSlotOrContractMinCv();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMaxCv() <em>Get Slot Or Contract Max Cv</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Max Cv</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMaxCv()
+	 * @generated
+	 */
+	EOperation getDischargeSlot__GetSlotOrContractMaxCv();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractDeliveryType() <em>Get Slot Or Contract Delivery Type</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractDeliveryType()
+	 * @generated
+	 */
+	EOperation getDischargeSlot__GetSlotOrContractDeliveryType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CargoModel <em>Model</em>}'.
@@ -2682,6 +3540,46 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__NOTES = eINSTANCE.getSlot_Notes();
 
 		/**
+		 * The meta object literal for the '<em><b>Shipping Days Restriction</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__SHIPPING_DAYS_RESTRICTION = eINSTANCE.getSlot_ShippingDaysRestriction();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__ENTITY = eINSTANCE.getSlot_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Contracts</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__RESTRICTED_CONTRACTS = eINSTANCE.getSlot_RestrictedContracts();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__RESTRICTED_PORTS = eINSTANCE.getSlot_RestrictedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedListsArePermissive();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2730,6 +3628,38 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE = eINSTANCE.getSlot__GetSlotOrPortWindowSize();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegated Entity</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATED_ENTITY = eINSTANCE.getSlot__GetSlotOrDelegatedEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Contracts</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS = eINSTANCE.getSlot__GetSlotOrContractRestrictedContracts();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Ports</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS = eINSTANCE.getSlot__GetSlotOrContractRestrictedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Lists Are Permissive</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrContractRestrictedListsArePermissive();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2773,12 +3703,12 @@ public interface CargoPackage extends EPackage {
 		EReference LOAD_SLOT__TRANSFER_FROM = eINSTANCE.getLoadSlot_TransferFrom();
 
 		/**
-		 * The meta object literal for the '<em><b>Get Slot Or Port CV</b></em>' operation.
+		 * The meta object literal for the '<em><b>Get Slot Or Delegated CV</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation LOAD_SLOT___GET_SLOT_OR_PORT_CV = eINSTANCE.getLoadSlot__GetSlotOrPortCV();
+		EOperation LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = eINSTANCE.getLoadSlot__GetSlotOrDelegatedCV();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
@@ -2815,6 +3745,46 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DISCHARGE_SLOT__TRANSFER_TO = eINSTANCE.getDischargeSlot_TransferTo();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_SLOT__MIN_CV_VALUE = eINSTANCE.getDischargeSlot_MinCvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_SLOT__MAX_CV_VALUE = eINSTANCE.getDischargeSlot_MaxCvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Min Cv</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MIN_CV = eINSTANCE.getDischargeSlot__GetSlotOrContractMinCv();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Max Cv</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_MAX_CV = eINSTANCE.getDischargeSlot__GetSlotOrContractMaxCv();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Delivery Type</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = eINSTANCE.getDischargeSlot__GetSlotOrContractDeliveryType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.

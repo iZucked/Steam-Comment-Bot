@@ -53,8 +53,8 @@ public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 						featureCheckedName = "slot";
 					} else {
 						final Contract contract = dischargeSlot.getContract();
+						requiredCargoType = dischargeSlot.getSlotOrContractDeliveryType();
 						if (contract instanceof SalesContract) {
-							requiredCargoType = ((SalesContract) contract).getPurchaseDeliveryType();
 							featureChecked = CargoPackage.Literals.SLOT__CONTRACT;
 							featureCheckedName = String.format("Sales contract '%s'", contract.getName());
 						}

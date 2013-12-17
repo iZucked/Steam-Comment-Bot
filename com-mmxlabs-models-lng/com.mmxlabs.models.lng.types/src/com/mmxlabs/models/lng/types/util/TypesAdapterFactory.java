@@ -74,8 +74,7 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 */
 	protected TypesSwitch<Adapter> modelSwitch = new TypesSwitch<Adapter>() {
 		@Override
-		public <T extends ObjectSet<T, U>, U> Adapter caseObjectSet(
-				ObjectSet<T, U> object) {
+		public <T extends ObjectSet<T, U>, U> Adapter caseObjectSet(ObjectSet<T, U> object) {
 			return createObjectSetAdapter();
 		}
 

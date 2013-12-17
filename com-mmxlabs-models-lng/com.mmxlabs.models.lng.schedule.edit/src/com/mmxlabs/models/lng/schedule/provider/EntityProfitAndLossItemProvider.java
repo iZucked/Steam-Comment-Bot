@@ -66,6 +66,7 @@ public class EntityProfitAndLossItemProvider
 
 			addEntityPropertyDescriptor(object);
 			addProfitAndLossPropertyDescriptor(object);
+			addProfitAndLossPreTaxPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -115,6 +116,28 @@ public class EntityProfitAndLossItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Profit And Loss Pre Tax feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addProfitAndLossPreTaxPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EntityProfitAndLoss_profitAndLossPreTax_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EntityProfitAndLoss_profitAndLossPreTax_feature", "_UI_EntityProfitAndLoss_type"),
+				 SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns EntityProfitAndLoss.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -150,6 +173,7 @@ public class EntityProfitAndLossItemProvider
 
 		switch (notification.getFeatureID(EntityProfitAndLoss.class)) {
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

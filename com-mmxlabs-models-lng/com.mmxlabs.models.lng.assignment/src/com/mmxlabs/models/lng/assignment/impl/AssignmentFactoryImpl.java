@@ -32,7 +32,7 @@ public class AssignmentFactoryImpl extends EFactoryImpl implements AssignmentFac
 	 */
 	public static AssignmentFactory init() {
 		try {
-			AssignmentFactory theAssignmentFactory = (AssignmentFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/assignment/1/"); 
+			AssignmentFactory theAssignmentFactory = (AssignmentFactory)EPackage.Registry.INSTANCE.getEFactory(AssignmentPackage.eNS_URI);
 			if (theAssignmentFactory != null) {
 				return theAssignmentFactory;
 			}

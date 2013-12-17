@@ -19,6 +19,8 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -73,18 +75,41 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 
 					if (target instanceof LoadSlot) {
+
+						LoadSlot loadSlot = (LoadSlot) target;
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
-							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(CommercialPackage.eINSTANCE.getPurchaseContract())) {
-								filteredList.add(value);
+							EObject second = value.getSecond();
+							if (((EReference) (second.eContainingFeature())).getEReferenceType().isSuperTypeOf(CommercialPackage.eINSTANCE.getPurchaseContract())) {
+								ContractType contractType = ((Contract) second).getContractType();
+								if (loadSlot.isDESPurchase()) {
+									if (contractType == ContractType.DES || contractType == ContractType.BOTH) {
+										filteredList.add(value);
+									}
+								} else {
+									if (contractType == ContractType.FOB || contractType == ContractType.BOTH) {
+										filteredList.add(value);
+									}
+								}
 							}
 						}
 						return addNullEntry(filteredList);
 					} else if (target instanceof DischargeSlot) {
+						DischargeSlot dischargeSlot = (DischargeSlot) target;
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
-							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(CommercialPackage.eINSTANCE.getSalesContract())) {
-								filteredList.add(value);
+							EObject second = value.getSecond();
+							if (((EReference) (second.eContainingFeature())).getEReferenceType().isSuperTypeOf(CommercialPackage.eINSTANCE.getSalesContract())) {
+								ContractType contractType = ((Contract) second).getContractType();
+								if (dischargeSlot.isFOBSale()) {
+									if (contractType == ContractType.FOB || contractType == ContractType.BOTH) {
+										filteredList.add(value);
+									}
+								} else {
+									if (contractType == ContractType.DES || contractType == ContractType.BOTH) {
+										filteredList.add(value);
+									}
+								}
 							}
 						}
 						return addNullEntry(filteredList);

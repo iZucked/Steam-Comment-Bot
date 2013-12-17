@@ -20,7 +20,7 @@
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.assignment.helpers.AssignmentModel"
-			helperClass="com.mmxlabs.models.lng.assignment.presentation.composites.AssignmentModelComponentHelper"
+			helperClass="com.mmxlabs.models.lng.assignment. "
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.assignment.AssignmentModel" />
 	</extension>
@@ -56,6 +56,18 @@
           inheritable="false"
           modelClass="com.mmxlabs.models.lng.fleet.VesselEvent">
     </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.assignment.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.assignment.editor.loadSlotAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+    </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.assignment.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.assignment.editor.dischargeSlotAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+    </componentHelper>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -73,4 +85,16 @@
           id="com.mmxlabs.models.lng.assignment.commands.ElementAssignmentCommandProvider">
     </ModelCommandProvider>
  </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated assignment -->
+      <editor
+            id="com.mmxlabs.models.lng.assignment.presentation.AssignmentEditorID"
+            name="%_UI_AssignmentEditor_label"
+            icon="icons/full/obj16/AssignmentModelFile.gif"
+            extensions="assignment"
+            class="com.mmxlabs.models.lng.assignment.presentation.AssignmentEditor"
+            contributorClass="com.mmxlabs.models.lng.assignment.presentation.AssignmentActionBarContributor">
+      </editor>
+   </extension>
+
 </plugin>

@@ -5,11 +5,13 @@
 package com.mmxlabs.models.lng.cargo.validation;
 
 import java.text.DateFormat;
+
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -34,9 +36,12 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
+import static com.mmxlabs.models.lng.cargo.util.SlotClassifier.*;
+
 public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 
 	private static class PortSlotCounter {
+				
 		private final Map<Port, Map<String, Collection<Slot>>> countingMap = new HashMap<Port, Map<String, Collection<Slot>>>();
 
 		private final DateFormat df = DateFormat.getDateInstance();
@@ -49,7 +54,7 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 		 */
 		public Collection<Slot> slotOverlaps(final Slot slot) {
 
-			final Date windowStart = slot.getWindowStart();
+			final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStart == null) {
 				return Collections.emptySet();
 			}
@@ -58,12 +63,52 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			int windowSize = slot.getWindowSize();
 
 			final Set<Slot> overlappingSlots = new LinkedHashSet<Slot>();
-			do {
+			SlotType slotType = classify(slot);
+			do {				
 				final String dateKey = dateToString(cal.getTime());
-				final Collection<Slot> slots = getSlots(slot, dateKey);
+				final Collection<Slot> potentialOverlaps = getOverlappingSlots(slot, dateKey);				
+				Iterator<Slot> ii = potentialOverlaps.iterator();
+				while(ii.hasNext()){
+					Slot overlapSlot = ii.next();
+					SlotType overlapSlotType = classify(overlapSlot);
+					// The combinations below are OK, let them pass
+					if (overlapSlotType == SlotType.DES_Buy && slotType==SlotType.DES_Sale
+						||(overlapSlotType == SlotType.DES_Sale && slotType==SlotType.DES_Buy)
+						||(overlapSlotType == SlotType.FOB_Sale && slotType==SlotType.FOB_Buy)						
+						||(overlapSlotType == SlotType.FOB_Buy && slotType==SlotType.FOB_Sale)){
+						ii.remove();
+						continue;
+					}
+					
+					Date slotStart = slot.getWindowStartWithSlotOrPortTime();
+					Date overlapSlotStart = overlapSlot.getWindowStartWithSlotOrPortTime();					
+					int slotDur = slot.getDuration();
+					int overlapSlotDur = overlapSlot.getDuration();
+					Date olEnd = overlapSlot.getWindowEndWithSlotOrPortTime();
+					Date slotEnd = slot.getWindowEndWithSlotOrPortTime();
+					
+					// if slot start + duration is before the end of the overlapSlot window, it can be OK so let them pass
+					Calendar slotCal = Calendar.getInstance();
+					slotCal.setTime(slotStart);
+					slotCal.add(Calendar.HOUR_OF_DAY, slotDur);
+					Date slotFinish = slotCal.getTime();
+					if(slotFinish.before(olEnd)){
+						ii.remove();
+						continue;						
+					}					
+
+					Calendar overlapSlotCal = Calendar.getInstance();
+					overlapSlotCal.setTime(overlapSlotStart);
+					overlapSlotCal.add(Calendar.HOUR_OF_DAY, overlapSlotDur);
+					Date overlapSlotFinish = overlapSlotCal.getTime();					
+					if(overlapSlotFinish.before(slotEnd)){
+						ii.remove();
+						continue;																		
+					}
+				}
 				// final boolean overlaps = slots.contains(slot) ? slots.size() > 1 : slots.size() > 0;
 				// if (overlaps) {
-				overlappingSlots.addAll(slots);
+				overlappingSlots.addAll(potentialOverlaps);
 				// overlappingSlots.remove(slot);
 				// }
 				windowSize -= 24;
@@ -73,41 +118,45 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			return overlappingSlots;
 		}
 
+		
 		public void addSlot(final Slot slot) {
 
-			if (slot instanceof LoadSlot) {
-				final LoadSlot load = (LoadSlot) slot;
-				if (load.isDESPurchase()) {
-					return;
-				}
-			} else if (slot instanceof DischargeSlot) {
-				final DischargeSlot disch = (DischargeSlot) slot;
-				if (disch.isFOBSale()) {
-					return;
-				}
-			}
+//			if (slot instanceof LoadSlot) {
+//				final LoadSlot load = (LoadSlot) slot;
+//				if (load.isDESPurchase()) {
+//					if (!slot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)){
+//						return;
+//					}
+//				}
+//			} else if (slot instanceof DischargeSlot) {
+//				final DischargeSlot disch = (DischargeSlot) slot;
+//				if (disch.isFOBSale()) {
+//					return;
+//				}
+//			}
 
 			if (slot instanceof SpotSlot) {
 				return;
 			}
 
-			final Date windowStart = slot.getWindowStart();
+			final Date windowStart = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStart == null) {
 				return;
 			}
 			final Calendar cal = Calendar.getInstance();
 			cal.setTime(windowStart);
-			int windowSize = slot.getWindowSize();
+			int windowPlusDurationSize = slot.getWindowSize();// + slot.getDuration();
 			do {
 				final String dateKey = dateToString(cal.getTime());
-				final Collection<Slot> slots = getSlots(slot, dateKey);
+				final Collection<Slot> slots = getOverlappingSlots(slot, dateKey);
 				slots.add(slot);
-				windowSize -= 24;
+//				if(Calendar.get(Calendar.HOUR_OF_DAY, slot.getWindowStartWithSlotOrPortTime()) == 0)
+				windowPlusDurationSize -= 24;
 				cal.add(Calendar.DAY_OF_MONTH, 1);
-			} while (windowSize > 0);
+			} while (windowPlusDurationSize > 0);
 		}
 
-		private Collection<Slot> getSlots(final Slot slot, final String dateKey) {
+		private Collection<Slot> getOverlappingSlots(final Slot slot, final String dateKey) {
 
 			final Port port = slot.getPort();
 			Map<String, Collection<Slot>> map;
@@ -145,14 +194,14 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			final Slot slot = (Slot) object;
 			if (slot instanceof LoadSlot) {
 				final LoadSlot load = (LoadSlot) slot;
-				if (load.isDESPurchase()) {
-					return ctx.createSuccessStatus();
-				}
+//				if (load.isDESPurchase()) {
+//					return ctx.createSuccessStatus();
+//				}
 			} else if (slot instanceof DischargeSlot) {
 				final DischargeSlot disch = (DischargeSlot) slot;
-				if (disch.isFOBSale()) {
-					return ctx.createSuccessStatus();
-				}
+//				if (disch.isFOBSale()) {
+//					return ctx.createSuccessStatus();
+//				}
 			}
 			if (slot instanceof SpotSlot) {
 				return ctx.createSuccessStatus();

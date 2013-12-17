@@ -83,8 +83,6 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fitnesses" upperBound="-1"
         eType="#//Fitness" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dailyHireRate" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceType" eType="#//SequenceType"/>
@@ -177,7 +175,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="#//CapacityViolationType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossContainer" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLoss" eType="#//GroupProfitAndLoss"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLossNoTimeCharter"
@@ -185,12 +183,14 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GroupProfitAndLoss">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLossPreTax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="entityProfitAndLosses"
         upperBound="-1" eType="#//EntityProfitAndLoss" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EntityProfitAndLoss">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//LegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLossPreTax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="SequenceType">
     <eLiterals name="VESSEL"/>
@@ -218,6 +218,7 @@
     <eLiterals name="MAX_HEEL" value="4" literal="MAX_HEEL"/>
     <eLiterals name="FORCED_COOLDOWN" value="5"/>
     <eLiterals name="VESSEL_CAPACITY" value="6" literal="VESSEL_CAPACITY"/>
+    <eLiterals name="LOST_HEEL" value="7"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Calendar" instanceClassName="java.util.Calendar"/>
   <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">

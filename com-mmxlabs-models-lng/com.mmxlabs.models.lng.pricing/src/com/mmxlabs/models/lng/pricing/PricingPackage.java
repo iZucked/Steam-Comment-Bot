@@ -70,7 +70,7 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -283,7 +283,7 @@ public interface PricingPackage extends EPackage {
 	int FLEET_COST_MODEL = 5;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -320,7 +320,7 @@ public interface PricingPackage extends EPackage {
 	int ROUTE_COST = 6;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -384,7 +384,7 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_COST = 7;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -402,15 +402,6 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_COST__FUEL = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int BASE_FUEL_COST__PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -418,7 +409,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_COST__INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int BASE_FUEL_COST__INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel Cost</em>' class.
@@ -427,7 +418,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FUEL_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int BASE_FUEL_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.
@@ -440,7 +431,7 @@ public interface PricingPackage extends EPackage {
 	int PORT_COST = 8;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -532,7 +523,7 @@ public interface PricingPackage extends EPackage {
 	int COOLDOWN_PRICE = 10;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -601,7 +592,7 @@ public interface PricingPackage extends EPackage {
 	int NAMED_INDEX_CONTAINER = 14;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
@@ -651,7 +642,7 @@ public interface PricingPackage extends EPackage {
 	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
@@ -701,7 +692,7 @@ public interface PricingPackage extends EPackage {
 	int COMMODITY_INDEX_FEATURE_COUNT = NAMED_INDEX_CONTAINER_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
@@ -762,7 +753,7 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_INDEX = 13;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
@@ -1078,19 +1069,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getBaseFuelCost_Fuel();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice <em>Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Price</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.BaseFuelCost#getPrice()
-	 * @see #getBaseFuelCost()
-	 * @generated
-	 */
-	@Deprecated
-	EAttribute getBaseFuelCost_Price();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost#getIndex <em>Index</em>}'.
@@ -1505,14 +1483,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BASE_FUEL_COST__FUEL = eINSTANCE.getBaseFuelCost_Fuel();
-
-		/**
-		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute BASE_FUEL_COST__PRICE = eINSTANCE.getBaseFuelCost_Price();
 
 		/**
 		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.

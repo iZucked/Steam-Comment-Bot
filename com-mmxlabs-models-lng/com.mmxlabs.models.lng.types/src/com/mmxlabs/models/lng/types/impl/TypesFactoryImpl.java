@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import java.lang.Iterable;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -31,8 +32,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 */
 	public static TypesFactory init() {
 		try {
-			TypesFactory theTypesFactory = (TypesFactory) EPackage.Registry.INSTANCE
-					.getEFactory("http://www.mmxlabs.com/models/lng/types/1/");
+			TypesFactory theTypesFactory = (TypesFactory) EPackage.Registry.INSTANCE.getEFactory(TypesPackage.eNS_URI);
 			if (theTypesFactory != null) {
 				return theTypesFactory;
 			}
@@ -61,8 +61,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName()
-					+ "' is not a valid classifier");
+			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -81,8 +80,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
-			throw new IllegalArgumentException("The datatype '"
-					+ eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -101,8 +99,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
-			throw new IllegalArgumentException("The datatype '"
-					+ eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -111,13 +108,10 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCapability createPortCapabilityFromString(EDataType eDataType,
-			String initialValue) {
+	public PortCapability createPortCapabilityFromString(EDataType eDataType, String initialValue) {
 		PortCapability result = PortCapability.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue
-					+ "' is not a valid enumerator of '" + eDataType.getName()
-					+ "'");
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
 
@@ -126,8 +120,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertPortCapabilityToString(EDataType eDataType,
-			Object instanceValue) {
+	public String convertPortCapabilityToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -137,13 +130,10 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoDeliveryType createCargoDeliveryTypeFromString(
-			EDataType eDataType, String initialValue) {
+	public CargoDeliveryType createCargoDeliveryTypeFromString(EDataType eDataType, String initialValue) {
 		CargoDeliveryType result = CargoDeliveryType.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue
-					+ "' is not a valid enumerator of '" + eDataType.getName()
-					+ "'");
+			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
 		return result;
 	}
 
@@ -153,8 +143,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertCargoDeliveryTypeToString(EDataType eDataType,
-			Object instanceValue) {
+	public String convertCargoDeliveryTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -164,8 +153,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Iterable<?> createIterableFromString(EDataType eDataType,
-			String initialValue) {
+	public Iterable<?> createIterableFromString(EDataType eDataType, String initialValue) {
 		return (Iterable<?>) super.createFromString(initialValue);
 	}
 
@@ -175,8 +163,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertIterableToString(EDataType eDataType,
-			Object instanceValue) {
+	public String convertIterableToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
 	}
 

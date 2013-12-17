@@ -31,8 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *
  * @generated
  */
-public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends
-		UUIDObjectImpl implements ObjectSet<T, U> {
+public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends UUIDObjectImpl implements ObjectSet<T, U> {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -90,8 +89,7 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.OBJECT_SET__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.OBJECT_SET__NAME, oldName, name));
 	}
 
 	/**
@@ -158,8 +156,7 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.OBJECT_SET__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -207,8 +204,7 @@ public abstract class ObjectSetImpl<T extends ObjectSet<T, U>, U> extends
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments)
-			throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 		case TypesPackage.OBJECT_SET___COLLECT__ELIST:
 			return collect((EList<T>) arguments.get(0));

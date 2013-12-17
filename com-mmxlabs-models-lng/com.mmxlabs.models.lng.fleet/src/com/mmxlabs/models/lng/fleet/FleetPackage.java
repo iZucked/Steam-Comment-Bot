@@ -102,7 +102,7 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -185,7 +185,7 @@ public interface FleetPackage extends EPackage {
 	int BASE_FUEL = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -230,7 +230,7 @@ public interface FleetPackage extends EPackage {
 	int BASE_FUEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -304,7 +304,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -558,7 +558,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_GROUP = 4;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -616,7 +616,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_TYPE_GROUP = 5;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
@@ -666,7 +666,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_TYPE_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -711,7 +711,7 @@ public interface FleetPackage extends EPackage {
 	int HEEL_OPTIONS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -765,13 +765,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Service Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Vessel State Attributes</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_STATE_ATTRIBUTES_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -801,7 +810,7 @@ public interface FleetPackage extends EPackage {
 	int FUEL_CONSUMPTION_FEATURE_COUNT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -873,7 +882,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS_ROUTE_PARAMETERS_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
 	 * <!-- end-user-doc -->
@@ -923,7 +932,7 @@ public interface FleetPackage extends EPackage {
 	int SCENARIO_FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1035,7 +1044,7 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1062,13 +1071,49 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__ASSIGNMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__SPOT_INDEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__SEQUENCE_HINT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__DURATION_IN_DAYS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT__DURATION_IN_DAYS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -1077,7 +1122,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int VESSEL_EVENT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1086,7 +1131,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int VESSEL_EVENT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Start After</b></em>' attribute.
@@ -1095,7 +1140,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__START_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT__START_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Start By</b></em>' attribute.
@@ -1104,7 +1149,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event</em>' class.
@@ -1113,10 +1158,10 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1141,6 +1186,42 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int MAINTENANCE_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__ASSIGNMENT = VESSEL_EVENT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__SPOT_INDEX = VESSEL_EVENT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__SEQUENCE_HINT = VESSEL_EVENT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__LOCKED = VESSEL_EVENT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
@@ -1197,7 +1278,7 @@ public interface FleetPackage extends EPackage {
 	int MAINTENANCE_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1222,6 +1303,42 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRY_DOCK_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__ASSIGNMENT = VESSEL_EVENT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__SPOT_INDEX = VESSEL_EVENT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__SEQUENCE_HINT = VESSEL_EVENT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__LOCKED = VESSEL_EVENT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
@@ -1278,7 +1395,7 @@ public interface FleetPackage extends EPackage {
 	int DRY_DOCK_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1303,6 +1420,42 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__ASSIGNMENT = VESSEL_EVENT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__SPOT_INDEX = VESSEL_EVENT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__SEQUENCE_HINT = VESSEL_EVENT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__LOCKED = VESSEL_EVENT__LOCKED;
 
 	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
@@ -1395,6 +1548,61 @@ public interface FleetPackage extends EPackage {
 	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getAssignableElement()
+	 * @generated
+	 */
+	int ASSIGNABLE_ELEMENT = 16;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__ASSIGNMENT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__SPOT_INDEX = 1;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__SEQUENCE_HINT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__LOCKED = 3;
+
+	/**
+	 * The number of structural features of the '<em>Assignable Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT_FEATURE_COUNT = 4;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.VesselType <em>Vessel Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1403,7 +1611,7 @@ public interface FleetPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselType()
 	 * @generated
 	 */
-	int VESSEL_TYPE = 16;
+	int VESSEL_TYPE = 17;
 
 
 	/**
@@ -1832,6 +2040,60 @@ public interface FleetPackage extends EPackage {
 	EAttribute getCharterOutEvent_HireRate();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.AssignableElement <em>Assignable Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Assignable Element</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.AssignableElement
+	 * @generated
+	 */
+	EClass getAssignableElement();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getAssignment <em>Assignment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Assignment</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#getAssignment()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EReference getAssignableElement_Assignment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getSpotIndex <em>Spot Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Index</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#getSpotIndex()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_SpotIndex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getSequenceHint <em>Sequence Hint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sequence Hint</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#getSequenceHint()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_SequenceHint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.AssignableElement#isLocked <em>Locked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Locked</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#isLocked()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_Locked();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.HeelOptions <em>Heel Options</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1938,6 +2200,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getVesselStateAttributes_FuelConsumption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed <em>Service Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Service Speed</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed()
+	 * @see #getVesselStateAttributes()
+	 * @generated
+	 */
+	EAttribute getVesselStateAttributes_ServiceSpeed();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselAvailability <em>Vessel Availability</em>}'.
@@ -2611,6 +2884,48 @@ public interface FleetPackage extends EPackage {
 		EAttribute CHARTER_OUT_EVENT__HIRE_RATE = eINSTANCE.getCharterOutEvent_HireRate();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getAssignableElement()
+		 * @generated
+		 */
+		EClass ASSIGNABLE_ELEMENT = eINSTANCE.getAssignableElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Assignment</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ASSIGNABLE_ELEMENT__ASSIGNMENT = eINSTANCE.getAssignableElement_Assignment();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__SPOT_INDEX = eINSTANCE.getAssignableElement_SpotIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Sequence Hint</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__SEQUENCE_HINT = eINSTANCE.getAssignableElement_SequenceHint();
+
+		/**
+		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__LOCKED = eINSTANCE.getAssignableElement_Locked();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2693,6 +3008,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION = eINSTANCE.getVesselStateAttributes_FuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Service Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED = eINSTANCE.getVesselStateAttributes_ServiceSpeed();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.

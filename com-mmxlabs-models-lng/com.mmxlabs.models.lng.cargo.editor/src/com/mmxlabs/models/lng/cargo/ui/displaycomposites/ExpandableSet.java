@@ -20,13 +20,11 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -42,6 +40,7 @@ class ExpandableSet implements DisposeListener {
 	ExpandableComposite ec;
 	Composite client;
 	List<EStructuralFeature[]> featureLines;
+//	Hyperlink textClient;
 	Label textClient;
 	String baseTitle;
 	Set<EStructuralFeature> headerFeatures;
@@ -68,6 +67,7 @@ class ExpandableSet implements DisposeListener {
 	}	
 	
 	void create(Composite contentComposite, MMXRootObject root, EObject object,  Map<EStructuralFeature, IInlineEditor> feature2Editor, EMFDataBindingContext dbc, IDisplayCompositeLayoutProvider lp, FormToolkit toolkit){
+//		ec = toolkit.createSection(contentComposite, Section.TITLE_BAR | ExpandableComposite.TWISTIE);
 		ec = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 		Composite c = createExpandable(ec, toolkit);
 		ec.addDisposeListener(this);	
@@ -80,8 +80,11 @@ class ExpandableSet implements DisposeListener {
 		ec.setExpanded(true);
 		ec.setText(baseTitle);
 		// title label
-		textClient = new Label(ec, SWT.NONE);
-		textClient.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		{
+//			textClient = toolkit.createHyperlink(ec, "", SWT.NONE);
+			textClient = toolkit.createLabel(ec, "", SWT.NONE);
+		}
+		textClient.setText("");
 		ec.setTextClient(textClient);
 		updateTextClient(object);
 		// hide if no features
@@ -96,7 +99,7 @@ class ExpandableSet implements DisposeListener {
 	}
 	
 	private Composite createExpandable(final ExpandableComposite ec, FormToolkit toolkit) {
-		ec.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		ec.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false,2, 1));
 		final Composite inner = toolkit.createComposite(ec);
 		inner.setLayout(new GridLayout(2, false));
 		ec.setClient(inner);

@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -32,8 +31,9 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Custom import logic for loading a commodity index.
@@ -42,33 +42,14 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * @since 5.0
  * 
  */
-public class CommodityIndexImporter implements IClassImporter {
+public class CommodityIndexImporter extends AbstractClassImporter {
 	private static final String NAME = "name";
 	private static final String EXPRESSION = "expression";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
 	@Override
-	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context) {
-		final List<EObject> result = new LinkedList<EObject>();
-
-		Map<String, String> row;
-		try {
-			context.pushReader(reader);
-			while (null != (row = reader.readRow())) {
-				result.addAll(importObject(targetClass, row, context));
-			}
-		} catch (final IOException e) {
-			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
-		} finally {
-			context.popReader();
-		}
-
-		return result;
-	}
-
-	@Override
-	public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		CommodityIndex result = PricingFactory.eINSTANCE.createCommodityIndex();
 		final Index<Double> indexData;
 		if (row.containsKey(EXPRESSION)) {
@@ -139,7 +120,7 @@ public class CommodityIndexImporter implements IClassImporter {
 
 		context.registerNamedObject(result);
 
-		return Collections.singleton((EObject) result);
+		return new ImportResults((EObject) result);
 	}
 
 	@Override

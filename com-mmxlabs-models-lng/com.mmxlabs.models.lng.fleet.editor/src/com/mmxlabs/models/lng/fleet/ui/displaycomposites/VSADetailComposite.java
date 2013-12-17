@@ -33,7 +33,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
-import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -137,7 +136,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		fuelColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return element == null ? "" : String.format("%d", ((FuelConsumption) element).getConsumption());
+				return element == null ? "" : String.format("%.2f", ((FuelConsumption) element).getConsumption());
 			}
 		});
 
@@ -167,7 +166,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
-				ed.setFormatter(new IntegerFormatter());
+				ed.setFormatter(new DoubleFormatter());
 				return ed;
 			}
 

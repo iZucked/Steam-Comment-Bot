@@ -59,8 +59,7 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl
-			.init();
+	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl.init();
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
@@ -74,7 +73,7 @@ public interface TypesPackage extends EPackage {
 	int OBJECT_SET = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
@@ -174,7 +173,7 @@ public interface TypesPackage extends EPackage {
 	int APORT_SET = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -266,7 +265,7 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL_SET = 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -570,8 +569,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE
-				.getITimezoneProvider__GetTimeZone__EAttribute();
+		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
@@ -591,8 +589,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation OBJECT_SET___COLLECT__ELIST = eINSTANCE
-				.getObjectSet__Collect__EList();
+		EOperation OBJECT_SET___COLLECT__ELIST = eINSTANCE.getObjectSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.

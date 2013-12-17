@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -19,6 +20,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo <em>Price Info</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getEntity <em>Entity</em>}</li>
  * </ul>
  * </p>
  *
@@ -130,6 +132,32 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setPriceInfo(LNGPriceCalculatorParameters value);
+
+	/**
+	 * Returns the value of the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entity</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entity</em>' reference.
+	 * @see #setEntity(LegalEntity)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_Entity()
+	 * @model
+	 * @generated
+	 */
+	LegalEntity getEntity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getEntity <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Entity</em>' reference.
+	 * @see #getEntity()
+	 * @generated
+	 */
+	void setEntity(LegalEntity value);
 
 	/**
 	 * <!-- begin-user-doc -->

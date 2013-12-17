@@ -61,6 +61,10 @@ public class VesselEventItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addAssignmentPropertyDescriptor(object);
+			addSpotIndexPropertyDescriptor(object);
+			addSequenceHintPropertyDescriptor(object);
+			addLockedPropertyDescriptor(object);
 			addDurationInDaysPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
@@ -89,6 +93,94 @@ public class VesselEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Assignment feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAssignmentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_assignment_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_assignment_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Locked feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLockedPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_locked_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_locked_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Spot Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSpotIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_spotIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_spotIndex_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sequence Hint feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSequenceHintPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_sequenceHint_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_sequenceHint_feature", "_UI_AssignableElement_type"),
+				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -230,6 +322,9 @@ public class VesselEventItemProvider
 
 		switch (notification.getFeatureID(VesselEvent.class)) {
 			case FleetPackage.VESSEL_EVENT__NAME:
+			case FleetPackage.VESSEL_EVENT__SPOT_INDEX:
+			case FleetPackage.VESSEL_EVENT__SEQUENCE_HINT:
+			case FleetPackage.VESSEL_EVENT__LOCKED:
 			case FleetPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 			case FleetPackage.VESSEL_EVENT__START_AFTER:
 			case FleetPackage.VESSEL_EVENT__START_BY:

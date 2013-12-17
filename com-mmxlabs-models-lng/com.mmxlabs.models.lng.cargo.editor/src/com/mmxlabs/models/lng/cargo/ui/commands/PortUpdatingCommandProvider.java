@@ -37,12 +37,15 @@ public class PortUpdatingCommandProvider implements IModelCommandProvider {
 					final EObject newValue = parameter.getEValue();
 					if (newValue instanceof Contract) {
 						final Contract contract = (Contract) newValue;
-						if (contract.getAllowedPorts().isEmpty())
+						if (contract.getAllowedPorts().isEmpty()) {
 							return null;
+						}
 						final Port currentPort = slot.getPort();
-						if (!SetUtils.getObjects(contract.getAllowedPorts()).contains(currentPort)) {
-							// figure out a new port - preferred port?
-							return SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), contract.getPreferredPort());
+						if (contract.getPreferredPort() != null) {
+							if (!SetUtils.getObjects(contract.getAllowedPorts()).contains(currentPort)) {
+								// figure out a new port - preferred port?
+								return SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), contract.getPreferredPort());
+							}
 						}
 					}
 				}

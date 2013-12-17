@@ -8,12 +8,16 @@
   <genPackages prefix="Commercial" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
       multipleEditorPages="false" generateModelWizard="false" extensibleProviderFactory="true"
       childCreationExtenders="true" ecorePackage="commercial.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="commercial.ecore#//ContractType">
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//ContractType/BOTH"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//ContractType/FOB"/>
+      <genEnumLiterals ecoreEnumLiteral="commercial.ecore#//ContractType/DES"/>
+    </genEnums>
     <genClasses ecoreClass="commercial.ecore#//CommercialModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/entities"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/salesContracts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/shippingEntity"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/purchaseContracts"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/contractSlotExtensions"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//LegalEntity">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//LegalEntity/taxRates"/>
@@ -33,6 +37,8 @@
       <genFeatures notify="false" createChild="false" propertyDescription="If set, these ports cannot be paried to this contract."
           propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedPorts"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/priceInfo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/notes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/contractType"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>
@@ -48,5 +54,6 @@
     <genClasses ecoreClass="commercial.ecore#//ExpressionPriceParameters">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ExpressionPriceParameters/priceExpression"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="commercial.ecore#//SlotContractParams"/>
   </genPackages>
 </genmodel:GenModel>

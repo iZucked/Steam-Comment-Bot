@@ -15,6 +15,7 @@
 -->
 
 <plugin>
+   <extension-point id="TradesTableContextMenuExtension" name="TradesTableContextMenuExtension" schema="schema/TradesTableContextMenuExtension.exsd"/>
 
 
 
@@ -115,6 +116,16 @@
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.SpotMarketValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.SpotSlot"
           referenceEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.LoadSlot"
+          referenceEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.DischargeSlot"
+          referenceEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
     </valueProvider>
  </extension>
  <extension
@@ -239,10 +250,6 @@
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
-    <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider">
-    </ModelCommandProvider>
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider">

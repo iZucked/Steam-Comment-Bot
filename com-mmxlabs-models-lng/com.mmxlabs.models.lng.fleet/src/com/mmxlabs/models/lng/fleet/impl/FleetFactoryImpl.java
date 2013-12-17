@@ -45,7 +45,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 */
 	public static FleetFactory init() {
 		try {
-			FleetFactory theFleetFactory = (FleetFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/fleet/1/"); 
+			FleetFactory theFleetFactory = (FleetFactory)EPackage.Registry.INSTANCE.getEFactory(FleetPackage.eNS_URI);
 			if (theFleetFactory != null) {
 				return theFleetFactory;
 			}

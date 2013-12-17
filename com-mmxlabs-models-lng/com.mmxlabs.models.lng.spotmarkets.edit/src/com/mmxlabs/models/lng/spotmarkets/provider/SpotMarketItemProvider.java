@@ -66,6 +66,7 @@ public class SpotMarketItemProvider
 			addNamePropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -133,6 +134,28 @@ public class SpotMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Entity feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_entity_feature", "_UI_SpotMarket_type"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

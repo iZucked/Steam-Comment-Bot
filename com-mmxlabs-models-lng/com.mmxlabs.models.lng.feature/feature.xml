@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.lng.feature"
       label="Models: LNG Feature"
-      version="7.0.5.qualifier"
+      version="8.0.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -257,27 +257,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.spotmarkets.validation"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.assignment"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.assignment.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.lng.assignment.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"

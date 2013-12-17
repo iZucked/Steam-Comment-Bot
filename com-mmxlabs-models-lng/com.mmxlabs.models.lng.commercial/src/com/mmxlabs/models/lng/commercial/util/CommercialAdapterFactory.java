@@ -112,6 +112,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createExpressionPriceParametersAdapter();
 			}
 			@Override
+			public Adapter caseSlotContractParams(SlotContractParams object) {
+				return createSlotContractParamsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -255,6 +259,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createExpressionPriceParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SlotContractParams <em>Slot Contract Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.SlotContractParams
+	 * @generated
+	 */
+	public Adapter createSlotContractParamsAdapter() {
 		return null;
 	}
 

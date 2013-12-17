@@ -54,7 +54,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CONSUMPTION_EDEFAULT = 0;
+	protected static final double CONSUMPTION_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getConsumption() <em>Consumption</em>}' attribute.
@@ -64,7 +64,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * @generated
 	 * @ordered
 	 */
-	protected int consumption = CONSUMPTION_EDEFAULT;
+	protected double consumption = CONSUMPTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -111,7 +111,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getConsumption() {
+	public double getConsumption() {
 		return consumption;
 	}
 
@@ -120,8 +120,8 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setConsumption(int newConsumption) {
-		int oldConsumption = consumption;
+	public void setConsumption(double newConsumption) {
+		double oldConsumption = consumption;
 		consumption = newConsumption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FUEL_CONSUMPTION__CONSUMPTION, oldConsumption, consumption));
@@ -155,7 +155,7 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 				setSpeed((Double)newValue);
 				return;
 			case FleetPackage.FUEL_CONSUMPTION__CONSUMPTION:
-				setConsumption((Integer)newValue);
+				setConsumption((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

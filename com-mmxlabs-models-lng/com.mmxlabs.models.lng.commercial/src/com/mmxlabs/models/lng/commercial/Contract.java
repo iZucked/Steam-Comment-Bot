@@ -28,6 +28,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -132,6 +133,7 @@ public interface Contract extends UUIDObject, NamedObject {
 
 	/**
 	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
+	 * The default value is <code>"140000"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Max Quantity</em>' attribute isn't clear,
@@ -141,7 +143,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Max Quantity</em>' attribute.
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MaxQuantity()
-	 * @model required="true"
+	 * @model default="140000" required="true"
 	 * @generated
 	 */
 	int getMaxQuantity();
@@ -258,7 +260,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @return the value of the '<em>Notes</em>' attribute.
 	 * @see #setNotes(String)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Notes()
-	 * @model required="true"
+	 * @model
 	 * @generated
 	 */
 	String getNotes();
@@ -273,6 +275,35 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setNotes(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Contract Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.commercial.ContractType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contract Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contract Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.ContractType
+	 * @see #setContractType(ContractType)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_ContractType()
+	 * @model
+	 * @generated
+	 */
+	ContractType getContractType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contract Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.ContractType
+	 * @see #getContractType()
+	 * @generated
+	 */
+	void setContractType(ContractType value);
 
 } // end of  Contract
 

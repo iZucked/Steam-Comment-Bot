@@ -35,8 +35,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -45,10 +44,14 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ContractType;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -58,12 +61,16 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
@@ -106,7 +113,7 @@ public class CargoEditorMenuHelper {
 		public void run() {
 
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(shell, scenarioEditingLocation.getDefaultCommandHandler());
-			ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
+			final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 			try {
 				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
@@ -244,9 +251,14 @@ public class CargoEditorMenuHelper {
 				}
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
-				if (dischargeSlot.getCargo() != null) {
-					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), dischargeSlot.getCargo());
-					createAssignmentMenus(manager, dischargeSlot.getCargo(), elementAssignment);
+				if (dischargeSlot.isFOBSale()) {
+					createAssignmentMenus(manager, dischargeSlot);
+				} else if (dischargeSlot.getCargo() != null) {
+					createAssignmentMenus(manager, dischargeSlot.getCargo());
+				}
+				final Contract contract = dischargeSlot.getContract();
+				if (contract != null && contract.getContractType() == ContractType.BOTH) {
+					createFOBDESSwitchMenu(manager, dischargeSlot);
 				}
 			}
 
@@ -269,43 +281,45 @@ public class CargoEditorMenuHelper {
 		}
 	}
 
-	private void createAssignmentMenus(final IMenuManager menuManager, final Cargo cargo, final ElementAssignment elementAssignment) {
+	private void createAssignmentMenus(final IMenuManager menuManager, final AssignableElement assignableElement) {
 		menuManager.add(new Separator());
 
-		{
+		if (assignableElement != null) {
 			final MenuManager reassignMenuManager = new MenuManager("Assign to...", null);
 			menuManager.add(reassignMenuManager);
 
 			final ScenarioFleetModel fleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 			class AssignAction extends Action {
-				private final Vessel vessel;
+				private final AVesselSet<Vessel> vessel;
 
-				public AssignAction(final Vessel vessel) {
-					super(vessel.getName());
+				public AssignAction(final String label, final AVesselSet<Vessel> vessel) {
+					super(label);
 					this.vessel = vessel;
 				}
 
 				public void run() {
-					final Command cmd = AssignmentEditorHelper.reassignElement(scenarioEditingLocation.getEditingDomain(), vessel, elementAssignment);
+
+					Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
+					final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, value);
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}
 			}
-			if (elementAssignment != null) {
-				for (final VesselAvailability vesselAvailability : fleetModel.getVesselAvailabilities()) {
-					final Vessel vessel = vesselAvailability.getVessel();
-					if (vessel != elementAssignment.getAssignment()) {
-						reassignMenuManager.add(new AssignAction(vessel));
-					}
+
+			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
+					.getValueProviderFactory(FleetPackage.eINSTANCE.getAssignableElement(), FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(FleetPackage.eINSTANCE.getAssignableElement(),
+					FleetPackage.eINSTANCE.getAssignableElement_Assignment(), scenarioModel);
+
+			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment())) {
+				if (p.getSecond() != assignableElement.getAssignment()) {
+					reassignMenuManager.add(new AssignAction(p.getFirst(), (AVesselSet<Vessel>) p.getSecond()));
 				}
 			}
-		}
-
-		if (elementAssignment != null && elementAssignment.getAssignment() != null) {
-			if (elementAssignment.isLocked()) {
+			if (assignableElement.isLocked()) {
 				final Action action = new Action("Unlock") {
 					@Override
 					public void run() {
-						final Command cmd = AssignmentEditorHelper.unlockElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
+						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE);
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -314,7 +328,7 @@ public class CargoEditorMenuHelper {
 				final Action action = new Action("Lock") {
 					@Override
 					public void run() {
-						final Command cmd = AssignmentEditorHelper.lockElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
+						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE);
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -324,7 +338,7 @@ public class CargoEditorMenuHelper {
 				final Action action = new Action("Unassign") {
 					@Override
 					public void run() {
-						final Command cmd = AssignmentEditorHelper.unassignElement(scenarioEditingLocation.getEditingDomain(), elementAssignment);
+						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE);
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -355,11 +369,17 @@ public class CargoEditorMenuHelper {
 				}
 				createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
 				createDeleteSlotMenu(manager, loadSlot);
-				if (loadSlot.getCargo() != null) {
-					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(portfolioModel.getAssignmentModel(), loadSlot.getCargo());
-					createAssignmentMenus(manager, loadSlot.getCargo(), elementAssignment);
+				if (loadSlot.isDESPurchase()) {
+					createAssignmentMenus(manager, loadSlot);
+				} else if (loadSlot.getCargo() != null) {
+					createAssignmentMenus(manager, loadSlot.getCargo());
+				}
+				final Contract contract = loadSlot.getContract();
+				if (contract != null && contract.getContractType() == ContractType.BOTH) {
+					createFOBDESSwitchMenu(manager, loadSlot);
 				}
 			}
+
 		};
 		return l;
 
@@ -536,22 +556,22 @@ public class CargoEditorMenuHelper {
 	 * @return
 	 */
 	private boolean checkSourceContractConstraints(final Slot source, final Slot target) {
-		if (source.getContract() != null) {
-			final Contract sourceContract = source.getContract();
-			if (!sourceContract.getRestrictedPorts().isEmpty()) {
-				if (sourceContract.getRestrictedPorts().contains(target.getPort()) != sourceContract.isRestrictedListsArePermissive()) {
-					// Trying to pair to a restricted port - skip
-					return false;
-				}
-			}
+		final EList<Port> restrictedPorts = source.getRestrictedPorts();
+		final EList<Contract> restrictedContracts = source.getRestrictedContracts();
+		final boolean areRestrictedListsPermissive = source.getSlotOrContractRestrictedListsArePermissive();
 
-			if (!sourceContract.getRestrictedContracts().isEmpty() && target.getContract() != null) {
-				if (sourceContract.getRestrictedContracts().contains(target.getContract()) != sourceContract.isRestrictedListsArePermissive()) {
-					// Trying to pair to a restricted contract - skip
-					return false;
-				}
+		if (restrictedContracts != null) {
+			if (restrictedContracts.contains(target.getContract()) != areRestrictedListsPermissive) {
+				return false;
 			}
 		}
+
+		if (restrictedPorts != null) {
+			if (restrictedPorts.contains(target.getPort()) != areRestrictedListsPermissive) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 
@@ -1000,6 +1020,59 @@ public class CargoEditorMenuHelper {
 			}
 
 			scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+		}
+	}
+
+	private void createFOBDESSwitchMenu(final IMenuManager manager, final Slot slot) {
+
+		final Contract contract = slot.getContract();
+		assert (contract != null && contract.getContractType() == ContractType.BOTH);
+
+		if (slot instanceof LoadSlot) {
+			final LoadSlot loadSlot = (LoadSlot) slot;
+			if (SlotClassifier.classify(loadSlot) == SlotType.FOB_Buy) {
+				manager.add(new FOBDESSwitchAction("Convert to DES Purchase", slot));
+			} else if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
+				manager.add(new FOBDESSwitchAction("Convert to FOB Purchase", slot));
+			}
+		} else if (slot instanceof DischargeSlot) {
+			final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+			if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
+				manager.add(new FOBDESSwitchAction("Convert to DES Sale", slot));
+			} else if (SlotClassifier.classify(dischargeSlot) == SlotType.DES_Sale) {
+				manager.add(new FOBDESSwitchAction("Convert to FOB Sale", slot));
+			}
+		}
+	}
+
+	private class FOBDESSwitchAction extends Action {
+		private final Slot slot;
+
+		public FOBDESSwitchAction(final String label, final Slot slot) {
+			super(label);
+			this.slot = slot;
+		}
+
+		@Override
+		public void run() {
+
+			final CompoundCommand cmd = new CompoundCommand(getText());
+			if (slot instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) slot;
+				if (SlotClassifier.classify(loadSlot) != SlotType.DES_Buy) {
+					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, !loadSlot.isDESPurchase()));
+				}
+			} else if (slot instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				if (SlotClassifier.classify(dischargeSlot) != SlotType.FOB_Sale) {
+					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, !dischargeSlot.isFOBSale()));
+				}
+			}
+
+			if (cmd.canExecute()) {
+				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+			}
+
 		}
 	}
 

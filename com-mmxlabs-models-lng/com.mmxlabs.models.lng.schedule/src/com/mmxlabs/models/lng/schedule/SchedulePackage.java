@@ -73,7 +73,7 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -165,7 +165,7 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -415,7 +415,7 @@ public interface SchedulePackage extends EPackage {
 	int FITNESS = 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -487,7 +487,7 @@ public interface SchedulePackage extends EPackage {
 	int FITNESS_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -671,6 +671,15 @@ public interface SchedulePackage extends EPackage {
 	int PROFIT_AND_LOSS_CONTAINER = 22;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -678,7 +687,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = 0;
+	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
@@ -688,7 +697,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = 1;
+	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
@@ -698,7 +707,34 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = 2;
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>Profit And Loss Container</em>' class.
@@ -708,7 +744,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT = 0;
+	int PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl <em>Market Allocation</em>}' class.
@@ -720,6 +756,15 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	int MARKET_ALLOCATION = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION__EXTENSIONS = PROFIT_AND_LOSS_CONTAINER__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
@@ -802,6 +847,33 @@ public interface SchedulePackage extends EPackage {
 	int MARKET_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 5;
 
 	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION___ECONTAINER_OP = PROFIT_AND_LOSS_CONTAINER___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>Market Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -812,7 +884,7 @@ public interface SchedulePackage extends EPackage {
 	int MARKET_ALLOCATION_OPERATION_COUNT = PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -976,7 +1048,7 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1022,23 +1094,13 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Daily Hire Rate</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEQUENCE__DAILY_HIRE_RATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SEQUENCE__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Sequence Type</b></em>' attribute.
@@ -1048,7 +1110,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__SEQUENCE_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SEQUENCE__SEQUENCE_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
@@ -1057,7 +1119,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1132,7 +1194,7 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1305,7 +1367,7 @@ public interface SchedulePackage extends EPackage {
 	int EVENT_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1543,7 +1605,7 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1781,7 +1843,7 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2026,7 +2088,7 @@ public interface SchedulePackage extends EPackage {
 	int JOURNEY_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2225,7 +2287,7 @@ public interface SchedulePackage extends EPackage {
 	int IDLE_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2418,7 +2480,7 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2636,7 +2698,7 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -2856,7 +2918,7 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
@@ -3067,7 +3129,7 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -3404,7 +3466,7 @@ public interface SchedulePackage extends EPackage {
 	int FUEL_AMOUNT_OPERATION_COUNT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->
@@ -3535,6 +3597,15 @@ public interface SchedulePackage extends EPackage {
 	int GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 1;
+
+	/**
 	 * The feature id for the '<em><b>Entity Profit And Losses</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3542,7 +3613,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 1;
+	int GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES = 2;
 
 	/**
 	 * The number of structural features of the '<em>Group Profit And Loss</em>' class.
@@ -3552,7 +3623,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+	int GROUP_PROFIT_AND_LOSS_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Group Profit And Loss</em>' class.
@@ -3596,6 +3667,15 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 2;
+
+	/**
 	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3603,7 +3683,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 2;
+	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
@@ -3855,19 +3935,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSequence_Fitnesses();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Daily Hire Rate</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate()
-	 * @see #getSequence()
-	 * @generated
-	 */
-	@Deprecated
-	EAttribute getSequence_DailyHireRate();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}'.
@@ -4862,6 +4929,17 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getGroupProfitAndLoss_ProfitAndLoss();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax()
+	 * @see #getGroupProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getGroupProfitAndLoss_ProfitAndLossPreTax();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -4907,6 +4985,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getEntityProfitAndLoss_ProfitAndLoss();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -5133,16 +5222,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SEQUENCE__FITNESSES = eINSTANCE.getSequence_Fitnesses();
-
-		/**
-		 * The meta object literal for the '<em><b>Daily Hire Rate</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @deprecated
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		@Deprecated
-		EAttribute SEQUENCE__DAILY_HIRE_RATE = eINSTANCE.getSequence_DailyHireRate();
 
 		/**
 		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
@@ -5940,6 +6019,14 @@ public interface SchedulePackage extends EPackage {
 		EAttribute GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getGroupProfitAndLoss_ProfitAndLoss();
 
 		/**
+		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = eINSTANCE.getGroupProfitAndLoss_ProfitAndLossPreTax();
+
+		/**
 		 * The meta object literal for the '<em><b>Entity Profit And Losses</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * @since 4.0
@@ -5976,6 +6063,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = eINSTANCE.getEntityProfitAndLoss_ProfitAndLoss();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = eINSTANCE.getEntityProfitAndLoss_ProfitAndLossPreTax();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

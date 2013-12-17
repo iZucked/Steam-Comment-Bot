@@ -24,7 +24,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
@@ -89,7 +88,6 @@ public class LNGScenarioModelItemProvider
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PricingModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_CommercialModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SpotMarketsModel());
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ParametersModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_AnalyticsModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortfolioModel());
 		}
@@ -151,7 +149,6 @@ public class LNGScenarioModelItemProvider
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PRICING_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__COMMERCIAL_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__SPOT_MARKETS_MODEL:
-			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PARAMETERS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__ANALYTICS_MODEL:
 			case LNGScenarioPackage.LNG_SCENARIO_MODEL__PORTFOLIO_MODEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -195,11 +192,6 @@ public class LNGScenarioModelItemProvider
 			(createChildParameter
 				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_SpotMarketsModel(),
 				 SpotMarketsFactory.eINSTANCE.createSpotMarketsModel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_ParametersModel(),
-				 ParametersFactory.eINSTANCE.createParametersModel()));
 
 		newChildDescriptors.add
 			(createChildParameter

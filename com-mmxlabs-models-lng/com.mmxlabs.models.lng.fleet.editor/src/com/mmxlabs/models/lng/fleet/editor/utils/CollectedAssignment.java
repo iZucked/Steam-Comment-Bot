@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.assignment.editor.utils;
+package com.mmxlabs.models.lng.fleet.editor.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,11 +10,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * Utility class representing a sequence from the input model.
@@ -24,12 +23,12 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  */
 public class CollectedAssignment {
-	final AVesselSet<Vessel> vessel;
-	final ArrayList<UUIDObject> assignedObjects = new ArrayList<UUIDObject>();
-	List<ElementAssignment> assignments = null;
+	final AVesselSet<? extends  Vessel> vessel;
+	final ArrayList<AssignableElement> assignedObjects = new ArrayList<AssignableElement>();
+	List<AssignableElement> assignments = null;
 	private int spotIndex;
 	
-	public CollectedAssignment(final List<ElementAssignment> assignments, final AVesselSet<Vessel> vessel, int spotIndex) {
+	public CollectedAssignment(final List<AssignableElement> assignments, final AVesselSet<? extends Vessel> vessel, int spotIndex) {
 		this.vessel = vessel;
 		this.assignments = assignments;
 		this.spotIndex = spotIndex;
@@ -38,13 +37,13 @@ public class CollectedAssignment {
 	
 	private void sortAssignments() {
 		// if two assignments don't overlap, sort by start date. Otherwise, sort by sequence number.
-		Collections.sort(assignments, new Comparator<ElementAssignment>() {
+		Collections.sort(assignments, new Comparator<AssignableElement>() {
 			@Override
-			public int compare(final ElementAssignment arg0, final ElementAssignment arg1) {
-				final Date start0 = AssignmentEditorHelper.getStartDate(arg0.getAssignedObject());
-				final Date start1 = AssignmentEditorHelper.getStartDate(arg1.getAssignedObject());
-				final Date end0 = AssignmentEditorHelper.getEndDate(arg0.getAssignedObject());
-				final Date end1 = AssignmentEditorHelper.getEndDate(arg1.getAssignedObject());
+			public int compare(final AssignableElement arg0, final AssignableElement arg1) {
+				final Date start0 = AssignmentEditorHelper.getStartDate(arg0);
+				final Date start1 = AssignmentEditorHelper.getStartDate(arg1);
+				final Date end0 = AssignmentEditorHelper.getEndDate(arg0);
+				final Date end1 = AssignmentEditorHelper.getEndDate(arg1);
 				
 				final boolean null0 = start0 == null || end0 == null;
 				final boolean null1 = start1 == null || end1 == null;
@@ -60,7 +59,7 @@ public class CollectedAssignment {
 				}
 				
 				if (overlaps(start0, end0, start1, end1)) {
-					return ((Integer) arg0.getSequence()).compareTo(arg1.getSequence());
+					return ((Integer) arg0.getSequenceHint()).compareTo(arg1.getSequenceHint());
 				} else {
 					return start0.compareTo(start1);
 				}
@@ -71,12 +70,12 @@ public class CollectedAssignment {
 			}
 		});
 		
-		for (final ElementAssignment ea : assignments) {
-			assignedObjects.add(ea.getAssignedObject());
+		for (final AssignableElement ea : assignments) {
+			assignedObjects.add(ea);
 		}
 	}
 
-	public List<UUIDObject> getAssignedObjects() {
+	public List<AssignableElement> getAssignedObjects() {
 		return Collections.unmodifiableList(assignedObjects);
 	}
 	
@@ -84,7 +83,7 @@ public class CollectedAssignment {
 		return vessel instanceof VesselClass;
 	}
 	
-	public AVesselSet<Vessel> getVesselOrClass() {
+	public AVesselSet<? extends Vessel> getVesselOrClass() {
 		return vessel;
 	}
 	

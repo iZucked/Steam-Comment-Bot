@@ -37,6 +37,7 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getTimeZone <em>Time Zone</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getLoadDuration <em>Load Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDischargeDuration <em>Discharge Duration</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getBerths <em>Berths</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getDefaultStartTime <em>Default Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#isAllowCooldown <em>Allow Cooldown</em>}</li>
@@ -128,6 +129,26 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected int dischargeDuration = DISCHARGE_DURATION_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getBerths() <em>Berths</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBerths()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int BERTHS_EDEFAULT = 1;
+
+	/**
+	 * The cached value of the '{@link #getBerths() <em>Berths</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBerths()
+	 * @generated
+	 * @ordered
+	 */
+	protected int berths = BERTHS_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getCvValue() <em>Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -435,6 +456,27 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getBerths() {
+		return berths;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBerths(int newBerths) {
+		int oldBerths = berths;
+		berths = newBerths;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__BERTHS, oldBerths, berths));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public double getCvValue() {
 		return cvValue;
 	}
@@ -704,6 +746,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getLoadDuration();
 			case PortPackage.PORT__DISCHARGE_DURATION:
 				return getDischargeDuration();
+			case PortPackage.PORT__BERTHS:
+				return getBerths();
 			case PortPackage.PORT__CV_VALUE:
 				return getCvValue();
 			case PortPackage.PORT__DEFAULT_START_TIME:
@@ -753,6 +797,9 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return;
 			case PortPackage.PORT__DISCHARGE_DURATION:
 				setDischargeDuration((Integer)newValue);
+				return;
+			case PortPackage.PORT__BERTHS:
+				setBerths((Integer)newValue);
 				return;
 			case PortPackage.PORT__CV_VALUE:
 				setCvValue((Double)newValue);
@@ -811,6 +858,9 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__DISCHARGE_DURATION:
 				setDischargeDuration(DISCHARGE_DURATION_EDEFAULT);
 				return;
+			case PortPackage.PORT__BERTHS:
+				setBerths(BERTHS_EDEFAULT);
+				return;
 			case PortPackage.PORT__CV_VALUE:
 				setCvValue(CV_VALUE_EDEFAULT);
 				return;
@@ -863,6 +913,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return loadDuration != LOAD_DURATION_EDEFAULT;
 			case PortPackage.PORT__DISCHARGE_DURATION:
 				return dischargeDuration != DISCHARGE_DURATION_EDEFAULT;
+			case PortPackage.PORT__BERTHS:
+				return berths != BERTHS_EDEFAULT;
 			case PortPackage.PORT__CV_VALUE:
 				return cvValue != CV_VALUE_EDEFAULT;
 			case PortPackage.PORT__DEFAULT_START_TIME:
@@ -939,6 +991,8 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		result.append(loadDuration);
 		result.append(", dischargeDuration: ");
 		result.append(dischargeDuration);
+		result.append(", berths: ");
+		result.append(berths);
 		result.append(", cvValue: ");
 		result.append(cvValue);
 		result.append(", defaultStartTime: ");

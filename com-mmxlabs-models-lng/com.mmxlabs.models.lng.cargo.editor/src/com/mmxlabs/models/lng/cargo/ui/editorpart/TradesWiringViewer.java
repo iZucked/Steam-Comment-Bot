@@ -22,7 +22,6 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -90,9 +89,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -109,8 +105,11 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDa
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreateStripDialog.StripType;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
+import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -167,6 +166,8 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  * 
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
+
+	private Iterable<ITradesTableContextMenuExtension> contextMenuExtensions;
 
 	private TradesWiringDiagram wiringDiagram;
 
@@ -303,10 +304,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					public Object[] getElements(final Object inputElement) {
 
 						final CargoModel cargoModel = getPortfolioModel().getCargoModel();
-						final AssignmentModel assignmentModel = getPortfolioModel().getAssignmentModel();
 						final ScheduleModel scheduleModel = getPortfolioModel().getScheduleModel();
 
-						final RootData root = setCargoes(assignmentModel, cargoModel, scheduleModel, referenceRootData);
+						final RootData root = setCargoes(cargoModel, scheduleModel, referenceRootData);
 
 						TradesWiringViewer.this.rootData = root;
 
@@ -416,8 +416,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return source;
 				} else if (source instanceof Cargo) {
 					return source;
-				} else if (source instanceof ElementAssignment) {
-					return ((ElementAssignment) source).getAssignedObject();
 				}
 
 				return super.getElementForNotificationTarget(source);
@@ -431,6 +429,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		};
 		final MenuManager mgr = new MenuManager();
+
+		contextMenuExtensions = TradesTableContextMenuExtensionUtil.getContextMenuExtensions();
+
 		scenarioViewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
 
 			private Menu menu;
@@ -463,18 +464,42 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						if (rowDataItem.loadSlot != null) {
 							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getLoadSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
 						} else {
 							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getDischargeSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
 						}
 					}
 					if (dischargeColumns.contains(column)) {
 						if (rowDataItem.dischargeSlot != null) {
 							final IMenuListener listener = menuHelper.createDischargeSlotMenuListener(rootData.getDischargeSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getDischargeSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
 						} else if (rowDataItem.loadSlot != null) {
 							final IMenuListener listener = menuHelper.createLoadSlotMenuListener(rootData.getLoadSlots(), idx);
 							listener.menuAboutToShow(mgr);
+							if (contextMenuExtensions != null) {
+								final Slot slot = rootData.getLoadSlots().get(idx);
+								for (final ITradesTableContextMenuExtension ext : contextMenuExtensions) {
+									ext.contributeToMenu(scenarioEditingLocation, slot, mgr);
+								}
+							}
 						}
 					}
 
@@ -515,7 +540,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					aSet.add(rd.cargo);
 					aSet.add(rd.loadSlot);
 					aSet.add(rd.dischargeSlot);
-					aSet.add(rd.elementAssignment);
 					aSet.remove(null);
 				} else if (a instanceof CargoAllocation) {
 					final CargoAllocation cargoAllocation = (CargoAllocation) a;
@@ -738,7 +762,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
-			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.CARGO);
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
 			final GridViewerColumn assignmentColumn = addTradesColumn("Assignment", assignmentManipulator, assignmentPath);
 			assignmentColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), assignmentManipulator, assignmentPath) {
 				@Override
@@ -746,8 +770,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					if (element instanceof RowData) {
 						final RowData rowDataItem = (RowData) element;
-						if (rowDataItem.elementAssignment != null) {
-							if (rowDataItem.elementAssignment != null && rowDataItem.elementAssignment.isLocked()) {
+						Object object = assignmentPath.get(rowDataItem);
+						if (object instanceof AssignableElement) {
+							AssignableElement assignableElement = (AssignableElement) object;
+
+							if (assignableElement.isLocked()) {
 								return lockedImage;
 							}
 						}
@@ -917,9 +944,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * @param newCargoes
 	 * @since 5.0
 	 */
-	public RootData setCargoes(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel, final RootData existingData) {
+	public RootData setCargoes(final CargoModel cargoModel, final ScheduleModel scheduleModel, final RootData existingData) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
-		return transformer.transform(assignmentModel, cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors(), existingData);
+		return transformer.transform(cargoModel, scheduleModel, getScenarioViewer().getValidationSupport().getValidationErrors(), existingData);
 	}
 
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack) {
@@ -996,7 +1023,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final List<Command> deleteCommands = new LinkedList<Command>();
 
 		final CargoModel cargoModel = getPortfolioModel().getCargoModel();
-		final AssignmentModel assignmentModel = getPortfolioModel().getAssignmentModel();
 
 		final Set<Slot> slotsToRemove = new HashSet<Slot>();
 		final Set<Slot> slotsToKeep = new HashSet<Slot>();
@@ -1041,8 +1067,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
 
 					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
-
-					cec.appendFOBDESCommands(setCommands, deleteCommands, scenarioEditingLocation.getEditingDomain(), assignmentModel, c, loadSide.loadSlot, dischargeSide.getDischargeSlot());
 
 					{
 						Cargo dischargeCargo = null;
@@ -1115,6 +1139,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public void run() {
+				// TODO: Race conditions in the app can cause this command to fail. If two editing command happen too quickly, the first command could have executed but the second command is created
+				// before the UI state has refreshed properly (due to various asyncExec calls).
 				scenarioEditingLocation.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 			}
 		};
@@ -1280,7 +1306,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
-			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.ASSIGNMENT, AssignmentPackage.Literals.ELEMENT_ASSIGNMENT__ASSIGNMENT);
+			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
 			final Action clearAction = new Action("Clear Filter") {
 				@Override

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IExportWizard;
@@ -24,8 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -67,14 +70,17 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 			}
 
 			if (rootObject instanceof LNGScenarioModel) {
-				LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+				final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 				final File directory = createExportDirectories ? new File(outputDirectory, instance.getName()) : outputDirectory;
 				if (!directory.exists()) {
-					directory.mkdirs();
+					if (!directory.mkdirs()) {
+						MessageDialog.openError(getShell(), "Export error", "Unable to create target directory");
+						return false;
+					}
 				}
 
 				// generate export files
-				for (UUIDObject modelInstance : getSubModels(scenarioModel)) {
+				for (final UUIDObject modelInstance : getSubModels(scenarioModel)) {
 					final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
 					if (importer != null) {
 						final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
@@ -90,6 +96,20 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 						}
 					}
 				}
+
+				final Collection<IExtraModelImporter> extra = Activator.getDefault().getImporterRegistry().getExtraModelImporters();
+				for (final IExtraModelImporter importer : extra) {
+					final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
+					importer.exportModel((MMXRootObject) rootObject, outputs);
+					for (final String key : outputs.keySet()) {
+						final Collection<Map<String, String>> rows = outputs.get(key);
+						final String friendlyName = importer.getRequiredInputs().get(key);
+						final File outputFile = new File(directory, friendlyName + ".csv");
+
+						// export CSV for this file
+						writeCSV(rows, outputFile);
+					}
+				}
 			}
 		}
 
@@ -99,7 +119,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	}
 
 	private List<UUIDObject> getSubModels(final LNGScenarioModel scenarioModel) {
-		List<UUIDObject> subModels = new ArrayList<UUIDObject>();
+		final List<UUIDObject> subModels = new ArrayList<UUIDObject>();
 
 		subModels.add(scenarioModel.getPortModel());
 		subModels.add(scenarioModel.getFleetModel());
@@ -110,7 +130,6 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 
 		subModels.add(scenarioModel.getPortfolioModel().getScenarioFleetModel());
 		subModels.add(scenarioModel.getPortfolioModel().getCargoModel());
-		subModels.add(scenarioModel.getPortfolioModel().getAssignmentModel());
 		subModels.add(scenarioModel.getPortfolioModel().getScheduleModel());
 
 		// Remove any null references

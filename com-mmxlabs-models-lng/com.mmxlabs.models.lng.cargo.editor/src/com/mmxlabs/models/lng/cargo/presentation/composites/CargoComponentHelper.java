@@ -18,13 +18,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.swt.SWT;
 
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
@@ -63,6 +63,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(FleetPackage.Literals.ASSIGNABLE_ELEMENT));
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);	
 	}
 
 	/**
@@ -143,7 +144,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 
 			@Override
 			public void notifyChanged(final Notification notification) {
-				if (notification.getFeature() == AssignmentPackage.eINSTANCE.getElementAssignment_Locked()) {
+				if (notification.getFeature() == FleetPackage.eINSTANCE.getAssignableElement_Locked()) {
 					editor.setEditorEnabled(!notification.getNewBooleanValue());
 					if (notification.getNewBooleanValue()) {
 						final ICommandHandler handler = location.getDefaultCommandHandler();
@@ -165,7 +166,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS);
-		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
 

@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +15,10 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -47,25 +44,24 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  */
 public class CargoModelRowTransformer {
 	static final Color InvalidTerminalColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-	private final Color darkRed = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
+	private final Color InvalidWireColour = Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED);
 
+	private final Color Grey = new Color(Display.getCurrent(), new RGB(64, 64, 64));
 	static final Color ValidTerminalColour = TradesWiringDiagram.Light_Green;
-	private final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-	private final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
+	private final Color RewirableColour = Grey;// Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	/**
 	 * @since 5.0
 	 */
-	public RootData transform(final AssignmentModel assignmentModel, final CargoModel cargoModel, final ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo,
-			final RootData existingData) {
-		return transform(assignmentModel, cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo, existingData);
+	public RootData transform(final CargoModel cargoModel, final ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo, final RootData existingData) {
+		return transform(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo, existingData);
 
 	}
 
 	/**
 	 * Returns any slot the specified slot is linked to in a ship-to-ship transfer
 	 * 
-	 * @param assignmentModel
 	 * @param cargoes
 	 * @param allLoadSlots
 	 * @param allDischargeSlots
@@ -73,8 +69,8 @@ public class CargoModelRowTransformer {
 	 * @return
 	 * @since 5.0
 	 */
-	public RootData transform(final AssignmentModel assignmentModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots,
-			final Schedule schedule, final Map<Object, IStatus> validationInfo, final RootData existingWiring) {
+	public RootData transform(final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, final Schedule schedule,
+			final Map<Object, IStatus> validationInfo, final RootData existingWiring) {
 
 		final RootData root = new RootData();
 
@@ -236,12 +232,6 @@ public class CargoModelRowTransformer {
 					root.getRows().add(dischargeRowData);
 				}
 				loadRowData.cargo = cargo;
-				// Add slot if possible
-				// Add element assignment to all rows (TODO: just add it once?)
-				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
-				if (elementAssignment != null) {
-					loadRowData.elementAssignment = elementAssignment;
-				}
 
 				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
 				loadRowData.loadTerminalColour = ValidTerminalColour;
@@ -507,8 +497,6 @@ public class CargoModelRowTransformer {
 		DischargeSlot dischargeSlot;
 		SlotAllocation dischargeAllocation;
 
-		ElementAssignment elementAssignment;
-
 		// This is the RowData with the cargo defining load slot
 		boolean primaryRecord;
 
@@ -525,7 +513,7 @@ public class CargoModelRowTransformer {
 			if (obj instanceof RowData) {
 				final RowData other = (RowData) obj;
 				return Equality.isEqual(cargo, other.cargo) && Equality.isEqual(loadSlot, other.loadSlot) && Equality.isEqual(dischargeSlot, other.dischargeSlot)
-						&& Equality.isEqual(elementAssignment, other.elementAssignment) && Equality.isEqual(marketAllocation, other.marketAllocation);
+						&& Equality.isEqual(marketAllocation, other.marketAllocation);
 			}
 
 			return false;
@@ -543,13 +531,6 @@ public class CargoModelRowTransformer {
 			this.dischargeSlot = dischargeSlot;
 		}
 
-		/**
-		 * @since 4.0
-		 */
-		public void setElementAssignment(final ElementAssignment elementAssignment) {
-			this.elementAssignment = elementAssignment;
-		}
-
 		public GroupData getGroup() {
 			return group;
 		}
@@ -564,13 +545,6 @@ public class CargoModelRowTransformer {
 
 		public DischargeSlot getDischargeSlot() {
 			return dischargeSlot;
-		}
-
-		/**
-		 * @since 4.0
-		 */
-		public ElementAssignment getElementAssignment() {
-			return elementAssignment;
 		}
 
 		public void setGroup(final GroupData group) {
@@ -668,7 +642,7 @@ public class CargoModelRowTransformer {
 			// and add a wire to the group, showing the ship-to-ship transfer
 			final WireData wire = new WireData();
 			getWires().add(wire);
-			wire.colour = gray;
+			wire.colour = FixedWireColour;
 			wire.dashed = true;
 
 			LoadSlot loadSlot = null;
@@ -690,7 +664,7 @@ public class CargoModelRowTransformer {
 		/**
 		 * @since 4.0
 		 */
-		public void addCargo(final Cargo cargo, final AssignmentModel assignmentModel) {
+		public void addCargo(final Cargo cargo) {
 			getObjects().add(cargo);
 
 			// Build up list of slots assigned to cargo, sorting into loads and discharges
@@ -744,11 +718,6 @@ public class CargoModelRowTransformer {
 				}
 				if (i < dischargeSlots.size()) {
 					row.dischargeSlot = dischargeSlots.get(i);
-				}
-				// Add element assignment to all rows (TODO: just add it once?)
-				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
-				if (elementAssignment != null) {
-					row.elementAssignment = elementAssignment;
 				}
 
 				// Set terminal colours to valid - even if slot is missing, in such cases the terminal will not be rendered
@@ -858,8 +827,6 @@ public class CargoModelRowTransformer {
 				final RowData rowData = (RowData) root;
 				final boolean showRecord = primaryRecordOnly ? rowData.primaryRecord : true;
 				switch (type) {
-				case ASSIGNMENT:
-					return showRecord ? super.get(rowData.elementAssignment, depth) : null;
 				case CARGO:
 					return showRecord ? super.get(rowData.cargo, depth) : null;
 				case DISCHARGE:
@@ -886,6 +853,20 @@ public class CargoModelRowTransformer {
 					return result != null ? result : get(rowData.loadSlot, depth);
 
 				}
+				case SLOT_OR_CARGO: {
+
+					Object result = null;
+					if (rowData.loadSlot != null && rowData.loadSlot.isDESPurchase()) {
+						result = get(rowData.loadSlot, depth);
+					}
+					if (result == null && rowData.dischargeSlot != null && rowData.dischargeSlot.isFOBSale()) {
+						result = get(rowData.dischargeSlot, depth);
+					}
+					if (result == null) {
+						result = get(rowData.cargo, depth);
+					}
+					return result;
+				}
 
 				}
 			}
@@ -898,11 +879,11 @@ public class CargoModelRowTransformer {
 			int result = super.hashCode();
 			result = prime * result + (type.hashCode());
 			return result;
-		}	
+		}
 	}
 
 	public enum Type {
-		CARGO, LOAD, DISCHARGE, ASSIGNMENT, CARGO_ALLOCATION, LOAD_ALLOCATION, DISCHARGE_ALLOCATION,
+		CARGO, LOAD, DISCHARGE, CARGO_ALLOCATION, LOAD_ALLOCATION, DISCHARGE_ALLOCATION,
 		/**
 		 * @since 4.0
 		 */
@@ -919,7 +900,9 @@ public class CargoModelRowTransformer {
 		/**
 		 * @since 5.0
 		 */
-		CARGO_OR_MARKET_ALLOCATION
+		CARGO_OR_MARKET_ALLOCATION,
+
+		SLOT_OR_CARGO
 	}
 
 	/**
@@ -959,10 +942,9 @@ public class CargoModelRowTransformer {
 		}
 		if (c != null) {
 			for (final WireData wire : g.getWires()) {
-				wire.colour = validWire ? (c.isAllowRewiring() ? gray : black) : darkRed;
+				wire.colour = validWire ? (c.isAllowRewiring() ? RewirableColour : FixedWireColour) : InvalidWireColour;
 			}
 		}
 	}
-	
-	
+
 }

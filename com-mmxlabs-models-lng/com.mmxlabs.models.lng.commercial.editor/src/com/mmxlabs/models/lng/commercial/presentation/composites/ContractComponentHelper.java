@@ -76,6 +76,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_restrictedPortsEditor(detailComposite, topClass);
 		add_priceInfoEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
+		add_contractTypeEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -86,6 +87,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	private void add_notesEditor(IInlineEditorContainer detailComposite,
 			EClass topClass) {
 		detailComposite.addInlineEditor(new MultiTextInlineEditor(CommercialPackage.Literals.CONTRACT__NOTES));
+	}
+
+	/**
+	 * Create the editor for the contractType feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_contractTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE));
 	}
 
 	/**

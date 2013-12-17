@@ -22,12 +22,17 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 		if (rootObject instanceof LNGScenarioModel) {
 			LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 			final CargoModel cm = lngScenarioModel.getPortfolioModel().getCargoModel();
-			if (cm == null)
+			if (cm == null) {
 				return null;
+			}
 			if (CargoPackage.eINSTANCE.getCargo().isSuperTypeOf(reference.getEReferenceType())) {
 				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 			} else if (reference.getEReferenceType().isSuperTypeOf(CargoPackage.eINSTANCE.getCargoGroup())) {
 				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_CargoGroups());
+			} else if (CargoPackage.eINSTANCE.getLoadSlot().isSuperTypeOf(reference.getEReferenceType())) {
+				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_LoadSlots());
+			} else if (CargoPackage.eINSTANCE.getDischargeSlot().isSuperTypeOf(reference.getEReferenceType())) {
+				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots());
 			}
 		}
 		return null;

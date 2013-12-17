@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.commercial;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -70,7 +71,7 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -124,23 +125,13 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Contract Slot Extensions</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
-
-	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -153,7 +144,7 @@ public interface CommercialPackage extends EPackage {
 	int LEGAL_ENTITY = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -209,7 +200,7 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -331,13 +322,22 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
+	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__CONTRACT_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -350,7 +350,7 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -472,6 +472,15 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__NOTES = CONTRACT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -521,7 +530,7 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -643,13 +652,31 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__NOTES = CONTRACT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__CARGO_CV = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -704,7 +731,7 @@ public interface CommercialPackage extends EPackage {
 	int LNG_PRICE_CALCULATOR_PARAMETERS = 6;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->
@@ -745,7 +772,7 @@ public interface CommercialPackage extends EPackage {
 	int EXPRESSION_PRICE_PARAMETERS = 7;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->
@@ -783,6 +810,53 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
+	 * @generated
+	 */
+	int SLOT_CONTRACT_PARAMS = 8;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_CONTRACT_PARAMS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_CONTRACT_PARAMS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The number of structural features of the '<em>Slot Contract Params</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_CONTRACT_PARAMS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.ContractType
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
+	 * @generated
+	 */
+	int CONTRACT_TYPE = 9;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -837,18 +911,6 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCommercialModel_PurchaseContracts();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getContractSlotExtensions <em>Contract Slot Extensions</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Contract Slot Extensions</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getContractSlotExtensions()
-	 * @see #getCommercialModel()
-	 * @generated
-	 */
-	EReference getCommercialModel_ContractSlotExtensions();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
@@ -998,6 +1060,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_Notes();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Contract Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getContractType()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_ContractType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1052,6 +1125,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPurchaseContract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo CV</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV()
+	 * @see #getPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getPurchaseContract_CargoCV();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.TaxRate <em>Tax Rate</em>}'.
@@ -1123,6 +1207,26 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getExpressionPriceParameters_PriceExpression();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SlotContractParams <em>Slot Contract Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot Contract Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SlotContractParams
+	 * @generated
+	 */
+	EClass getSlotContractParams();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Contract Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractType
+	 * @generated
+	 */
+	EEnum getContractType();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1185,15 +1289,6 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMMERCIAL_MODEL__PURCHASE_CONTRACTS = eINSTANCE.getCommercialModel_PurchaseContracts();
-
-		/**
-		 * The meta object literal for the '<em><b>Contract Slot Extensions</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS = eINSTANCE.getCommercialModel_ContractSlotExtensions();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -1310,6 +1405,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__NOTES = eINSTANCE.getContract_Notes();
 
 		/**
+		 * The meta object literal for the '<em><b>Contract Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__CONTRACT_TYPE = eINSTANCE.getContract_ContractType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1355,6 +1458,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass PURCHASE_CONTRACT = eINSTANCE.getPurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo CV</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURCHASE_CONTRACT__CARGO_CV = eINSTANCE.getPurchaseContract_CargoCV();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -1415,6 +1526,26 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getExpressionPriceParameters_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
+		 * @generated
+		 */
+		EClass SLOT_CONTRACT_PARAMS = eINSTANCE.getSlotContractParams();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.ContractType
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
+		 * @generated
+		 */
+		EEnum CONTRACT_TYPE = eINSTANCE.getContractType();
 
 	}
 

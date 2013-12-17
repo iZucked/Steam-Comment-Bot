@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import com.mmxlabs.models.lng.cargo.*;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -128,6 +128,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
+			}
+			@Override
+			public Adapter caseAssignableElement(AssignableElement object) {
+				return createAssignableElementAdapter();
 			}
 			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
@@ -318,6 +322,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.AssignableElement <em>Assignable Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.AssignableElement
+	 * @generated
+	 */
+	public Adapter createAssignableElementAdapter() {
 		return null;
 	}
 

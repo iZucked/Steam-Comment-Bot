@@ -4,17 +4,13 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
-import com.mmxlabs.models.lng.types.APortSet;
-import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,7 +20,6 @@ import java.util.Collection;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getNotionalPort <em>Notional Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESSalesMarketImpl#getMarketPorts <em>Market Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -40,17 +35,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 	 * @ordered
 	 */
 	protected Port notionalPort;
-
-	/**
-	 * The cached value of the '{@link #getMarketPorts() <em>Market Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @see #getMarketPorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<APortSet<Port>> marketPorts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -111,19 +95,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<APortSet<Port>> getMarketPorts() {
-		if (marketPorts == null) {
-			marketPorts = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, SpotMarketsPackage.DES_SALES_MARKET__MARKET_PORTS);
-		}
-		return marketPorts;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -133,8 +104,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				if (resolve) return getNotionalPort();
 				return basicGetNotionalPort();
-			case SpotMarketsPackage.DES_SALES_MARKET__MARKET_PORTS:
-				return getMarketPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -151,10 +120,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				setNotionalPort((Port)newValue);
 				return;
-			case SpotMarketsPackage.DES_SALES_MARKET__MARKET_PORTS:
-				getMarketPorts().clear();
-				getMarketPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -170,9 +135,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				setNotionalPort((Port)null);
 				return;
-			case SpotMarketsPackage.DES_SALES_MARKET__MARKET_PORTS:
-				getMarketPorts().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -187,8 +149,6 @@ public class DESSalesMarketImpl extends SpotMarketImpl implements DESSalesMarket
 		switch (featureID) {
 			case SpotMarketsPackage.DES_SALES_MARKET__NOTIONAL_PORT:
 				return notionalPort != null;
-			case SpotMarketsPackage.DES_SALES_MARKET__MARKET_PORTS:
-				return marketPorts != null && !marketPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

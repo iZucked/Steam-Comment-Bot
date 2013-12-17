@@ -72,7 +72,7 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -147,7 +147,7 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_MATRIX = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -364,7 +364,7 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_LINE = 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -807,7 +807,7 @@ public interface AnalyticsPackage extends EPackage {
 	int SHIPPING_COST_PLAN = 8;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
@@ -888,7 +888,7 @@ public interface AnalyticsPackage extends EPackage {
 	int SHIPPING_COST_ROW = 9;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
@@ -990,7 +990,7 @@ public interface AnalyticsPackage extends EPackage {
 	int CARGO_SANDBOX = 10;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->
@@ -1041,7 +1041,7 @@ public interface AnalyticsPackage extends EPackage {
 	int PROVISIONAL_CARGO = 11;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->
@@ -1112,7 +1112,7 @@ public interface AnalyticsPackage extends EPackage {
 	int BUY_OPPORTUNITY = 12;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->
@@ -1183,7 +1183,7 @@ public interface AnalyticsPackage extends EPackage {
 	int SELL_OPPORTUNITY = 13;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->

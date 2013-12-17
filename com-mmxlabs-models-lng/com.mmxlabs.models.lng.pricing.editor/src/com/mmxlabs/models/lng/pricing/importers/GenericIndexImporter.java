@@ -33,8 +33,9 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Generic import logic for loading index data. 
@@ -45,29 +46,10 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * @since 5.0
  * 
  */
-abstract public class GenericIndexImporter<TargetClass> implements IClassImporter {
+abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImporter {
 	protected static final String EXPRESSION = "expression";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
-
-	@Override
-	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context) {
-		final List<EObject> result = new LinkedList<EObject>();
-
-		Map<String, String> row;
-		try {
-			context.pushReader(reader);
-			while (null != (row = reader.readRow())) {
-				result.addAll(importObject(targetClass, row, context));
-			}
-		} catch (final IOException e) {
-			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
-		} finally {
-			context.popReader();
-		}
-
-		return result;
-	}
 	
 	@SuppressWarnings("unchecked")
 	protected Index<Double> importDoubleIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore,@NonNull final IImportContext context) {
@@ -151,7 +133,7 @@ abstract public class GenericIndexImporter<TargetClass> implements IClassImporte
 	}
 
 	@Override
-	abstract public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context);
+	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 	
 	protected Comparator<String> getFieldNameOrderComparator() {
 		return new Comparator<String>() {

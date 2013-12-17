@@ -22,7 +22,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -50,7 +49,6 @@ public class MigrateToV2Test {
 		instance = CargoPackage.eINSTANCE;
 		instance = CommercialPackage.eINSTANCE;
 		instance = FleetPackage.eINSTANCE;
-		instance = AssignmentPackage.eINSTANCE;
 		instance = ParametersPackage.eINSTANCE;
 		instance = PortPackage.eINSTANCE;
 		instance = PricingPackage.eINSTANCE;

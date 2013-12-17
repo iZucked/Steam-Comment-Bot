@@ -192,7 +192,7 @@ public interface LoadSlot extends Slot {
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
-	double getSlotOrPortCV();
+	double getSlotOrDelegatedCV();
 
 } // end of  LoadSlot
 

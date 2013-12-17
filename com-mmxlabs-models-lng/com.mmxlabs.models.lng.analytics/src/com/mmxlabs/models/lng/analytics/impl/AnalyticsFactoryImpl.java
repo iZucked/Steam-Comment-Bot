@@ -44,7 +44,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	 */
 	public static AnalyticsFactory init() {
 		try {
-			AnalyticsFactory theAnalyticsFactory = (AnalyticsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/analytics/1/"); 
+			AnalyticsFactory theAnalyticsFactory = (AnalyticsFactory)EPackage.Registry.INSTANCE.getEFactory(AnalyticsPackage.eNS_URI);
 			if (theAnalyticsFactory != null) {
 				return theAnalyticsFactory;
 			}

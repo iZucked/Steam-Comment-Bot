@@ -86,7 +86,6 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * <!-- begin-model-doc -->
 	 * The cargo must be delivered by a third party.
-	 * @since 5.0
 	 * <!-- end-model-doc -->
 	 * @see #NOT_SHIPPED
 	 * @model name="NotShipped"
@@ -101,8 +100,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final CargoDeliveryType[] VALUES_ARRAY = new CargoDeliveryType[] {
-			ANY, SHIPPED, NOT_SHIPPED, };
+	private static final CargoDeliveryType[] VALUES_ARRAY = new CargoDeliveryType[] { ANY, SHIPPED, NOT_SHIPPED, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Cargo Delivery Type</b></em>' enumerators.
@@ -110,8 +108,7 @@ public enum CargoDeliveryType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<CargoDeliveryType> VALUES = Collections
-			.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<CargoDeliveryType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
 	 * Returns the '<em><b>Cargo Delivery Type</b></em>' literal with the specified literal value.

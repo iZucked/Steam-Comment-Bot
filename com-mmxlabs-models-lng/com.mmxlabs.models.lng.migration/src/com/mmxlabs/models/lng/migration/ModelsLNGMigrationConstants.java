@@ -67,6 +67,7 @@ public final class ModelsLNGMigrationConstants {
 	public static final PackageData PKG_DATA_FleetModel = new PackageData(NSURI_FleetModel, "platform:/plugin/com.mmxlabs.models.lng.fleet/model/fleet.ecore",
 			"../../com.mmxlabs.models.lng.fleet/model/fleet.ecore");
 
+	
 	/**
 	 * @since 4.0
 	 */
@@ -74,7 +75,7 @@ public final class ModelsLNGMigrationConstants {
 	/**
 	 * @since 4.0
 	 */
-	public static final PackageData PKG_DATA_AssignmentModel = new PackageData(NSURI_AssignmentModel, "platform:/plugin/com.mmxlabs.models.lng.assignment/model/assignment.ecore",
+	public static final PackageData PKG_DATA_AssignmentModel = new PackageData(NSURI_AssignmentModel, "platform:/plugin/com.mmxlabs.models.lng.assignment/model/assignment.ecore","platform:/plugin/com.mmxlabs.models.lng.migration/model/assignment.ecore",
 			"../../com.mmxlabs.models.lng.assignment/model/assignment.ecore");
 
 	/**

@@ -31,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getIdleBaseRate <em>Idle Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getInPortBaseRate <em>In Port Base Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getFuelConsumption <em>Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselStateAttributesImpl#getServiceSpeed <em>Service Speed</em>}</li>
  * </ul>
  * </p>
  *
@@ -45,7 +46,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int NBO_RATE_EDEFAULT = 0;
+	protected static final double NBO_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getNboRate() <em>Nbo Rate</em>}' attribute.
@@ -55,7 +56,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected int nboRate = NBO_RATE_EDEFAULT;
+	protected double nboRate = NBO_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getIdleNBORate() <em>Idle NBO Rate</em>}' attribute.
@@ -65,7 +66,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int IDLE_NBO_RATE_EDEFAULT = 0;
+	protected static final double IDLE_NBO_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getIdleNBORate() <em>Idle NBO Rate</em>}' attribute.
@@ -75,7 +76,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected int idleNBORate = IDLE_NBO_RATE_EDEFAULT;
+	protected double idleNBORate = IDLE_NBO_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getIdleBaseRate() <em>Idle Base Rate</em>}' attribute.
@@ -85,7 +86,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int IDLE_BASE_RATE_EDEFAULT = 0;
+	protected static final double IDLE_BASE_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getIdleBaseRate() <em>Idle Base Rate</em>}' attribute.
@@ -95,7 +96,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected int idleBaseRate = IDLE_BASE_RATE_EDEFAULT;
+	protected double idleBaseRate = IDLE_BASE_RATE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getInPortBaseRate() <em>In Port Base Rate</em>}' attribute.
@@ -105,7 +106,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int IN_PORT_BASE_RATE_EDEFAULT = 0;
+	protected static final double IN_PORT_BASE_RATE_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getInPortBaseRate() <em>In Port Base Rate</em>}' attribute.
@@ -115,7 +116,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @generated
 	 * @ordered
 	 */
-	protected int inPortBaseRate = IN_PORT_BASE_RATE_EDEFAULT;
+	protected double inPortBaseRate = IN_PORT_BASE_RATE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getFuelConsumption() <em>Fuel Consumption</em>}' containment reference list.
@@ -126,6 +127,26 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * @ordered
 	 */
 	protected EList<FuelConsumption> fuelConsumption;
+
+	/**
+	 * The default value of the '{@link #getServiceSpeed() <em>Service Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getServiceSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double SERVICE_SPEED_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getServiceSpeed() <em>Service Speed</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getServiceSpeed()
+	 * @generated
+	 * @ordered
+	 */
+	protected double serviceSpeed = SERVICE_SPEED_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -151,7 +172,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getNboRate() {
+	public double getNboRate() {
 		return nboRate;
 	}
 
@@ -160,8 +181,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setNboRate(int newNboRate) {
-		int oldNboRate = nboRate;
+	public void setNboRate(double newNboRate) {
+		double oldNboRate = nboRate;
 		nboRate = newNboRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE, oldNboRate, nboRate));
@@ -172,7 +193,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getIdleNBORate() {
+	public double getIdleNBORate() {
 		return idleNBORate;
 	}
 
@@ -181,8 +202,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIdleNBORate(int newIdleNBORate) {
-		int oldIdleNBORate = idleNBORate;
+	public void setIdleNBORate(double newIdleNBORate) {
+		double oldIdleNBORate = idleNBORate;
 		idleNBORate = newIdleNBORate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE, oldIdleNBORate, idleNBORate));
@@ -193,7 +214,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getIdleBaseRate() {
+	public double getIdleBaseRate() {
 		return idleBaseRate;
 	}
 
@@ -202,8 +223,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIdleBaseRate(int newIdleBaseRate) {
-		int oldIdleBaseRate = idleBaseRate;
+	public void setIdleBaseRate(double newIdleBaseRate) {
+		double oldIdleBaseRate = idleBaseRate;
 		idleBaseRate = newIdleBaseRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE, oldIdleBaseRate, idleBaseRate));
@@ -214,7 +235,7 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getInPortBaseRate() {
+	public double getInPortBaseRate() {
 		return inPortBaseRate;
 	}
 
@@ -223,8 +244,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setInPortBaseRate(int newInPortBaseRate) {
-		int oldInPortBaseRate = inPortBaseRate;
+	public void setInPortBaseRate(double newInPortBaseRate) {
+		double oldInPortBaseRate = inPortBaseRate;
 		inPortBaseRate = newInPortBaseRate;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE, oldInPortBaseRate, inPortBaseRate));
@@ -240,6 +261,27 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 			fuelConsumption = new EObjectContainmentEList<FuelConsumption>(FuelConsumption.class, this, FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION);
 		}
 		return fuelConsumption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getServiceSpeed() {
+		return serviceSpeed;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setServiceSpeed(double newServiceSpeed) {
+		double oldServiceSpeed = serviceSpeed;
+		serviceSpeed = newServiceSpeed;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED, oldServiceSpeed, serviceSpeed));
 	}
 
 	/**
@@ -274,6 +316,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return getInPortBaseRate();
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
 				return getFuelConsumption();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				return getServiceSpeed();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -288,20 +332,23 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__NBO_RATE:
-				setNboRate((Integer)newValue);
+				setNboRate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_NBO_RATE:
-				setIdleNBORate((Integer)newValue);
+				setIdleNBORate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IDLE_BASE_RATE:
-				setIdleBaseRate((Integer)newValue);
+				setIdleBaseRate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__IN_PORT_BASE_RATE:
-				setInPortBaseRate((Integer)newValue);
+				setInPortBaseRate((Double)newValue);
 				return;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
 				getFuelConsumption().clear();
 				getFuelConsumption().addAll((Collection<? extends FuelConsumption>)newValue);
+				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				setServiceSpeed((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -330,6 +377,9 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
 				getFuelConsumption().clear();
 				return;
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				setServiceSpeed(SERVICE_SPEED_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -352,6 +402,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 				return inPortBaseRate != IN_PORT_BASE_RATE_EDEFAULT;
 			case FleetPackage.VESSEL_STATE_ATTRIBUTES__FUEL_CONSUMPTION:
 				return fuelConsumption != null && !fuelConsumption.isEmpty();
+			case FleetPackage.VESSEL_STATE_ATTRIBUTES__SERVICE_SPEED:
+				return serviceSpeed != SERVICE_SPEED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -374,6 +426,8 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 		result.append(idleBaseRate);
 		result.append(", inPortBaseRate: ");
 		result.append(inPortBaseRate);
+		result.append(", serviceSpeed: ");
+		result.append(serviceSpeed);
 		result.append(')');
 		return result.toString();
 	}

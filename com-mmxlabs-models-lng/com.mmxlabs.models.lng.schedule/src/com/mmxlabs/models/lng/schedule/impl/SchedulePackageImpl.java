@@ -493,17 +493,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSequence_DailyHireRate() {
-		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getSequence_SpotIndex() {
-		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -513,7 +504,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	public EAttribute getSequence_SequenceType() {
-		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -1344,12 +1335,21 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGroupProfitAndLoss_ProfitAndLossPreTax() {
+		return (EAttribute)groupProfitAndLossEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EReference getGroupProfitAndLoss_EntityProfitAndLosses() {
-		return (EReference)groupProfitAndLossEClass.getEStructuralFeatures().get(1);
+		return (EReference)groupProfitAndLossEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1380,6 +1380,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getEntityProfitAndLoss_ProfitAndLoss() {
 		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax() {
+		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1523,7 +1532,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(sequenceEClass, SEQUENCE__VESSEL_AVAILABILITY);
 		createEReference(sequenceEClass, SEQUENCE__VESSEL_CLASS);
 		createEReference(sequenceEClass, SEQUENCE__FITNESSES);
-		createEAttribute(sequenceEClass, SEQUENCE__DAILY_HIRE_RATE);
 		createEAttribute(sequenceEClass, SEQUENCE__SPOT_INDEX);
 		createEAttribute(sequenceEClass, SEQUENCE__SEQUENCE_TYPE);
 		createEOperation(sequenceEClass, SEQUENCE___GET_NAME);
@@ -1605,11 +1613,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		groupProfitAndLossEClass = createEClass(GROUP_PROFIT_AND_LOSS);
 		createEAttribute(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
+		createEAttribute(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX);
 		createEReference(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__ENTITY_PROFIT_AND_LOSSES);
 
 		entityProfitAndLossEClass = createEClass(ENTITY_PROFIT_AND_LOSS);
 		createEReference(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__ENTITY);
 		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
+		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX);
 
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
@@ -1696,6 +1706,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		capacityViolationsHolderEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		profitAndLossContainerEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1752,7 +1763,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSequence_VesselAvailability(), theFleetPackage.getVesselAvailability(), null, "vesselAvailability", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_VesselClass(), theFleetPackage.getVesselClass(), null, "vesselClass", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSequence_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSequence_DailyHireRate(), ecorePackage.getEInt(), "dailyHireRate", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SequenceType(), this.getSequenceType(), "sequenceType", null, 0, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1844,11 +1854,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(groupProfitAndLossEClass, GroupProfitAndLoss.class, "GroupProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGroupProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getGroupProfitAndLoss_ProfitAndLossPreTax(), ecorePackage.getELong(), "profitAndLossPreTax", null, 0, 1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getGroupProfitAndLoss_EntityProfitAndLosses(), this.getEntityProfitAndLoss(), null, "entityProfitAndLosses", null, 0, -1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(entityProfitAndLossEClass, EntityProfitAndLoss.class, "EntityProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getEntityProfitAndLoss_Entity(), theCommercialPackage.getLegalEntity(), null, "entity", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getEntityProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEntityProfitAndLoss_ProfitAndLossPreTax(), ecorePackage.getELong(), "profitAndLossPreTax", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
@@ -1877,6 +1889,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.MAX_HEEL);
 		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.FORCED_COOLDOWN);
 		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.VESSEL_CAPACITY);
+		addEEnumLiteral(capacityViolationTypeEEnum, CapacityViolationType.LOST_HEEL);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

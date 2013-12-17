@@ -20,14 +20,4 @@ package com.mmxlabs.models.lng.pricing;
  */
 public interface BaseFuelIndex extends NamedIndexContainer<Double> {
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-	@Deprecated
-	double getPrice();
-
 } // BaseFuelIndex

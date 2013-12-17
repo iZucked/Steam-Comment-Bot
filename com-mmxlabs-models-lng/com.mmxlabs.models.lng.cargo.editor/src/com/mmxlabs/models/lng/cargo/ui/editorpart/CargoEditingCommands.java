@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -19,8 +18,6 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -30,7 +27,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -223,57 +219,8 @@ public class CargoEditingCommands {
 		return newDischarge;
 	}
 
-	/**
-	 * @since 4.0
-	 */
-	public void appendFOBDESCommands(final List<Command> setCommands, final List<Command> deleteCommands, final EditingDomain editingDomain, final AssignmentModel assignmentModel, final Cargo cargo,
-			final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
-
-		if (loadSlot.isDESPurchase()) {
-			deleteCommands.add(AssignmentEditorHelper.unassignElement(editingDomain, assignmentModel, cargo));
-
-			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getLoadSlot_ArriveCold(), false));
-			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
-			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
-			if (loadSlot instanceof SpotSlot) {
-				final CompoundCommand cmd = new CompoundCommand();
-
-				SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, loadSlot, dischargeSlot, cmd);
-				if (!cmd.isEmpty()) {
-					setCommands.add(cmd);
-				}
-			} else {
-				setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
-				if (dischargeSlot.isSetWindowStartTime()) {
-					setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
-				} else {
-					setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), SetCommand.UNSET_VALUE));
-				}
-			}
-		} else if (dischargeSlot.isFOBSale()) {
-			deleteCommands.add(AssignmentEditorHelper.unassignElement(editingDomain, assignmentModel, cargo));
-			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
-			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
-			if (dischargeSlot instanceof SpotSlot) {
-				final CompoundCommand cmd = new CompoundCommand();
-				SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, dischargeSlot, loadSlot, cmd);
-				if (!cmd.isEmpty()) {
-					setCommands.add(cmd);
-				}
-			} else {
-				setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
-				if (loadSlot.isSetWindowStartTime()) {
-					setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
-				} else {
-					setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), SetCommand.UNSET_VALUE));
-				}
-			}
-		}
-	}
-
 	public void runWiringUpdate(final List<Command> setCommands, final List<Command> deleteCommands, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
-		final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
 
 		// Discharge has an existing slot, so remove the cargo & wiring
 		if (dischargeSlot.getCargo() != null) {
@@ -320,9 +267,6 @@ public class CargoEditingCommands {
 			setCommands.add(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 			setCommands.add(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), cargo));
 		}
-
-		appendFOBDESCommands(setCommands, deleteCommands, editingDomain, assignmentModel, cargo, loadSlot, dischargeSlot);
-
 	}
 
 }

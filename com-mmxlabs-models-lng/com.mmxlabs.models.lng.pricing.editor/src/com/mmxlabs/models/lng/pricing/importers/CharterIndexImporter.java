@@ -4,18 +4,15 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -31,9 +28,9 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
-import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
  * Custom import logic for loading a {@link CharterIndex}.
@@ -42,33 +39,16 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * @since 5.0
  * 
  */
-public class CharterIndexImporter implements IClassImporter {
+public class CharterIndexImporter extends AbstractClassImporter {
 	private static final String NAME = "name";
 	private static final String EXPRESSION = "expression";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
-	@Override
-	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context) {
-		final List<EObject> result = new LinkedList<EObject>();
 
-		Map<String, String> row;
-		try {
-			context.pushReader(reader);
-			while (null != (row = reader.readRow())) {
-				result.addAll(importObject(targetClass, row, context));
-			}
-		} catch (final IOException e) {
-			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
-		} finally {
-			context.popReader();
-		}
-
-		return result;
-	}
 
 	@Override
-	public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		CharterIndex result = PricingFactory.eINSTANCE.createCharterIndex();
 
 		final Index<Integer> indexData;
@@ -139,7 +119,7 @@ public class CharterIndexImporter implements IClassImporter {
 
 		context.registerNamedObject(result);
 
-		return Collections.singleton((EObject) result);
+		return new ImportResults((EObject) result);
 	}
 
 	@Override

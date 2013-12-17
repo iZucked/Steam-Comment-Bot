@@ -17,7 +17,7 @@
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/assignment/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
          </package>
          <constraints
                categories=" com.mmxlabs.models.lng.assignment.validation.base">
@@ -37,26 +37,7 @@
                   description body text
                </description>
                <target
-                     class="ElementAssignment">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.assignment.validation.CargoTypeAssignmentConstraint"
-                  id="com.mmxlabs.models.lng.input.validation.CargoTypeAssignmentConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="Cargo Type Assignment Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <description>
-                  description body text
-               </description>
-               <target
-                     class="ElementAssignment">
+                     class="AssignableElement">
                </target>
             </constraint>
             <constraint
@@ -75,7 +56,7 @@
                   description body text
                </description>
                <target
-                     class="ElementAssignment">
+                     class="AssignableElement">
                </target>
             </constraint>
             <constraint
@@ -90,30 +71,8 @@
                <message>
                   {0}
                </message>
-               <description>
-                  description body text
-               </description>
                <target
-                     class="ElementAssignment">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.assignment.validation.UniqueElementAssignmentConstraint"
-                  id="com.mmxlabs.models.lng.input.validation.UniqueElementAssignmentConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="Unique Element Assignment Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <description>
-                  description body text
-               </description>
-               <target
-                     class="AssignmentModel">
+                     class="AssignableElement">
                </target>
             </constraint>
             <constraint
@@ -129,7 +88,7 @@
                   {0}
                </message>
                <target
-                     class="ElementAssignment">
+                     class="AssignableElement">
                </target>
             </constraint>
             <constraint
@@ -145,7 +104,23 @@
                   {0}
                </message>
                <target
-                     class="ElementAssignment">
+                     class="AssignableElement">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Availability Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="AssignableElement">
                </target>
             </constraint>
          </constraints>
@@ -158,7 +133,7 @@
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/assignment/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
          </package>
          <constraints
                categories="com.mmxlabs.models.lng.assignment.validation.optimisation">
@@ -174,9 +149,6 @@
                <message>
                   {0}
                </message>
-               <target
-                     class="AssignmentModel">
-               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.CargoVolumeVesselAssignmentConstraint"
@@ -185,13 +157,13 @@
                   lang="java"
                   mode="Batch"
                   name="Cargo / Vessel Volume Constraint"
-                  severity="ERROR"
+                  severity="WARNING"
                   statusCode="1">
                <message>
                   {0}
                </message>
                <target
-                     class="ElementAssignment">
+                     class="AssignableElement">
                </target>
             </constraint>
          </constraints>
