@@ -107,6 +107,22 @@
                      class="AssignableElement">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.VesselAvailabilityConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Availability Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="AssignableElement">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
             <category
