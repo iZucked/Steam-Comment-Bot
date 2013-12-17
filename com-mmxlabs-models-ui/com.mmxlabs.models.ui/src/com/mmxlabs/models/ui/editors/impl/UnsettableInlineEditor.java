@@ -79,7 +79,14 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			this.lastSetValue = getInitialUnsetValue();
 //			final Composite sub = new Composite(parent, SWT.NONE);
 			final Composite sub = toolkit.createComposite(parent);
-			sub.setLayout(new GridLayout(2, false));
+			GridLayout gl = new GridLayout(2, false);
+			gl.marginLeft = 0;
+			gl.marginBottom = 0;
+			gl.marginHeight = 0;
+			gl.marginTop = 0;
+			gl.marginRight = 0;
+			gl.marginWidth= 0;
+			sub.setLayout(gl);
 //			this.setButton = new Button(sub, SWT.CHECK);
 			this.setButton = toolkit.createButton(sub, "", SWT.CHECK);
 			this.inner = createValueControl(sub);
@@ -178,7 +185,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			setButton.setEnabled(isEditorEnabled());
 		}
 
-		boolean innerEnabled = isEditorEnabled() && !isEditorLocked() && (setButton == null || setButton.getSelection());
+		boolean innerEnabled = !isFeatureReadonly() && isEditorEnabled() && !isEditorLocked() && (setButton == null || setButton.getSelection());
 		if (inner != null) {
 			setControlEnabled(inner, innerEnabled);
 		}
@@ -186,21 +193,23 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	@Override
 	public void setEditorEnabled(boolean enabled) {
-		this.controlEnabled = enabled;
+		this.controlEnabled = !isFeatureReadonly() && enabled;
 		super.setEditorEnabled(enabled);
 	}
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
-		super.setControlsEnabled(enabled);
+		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
+
+		super.setControlsEnabled(controlsEnabled);
 		if (setButton != null) {
-			setButton.setEnabled(enabled);
+			setButton.setEnabled(controlsEnabled);
 			if (inner != null) {
 				inner.setEnabled(setButton.getSelection());
 			}
 		}
 		else if (inner != null) {
-			inner.setEnabled(enabled);
+			inner.setEnabled(controlsEnabled);
 		}
 		
 	}
@@ -219,7 +228,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (input instanceof MMXObject) {
 			MMXObject mmxinput = (MMXObject) input;
 			DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
-			if (di.delegate == changedFeature) {
+			if (di.delegatesTo(changedFeature)) {
 				return true;
 			}
 			

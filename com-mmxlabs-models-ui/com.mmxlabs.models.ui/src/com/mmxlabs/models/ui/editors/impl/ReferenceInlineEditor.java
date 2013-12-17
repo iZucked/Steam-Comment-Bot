@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -55,6 +56,8 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	 */
 	protected final ArrayList<EObject> valueList = new ArrayList<EObject>();
 
+	protected IItemPropertyDescriptor propertyDescriptor = null;
+	
 	public ReferenceInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
@@ -78,7 +81,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		// this.combo = toolkit.createCombo(parent, SWT.READ_ONLY);
 		toolkit.adapt(combo, true, true);
 
-		combo.setEnabled(isEditorEnabled());
+		combo.setEnabled(feature.isChangeable() && isEditorEnabled());
 
 		combo.addSelectionListener(new SelectionListener() {
 			{
@@ -152,13 +155,16 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
-		return valueProvider.updateOnChangeToFeature(changedFeature);
+		if (valueProvider != null) {
+			return valueProvider.updateOnChangeToFeature(changedFeature);
+		}
+		return false;
 	}
 
 	@Override
 	public void setControlsEnabled(final boolean enabled) {
 		if (combo != null && !combo.isDisposed()) {
-			combo.setEnabled(enabled);
+			combo.setEnabled(!isFeatureReadonly() &&  enabled);
 		}
 
 		super.setControlsEnabled(enabled);

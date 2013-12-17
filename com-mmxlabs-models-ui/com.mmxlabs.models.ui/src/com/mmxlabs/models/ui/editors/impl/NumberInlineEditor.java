@@ -173,17 +173,19 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
+		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
-		text.getControl().setEnabled(enabled);
-
-		super.setControlsEnabled(enabled);
+		if (text != null) {
+			text.getControl().setEnabled(controlsEnabled);
+		}
+		super.setControlsEnabled(controlsEnabled);
 	}
 
 	@Override
 	protected void setControlsVisible(final boolean visible) {
-
-		text.getControl().setVisible(visible);
-
+		if (text != null) {
+			text.getControl().setVisible(visible);
+		}
 		super.setControlsVisible(visible);
 	}
 }

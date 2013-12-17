@@ -42,10 +42,9 @@ public class EditorControlFactory {
 	
 		Composite holder = c;
 		if (fs.length > 1) {
-			holder = new Composite(c, SWT.NONE);
-			holder.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
-			GridData gd = new GridData();
-			gd.horizontalSpan = 5;
+			holder = toolkit.createComposite(c, SWT.NONE);
+			GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
+			gd.horizontalSpan = 2;
 			holder.setLayoutData(gd);
 			GridLayout gl = new GridLayout(2 * fs.length, false);
 			gl.marginWidth = 0;

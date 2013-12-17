@@ -37,18 +37,18 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	 */
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
-//		final Composite contents = new Composite(parent, SWT.NONE);
+		// final Composite contents = new Composite(parent, SWT.NONE);
 		final Composite contents = toolkit.createComposite(parent);
 		contents.setLayout(new GridLayout(2, false));
 
-//		final Label description = new Label(contents, SWT.WRAP);
-		final Label description = toolkit.createLabel(contents,"", SWT.WRAP);
+		// final Label description = new Label(contents, SWT.WRAP);
+		final Label description = toolkit.createLabel(contents, "", SWT.WRAP);
 		description.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
 
-//		final Button button = new Button(contents, SWT.NONE);
+		// final Button button = new Button(contents, SWT.NONE);
 		final Button button = toolkit.createButton(contents, "Edit", SWT.NONE);
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-//		button.setText("Edit");
+		// button.setText("Edit");
 		this.description = description;
 		this.button = button;
 		button.addSelectionListener(new SelectionListener() {
@@ -87,10 +87,10 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
-
-		super.setControlsEnabled(enabled);
-		button.setEnabled(enabled);
-		description.setEnabled(enabled);
+		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
+		super.setControlsEnabled(controlsEnabled);
+		button.setEnabled(controlsEnabled);
+		description.setEnabled(controlsEnabled);
 	}
 
 	@Override

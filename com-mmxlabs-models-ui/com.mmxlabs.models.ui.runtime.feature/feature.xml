@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.ui.runtime.feature"
       label="Models: UI Runtime Feature"
-      version="7.0.2.qualifier"
+      version="7.1.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -61,6 +61,20 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.ui.validation.views"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.ui.properties"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.ui.properties.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -9,8 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
@@ -43,7 +45,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -153,7 +157,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private EObject getDuplicate(final EObject input, final IDisplayComposite displayComposite) {
 		final EObject original = input;
 		if (!originalToDuplicate.containsKey(original)) {
-			final List<EObject> range = new ArrayList<EObject>(displayCompositeFactory.getExternalEditingRange(rootObject, original));
+			// Use a set to avoid duplicates in the list
+			final Set<EObject> range = new LinkedHashSet<EObject>(displayCompositeFactory.getExternalEditingRange(rootObject, original));
 			range.add(original);
 			// range is the full set of objects which the display composite
 			// might touch; we need to duplicate all of these
@@ -342,6 +347,29 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), scenarioEditingLocation, toolkit);
+
+		/**
+		 * Allow the child composites to trigger a complete redisplay of the editor components. E.g.
+		 * 
+		 * <code>
+		 * for (final Listener l : this.getListeners(SWT.CLOSE)) { 
+		 * 		l.handleEvent(new Event()); 
+		 * }
+		 * </code>
+		 * 
+		 * A recursive listener & firing code will need to be present in the top-level and sub-level composites
+		 * 
+		 * FIXME: Expose a proper API for this!
+		 * 
+		 */
+		displayComposite.getComposite().addListener(SWT.CLOSE, new Listener() {
+
+			@Override
+			public void handleEvent(final Event event) {
+				updateEditor();
+			}
+		});
+
 		// Create a new instance with the current adapter factory.
 		// TODO: Dispose?
 		copyDialogToClipboardEditorWrapper = new CopyDialogToClipboard(scenarioEditingLocation.getAdapterFactory());
@@ -650,6 +678,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	public int open(final IScenarioEditingLocation editorPart, final MMXRootObject rootObject, final List<EObject> objects) {
 		return open(editorPart, rootObject, objects, false);
+
 	}
 
 	private boolean lockedForEditing = false;
@@ -775,7 +804,13 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 							((UUIDObject) duplicate).eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						}
 
-						adder.append(AddCommand.create(commandHandler.getEditingDomain(), original.eContainer(), original.eContainingFeature(), Collections.singleton(duplicate)));
+						EObject eContainer = original.eContainer();
+						if (originalToDuplicate.containsKey(eContainer)) {
+							// Already part of another duplicated object - skip as container will be parented
+							continue;
+						}
+
+						adder.append(AddCommand.create(commandHandler.getEditingDomain(), eContainer, original.eContainingFeature(), Collections.singleton(duplicate)));
 					}
 					final boolean isExecutable = adder.canExecute();
 					if (isExecutable) {

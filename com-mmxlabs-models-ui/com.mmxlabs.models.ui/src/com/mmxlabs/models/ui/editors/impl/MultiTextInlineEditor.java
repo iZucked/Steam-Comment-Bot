@@ -25,7 +25,7 @@ public class MultiTextInlineEditor extends TextInlineEditor {
 	}
 
 	public MultiTextInlineEditor(final EStructuralFeature feature, final int minHeight) {
-		super(feature, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
+		super(feature, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER | SWT.WRAP);
 		newLine = System.getProperty("line.separator");
 		this.minHeight = minHeight;
 	}
