@@ -28,7 +28,13 @@ public interface IProfitAndLossEntry {
 	public long getFinalGroupValue();
 
 	/**
+	 * @return The final contribution to pre-tax group profit from this entry.
+	 */
+	public long getFinalGroupValuePreTax();
+
+	/**
 	 * @return an {@link IDetailTree} of computation details for this entry
 	 */
 	public IDetailTree getDetails();
+
 }
