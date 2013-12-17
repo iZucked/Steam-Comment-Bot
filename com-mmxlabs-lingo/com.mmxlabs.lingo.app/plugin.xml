@@ -27,46 +27,6 @@
       </perspective>
    </extension>
    <extension
-         id="product"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="com.mmxlabs.lingo.app.application"
-            name="ShipLiNGO">
-         <property
-               name="windowImages"
-               value="icons/alt_window_16.gif">
-         </property>
-         <property
-               name="appName"
-               value="ShipLiNGO">
-         </property>
-         <property
-               name="startupForegroundColor"
-               value="000000">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="20,220,440,20">
-         </property>
-         <property
-               name="startupProgressRect"
-               value="20,210,440,15">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
-         </property>
-         <property
-               name="aboutImage"
-               value="aboutImage.gif">
-         </property>
-         <property
-               name="aboutText"
-               value="Ship Lingo Platform&#x0A;Version {0}">
-         </property>
-      </product>
-   </extension>
-   <extension
          point="org.eclipse.ui.intro">
       <intro
             class="org.eclipse.ui.intro.config.CustomizableIntroPart"

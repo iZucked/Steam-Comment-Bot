@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.tests;
+package com.mmxlabs.lingo.its.tests.scenarios;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,10 +19,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.mmxlabs.lingo.its.tests.scenarios.AbstractOptimisationResultTester;
+import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -60,7 +59,6 @@ public class OptimisationRepeatabilityTest {
 		instance = CargoPackage.eINSTANCE;
 		instance = CommercialPackage.eINSTANCE;
 		instance = FleetPackage.eINSTANCE;
-		instance = AssignmentPackage.eINSTANCE;
 		instance = ParametersPackage.eINSTANCE;
 		instance = PortPackage.eINSTANCE;
 		instance = PricingPackage.eINSTANCE;

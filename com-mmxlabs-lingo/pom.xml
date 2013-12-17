@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.lingo</groupId>
 	<artifactId>com.mmxlabs.lingo.parent</artifactId>
-	<version>3.1.5-SNAPSHOT</version>
+	<version>3.2.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -44,6 +44,7 @@
 		<module>com.mmxlabs.lingo.doc</module>
 
 		<module>com.mmxlabs.lingo.feature</module>
+		<module>com.mmxlabs.lingo.its.feature</module>
 		<module>com.mmxlabs.lingo.product-definition</module>
 
 		<module>com.mmxlabs.lingo.its</module>

@@ -88,11 +88,11 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	// private IWorkbenchAction newEditorAction;
 	//
-	// private IWorkbenchAction helpContentsAction;
-	//
-	// private IWorkbenchAction helpSearchAction;
-	//
-	// private IWorkbenchAction dynamicHelpAction;
+	private IWorkbenchAction helpContentsAction;
+
+	private IWorkbenchAction helpSearchAction;
+
+	private IWorkbenchAction dynamicHelpAction;
 
 	private IWorkbenchAction aboutAction;
 
@@ -637,7 +637,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		sep.setVisible(!Util.isMac());
 		menu.add(sep);
 
-
 		// See the comment for quit in createFileMenu
 		final ActionContributionItem openPreferencesItem = new ActionContributionItem(openPreferencesAction);
 		openPreferencesItem.setVisible(!Util.isMac());
@@ -667,9 +666,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		}
 		menu.add(new Separator());
 		// menu.add(editActionSetAction);
-//		menu.add(savePerspectiveAction);
-//		menu.add(closePerspAction);
-//		menu.add(closeAllPerspsAction);
+		// menu.add(savePerspectiveAction);
+		// menu.add(closePerspAction);
+		// menu.add(closeAllPerspsAction);
 	}
 
 	//
@@ -724,9 +723,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// }
 		menu.add(new GroupMarker("group.intro.ext")); //$NON-NLS-1$
 		addSeparatorOrGroupMarker(menu, "group.main"); //$NON-NLS-1$
-		// menu.add(helpContentsAction);
-		// menu.add(helpSearchAction);
-		// menu.add(dynamicHelpAction);
+		menu.add(helpContentsAction);
+		menu.add(helpSearchAction);
+		menu.add(dynamicHelpAction);
 		addSeparatorOrGroupMarker(menu, "group.assist"); //$NON-NLS-1$
 		// // See if a tips and tricks page is specified
 		// if (tipsAndTricksAction != null) {
@@ -814,9 +813,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		saveAllAction = null;
 		newWindowAction = null;
 		// newEditorAction = null;
-		// helpContentsAction = null;
-		// helpSearchAction = null;
-		// dynamicHelpAction = null;
+		helpContentsAction = null;
+		helpSearchAction = null;
+		dynamicHelpAction = null;
 		aboutAction = null;
 		openPreferencesAction = null;
 		saveAsAction = null;
@@ -982,15 +981,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		closeAllSavedAction = ActionFactory.CLOSE_ALL_SAVED.create(window);
 		register(closeAllSavedAction);
 
-		// helpContentsAction = ActionFactory.HELP_CONTENTS.create(window);
-		// register(helpContentsAction);
-		//
-		// helpSearchAction = ActionFactory.HELP_SEARCH.create(window);
-		// register(helpSearchAction);
-		//
-		// dynamicHelpAction = ActionFactory.DYNAMIC_HELP.create(window);
-		// register(dynamicHelpAction);
-		//
+		helpContentsAction = ActionFactory.HELP_CONTENTS.create(window);
+		register(helpContentsAction);
+
+		helpSearchAction = ActionFactory.HELP_SEARCH.create(window);
+		register(helpSearchAction);
+
+		dynamicHelpAction = ActionFactory.DYNAMIC_HELP.create(window);
+		register(dynamicHelpAction);
+
 		aboutAction = ActionFactory.ABOUT.create(window);
 		aboutAction.setImageDescriptor(IDEInternalWorkbenchImages.getImageDescriptor(IDEInternalWorkbenchImages.IMG_OBJS_DEFAULT_PROD));
 		register(aboutAction);

@@ -239,11 +239,11 @@ public class HeadlessApplication implements IApplication {
 		options.addOption("feature", true, "(Equinox) equivalent to setting eclipse.product to <feature id>");
 		options.addOption("framework", true, "(Equinox) equivalent to setting osgi.framework to <location>");
 		options.addOption(
-				"initialize ",
+				"initialize",
 				false,
 				"(OSGi) initializes the configuration being run. All runtime related data structures and caches are refreshed. Any user/plug-in defined configuration data is not purged. No application is run, any product specifications are ignored and no UI is presented (e.g., the splash screen is not drawn)");
 		options.addOption("install", true, "(OSGi) OSGi install area");
-		options.addOption("keyring ", true, "(OSGi) the location of the authorization database on disk. This argument has to be used together with the -password argument.");
+		options.addOption("keyring", true, "(OSGi) the location of the authorization database on disk. This argument has to be used together with the -password argument.");
 		// various --launcher options
 
 		options.addOption(
@@ -253,15 +253,15 @@ public class HeadlessApplication implements IApplication {
 
 		options.addOption("nl", true, "(OSGi) equivalent to setting osgi.nl to <locale>");
 		options.addOption("noExit", false, "(OSGi) equivalent to setting osgi.noShutdown to \"true\"");
-		options.addOption("noLazyRegistryCacheLoading ", false, "(OSGi) equivalent to setting eclipse.noLazyRegistryCacheLoading to \"true\"");
-		options.addOption("noRegistryCache ", false, "(OSGi)equivalent to setting eclipse.noRegistryCache to \"true\"");
+		options.addOption("noLazyRegistryCacheLoading", false, "(OSGi) equivalent to setting eclipse.noLazyRegistryCacheLoading to \"true\"");
+		options.addOption("noRegistryCache", false, "(OSGi)equivalent to setting eclipse.noRegistryCache to \"true\"");
 		options.addOption("nosplash", false, "(OSGi) Disable splash screen");
 		options.addOption("os", true, "(OSGi) equivalent to setting osgi.os to <operating system>");
 		options.addOption("password", true, "(OSGi) the password for the authorization database");
-		options.addOption("pluginCustomization ", true, "(OSGi) equivalent to setting eclipse.pluginCustomization to <location>");
+		options.addOption("pluginCustomization", true, "(OSGi) equivalent to setting eclipse.pluginCustomization to <location>");
 		options.addOption("product", true, "(OSGi) Product ID");
 
-		options.addOption("registryMultiLanguage ", false, "(OSGi) equivalent to setting eclipse.registry.MultiLanguage to \"true\"");
+		options.addOption("registryMultiLanguage", false, "(OSGi) equivalent to setting eclipse.registry.MultiLanguage to \"true\"");
 		options.addOption(
 				"showSplash",
 				true,

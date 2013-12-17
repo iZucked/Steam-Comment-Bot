@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.lingo.its.tests.scenarios;
+package com.mmxlabs.lingo.its.tests;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,9 +23,9 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.lng.assignment.AssignmentPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -39,6 +39,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
@@ -59,8 +60,8 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class AbstractOptimisationResultTester {
 
 	/**
-	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Note if this value is true, this should be run as part of a
-	 * JUnit test rather than a plugin test as the URL to File conversion may not work as expected.
+	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. 
+	 * Should be run as part of a plugin test. 
 	 */
 	private static final boolean storeFitnessMap = false;
 
@@ -74,7 +75,6 @@ public class AbstractOptimisationResultTester {
 		instance = CargoPackage.eINSTANCE;
 		instance = CommercialPackage.eINSTANCE;
 		instance = FleetPackage.eINSTANCE;
-		instance = AssignmentPackage.eINSTANCE;
 		instance = ParametersPackage.eINSTANCE;
 		instance = PortPackage.eINSTANCE;
 		instance = PricingPackage.eINSTANCE;
@@ -113,6 +113,19 @@ public class AbstractOptimisationResultTester {
 		runScenario(originalScenario, url);
 	}
 
+	public ScenarioRunner evaluateScenario(final URL url) throws Exception {
+
+		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
+
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, false);
+
+		MigrationHelper.migrateAndLoad(instance);
+
+		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+
+		return evaluateScenario(originalScenario, url);
+	}
+
 	/**
 	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
 	 * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
@@ -128,13 +141,20 @@ public class AbstractOptimisationResultTester {
 
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 		final LNGScenarioModel copy = duplicate(originalScenario);
-
+		if (false) {
+			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
+			final String context = migrationRegistry.getDefaultMigrationContext();
+			if (context == null) {
+				throw new NullPointerException("Context cannot be null");
+			}
+			final int version = migrationRegistry.getLastReleaseVersion(context);
+			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
+		}
 		// Create two scenario runners.
 		// TODO are two necessary?
 		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
 		originalScenarioRunner.init();
 		final EList<Fitness> currentOriginalFitnesses = originalScenarioRunner.getIntialSchedule().getFitnesses();
-		ScenarioTools.storeToFile(originalScenario, new File("c:/temp/test2.scenario"));
 
 		if (!storeFitnessMap) {
 
@@ -192,6 +212,27 @@ public class AbstractOptimisationResultTester {
 			// testOriginalAndCurrentFitnesses(props, originalFitnessesMapName, currentOriginalFitnesses);
 			testOriginalAndCurrentFitnesses(props, endFitnessesMapName, currentEndFitnesses);
 		}
+	}
+
+	public ScenarioRunner evaluateScenario(final LNGScenarioModel originalScenario, final URL origURL) throws IOException, IncompleteScenarioException {
+
+		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
+		if (false) {
+			final LNGScenarioModel copy = duplicate(originalScenario);
+			final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
+			final String context = migrationRegistry.getDefaultMigrationContext();
+			if (context == null) {
+				throw new NullPointerException("Context cannot be null");
+			}
+			final int version = migrationRegistry.getLastReleaseVersion(context);
+			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
+		}
+		// Create two scenario runners.
+		// TODO are two necessary?
+		final ScenarioRunner originalScenarioRunner = new ScenarioRunner(originalScenario);
+		originalScenarioRunner.init();
+
+		return originalScenarioRunner;
 	}
 
 	/**
