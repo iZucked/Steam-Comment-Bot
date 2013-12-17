@@ -15,11 +15,15 @@ public class CargoTypeUtil {
 		if (buy instanceof ILoadSlot && sell instanceof IDischargeSlot) {
 			return CargoType.SHIPPED;
 		} else if (buy instanceof ILoadSlot) {
-			return CargoType.FOB_SALE;
+			if (sell == null) {
+				// Assume shipped if sell is null
+				return CargoType.SHIPPED;
+			} else {
+				return CargoType.FOB_SALE;
+			}
 		} else {
 			return CargoType.DES_PURCHASE;
 		}
 	}
 
 }
-
