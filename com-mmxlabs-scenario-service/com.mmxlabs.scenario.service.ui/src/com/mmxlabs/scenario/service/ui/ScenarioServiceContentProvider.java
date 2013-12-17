@@ -53,6 +53,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 							provider.fireDirtyChange(saveable);
 							provider.fireClosed(saveable);
 						}
+						return;
 					}
 				}
 			}
