@@ -25,6 +25,9 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	public class SlotAllocationAnnotation {
 		public long volumeInM3;
 		public int pricePerM3;
+		/**
+		 * @since 8.0
+		 */
 		public int pricePerMMBTu;
 		public int startTime;
 	}
@@ -132,6 +135,9 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return -1;
 	}
 	
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public int getSlotPricePerMMBTu(final IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
@@ -150,7 +156,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	}
 	
 	/**
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
 		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;

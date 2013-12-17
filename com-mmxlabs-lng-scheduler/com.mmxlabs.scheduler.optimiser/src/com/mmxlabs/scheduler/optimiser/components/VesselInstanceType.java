@@ -53,5 +53,8 @@ public enum VesselInstanceType {
 	 */
 	CARGO_SHORTS,
 	
+	/**
+	 * @since 8.0
+	 */
 	REFERENCE
 }

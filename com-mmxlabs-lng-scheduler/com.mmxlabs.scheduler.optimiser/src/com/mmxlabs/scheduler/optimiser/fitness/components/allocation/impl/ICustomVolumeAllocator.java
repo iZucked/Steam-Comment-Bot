@@ -7,6 +7,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseVo
  * Implementation of the {@link ICustomVolumeAllocator} permit the default behaviour of an {@link IVolumeAllocator} to change on a per cargo basis.
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public interface ICustomVolumeAllocator {

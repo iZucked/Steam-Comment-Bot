@@ -11,6 +11,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 
+/**
+ * @since 8.0
+ */
 public class HashMapNominatedVesselProviderEditor implements INominatedVesselProviderEditor {
 
 	private final String name;

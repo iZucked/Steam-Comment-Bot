@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * TODO: This needs to be updated once the Heel Tracking branch is merged in to consider the remaining heel from the previous voyage.
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public class CapacityViolationChecker {

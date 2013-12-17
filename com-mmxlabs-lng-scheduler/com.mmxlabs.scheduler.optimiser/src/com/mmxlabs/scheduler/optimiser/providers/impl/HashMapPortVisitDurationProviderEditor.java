@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * An {@link IElementDurationProvider} implementation to wrap around a LNG port & type based duration data structure.
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public class HashMapPortVisitDurationProviderEditor implements IPortVisitDurationProviderEditor {

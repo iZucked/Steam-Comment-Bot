@@ -119,6 +119,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * Implementation of {@link ISchedulerBuilder}
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public final class SchedulerBuilder implements ISchedulerBuilder {
@@ -375,7 +376,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
+	 * @since 8.0
 	 */
 	@Override
 	@NonNull
@@ -438,7 +439,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
+	 * @since 8.0
 	 */
 	@Override
 	@NonNull
@@ -1185,7 +1186,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	@Override
 	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
@@ -1891,6 +1892,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public void setNominatedVessel(@NonNull final IPortSlot slot, @NonNull final IVessel vessel) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
@@ -1902,6 +1906,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		nominatedVesselProviderEditor.setNominatedVessel(element, resource, vessel);
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public void setShippingHoursRestriction(@NonNull final IPortSlot slot, @NonNull final ITimeWindow baseTime, final int hours) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);

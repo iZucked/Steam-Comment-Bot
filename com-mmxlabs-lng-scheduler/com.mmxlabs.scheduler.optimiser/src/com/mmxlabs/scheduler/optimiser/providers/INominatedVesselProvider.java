@@ -12,6 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
  * A DCP to store the nominated vessel for a DES Purchase or FOB Sale.
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public interface INominatedVesselProvider extends IDataComponentProvider {

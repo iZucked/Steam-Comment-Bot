@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * TODO: This should be rolled into the core API more directly - i.e. not useful until volume allocation has run, evaluators can cause data to be invalid etc...
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public class ScheduledDataLookupProvider {

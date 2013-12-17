@@ -7,6 +7,7 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
  * Empty implementation of {@link IBreakEvenEvaluator}
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public class NullBreakEvenEvaluator implements IBreakEvenEvaluator {

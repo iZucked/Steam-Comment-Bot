@@ -6,6 +6,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 
+/**
+ * @since 8.0
+ */
 public interface INominatedVesselProviderEditor extends INominatedVesselProvider {
 
 	/**

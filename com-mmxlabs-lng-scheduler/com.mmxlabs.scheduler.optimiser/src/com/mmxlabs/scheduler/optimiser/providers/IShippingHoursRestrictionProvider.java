@@ -6,6 +6,9 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
+/**
+ * @since 8.0
+ */
 public interface IShippingHoursRestrictionProvider extends IDataComponentProvider {
 
 	/**

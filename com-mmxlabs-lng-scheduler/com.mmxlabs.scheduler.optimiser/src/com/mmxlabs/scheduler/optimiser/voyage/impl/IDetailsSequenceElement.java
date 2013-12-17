@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
  * 
  * 
  * @author Simon McGregor
+ * @since 8.0
  *
  */
 public interface IDetailsSequenceElement {

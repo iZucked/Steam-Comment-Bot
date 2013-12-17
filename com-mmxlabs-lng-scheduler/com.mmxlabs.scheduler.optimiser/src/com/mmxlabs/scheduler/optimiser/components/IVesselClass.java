@@ -111,6 +111,7 @@ public interface IVesselClass {
 	/**
 	 * Returns the vessels "service" speed. Used in e.g. P&L based calculations
 	 * @return
+	 * @since 8.0
 	 */
 	int getServiceSpeed(VesselState vesselState);
 

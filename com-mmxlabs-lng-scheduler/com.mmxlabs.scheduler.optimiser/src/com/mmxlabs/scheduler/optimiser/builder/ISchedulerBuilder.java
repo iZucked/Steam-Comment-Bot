@@ -109,7 +109,7 @@ public interface ISchedulerBuilder {
 	 * @param nboSpeed
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
 	 * 
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	void setVesselClassStateParameters(@NonNull IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed, int serviceSpeed);
@@ -453,7 +453,7 @@ public interface ISchedulerBuilder {
 			boolean cooldownSet, boolean cooldownForbidden, int pricingDate, boolean slotIsOptional);
 
 	/**
-	 * @since 6.0
+	 * @since 8.0
 	 */
 	@NonNull
 	ILoadOption createDESPurchaseLoadSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue,
@@ -488,7 +488,7 @@ public interface ISchedulerBuilder {
 	 * @param priceCalculator
 	 * @param slotIsOptional
 	 * @return
-	 * @since 6.0
+	 * @since 8.0
 	 */
 	@NonNull
 	IDischargeOption createFOBSaleDischargeSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue,
@@ -739,6 +739,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param slot
 	 * @param hours
+	 * @since 8.0
 	 */
 	void setNominatedVessel(@NonNull IPortSlot slot, @NonNull IVessel vessel);
 
@@ -747,6 +748,7 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param slot
 	 * @param hours
+	 * @since 8.0
 	 */
 	void setShippingHoursRestriction(@NonNull IPortSlot slot, @NonNull ITimeWindow baseTime, int hours);
 

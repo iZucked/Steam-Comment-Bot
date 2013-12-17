@@ -8,6 +8,9 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @since 8.0
+ */
 public abstract class AbstractLoggingSequenceScheduler {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractLoggingSequenceScheduler.class);

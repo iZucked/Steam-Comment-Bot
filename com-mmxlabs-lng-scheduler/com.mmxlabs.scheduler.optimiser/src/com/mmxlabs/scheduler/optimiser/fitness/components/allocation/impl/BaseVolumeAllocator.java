@@ -61,6 +61,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * Record class for allocation constraints per
 	 * 
 	 * @author Simon McGregor
+	 * @since 8.0
 	 */
 	public static final class AllocationRecord {
 		/**

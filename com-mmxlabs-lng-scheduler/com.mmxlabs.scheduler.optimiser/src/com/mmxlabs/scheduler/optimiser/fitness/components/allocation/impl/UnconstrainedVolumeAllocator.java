@@ -179,6 +179,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		return null;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	protected boolean handleRedirectionVolumes(final AllocationRecord constraint) {
 
 		if (redirectionVolumeAllocator != null) {

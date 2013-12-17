@@ -5,6 +5,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
+/**
+ * @since 8.0
+ */
 public interface IPortVisitDurationProvider extends IDataComponentProvider {
 
 	/**
