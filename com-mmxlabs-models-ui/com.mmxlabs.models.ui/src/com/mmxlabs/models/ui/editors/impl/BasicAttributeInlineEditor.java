@@ -564,6 +564,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	protected boolean isFeatureReadonly() {
 		return propertyDescriptor == null ? false : !propertyDescriptor.canSetProperty(input);
 	}

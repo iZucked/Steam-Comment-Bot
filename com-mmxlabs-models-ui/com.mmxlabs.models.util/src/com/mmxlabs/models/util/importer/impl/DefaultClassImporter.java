@@ -52,6 +52,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	 * @author Simon McGregor
 	 * 
 	 * @param <T>
+	 * @since 8.0
 	 */
 	public static class ImportResults {
 		final public EObject importedObject;
@@ -69,14 +70,14 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		public ImportResults(EObject object) {
 			this(object, true);
 		}
-		
+
 		public void add(EObject object) {
 			createdExtraObjects.add(object);
 		}
 
 		public List<EObject> getCreatedObjects() {
 			return createdExtraObjects;
-			
+
 		}
 
 	}
@@ -161,6 +162,9 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		return outputEClass;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
@@ -190,42 +194,45 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		return reference.getEReferenceType();
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance) {
- 		for (final EReference reference : rowClass.getEAllReferences()) {
+		for (final EReference reference : rowClass.getEAllReferences()) {
 			if (!shouldImportReference(reference)) {
 				continue;
 			}
-			
+
 			final String lcrn = reference.getName().toLowerCase();
-			
-			// If the reference is marked in the EMF model as "not contained", we expect 
+
+			// If the reference is marked in the EMF model as "not contained", we expect
 			// a field for the reference directly in the data as a REF_NAME field, which we will use for lookup later
-			//if (!reference.isContainment()) {
+			// if (!reference.isContainment()) {
 			if (row.containsKey(lcrn)) {
 				if (reference.isContainment()) {
-//					System.err.println("Got " + reference.getContainerClass().getName() + "." + reference.getName() + " as direct CSV data");
+					// System.err.println("Got " + reference.getContainerClass().getName() + "." + reference.getName() + " as direct CSV data");
 				}
 
 				if (!row.containsKey(lcrn)) {
 					notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
 					continue;
 				}
-				
+
 				// The reference itself is present, so do a lookup later
 				final String referentName = row.get(lcrn).trim();
 				if (!referentName.isEmpty()) {
 					context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row.get(lcrn), context));
 				}
-			} 
+			}
 			// If the reference is marked in the EMF model as "contained" by its parent, we expect the child object's fields in the CSV data
 			// under hierarchical REF_NAME.FIELD fields
 			else {
 				// The CSV data should not contain REF_NAME as a direct field; it will be ignored if present
-				
+
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
 				if (!reference.isContainment() && !subKeys.isEmpty()) {
-//					System.err.println("Got " + lcrn + " as direct CSV data");
+					// System.err.println("Got " + lcrn + " as direct CSV data");
 				}
 
 				if (reference.isMany()) {
@@ -281,10 +288,16 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	protected boolean shouldImportReference(final EReference reference) {
 		return true;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	protected void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IImportContext context) {
 		if (blank == null) {
 			return;

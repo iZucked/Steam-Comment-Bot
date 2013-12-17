@@ -14,6 +14,9 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
+/**
+ * @since 8.0
+ */
 public abstract class AbstractClassImporter implements IClassImporter {
 
 	@Override

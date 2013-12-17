@@ -173,6 +173,9 @@ public class FieldMap implements IFieldMap {
 		return superMap;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public boolean containsPrefix(String keyPrefix) {
 		for (final String key : delegate.keySet()) {

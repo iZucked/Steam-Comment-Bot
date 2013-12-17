@@ -56,6 +56,9 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	 */
 	protected final ArrayList<EObject> valueList = new ArrayList<EObject>();
 
+	/**
+	 * @since 8.0
+	 */
 	protected IItemPropertyDescriptor propertyDescriptor = null;
 	
 	public ReferenceInlineEditor(final EStructuralFeature feature) {
