@@ -5,14 +5,12 @@
 package com.mmxlabs.models.migration.scenario.tests;
 
 import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
