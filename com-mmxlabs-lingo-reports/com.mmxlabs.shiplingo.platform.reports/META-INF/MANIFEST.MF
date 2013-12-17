@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Reports
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.reports;singleton:=true
-Bundle-Version: 5.0.4.qualifier
+Bundle-Version: 5.1.0.qualifier
 Bundle-Activator: com.mmxlabs.shiplingo.platform.reports.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
@@ -11,16 +11,17 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.emf.edit.ui;bundle-version="2.7.0",
  com.mmxlabs.rcp.common;bundle-version="[4.2.0,5.0.0)",
  com.mmxlabs.jobmanager;bundle-version="[1.1.0,2.0.0)",
- com.mmxlabs.models.util;bundle-version="[7.0.0,8.0.0)",
- com.mmxlabs.models.ui.tabular;bundle-version="[7.0.0,8.0.0)",
- com.mmxlabs.scenario.service.ui;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.models.lng.scenario.model.edit;bundle-version="[7.0.0,8.0.0)"
+ com.mmxlabs.models.util;bundle-version="[7.1.0,8.0.0)",
+ com.mmxlabs.models.ui.tabular;bundle-version="[7.1.0,8.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[5.1.0,6.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[5.1.0,6.0.0)",
+ com.mmxlabs.models.lng.scenario.model.edit;bundle-version="[8.0.0,9.0.0)",
+ com.mmxlabs.models.ui.properties;bundle-version="7.0.0",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[7.1.0,8.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.reports,
  com.mmxlabs.shiplingo.platform.reports.properties,
  com.mmxlabs.shiplingo.platform.reports.utils,
  com.mmxlabs.shiplingo.platform.reports.views
-Import-Package: com.mmxlabs.models.lng.commercial.parseutils,
- com.mmxlabs.scheduler.optimiser;version="3.0.1"
+Import-Package: com.mmxlabs.models.lng.commercial.parseutils

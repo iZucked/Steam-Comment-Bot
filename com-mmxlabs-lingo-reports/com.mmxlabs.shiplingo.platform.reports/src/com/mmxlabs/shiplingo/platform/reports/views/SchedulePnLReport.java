@@ -441,10 +441,10 @@ public class SchedulePnLReport extends EMFReportView {
 						setInputEquivalents(row, equivalents);
 					} else if (a instanceof VesselEventVisit) {
 						final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
-						setInputEquivalents(row, Lists.<Object> newArrayList(vesselEventVisit.getVesselEvent()));
+						setInputEquivalents(row, Lists.<Object> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
 					} else if (a instanceof StartEvent) {
 						final StartEvent startEvent = (StartEvent) a;
-						setInputEquivalents(row, Lists.<Object> newArrayList(startEvent.getSequence().getVesselAvailability().getVessel()));
+						setInputEquivalents(row, Lists.<Object> newArrayList(startEvent, startEvent.getSequence().getVesselAvailability().getVessel()));
 					}
 				}
 			}

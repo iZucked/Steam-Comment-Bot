@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelAmount;
@@ -226,6 +227,9 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				if (object instanceof Journey) {
 					total += ((Journey) object).getToll();
+				}
+				if (object instanceof Cooldown) {
+					total += ((Cooldown) object).getCost();
 				}
 
 				return (int) total;

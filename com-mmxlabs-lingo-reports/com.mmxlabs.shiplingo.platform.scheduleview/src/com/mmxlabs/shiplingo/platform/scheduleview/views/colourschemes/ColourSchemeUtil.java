@@ -4,21 +4,16 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
-import java.util.Collection;
 import java.util.Date;
 
 import org.eclipse.swt.graphics.RGB;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
-import com.mmxlabs.models.lng.assignment.AssignmentModel;
-import com.mmxlabs.models.lng.assignment.ElementAssignment;
-import com.mmxlabs.models.lng.assignment.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -28,7 +23,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 public class ColourSchemeUtil {
 
@@ -47,8 +41,8 @@ public class ColourSchemeUtil {
 	static final RGB VesselEvent_Green = new RGB(0, 225, 150);
 	static final RGB VesselEvent_Green2 = new RGB(80, 180, 50);
 	static final RGB VesselEvent_Green3 = new RGB(50, 200, 80);
-//	static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
-//	static final RGB VesselEvent_Brown = new RGB(77, 88, 50);
+	// static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
+	// static final RGB VesselEvent_Brown = new RGB(77, 88, 50);
 	static final RGB VesselEvent_Brown = new RGB(150, 150, 80);
 
 	static final RGB Warning_Yellow = new RGB(255, 255, 25);
@@ -95,21 +89,7 @@ public class ColourSchemeUtil {
 
 		// Stage 2: Find the input assignment
 		if (cargo != null) {
-
-			final Object input = viewer.getInput();
-			if (input instanceof IScenarioViewerSynchronizerOutput) {
-				final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
-
-				final Collection<Object> collectedElements = output.getCollectedElements();
-				if (collectedElements.size() > 0) {
-					final LNGPortfolioModel portfolioModel = output.getLNGPortfolioModel(sequence.eContainer());
-					final AssignmentModel assignmentModel = portfolioModel.getAssignmentModel();
-					final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, cargo);
-					if (elementAssignment != null && elementAssignment.isLocked()) {
-						return true;
-					}
-				}
-			}
+			return cargo.isLocked();
 		}
 		return false;
 	}
@@ -154,7 +134,7 @@ public class ColourSchemeUtil {
 
 		return (travelTime / totalTime > IdleRisk_threshold);
 	}
-	
+
 	public static boolean isSpot(final SlotVisit visit) {
 		Slot slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof SpotSlot) {
