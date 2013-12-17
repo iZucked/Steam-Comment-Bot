@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.lang.model.type.PrimitiveType;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -31,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -83,7 +83,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final List<Integer> arrivalTimes = new ArrayList<Integer>();
 				int dischargeIdx = -1;
-				final Object[] currentSequence = vp.getSequence();
+				final IDetailsSequenceElement[] currentSequence = vp.getSequence();
 				List<ISequenceElement> sequenceElements = new LinkedList<>();
 
 				ILoadOption originalLoad = null;
@@ -142,7 +142,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					throw new IllegalStateException("Unable to breakeven with more than one missing price");
 				}
 
-				final Object[] newSequence = currentSequence.clone();
+				final IDetailsSequenceElement[] newSequence = currentSequence.clone();
 				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
 
 				if (originalLoad != null) {
@@ -188,7 +188,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 						vp.setSequence(newSequence);
 					} else {
-						voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
+						voyageCalculator.calculateVoyagePlan(vp, vessel, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newSequence);
 					}
 				} else if (originalDischarge != null) {
 

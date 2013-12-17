@@ -79,9 +79,9 @@ public class SimpleSchedulerTest {
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0);
 
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
-				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000);
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000, 0);
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
-				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000);
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000, 0);
 
 		// TODO: Setup start/end ports correctly
 		builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0, 150000000);

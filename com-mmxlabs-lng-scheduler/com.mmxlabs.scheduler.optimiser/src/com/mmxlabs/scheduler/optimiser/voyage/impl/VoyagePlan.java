@@ -44,7 +44,7 @@ public final class VoyagePlan implements Cloneable {
 		DISCHARGE
 	}
 
-	private Object[] sequence;
+	private IDetailsSequenceElement[] sequence;
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
@@ -63,7 +63,7 @@ public final class VoyagePlan implements Cloneable {
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
 			final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd, final long remainingHeelInM3, final HeelType remainingHeelType) {
 		super();
 		this.sequence = sequence;
@@ -115,11 +115,11 @@ public final class VoyagePlan implements Cloneable {
 		this.violationsCount = violationsCount;
 	}
 
-	public final Object[] getSequence() {
+	public final IDetailsSequenceElement[] getSequence() {
 		return sequence;
 	}
 
-	public final void setSequence(final Object[] sequence) {
+	public final void setSequence(final IDetailsSequenceElement[] sequence) {
 		this.sequence = sequence;
 	}
 
@@ -154,9 +154,9 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public final VoyagePlan clone() {
-		final Object[] clonedSequence = new Object[sequence.length];
+		final IDetailsSequenceElement[] clonedSequence = new IDetailsSequenceElement[sequence.length];
 		int k = 0;
-		for (final Object o : sequence) {
+		for (final IDetailsSequenceElement o : sequence) {
 			if (o instanceof VoyageDetails) {
 				clonedSequence[k++] = ((VoyageDetails) o).clone();
 			} else if (o instanceof PortDetails) {

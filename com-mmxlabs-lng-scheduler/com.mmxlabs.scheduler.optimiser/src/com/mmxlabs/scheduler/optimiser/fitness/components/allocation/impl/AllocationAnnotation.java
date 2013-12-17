@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -27,6 +25,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	public class SlotAllocationAnnotation {
 		public long volumeInM3;
 		public int pricePerM3;
+		public int pricePerMMBTu;
 		public int startTime;
 	}
 
@@ -132,6 +131,16 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		// TODO: throw an exception instead of returning magic value
 		return -1;
 	}
+	
+	@Override
+	public int getSlotPricePerMMBTu(final IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		if (allocation != null) {
+			return allocation.pricePerMMBTu;
+		}
+		// TODO: throw an exception instead of returning magic value
+		return -1;
+	}
 
 	/**
 	 * @since 5.0
@@ -139,23 +148,19 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	public void setSlotPricePerM3(final IPortSlot slot, final int price) {
 		getOrCreateSlotAllocation(slot).pricePerM3 = price;
 	}
+	
+	/**
+	 * @since 5.0
+	 */
+	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
+		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;
+	}
 
 	/**
 	 * @since 6.0
 	 */
 	@Override
 	public long getSlotVolumeInM3(final IPortSlot slot) {
-		// TODO: remove this horrible hack!
-		if (slot instanceof ILoadOption) {
-			// assume just one load option, and assume it is the first slot in the itinerary
-			long result = remainingHeelVolumeInM3 + fuelVolumeInM3;
-			for (final Entry<IPortSlot, SlotAllocationAnnotation> entry : slotAllocations.entrySet()) {
-				if (entry.getKey() instanceof IDischargeOption) {
-					result += entry.getValue().volumeInM3;
-				}
-			}
-			return result;
-		}
 
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {

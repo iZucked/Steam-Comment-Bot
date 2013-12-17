@@ -19,9 +19,10 @@ public class ProfitAndLossEntryTest {
 
 		final IEntity entity = mock(IEntity.class);
 		final long groupValue = 1234567890l;
+		final long groupValuePreTax = 2234567890l;
 		final IDetailTree details = mock(IDetailTree.class);
 
-		final ProfitAndLossEntry entry = new ProfitAndLossEntry(entity, groupValue, details);
+		final ProfitAndLossEntry entry = new ProfitAndLossEntry(entity, groupValue, groupValuePreTax, details);
 
 		Assert.assertSame(entity, entry.getEntity());
 		Assert.assertEquals(groupValue, entry.getFinalGroupValue());

@@ -43,9 +43,4 @@ public interface ISequenceScheduler {
 	 * The caller can use this to avoid full evaluation on the next cycle if a schedule is accepted.
 	 */
 	void acceptLastSchedule();
-
-	/**
-	 * Release resources.
-	 */
-	void dispose();
 }

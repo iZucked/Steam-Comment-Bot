@@ -17,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 
-public final class PortDetails implements IProfitAndLossDetails, Cloneable {
+public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequenceElement, Cloneable {
 
 	private PortOptions options;
 
@@ -77,10 +77,6 @@ public final class PortDetails implements IProfitAndLossDetails, Cloneable {
 
 	public final void setCapacityViolation(final CapacityViolationType type, final long quantity) {
 		capacityViolations.put(type, quantity);
-	}
-
-	public final long getPortCost(final Object key) {
-		throw new UnsupportedOperationException("Undefined API");
 	}
 
 	/**

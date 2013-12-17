@@ -22,6 +22,8 @@ public final class VesselClass implements IVesselClass {
 
 	private int maxSpeed;
 
+	private final EnumMap<VesselState, Integer> serviceSpeed = new EnumMap<VesselState, Integer>(VesselState.class);
+
 	private int baseFuelUnitPrice;
 
 	private int baseFuelConversionFactor;
@@ -88,6 +90,16 @@ public final class VesselClass implements IVesselClass {
 
 	public void setMaxSpeed(final int maxSpeed) {
 		this.maxSpeed = maxSpeed;
+	}
+
+	public void setServiceSpeed(final VesselState vesselState, final int serviceSpeed) {
+		this.serviceSpeed.put(vesselState, serviceSpeed);
+	}
+
+	@Override
+	public int getServiceSpeed(final VesselState vesselState) {
+		return CollectionsUtil.getValue(serviceSpeed, vesselState, 0);
+
 	}
 
 	@Override

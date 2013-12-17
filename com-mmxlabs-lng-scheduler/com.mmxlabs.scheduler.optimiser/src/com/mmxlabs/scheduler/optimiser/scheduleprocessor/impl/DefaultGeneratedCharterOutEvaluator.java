@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -145,7 +146,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				}
 
 				// We will use the VPO to optimise fuel and route choices
-				final List<Object> newRawSequence = new ArrayList<Object>(currentSequence.length);
+				final List<IOptionsSequenceElement> newRawSequence = new ArrayList<IOptionsSequenceElement>(currentSequence.length);
 				for (final Object o : currentSequence) {
 					if (o instanceof PortDetails) {
 						newRawSequence.add(((PortDetails) o).getOptions());
@@ -172,7 +173,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				// Construct a new VPO instance (TODO - use injection provider)
 				final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
-				vpo.setVessel(vessel, seq.getStartTime());
+				vpo.setVessel(vessel, seq.getStartTime(), vessel.getVesselClass().getBaseFuelUnitPrice());
 
 				// Install our new alternative sequence
 				vpo.setBasicSequence(newRawSequence);
@@ -224,7 +225,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					// Keep
 				} else {
 					// Overwrite details
-					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newVoyagePlan.getSequence());
+					voyageCalculator.calculateVoyagePlan(vp, vessel, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newVoyagePlan.getSequence());
 				}
 			}
 		}

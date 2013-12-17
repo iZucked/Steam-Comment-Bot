@@ -141,20 +141,24 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			if (firstType == PortType.Load) {
 				if (secondType == PortType.Discharge) {
 
-					if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
-						return true;
-					}
-					if (tw1.getStart() <= tw2.getEnd() && tw1.getEnd() >= tw2.getEnd()) {
-						return true;
-					}
+					// See ShippingHoursRestrictions otherwise 
+					if (slot1.getPort() == slot2.getPort()) {
 
-					if (tw2.getStart() <= tw1.getStart() && tw2.getEnd() >= tw1.getStart()) {
-						return true;
+						if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
+							return true;
+						}
+						if (tw1.getStart() <= tw2.getEnd() && tw1.getEnd() >= tw2.getEnd()) {
+							return true;
+						}
+
+						if (tw2.getStart() <= tw1.getStart() && tw2.getEnd() >= tw1.getStart()) {
+							return true;
+						}
+						if (tw2.getStart() <= tw1.getEnd() && tw2.getEnd() >= tw1.getEnd()) {
+							return true;
+						}
+						return false;
 					}
-					if (tw2.getStart() <= tw1.getEnd() && tw2.getEnd() >= tw1.getEnd()) {
-						return true;
-					}
-					return false;
 				}
 			}
 			return true;

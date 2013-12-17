@@ -15,7 +15,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
  * @author Simon Goodall
  * 
  */
-public final class VoyageOptions implements Cloneable {
+public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	private int availableTime;
 	private int distance;
 	private IVessel vessel;

@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -208,12 +209,14 @@ public class VoyagePlanner {
 	final public List<VoyagePlan> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		voyagePlanOptimiser.setVessel(vessel, arrivalTimes[0]);
+		// TODO: Extract out further for custom base fuel pricing logic?
+		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
+		voyagePlanOptimiser.setVessel(vessel, arrivalTimes[0], baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
 		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
-		final List<Object> voyageOrPortOptions = new ArrayList<Object>(5);
+		final List<IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<IOptionsSequenceElement>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
 		final boolean[] breakSequence = findSequenceBreaks(sequence);
 		final VesselState[] states = findVesselStates(sequence);
@@ -338,14 +341,15 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer>  arrivalTimes) {
+	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer> arrivalTimes) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		voyagePlanOptimiser.setVessel(vessel, startTime);
+		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
+		voyagePlanOptimiser.setVessel(vessel, startTime, baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
-		final List<Object> voyageOrPortOptions = new ArrayList<Object>(5);
+		final List<IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<IOptionsSequenceElement>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
 		final VesselState[] states = findVesselStates(sequenceElements);
 
@@ -373,7 +377,7 @@ public class VoyagePlanner {
 
 				if (!isShortCargoEnd) {
 					// Available time, as determined by inputs.
-					availableTime = arrivalTimes.get(idx) - arrivalTimes.get(idx-1) - prevVisitDuration;
+					availableTime = arrivalTimes.get(idx) - arrivalTimes.get(idx - 1) - prevVisitDuration;
 				} else { // shorts cargo end on shorts sequence
 					int minTravelTime = Integer.MAX_VALUE;
 					for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, prev2Port)) {
@@ -434,7 +438,7 @@ public class VoyagePlanner {
 	 * @param optimiser
 	 * @return An optimised VoyagePlan
 	 */
-	final public VoyagePlan getOptimisedVoyagePlan(final List<Object> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser) {
+	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser) {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
@@ -472,7 +476,7 @@ public class VoyagePlanner {
 
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) {
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<IOptionsSequenceElement> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) {
 		final VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser);
 		if (plan == null) {
 			return false;

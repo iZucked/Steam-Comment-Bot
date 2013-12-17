@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
+import com.google.inject.Inject;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -17,12 +18,15 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  */
 public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
+	@Inject(optional = true)
+	private ICustomVolumeAllocator redirectionVolumeAllocator;
+
 	/**
 	 * Returns x, capped by y; if x has the special value 0, it is considered undefined and y is returned.
 	 * 
 	 * @return
 	 */
-	private final static long capValueWithZeroDefault(long x, long y) {
+	private final static long capValueWithZeroDefault(final long x, final long y) {
 		return x == 0 ? y : Math.min(x, y);
 	}
 
@@ -39,12 +43,12 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * 
 	 * @author Simon McGregor
 	 */
-	private final static void allocateBasicSlotVolumes(AllocationRecord constraint) {
+	private final static void allocateBasicSlotVolumes(final AllocationRecord constraint) {
 		// TODO: the logic for reporting constraint violations should be moved into this method
 		final IPortSlot[] slots = constraint.slots;
 		final long[] result = constraint.allocations;
 
-		ILoadOption loadSlot = (ILoadOption) slots[0];
+		final ILoadOption loadSlot = (ILoadOption) slots[0];
 
 		// how much room is there in the tanks?
 		final long availableCargoSpace = constraint.vesselCapacityInM3;
@@ -73,10 +77,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// this is subsumed by the LDD* case, but can be done more efficiently by branching instead of looping
 		if (slots.length == 2) {
 
-			IDischargeOption dischargeSlot = (IDischargeOption) slots[1];
+			final IDischargeOption dischargeSlot = (IDischargeOption) slots[1];
 
 			// greedy assumption: always discharge as much as possible
-			long dischargeVolume = capValueWithZeroDefault(dischargeSlot.getMaxDischargeVolume(), unusedVolume);
+			final long dischargeVolume = capValueWithZeroDefault(dischargeSlot.getMaxDischargeVolume(), unusedVolume);
 			// TODO: report min discharge constraint violation if appropriate
 
 			result[1] = dischargeVolume;
@@ -88,13 +92,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// TODO: this only handles LDD* cases
 
 			// track which discharge slot is the most profitable
-			int[] prices = constraint.slotPricesPerM3;
+			final int[] prices = constraint.slotPricesPerM3;
 			int mostProfitableDischargeIndex = 1;
 
 			// assign the minimum amount per discharge slot
 			for (int i = 1; i < slots.length; i++) {
-				IDischargeOption dischargeSlot = (IDischargeOption) slots[i];
-				long minDischargeVolume = dischargeSlot.getMinDischargeVolume();
+				final IDischargeOption dischargeSlot = (IDischargeOption) slots[i];
+				final long minDischargeVolume = dischargeSlot.getMinDischargeVolume();
 
 				// assign the minimum amount per discharge slot
 				if (unusedVolume >= minDischargeVolume) {
@@ -111,18 +115,18 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				}
 			}
 
-			int nDischargeSlots = slots.length - 1;
+			final int nDischargeSlots = slots.length - 1;
 
 			// now, starting with the most profitable discharge slot, allocate
 			// any remaining volume
 			for (int i = 0; i < nDischargeSlots && unusedVolume > 0; i++) {
 				// start at the most profitable slot and cycle through them in order
 				// TODO: would be better to sort them by profitability, but needs to be done efficiently
-				int index = 1 + ((i + mostProfitableDischargeIndex) % nDischargeSlots);
+				final int index = 1 + ((i + mostProfitableDischargeIndex) % nDischargeSlots);
 
-				IDischargeOption slot = (IDischargeOption) slots[index];
+				final IDischargeOption slot = (IDischargeOption) slots[index];
 				// discharge all remaining volume at this slot, up to the slot maximum
-				long volume = Math.min(slot.getMaxDischargeVolume(), unusedVolume);
+				final long volume = Math.min(slot.getMaxDischargeVolume(), unusedVolume);
 				// reduce the remaining available volume
 				unusedVolume -= volume - result[index];
 				result[index] = volume;
@@ -140,7 +144,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// if there is any leftover volume after discharge
 		if (unusedVolume > 0) {
 			// we use a conservative heuristic: load exactly as much as we need, subject to constraints
-			long revisedLoadVolume = loadVolume - unusedVolume;
+			final long revisedLoadVolume = loadVolume - unusedVolume;
 
 			// TODO: report min load constraint violation if necessary
 
@@ -166,9 +170,23 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 */
 	@Override
 	protected long[] allocateSpareVolume() {
-		for (AllocationRecord constraint : constraints) {
-			allocateBasicSlotVolumes(constraint);
+		for (final AllocationRecord constraint : constraints) {
+
+			if (!handleRedirectionVolumes(constraint)) {
+				allocateBasicSlotVolumes(constraint);
+			}
 		}
 		return null;
+	}
+
+	protected boolean handleRedirectionVolumes(final AllocationRecord constraint) {
+
+		if (redirectionVolumeAllocator != null) {
+			if (redirectionVolumeAllocator.canHandle(constraint)) {
+				redirectionVolumeAllocator.handle(constraint);
+				return true;
+			}
+		}
+		return false;
 	}
 }

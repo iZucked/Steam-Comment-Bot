@@ -16,12 +16,14 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 public class ProfitAndLossEntry implements IProfitAndLossEntry {
 	private final IEntity entity;
 	private final long groupValue;
+	private final long groupValuePreTax;
 	private final IDetailTree details;
 
-	public ProfitAndLossEntry(final IEntity entity, final long groupValue, final IDetailTree details) {
+	public ProfitAndLossEntry(final IEntity entity, final long groupValue, final long groupValuePreTax, final IDetailTree details) {
 		super();
 		this.entity = entity;
 		this.groupValue = groupValue;
+		this.groupValuePreTax = groupValuePreTax;
 		this.details = details;
 	}
 
@@ -33,6 +35,11 @@ public class ProfitAndLossEntry implements IProfitAndLossEntry {
 	@Override
 	public long getFinalGroupValue() {
 		return groupValue;
+	}
+
+	@Override
+	public long getFinalGroupValuePreTax() {
+		return groupValuePreTax;
 	}
 
 	@Override

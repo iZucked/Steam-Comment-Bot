@@ -975,12 +975,6 @@ public class NewLNGVoyageCalculatorTest {
 		Assert.assertEquals(88, result[FuelComponent.IdlePilotLight.ordinal()]);
 		Assert.assertEquals(99, result[FuelComponent.Cooldown.ordinal()]);
 
-		Assert.assertEquals(expectedBasePrice, details.getFuelUnitPrice(FuelComponent.Base));
-		Assert.assertEquals(expectedBasePrice, details.getFuelUnitPrice(FuelComponent.Base_Supplemental));
-		Assert.assertEquals(expectedBasePrice, details.getFuelUnitPrice(FuelComponent.PilotLight));
-		Assert.assertEquals(expectedBasePrice, details.getFuelUnitPrice(FuelComponent.IdlePilotLight));
-		Assert.assertEquals(expectedBasePrice, details.getFuelUnitPrice(FuelComponent.IdleBase));
-
 		// Expect no change in LNG price
 		Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.FBO));
 		Assert.assertEquals(0, details.getFuelUnitPrice(FuelComponent.NBO));

@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -94,7 +95,7 @@ public class CostComponentTest {
 
 		// note: the value of this voyage sequence is ignored during this test
 		// any reason to have it here?
-		final Object[] voyageSequence = new Object[] { voyage, port };
+		final IDetailsSequenceElement[] voyageSequence = new IDetailsSequenceElement[] { voyage, port };
 		final VoyagePlan voyagePlan = new VoyagePlan();
 		voyagePlan.setSequence(voyageSequence);
 

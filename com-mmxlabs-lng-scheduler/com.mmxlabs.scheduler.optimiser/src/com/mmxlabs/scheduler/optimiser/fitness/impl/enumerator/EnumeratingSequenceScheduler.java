@@ -153,6 +153,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Inject
 	private IElementDurationProvider durationProvider;
+	
+	@Inject
+	private IVesselProvider vesselProvider;
 
 	/**
 	 * Resize one of the integer buffers above
@@ -504,7 +507,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
 	 * @param maxValue
-	 * 
+s	 * 
 	 * @param sequence
 	 * @return
 	 */
@@ -512,7 +515,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		final ISequence sequence = sequences.getSequence(sequenceIndex);
 		final IResource resource = sequences.getResources().get(sequenceIndex);
 
-		final IVesselProvider vesselProvider = super.getVesselProvider();
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return;

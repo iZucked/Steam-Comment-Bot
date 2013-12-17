@@ -149,7 +149,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 		allComponents.clear();
 		schedulerComponents.clear();
-		scheduler.dispose();
+		scheduler = null;
 	}
 
 	public List<ICargoFitnessComponent> getCargoSchedulerFitnessComponent() {

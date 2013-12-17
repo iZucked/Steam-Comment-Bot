@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
 /**
  * @since 2.0
@@ -17,7 +18,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	private int price;
 
 	@Override
-	public void prepareEvaluation(final ISequences sequences) {
+	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 		price = 0;
 	}
 

@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -40,6 +41,9 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 	private final String name;
 
+	@Inject
+	private INominatedVesselProvider nominatedVesselProvider;
+
 	/**
 	 * @since 2.0
 	 */
@@ -61,7 +65,12 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		if (portExclusionProvider.hasNoExclusions()) {
 			return true;
 		}
-		final Set<IPort> excludedPorts = getExclusionsForVessel(vesselProvider.getVessel(resource));
+		
+		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
+		if (vessel == null) {
+			vessel = vesselProvider.getVessel(resource);
+		}
+		final Set<IPort> excludedPorts = getExclusionsForVessel(vessel);
 		if (excludedPorts.isEmpty()) {
 			return true;
 		}
@@ -119,7 +128,11 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 			return true;
 		}
 
-		final IVessel vessel = vesselProvider.getVessel(resource);
+		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
+		if (vessel == null) {
+			vessel = vesselProvider.getVessel(resource);
+		}
+		
 		// Get vessel exclusions,
 		final Set<IPort> exclusions = getExclusionsForVessel(vessel);
 		if (exclusions.isEmpty()) {

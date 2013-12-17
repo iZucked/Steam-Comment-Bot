@@ -29,7 +29,7 @@ public class TestMarketPriceContract {
 		final MarketPriceContract mpc = new MarketPriceContract(market, 0, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
 		for (int i = 0; i < 1000; i++) {
 			final int date = random.nextInt();
-			Assert.assertEquals(mpc.calculateLoadUnitPrice(null, null, date, date, 0, 0, 0, null, null, null), market.getValueAtPoint(date));
+			Assert.assertEquals(mpc.calculateFOBPricePerMMBTu(null, null, date, date, 0, 0, 0, null, null, null), market.getValueAtPoint(date));
 		}
 	}
 }

@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -60,6 +61,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleCalculator {
 
+	@Inject(optional = true)
+	private ScheduledDataLookupProvider scheduledDataLookupProvider;
+
+	@Inject
+	private CapacityViolationChecker capacityViolationChecker;
+
 	@Inject
 	private IVolumeAllocator volumeAllocator;
 
@@ -73,9 +80,6 @@ public class ScheduleCalculator {
 	private IBreakEvenEvaluator breakEvenEvaluator;
 
 	@Inject
-	private IVesselProvider vesselProvider;
-
-	@Inject
 	private IPortSlotProvider portSlotProvider;
 
 	@Inject(optional = true)
@@ -87,6 +91,9 @@ public class ScheduleCalculator {
 	@Inject(optional = true)
 	private IMarkToMarketProvider markToMarketProvider;
 
+	@Inject
+	private IVesselProvider vesselProvider;
+
 	public IAnnotatedSolution calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
 		annotatedSolution.setSequences(sequences);
@@ -96,12 +103,16 @@ public class ScheduleCalculator {
 
 	public void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
+		if (scheduledDataLookupProvider != null) {
+			scheduledDataLookupProvider.reset();
+		}
+
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences);
+			shippingCalculator.prepareEvaluation(sequences, scheduledSequences);
 		}
 		// Prime the load price calculators with the scheduled result
 		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
-			calculator.prepareEvaluation(sequences);
+			calculator.prepareEvaluation(sequences, scheduledSequences);
 		}
 
 		// FIXME: This should be more customisable
@@ -154,7 +165,14 @@ public class ScheduleCalculator {
 			}
 		}
 
+		if (scheduledDataLookupProvider != null) {
+			scheduledDataLookupProvider.setInputs(sequences, scheduledSequences);
+		}
+
 		calculateProfitAndLoss(sequences, scheduledSequences, allocations, annotatedSolution);
+
+		// Perform capacity violations analysis
+		capacityViolationChecker.calculateCapacityViolations(sequences, scheduledSequences, allocations, annotatedSolution);
 	}
 
 	// TODO: Push into entity value calculator?
@@ -285,7 +303,7 @@ public class ScheduleCalculator {
 				dischargeOptions.setVisitDuration(0);
 				dischargeOptions.setPortSlot(dischargeOption);
 
-				voyagePlan.setSequence(new Object[] { loadDetails, dischargeDetails });
+				voyagePlan.setSequence(new IDetailsSequenceElement[] { loadDetails, dischargeDetails });
 			}
 
 			// Create an allocation annotation.
@@ -313,5 +331,4 @@ public class ScheduleCalculator {
 		}
 		return planDuration;
 	}
-
 }

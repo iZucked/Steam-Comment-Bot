@@ -129,68 +129,17 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				final PortVisitEventImpl visit;
 				if (currentPortSlot instanceof ILoadSlot) {
 					final LoadEventImpl load = new LoadEventImpl();
-					// load.setLoadVolume(plan.getLoadVolume());
-					// TODO: Check unit vs. actual
-					// load.setPurchasePrice(plan.getPurchaseCost());
-
 					visit = load;
-
-					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
-					recordCapacityViolation(details, entries, CapacityViolationType.MIN_LOAD);
-					recordCapacityViolation(details, entries, CapacityViolationType.MAX_LOAD);
-					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
-					recordCapacityViolation(details, entries, CapacityViolationType.VESSEL_CAPACITY);
-
-					if (!entries.isEmpty()) {
-						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
-						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
-					}
-
 				} else if (currentPortSlot instanceof IDischargeSlot) {
 					final DischargeEventImpl discharge = new DischargeEventImpl();
-
-					// discharge.setDischargeVolume(plan.getDischargeVolume());
-
-					// TODO: Check unit vs. actual
-					// discharge.setSalesPrice(plan.getSalesRevenue());
-
-					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
-					recordCapacityViolation(details, entries, CapacityViolationType.MIN_DISCHARGE);
-					recordCapacityViolation(details, entries, CapacityViolationType.MAX_DISCHARGE);
-
-					if (!entries.isEmpty()) {
-						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
-						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
-					}
-
 					visit = discharge;
-
 				} else if (currentPortSlot instanceof IVesselEventPortSlot) {
-
-					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
-					recordCapacityViolation(details, entries, CapacityViolationType.MAX_HEEL);
-					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
-					recordCapacityViolation(details, entries, CapacityViolationType.VESSEL_CAPACITY);
-
-					if (!entries.isEmpty()) {
-						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
-						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
-					}
-
 					visit = new PortVisitEventImpl();
 				} else {
-					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
-					recordCapacityViolation(details, entries, CapacityViolationType.MAX_HEEL);
-					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
-
-					if (!entries.isEmpty()) {
-						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
-						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
-					}
-
 					visit = new PortVisitEventImpl();
 				}
 
+				// TODO: Set on the port details object 
 				// Port Costs
 				{
 					final long cost = portCostProvider.getPortCost(currentPortSlot.getPort(), vessel, currentPortSlot.getPortType());
@@ -321,16 +270,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 			}
 		}
 
-	}
-
-	public void recordCapacityViolation(final PortDetails plan, final List<ICapacityEntry> entries, final CapacityViolationType cvt) {
-		{
-			final long quantity = plan.getCapacityViolation(cvt);
-			if (quantity > 0) {
-				final ICapacityEntry e = new CapacityEntry(cvt, quantity);
-				entries.add(e);
-			}
-		}
 	}
 
 	public void setPortSlotProvider(final IPortSlotProvider portSlotProvider) {

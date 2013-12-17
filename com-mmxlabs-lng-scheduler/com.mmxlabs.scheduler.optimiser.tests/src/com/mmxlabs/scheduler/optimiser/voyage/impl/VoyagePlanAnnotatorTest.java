@@ -161,10 +161,10 @@ public class VoyagePlanAnnotatorTest {
 		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotEditor, portCostProvider, vesselProvider);
 
 		final VoyagePlan plan1 = new VoyagePlan();
-		plan1.setSequence(new Object[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
+		plan1.setSequence(new IDetailsSequenceElement[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
 
 		final VoyagePlan plan2 = new VoyagePlan();
-		plan2.setSequence(new Object[] { loadDetails2, voyageDetails3, dischargeDetails2 });
+		plan2.setSequence(new IDetailsSequenceElement[] { loadDetails2, voyageDetails3, dischargeDetails2 });
 
 		final List<VoyagePlan> plans = new LinkedList<VoyagePlan>();
 		plans.add(plan1);
