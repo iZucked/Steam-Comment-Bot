@@ -43,10 +43,16 @@ public interface MMXObject extends EObject {
 			this.absentDelegateValue = value;
 		}
 		
+		/**
+		 * @since 5.0
+		 */
 		public boolean delegatesTo(final Object changedFeature) {
 			return delegate == changedFeature;
 		}
 		
+		/**
+		 * @since 5.0
+		 */
 		public Object getValue(final EObject object) {
 			if (delegate != null) {
 				MMXObject delegateObject = (MMXObject) object.eGet(delegate);
