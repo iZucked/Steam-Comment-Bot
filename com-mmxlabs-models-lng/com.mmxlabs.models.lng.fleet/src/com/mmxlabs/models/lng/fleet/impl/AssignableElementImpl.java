@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Assignable Element</b></em>'.
+ * @since 8.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

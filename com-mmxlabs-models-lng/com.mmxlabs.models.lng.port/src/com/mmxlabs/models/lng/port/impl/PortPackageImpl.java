@@ -190,6 +190,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

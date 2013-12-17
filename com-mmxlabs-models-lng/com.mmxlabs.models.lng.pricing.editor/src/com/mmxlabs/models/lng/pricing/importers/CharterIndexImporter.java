@@ -47,6 +47,9 @@ public class CharterIndexImporter extends AbstractClassImporter {
 
 
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		CharterIndex result = PricingFactory.eINSTANCE.createCharterIndex();

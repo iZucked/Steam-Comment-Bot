@@ -89,6 +89,7 @@ public interface EntityProfitAndLoss extends EObject {
 	 * If the meaning of the '<em>Profit And Loss Pre Tax</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Profit And Loss Pre Tax</em>' attribute.
 	 * @see #setProfitAndLossPreTax(long)
@@ -101,6 +102,7 @@ public interface EntityProfitAndLoss extends EObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Profit And Loss Pre Tax</em>' attribute.
 	 * @see #getProfitAndLossPreTax()

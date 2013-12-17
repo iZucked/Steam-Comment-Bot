@@ -66,6 +66,7 @@ public class PurchaseContractItemProvider
 	/**
 	 * This adds a property descriptor for the Cargo CV feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

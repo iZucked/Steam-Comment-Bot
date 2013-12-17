@@ -942,7 +942,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
 	 * @param newCargoes
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	public RootData setCargoes(final CargoModel cargoModel, final ScheduleModel scheduleModel, final RootData existingData) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();

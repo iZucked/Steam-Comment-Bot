@@ -18,6 +18,9 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 
+/**
+ * @since 8.0
+ */
 public abstract class AbstractValueListInlineEditor extends
 		UnsettableInlineEditor {
 

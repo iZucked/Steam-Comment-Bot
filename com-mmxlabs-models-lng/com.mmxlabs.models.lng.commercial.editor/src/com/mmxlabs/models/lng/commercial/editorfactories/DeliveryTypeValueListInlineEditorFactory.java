@@ -10,6 +10,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 
+/**
+ * @since 8.0
+ */
 public class DeliveryTypeValueListInlineEditorFactory implements IInlineEditorFactory {
 	@Override
 	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {

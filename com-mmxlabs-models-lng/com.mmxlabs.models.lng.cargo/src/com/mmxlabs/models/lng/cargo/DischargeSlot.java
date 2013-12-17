@@ -152,6 +152,7 @@ public interface DischargeSlot extends Slot {
 	 * If the meaning of the '<em>Min Cv Value</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Min Cv Value</em>' attribute.
 	 * @see #isSetMinCvValue()
@@ -166,6 +167,7 @@ public interface DischargeSlot extends Slot {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue <em>Min Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Min Cv Value</em>' attribute.
 	 * @see #isSetMinCvValue()
@@ -178,6 +180,7 @@ public interface DischargeSlot extends Slot {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue <em>Min Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetMinCvValue()
 	 * @see #getMinCvValue()
@@ -189,6 +192,7 @@ public interface DischargeSlot extends Slot {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue <em>Min Cv Value</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Min Cv Value</em>' attribute is set.
 	 * @see #unsetMinCvValue()
@@ -205,6 +209,7 @@ public interface DischargeSlot extends Slot {
 	 * If the meaning of the '<em>Max Cv Value</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Max Cv Value</em>' attribute.
 	 * @see #isSetMaxCvValue()
@@ -219,6 +224,7 @@ public interface DischargeSlot extends Slot {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue <em>Max Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Max Cv Value</em>' attribute.
 	 * @see #isSetMaxCvValue()
@@ -231,6 +237,7 @@ public interface DischargeSlot extends Slot {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue <em>Max Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetMaxCvValue()
 	 * @see #getMaxCvValue()
@@ -242,6 +249,7 @@ public interface DischargeSlot extends Slot {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue <em>Max Cv Value</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Max Cv Value</em>' attribute is set.
 	 * @see #unsetMaxCvValue()
@@ -253,6 +261,7 @@ public interface DischargeSlot extends Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
@@ -261,6 +270,7 @@ public interface DischargeSlot extends Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
@@ -269,6 +279,7 @@ public interface DischargeSlot extends Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated

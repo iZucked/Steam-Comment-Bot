@@ -673,6 +673,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -712,6 +713,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -721,6 +723,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -730,6 +733,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -760,6 +764,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -849,6 +854,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -858,6 +864,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -867,6 +874,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3599,6 +3607,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3669,6 +3678,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4931,6 +4941,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax()
@@ -4989,6 +5000,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax()
@@ -6021,6 +6033,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6067,6 +6080,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

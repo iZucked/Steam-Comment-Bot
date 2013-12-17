@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Assignable Element</b></em>'.
+ * @since 8.0
  * <!-- end-user-doc -->
  *
  * <p>

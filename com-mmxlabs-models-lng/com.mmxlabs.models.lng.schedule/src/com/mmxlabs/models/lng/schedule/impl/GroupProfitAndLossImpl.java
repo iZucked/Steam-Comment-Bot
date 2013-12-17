@@ -62,6 +62,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	/**
 	 * The default value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfitAndLossPreTax()
 	 * @generated
@@ -72,6 +73,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	/**
 	 * The cached value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfitAndLossPreTax()
 	 * @generated
@@ -131,6 +133,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -140,6 +143,7 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

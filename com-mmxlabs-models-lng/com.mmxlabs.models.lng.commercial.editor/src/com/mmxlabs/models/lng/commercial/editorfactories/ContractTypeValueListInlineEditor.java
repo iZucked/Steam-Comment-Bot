@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ContractType;
 
 /**
- * @since 2.0
+ * @since 8.0
  */
 
 public class ContractTypeValueListInlineEditor extends AbstractValueListInlineEditor {

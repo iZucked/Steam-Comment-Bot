@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  * Because the input model is now held as per-element assignment
  * classes, this is needed to glom everything together.
  * @author hinton
+ * @since 8.0
  *
  */
 public class CollectedAssignment {

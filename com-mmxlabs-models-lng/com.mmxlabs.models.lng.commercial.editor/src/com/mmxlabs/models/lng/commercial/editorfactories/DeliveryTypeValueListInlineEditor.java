@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.TypesPackage;
 
 /**
- * @since 2.0
+ * @since 8.0
  */
 
 public class DeliveryTypeValueListInlineEditor extends AbstractValueListInlineEditor {

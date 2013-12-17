@@ -38,6 +38,9 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
+/**
+ * @since 8.0
+ */
 public class AssignmentEditorHelper {
 	public static Date getStartDate(final AssignableElement task) {
 

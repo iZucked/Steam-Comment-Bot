@@ -324,6 +324,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -474,6 +475,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -654,6 +656,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -663,6 +666,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -814,6 +818,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
@@ -824,6 +829,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -833,6 +839,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -842,6 +849,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Slot Contract Params</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -851,6 +859,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.ContractType
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
@@ -1062,6 +1071,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Contract Type</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.Contract#getContractType()
@@ -1129,6 +1139,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Cargo CV</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV()
@@ -1209,6 +1220,8 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SlotContractParams <em>Slot Contract Params</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Slot Contract Params</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.SlotContractParams
@@ -1219,6 +1232,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Contract Type</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.ContractType
@@ -1407,6 +1421,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Contract Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1462,6 +1477,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Cargo CV</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1530,6 +1546,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
@@ -1540,6 +1557,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.ContractType
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()

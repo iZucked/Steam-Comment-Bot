@@ -29,6 +29,7 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
  *            The LNGPriceCalculatorParameters subclass
  * @param <U>
  *            The custom data structure class
+ * @since 8.0
  */
 public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters, U extends EObject> extends IInlineEditorEnablementWrapper {
 	private boolean enabled = false;

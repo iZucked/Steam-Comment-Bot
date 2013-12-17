@@ -62,6 +62,9 @@ public class DataIndexImporter extends AbstractClassImporter {
 		this.parseAsInt = parseAsInt;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		final Index<Number> result;

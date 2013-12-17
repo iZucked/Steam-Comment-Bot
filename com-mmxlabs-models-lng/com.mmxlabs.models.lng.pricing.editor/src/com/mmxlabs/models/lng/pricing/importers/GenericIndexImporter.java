@@ -132,6 +132,9 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return result;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 	

@@ -48,6 +48,9 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		CommodityIndex result = PricingFactory.eINSTANCE.createCommodityIndex();

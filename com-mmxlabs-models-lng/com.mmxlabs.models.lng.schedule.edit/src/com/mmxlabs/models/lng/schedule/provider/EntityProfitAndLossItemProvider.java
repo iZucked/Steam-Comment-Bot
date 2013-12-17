@@ -118,6 +118,7 @@ public class EntityProfitAndLossItemProvider
 	/**
 	 * This adds a property descriptor for the Profit And Loss Pre Tax feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -305,6 +305,7 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Contract Type feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

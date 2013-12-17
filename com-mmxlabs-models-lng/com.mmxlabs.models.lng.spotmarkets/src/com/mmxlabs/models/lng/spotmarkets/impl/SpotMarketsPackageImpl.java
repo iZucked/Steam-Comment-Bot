@@ -364,6 +364,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
