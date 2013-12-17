@@ -334,6 +334,7 @@ public class TradingExporterExtension implements IExporterExtension {
 		}
 		
 		int totalGroupValue = 0;
+		int totalGroupValuePreTax = 0;
 		final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
 		if (includeTimeCharterRate) {
 			container.setGroupProfitAndLoss(groupProfitAndLoss);
@@ -343,33 +344,39 @@ public class TradingExporterExtension implements IExporterExtension {
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
 
-		final Map<LegalEntity, Integer> groupProfitMap = new HashMap<LegalEntity, Integer>();
+		final Map<LegalEntity, int[]> groupProfitMap = new HashMap<LegalEntity, int[]>();
 
 		// We may see the same entity multiple times - so aggregate results
 		for (final IProfitAndLossEntry entry : entries) {
 
 			final LegalEntity entity = entities.getModelObject(entry.getEntity(), LegalEntity.class);
 			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
-
-			if (groupProfitMap.containsKey(entity)) {
-				groupProfit += groupProfitMap.get(entity);
+			int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
+			
+			if (!groupProfitMap.containsKey(entity)) {
+				groupProfitMap.put(entity, new int[2]);
 			}
-			groupProfitMap.put(entity, groupProfit);
+			groupProfitMap.get(entity)[0] += groupProfit;
+			groupProfitMap.get(entity)[1] += groupProfitPreTax;
 		}
 		// Now create output data on the unique set.
-		for (final Map.Entry<LegalEntity, Integer> e : groupProfitMap.entrySet()) {
+		for (final Map.Entry<LegalEntity, int[]> e : groupProfitMap.entrySet()) {
 
 			final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
 			streamData.setEntity(e.getKey());
-			final int groupValue = e.getValue();
+			final int groupValue = e.getValue()[0];
+			final int groupValuePreTax = e.getValue()[1];
 
 			streamData.setProfitAndLoss(groupValue);
+			streamData.setProfitAndLossPreTax(groupValuePreTax);
 			totalGroupValue += groupValue;
+			totalGroupValuePreTax += groupValuePreTax;
 
 			groupProfitAndLoss.getEntityProfitAndLosses().add(streamData);
 		}
 
 		groupProfitAndLoss.setProfitAndLoss(totalGroupValue);
+		groupProfitAndLoss.setProfitAndLossPreTax(totalGroupValuePreTax);
 	}
 
 	// private void setShippingCosts(final IShippingCostAnnotation shippingCostAnnotation, final ProfitAndLossContainer container) {
