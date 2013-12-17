@@ -3,6 +3,4 @@
 .swp$
 \.project$
 syntax: regexp
-\.settings$
-syntax: regexp
 .*/target$

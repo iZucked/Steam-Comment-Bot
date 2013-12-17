@@ -60,7 +60,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.ui.Activator;
-import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view shows data obtained from the model. The sample creates a dummy model on the fly, but a real implementation would connect
@@ -84,7 +84,6 @@ public class JobManagerView extends ViewPart {
 	private Action pauseAction;
 	private Action stopAction;
 	private Action removeAction;
-	private Action toggleDisplayAction;
 
 	private Action doubleClickAction;
 
@@ -160,14 +159,14 @@ public class JobManagerView extends ViewPart {
 			// TODO: Cache images -- they need to be disposed
 
 			if (index == 0) {
-				if (obj instanceof IJobDescriptor) {
-					final IJobDescriptor job = (IJobDescriptor) obj;
-//					if (jobManager.getSelectedJobs().contains(job)) {
-//						return getCachedImage("/icons/console_view.gif");
-//					} else {
-						return null;
-//					}
-				}
+//				if (obj instanceof IJobDescriptor) {
+//					final IJobDescriptor job = (IJobDescriptor) obj;
+//					// if (jobManager.getSelectedJobs().contains(job)) {
+//					// return getCachedImage("/icons/console_view.gif");
+//					// } else {
+//					return null;
+//					// }
+//				}
 			}
 
 			if (index == 1) {
@@ -222,6 +221,8 @@ public class JobManagerView extends ViewPart {
 					break;
 				case UNKNOWN:
 					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_WARNING);
+				default:
+					break;
 				}
 			} else {
 				desc = Activator.getImageDescriptor(key.toString());
@@ -274,7 +275,8 @@ public class JobManagerView extends ViewPart {
 					}
 				});
 				break;
-
+			default:
+				break;
 			}
 			return true;
 		}
@@ -474,7 +476,6 @@ public class JobManagerView extends ViewPart {
 		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
-		manager.add(toggleDisplayAction);
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -482,7 +483,6 @@ public class JobManagerView extends ViewPart {
 		manager.add(pauseAction);
 		manager.add(stopAction);
 		manager.add(removeAction);
-		manager.add(toggleDisplayAction);
 
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -490,7 +490,6 @@ public class JobManagerView extends ViewPart {
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(packAction);
-		manager.add(toggleDisplayAction);
 		manager.add(startAction);
 		manager.add(pauseAction);
 		manager.add(stopAction);
@@ -499,7 +498,7 @@ public class JobManagerView extends ViewPart {
 
 	private void makeActions() {
 
-		packAction = new PackTreeColumnsAction(viewer);
+		packAction = PackActionFactory.createPackColumnsAction(viewer);
 
 		startAction = new Action() {
 			@Override
@@ -597,20 +596,20 @@ public class JobManagerView extends ViewPart {
 		removeAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/rem_co.gif"));
 		removeAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/rem_co.gif"));
 
-		toggleDisplayAction = new Action() {
-			@Override
-			public void run() {
-
-				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
-				while (itr.hasNext()) {
-					final IJobDescriptor job = itr.next();
-//					jobManager.toggleJobSelection(job);
-				}
-			}
-		};
-		toggleDisplayAction.setText("Toggle Display Flag");
-		toggleDisplayAction.setToolTipText("Toggle whether or not a job is linked to views");
-		toggleDisplayAction.setImageDescriptor(Activator.getImageDescriptor("/icons/console_view.gif"));
+//		toggleDisplayAction = new Action() {
+//			@Override
+//			public void run() {
+//
+//				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
+//				while (itr.hasNext()) {
+////					final IJobDescriptor job = itr.next();
+//					// jobManager.toggleJobSelection(job);
+//				}
+//			}
+//		};
+//		toggleDisplayAction.setText("Toggle Display Flag");
+//		toggleDisplayAction.setToolTipText("Toggle whether or not a job is linked to views");
+//		toggleDisplayAction.setImageDescriptor(Activator.getImageDescriptor("/icons/console_view.gif"));
 
 		doubleClickAction = new Action() {
 
@@ -665,7 +664,6 @@ public class JobManagerView extends ViewPart {
 			pauseAction.setEnabled(false);
 			stopAction.setEnabled(false);
 			removeAction.setEnabled(false);
-			toggleDisplayAction.setEnabled(false);
 		} else {
 			boolean startEnabled = false;
 			boolean pauseEnabled = false;
@@ -718,7 +716,11 @@ public class JobManagerView extends ViewPart {
 						break;
 					case UNKNOWN:
 						break;
-
+					default:
+						pauseEnabled = false;
+						stopEnabled = false;
+						toogleDisplayEnabled = false;
+						break;
 					}
 				}
 			}
@@ -726,7 +728,6 @@ public class JobManagerView extends ViewPart {
 			startAction.setEnabled(startEnabled);
 			pauseAction.setEnabled(pauseEnabled);
 			stopAction.setEnabled(stopEnabled);
-			toggleDisplayAction.setEnabled(toogleDisplayEnabled);
 
 			removeAction.setEnabled(true);
 		}
