@@ -53,7 +53,6 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 							provider.fireDirtyChange(saveable);
 							provider.fireClosed(saveable);
 						}
-						return;
 					}
 				}
 			}
@@ -94,6 +93,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 		}
 	};
+
 
 	private final class InternalSaveablesProvider extends SaveablesProvider {
 		@Override
