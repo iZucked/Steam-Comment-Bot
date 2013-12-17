@@ -69,7 +69,7 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_OBJECT = 0;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -133,7 +133,7 @@ public interface MMXCorePackage extends EPackage {
 	int NAMED_OBJECT = 1;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -207,7 +207,7 @@ public interface MMXCorePackage extends EPackage {
 	int OTHER_NAMES_OBJECT = 2;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
 	 * <!-- end-user-doc -->
@@ -297,7 +297,7 @@ public interface MMXCorePackage extends EPackage {
 	int UUID_OBJECT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -370,7 +370,7 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -443,10 +443,10 @@ public interface MMXCorePackage extends EPackage {
 	EClass getMMXObject();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.mmxcore.MMXObject#getExtensions <em>Extensions</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.mmxcore.MMXObject#getExtensions <em>Extensions</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Extensions</em>'.
+	 * @return the meta object for the containment reference list '<em>Extensions</em>'.
 	 * @see com.mmxlabs.models.mmxcore.MMXObject#getExtensions()
 	 * @see #getMMXObject()
 	 * @generated
@@ -591,7 +591,7 @@ public interface MMXCorePackage extends EPackage {
 		EClass MMX_OBJECT = eINSTANCE.getMMXObject();
 
 		/**
-		 * The meta object literal for the '<em><b>Extensions</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Extensions</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

@@ -313,7 +313,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(mmxObjectEClass, MMXObject.class, "MMXObject", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMMXObject_Extensions(), this.getUUIDObject(), null, "extensions", null, 0, -1, MMXObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
+		initEReference(getMMXObject_Extensions(), ecorePackage.getEObject(), null, "extensions", null, 0, -1, MMXObject.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, !IS_ORDERED);
 
 		EOperation op = initEOperation(getMMXObject__GetUnsetValue__EStructuralFeature(), ecorePackage.getEJavaObject(), "getUnsetValue", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEStructuralFeature(), "feature", 1, 1, IS_UNIQUE, IS_ORDERED);
