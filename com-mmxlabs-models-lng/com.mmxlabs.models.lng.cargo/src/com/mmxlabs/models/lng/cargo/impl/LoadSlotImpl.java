@@ -329,7 +329,7 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @generated NOT
 	 */
 	public double getSlotOrDelegatedCV() {
-		return (double) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__CARGO_CV);
+		return (Double) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__CARGO_CV);
 	}
 
 	/**
