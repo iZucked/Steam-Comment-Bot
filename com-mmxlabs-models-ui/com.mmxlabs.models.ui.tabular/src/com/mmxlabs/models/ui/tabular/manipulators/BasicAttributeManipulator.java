@@ -46,6 +46,12 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 		if (object == null) {
 			return null;
 		}
+		
+		// if the object for some reason does not support the field (e.g. it's a placeholder row in a table)
+		// ignore it
+		if (object instanceof EObject && !((EObject) object).eClass().getEAllStructuralFeatures().contains(field)) {
+			return null;
+		}
 
 		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
 			return renderUnsetValue(object, (object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) : null);
