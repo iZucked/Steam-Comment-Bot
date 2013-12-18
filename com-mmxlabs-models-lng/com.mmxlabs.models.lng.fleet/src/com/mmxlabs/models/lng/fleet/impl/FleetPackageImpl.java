@@ -1321,7 +1321,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		EGenericType g3 = createEGenericType(this.getVessel());
 		g2.setEUpperBound(g3);
 		initEReference(getAssignableElement_Assignment(), g1, null, "assignment", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAssignableElement_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAssignableElement_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAssignableElement_SequenceHint(), ecorePackage.getEInt(), "sequenceHint", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getAssignableElement_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, AssignableElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

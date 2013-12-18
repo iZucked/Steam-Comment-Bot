@@ -35,13 +35,13 @@ public class AssignmentImporter {
 				final String assignedObjects = row.get("assignedobjects");
 				final String spotIndexStr = row.get("spotindex");
 
-				int spotIndexTmp = 0;
+				Integer spotIndexTmp = null;
 				try {
 					spotIndexTmp = Integer.parseInt(spotIndexStr);
 				} catch (final NumberFormatException nfe) {
 					context.createProblem("Error parsing spot index", true, true, true);
 				}
-				final int spotIndex = spotIndexTmp;
+				final Integer spotIndex = spotIndexTmp;
 				final String[] assignedObjectNames = assignedObjects.split(",");
 				int index = 0;
 				for (final String aon : assignedObjectNames) {
@@ -96,16 +96,18 @@ public class AssignmentImporter {
 								if (assignableElement != null) {
 									assignableElement.setSequenceHint(seq);
 
-									// Try named vessel first...
-									final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
-									if (v != null) {
-										assignableElement.setAssignment((Vessel) v);
+									if (spotIndex == null) {
+										// Try named vessel first...
+										final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+										if (v != null) {
+											assignableElement.setAssignment(v);
+											assignableElement.unsetSpotIndex();
+										}
 									} else {
-										// ...then generic set
 										final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
 										if (v2 instanceof VesselClass) {
-											assignableElement.setSpotIndex(spotIndex);
 											assignableElement.setAssignment((VesselClass) v2);
+											assignableElement.setSpotIndex(spotIndex);
 										}
 									}
 									break;

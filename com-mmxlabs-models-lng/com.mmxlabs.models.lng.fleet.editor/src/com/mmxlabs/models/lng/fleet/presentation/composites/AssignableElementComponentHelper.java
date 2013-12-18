@@ -7,13 +7,11 @@
 package com.mmxlabs.models.lng.fleet.presentation.composites;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ui.inlineeditors.AssignmentInlineEditor;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,9 +74,7 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_assignmentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT));
-		final IInlineEditor assignmentEditor = new AssignmentInlineEditor();
-		detailComposite.addInlineEditor(assignmentEditor);
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT));
 	}
 
 	/**

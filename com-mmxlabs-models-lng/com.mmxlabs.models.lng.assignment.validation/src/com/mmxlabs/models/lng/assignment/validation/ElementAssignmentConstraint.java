@@ -103,13 +103,13 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 				} else { // FOD/DES cargo
 					if (vessel instanceof Vessel) {
 						if (scenarioVessels.contains(vessel)) {
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Non-shipped cargo " + cargo.getName()
 									+ " is assigned to scenario vessel " + vessel.getName() + "."));
 							failure.addEObjectAndFeature(assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 							failures.add(failure);
 						}
 					} else if (vessel != null) {
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Non-shipped cargo " + cargo.getName()
 								+ " can only be assigned to a specific vessel"));
 						failure.addEObjectAndFeature(assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
