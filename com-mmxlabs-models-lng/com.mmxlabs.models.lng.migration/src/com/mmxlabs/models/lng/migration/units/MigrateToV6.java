@@ -101,7 +101,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 
 		final EClass class_AssignmentModel = MetamodelUtils.getEClass(package_AssignmentModel, "AssignmentModel");
 		final EClass class_ElementAssignment = MetamodelUtils.getEClass(package_AssignmentModel, "ElementAssignment");
-		final EClass class_Vessel = MetamodelUtils.getEClass(package_AssignmentModel, "Vessel");
+		final EClass class_Vessel = MetamodelUtils.getEClass(package_FleetModel, "Vessel");
 
 		final EReference reference_AssignableModel_elementAssignments = MetamodelUtils.getReference(class_AssignmentModel, "elementAssignments");
 		final EReference reference_ElementAssignment_assignment = MetamodelUtils.getReference(class_ElementAssignment, "assignment");
