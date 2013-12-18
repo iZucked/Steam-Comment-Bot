@@ -20,10 +20,12 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -45,6 +47,7 @@ import org.eclipse.ui.part.ViewPart;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -58,12 +61,8 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private final ArrayList<ColumnManager<T>> columnManagers = new ArrayList<ColumnManager<T>>();
 
 	private boolean inverseSort = false;
-	/**
-	 * The ID of the view as specified by the extension.
-	 */
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView";
 
-	private GridTableViewer viewer;
+	private GridTreeViewer viewer;
 
 	private Action packColumnsAction;
 
@@ -73,7 +72,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	private SimpleContentAndColumnProvider<T> contentProvider;
 	
-	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
+	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
 		public ViewLabelProvider() {
 		}
@@ -174,7 +173,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		final SimpleContentAndColumnProvider<T> contentProvider = createContentProvider(); 
 		this.contentProvider = contentProvider;
 		
-		viewer = new GridTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
+		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
 			final List<GridViewerColumn> viewerColumns = new ArrayList<GridViewerColumn>();
 			
 			@Override
@@ -208,6 +207,10 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					gc.setText(name);
 					gc.pack();
 					addSortSelectionListener(gc, cv);
+					if (cv.isTree()) {
+						// Enable the tree controls on this column
+						gvc.getColumn().setTree(true);
+					}
 				}
 			}
 			
@@ -341,7 +344,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackGridTableColumnsAction(viewer);
+		packColumnsAction = new PackGridTreeColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
