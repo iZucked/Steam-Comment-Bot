@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getData <em>Data</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits <em>Units</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,5 +53,31 @@ public interface NamedIndexContainer<Value> extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setData(Index<Value> value);
+
+	/**
+	 * Returns the value of the '<em><b>Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Units</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Units</em>' attribute.
+	 * @see #setUnits(String)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getNamedIndexContainer_Units()
+	 * @model
+	 * @generated
+	 */
+	String getUnits();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits <em>Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Units</em>' attribute.
+	 * @see #getUnits()
+	 * @generated
+	 */
+	void setUnits(String value);
 
 } // NamedIndexContainer

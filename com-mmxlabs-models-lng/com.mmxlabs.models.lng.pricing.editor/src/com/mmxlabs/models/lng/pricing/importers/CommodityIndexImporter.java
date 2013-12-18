@@ -42,6 +42,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 public class CommodityIndexImporter extends AbstractClassImporter {
 	private static final String NAME = "name";
 	private static final String EXPRESSION = "expression";
+	private static final String UNITS = "units";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
@@ -69,6 +70,12 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 			result.setName(row.get(NAME));
 		} else {
 			context.addProblem(context.createProblem("CommodityIndex name is missing", true, true, true));
+		}
+
+		if (row.containsKey(UNITS)) {
+			result.setUnits(row.get(UNITS));
+		} else {
+			context.addProblem(context.createProblem("CommodityIndex units is missing", true, true, true));
 		}
 
 		if (indexData instanceof DataIndex) {
@@ -100,7 +107,7 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
 					}
 				} catch (final ParseException ex) {
-					if (s.equals(NAME) == false && s.equals(EXPRESSION) == false) {
+					if (s.equals(NAME) == false && s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
 				}
@@ -153,6 +160,8 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 					}
 				});
 				row.put(NAME, commodityIndex.getName());
+				row.put(UNITS, commodityIndex.getUnits());
+				
 				for (final IndexPoint<Double> pt : i.getPoints()) {
 					final Double n = pt.getValue();
 					final Date dt = pt.getDate();
@@ -163,6 +172,7 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 				final DerivedIndex<Double> derived = (DerivedIndex<Double>) index;
 				final Map<String, String> row = new LinkedHashMap<String, String>();
 				row.put(NAME, commodityIndex.getName());
+				row.put(UNITS, commodityIndex.getUnits());
 				row.put(EXPRESSION, derived.getExpression());
 				result.add(row);
 			}

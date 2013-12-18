@@ -66,6 +66,7 @@ public class NamedIndexContainerItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addUnitsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -84,6 +85,28 @@ public class NamedIndexContainerItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Units feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUnitsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedIndexContainer_units_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedIndexContainer_units_feature", "_UI_NamedIndexContainer_type"),
+				 PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS,
 				 true,
 				 false,
 				 false,
@@ -160,6 +183,7 @@ public class NamedIndexContainerItemProvider
 
 		switch (notification.getFeatureID(NamedIndexContainer.class)) {
 			case PricingPackage.NAMED_INDEX_CONTAINER__NAME:
+			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:

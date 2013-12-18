@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
+import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -42,7 +43,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 */
 	public static PricingFactory init() {
 		try {
-			PricingFactory thePricingFactory = (PricingFactory)EPackage.Registry.INSTANCE.getEFactory(PricingPackage.eNS_URI);
+			PricingFactory thePricingFactory = (PricingFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/pricing/1/"); 
 			if (thePricingFactory != null) {
 				return thePricingFactory;
 			}

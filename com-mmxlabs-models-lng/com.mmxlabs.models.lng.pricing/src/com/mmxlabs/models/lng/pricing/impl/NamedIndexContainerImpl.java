@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getData <em>Data</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.NamedIndexContainerImpl#getUnits <em>Units</em>}</li>
  * </ul>
  * </p>
  *
@@ -64,6 +65,26 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 	 * @ordered
 	 */
 	protected Index<Value> data;
+
+	/**
+	 * The default value of the '{@link #getUnits() <em>Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String UNITS_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getUnits() <em>Units</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnits()
+	 * @generated
+	 * @ordered
+	 */
+	protected String units = UNITS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -154,6 +175,27 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public String getUnits() {
+		return units;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setUnits(String newUnits) {
+		String oldUnits = units;
+		units = newUnits;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.NAMED_INDEX_CONTAINER__UNITS, oldUnits, units));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -175,6 +217,8 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 				return getName();
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				return getData();
+			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
+				return getUnits();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -194,6 +238,9 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				setData((Index<Value>)newValue);
 				return;
+			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
+				setUnits((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -212,6 +259,9 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				setData((Index<Value>)null);
 				return;
+			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
+				setUnits(UNITS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -228,6 +278,8 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case PricingPackage.NAMED_INDEX_CONTAINER__DATA:
 				return data != null;
+			case PricingPackage.NAMED_INDEX_CONTAINER__UNITS:
+				return UNITS_EDEFAULT == null ? units != null : !UNITS_EDEFAULT.equals(units);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -276,6 +328,8 @@ public class NamedIndexContainerImpl<Value> extends UUIDObjectImpl implements Na
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", units: ");
+		result.append(units);
 		result.append(')');
 		return result.toString();
 	}
