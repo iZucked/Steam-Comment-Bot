@@ -60,9 +60,11 @@ public interface AssignableElement extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Spot Index</em>' attribute.
+	 * @see #isSetSpotIndex()
+	 * @see #unsetSpotIndex()
 	 * @see #setSpotIndex(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getAssignableElement_SpotIndex()
-	 * @model
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	int getSpotIndex();
@@ -72,10 +74,35 @@ public interface AssignableElement extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Spot Index</em>' attribute.
+	 * @see #isSetSpotIndex()
+	 * @see #unsetSpotIndex()
 	 * @see #getSpotIndex()
 	 * @generated
 	 */
 	void setSpotIndex(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getSpotIndex <em>Spot Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSpotIndex()
+	 * @see #getSpotIndex()
+	 * @see #setSpotIndex(int)
+	 * @generated
+	 */
+	void unsetSpotIndex();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getSpotIndex <em>Spot Index</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Spot Index</em>' attribute is set.
+	 * @see #unsetSpotIndex()
+	 * @see #getSpotIndex()
+	 * @see #setSpotIndex(int)
+	 * @generated
+	 */
+	boolean isSetSpotIndex();
 
 	/**
 	 * Returns the value of the '<em><b>Sequence Hint</b></em>' attribute.

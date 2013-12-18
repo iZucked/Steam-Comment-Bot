@@ -87,9 +87,22 @@ public class AssignmentEditorHelper {
 
 						int c = o1.getSecond() - o2.getSecond();
 						if (c == 0) {
-							c = o1.getThird() - o2.getThird();
+							if (o1.getThird() == o2.getThird()) {
+								c = 0;
+							} else if (o1.getThird() == null) {
+								c = -1;
+							} else if (o2.getThird() == null) {
+								return 1;
+							} else {
+								c = o1.getThird() - o2.getThird();
+							}
 						}
 
+						if (c == 0) {
+							// Hmm, this could be bad, will we loose elements in the TreeMap?
+							int ii = 0; // Set a breakpoint!
+						}
+						
 						return c;
 					}
 				});
@@ -117,7 +130,8 @@ public class AssignmentEditorHelper {
 			}
 
 			// Use vessel index normally, but for spots include spot index
-			final Triple<AVesselSet<? extends Vessel>, Integer, Integer> k = new Triple<AVesselSet<? extends Vessel>, Integer, Integer>(assignableElement.getAssignment(), vesselOrder.indexOf(assignableElement.getAssignment()), assignableElement.getSpotIndex());
+			final Triple<AVesselSet<? extends Vessel>, Integer, Integer> k = new Triple<AVesselSet<? extends Vessel>, Integer, Integer>(assignableElement.getAssignment(),
+					vesselOrder.indexOf(assignableElement.getAssignment()), assignableElement.isSetSpotIndex() ? assignableElement.getSpotIndex() : null);
 			List<AssignableElement> l = grouping.get(k);
 			if (l == null) {
 				l = new ArrayList<AssignableElement>();
@@ -165,25 +179,30 @@ public class AssignmentEditorHelper {
 		int maxSpot = 0;
 		for (Cargo cargo : cargoModel.getCargoes()) {
 			if (cargo.getAssignment() != null) {
-
-				maxSpot = Math.max(maxSpot, cargo.getSpotIndex());
+				if (cargo.isSetSpotIndex()) {
+					maxSpot = Math.max(maxSpot, cargo.getSpotIndex());
+				}
 			}
 		}
 		for (LoadSlot loadSlot : cargoModel.getLoadSlots()) {
 			if (loadSlot.getAssignment() != null) {
-
-				maxSpot = Math.max(maxSpot, loadSlot.getSpotIndex());
+				if (loadSlot.isSetSpotIndex()) {
+					maxSpot = Math.max(maxSpot, loadSlot.getSpotIndex());
+				}
 			}
 		}
 		for (DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
 			if (dischargeSlot.getAssignment() != null) {
-
-				maxSpot = Math.max(maxSpot, dischargeSlot.getSpotIndex());
+				if (dischargeSlot.isSetSpotIndex()) {
+					maxSpot = Math.max(maxSpot, dischargeSlot.getSpotIndex());
+				}
 			}
 		}
 		for (VesselEvent vesselEvent : scenarioFleetModel.getVesselEvents()) {
 			if (vesselEvent.getAssignment() != null) {
-				maxSpot = Math.max(maxSpot, vesselEvent.getSpotIndex());
+				if (vesselEvent.isSetSpotIndex()) {
+					maxSpot = Math.max(maxSpot, vesselEvent.getSpotIndex());
+				}
 			}
 		}
 		maxSpot++;

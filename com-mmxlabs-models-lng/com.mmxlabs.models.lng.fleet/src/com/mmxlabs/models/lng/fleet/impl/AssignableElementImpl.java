@@ -62,6 +62,15 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	protected int spotIndex = SPOT_INDEX_EDEFAULT;
 
 	/**
+	 * This is true if the Spot Index attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean spotIndexESet;
+
+	/**
 	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -176,8 +185,33 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
+		boolean oldSpotIndexESet = spotIndexESet;
+		spotIndexESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX, oldSpotIndex, spotIndex));
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX, oldSpotIndex, spotIndex, !oldSpotIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSpotIndex() {
+		int oldSpotIndex = spotIndex;
+		boolean oldSpotIndexESet = spotIndexESet;
+		spotIndex = SPOT_INDEX_EDEFAULT;
+		spotIndexESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX, oldSpotIndex, SPOT_INDEX_EDEFAULT, oldSpotIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSpotIndex() {
+		return spotIndexESet;
 	}
 
 	/**
@@ -280,7 +314,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 				setAssignment((AVesselSet<? extends Vessel>)null);
 				return;
 			case FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
-				setSpotIndex(SPOT_INDEX_EDEFAULT);
+				unsetSpotIndex();
 				return;
 			case FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
 				setSequenceHint(SEQUENCE_HINT_EDEFAULT);
@@ -303,7 +337,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 			case FleetPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT:
 				return assignment != null;
 			case FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
-				return spotIndex != SPOT_INDEX_EDEFAULT;
+				return isSetSpotIndex();
 			case FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
 				return sequenceHint != SEQUENCE_HINT_EDEFAULT;
 			case FleetPackage.ASSIGNABLE_ELEMENT__LOCKED:
@@ -323,7 +357,7 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (spotIndex: ");
-		result.append(spotIndex);
+		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
 		result.append(", sequenceHint: ");
 		result.append(sequenceHint);
 		result.append(", locked: ");

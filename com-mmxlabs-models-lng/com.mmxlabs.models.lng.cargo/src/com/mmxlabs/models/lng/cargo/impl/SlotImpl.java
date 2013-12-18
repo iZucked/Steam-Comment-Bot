@@ -128,6 +128,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	protected int spotIndex = SPOT_INDEX_EDEFAULT;
 
 	/**
+	 * This is true if the Spot Index attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean spotIndexESet;
+
+	/**
 	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -644,8 +653,33 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
+		boolean oldSpotIndexESet = spotIndexESet;
+		spotIndexESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SPOT_INDEX, oldSpotIndex, spotIndex));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__SPOT_INDEX, oldSpotIndex, spotIndex, !oldSpotIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSpotIndex() {
+		int oldSpotIndex = spotIndex;
+		boolean oldSpotIndexESet = spotIndexESet;
+		spotIndex = SPOT_INDEX_EDEFAULT;
+		spotIndexESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__SPOT_INDEX, oldSpotIndex, SPOT_INDEX_EDEFAULT, oldSpotIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSpotIndex() {
+		return spotIndexESet;
 	}
 
 	/**
@@ -1722,7 +1756,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				setAssignment((AVesselSet<? extends Vessel>)null);
 				return;
 			case CargoPackage.SLOT__SPOT_INDEX:
-				setSpotIndex(SPOT_INDEX_EDEFAULT);
+				unsetSpotIndex();
 				return;
 			case CargoPackage.SLOT__SEQUENCE_HINT:
 				setSequenceHint(SEQUENCE_HINT_EDEFAULT);
@@ -1800,7 +1834,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__ASSIGNMENT:
 				return assignment != null;
 			case CargoPackage.SLOT__SPOT_INDEX:
-				return spotIndex != SPOT_INDEX_EDEFAULT;
+				return isSetSpotIndex();
 			case CargoPackage.SLOT__SEQUENCE_HINT:
 				return sequenceHint != SEQUENCE_HINT_EDEFAULT;
 			case CargoPackage.SLOT__LOCKED:
@@ -1977,7 +2011,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(" (name: ");
 		result.append(name);
 		result.append(", spotIndex: ");
-		result.append(spotIndex);
+		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
 		result.append(", sequenceHint: ");
 		result.append(sequenceHint);
 		result.append(", locked: ");

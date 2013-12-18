@@ -16,25 +16,24 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
- * Utility class representing a sequence from the input model.
- * Because the input model is now held as per-element assignment
- * classes, this is needed to glom everything together.
+ * Utility class representing a sequence from the input model. Because the input model is now held as per-element assignment classes, this is needed to glom everything together.
+ * 
  * @author hinton
- *
+ * 
  */
 public class CollectedAssignment {
-	final AVesselSet<? extends  Vessel> vessel;
+	final AVesselSet<? extends Vessel> vessel;
 	final ArrayList<AssignableElement> assignedObjects = new ArrayList<AssignableElement>();
 	List<AssignableElement> assignments = null;
-	private int spotIndex;
-	
-	public CollectedAssignment(final List<AssignableElement> assignments, final AVesselSet<? extends Vessel> vessel, int spotIndex) {
+	private Integer spotIndex;
+
+	public CollectedAssignment(final List<AssignableElement> assignments, final AVesselSet<? extends Vessel> vessel, Integer spotIndex) {
 		this.vessel = vessel;
 		this.assignments = assignments;
 		this.spotIndex = spotIndex;
 		sortAssignments();
 	}
-	
+
 	private void sortAssignments() {
 		// if two assignments don't overlap, sort by start date. Otherwise, sort by sequence number.
 		Collections.sort(assignments, new Comparator<AssignableElement>() {
@@ -44,10 +43,10 @@ public class CollectedAssignment {
 				final Date start1 = AssignmentEditorHelper.getStartDate(arg1);
 				final Date end0 = AssignmentEditorHelper.getEndDate(arg0);
 				final Date end1 = AssignmentEditorHelper.getEndDate(arg1);
-				
+
 				final boolean null0 = start0 == null || end0 == null;
 				final boolean null1 = start1 == null || end1 == null;
-				
+
 				if (null0) {
 					if (null1) {
 						return 0;
@@ -57,7 +56,7 @@ public class CollectedAssignment {
 				} else if (null1) {
 					return 1;
 				}
-				
+
 				if (overlaps(start0, end0, start1, end1)) {
 					return ((Integer) arg0.getSequenceHint()).compareTo(arg1.getSequenceHint());
 				} else {
@@ -65,11 +64,11 @@ public class CollectedAssignment {
 				}
 			}
 
-			private boolean overlaps(final Date start0, final Date end0, final Date start1,final Date end1) {
+			private boolean overlaps(final Date start0, final Date end0, final Date start1, final Date end1) {
 				return !(end0.before(start1) || end1.before(start0));
 			}
 		});
-		
+
 		for (final AssignableElement ea : assignments) {
 			assignedObjects.add(ea);
 		}
@@ -78,16 +77,20 @@ public class CollectedAssignment {
 	public List<AssignableElement> getAssignedObjects() {
 		return Collections.unmodifiableList(assignedObjects);
 	}
-	
+
 	public boolean isSpotVessel() {
 		return vessel instanceof VesselClass;
 	}
-	
+
 	public AVesselSet<? extends Vessel> getVesselOrClass() {
 		return vessel;
 	}
-	
+
+	public boolean isSetSpotIndex() {
+		return spotIndex != null;
+	}
+
 	public int getSpotIndex() {
-		return spotIndex;
+		return spotIndex == null ? 0 : spotIndex.intValue();
 	}
 }
