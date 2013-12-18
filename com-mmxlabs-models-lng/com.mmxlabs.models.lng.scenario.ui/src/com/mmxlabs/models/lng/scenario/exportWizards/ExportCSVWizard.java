@@ -54,6 +54,8 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	public boolean performFinish() {
 		final File outputDirectory = exportPage.getOutputDirectory();
 		final Collection<ScenarioInstance> instances = exportPage.getScenarioInstance();
+		char delimiter = exportPage.getCsvDelimiter();
+
 
 		final boolean createExportDirectories = instances.size() > 1;
 		for (final ScenarioInstance instance : instances) {
@@ -92,7 +94,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 							final File outputFile = new File(directory, friendlyName + ".csv");
 
 							// export CSV for this file
-							writeCSV(rows, outputFile);
+							writeCSV(rows, outputFile, delimiter);
 						}
 					}
 				}
@@ -107,7 +109,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 						final File outputFile = new File(directory, friendlyName + ".csv");
 
 						// export CSV for this file
-						writeCSV(rows, outputFile);
+						writeCSV(rows, outputFile, delimiter);
 					}
 				}
 			}
@@ -142,7 +144,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	 * @param rows
 	 * @param outputFile
 	 */
-	private void writeCSV(final Collection<Map<String, String>> rows, final File outputFile) {
+	private void writeCSV(final Collection<Map<String, String>> rows, final File outputFile, final char delimiter) {
 		if (rows.isEmpty())
 			return;
 		final LinkedHashSet<String> keys = new LinkedHashSet<String>();
@@ -156,18 +158,18 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 			boolean firstKey = true;
 			for (final String key : keys) {
 				if (!firstKey)
-					writer.write(",");
+					writer.write(delimiter);
 				firstKey = false;
-				writer.write(escape(key));
+				writer.write(escape(key, delimiter));
 			}
 			for (final Map<String, String> row : rows) {
 				writer.write("\n");
 				firstKey = true;
 				for (final String key : keys) {
 					if (!firstKey)
-						writer.write(",");
+						writer.write(delimiter);
 					firstKey = false;
-					writer.write(escape(row.get(key)));
+					writer.write(escape(row.get(key), delimiter));
 				}
 			}
 		} catch (final IOException e) {
@@ -181,11 +183,11 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		}
 	}
 
-	private String escape(final String key) {
+	private String escape(final String key, final char delimiter) {
 		if (key == null)
 			return "";
 		final String sub = key.trim().replace("\"", "\\\"");
-		return sub.contains(",") ? "\"" + sub + "\"" : sub;
+		return sub.contains("" + delimiter) ? "\"" + sub + "\"" : sub;
 	}
 
 	@Override

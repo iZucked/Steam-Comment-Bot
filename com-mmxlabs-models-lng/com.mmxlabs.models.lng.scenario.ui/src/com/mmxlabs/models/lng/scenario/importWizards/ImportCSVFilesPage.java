@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.RadioSelectionGroup;
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -123,6 +124,9 @@ public class ImportCSVFilesPage extends WizardPage {
 	private final ScenarioServiceNewScenarioPage mainPage;
 
 	private ScenarioInstance scenarioInstance;
+	private int CHOICE_COMMA = 0;
+	private int CHOICE_SEMICOLON = 1;
+	private RadioSelectionGroup csvSelectionGroup;
 
 	public IImportContext getImportContext() {
 		return importContext;
@@ -181,6 +185,10 @@ public class ImportCSVFilesPage extends WizardPage {
 				}
 			}
 		});
+		
+		csvSelectionGroup = new RadioSelectionGroup(top, "Format separator", SWT.NONE, new String[] {"comma (\",\")", "semicolon (\";\")"}, new int[] {CHOICE_COMMA, CHOICE_SEMICOLON});
+		csvSelectionGroup.setSelectedIndex(0);		
+		
 		//
 		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
 			if (importer == null) {
@@ -259,6 +267,9 @@ public class ImportCSVFilesPage extends WizardPage {
 		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
 		scenarioModel.setPortfolioModel(portfolioModel);
 
+		
+		char delimiter = csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
+		
 		context.setRootObject(scenarioModel);
 
 		for (final SubModelChunk c : subModelChunks) {
@@ -267,7 +278,7 @@ public class ImportCSVFilesPage extends WizardPage {
 				for (final String key : c.keys.keySet()) {
 					try {
 						@SuppressWarnings("resource")
-						final CSVReader r = new CSVReader(new File(c.keys.get(key)));
+						final CSVReader r = new CSVReader(new File(c.keys.get(key)), delimiter);
 						readers.put(key, r);
 					} catch (final IOException e) {
 						log.error(e.getMessage(), e);
@@ -443,4 +454,5 @@ public class ImportCSVFilesPage extends WizardPage {
 	protected void setScenarioInstance(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 	}
+
 }
