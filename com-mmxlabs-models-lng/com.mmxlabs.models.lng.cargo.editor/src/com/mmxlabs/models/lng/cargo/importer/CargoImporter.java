@@ -456,28 +456,30 @@ public class CargoImporter extends DefaultClassImporter {
 
 			final String vesselName = fields.get(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
 
-			context.doLater(new IDeferment() {
-
-				@Override
-				public void run(final IImportContext context) {
-					if (assignableElement.isSetSpotIndex()) {
-						final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
-						if (v2 instanceof VesselClass) {
-							assignableElement.setAssignment((VesselClass) v2);
-						}
-					} else {
-						final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
-						if (v != null) {
-							assignableElement.setAssignment(v);
+			if (vesselName != null) {
+				context.doLater(new IDeferment() {
+	
+					@Override
+					public void run(final IImportContext context) {
+						if (assignableElement.isSetSpotIndex()) {
+							final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
+							if (v2 instanceof VesselClass) {
+								assignableElement.setAssignment((VesselClass) v2);
+							}
+						} else {
+							final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+							if (v != null) {
+								assignableElement.setAssignment(v);
+							}
 						}
 					}
-				}
-
-				@Override
-				public int getStage() {
-					return IImportContext.STAGE_MODIFY_SUBMODELS;
-				}
-			});
+	
+					@Override
+					public int getStage() {
+						return IImportContext.STAGE_MODIFY_SUBMODELS;
+					}
+				});
+			}
 		}
 	}
 }
