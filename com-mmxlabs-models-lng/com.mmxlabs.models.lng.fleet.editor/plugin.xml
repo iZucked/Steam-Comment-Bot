@@ -237,6 +237,12 @@
           eClassName="com.mmxlabs.models.lng.fleet.BaseFuel"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.fleet.importer.VesselEventImporter"
+          classImporterClass="com.mmxlabs.models.lng.fleet.importer.VesselEventImporter"
+          eClassName="com.mmxlabs.models.lng.fleet.VesselEvent"
+          inheritable="true">
+    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">

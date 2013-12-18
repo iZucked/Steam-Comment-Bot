@@ -28,6 +28,11 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
@@ -36,6 +41,7 @@ import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -70,16 +76,43 @@ public class CargoImporter extends DefaultClassImporter {
 		return result;
 	}
 
+	protected boolean shouldImportReference(final EReference reference) {
+		return reference != FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT;
+	}
+
 	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
+
+			if (object instanceof AssignableElement) {
+				final AssignableElement assignableElement = (AssignableElement) object;
+				// yes yes both attribute and reference here, but easier to copy paste....
+				if (attribute == FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX || attribute == FleetPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT
+						|| attribute == FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
+					if (assignableElement.getAssignment() == null) {
+						continue;
+					}
+				}
+			}
+
 			if (shouldExportFeature(attribute)) {
 				exportAttribute(object, attribute, result);
 			}
 		}
 
 		for (final EReference reference : object.eClass().getEAllReferences()) {
+
+			if (object instanceof AssignableElement) {
+				final AssignableElement assignableElement = (AssignableElement) object;
+				// yes yes both attribute and reference here, but easier to copy paste....
+				if (reference == FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
+					if (assignableElement.getAssignment() == null) {
+						continue;
+					}
+				}
+			}
+
 			if (shouldExportFeature(reference)) {
 				exportReference(object, reference, result, root);
 			}
@@ -233,12 +266,10 @@ public class CargoImporter extends DefaultClassImporter {
 
 		// fix missing names
 
-		
 		// TODO: sort out this hack. Is the identity of the "row object" important
 		// when returning from this method?
 		final ImportResults newResult = new ImportResults(null);
-		
-		
+
 		boolean keepCargo = true;
 		if (load == null || load.getWindowStart() == null) {
 			keepCargo = false;
@@ -385,6 +416,9 @@ public class CargoImporter extends DefaultClassImporter {
 	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
 		objects.addAll(super.importObject(parent, eClass, row, context).getCreatedObjects());
+		for (final EObject target : objects) {
+			addAssignmentTask(target, new FieldMap(row), context);
+		}
 
 		// Special case for load and discharge slots. These are not under the correct reference type string - so fake it here
 		final IFieldMap fieldMap = new FieldMap(row);
@@ -396,6 +430,9 @@ public class CargoImporter extends DefaultClassImporter {
 			final EClass referenceType = CargoPackage.eINSTANCE.getLoadSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
 			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
+			for (final EObject target : values) {
+				addAssignmentTask(target, subKeys, context);
+			}
 			objects.addAll(values);
 		}
 		{
@@ -405,8 +442,42 @@ public class CargoImporter extends DefaultClassImporter {
 			final EClass referenceType = CargoPackage.eINSTANCE.getDischargeSlot();
 			final IClassImporter classImporter = importerRegistry.getClassImporter(referenceType);
 			final Collection<EObject> values = classImporter.importObject(parent, referenceType, subKeys, context).getCreatedObjects();
+			for (final EObject target : values) {
+				addAssignmentTask(target, subKeys, context);
+			}
 			objects.addAll(values);
 		}
 		return objects;
+	}
+
+	private void addAssignmentTask(final EObject target, final IFieldMap fields, final IImportContext context) {
+		if (target instanceof AssignableElement) {
+			final AssignableElement assignableElement = (AssignableElement) target;
+
+			final String vesselName = fields.get(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
+
+			context.doLater(new IDeferment() {
+
+				@Override
+				public void run(final IImportContext context) {
+					if (assignableElement.isSetSpotIndex()) {
+						final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
+						if (v2 instanceof VesselClass) {
+							assignableElement.setAssignment((VesselClass) v2);
+						}
+					} else {
+						final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+						if (v != null) {
+							assignableElement.setAssignment(v);
+						}
+					}
+				}
+
+				@Override
+				public int getStage() {
+					return IImportContext.STAGE_MODIFY_SUBMODELS;
+				}
+			});
+		}
 	}
 }

@@ -101,6 +101,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 
 		final EClass class_AssignmentModel = MetamodelUtils.getEClass(package_AssignmentModel, "AssignmentModel");
 		final EClass class_ElementAssignment = MetamodelUtils.getEClass(package_AssignmentModel, "ElementAssignment");
+		final EClass class_Vessel = MetamodelUtils.getEClass(package_FleetModel, "Vessel");
 
 		final EReference reference_AssignableModel_elementAssignments = MetamodelUtils.getReference(class_AssignmentModel, "elementAssignments");
 		final EReference reference_ElementAssignment_assignment = MetamodelUtils.getReference(class_ElementAssignment, "assignment");
@@ -127,10 +128,13 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 						// Check cast
 						if (class_AssignableElement.isInstance(assignedObject)) {
 							// Copy data across
-							assignedObject.eSet(reference_AssignableElement_assignment, elementAssignment.eGet(reference_ElementAssignment_assignment));
+							final Object assignment = elementAssignment.eGet(reference_ElementAssignment_assignment);
+							assignedObject.eSet(reference_AssignableElement_assignment, assignment);
 							assignedObject.eSet(attribute_AssignableElement_locked, elementAssignment.eGet(attribute_ElementAssignment_locked));
 							assignedObject.eSet(attribute_AssignableElement_sequenceHint, elementAssignment.eGet(attribute_ElementAssignment_sequence));
-							assignedObject.eSet(attribute_AssignableElement_spotIndex, elementAssignment.eGet(attribute_ElementAssignment_spotIndex));
+							if (!class_Vessel.isInstance(assignment)) {
+								assignedObject.eSet(attribute_AssignableElement_spotIndex, elementAssignment.eGet(attribute_ElementAssignment_spotIndex));
+							}
 						}
 					}
 				}
