@@ -426,6 +426,8 @@ public class LNGSchedulerJobUtils {
 					object.setSequenceHint(index++);
 					if (sequence.isSetSpotIndex()) {
 						object.setSpotIndex(sequence.getSpotIndex());
+					} else {
+						object.unsetSpotIndex();
 					}
 				}
 			}
