@@ -48,6 +48,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  */
 abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImporter {
 	protected static final String EXPRESSION = "expression";
+	protected static final String UNITS = "units";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 	
@@ -122,7 +123,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
 					}
 				} catch (final ParseException ex) {
-					if (s.equals(EXPRESSION) == false) {
+					if (s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
 				}

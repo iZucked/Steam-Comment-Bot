@@ -26,6 +26,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  */
 public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 	private static final String NAME = "name";
+	private static final String UNITS = "units";
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
@@ -35,6 +36,12 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 			result.setName(row.get(NAME));
 		} else {
 			context.addProblem(context.createProblem("BaseFuelIndex name is missing", true, true, true));
+		}
+		
+		if (row.containsKey(UNITS)) {
+			result.setUnits(row.get(UNITS));
+		} else {
+			context.addProblem(context.createProblem("BaseFuelIndex units is missing", true, true, true));
 		}
 		
 		final Index<Double> indexData = importDoubleIndex(row, Collections.singleton(NAME), context);
@@ -68,6 +75,7 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 	protected Map<String, String>  getNonDateFields(BaseFuelIndex target, Index<? extends Number> index) {
 		Map<String, String> result = super.getNonDateFields(target, index);
 		result.put(NAME, target.getName());
+		result.put(UNITS, target.getUnits());
 		return result;
 	}
 

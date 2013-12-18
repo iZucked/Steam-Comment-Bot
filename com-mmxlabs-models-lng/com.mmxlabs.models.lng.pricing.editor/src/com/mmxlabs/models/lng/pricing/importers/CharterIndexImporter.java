@@ -41,6 +41,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  */
 public class CharterIndexImporter extends AbstractClassImporter {
 	private static final String NAME = "name";
+	private static final String UNITS = "units";
 	private static final String EXPRESSION = "expression";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
@@ -71,6 +72,12 @@ public class CharterIndexImporter extends AbstractClassImporter {
 			context.addProblem(context.createProblem("CharterIndex name is missing", true, true, true));
 		}
 
+		if (row.containsKey(UNITS)) {
+			result.setUnits(row.get(UNITS));
+		} else {
+			context.addProblem(context.createProblem("CharterIndex units is missing", true, true, true));
+		}
+
 		if (indexData instanceof DataIndex) {
 			final DataIndex<Integer> data = (DataIndex<Integer>) indexData;
 			for (final String s : row.keySet()) {
@@ -99,7 +106,7 @@ public class CharterIndexImporter extends AbstractClassImporter {
 						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
 					}
 				} catch (final ParseException ex) {
-					if (s.equals(NAME) == false && s.equals(EXPRESSION) == false) {
+					if (s.equals(NAME) == false && s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
 				}
@@ -152,6 +159,7 @@ public class CharterIndexImporter extends AbstractClassImporter {
 					}
 				});
 				row.put(NAME, charterIndex.getName());
+				row.put(UNITS, charterIndex.getUnits());
 				for (final IndexPoint<Integer> pt : i.getPoints()) {
 					final Integer n = pt.getValue();
 					final Date dt = pt.getDate();
@@ -162,6 +170,7 @@ public class CharterIndexImporter extends AbstractClassImporter {
 				final DerivedIndex<Integer> derived = (DerivedIndex<Integer>) obj;
 				final Map<String, String> row = new LinkedHashMap<String, String>();
 				row.put(NAME, charterIndex.getName());
+				row.put(UNITS, charterIndex.getUnits());
 				row.put(EXPRESSION, derived.getExpression());
 				result.add(row);
 			}

@@ -632,6 +632,15 @@ public interface PricingPackage extends EPackage {
 	int NAMED_INDEX_CONTAINER__DATA = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_INDEX_CONTAINER__UNITS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Named Index Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -639,7 +648,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int NAMED_INDEX_CONTAINER_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -680,6 +689,15 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int COMMODITY_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
+
+	/**
+	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMODITY_INDEX__UNITS = NAMED_INDEX_CONTAINER__UNITS;
 
 	/**
 	 * The number of structural features of the '<em>Commodity Index</em>' class.
@@ -730,6 +748,15 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
+
+	/**
+	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_INDEX__UNITS = NAMED_INDEX_CONTAINER__UNITS;
 
 	/**
 	 * The number of structural features of the '<em>Charter Index</em>' class.
@@ -791,6 +818,15 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE_FUEL_INDEX__DATA = NAMED_INDEX_CONTAINER__DATA;
+
+	/**
+	 * The feature id for the '<em><b>Units</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL_INDEX__UNITS = NAMED_INDEX_CONTAINER__UNITS;
 
 	/**
 	 * The number of structural features of the '<em>Base Fuel Index</em>' class.
@@ -1246,6 +1282,17 @@ public interface PricingPackage extends EPackage {
 	EReference getNamedIndexContainer_Data();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits <em>Units</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Units</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.NamedIndexContainer#getUnits()
+	 * @see #getNamedIndexContainer()
+	 * @generated
+	 */
+	EAttribute getNamedIndexContainer_Units();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1631,6 +1678,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference NAMED_INDEX_CONTAINER__DATA = eINSTANCE.getNamedIndexContainer_Data();
+
+		/**
+		 * The meta object literal for the '<em><b>Units</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NAMED_INDEX_CONTAINER__UNITS = eINSTANCE.getNamedIndexContainer_Units();
 
 	}
 

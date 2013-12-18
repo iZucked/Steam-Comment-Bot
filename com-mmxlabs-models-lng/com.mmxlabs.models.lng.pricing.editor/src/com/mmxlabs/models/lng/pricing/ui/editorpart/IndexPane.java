@@ -172,6 +172,18 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// Enable the tree controls on this column
 		nameColumn.getColumn().setTree(true);
 
+		addTypicalColumn("Units", new BasicAttributeManipulator(PricingPackage.Literals.NAMED_INDEX_CONTAINER__UNITS, getEditingDomain()) {
+			@Override
+			public boolean canEdit(final Object object) {
+				// Skip tree model elements
+				if (transformer.getNodeClass().isInstance(object)) {
+					return false;
+				}
+
+				return super.canEdit(object);
+			}
+		});
+
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
 			public String render(Object object) {

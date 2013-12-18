@@ -592,6 +592,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getNamedIndexContainer_Units() {
+		return (EAttribute)namedIndexContainerEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -670,6 +679,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		namedIndexContainerEClass = createEClass(NAMED_INDEX_CONTAINER);
 		createEReference(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__DATA);
+		createEAttribute(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__UNITS);
 	}
 
 	/**
@@ -830,6 +840,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(namedIndexContainerEClass_Value);
 		g1.getETypeArguments().add(g2);
 		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
