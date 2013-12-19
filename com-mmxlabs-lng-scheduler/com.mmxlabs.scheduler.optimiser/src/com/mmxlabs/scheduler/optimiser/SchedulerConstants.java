@@ -107,9 +107,18 @@ public final class SchedulerConstants {
 	 */
 	public static final String DCP_markToMarketElementProvider = "provider-mark-to-market";
 
+	/**
+	 * @since 8.0
+	 */
 	public static final String DCP_nominatedVesselProvider = "provider-nominated-vessel";
 
+	/**
+	 * @since 8.0
+	 */
 	public static final String DCP_shippingHoursRestrictionProvider = "provider-shipping-hours-restriction";
 
+	/**
+	 * @since 8.0
+	 */
 	public static final String DCP_portVisitDurationProvider = "provider-port-visit-durations";
 }

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.providers.impl;
 
 import java.util.EnumMap;
@@ -15,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * An {@link IElementDurationProvider} implementation to wrap around a LNG port & type based duration data structure.
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public class HashMapPortVisitDurationProviderEditor implements IPortVisitDurationProviderEditor {

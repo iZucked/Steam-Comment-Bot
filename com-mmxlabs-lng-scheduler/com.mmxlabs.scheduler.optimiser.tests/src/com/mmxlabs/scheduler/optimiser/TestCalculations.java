@@ -77,7 +77,7 @@ public class TestCalculations {
 	/**
 	 * This tests the fuel costs + consumptions when travelling at slowest speed with no idle time.
 	 */
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unused" })
 	@Test
 	public void testCalculations1() {
 

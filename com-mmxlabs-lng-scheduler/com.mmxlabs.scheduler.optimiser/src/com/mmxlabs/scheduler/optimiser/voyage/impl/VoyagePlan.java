@@ -115,10 +115,16 @@ public final class VoyagePlan implements Cloneable {
 		this.violationsCount = violationsCount;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	public final IDetailsSequenceElement[] getSequence() {
 		return sequence;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	public final void setSequence(final IDetailsSequenceElement[] sequence) {
 		this.sequence = sequence;
 	}

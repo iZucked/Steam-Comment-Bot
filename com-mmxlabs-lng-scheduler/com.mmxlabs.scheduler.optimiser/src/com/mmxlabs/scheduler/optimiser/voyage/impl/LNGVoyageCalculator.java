@@ -415,6 +415,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @return
 	 * 
 	 * @author Simon McGregor
+	 * @since 8.0
 	 */
 	public long[] calculateVoyagePlanFuelConsumptions(final IVessel vessel, final IDetailsSequenceElement... sequence) {
 		final long[] fuelConsumptions = new long[FuelComponent.values().length];
@@ -470,7 +471,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
 		int cooldownM3Price = 0;
@@ -528,7 +529,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
 		// TODO: does not need to be this long
@@ -598,7 +599,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @param dischargeTime
 	 * @param loadTime
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	@Override
 	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final int baseFuelPricePerMT, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
@@ -920,7 +921,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 8.0
 	 * 
 	 */
 	@Override
@@ -1009,7 +1010,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	final public int findFirstLoadIndex(final IDetailsSequenceElement... sequence) {
 		// ignore the last element in the sequence, to avoid double-counting (it will be included in the next sequence)
@@ -1028,7 +1029,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	final public int findFirstDischargeIndex(final IDetailsSequenceElement... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
@@ -1046,7 +1047,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	final public List<Integer> findLoadIndices(final IDetailsSequenceElement... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();
@@ -1066,7 +1067,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	final public List<Integer> findDischargeIndices(final IDetailsSequenceElement... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();

@@ -19,6 +19,9 @@ public class ProfitAndLossEntry implements IProfitAndLossEntry {
 	private final long groupValuePreTax;
 	private final IDetailTree details;
 
+	/**
+	 * @since 8.0
+	 */
 	public ProfitAndLossEntry(final IEntity entity, final long groupValue, final long groupValuePreTax, final IDetailTree details) {
 		super();
 		this.entity = entity;
@@ -37,6 +40,9 @@ public class ProfitAndLossEntry implements IProfitAndLossEntry {
 		return groupValue;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public long getFinalGroupValuePreTax() {
 		return groupValuePreTax;

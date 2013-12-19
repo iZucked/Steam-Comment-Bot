@@ -7,6 +7,9 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
+/**
+ * @since 8.0
+ */
 public class ShippingHoursRestrictionCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "ShippingHoursRestrictionChecker";

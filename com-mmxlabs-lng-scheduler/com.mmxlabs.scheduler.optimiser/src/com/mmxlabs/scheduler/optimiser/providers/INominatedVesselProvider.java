@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -12,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
  * A DCP to store the nominated vessel for a DES Purchase or FOB Sale.
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public interface INominatedVesselProvider extends IDataComponentProvider {

@@ -79,7 +79,7 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	/**
 	 * @param vessel
 	 * @param vesselStartTime
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	@Override
 	public void setVessel(final IVessel vessel, final int vesselStartTime, final int baseFuelPricePerMT) {

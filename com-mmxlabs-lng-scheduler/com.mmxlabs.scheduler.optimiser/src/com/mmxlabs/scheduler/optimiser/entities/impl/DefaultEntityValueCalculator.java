@@ -491,7 +491,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return planDuration;
 	}
 
-	public void generateShippingAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
+	private void generateShippingAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
 			final long revenue, final long cost, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG, final boolean includeTimeCharterRates) {
 		{
 			final long shippingCosts = getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates, vesselStartTime, null);
@@ -510,7 +510,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	public void generateCargoAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
+	private void generateCargoAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
 			final long revenue, final long cost, final long additionProfitAndLoss, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG,
 			final boolean includeTimeCharterRates, final IAllocationAnnotation currentAllocation) {
 		{
@@ -562,7 +562,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	public void generateCharterOutAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
+	private void generateCharterOutAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
 			final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot, final boolean includeTimeCharterRates) {
 		if (generatedCharterOutRevenue != 0) {
 

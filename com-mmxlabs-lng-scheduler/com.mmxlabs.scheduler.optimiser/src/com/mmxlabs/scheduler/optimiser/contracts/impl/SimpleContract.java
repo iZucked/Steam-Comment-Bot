@@ -22,10 +22,14 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
+ * @since 8.0
  * 
  */
 public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public void prepareEvaluation(final ISequences sequences, ScheduledSequences scheduledSequences) {
 
@@ -37,7 +41,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	protected abstract int calculateSimpleUnitPrice(final int loadTime);
 
 	/**
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
@@ -67,17 +71,26 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		return calculateSimpleUnitPrice(time);
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumes, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
 			IDetailTree annotations) {
 		return 0;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, IDischargeSlot dischargeSlot, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
 		return calculateSimpleUnitPrice(transferTime);
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, IDischargeOption dischargeOption, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
 		return calculateSimpleUnitPrice(transferTime);

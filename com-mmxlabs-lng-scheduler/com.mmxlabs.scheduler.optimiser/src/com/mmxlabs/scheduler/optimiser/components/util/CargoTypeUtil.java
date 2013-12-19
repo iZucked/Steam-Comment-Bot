@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.components.util;
 
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -5,6 +9,9 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
+/**
+ * @since 8.0
+ */
 public class CargoTypeUtil {
 
 	public static enum CargoType {

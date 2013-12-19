@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 /**
@@ -6,6 +10,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
  * 
  * 
  * @author Simon McGregor
+ * @since 8.0
  *
  */
 public interface IDetailsSequenceElement {

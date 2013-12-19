@@ -17,6 +17,9 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 
 	private int price;
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 		price = 0;

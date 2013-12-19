@@ -26,29 +26,44 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 
 	private int price;
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
 		price = 0;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerM3,
 			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 		return price;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int transferTime, final int dischargePricePerMMBTu,
 			final long transferVolumeInM3, final IDetailTree annotations) {
 		return price;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, final long transferVolumeInM3,
 			final IDetailTree annotations) {
 		return price;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final List<IPortSlot> slots, final int[] arrivalTimes, final long[] volumes, final int[] dischargePricesPerMMBTu,
 			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {

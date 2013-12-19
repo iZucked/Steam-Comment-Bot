@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -6,6 +10,9 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
+/**
+ * @since 8.0
+ */
 public interface IShippingHoursRestrictionProvider extends IDataComponentProvider {
 
 	/**

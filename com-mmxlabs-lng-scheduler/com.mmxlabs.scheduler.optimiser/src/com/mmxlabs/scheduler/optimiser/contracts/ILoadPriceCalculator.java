@@ -32,6 +32,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @param sequences
 	 * @param scheduledSequences
+	 * @since 8.0
 	 */
 	public void prepareEvaluation(ISequences sequences, ScheduledSequences scheduledSequences);
 
@@ -49,7 +50,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargeVolumeInM3
 	 * 
 	 * @return
-	 * @since 7.1
+	 * @since 8.0
 	 */
 	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePricePerMMBTu, long loadVolumeInM3, long dischargeVolumeInM3,
 			IVessel vessel, VoyagePlan plan, IDetailTree annotations);
@@ -66,7 +67,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
 	 * @return
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
 			IDetailTree annotations);
@@ -82,7 +83,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
 	 * @return
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
 			IDetailTree annotations);
@@ -93,6 +94,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * TODO: Could break out into Cargo, FOB, DES API's TODO: Check array/list in API pass through for least amount of conversions (see base volume allocator & default enitiy value calculator)
 	 * 
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
+	 * @since 8.0
 	 */
 	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumesInM3, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
 			IDetailTree annotations);

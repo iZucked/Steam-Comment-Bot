@@ -22,10 +22,8 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -61,6 +59,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * Record class for allocation constraints per
 	 * 
 	 * @author Simon McGregor
+	 * @since 8.0
 	 */
 	public static final class AllocationRecord {
 		/**

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import java.util.HashMap;
@@ -26,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * TODO: This should be rolled into the core API more directly - i.e. not useful until volume allocation has run, evaluators can cause data to be invalid etc...
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public class ScheduledDataLookupProvider {

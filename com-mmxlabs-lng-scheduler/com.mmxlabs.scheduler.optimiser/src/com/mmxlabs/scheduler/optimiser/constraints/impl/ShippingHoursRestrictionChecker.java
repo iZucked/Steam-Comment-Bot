@@ -28,6 +28,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
+/**
+ * @since 8.0
+ */
 public class ShippingHoursRestrictionChecker implements IPairwiseConstraintChecker {
 
 	@Inject

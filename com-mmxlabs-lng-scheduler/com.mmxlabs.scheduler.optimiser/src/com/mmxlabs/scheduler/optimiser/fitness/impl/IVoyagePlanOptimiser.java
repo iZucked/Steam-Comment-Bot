@@ -72,7 +72,7 @@ public interface IVoyagePlanOptimiser {
 	 * Set the {@link IVessel} to evaluate voyages against.
 	 * 
 	 * @param vessel
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	void setVessel(final IVessel vessel, final int vesselStartTime, int baseFuelPricePerMT);
 
