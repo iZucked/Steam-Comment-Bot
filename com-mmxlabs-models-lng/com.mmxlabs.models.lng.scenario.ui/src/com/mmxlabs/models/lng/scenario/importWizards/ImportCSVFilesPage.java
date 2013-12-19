@@ -126,7 +126,9 @@ public class ImportCSVFilesPage extends WizardPage {
 	private ScenarioInstance scenarioInstance;
 	private int CHOICE_COMMA = 0;
 	private int CHOICE_SEMICOLON = 1;
+	private int CHOICE_PERIOD = 1;
 	private RadioSelectionGroup csvSelectionGroup;
+	private RadioSelectionGroup decimalSelectionGroup;
 
 	public IImportContext getImportContext() {
 		return importContext;
@@ -185,10 +187,13 @@ public class ImportCSVFilesPage extends WizardPage {
 				}
 			}
 		});
+
+		csvSelectionGroup = new RadioSelectionGroup(top, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
+		csvSelectionGroup.setSelectedIndex(0);
 		
-		csvSelectionGroup = new RadioSelectionGroup(top, "Format separator", SWT.NONE, new String[] {"comma (\",\")", "semicolon (\";\")"}, new int[] {CHOICE_COMMA, CHOICE_SEMICOLON});
-		csvSelectionGroup.setSelectedIndex(0);		
-		
+		decimalSelectionGroup = new RadioSelectionGroup(top, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
+		decimalSelectionGroup.setSelectedIndex(0);
+
 		//
 		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
 			if (importer == null) {
@@ -235,7 +240,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			final Group g = new Group(top, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
-//			g.setText(EditorUtils.unmangle(subModelClass.getName()));
+			// g.setText(EditorUtils.unmangle(subModelClass.getName()));
 			for (final Map.Entry<String, String> entry : parts.entrySet()) {
 				final FileFieldEditor ffe = new FileFieldEditor(entry.getKey(), entry.getValue(), g);
 				ffe.getTextControl(g).addModifyListener(new ModifyListener() {
@@ -267,9 +272,8 @@ public class ImportCSVFilesPage extends WizardPage {
 		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
 		scenarioModel.setPortfolioModel(portfolioModel);
 
-		
 		char delimiter = csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
-		
+
 		context.setRootObject(scenarioModel);
 
 		for (final SubModelChunk c : subModelChunks) {
@@ -370,6 +374,7 @@ public class ImportCSVFilesPage extends WizardPage {
 	public IWizardPage getNextPage() {
 		setMessage("");
 		this.importContext = null;
+		final char decimalSeparator = decimalSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : '.';
 
 		try {
 			getContainer().run(false, false, new IRunnableWithProgress() {
@@ -379,7 +384,7 @@ public class ImportCSVFilesPage extends WizardPage {
 
 					monitor.beginTask("Import Scenario", 2);
 					try {
-						final DefaultImportContext context = new DefaultImportContext();
+						final DefaultImportContext context = new DefaultImportContext(decimalSeparator);
 
 						final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 

@@ -12,20 +12,22 @@ import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 /**
  * @author hinton
  * @since 2.0
- *
+ * 
  */
 public class AnalyticsModelImporter implements ISubmodelImporter {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.util.importer.ISubmodelImporter#getRequiredInputs()
 	 */
 	@Override
@@ -33,20 +35,23 @@ public class AnalyticsModelImporter implements ISubmodelImporter {
 		return Collections.emptyMap();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.util.importer.ISubmodelImporter#importModel(java.util.Map, com.mmxlabs.models.util.importer.IImportContext)
 	 */
 	@Override
-	public UUIDObject importModel(Map<String, CSVReader> inputs, IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		return AnalyticsFactory.eINSTANCE.createAnalyticsModel();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.util.importer.ISubmodelImporter#exportModel(com.mmxlabs.models.mmxcore.UUIDObject, java.util.Map)
 	 */
 	@Override
-	public void exportModel(MMXRootObject root, UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
-		// TODO Auto-generated method stub
+	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 
 	}
 

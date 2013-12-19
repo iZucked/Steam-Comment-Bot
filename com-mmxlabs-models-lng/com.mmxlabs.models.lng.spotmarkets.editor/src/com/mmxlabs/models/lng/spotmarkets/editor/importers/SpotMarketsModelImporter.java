@@ -27,11 +27,11 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
@@ -58,7 +58,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 
 	private IClassImporter spotCargoMarketImporter;
 
-	private IClassImporter spotCargoMarketAvailabilityImporter;
+	// private IClassImporter spotCargoMarketAvailabilityImporter;
 
 	/**
 	 * @since 2.0
@@ -78,8 +78,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 
 			charterPriceImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getCharterCostModel());
 			spotCargoMarketImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotMarket());
-			spotCargoMarketAvailabilityImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotAvailability());
-
+//			spotCargoMarketAvailabilityImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotAvailability());
 		}
 	}
 
@@ -186,9 +185,9 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) model;
-		output.put(CHARTER_PRICING_KEY, charterPriceImporter.exportObjects(spotMarketsModel.getCharteringSpotMarkets(), root));
+		output.put(CHARTER_PRICING_KEY, charterPriceImporter.exportObjects(spotMarketsModel.getCharteringSpotMarkets(), context));
 		{
 			// Group the SpotMarketGroup and SpotMarkets all into the same export file
 			final LinkedList<EObject> spotMarkets = new LinkedList<EObject>();
@@ -202,7 +201,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 			spotMarkets.addAll(spotMarketsModel.getFobPurchasesSpotMarket().getMarkets());
 			spotMarkets.addAll(spotMarketsModel.getFobSalesSpotMarket().getMarkets());
 
-			output.put(SPOT_CARGO_MARKETS_KEY, spotCargoMarketImporter.exportObjects(spotMarkets, root));
+			output.put(SPOT_CARGO_MARKETS_KEY, spotCargoMarketImporter.exportObjects(spotMarkets, context));
 		}
 
 	}

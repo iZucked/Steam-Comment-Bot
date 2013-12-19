@@ -17,11 +17,11 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
@@ -83,10 +83,10 @@ public class ScenarioFleetModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final ScenarioFleetModel scenarioFleetModel = (ScenarioFleetModel) model;
-		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(scenarioFleetModel.getVesselAvailabilities(), root));
-		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(scenarioFleetModel.getVesselEvents(), root));
+		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(scenarioFleetModel.getVesselAvailabilities(), context));
+		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(scenarioFleetModel.getVesselEvents(), context));
 	}
 
 	@Override

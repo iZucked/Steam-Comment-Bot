@@ -26,8 +26,8 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
@@ -46,14 +46,12 @@ public class CharterIndexImporter extends AbstractClassImporter {
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
-
-
 	/**
 	 * @since 8.0
 	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
-		CharterIndex result = PricingFactory.eINSTANCE.createCharterIndex();
+		final CharterIndex result = PricingFactory.eINSTANCE.createCharterIndex();
 
 		final Index<Integer> indexData;
 		if (row.containsKey(EXPRESSION)) {
@@ -133,12 +131,12 @@ public class CharterIndexImporter extends AbstractClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject obj : objects) {
 
-			CharterIndex charterIndex = (CharterIndex) obj;
-			Index<Integer> index = charterIndex.getData();
+			final CharterIndex charterIndex = (CharterIndex) obj;
+			final Index<Integer> index = charterIndex.getData();
 
 			if (index instanceof DataIndex) {
 				final DataIndex<Integer> i = (DataIndex<Integer>) index;

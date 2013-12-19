@@ -26,8 +26,8 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
@@ -51,7 +51,7 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
-		CommodityIndex result = PricingFactory.eINSTANCE.createCommodityIndex();
+		final CommodityIndex result = PricingFactory.eINSTANCE.createCommodityIndex();
 		final Index<Double> indexData;
 		if (row.containsKey(EXPRESSION)) {
 			if (row.get(EXPRESSION).isEmpty() == false) {
@@ -131,12 +131,12 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject obj : objects) {
 
-			CommodityIndex commodityIndex = (CommodityIndex) obj;
-			Index<Double> index = commodityIndex.getData();
+			final CommodityIndex commodityIndex = (CommodityIndex) obj;
+			final Index<Double> index = commodityIndex.getData();
 
 			if (index instanceof DataIndex) {
 				final DataIndex<Double> i = (DataIndex<Double>) index;
@@ -161,7 +161,7 @@ public class CommodityIndexImporter extends AbstractClassImporter {
 				});
 				row.put(NAME, commodityIndex.getName());
 				row.put(UNITS, commodityIndex.getUnits());
-				
+
 				for (final IndexPoint<Double> pt : i.getPoints()) {
 					final Double n = pt.getValue();
 					final Date dt = pt.getDate();

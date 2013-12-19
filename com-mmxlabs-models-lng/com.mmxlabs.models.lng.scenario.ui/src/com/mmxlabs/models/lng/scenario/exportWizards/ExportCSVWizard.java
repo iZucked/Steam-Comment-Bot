@@ -28,8 +28,10 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.impl.DefaultExportContext;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -54,8 +56,8 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 	public boolean performFinish() {
 		final File outputDirectory = exportPage.getOutputDirectory();
 		final Collection<ScenarioInstance> instances = exportPage.getScenarioInstance();
-		char delimiter = exportPage.getCsvDelimiter();
-
+		final char delimiter = exportPage.getCsvDelimiter();
+		final char decimalSeparator = exportPage.getDecimalSeparator();
 
 		final boolean createExportDirectories = instances.size() > 1;
 		for (final ScenarioInstance instance : instances) {
@@ -73,6 +75,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+				final IExportContext context = new DefaultExportContext(scenarioModel, decimalSeparator);
 				final File directory = createExportDirectories ? new File(outputDirectory, instance.getName()) : outputDirectory;
 				if (!directory.exists()) {
 					if (!directory.mkdirs()) {
@@ -86,7 +89,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 					final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
 					if (importer != null) {
 						final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
-						importer.exportModel(scenarioModel, modelInstance, outputs);
+						importer.exportModel(modelInstance, outputs, context);
 
 						for (final String key : outputs.keySet()) {
 							final Collection<Map<String, String>> rows = outputs.get(key);

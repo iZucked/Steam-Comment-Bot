@@ -34,6 +34,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
@@ -195,13 +196,13 @@ public class PricingModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel( final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final PricingModel pricing = (PricingModel) model;
-		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityIndices(), root));
-		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterIndices(), root));
-		output.put(BASEFUEL_PRICING_KEY, baseFuelIndexImporter.exportObjects(pricing.getBaseFuelPrices(), root));
-		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(pricing.getCooldownPrices(), root));
-		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(pricing.getPortCosts(), root));
+		output.put(PRICE_CURVE_KEY, commodityIndexImporter.exportObjects(pricing.getCommodityIndices(), context));
+		output.put(CHARTER_CURVE_KEY, charterIndexImporter.exportObjects(pricing.getCharterIndices(), context));
+		output.put(BASEFUEL_PRICING_KEY, baseFuelIndexImporter.exportObjects(pricing.getBaseFuelPrices(), context));
+		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(pricing.getCooldownPrices(), context));
+		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(pricing.getPortCosts(), context));
 	}
 
 	@Override

@@ -85,7 +85,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		return null;
 	}
 
-	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final Shell shell, final String importFilePath, final char csvSeparator) {
+	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final Shell shell, final String importFilePath, final char csvSeparator, final char decimalSeparator) {
 		return new ImportAction.ImportHooksProvider() {
 			ScenarioLock lock;
 
@@ -106,7 +106,6 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 
 			@Override
 			public String getImportFilePath() {
-				// TODO Auto-generated method stub
 				return importFilePath;
 			}
 
@@ -129,51 +128,56 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 				return csvSeparator;
 			}
 
+			@Override
+			public char getDecimalSeparator() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
 		};
 	}
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 
-		IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
+		final IWorkbenchWindow activeWorkbenchWindow = HandlerUtil.getActiveWorkbenchWindow(event);
 		if (activeWorkbenchWindow == null) {
 			// action has been disposed
 			return null;
 		}
 
-		Shell shell = HandlerUtil.getActiveShell(event);
-		IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
+		final Shell shell = HandlerUtil.getActiveShell(event);
+		final IScenarioServiceEditorInput editor = (IScenarioServiceEditorInput) HandlerUtil.getActiveEditorInput(event);
 
-		BulkImportWizard wizard = new BulkImportWizard(editor.getScenarioInstance(), getFieldToImport());
+		final BulkImportWizard wizard = new BulkImportWizard(editor.getScenarioInstance(), getFieldToImport());
 		wizard.init(activeWorkbenchWindow.getWorkbench(), null);
 
-		WizardDialog dialog = new WizardDialog(shell, wizard);
+		final WizardDialog dialog = new WizardDialog(shell, wizard);
 		dialog.create();
 		dialog.open();
 
-		List<ScenarioInstance> scenarios = wizard.getSelectedScenarios();
-		String importFilename = wizard.getImportFilename();
+		final List<ScenarioInstance> scenarios = wizard.getSelectedScenarios();
+		final String importFilename = wizard.getImportFilename();
 
-		int importTarget = wizard.getImportedField();
+		final int importTarget = wizard.getImportedField();
 
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
-			char separator = wizard.getCsvSeparator();
-
-			bulkImport(importTarget, shell, scenarios, importFilename, separator);
+			final char separator = wizard.getCsvSeparator();
+			final char decimalSeparator = wizard.getDecimalSeparator();
+			bulkImport(importTarget, shell, scenarios, importFilename, separator, decimalSeparator);
 		}
 
 		return null;
 	}
 
-	void bulkImport(int importTarget, Shell shell, List<ScenarioInstance> instances, String filename, char separator) {
+	void bulkImport(final int importTarget, final Shell shell, final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator) {
 		final List<ScenarioInstance> badInstances = new LinkedList<ScenarioInstance>();
-		
-			for (ScenarioInstance instance : instances) {
+
+		for (final ScenarioInstance instance : instances) {
 			if (instance.getInstance() == null) {
 				try {
 					instance.getScenarioService().load(instance);
-				}
-				catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 					badInstances.add(instance);
 				}
@@ -181,43 +185,45 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		}
 
 		if (!badInstances.isEmpty()) {
-			StringBuilder sb = new StringBuilder("The following scenario(s) have problems and cannot have data imported into them:\n");
-			for (ScenarioInstance instance: badInstances) {
-				sb.append("\n"); sb.append(instance.getName());
+			final StringBuilder sb = new StringBuilder("The following scenario(s) have problems and cannot have data imported into them:\n");
+			for (final ScenarioInstance instance : badInstances) {
+				sb.append("\n");
+				sb.append(instance.getName());
 			}
-			MessageDialog.openWarning(shell, "Import Problems", sb.toString());			
+			MessageDialog.openWarning(shell, "Import Problems", sb.toString());
 		}
-		
+
 		final Set<String> uniqueProblems = new HashSet<String>();
 		final List<String> allProblems = new ArrayList<String>();
 		final Set<ScenarioInstance> goodInstances = new HashSet<ScenarioInstance>(instances);
 		goodInstances.removeAll(badInstances);
-		
-		for (ScenarioInstance instance: goodInstances) {
-			ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, shell, filename, separator);
-			ImportAction action = getImportAction(importTarget, ihp);
 
-			DefaultImportContext context = action.safelyImport();
-			for (IImportProblem problem: context.getProblems()) {
-				String description = problem.getProblemDescription();
+		for (final ScenarioInstance instance : goodInstances) {
+			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, shell, filename, listSeparator, decimalSeparator);
+			final ImportAction action = getImportAction(importTarget, ihp);
+
+			final DefaultImportContext context = action.safelyImport();
+			for (final IImportProblem problem : context.getProblems()) {
+				final String description = problem.getProblemDescription();
 				if (!uniqueProblems.contains(description)) {
 					uniqueProblems.add(description);
 					allProblems.add(description);
 				}
 			}
 		}
-		
+
 		if (!allProblems.isEmpty()) {
 			// pop up a dialog showing the problems
-			StringBuilder sb = new StringBuilder("There were problems with the import (perhaps the wrong delimeter character was used): \n");
-			for (String problem: allProblems) {
-				sb.append("\n"); sb.append(problem);
+			final StringBuilder sb = new StringBuilder("There were problems with the import (perhaps the wrong delimeter character was used): \n");
+			for (final String problem : allProblems) {
+				sb.append("\n");
+				sb.append(problem);
 			}
 			MessageDialog.openWarning(shell, "Import Problems", sb.toString());
 		}
 
 	}
-	
+
 	public abstract int getFieldToImport();
 
 }

@@ -28,16 +28,14 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
- * Generic import logic for loading index data. 
- * Currently implemented by BaseFuelIndexImporter.
- * TODO: change CharterIndexImporter and CommodityIndexImporter to implement this class. 
+ * Generic import logic for loading index data. Currently implemented by BaseFuelIndexImporter. TODO: change CharterIndexImporter and CommodityIndexImporter to implement this class.
  * 
  * @author Simon McGregor
  * @since 5.0
@@ -48,18 +46,18 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	protected static final String UNITS = "units";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
-	
+
 	@SuppressWarnings("unchecked")
-	protected Index<Double> importDoubleIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore,@NonNull final IImportContext context) {
-		return (Index<Double>) importIndex(false, row, columnsToIgnore, context);	
+	protected Index<Double> importDoubleIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
+		return (Index<Double>) importIndex(false, row, columnsToIgnore, context);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	protected Index<Integer> importIntIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore,@NonNull  final IImportContext context) {
-		return (Index<Integer>) importIndex(true, row, columnsToIgnore, context);	
+	protected Index<Integer> importIntIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
+		return (Index<Integer>) importIndex(true, row, columnsToIgnore, context);
 	}
-	
-	protected Index<? extends Number> importIndex(boolean parseAsInt, @NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
+
+	protected Index<? extends Number> importIndex(final boolean parseAsInt, @NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
 		// for expression indices, return a derived index
 		if (row.containsKey(EXPRESSION) && row.get(EXPRESSION).isEmpty() == false) {
 			final DerivedIndex<Number> di = PricingFactory.eINSTANCE.createDerivedIndex();
@@ -75,9 +73,9 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				}
 			}
 			return di;
-		}   
-		
-		// for other indices, return a data index		
+		}
+
+		// for other indices, return a data index
 		final DataIndex<Number> result = PricingFactory.eINSTANCE.createDataIndex();
 
 		if (result instanceof DataIndex) {
@@ -126,7 +124,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				}
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -135,45 +133,45 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	 */
 	@Override
 	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
-	
+
 	protected Comparator<String> getFieldNameOrderComparator() {
 		return new Comparator<String>() {
 			@Override
-			public int compare(String arg0, String arg1) {
+			public int compare(final String arg0, final String arg1) {
 				return arg0.compareTo(arg1);
-			}			
+			}
 		};
 	}
-	
+
 	abstract protected Index<? extends Number> getIndexFromObject(TargetClass target);
-	 
-	protected Map<String, String>  getNonDateFields(TargetClass target, Index<? extends Number> index) {
-		final HashMap<String, String> result = new HashMap<String,String>();
+
+	protected Map<String, String> getNonDateFields(final TargetClass target, final Index<? extends Number> index) {
+		final HashMap<String, String> result = new HashMap<String, String>();
 		if (index instanceof DerivedIndex) {
 			result.put(EXPRESSION, ((DerivedIndex<? extends Number>) index).getExpression());
 		}
 		return result;
 	}
-	
-	protected Map<String, String> getDateFields(Index<? extends Number> index) {
-		Map<String, String> map = new HashMap<String, String>();
-		
+
+	protected Map<String, String> getDateFields(final Index<? extends Number> index) {
+		final Map<String, String> map = new HashMap<String, String>();
+
 		if (index instanceof DataIndex) {
 			final DataIndex<? extends Number> di = (DataIndex<? extends Number>) index;
 			for (final IndexPoint<? extends Number> pt : di.getPoints()) {
 				map.put(shortDate.format(pt.getDate()), pt.getValue().toString());
-			}		
+			}
 		}
-		
+
 		return map;
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject obj : objects) {
 
-			Index<? extends Number> index = getIndexFromObject((TargetClass) obj);
+			final Index<? extends Number> index = getIndexFromObject((TargetClass) obj);
 
 			if (index instanceof DataIndex) {
 				final Map<String, String> row = new TreeMap<String, String>(getFieldNameOrderComparator());

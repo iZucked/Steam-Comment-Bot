@@ -65,6 +65,8 @@ public abstract class ImportAction extends LockableAction {
 
 		char getCsvSeparator();
 
+		char getDecimalSeparator();
+
 		void lock();
 
 		void unlock();
@@ -128,6 +130,11 @@ public abstract class ImportAction extends LockableAction {
 			public char getCsvSeparator() {
 				return ',';
 			}
+
+			@Override
+			public char getDecimalSeparator() {
+				return '.';
+			}
 		});
 	}
 
@@ -150,7 +157,7 @@ public abstract class ImportAction extends LockableAction {
 		DefaultImportContext context = null;
 		try {
 			importHooksProvider.lock();
-			context = new DefaultImportContext();
+			context = new DefaultImportContext(importHooksProvider.getDecimalSeparator());
 			context.setRootObject(importHooksProvider.getRootObject());
 			context.registerNamedObjectsFromSubModels();
 

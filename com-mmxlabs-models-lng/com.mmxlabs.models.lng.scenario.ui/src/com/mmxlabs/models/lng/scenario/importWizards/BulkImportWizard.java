@@ -24,6 +24,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private List<ScenarioInstance> selectedScenarios;
 	private String importFilename;
 	private char csvSeparator;
+	private char decimalSeparator;
 	final private ScenarioInstance currentScenario;
 	private int importedField;
 	
@@ -52,6 +53,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		selectedScenarios = bip.getSelectedScenarios();
 		importFilename = bip.getImportFilename();
 		csvSeparator = bip.getCsvSeparator();
+		decimalSeparator = bip.getDecimalSeparator();
 		return true;
 	}
 
@@ -64,6 +66,10 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	}
 	
 	public char getCsvSeparator() {
+		return csvSeparator;
+	}
+	
+	public char getDecimalSeparator() {
 		return csvSeparator;
 	}
 	

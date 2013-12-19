@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
@@ -91,7 +92,7 @@ public class FuelCurveImporter {
 				final Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>> c = consumptions.get(s);
 				context.doLater(new IDeferment() {
 					@Override
-					public void run(IImportContext context) {
+					public void run(final IImportContext context) {
 						final VesselClass vesselClass = (VesselClass) context.getNamedObject(s, FleetPackage.eINSTANCE.getVesselClass());
 						if (vesselClass != null) {
 							vesselClass.getLadenAttributes().getFuelConsumption().addAll(c.getSecond().getFirst());
@@ -112,7 +113,7 @@ public class FuelCurveImporter {
 		}
 	}
 
-	public Collection<Map<String, String>> exportCurves(final EList<VesselClass> vesselClasses) {
+	public Collection<Map<String, String>> exportCurves(final EList<VesselClass> vesselClasses, final IExportContext context) {
 		final List<Map<String, String>> rows = new ArrayList<Map<String, String>>(vesselClasses.size() * 2);
 
 		// Use a LinkedHashMap to preserve put order, use a TreeMap to sort columns by speed
@@ -138,7 +139,7 @@ public class FuelCurveImporter {
 		return rows;
 	}
 
-	private void exportConsumptions(EList<FuelConsumption> fuelConsumption, Map<String, String> ladenRow) {
+	private void exportConsumptions(final EList<FuelConsumption> fuelConsumption, final Map<String, String> ladenRow) {
 		for (final FuelConsumption fc : fuelConsumption) {
 			ladenRow.put(String.format("%.2f", fc.getSpeed()), String.format("%.2f", fc.getConsumption()));
 		}
