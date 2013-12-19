@@ -51,9 +51,11 @@ public class DefaultImportContext implements IImportContext {
 		final List<NamedObject> matches = namedObjects.get(name);
 		if (matches == null) {
 			log.warn("No objects with name " + name + " have been imported");
-			final String lowerName = name.toLowerCase();
-			if (!lowerName.equals(name)) {
-				return getNamedObject(lowerName, preferredType);
+			if (name != null) {
+				final String lowerName = name.toLowerCase();
+				if (!lowerName.equals(name)) {
+					return getNamedObject(lowerName, preferredType);
+				}
 			}
 			return null;
 		}
