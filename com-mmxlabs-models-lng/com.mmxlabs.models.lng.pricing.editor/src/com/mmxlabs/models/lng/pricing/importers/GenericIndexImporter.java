@@ -32,6 +32,7 @@ import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
+import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
 /**
@@ -44,7 +45,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImporter {
 	protected static final String EXPRESSION = "expression";
 	protected static final String UNITS = "units";
-	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
+	final DateFormat exportDateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
 	@SuppressWarnings("unchecked")
@@ -64,7 +65,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			di.setExpression(row.get(EXPRESSION));
 			for (final String s : row.keySet()) {
 				try {
-					shortDate.parse(s);
+					dateParser.parseDate(s);
 					if (row.get(s).isEmpty() == false) {
 						context.addProblem(context.createProblem("Indices with an expression should not have any values set", true, true, true));
 					}
@@ -74,6 +75,8 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			}
 			return di;
 		}
+
+		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
 		// for other indices, return a data index
 		final DataIndex<Number> result = PricingFactory.eINSTANCE.createDataIndex();
@@ -95,7 +98,8 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 					c.set(Calendar.MINUTE, 0);
 					c.set(Calendar.SECOND, 0);
 					c.set(Calendar.MILLISECOND, 0);
-					if (row.get(s).isEmpty())
+					final String valueStr = row.get(s);
+					if (valueStr.isEmpty())
 						continue;
 					try {
 						final Number n;
@@ -103,10 +107,10 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.25
 						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
 						if (parseAsInt) {
-							final int value = Integer.parseInt(row.get(s));
+							final int value = nai.stringToInt(valueStr);
 							n = value;
 						} else {
-							final double value = Double.parseDouble(row.get(s));
+							final double value = nai.stringToDouble(valueStr);
 							n = value;
 						}
 
@@ -115,7 +119,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 						point.setValue(n);
 						data.getPoints().add(point);
 					} catch (final NumberFormatException nfe) {
-						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
+						context.addProblem(context.createProblem("The value " + valueStr + " is not a number", true, true, true));
 					}
 				} catch (final ParseException ex) {
 					if (s.equals(EXPRESSION) == false && s.equals(UNITS) == false) {
@@ -153,21 +157,28 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return result;
 	}
 
-	protected Map<String, String> getDateFields(final Index<? extends Number> index) {
+	protected Map<String, String> getDateFields(final IExportContext context, final Index<? extends Number> index, final boolean exportAsInt) {
 		final Map<String, String> map = new HashMap<String, String>();
+		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
 		if (index instanceof DataIndex) {
 			final DataIndex<? extends Number> di = (DataIndex<? extends Number>) index;
 			for (final IndexPoint<? extends Number> pt : di.getPoints()) {
-				map.put(shortDate.format(pt.getDate()), pt.getValue().toString());
+				String value;
+				if (exportAsInt) {
+					value = nai.intToString(pt.getValue().intValue());
+				} else {
+					value = nai.doubleToString(pt.getValue().doubleValue());
+				}
+				map.put(exportDateFormatter.format(pt.getDate()), value);
 			}
 		}
 
 		return map;
 	}
 
-	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
+	protected Collection<Map<String, String>> exportIndices(final Collection<? extends EObject> objects, final IExportContext context, final boolean exportAsInt) {
+
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject obj : objects) {
 
@@ -176,7 +187,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 			if (index instanceof DataIndex) {
 				final Map<String, String> row = new TreeMap<String, String>(getFieldNameOrderComparator());
 				row.putAll(getNonDateFields((TargetClass) obj, index));
-				row.putAll(getDateFields((DataIndex<? extends Number>) index));
+				row.putAll(getDateFields(context, (DataIndex<? extends Number>) index, exportAsInt));
 				result.add(row);
 			} else if (index instanceof DerivedIndex) {
 				final Map<String, String> row = new LinkedHashMap<String, String>();

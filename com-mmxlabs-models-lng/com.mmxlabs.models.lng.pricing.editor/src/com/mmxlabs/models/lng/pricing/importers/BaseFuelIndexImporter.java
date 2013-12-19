@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.importers;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
@@ -82,5 +84,10 @@ public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {
 	@Override
 	protected Index<? extends Number> getIndexFromObject(BaseFuelIndex target) {
 		return target.getData();
+	}
+	
+	@Override
+	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects, IExportContext context) {
+		return exportIndices(objects, context, false);
 	}
 }

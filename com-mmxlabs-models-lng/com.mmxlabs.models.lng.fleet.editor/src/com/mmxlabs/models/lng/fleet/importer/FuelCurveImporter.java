@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.fleet.importer;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 
 /**
  * Special case for fuel curve data
@@ -40,6 +42,9 @@ public class FuelCurveImporter {
 	}
 
 	public Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> readConsumptions(final CSVReader reader, final IImportContext context) throws IOException {
+
+		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
+
 		final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> result = new HashMap<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>>();
 		Map<String, String> row = null;
 		try {
@@ -51,14 +56,13 @@ public class FuelCurveImporter {
 				final List<FuelConsumption> consumptions = new LinkedList<FuelConsumption>();
 				for (final Map.Entry<String, String> column : row.entrySet()) {
 					try {
-						final double speed = Double.parseDouble(column.getKey());
-						final double consumption = Double.parseDouble(column.getValue());
+						final double speed = nai.stringToDouble(column.getKey());
+						final double consumption = nai.stringToDouble(column.getValue());
 						final FuelConsumption fcl = FleetFactory.eINSTANCE.createFuelConsumption();
 						fcl.setSpeed(speed);
 						fcl.setConsumption(consumption);
 						consumptions.add(fcl);
-					} catch (final NumberFormatException nfe) {
-
+					} catch (final NumberFormatException | ParseException e) {
 					}
 				}
 
@@ -115,6 +119,7 @@ public class FuelCurveImporter {
 
 	public Collection<Map<String, String>> exportCurves(final EList<VesselClass> vesselClasses, final IExportContext context) {
 		final List<Map<String, String>> rows = new ArrayList<Map<String, String>>(vesselClasses.size() * 2);
+		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
 
 		// Use a LinkedHashMap to preserve put order, use a TreeMap to sort columns by speed
 
@@ -123,7 +128,7 @@ public class FuelCurveImporter {
 			final Map<String, String> ladenRowValues = new TreeMap<String, String>();
 			ladenRow.put("class", vc.getName());
 			ladenRow.put("state", "laden");
-			exportConsumptions(vc.getLadenAttributes().getFuelConsumption(), ladenRowValues);
+			exportConsumptions(vc.getLadenAttributes().getFuelConsumption(), ladenRowValues, nai);
 			ladenRow.putAll(ladenRowValues);
 			rows.add(ladenRow);
 
@@ -131,7 +136,7 @@ public class FuelCurveImporter {
 			final Map<String, String> ballastRowValues = new TreeMap<String, String>();
 			ballastRow.put("class", vc.getName());
 			ballastRow.put("state", "ballast");
-			exportConsumptions(vc.getBallastAttributes().getFuelConsumption(), ballastRowValues);
+			exportConsumptions(vc.getBallastAttributes().getFuelConsumption(), ballastRowValues, nai);
 			ballastRow.putAll(ballastRowValues);
 			rows.add(ballastRow);
 		}
@@ -139,9 +144,9 @@ public class FuelCurveImporter {
 		return rows;
 	}
 
-	private void exportConsumptions(final EList<FuelConsumption> fuelConsumption, final Map<String, String> ladenRow) {
+	private void exportConsumptions(final EList<FuelConsumption> fuelConsumption, final Map<String, String> ladenRow, final NumberAttributeImporter nai) {
 		for (final FuelConsumption fc : fuelConsumption) {
-			ladenRow.put(String.format("%.2f", fc.getSpeed()), String.format("%.2f", fc.getConsumption()));
+			ladenRow.put(nai.doubleToString(fc.getSpeed()), nai.doubleToString(fc.getConsumption()));
 		}
 	}
 }

@@ -141,7 +141,7 @@ public class PortModelImporter implements ISubmodelImporter {
 	@Override
 	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		for (final Route r : ((PortModel) model).getRoutes()) {
-			final Collection<Map<String, String>> result = routeImporter.exportRoute(r);
+			final Collection<Map<String, String>> result = routeImporter.exportRoute(r, context);
 			if (r.getName().equals(DIRECT_NAME)) {
 				output.put(DISTANCES_KEY, result);
 			} else if (r.getName().equals(SUEZ_CANAL_NAME)) {

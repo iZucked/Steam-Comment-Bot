@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.port.importer;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -21,8 +22,10 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.SetReference;
 
 /**
@@ -42,6 +45,8 @@ public class RouteImporter {
 	public Route importRoute(final CSVReader reader, final IImportContext context) {
 		final Route result = PortFactory.eINSTANCE.createRoute();
 
+		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
+
 		try {
 			context.pushReader(reader);
 			Map<String, String> row = null;
@@ -54,21 +59,21 @@ public class RouteImporter {
 						continue;
 					}
 					try {
-						final int distance = Integer.parseInt(entry.getValue());
+						final int distance = nai.stringToInt(entry.getValue());
 						final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 						line.setDistance(distance);
 						row.get(entry.getKey());
 						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 						lines.add(line);
-					} catch (final NumberFormatException nfe) {
+					} catch (final ParseException nfe) {
 						try {
-							final double distance = Double.parseDouble(entry.getValue());
+							final double distance = nai.stringToDouble(entry.getValue());
 							final RouteLine line = PortFactory.eINSTANCE.createRouteLine();
 							line.setDistance((int) distance);
 							row.get(entry.getKey());
 							context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_To(), reader.getCasedColumnName(entry.getKey()), context));
 							lines.add(line);
-						} catch (final NumberFormatException nfe2) {
+						} catch (final ParseException nfe2) {
 							if (entry.getValue().isEmpty() == false) {
 								fromName = entry.getValue();
 							}
@@ -80,7 +85,7 @@ public class RouteImporter {
 					for (final RouteLine line : lines) {
 						context.doLater(new SetReference(line, PortPackage.eINSTANCE.getRouteLine_From(), fromName, context));
 						context.doLater(new IDeferment() {
-							
+
 							@Override
 							public void run(IImportContext context) {
 								if (line.getTo() == null || line.getFrom() == null) {
@@ -90,7 +95,7 @@ public class RouteImporter {
 									((List) eContainer.eGet(eContainingFeature)).remove(line);
 								}
 							}
-							
+
 							@Override
 							public int getStage() {
 								return IImportContext.STAGE_MODIFY_SUBMODELS;
@@ -101,7 +106,7 @@ public class RouteImporter {
 				} else {
 					// TODO warn
 				}
-				
+
 				lines.clear();
 			}
 		} catch (final IOException ex) {
@@ -121,9 +126,10 @@ public class RouteImporter {
 	 * @param r
 	 * @return
 	 */
-	public Collection<Map<String, String>> exportRoute(final Route r) {
+	public Collection<Map<String, String>> exportRoute(final Route r, IExportContext context) {
 		final Map<String, Map<String, String>> rows = new TreeMap<String, Map<String, String>>();
-		
+		final NumberAttributeImporter nai = new NumberAttributeImporter(context.getDecimalSeparator());
+
 		for (final RouteLine line : r.getLines()) {
 			Map<String, String> row = rows.get(line.getFrom().getName());
 			if (row == null) {
@@ -151,9 +157,10 @@ public class RouteImporter {
 				row.put(line.getFrom().getName(), "");
 
 			}
-			row.put(line.getTo().getName(), line.getDistance() + "");
+
+			row.put(line.getTo().getName(), nai.intToString(line.getDistance()));
 		}
-		
+
 		final ArrayList<Map<String, String>> result = new ArrayList<Map<String, String>>(rows.values());
 		return result;
 	}
