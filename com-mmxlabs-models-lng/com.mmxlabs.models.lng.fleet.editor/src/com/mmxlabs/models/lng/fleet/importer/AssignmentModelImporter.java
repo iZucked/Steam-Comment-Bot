@@ -10,6 +10,7 @@ import java.util.Map;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 
@@ -28,14 +29,14 @@ public class AssignmentModelImporter implements IExtraModelImporter {
 	}
 
 	@Override
-	public void importModel(MMXRootObject rootObject, Map<String, CSVReader> inputs, IImportContext context) {
+	public void importModel(final MMXRootObject rootObject, final Map<String, CSVReader> inputs, final IImportContext context) {
 		if (inputs.containsKey(ASSIGNMENTS)) {
 			importer.importAssignments(inputs.get(ASSIGNMENTS), context);
 		}
 	}
 
 	@Override
-	public void exportModel(MMXRootObject root, Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 
 	}
 }

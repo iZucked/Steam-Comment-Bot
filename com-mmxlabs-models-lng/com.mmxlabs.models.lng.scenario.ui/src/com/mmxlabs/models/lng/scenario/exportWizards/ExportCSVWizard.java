@@ -105,7 +105,7 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 				final Collection<IExtraModelImporter> extra = Activator.getDefault().getImporterRegistry().getExtraModelImporters();
 				for (final IExtraModelImporter importer : extra) {
 					final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
-					importer.exportModel((MMXRootObject) rootObject, outputs);
+					importer.exportModel(outputs, context);
 					for (final String key : outputs.keySet()) {
 						final Collection<Map<String, String>> rows = outputs.get(key);
 						final String friendlyName = importer.getRequiredInputs().get(key);
