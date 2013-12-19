@@ -13,6 +13,9 @@ import javax.inject.Inject;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.registry.IExtraModelImporterExtension;
 
+/**
+ * @since 8.0
+ */
 public class ExtraModelImporterRegistry {
 
 	@Inject

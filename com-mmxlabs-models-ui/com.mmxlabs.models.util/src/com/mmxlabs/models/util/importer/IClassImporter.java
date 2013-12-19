@@ -38,6 +38,7 @@ public interface IClassImporter {
 	 * @param row
 	 * @param context
 	 * @return
+	 * @since 8.0
 	 */
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 	/**

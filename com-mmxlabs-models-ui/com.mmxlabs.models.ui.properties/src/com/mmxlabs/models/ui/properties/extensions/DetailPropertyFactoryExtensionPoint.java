@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.ui.properties.extensions;
 
 import org.ops4j.peaberry.eclipse.ExtensionBean;

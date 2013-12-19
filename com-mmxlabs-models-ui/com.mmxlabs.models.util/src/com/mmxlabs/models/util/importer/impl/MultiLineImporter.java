@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.util.importer.impl;
 
 import java.util.Collection;
@@ -60,6 +64,7 @@ import com.mmxlabs.models.util.importer.IImportContext;
  *  This class is intended as an eventual replacement for the DefaultClassImporter
  *  
  * @author Simon McGregor
+ * @since 8.0
  *
  */
 public class MultiLineImporter extends DefaultClassImporter {

@@ -58,13 +58,16 @@ public class ImporterRegistry implements IImporterRegistry {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 8.0
 	 */
 	@Override
 	public Collection<IPostModelImporter> getPostModelImporters() {
 		return postmodelRegistry.getPostModelImporters();
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	@Override
 	public Collection<IExtraModelImporter> getExtraModelImporters() {
 		return extramodelRegistry.getExtraModelImporters();

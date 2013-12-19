@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.util.importer.impl;
 
 import java.io.IOException;
@@ -14,6 +18,9 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 
+/**
+ * @since 8.0
+ */
 public abstract class AbstractClassImporter implements IClassImporter {
 
 	@Override

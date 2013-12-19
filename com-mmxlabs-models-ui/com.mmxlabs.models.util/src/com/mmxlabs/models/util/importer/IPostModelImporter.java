@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.util.importer;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -9,6 +13,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * after import.
  * 
  * @author Simon Goodall
+ * @since 8.0
  * 
  */
 public interface IPostModelImporter {

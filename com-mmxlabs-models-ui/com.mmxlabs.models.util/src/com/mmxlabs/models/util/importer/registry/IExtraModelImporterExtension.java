@@ -9,6 +9,9 @@ import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 
+/**
+ * @since 8.0
+ */
 @ExtensionBean("com.mmxlabs.models.util.import.extramodelimporters")
 public interface IExtraModelImporterExtension {
 
