@@ -27,6 +27,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.models.lng.scenario.internal.Activator;
+import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.RadioSelectionGroup;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -43,9 +44,17 @@ public class ExportCSVWizardPage extends WizardPage {
 	private final ISelection selection;
 
 	private static final String FILTER_KEY = "lastSelection";
+	private static final String DELIMITER_KEY = "lastDelimiter";
 	private static final String SECTION_NAME = "ExportCSVWizardPage.section";
 
 	private DirectoryFieldEditor editor;
+
+	private int CHOICE_COMMA = 0;
+
+	private int CHOICE_SEMICOLON = 1;
+
+	private RadioSelectionGroup csvSelectionGroup;
+
 
 	protected ExportCSVWizardPage(ISelection selection) {
 		super("Export Scenario as CSV");
@@ -106,12 +115,20 @@ public class ExportCSVWizardPage extends WizardPage {
 			}
 		});
 
+		csvSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] {"comma (\",\")", "semicolon (\";\")"}, new int[] {CHOICE_COMMA, CHOICE_SEMICOLON});
+		
+		
 		// get the default export directory from the settings
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 		final String filter = section == null ? null : section.get(FILTER_KEY);
+		int delimiterValue = 0;
+		if (section != null && section.get(DELIMITER_KEY) != null) {
+			delimiterValue = section.getInt(DELIMITER_KEY);
+		}
 		// use it to populate the editor
 		editor.setStringValue(filter);
+		csvSelectionGroup.setSelectedIndex(delimiterValue);		
 
 		initialize();
 		dialogChanged();
@@ -171,6 +188,11 @@ public class ExportCSVWizardPage extends WizardPage {
 			section = dialogSettings.addNewSection(SECTION_NAME);
 		}
 		section.put(FILTER_KEY, editor.getStringValue());
+		section.put(DELIMITER_KEY , csvSelectionGroup.getSelectedValue());
+	}
+
+	public char getCsvDelimiter() {
+		return csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
 	}
 
 }

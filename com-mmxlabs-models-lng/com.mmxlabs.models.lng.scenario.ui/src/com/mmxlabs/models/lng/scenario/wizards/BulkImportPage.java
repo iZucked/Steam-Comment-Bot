@@ -292,7 +292,7 @@ public class BulkImportPage extends WizardPage {
 	 * group to a single variable? 
 	 */
 	
-	class RadioSelectionGroup extends Composite {
+	public static class RadioSelectionGroup extends Composite {
 		int selectedIndex = -1;
 		final ArrayList<Button> buttons = new ArrayList<Button>();
 		final Group group;
