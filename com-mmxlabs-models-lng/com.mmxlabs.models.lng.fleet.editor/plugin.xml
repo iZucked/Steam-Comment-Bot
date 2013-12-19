@@ -293,6 +293,10 @@
           commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider"
           id="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider">
     </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.AssignableElementCommandProvider"
+          id="com.mmxlabs.models.lng.fleet.editor.commands.AssignableElementCommandProvider">
+    </ModelCommandProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated fleet -->
