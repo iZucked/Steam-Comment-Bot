@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -31,6 +32,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.PropertySheet;
 
@@ -62,6 +64,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
+import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -164,6 +168,16 @@ public class CargoEconsReport extends ViewPart {
 
 			}
 		};
+
+		// Disable copy-to-clipboard ad the "-" get badly interpretted by excel
+		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
+		// final Action copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(viewer);
+		//
+		getViewSite().getActionBars().getToolBarManager().add(packAction);
+		// getViewSite().getActionBars().getToolBarManager().add(copyAction);
+		//
+		// getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
+
 		getSite().getPage().addSelectionListener(selectionListener);
 	}
 
@@ -484,7 +498,7 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_PER_MMBTU: {
 				final Integer pnl = CargoEconsReport.getPNLValue(marketAllocation);
 				if (pnl != null) {
-					Number number = (Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU);
+					final Number number = (Number) getObject(FieldType.SELL_VOLUME_IN_MMBTU);
 					if (number != null) {
 						final double dischargeVolumeInMMBTu = number.doubleValue();
 						return (double) pnl / dischargeVolumeInMMBTu;
@@ -561,7 +575,7 @@ public class CargoEconsReport extends ViewPart {
 			return null;
 		}
 
-		private double getMarketCV(SpotMarket market) {
+		private double getMarketCV(final SpotMarket market) {
 			if (market instanceof DESPurchaseMarket) {
 				return ((DESPurchaseMarket) market).getCv();
 			}
@@ -665,7 +679,7 @@ public class CargoEconsReport extends ViewPart {
 				if (obj instanceof CargoAllocation) {
 					validObjects.add(obj);
 				} else if (obj instanceof SlotAllocation) {
-					SlotAllocation slotAllocation = (SlotAllocation) obj;
+					final SlotAllocation slotAllocation = (SlotAllocation) obj;
 					if (slotAllocation.getCargoAllocation() != null) {
 						validObjects.add(slotAllocation.getCargoAllocation());
 					}
@@ -815,7 +829,6 @@ public class CargoEconsReport extends ViewPart {
 		return (int) groupProfitAndLoss.getProfitAndLoss();
 	}
 
-	
 	/**
 	 * Get total cargo PNL value excluding time charter rate
 	 * 

@@ -7,7 +7,9 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -24,7 +26,7 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
  * @since 2.0
  * 
  */
-public abstract class SimpleContentAndColumnProvider<T> implements IStructuredContentProvider {
+public abstract class SimpleContentAndColumnProvider<T> implements ITreeContentProvider {
 
 	protected static class ColumnManager<T> {
 		private final String name;
@@ -59,6 +61,10 @@ public abstract class SimpleContentAndColumnProvider<T> implements IStructuredCo
 
 		public int compare(final T obj1, final T obj2) {
 			return 0;
+		}
+
+		public boolean isTree() {
+			return false;
 		}
 	}
 
@@ -101,5 +107,20 @@ public abstract class SimpleContentAndColumnProvider<T> implements IStructuredCo
 	@Override
 	public void dispose() {
 
+	}
+
+	@Override
+	public Object[] getChildren(Object parentElement) {
+		return null;
+	}
+
+	@Override
+	public Object getParent(Object element) {
+		return null;
+	}
+
+	@Override
+	public boolean hasChildren(Object element) {
+		return false;
 	}
 }
