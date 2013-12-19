@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="-6"
+            latestVersion="6"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -56,7 +56,7 @@
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV6"
             context="com.mmxlabs.lingo"
             from="5"
-            to="-6">
+            to="6">
       </MigrationUnit>            
    </extension>
    <extension
