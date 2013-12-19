@@ -138,6 +138,7 @@ public class DischargeSlotItemProvider
 	/**
 	 * This adds a property descriptor for the Min Cv Value feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -160,6 +161,7 @@ public class DischargeSlotItemProvider
 	/**
 	 * This adds a property descriptor for the Max Cv Value feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

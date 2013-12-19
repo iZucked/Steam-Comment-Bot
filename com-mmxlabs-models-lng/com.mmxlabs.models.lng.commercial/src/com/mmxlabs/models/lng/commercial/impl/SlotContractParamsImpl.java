@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
+/**
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
@@ -11,6 +15,7 @@ import org.eclipse.emf.ecore.EClass;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Slot Contract Params</b></em>'.
+ * @since 8.0
  * <!-- end-user-doc -->
  * <p>
  * </p>

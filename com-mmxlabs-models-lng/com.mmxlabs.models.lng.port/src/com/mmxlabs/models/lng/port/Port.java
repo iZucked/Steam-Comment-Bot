@@ -146,6 +146,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * If the meaning of the '<em>Berths</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Berths</em>' attribute.
 	 * @see #setBerths(int)
@@ -158,6 +159,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.port.Port#getBerths <em>Berths</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Berths</em>' attribute.
 	 * @see #getBerths()

@@ -114,6 +114,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Assignment feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -136,6 +137,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Spot Index feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -158,6 +160,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Sequence Hint feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -180,6 +183,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Locked feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -492,6 +496,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Shipping Days Restriction feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -514,6 +519,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Entity feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -536,6 +542,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Restricted Contracts feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -558,6 +565,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Restricted Ports feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -580,6 +588,7 @@ public class SlotItemProvider
 	/**
 	 * This adds a property descriptor for the Restricted Lists Are Permissive feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

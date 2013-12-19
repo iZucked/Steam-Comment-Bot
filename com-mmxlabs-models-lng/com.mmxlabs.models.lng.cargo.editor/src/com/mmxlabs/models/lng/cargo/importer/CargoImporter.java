@@ -413,6 +413,9 @@ public class CargoImporter extends DefaultClassImporter {
 
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();
 		objects.addAll(super.importObject(parent, eClass, row, context).getCreatedObjects());

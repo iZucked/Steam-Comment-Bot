@@ -66,6 +66,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	/**
 	 * The default value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfitAndLossPreTax()
 	 * @generated
@@ -76,6 +77,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	/**
 	 * The cached value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfitAndLossPreTax()
 	 * @generated
@@ -163,6 +165,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -172,6 +175,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

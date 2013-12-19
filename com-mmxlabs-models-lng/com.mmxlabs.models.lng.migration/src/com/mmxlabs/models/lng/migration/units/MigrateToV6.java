@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013	
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.migration.units;
@@ -41,7 +41,7 @@ public class MigrateToV6 extends AbstractMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -6;
+		return 6;
 	}
 
 	@Override

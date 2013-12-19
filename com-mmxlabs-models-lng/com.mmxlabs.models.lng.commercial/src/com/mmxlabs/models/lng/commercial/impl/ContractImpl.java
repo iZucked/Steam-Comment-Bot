@@ -220,6 +220,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The default value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getContractType()
 	 * @generated
@@ -230,6 +231,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getContractType()
 	 * @generated
@@ -529,6 +531,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -538,6 +541,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

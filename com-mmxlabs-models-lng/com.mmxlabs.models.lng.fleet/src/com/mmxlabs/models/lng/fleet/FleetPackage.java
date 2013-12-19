@@ -767,6 +767,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service Speed</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1073,6 +1074,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1082,6 +1084,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1091,6 +1094,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1100,6 +1104,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1190,6 +1195,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1199,6 +1205,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1208,6 +1215,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1217,6 +1225,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1307,6 +1316,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1316,6 +1326,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1325,6 +1336,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1334,6 +1346,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1424,6 +1437,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1433,6 +1447,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1442,6 +1457,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1451,6 +1467,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1550,6 +1567,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl
 	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getAssignableElement()
@@ -1560,6 +1578,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1569,6 +1588,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1578,6 +1598,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1587,6 +1608,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1596,6 +1618,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Assignable Element</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2042,6 +2065,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.AssignableElement <em>Assignable Element</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Assignable Element</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.AssignableElement
@@ -2052,6 +2076,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getAssignment <em>Assignment</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Assignment</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#getAssignment()
@@ -2063,6 +2088,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getSpotIndex <em>Spot Index</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Spot Index</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#getSpotIndex()
@@ -2074,6 +2100,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.AssignableElement#getSequenceHint <em>Sequence Hint</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Sequence Hint</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#getSequenceHint()
@@ -2085,6 +2112,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.AssignableElement#isLocked <em>Locked</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Locked</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.AssignableElement#isLocked()
@@ -2204,6 +2232,7 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed <em>Service Speed</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Service Speed</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed()
@@ -2886,6 +2915,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.fleet.impl.AssignableElementImpl
 		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getAssignableElement()
@@ -2896,6 +2926,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Assignment</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2904,6 +2935,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2912,6 +2944,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Sequence Hint</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2920,6 +2953,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3012,6 +3046,7 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Service Speed</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

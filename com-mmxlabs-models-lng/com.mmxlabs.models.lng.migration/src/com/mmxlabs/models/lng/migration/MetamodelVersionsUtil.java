@@ -303,6 +303,9 @@ public class MetamodelVersionsUtil {
 		return loader;
 	}
 
+	/**
+	 * @since 8.0
+	 */
 	public static MetamodelLoader createV6Loader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
 

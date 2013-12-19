@@ -52,7 +52,7 @@ public class CargoModelRowTransformer {
 	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	/**
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	public RootData transform(final CargoModel cargoModel, final ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo, final RootData existingData) {
 		return transform(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo, existingData);
@@ -67,7 +67,7 @@ public class CargoModelRowTransformer {
 	 * @param allDischargeSlots
 	 * @param validationInfo
 	 * @return
-	 * @since 5.0
+	 * @since 8.0
 	 */
 	public RootData transform(final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, final Schedule schedule,
 			final Map<Object, IStatus> validationInfo, final RootData existingWiring) {
@@ -662,7 +662,7 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 4.0
+		 * @since 8.0
 		 */
 		public void addCargo(final Cargo cargo) {
 			getObjects().add(cargo);
@@ -902,6 +902,9 @@ public class CargoModelRowTransformer {
 		 */
 		CARGO_OR_MARKET_ALLOCATION,
 
+		/**
+		 * @since 8.0
+		 */
 		SLOT_OR_CARGO
 	}
 

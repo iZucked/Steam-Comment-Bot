@@ -195,6 +195,7 @@ public class PortItemProvider
 	/**
 	 * This adds a property descriptor for the Berths feature.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

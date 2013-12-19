@@ -15,7 +15,7 @@ import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 /**
- * @since 7.0
+ * @since 8.0
  */
 public class MigrateToV7 extends AbstractMigrationUnit {
 
@@ -29,12 +29,12 @@ public class MigrateToV7 extends AbstractMigrationUnit {
 
 	@Override
 	public int getSourceVersion() {
-		return -6;
+		return 6;
 	}
 
 	@Override
 	public int getDestinationVersion() {
-		return -7;
+		return 7;
 	}
 
 	@Override

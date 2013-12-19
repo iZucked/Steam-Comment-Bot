@@ -30,6 +30,7 @@ public interface PurchaseContract extends Contract {
 	 * If the meaning of the '<em>Cargo CV</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargo CV</em>' attribute.
 	 * @see #isSetCargoCV()
@@ -44,6 +45,7 @@ public interface PurchaseContract extends Contract {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Cargo CV</em>' attribute.
 	 * @see #isSetCargoCV()
@@ -56,6 +58,7 @@ public interface PurchaseContract extends Contract {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetCargoCV()
 	 * @see #getCargoCV()
@@ -67,6 +70,7 @@ public interface PurchaseContract extends Contract {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Cargo CV</em>' attribute is set.
 	 * @see #unsetCargoCV()

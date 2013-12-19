@@ -222,6 +222,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -231,6 +232,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -243,6 +245,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -252,6 +255,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -264,6 +268,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -273,6 +278,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -285,6 +291,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -294,6 +301,7 @@ public class VesselClassRouteParametersImpl extends MMXObjectImpl implements Ves
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

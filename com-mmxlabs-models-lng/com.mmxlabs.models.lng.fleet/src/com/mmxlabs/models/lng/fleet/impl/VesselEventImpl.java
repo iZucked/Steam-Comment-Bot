@@ -73,6 +73,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * The cached value of the '{@link #getAssignment() <em>Assignment</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getAssignment()
 	 * @generated
@@ -83,6 +84,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * The default value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSpotIndex()
 	 * @generated
@@ -93,6 +95,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * The cached value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSpotIndex()
 	 * @generated
@@ -112,6 +115,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSequenceHint()
 	 * @generated
@@ -122,6 +126,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSequenceHint()
 	 * @generated
@@ -132,6 +137,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isLocked()
 	 * @generated
@@ -142,6 +148,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * The cached value of the '{@link #isLocked() <em>Locked</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isLocked()
 	 * @generated
@@ -273,6 +280,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -291,6 +299,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -300,6 +309,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -312,6 +322,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -321,6 +332,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -333,6 +345,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -342,6 +355,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -379,6 +393,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -388,6 +403,7 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

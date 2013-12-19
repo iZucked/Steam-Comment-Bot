@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
+/**
  */
 package com.mmxlabs.models.lng.fleet.provider;
 
@@ -29,6 +33,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.AssignableElement} object.
  * <!-- begin-user-doc -->
+ * @since 8.0
  * <!-- end-user-doc -->
  * @generated
  */

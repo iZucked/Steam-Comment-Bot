@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.editor;
 
 import java.util.Collection;
@@ -29,6 +33,7 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
  *            The LNGPriceCalculatorParameters subclass
  * @param <U>
  *            The custom data structure class
+ * @since 8.0
  */
 public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters, U extends EObject> extends IInlineEditorEnablementWrapper {
 	private boolean enabled = false;

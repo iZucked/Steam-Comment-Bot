@@ -1,4 +1,8 @@
 /**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
+/**
  */
 package com.mmxlabs.models.lng.commercial.provider;
 
@@ -21,6 +25,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.SlotContractParams} object.
  * <!-- begin-user-doc -->
+ * @since 8.0
  * <!-- end-user-doc -->
  * @generated
  */

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.cargo.util;
 
 import java.util.Collection;
@@ -14,6 +18,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
  * 
  * @author proshun
  * @noinstantiate This class is not intended to be instantiated by clients.
+ * @since 8.0
  */
 public final class SlotClassifier {
 

@@ -91,6 +91,7 @@ public enum CapacityViolationType implements Enumerator {
 	VESSEL_CAPACITY(6, "VESSEL_CAPACITY", "VESSEL_CAPACITY"), /**
 	 * The '<em><b>LOST HEEL</b></em>' literal object.
 	 * <!-- begin-user-doc -->
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #LOST_HEEL_VALUE
 	 * @generated
@@ -211,6 +212,7 @@ public enum CapacityViolationType implements Enumerator {
 	 * If the meaning of '<em><b>LOST HEEL</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #LOST_HEEL
 	 * @model
