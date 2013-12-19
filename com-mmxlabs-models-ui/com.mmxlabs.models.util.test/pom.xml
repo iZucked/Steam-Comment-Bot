@@ -9,7 +9,7 @@
 		<version>8.0.2-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.mmxlabs.models.ui.properties</artifactId>
+	<artifactId>com.mmxlabs.models.util.test</artifactId>
 	<version>8.0.2-SNAPSHOT</version>
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 </project>

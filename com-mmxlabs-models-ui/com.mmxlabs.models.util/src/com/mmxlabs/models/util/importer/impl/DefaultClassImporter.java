@@ -30,13 +30,13 @@ import org.eclipse.emf.ecore.EcorePackage;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IAttributeImporter;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
@@ -57,21 +57,19 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	public static class ImportResults {
 		final public EObject importedObject;
 		private final LinkedList<EObject> createdExtraObjects = new LinkedList<EObject>();
-		private final boolean wasObjectCreated;
 
-		public ImportResults(EObject object, boolean created) {
+		public ImportResults(final EObject object, final boolean created) {
 			importedObject = object;
-			wasObjectCreated = created;
 			if (created) {
 				createdExtraObjects.add(object);
 			}
 		}
 
-		public ImportResults(EObject object) {
+		public ImportResults(final EObject object) {
 			this(object, true);
 		}
 
-		public void add(EObject object) {
+		public void add(final EObject object) {
 			createdExtraObjects.add(object);
 		}
 
@@ -238,12 +236,12 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				if (reference.isMany()) {
 					if (reference == MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS) {
 						if (subKeys.containsKey("count")) {
-							String countStr = subKeys.get("count");
+							final String countStr = subKeys.get("count");
 							if (countStr != null && !countStr.isEmpty()) {
 								final int count;
 								try {
 									count = Integer.parseInt(countStr);
-								} catch (NumberFormatException e) {
+								} catch (final NumberFormatException e) {
 									context.addProblem(context.createProblem(String.format("Error parsing %s as an integer for %s field", countStr, reference.getName()), true, true, true));
 									continue;
 								}
@@ -418,7 +416,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 
 		if (objects.isEmpty()) {
@@ -426,32 +424,32 @@ public class DefaultClassImporter extends AbstractClassImporter {
 		}
 
 		for (final EObject object : objects) {
-			final Map<String, String> flattened = exportObject(object, root);
+			final Map<String, String> flattened = exportObject(object, context);
 			flattened.put(KIND_KEY, object.eClass().getName());
 			result.add(flattened);
 		}
 		return result;
 	}
 
-	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
+	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 			if (shouldExportFeature(attribute)) {
-				exportAttribute(object, attribute, result);
+				exportAttribute(object, attribute, result, context);
 			}
 		}
 
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 			if (shouldExportFeature(reference)) {
-				exportReference(object, reference, result, root);
+				exportReference(object, reference, result, context);
 			}
 		}
 
 		return result;
 	}
 
-	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result) {
+	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result, final IExportContext context) {
 		final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
 		if (ai != null) {
 
@@ -471,17 +469,17 @@ public class DefaultClassImporter extends AbstractClassImporter {
 				}
 			}
 
-			result.put(attribute.getName(), ai.writeAttribute(object, attribute, object.eGet(attribute)));
+			result.put(attribute.getName(), ai.writeAttribute(object, attribute, object.eGet(attribute), context));
 		}
 	}
 
-	protected void exportReference(final EObject object, final EReference reference, final Map<String, String> result, final MMXRootObject root) {
+	protected void exportReference(final EObject object, final EReference reference, final Map<String, String> result, final IExportContext context) {
 		if (shouldFlattenReference(reference)) {
 			final EObject value = (EObject) object.eGet(reference);
 			if (value != null) {
 				final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(value.eClass());
 				if (importer != null) {
-					final Map<String, String> subMap = importer.exportObjects(Collections.singleton(value), root).iterator().next();
+					final Map<String, String> subMap = importer.exportObjects(Collections.singleton(value), context).iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
 						result.put(reference.getName() + DOT + e.getKey(), e.getValue());
 					}
@@ -497,7 +495,7 @@ public class DefaultClassImporter extends AbstractClassImporter {
 						for (final EObject extension : extensions) {
 							final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(extension.eClass());
 							if (importer != null) {
-								final Map<String, String> subMap = importer.exportObjects(Collections.singleton(extension), root).iterator().next();
+								final Map<String, String> subMap = importer.exportObjects(Collections.singleton(extension), context).iterator().next();
 								for (final Map.Entry<String, String> e : subMap.entrySet()) {
 									result.put(reference.getName() + DOT + count + DOT + e.getKey(), e.getValue());
 								}
