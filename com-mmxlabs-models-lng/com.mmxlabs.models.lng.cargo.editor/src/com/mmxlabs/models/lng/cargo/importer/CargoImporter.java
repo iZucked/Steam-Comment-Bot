@@ -461,7 +461,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 			final String vesselName = fields.get(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
 
-			if (vesselName != null) {
+			if (vesselName != null && !vesselName.isEmpty()) {
 				context.doLater(new IDeferment() {
 
 					@Override
@@ -484,6 +484,8 @@ public class CargoImporter extends DefaultClassImporter {
 						return IImportContext.STAGE_MODIFY_SUBMODELS;
 					}
 				});
+			} else {
+				assignableElement.unsetSpotIndex();
 			}
 		}
 	}

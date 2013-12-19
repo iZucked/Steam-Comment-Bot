@@ -73,12 +73,14 @@ public class FuelCurveImporter {
 							new Pair<List<FuelConsumption>, List<FuelConsumption>>());
 					result.put(className, p);
 				}
-				if (stateName.equalsIgnoreCase("laden")) {
-					p.getSecond().setFirst(consumptions);
-				} else if (stateName.equalsIgnoreCase("ballast")) {
-					p.getSecond().setSecond(consumptions);
-				} else {
-					context.addProblem(context.createProblem("Unknown vessel state " + stateName, true, true, false));
+				if (stateName != null) {
+					if (stateName.equalsIgnoreCase("laden")) {
+						p.getSecond().setFirst(consumptions);
+					} else if (stateName.equalsIgnoreCase("ballast")) {
+						p.getSecond().setSecond(consumptions);
+					} else {
+						context.addProblem(context.createProblem("Unknown vessel state " + stateName, true, true, false));
+					}
 				}
 			}
 		} finally {
