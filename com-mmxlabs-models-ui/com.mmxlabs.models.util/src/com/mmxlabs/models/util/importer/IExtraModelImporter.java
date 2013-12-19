@@ -35,10 +35,8 @@ public interface IExtraModelImporter {
 	/**
 	 * Turn the given model instance into a bunch of output values, keyed like the inputs.
 	 * 
-	 * @param root
-	 *            TODO
-	 * @param model
 	 * @param output
+	 * @param context
 	 */
-	void exportModel(MMXRootObject root, Map<String, Collection<Map<String, String>>> output);
+	void exportModel(Map<String, Collection<Map<String, String>>> output, IExportContext context);
 }
