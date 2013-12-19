@@ -33,6 +33,7 @@
 		<module>com.mmxlabs.models.ui.validation</module>
 		<module>com.mmxlabs.models.ui.tabular</module>
 		<module>com.mmxlabs.models.util</module>
+		<module>com.mmxlabs.models.util.test</module>
 		<module>com.mmxlabs.models.ui.properties</module>
 		<module>com.mmxlabs.models.ui.properties.edit</module>
 		<module>com.mmxlabs.models.mmxcore.validation</module>
