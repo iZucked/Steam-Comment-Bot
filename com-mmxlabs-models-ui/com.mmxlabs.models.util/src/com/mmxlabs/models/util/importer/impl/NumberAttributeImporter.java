@@ -32,15 +32,15 @@ public class NumberAttributeImporter {
 		return floatFormatter.parse(s.trim()).doubleValue();
 	}
 
-	public String intToString(final int i) throws ParseException {
+	public String intToString(final int i) {
 		return integerFormatter.format(i);
 	}
 
-	public String floatToString(final float f) throws ParseException {
+	public String floatToString(final float f) {
 		return floatFormatter.format(f);
 	}
 
-	public String doubleToString(final double d) throws ParseException {
+	public String doubleToString(final double d) {
 		return floatFormatter.format(d);
 	}
 

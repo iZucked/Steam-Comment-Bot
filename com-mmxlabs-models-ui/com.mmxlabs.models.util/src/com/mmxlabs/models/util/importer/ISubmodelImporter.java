@@ -9,7 +9,6 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -48,9 +47,8 @@ public interface ISubmodelImporter {
 	 * Turn the given model instance into a bunch of output values, keyed like the inputs.
 	 * 
 	 * @param root
-	 *            TODO
 	 * @param model
 	 * @param output
 	 */
-	void exportModel(MMXRootObject root, UUIDObject model, Map<String, Collection<Map<String, String>>> output);
+	void exportModel(UUIDObject model, Map<String, Collection<Map<String, String>>> output, IExportContext context);
 }

@@ -174,4 +174,5 @@ public interface IImportContext {
 	 */
 	public CSVReader peekReader();
 
+	public char getDecimalSeparator();
 }

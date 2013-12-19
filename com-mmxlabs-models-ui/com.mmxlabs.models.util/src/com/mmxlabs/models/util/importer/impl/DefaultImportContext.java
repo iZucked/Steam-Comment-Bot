@@ -29,12 +29,22 @@ import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 public class DefaultImportContext implements IImportContext {
-	private final LinkedList<IDeferment> deferments = new LinkedList<IDeferment>();
-	private final LinkedList<IDeferment> reschedule = new LinkedList<IDeferment>();
+	private static final Logger log = LoggerFactory.getLogger(DefaultImportContext.class);
+
+	private final LinkedList<IDeferment> deferments = new LinkedList<>();
+	private final LinkedList<IDeferment> reschedule = new LinkedList<>();
 	private boolean running = false;
 
-	private final HashMap<String, List<NamedObject>> namedObjects = new HashMap<String, List<NamedObject>>();
-	private static final Logger log = LoggerFactory.getLogger(DefaultImportContext.class);
+	private final HashMap<String, List<NamedObject>> namedObjects = new HashMap<>();
+
+	private final LinkedHashSet<IImportProblem> problems = new LinkedHashSet<>();
+
+	private MMXRootObject rootObject;
+	private final char decimalSeparator;
+
+	public DefaultImportContext(final char decimalSeparator) {
+		this.decimalSeparator = decimalSeparator;
+	}
 
 	@Override
 	public NamedObject getNamedObject(final String name, final EClass preferredType) {
@@ -281,9 +291,6 @@ public class DefaultImportContext implements IImportContext {
 		}
 	}
 
-	private final LinkedHashSet<IImportProblem> problems = new LinkedHashSet<IImportContext.IImportProblem>();
-	private MMXRootObject rootObject;
-
 	@Override
 	public List<IImportProblem> getProblems() {
 		return new ArrayList<IImportProblem>(problems);
@@ -321,5 +328,10 @@ public class DefaultImportContext implements IImportContext {
 				registerNamedObject((NamedObject) o);
 			}
 		}
+	}
+
+	@Override
+	public char getDecimalSeparator() {
+		return decimalSeparator;
 	}
 }

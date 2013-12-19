@@ -29,5 +29,5 @@ public interface IAttributeImporter {
 	 * @param value
 	 * @return
 	 */
-	public String writeAttribute(final EObject container, final EAttribute attribute, final Object value);
+	public String writeAttribute(final EObject container, final EAttribute attribute, final Object value, final IExportContext context);
 }
