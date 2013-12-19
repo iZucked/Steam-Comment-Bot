@@ -126,7 +126,7 @@ public class CSVImporter {
 			}
 		}
 
-		final DefaultImportContext context = new DefaultImportContext();
+		final DefaultImportContext context = new DefaultImportContext('.');
 
 		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
 		final IImporterRegistry importerRegistry = getImporterRegistry();
