@@ -53,7 +53,7 @@ public class LingoMigrateToV6 implements IMigrationUnit {
 	public void migrate(@NonNull final URI baseURI, @Nullable final Map<URI, PackageData> extraPackagesOrig) throws Exception {
 
 		@SuppressWarnings("null")
-		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, getSourceVersion(), -7);//getDestinationVersion());
+		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, getSourceVersion(), 7);//getDestinationVersion());
 		for (final IMigrationUnit unit : chain) {
 			unit.migrate(baseURI, extraPackagesOrig);
 		}
