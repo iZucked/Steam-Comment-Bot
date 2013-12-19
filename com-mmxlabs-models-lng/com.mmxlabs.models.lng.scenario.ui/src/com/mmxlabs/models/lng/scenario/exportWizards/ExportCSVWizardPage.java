@@ -125,11 +125,11 @@ public class ExportCSVWizardPage extends WizardPage {
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 		final String filter = section == null ? null : section.get(FILTER_KEY);
-		int delimiterValue = 0;
+		int delimiterValue = CHOICE_COMMA;
 		if (section != null && section.get(DELIMITER_KEY) != null) {
 			delimiterValue = section.getInt(DELIMITER_KEY);
 		}
-		int decimalValue = 0;
+		int decimalValue = CHOICE_PERIOD;
 		if (section != null && section.get(DECIMAL_SEPARATOR_KEY) != null) {
 			decimalValue = section.getInt(DECIMAL_SEPARATOR_KEY);
 		}
@@ -203,7 +203,7 @@ public class ExportCSVWizardPage extends WizardPage {
 	public char getCsvDelimiter() {
 		return csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
 	}
-	
+
 	public char getDecimalSeparator() {
 		return decimalSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : '.';
 	}

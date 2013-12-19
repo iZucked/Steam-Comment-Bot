@@ -10,7 +10,6 @@ public class BulkImportCargoHandler extends BulkImportCSVHandler {
 
 	@Override
 	public int getFieldToImport() {
-		// TODO Auto-generated method stub
 		return BulkImportPage.CHOICE_CARGOES;
 	}
 

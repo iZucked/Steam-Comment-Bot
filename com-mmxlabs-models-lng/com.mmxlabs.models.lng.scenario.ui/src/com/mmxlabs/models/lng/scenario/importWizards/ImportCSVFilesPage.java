@@ -70,6 +70,9 @@ public class ImportCSVFilesPage extends WizardPage {
 	private static final String FILTER_KEY = "lastSelection";
 	private static final String SECTION_NAME = "ImportCSVFilesPage.section";
 
+	private static final String DELIMITER_KEY = "lastDelimiter";
+	private static final String DECIMAL_SEPARATOR_KEY = "lastDecimalSeparator";
+
 	private static final Logger log = LoggerFactory.getLogger(ImportCSVFilesPage.class);
 
 	private abstract class Chunk {
@@ -189,11 +192,22 @@ public class ImportCSVFilesPage extends WizardPage {
 		});
 
 		csvSelectionGroup = new RadioSelectionGroup(top, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
-		csvSelectionGroup.setSelectedIndex(0);
-		
-		decimalSelectionGroup = new RadioSelectionGroup(top, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
-		decimalSelectionGroup.setSelectedIndex(0);
 
+		decimalSelectionGroup = new RadioSelectionGroup(top, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
+		// get the default export directory from the settings
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+		int delimiterValue = CHOICE_COMMA;
+		if (section != null && section.get(DELIMITER_KEY) != null) {
+			delimiterValue = section.getInt(DELIMITER_KEY);
+		}
+		int decimalValue = CHOICE_PERIOD;
+		if (section != null && section.get(DECIMAL_SEPARATOR_KEY) != null) {
+			decimalValue = section.getInt(DECIMAL_SEPARATOR_KEY);
+		}
+		// use it to populate the editor
+		csvSelectionGroup.setSelectedIndex(delimiterValue);
+		decimalSelectionGroup.setSelectedIndex(decimalValue);
 		//
 		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
 			if (importer == null) {
@@ -447,6 +461,19 @@ public class ImportCSVFilesPage extends WizardPage {
 		return super.getNextPage();
 	}
 
+	/**
+	 * Saves the value of the directory editor field to persistent storage
+	 */
+	public void saveDirectorySetting() {
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+		if (section == null) {
+			section = dialogSettings.addNewSection(SECTION_NAME);
+		}
+		section.put(DELIMITER_KEY, csvSelectionGroup.getSelectedValue());
+		section.put(DECIMAL_SEPARATOR_KEY, decimalSelectionGroup.getSelectedValue());
+	}
+	
 	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete();

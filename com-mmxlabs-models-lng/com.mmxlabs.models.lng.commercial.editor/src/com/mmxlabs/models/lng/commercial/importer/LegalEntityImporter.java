@@ -219,10 +219,12 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		}
 
 		// if there are any fields, attach them to the first element
-		final Map<String, String> first = result.getFirst();
-		for (final String field : fields) {
-			if (first.get(field) == null) {
-				first.put(field, "");
+		if (!result.isEmpty()) {
+			final Map<String, String> first = result.getFirst();
+			for (final String field : fields) {
+				if (first.get(field) == null) {
+					first.put(field, "");
+				}
 			}
 		}
 

@@ -130,8 +130,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 
 			@Override
 			public char getDecimalSeparator() {
-				// TODO Auto-generated method stub
-				return 0;
+				return decimalSeparator;
 			}
 
 		};

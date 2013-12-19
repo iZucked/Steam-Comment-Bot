@@ -42,6 +42,8 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 			} catch (PartInitException e) {
 			}
 		}
+		filesPage.saveDirectorySetting();
+
 		return true;
 	}
 

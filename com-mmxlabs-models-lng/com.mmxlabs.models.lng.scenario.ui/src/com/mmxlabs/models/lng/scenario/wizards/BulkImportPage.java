@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -46,10 +47,15 @@ import com.mmxlabs.scenario.service.model.ScenarioService;
  * @since 3.0
  */
 public class BulkImportPage extends WizardPage {
+
+	private static final String DELIMITER_KEY = "lastDelimiter";
+	private static final String DECIMAL_SEPARATOR_KEY = "lastDecimalSeparator";
+	private static final String SECTION_NAME = "BulkImportPage.section";
+
 	protected Control control = null;
 	// private RadioSelectionGroup dataImportGroup;
 	protected RadioSelectionGroup scenarioSelectionGroup;
-	 protected RadioSelectionGroup csvSelectionGroup;
+	protected RadioSelectionGroup csvSelectionGroup;
 	protected RadioSelectionGroup decimalSelectionGroup;
 	protected CheckboxTreeViewer scenarioTreeViewer;
 	protected FileFieldEditor importFileEditor;
@@ -379,32 +385,38 @@ public class BulkImportPage extends WizardPage {
 
 		// create a radiobutton group for specifying CSV import
 		csvSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
-		csvSelectionGroup.setSelectedIndex(0);
 		GridData csvLayoutData = new GridData();
 		csvLayoutData.widthHint = 500;
 		// csvLayoutData.grabExcessHorizontalSpace = true;
 		csvSelectionGroup.setLayoutData(csvLayoutData);
 
 		// create a radiobutton group for specifying CSV import
-		decimalSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
-		decimalSelectionGroup.setSelectedIndex(0);
+		decimalSelectionGroup = new RadioSelectionGroup(container, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
 		GridData decimalLayoutData = new GridData();
 		decimalLayoutData.widthHint = 500;
 		// csvLayoutData.grabExcessHorizontalSpace = true;
 		decimalSelectionGroup.setLayoutData(decimalLayoutData);
+
+		// get the default export directory from the settings
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+		int delimiterValue = CHOICE_COMMA;
+		if (section != null && section.get(DELIMITER_KEY) != null) {
+			delimiterValue = section.getInt(DELIMITER_KEY);
+		}
+		int decimalValue = CHOICE_PERIOD;
+		if (section != null && section.get(DECIMAL_SEPARATOR_KEY) != null) {
+			decimalValue = section.getInt(DECIMAL_SEPARATOR_KEY);
+		}
+		// use it to populate the editor
+		csvSelectionGroup.setSelectedIndex(delimiterValue);
+		decimalSelectionGroup.setSelectedIndex(decimalValue);
 
 		importFileEditor = new FileFieldEditor("Data file", "Data file", csvSelectionGroup);
 		importFileEditor.setFileExtensions(new String[] { "*.csv" });
 
 		importFileEditor.getTextControl(csvSelectionGroup).addModifyListener(new ModifyListener() {
 
-			@Override
-			public void modifyText(ModifyEvent e) {
-				BulkImportPage.this.getContainer().updateButtons();
-			}
-		});
-		importFileEditor.getTextControl(decimalSelectionGroup).addModifyListener(new ModifyListener() {
-			
 			@Override
 			public void modifyText(ModifyEvent e) {
 				BulkImportPage.this.getContainer().updateButtons();
@@ -472,4 +484,16 @@ public class BulkImportPage extends WizardPage {
 		return control;
 	}
 
+	/**
+	 * Saves the value of the directory editor field to persistent storage
+	 */
+	public void saveDirectorySetting() {
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+		if (section == null) {
+			section = dialogSettings.addNewSection(SECTION_NAME);
+		}
+		section.put(DELIMITER_KEY, csvSelectionGroup.getSelectedValue());
+		section.put(DECIMAL_SEPARATOR_KEY, decimalSelectionGroup.getSelectedValue());
+	}
 }
