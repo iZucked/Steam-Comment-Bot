@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
@@ -41,7 +42,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
 public class DataIndexImporter extends AbstractClassImporter {
 	private static final String EXPRESSION = "expression";
 	boolean parseAsInt = false;
-	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
+	final DateFormat exportDateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
 	/**
@@ -122,7 +123,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 		} else {
 			for (final String s : row.keySet()) {
 				try {
-					shortDate.parse(s);
+					dateParser.parseDate(s);
 					if (row.get(s).isEmpty() == false) {
 						context.addProblem(context.createProblem("Indices with an expression should not have any values set", true, true, true));
 					}
@@ -136,7 +137,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {
@@ -154,9 +155,9 @@ public class DataIndexImporter extends AbstractClassImporter {
 					final Number n = pt.getValue();
 					final Date dt = pt.getDate();
 					if (n instanceof Integer) {
-						row.put(shortDate.format(dt), String.format("%d", n));
+						row.put(exportDateFormatter.format(dt), String.format("%d", n));
 					} else {
-						row.put(shortDate.format(dt), n.toString());
+						row.put(exportDateFormatter.format(dt), n.toString());
 					}
 				}
 				result.add(row);

@@ -45,6 +45,7 @@ public class ExportCSVWizardPage extends WizardPage {
 
 	private static final String FILTER_KEY = "lastSelection";
 	private static final String DELIMITER_KEY = "lastDelimiter";
+	private static final String DECIMAL_SEPARATOR_KEY = "lastDecimalSeparator";
 	private static final String SECTION_NAME = "ExportCSVWizardPage.section";
 
 	private DirectoryFieldEditor editor;
@@ -53,8 +54,10 @@ public class ExportCSVWizardPage extends WizardPage {
 
 	private int CHOICE_SEMICOLON = 1;
 
-	private RadioSelectionGroup csvSelectionGroup;
+	private int CHOICE_PERIOD = 1;
 
+	private RadioSelectionGroup csvSelectionGroup;
+	private RadioSelectionGroup decimalSelectionGroup;
 
 	protected ExportCSVWizardPage(ISelection selection) {
 		super("Export Scenario as CSV");
@@ -115,20 +118,25 @@ public class ExportCSVWizardPage extends WizardPage {
 			}
 		});
 
-		csvSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] {"comma (\",\")", "semicolon (\";\")"}, new int[] {CHOICE_COMMA, CHOICE_SEMICOLON});
-		
-		
+		csvSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
+		decimalSelectionGroup = new RadioSelectionGroup(container, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
+
 		// get the default export directory from the settings
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
 		final String filter = section == null ? null : section.get(FILTER_KEY);
-		int delimiterValue = 0;
+		int delimiterValue = CHOICE_COMMA;
 		if (section != null && section.get(DELIMITER_KEY) != null) {
 			delimiterValue = section.getInt(DELIMITER_KEY);
 		}
+		int decimalValue = CHOICE_PERIOD;
+		if (section != null && section.get(DECIMAL_SEPARATOR_KEY) != null) {
+			decimalValue = section.getInt(DECIMAL_SEPARATOR_KEY);
+		}
 		// use it to populate the editor
 		editor.setStringValue(filter);
-		csvSelectionGroup.setSelectedIndex(delimiterValue);		
+		csvSelectionGroup.setSelectedIndex(delimiterValue);
+		decimalSelectionGroup.setSelectedIndex(decimalValue);
 
 		initialize();
 		dialogChanged();
@@ -188,11 +196,16 @@ public class ExportCSVWizardPage extends WizardPage {
 			section = dialogSettings.addNewSection(SECTION_NAME);
 		}
 		section.put(FILTER_KEY, editor.getStringValue());
-		section.put(DELIMITER_KEY , csvSelectionGroup.getSelectedValue());
+		section.put(DELIMITER_KEY, csvSelectionGroup.getSelectedValue());
+		section.put(DECIMAL_SEPARATOR_KEY, decimalSelectionGroup.getSelectedValue());
 	}
 
 	public char getCsvDelimiter() {
 		return csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
+	}
+
+	public char getDecimalSeparator() {
+		return decimalSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : '.';
 	}
 
 }

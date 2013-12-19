@@ -33,12 +33,12 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.FieldMap;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
@@ -76,11 +76,13 @@ public class CargoImporter extends DefaultClassImporter {
 		return result;
 	}
 
+	@Override
 	protected boolean shouldImportReference(final EReference reference) {
 		return reference != FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT;
 	}
 
-	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
+	@Override
+	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
@@ -97,7 +99,7 @@ public class CargoImporter extends DefaultClassImporter {
 			}
 
 			if (shouldExportFeature(attribute)) {
-				exportAttribute(object, attribute, result);
+				exportAttribute(object, attribute, result, context);
 			}
 		}
 
@@ -114,7 +116,7 @@ public class CargoImporter extends DefaultClassImporter {
 			}
 
 			if (shouldExportFeature(reference)) {
-				exportReference(object, reference, result, root);
+				exportReference(object, reference, result, context);
 			}
 		}
 
@@ -141,7 +143,7 @@ public class CargoImporter extends DefaultClassImporter {
 		return super.shouldExportFeature(feature);
 	}
 
-	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots, final IExportContext context) {
 
 		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
 
@@ -164,13 +166,13 @@ public class CargoImporter extends DefaultClassImporter {
 
 				// Export several rows of data depending on number of slots
 				for (int i = 0; i < rowCount; ++i) {
-					final Map<String, String> result = exportObject(cargo, root);
+					final Map<String, String> result = exportObject(cargo, context);
 
 					if (i < cLoadSlots.size()) {
-						exportSlot(root, result, cLoadSlots.get(i), KEY_LOADSLOT);
+						exportSlot(context, result, cLoadSlots.get(i), KEY_LOADSLOT);
 					}
 					if (i < cDischargeSlots.size()) {
-						exportSlot(root, result, cDischargeSlots.get(i), KEY_DISCHARGESLOT);
+						exportSlot(context, result, cDischargeSlots.get(i), KEY_DISCHARGESLOT);
 					}
 
 					result.put(KIND_KEY, cargo.eClass().getName());
@@ -183,7 +185,7 @@ public class CargoImporter extends DefaultClassImporter {
 			for (final LoadSlot slot : loadSlots) {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
-					exportSlot(root, result, slot, KEY_LOADSLOT);
+					exportSlot(context, result, slot, KEY_LOADSLOT);
 
 					data.add(result);
 				}
@@ -193,7 +195,7 @@ public class CargoImporter extends DefaultClassImporter {
 			for (final DischargeSlot slot : dischargeSlots) {
 				if (slot.getCargo() == null) {
 					final Map<String, String> result = new LinkedHashMap<String, String>();
-					exportSlot(root, result, slot, KEY_DISCHARGESLOT);
+					exportSlot(context, result, slot, KEY_DISCHARGESLOT);
 
 					data.add(result);
 				}
@@ -214,10 +216,10 @@ public class CargoImporter extends DefaultClassImporter {
 	/**
 	 * @since 3.1
 	 */
-	protected void exportSlot(final MMXRootObject rootObject, final Map<String, String> result, final Slot slot, final String referenceName) {
+	protected void exportSlot(final IExportContext context, final Map<String, String> result, final Slot slot, final String referenceName) {
 		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());
 		if (importer != null) {
-			final Map<String, String> subMap = importer.exportObjects(Collections.singleton(slot), rootObject).iterator().next();
+			final Map<String, String> subMap = importer.exportObjects(Collections.singleton(slot), context).iterator().next();
 			for (final Map.Entry<String, String> e : subMap.entrySet()) {
 				result.put(referenceName + DOT + csvNameFromFieldName(e.getKey(), slot), e.getValue());
 			}
@@ -459,9 +461,9 @@ public class CargoImporter extends DefaultClassImporter {
 
 			final String vesselName = fields.get(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
 
-			if (vesselName != null) {
+			if (vesselName != null && !vesselName.isEmpty()) {
 				context.doLater(new IDeferment() {
-	
+
 					@Override
 					public void run(final IImportContext context) {
 						if (assignableElement.isSetSpotIndex()) {
@@ -476,12 +478,14 @@ public class CargoImporter extends DefaultClassImporter {
 							}
 						}
 					}
-	
+
 					@Override
 					public int getStage() {
 						return IImportContext.STAGE_MODIFY_SUBMODELS;
 					}
 				});
+			} else {
+				assignableElement.unsetSpotIndex();
 			}
 		}
 	}

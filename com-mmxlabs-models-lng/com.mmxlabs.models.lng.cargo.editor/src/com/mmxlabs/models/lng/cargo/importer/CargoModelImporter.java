@@ -20,11 +20,11 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
@@ -35,7 +35,7 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 public class CargoModelImporter implements ISubmodelImporter {
 	public static final String CARGO_KEY = "CARGO";
 	public static final String CARGO_GROUP_KEY = "CARGO-GROUP";
-	private CargoImporter cargoImporter ;
+	private CargoImporter cargoImporter;
 
 	@Inject
 	private IImporterRegistry importerRegistry;
@@ -94,7 +94,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 		}
 
 		if (inputs.containsKey(CARGO_GROUP_KEY)) {
-			@SuppressWarnings("resource")
 			final CSVReader reader = inputs.get(CARGO_GROUP_KEY);
 			final Collection<EObject> values = cargoGroupImporter.importObjects(CargoPackage.eINSTANCE.getCargoGroup(), reader, context);
 			cargoModel.getCargoGroups().addAll((Collection<? extends CargoGroup>) values);
@@ -104,10 +103,10 @@ public class CargoModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final CargoModel cargoModel = (CargoModel) model;
-		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), root));
-		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), root));
+		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), context));
+		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), context));
 	}
 
 	@Override

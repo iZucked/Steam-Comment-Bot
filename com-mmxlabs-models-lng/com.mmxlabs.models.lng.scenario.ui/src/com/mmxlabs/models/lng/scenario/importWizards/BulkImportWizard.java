@@ -24,10 +24,10 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private List<ScenarioInstance> selectedScenarios;
 	private String importFilename;
 	private char csvSeparator;
+	private char decimalSeparator;
 	final private ScenarioInstance currentScenario;
 	private int importedField;
-	
-	
+
 	public BulkImportWizard(ScenarioInstance scenarioInstance, int fieldToImport) {
 		currentScenario = scenarioInstance;
 		importedField = fieldToImport;
@@ -45,36 +45,43 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		super.addPages();
 		addPage(bip);
 	}
-	
-	
+
 	@Override
 	public boolean performFinish() {
 		selectedScenarios = bip.getSelectedScenarios();
 		importFilename = bip.getImportFilename();
 		csvSeparator = bip.getCsvSeparator();
+		decimalSeparator = bip.getDecimalSeparator();
+
+		bip.saveDirectorySetting();
+
 		return true;
 	}
 
 	public List<ScenarioInstance> getSelectedScenarios() {
 		return selectedScenarios;
 	}
-	
+
 	public String getImportFilename() {
 		return importFilename;
 	}
-	
+
 	public char getCsvSeparator() {
 		return csvSeparator;
 	}
-	
+
+	public char getDecimalSeparator() {
+		return decimalSeparator;
+	}
+
 	public int getImportedField() {
 		return importedField;
 	}
-	
+
 	@Override
 	public boolean canFinish() {
 		File file = new File(bip.getImportFilename());
 		return file.isFile() && file.canRead();
 	}
-	
+
 }

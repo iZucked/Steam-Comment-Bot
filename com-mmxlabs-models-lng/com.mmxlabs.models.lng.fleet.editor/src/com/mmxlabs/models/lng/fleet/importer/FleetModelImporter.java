@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
@@ -169,13 +170,13 @@ public class FleetModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final FleetModel fleetModel = (FleetModel) model;
-		output.put(VESSELS_KEY, vesselImporter.exportObjects(fleetModel.getVessels(), root));
-		output.put(VESSEL_CLASSES_KEY, vesselClassImporter.exportObjects(fleetModel.getVesselClasses(), root));
-		output.put(FUELS_KEY, baseFuelImporter.exportObjects(fleetModel.getBaseFuels(), root));
-		output.put(CURVES_KEY, fuelCurveImporter.exportCurves(fleetModel.getVesselClasses()));
-		output.put(GROUPS_KEY, groupImporter.exportObjects(fleetModel.getVesselGroups(), root));
+		output.put(VESSELS_KEY, vesselImporter.exportObjects(fleetModel.getVessels(), context));
+		output.put(VESSEL_CLASSES_KEY, vesselClassImporter.exportObjects(fleetModel.getVesselClasses(), context));
+		output.put(FUELS_KEY, baseFuelImporter.exportObjects(fleetModel.getBaseFuels(), context));
+		output.put(CURVES_KEY, fuelCurveImporter.exportCurves(fleetModel.getVesselClasses(), context));
+		output.put(GROUPS_KEY, groupImporter.exportObjects(fleetModel.getVesselGroups(), context));
 	}
 
 	@Override

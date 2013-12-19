@@ -19,11 +19,11 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
@@ -84,10 +84,9 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(ENTITIES_KEY)) {
 			commercial.getEntities().addAll((Collection<? extends LegalEntity>) entityImporter.importObjects(CommercialPackage.eINSTANCE.getLegalEntity(), inputs.get(ENTITIES_KEY), context));
 			/*
-			LegalEntity shippingEntity = entityImporter.getShippingEntity();
-			if (commercial.getEntities().isEmpty() == false && shippingEntity == null) {
-				commercial.setShippingEntity(commercial.getEntities().get(0));
-			} */
+			 * LegalEntity shippingEntity = entityImporter.getShippingEntity(); if (commercial.getEntities().isEmpty() == false && shippingEntity == null) {
+			 * commercial.setShippingEntity(commercial.getEntities().get(0)); }
+			 */
 		}
 		if (inputs.containsKey(SALES_CON_KEY)) {
 			commercial.getSalesContracts()
@@ -101,9 +100,9 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(MMXRootObject root, UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final CommercialModel cm = (CommercialModel) model;
-		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities(), root));
+		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities(), context));
 		final LinkedList<PurchaseContract> purchase = new LinkedList<PurchaseContract>();
 		final LinkedList<SalesContract> sales = new LinkedList<SalesContract>();
 		for (final SalesContract c : cm.getSalesContracts()) {
@@ -112,8 +111,8 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		for (final PurchaseContract c : cm.getPurchaseContracts()) {
 			purchase.add(c);
 		}
-		output.put(SALES_CON_KEY, salesImporter.exportObjects(sales, root));
-		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(purchase, root));
+		output.put(SALES_CON_KEY, salesImporter.exportObjects(sales, context));
+		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(purchase, context));
 	}
 
 	@Override

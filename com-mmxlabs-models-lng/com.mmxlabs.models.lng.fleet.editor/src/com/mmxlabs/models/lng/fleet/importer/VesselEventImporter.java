@@ -17,9 +17,9 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.importer.FieldMap;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
@@ -34,7 +34,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 		return reference != FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT;
 	}
 
-	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
+	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
@@ -51,7 +51,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 			}
 
 			if (shouldExportFeature(attribute)) {
-				exportAttribute(object, attribute, result);
+				exportAttribute(object, attribute, result, context);
 			}
 		}
 
@@ -68,7 +68,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 			}
 
 			if (shouldExportFeature(reference)) {
-				exportReference(object, reference, result, root);
+				exportReference(object, reference, result, context);
 			}
 		}
 
@@ -77,7 +77,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
-		ImportResults results = super.importObject(parent, eClass, row, context);
+		final ImportResults results = super.importObject(parent, eClass, row, context);
 		addAssignmentTask(results.importedObject, new FieldMap(row), context);
 		return results;
 	}
@@ -88,9 +88,9 @@ public class VesselEventImporter extends DefaultClassImporter {
 
 			final String vesselName = fields.get(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
 
-			if (vesselName != null) {
+			if (vesselName != null && !vesselName.isEmpty()) {
 				context.doLater(new IDeferment() {
-	
+
 					@Override
 					public void run(final IImportContext context) {
 						if (assignableElement.isSetSpotIndex()) {
@@ -105,12 +105,14 @@ public class VesselEventImporter extends DefaultClassImporter {
 							}
 						}
 					}
-	
+
 					@Override
 					public int getStage() {
 						return IImportContext.STAGE_MODIFY_SUBMODELS;
 					}
 				});
+			} else {
+				assignableElement.unsetSpotIndex();
 			}
 		}
 	}

@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
@@ -59,14 +60,14 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		final IDeferment setShippingEntity = new IDeferment() {
 
 			@Override
-			public void run(IImportContext context) {
-				MMXRootObject rootObject = context.getRootObject();
+			public void run(final IImportContext context) {
+				final MMXRootObject rootObject = context.getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
-					CommercialModel commercialModel = ((LNGScenarioModel) rootObject).getCommercialModel();
+					final CommercialModel commercialModel = ((LNGScenarioModel) rootObject).getCommercialModel();
 					LegalEntity entity = finalEntity;
 					if (entity == null) {
 						context.addProblem(context.createProblem("No shipping entity was specified. An arbitrary one was chosen.", true, true, true));
-						EList<LegalEntity> entities = commercialModel.getEntities();
+						final EList<LegalEntity> entities = commercialModel.getEntities();
 						if (!entities.isEmpty()) {
 							entity = entities.get(0);
 						}
@@ -86,7 +87,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public ImportResults importObject(final EObject parent, EClass targetClass, Map<String, String> row, IImportContext context) {
+	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 
 		// use the default importer to import the object's usual attributes
 		final ImportResults result = super.importObject(parent, targetClass, row, context);
@@ -103,9 +104,9 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		}
 
 		// if this entity is the shipping entity, set it as the shipping entity
-		String shipping = row.get(SHIPPING_KEY);
+		final String shipping = row.get(SHIPPING_KEY);
 		// this will require importing later, when the submodels have been built
-		if ( shipping != null && (shipping.equalsIgnoreCase("Y") || shipping.equalsIgnoreCase("TRUE")) ) {
+		if (shipping != null && (shipping.equalsIgnoreCase("Y") || shipping.equalsIgnoreCase("TRUE"))) {
 			if (shippingEntity != null) {
 				final IImportProblem problem = context.createProblem("The importer is trying to set more than one shipping entity.", true, true, true);
 				context.addProblem(problem);
@@ -114,22 +115,22 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		}
 
 		// now read the tax rates out of the CSV data row
-		LinkedList<TaxRate> rates = new LinkedList<TaxRate>();
+		final LinkedList<TaxRate> rates = new LinkedList<TaxRate>();
 		for (final String key : row.keySet()) {
 			final String value = row.get(key);
 			if (value.equals("")) {
 				continue;
 			}
 			try {
-				Date date = dateParser.parseDate(key);
+				final Date date = dateParser.parseDate(key);
 				final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
 				taxRate.setDate(date);
 				taxRate.setValue(Float.parseFloat(row.get(key)));
 				rates.add(taxRate);
 
-			} catch (ParseException e) {
-			} catch (NumberFormatException e) {
-				String message = String.format("Could not understand '%s' as a tax rate for date '%s'.", row.get(key), key);
+			} catch (final ParseException e) {
+			} catch (final NumberFormatException e) {
+				final String message = String.format("Could not understand '%s' as a tax rate for date '%s'.", row.get(key), key);
 				context.addProblem(context.createProblem(message, true, true, true));
 			}
 
@@ -148,7 +149,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	 * @param root
 	 * @return
 	 */
-	protected Map<String, String> exportTaxCurve(final EObject object, final Collection<String> dates, final MMXRootObject root) {
+	protected Map<String, String> exportTaxCurve(final EObject object, final Collection<String> dates, final IExportContext context) {
 		if (object instanceof LegalEntity) {
 			final LegalEntity entity = (LegalEntity) object;
 			final Map<String, String> result = new LinkedHashMap<String, String>();
@@ -168,13 +169,14 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final IExportContext context) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 
 		// determine which entity is the default shipping entity
 		LegalEntity shippingEntity = null;
-		if (root instanceof LNGScenarioModel) {
-			shippingEntity = ((LNGScenarioModel) root).getCommercialModel().getShippingEntity();
+		final MMXRootObject rootObject = context.getRootObject();
+		if (rootObject instanceof LNGScenarioModel) {
+			shippingEntity = ((LNGScenarioModel) rootObject).getCommercialModel().getShippingEntity();
 		}
 
 		/*
@@ -205,7 +207,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		final SortedSet<String> fields = new TreeSet<String>();
 
 		for (final EObject object : objectList) {
-			Map<String, String> data = exportObject(object, root);
+			final Map<String, String> data = exportObject(object, context);
 			// export the "kind" field containing the metaclass name
 			data.put(KIND_KEY, object.eClass().getName());
 			data.put(SHIPPING_KEY, object == shippingEntity ? "Y" : "");
@@ -217,17 +219,19 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		}
 
 		// if there are any fields, attach them to the first element
-		final Map<String, String> first = result.getFirst();
-		for (final String field : fields) {
-			if (first.get(field) == null) {
-				first.put(field, "");
+		if (!result.isEmpty()) {
+			final Map<String, String> first = result.getFirst();
+			for (final String field : fields) {
+				if (first.get(field) == null) {
+					first.put(field, "");
+				}
 			}
 		}
 
 		// now export the tax curve date fields per object
 		// this guarantees they will appear after the non-date columns
 		for (int i = 0; i < objects.size(); i++) {
-			result.get(i).putAll(exportTaxCurve(objectList.get(i), dates, root));
+			result.get(i).putAll(exportTaxCurve(objectList.get(i), dates, context));
 		}
 
 		return result;

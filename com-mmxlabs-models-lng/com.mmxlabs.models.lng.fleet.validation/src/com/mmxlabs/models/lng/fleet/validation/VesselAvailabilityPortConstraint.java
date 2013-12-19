@@ -49,7 +49,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 			if (vessel == null) {
 				return Activator.PLUGIN_ID;
 			}
-			
+
 			final VesselClass vesselClass = vessel.getVesselClass();
 			if (vesselClass == null) {
 				return Activator.PLUGIN_ID;
@@ -108,7 +108,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 				final List<String> badVessels = new LinkedList<String>();
 				for (final VesselAvailability availability : portfolioModel.getScenarioFleetModel().getVesselAvailabilities()) {
 					final Vessel v = availability.getVessel();
-					if (extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
+					if (v != null && extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
 
 						final Set<Port> inaccessiblePortSet = SetUtils.getObjects(vesselClass.getInaccessiblePorts());
 

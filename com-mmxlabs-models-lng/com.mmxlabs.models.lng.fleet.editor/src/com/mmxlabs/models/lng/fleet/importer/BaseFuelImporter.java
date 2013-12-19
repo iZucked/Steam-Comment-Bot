@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
@@ -81,9 +82,10 @@ public class BaseFuelImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected Map<String, String> exportObject(final EObject object, final MMXRootObject rootObject) {
+	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
 		final BaseFuel bf = (BaseFuel) object;
-		final Map<String, String> result = super.exportObject(object, rootObject);
+		final Map<String, String> result = super.exportObject(object, context);
+		final MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final PricingModel pm = ((LNGScenarioModel) rootObject).getPricingModel();
 			if (pm != null) {

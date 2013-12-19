@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
@@ -148,7 +149,7 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	}
 
 	@Override
-	protected String stringFromAttribute(final EObject container, final EAttribute attribute, final Object value) {
+	protected String stringFromAttribute(final EObject container, final EAttribute attribute, final Object value, final IExportContext context) {
 		if (attribute.isUnsettable() && container.eIsSet(attribute) == false) {
 			return "";
 		}
