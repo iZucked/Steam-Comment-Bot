@@ -6,7 +6,7 @@
     <version>8.0.1-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <groupId>com.mmxlabs.models.ui.validation.views</groupId>
+  <groupId>com.mmxlabs.models.ui</groupId>
   <artifactId>com.mmxlabs.models.ui.validation.views</artifactId>
   <version>8.0.1-SNAPSHOT</version>
   <packaging>eclipse-plugin</packaging>
