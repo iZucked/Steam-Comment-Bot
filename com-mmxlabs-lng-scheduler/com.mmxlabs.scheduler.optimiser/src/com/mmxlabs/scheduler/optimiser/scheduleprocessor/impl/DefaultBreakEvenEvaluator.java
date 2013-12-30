@@ -239,7 +239,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					// final IDischargeOption beSlot;
 					((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
 					// Redundant? Search should have found this....
-					final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes);
+					final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes, 0);
 					seq.getVoyagePlans().set(vpIdx, newVoyagePlan);
 				}
 			}
@@ -252,7 +252,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		// Overwrite current break even price with test price
 		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
 
-		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes);
+		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes, 0);
 
 		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
 		final long newPnLValue = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);

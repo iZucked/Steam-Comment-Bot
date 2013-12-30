@@ -167,13 +167,22 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 */
 	@Override
 	public long getSlotVolumeInM3(final IPortSlot slot) {
+		long result = -1;
 
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
 		if (allocation != null) {
-			return allocation.volumeInM3;
+			result = allocation.volumeInM3;
 		}
+
+		/*
+			
+			return hackResult;
+		}
+		*/
+		
+
 		// TODO: throw an exception instead of returning magic value
-		return -1;
+		return result;
 	}
 
 	/**
