@@ -124,14 +124,6 @@ public class CapacityViolationChecker {
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3);
 							}
 
-							// TODO: Once heel tracking is merged in, this check and reset is no longer required
-							if (remainingHeelInM3 > 0) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
-								// Reset as we are not in the heel tracking branch
-								remainingHeelInM3 = 0;
-							}
-
-							// TODO: Consider remaining heel on first load!
 							if (remainingHeelInM3 + volumeInM3 > vesselCapacityInM3) {
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3);
 							}
@@ -227,11 +219,9 @@ public class CapacityViolationChecker {
 				}
 			}
 
-			// TODO: Update once HEEL_TRACKING branch is merged in
+			// Handle anything left over at the end of the schedule
 			if (remainingHeelInM3 > 0) {
 				addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
-				// Reset as we do not handle pushing remaining heel into a vessel event voyage
-				remainingHeelInM3 = 0;
 			}
 		}
 	}
