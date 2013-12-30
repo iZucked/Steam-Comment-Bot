@@ -149,7 +149,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// if there is any leftover volume after discharge
 		if (unusedVolume > 0) {
 			// we use a conservative heuristic: load exactly as much as we need, subject to constraints
-			final long revisedLoadVolume = loadVolume - unusedVolume;
+			final long revisedLoadVolume =Math.max(0,  loadVolume - unusedVolume);
 			
 			// TODO: report min load constraint violation if necessary
 			
@@ -161,8 +161,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			 */ 			
 		}		
 
-		constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3;
-		// constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3 + unusedVolume;
+//		constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3;
+		 constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3 + unusedVolume;
 		
 		result[0] = loadVolume;
 
