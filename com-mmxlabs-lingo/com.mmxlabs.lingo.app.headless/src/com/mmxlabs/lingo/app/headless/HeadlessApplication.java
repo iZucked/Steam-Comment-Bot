@@ -179,7 +179,7 @@ public class HeadlessApplication implements IApplication {
 		return originalScenario;
 	}
 
-	private void saveScenario(final String outputFile, LNGScenarioModel scenario) throws IOException {
+	private void saveScenario(final String outputFile, final LNGScenarioModel scenario) throws IOException {
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
@@ -187,11 +187,15 @@ public class HeadlessApplication implements IApplication {
 		manifest.setScenarioType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
 
 		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
-		String versionContext = migrationRegistry.getDefaultMigrationContext();
-		manifest.setScenarioVersion(migrationRegistry.getLastReleaseVersion(versionContext));
+		final String versionContext = migrationRegistry.getDefaultMigrationContext();
+		int version = migrationRegistry.getLatestContextVersion(versionContext);
+		if (version < 0) {
+			version = migrationRegistry.getLastReleaseVersion(versionContext);
+		}
+		manifest.setScenarioVersion(version);
 		manifest.setVersionContext(versionContext);
 
-		File file = new File(outputFile);
+		final File file = new File(outputFile);
 		final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
 		final Resource manifestResource = resourceSet.createResource(manifestURI);
 
@@ -379,12 +383,12 @@ public class HeadlessApplication implements IApplication {
 		}
 
 		@Override
-		public void moveInto(List<Container> elements, Container destination) {
+		public void moveInto(final List<Container> elements, final Container destination) {
 
 		}
 
 		@Override
-		public void makeFolder(Container parent, String name) {
+		public void makeFolder(final Container parent, final String name) {
 
 		}
 
