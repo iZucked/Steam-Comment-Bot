@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
+import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -91,7 +92,7 @@ public class ShippingCalculationsTest {
 	}
 
 	public enum Expectations {
-		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, OVERHEAD_COSTS, MIN_LOAD_VIOLATIONS, MAX_LOAD_VIOLATIONS, MIN_DISCHARGE_VIOLATIONS, MIN_HEEL_VIOLATIONS, VESSEL_CAPACITY_VIOLATIONS
+		DURATIONS, FUEL_COSTS, HIRE_COSTS, NBO_USAGE, BF_USAGE, FBO_USAGE, PILOT_USAGE, LOAD_DISCHARGE, OVERHEAD_COSTS, MIN_LOAD_VIOLATIONS, MAX_LOAD_VIOLATIONS, MIN_DISCHARGE_VIOLATIONS, MIN_HEEL_VIOLATIONS, VESSEL_CAPACITY_VIOLATIONS, LOST_HEEL_VIOLATIONS
 	}
 
 	public void checkClasses(final EList<? extends Object> objects, final Class<?>[] classes) {
@@ -141,39 +142,47 @@ public class ShippingCalculationsTest {
 				return null;
 		}
 		case MIN_LOAD_VIOLATIONS: {
-			if (event instanceof SlotVisit) {
-				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MIN_LOAD);
+			if (event instanceof CapacityViolationsHolder) {
+				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MIN_LOAD);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
 			}
 		}
 		case MAX_LOAD_VIOLATIONS: {
-			if (event instanceof SlotVisit) {
-				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MAX_LOAD);
+			if (event instanceof CapacityViolationsHolder) {
+				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MAX_LOAD);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
 			}
 		}
 		case MIN_DISCHARGE_VIOLATIONS: {
-			if (event instanceof SlotVisit) {
-				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.MIN_DISCHARGE);
+			if (event instanceof CapacityViolationsHolder) {
+				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MIN_DISCHARGE);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
 			}
 		}
 		case MIN_HEEL_VIOLATIONS: {
-			if (event instanceof SlotVisit) {
+			if (event instanceof CapacityViolationsHolder) {
 				return 0;
 			} else {
 				return null;
 			}
 		}
 		case VESSEL_CAPACITY_VIOLATIONS: {
-			if (event instanceof SlotVisit) {
-				Long value = ((SlotVisit) event).getViolations().get(CapacityViolationType.VESSEL_CAPACITY);
+			if (event instanceof CapacityViolationsHolder) {
+				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.VESSEL_CAPACITY);
+				return (value == null) ? 0 : (int) (long) value;
+			} else {
+				return null;
+			}
+		}
+		case LOST_HEEL_VIOLATIONS: {
+			if (event instanceof CapacityViolationsHolder) {
+				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.LOST_HEEL);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
@@ -246,27 +255,28 @@ public class ShippingCalculationsTest {
 		if (event instanceof ProfitAndLossContainer) {
 			container = (ProfitAndLossContainer) event;
 		}
-		
+
 		if (container != null) {
 			final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
 			return data;
 		}
-		
-		return null;		
+
+		return null;
 	}
-	
+
 	public Long getEventPnl(Event event) {
 		final GroupProfitAndLoss data = getPnlGroup(event);
-		
+
 		if (data != null) {
 			return data.getProfitAndLoss();
 		}
 
 		return null;
 	}
-	
+
 	/**
-	 * Figure out the separate PnL groups in the itinerary 
+	 * Figure out the separate PnL groups in the itinerary
+	 * 
 	 * @param events
 	 * @return
 	 */
@@ -274,24 +284,24 @@ public class ShippingCalculationsTest {
 		ArrayList<Integer> boundaries = new ArrayList<Integer>();
 		int index = 0;
 		GroupProfitAndLoss lastGroup = null;
-		
+
 		// find the boundaries at which the PnL group changes
-		for (Event event: events) {
+		for (Event event : events) {
 			final GroupProfitAndLoss data = getPnlGroup(event);
-			if  (data != null && data != lastGroup) {
+			if (data != null && data != lastGroup) {
 				boundaries.add(index);
 				lastGroup = data;
 			}
 			index++;
 		}
-		
-		boundaries.add(index-1);
-		
-		PnlChunkIndexData[] result = new PnlChunkIndexData[boundaries.size()-1];
+
+		boundaries.add(index - 1);
+
+		PnlChunkIndexData[] result = new PnlChunkIndexData[boundaries.size() - 1];
 		// construct Pnl chunks from the boundaries
-		for (int i = 0; i < boundaries.size()-1; i++) {
+		for (int i = 0; i < boundaries.size() - 1; i++) {
 			int start = boundaries.get(i);
-			int end = boundaries.get(i+1)-1;
+			int end = boundaries.get(i + 1) - 1;
 
 			// check if this chunk is a cargo
 			boolean isCargo = false;
@@ -300,10 +310,10 @@ public class ShippingCalculationsTest {
 					isCargo = true;
 				}
 			}
-			
+
 			result[i] = new PnlChunkIndexData(start, end, isCargo);
 		}
-		
+
 		return result;
 	}
 
@@ -497,6 +507,9 @@ public class ShippingCalculationsTest {
 		// 9970 (discharge) = 10000 - 20 { NBO journey consumption } - 10 { NBO idle consumption }
 		checker.setExpectedValuesIfMatching(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9970 });
 
+		// Min heel in m3
+		checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
 		return checker;
 
 	}
@@ -625,7 +638,7 @@ public class ShippingCalculationsTest {
 
 			checkClasses(events, classes);
 
-			setupExpectedHireCosts(hireCostPerHour);		
+			setupExpectedHireCosts(hireCostPerHour);
 			setCargoIndices(getPnlChunks(events));
 
 			for (final Class<?> clazz : new HashSet<Class<?>>(Arrays.asList(classes))) {
@@ -919,6 +932,7 @@ public class ShippingCalculationsTest {
 
 		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(5000);
+		vesselAvailability.getStartHeel().setCvValue(21);
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
 
 		final SequenceTester checker = getDefaultTester();
@@ -930,10 +944,10 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
 
 		// change from default scenario
-		// first load should be only 5010 
+		// first load should be only 5010
 		// 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
 		checker.setExpectedValue(5010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-		
+
 		// cost of first journey should be changed accordingly
 		// 10m3 * 21 (CV) * 1 (price) = 210
 		// 5mt * 10 (price) = 50
@@ -1075,6 +1089,7 @@ public class ShippingCalculationsTest {
 		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(1000);
 		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
+		vesselAvailability.getStartHeel().setCvValue(21);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1088,7 +1103,7 @@ public class ShippingCalculationsTest {
 
 		// first load amount is reduced because of leftover fuel from the start heel
 		// 9010 = 10000 [ vessel capacity ] - (1000 [ start heel ] - 10 [boiloff] )
-		checker.setExpectedValue(9010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);				
+		checker.setExpectedValue(9010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1168,6 +1183,9 @@ public class ShippingCalculationsTest {
 		// idle LNG consumption is 10, plus 30 + 15 for journeys and 500 min heel
 		final Integer[] expectedloadDischargeVolumes = { 10000, -9445 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+
+		// NBO on ballast Min heel in m3
+		checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -2325,6 +2343,8 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 3);
 
 		checker.setupOrdinaryFuelCosts();
+		// NBO on ballast - Charter out volume - ballast NBO
+		checker.setExpectedValue(10, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -2333,7 +2353,7 @@ public class ShippingCalculationsTest {
 
 		checker.check(sequence);
 	}
-	
+
 	@Test
 	public void testCharterOutRollover() {
 		System.err.println("\n\nTest LNG heel from early charter out event is rolled over.");
@@ -2352,15 +2372,16 @@ public class ShippingCalculationsTest {
 		event.getHeelOptions().setVolumeAvailable(5000);
 		event.getHeelOptions().setCvValue(21);
 		event.getHeelOptions().setPricePerMMBTU(1);
-		
+
 		// recalculate the vessel availability based on the new timetable
 		msc.setDefaultAvailability(msc.originPort, msc.originPort);
-		
+
 		// we now expect an idle and a vessel event visit before the first journey
-		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, EndEvent.class };
+		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class,
+				Idle.class, EndEvent.class };
 
 		SequenceTester checker = getDefaultTester(expectedClasses);
-		
+
 		// expected charter out duration
 		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
 
@@ -2368,25 +2389,25 @@ public class ShippingCalculationsTest {
 		// 24 { revenue per day } * 1 { days }
 		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
 
-		// new idle event at the start of the itinerary 
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] {0, 0, 2, 0} );
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] {0, 0, 10, 0});
-		
+		// new idle event at the start of the itinerary
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 0, 2, 0 });
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 0, 10, 0 });
+
 		// first journey runs on NBO and BF
 		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);		
-		
+		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
+
 		// expected load volume reduced due to roll over from LNG left at end of charter out
 		// 5010 = 10000 [vessel capacity] - (5000 [leftover heel] - 10 [journey boiloff])
 		checker.setExpectedValue(5010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-		
+
 		checker.setupOrdinaryFuelCosts();
-		
+
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
 		final Sequence sequence = schedule.getSequences().get(0);
-		
+
 		checker.check(sequence);
 	}
 
@@ -2471,6 +2492,9 @@ public class ShippingCalculationsTest {
 		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
 
+		// Min heel in m3
+		checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
 		checker.baseFuelPricePerM3 = 100;
 		checker.setupOrdinaryFuelCosts();
 
@@ -2485,10 +2509,10 @@ public class ShippingCalculationsTest {
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
-		
+
 		// create a maintenance event after the cargo
 		Port eventPort = msc.loadPort;
-				
+
 		msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
 
 		// and recalculate the vessel availability
@@ -2509,37 +2533,27 @@ public class ShippingCalculationsTest {
 		ScenarioTools.printSequences(schedule);
 
 		/*
-		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, // start to load
-				SlotVisit.class, Journey.class, Idle.class, // load to discharge
-				SlotVisit.class, Journey.class, Idle.class, // discharge to load
-				SlotVisit.class, Journey.class, Idle.class, // load to discharge
-				SlotVisit.class, Journey.class, Idle.class, // discharge to end
-				EndEvent.class };
-
-		SequenceTester checker = getDefaultTester(classes);
-
-		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 2, 1 });
-		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 0, 0, 0, 0 });
-		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 10, 10, 10, 5 });
-		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 20, 20, 10 });
-
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 2, 2, 0 });
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
-		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 10, 10, 0 });
-
-		// volume allocations: load 10000 at first load port (loading from empty)
-		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here
-		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
-		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
-		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
-
-		checker.baseFuelPricePerM3 = 100;
-		checker.setupOrdinaryFuelCosts();
-
-		final Sequence sequence = schedule.getSequences().get(0);
-		checker.check(sequence);
-		*/
+		 * final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, // start to load SlotVisit.class, Journey.class, Idle.class, // load to discharge SlotVisit.class, Journey.class,
+		 * Idle.class, // discharge to load SlotVisit.class, Journey.class, Idle.class, // load to discharge SlotVisit.class, Journey.class, Idle.class, // discharge to end EndEvent.class };
+		 * 
+		 * SequenceTester checker = getDefaultTester(classes);
+		 * 
+		 * checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 2, 1 }); checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 0, 0,
+		 * 0, 0 }); checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 10, 10, 10, 5 }); checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[]
+		 * { 0, 20, 20, 20, 10 });
+		 * 
+		 * checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 2, 2, 0 }); checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0
+		 * }); checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 }); checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 10,
+		 * 10, 0 });
+		 * 
+		 * // volume allocations: load 10000 at first load port (loading from empty) // at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here // at next
+		 * load, load back up to full (500 min heel minus 10m3 idle fuel was on board) // at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
+		 * checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
+		 * 
+		 * checker.baseFuelPricePerM3 = 100; checker.setupOrdinaryFuelCosts();
+		 * 
+		 * final Sequence sequence = schedule.getSequences().get(0); checker.check(sequence);
+		 */
 	}
 
 }
