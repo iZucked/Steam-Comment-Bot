@@ -28,7 +28,6 @@ public class LatenessComponentTest {
 	@Test
 	public void testLatenessComponent() {
 		final String name = "name";
-		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
 		final LatenessComponent c = new LatenessComponent(name, core);
 

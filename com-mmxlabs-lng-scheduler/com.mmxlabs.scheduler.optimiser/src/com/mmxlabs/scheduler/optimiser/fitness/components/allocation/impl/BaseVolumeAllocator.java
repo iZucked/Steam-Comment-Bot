@@ -332,8 +332,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		PortDetails loadDetails = null;
 		PortDetails dischargeDetails = null;
-		VoyageDetails ladenVoyage = null;
-		VoyageDetails ballastVoyage = null;
 
 		ILoadOption loadOption = null;
 		IDischargeOption dischargeOption = null;
@@ -361,9 +359,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				}
 			} else if (object instanceof VoyageDetails) {
 				if ((dischargeDetails == null) && (loadDetails != null)) {
-					ladenVoyage = (VoyageDetails) object;
+					// Nothing to do
 				} else if ((dischargeDetails != null) && (loadDetails != null)) {
-					ballastVoyage = (VoyageDetails) object;
 					assert plan != null;
 
 					{

@@ -898,7 +898,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		
 		// The load should cover at least the fuel usage plus the heel (or the min discharge, whichever is greater)
 		if (Math.max(minDischargeVolumeInM3, heelToDischarge) + lngCommitmentInM3 > upperLoadLimitInM3) {
-			final long fuelRequirements = lngCommitmentInM3 + heelToDischarge;
 			++violationsCount;
 		}
 		return violationsCount;

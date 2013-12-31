@@ -510,58 +510,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	private void generateCargoAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
-			final long revenue, final long cost, final long additionProfitAndLoss, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG,
-			final boolean includeTimeCharterRates, final IAllocationAnnotation currentAllocation) {
-		{
-
-			// Recalculate this data to avoid an even bigger method signature....
-
-			// get each entity
-			final List<IPortSlot> slots = currentAllocation.getSlots();
-
-			final int[] dischargePricesPerMMBTu = new int[slots.size()];
-			final long[] slotVolumesInM3 = new long[slots.size()];
-			final int[] arrivalTimes = new int[slots.size()];
-			// Extract data
-			int idx = 0;
-			for (final IPortSlot slot : slots) {
-				if (slot instanceof IDischargeOption) {
-					dischargePricesPerMMBTu[idx] = currentAllocation.getSlotPricePerMMBTu(slot);
-				} else {
-					dischargePricesPerMMBTu[idx] = Integer.MAX_VALUE;
-				}
-				arrivalTimes[idx] = currentAllocation.getSlotTime(slot);
-				slotVolumesInM3[idx] = currentAllocation.getSlotVolumeInM3(slot);
-
-				idx++;
-			}
-
-			final long shippingCosts = getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates, vesselStartTime, null);
-			final long shippingTotalPretaxProfit = revenue + additionProfitAndLoss - cost - shippingCosts;
-			final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
-
-			final DetailTree shippingDetails = new DetailTree();
-
-			final IDetailTree[] detailsRef = new IDetailTree[1];
-			getShippingCosts(plan, vessel, true, true, vesselStartTime, detailsRef);
-
-			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingTotalPretaxProfit, shippingDetails);
-
-			for (final IPortSlot slot : slots) {
-
-				if (slot instanceof ILoadOption) {
-					final ILoadOption loadOption = (ILoadOption) slot;
-					loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel, plan, entry.getDetails());
-				}
-			}
-
-			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
-			final String label = includeTimeCharterRates ? SchedulerConstants.AI_profitAndLoss : SchedulerConstants.AI_profitAndLossNoTimeCharterRate;
-			annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
-		}
-	}
-
 	private void generateCharterOutAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
 			final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot, final boolean includeTimeCharterRates) {
 		if (generatedCharterOutRevenue != 0) {

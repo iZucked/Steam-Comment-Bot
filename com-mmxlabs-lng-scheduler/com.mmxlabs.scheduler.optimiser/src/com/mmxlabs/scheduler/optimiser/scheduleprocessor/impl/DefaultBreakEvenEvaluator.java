@@ -82,7 +82,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final List<Integer> arrivalTimes = new ArrayList<Integer>();
-				int dischargeIdx = -1;
 				final IDetailsSequenceElement[] currentSequence = vp.getSequence();
 				List<ISequenceElement> sequenceElements = new LinkedList<>();
 
@@ -121,7 +120,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 									}
 									missingSalesPrice = true;
 									originalDischarge = dischargeOption;
-									dischargeIdx = idx;
 								}
 							}
 						}
