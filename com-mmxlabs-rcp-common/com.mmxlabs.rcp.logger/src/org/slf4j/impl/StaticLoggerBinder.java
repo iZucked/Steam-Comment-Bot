@@ -43,10 +43,12 @@ public class StaticLoggerBinder implements LoggerFactoryBinder {
 		loggerFactory = new ExtendedLogLoggerFactory();
 	}
 
+	@Override
 	public ILoggerFactory getLoggerFactory() {
 		return loggerFactory;
 	}
 
+	@Override
 	public String getLoggerFactoryClassStr() {
 		return loggerFactoryClassStr;
 	}

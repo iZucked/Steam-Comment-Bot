@@ -198,6 +198,7 @@ public class NewListSelectionDialog extends Dialog {
 			super.inputChanged(viewer, newInput, newInput);
 		}
 		
+		@Override
 		protected TreeNode makeTree(Object inputObject) {
 			// create the root node with the list of all tree elements as its children
 			TreeNode tree = new TreeNode(null, null, Arrays.asList(delegate.getElements(inputObject)));
@@ -456,6 +457,7 @@ public class NewListSelectionDialog extends Dialog {
 
 	}
 
+	@Override
 	protected void buttonPressed(final int buttonId) {
 		if (IDialogConstants.SELECT_ALL_ID == buttonId) {
 			selectAll();
