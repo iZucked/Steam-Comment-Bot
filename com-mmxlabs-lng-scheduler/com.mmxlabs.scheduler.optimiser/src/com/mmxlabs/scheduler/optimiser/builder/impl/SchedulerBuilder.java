@@ -91,7 +91,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
@@ -274,9 +273,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private ICharterMarketProviderEditor charterMarketProviderEditor;
-
-	@Inject
-	private IAlternativeElementProvider alternativeElementProvider;
 
 	@Inject
 	private IShortCargoReturnElementProviderEditor shortCargoReturnElementProviderEditor;
