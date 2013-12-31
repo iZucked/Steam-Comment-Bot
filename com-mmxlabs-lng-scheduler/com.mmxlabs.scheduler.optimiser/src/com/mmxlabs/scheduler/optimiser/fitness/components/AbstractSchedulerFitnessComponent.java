@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 
@@ -23,6 +23,9 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 	private final IFitnessCore core;
 	private final String name;
 	private ICurve discountCurve = new ConstantValueCurve(1);
+
+	@Inject(optional = true)
+	private IDiscountCurveProvider discountCurveProvider;
 
 	protected AbstractSchedulerFitnessComponent(final String name, final IFitnessCore core) {
 		super();
@@ -83,8 +86,8 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 
 	@Override
 	public void init(final IOptimisationData data) {
-		if (data != null) {
-			discountCurve = data.getDataComponentProvider(SchedulerConstants.DCP_discountCurveProvider, IDiscountCurveProvider.class).getDiscountCurve(getName());
+		if (discountCurveProvider != null) {
+			discountCurve = discountCurveProvider.getDiscountCurve(getName());
 		}
 	}
 }

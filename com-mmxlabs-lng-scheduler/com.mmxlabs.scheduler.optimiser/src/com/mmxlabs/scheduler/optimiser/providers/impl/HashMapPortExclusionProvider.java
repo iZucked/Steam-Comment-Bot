@@ -18,15 +18,9 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 	private HashMap<IVesselClass, Set<IPort>> exclusionsByVesselClass = new HashMap<IVesselClass, Set<IPort>>();
 	private HashMap<IVessel, Set<IPort>> exclusionsByVessel = new HashMap<IVessel, Set<IPort>>();
 
-	private final String name;
-
 	private boolean isVesselExclusionsEmpty = true;
 	private boolean isVesselClassExclusionsEmpty = true;
 	private static final Set<IPort> EMPTY = Collections.emptySet();
-
-	public HashMapPortExclusionProvider(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public Set<IPort> getExcludedPorts(final IVesselClass vesselClass) {
@@ -53,7 +47,7 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

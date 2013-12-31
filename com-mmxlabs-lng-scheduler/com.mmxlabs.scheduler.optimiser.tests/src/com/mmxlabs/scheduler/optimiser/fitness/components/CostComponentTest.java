@@ -126,7 +126,7 @@ public class CostComponentTest {
 	@Test
 	public void testCostComponent() {
 		final String name = "name";
-		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore();
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
 		final List<FuelComponent> fuelComponents = Collections.emptyList();
 		final CostComponent c = new CostComponent(name, fuelComponents, core);
 

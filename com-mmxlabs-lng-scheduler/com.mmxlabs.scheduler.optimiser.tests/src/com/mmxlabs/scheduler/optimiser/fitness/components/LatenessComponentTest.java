@@ -29,8 +29,8 @@ public class LatenessComponentTest {
 	public void testLatenessComponent() {
 		final String name = "name";
 		final String dcp = "dcp";
-		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore();
-		final LatenessComponent c = new LatenessComponent(name, dcp, core);
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
+		final LatenessComponent c = new LatenessComponent(name, core);
 
 		Assert.assertSame(name, c.getName());
 		Assert.assertSame(core, c.getFitnessCore());
@@ -42,7 +42,7 @@ public class LatenessComponentTest {
 		final String name = "name";
 		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = null;
-		final LatenessComponent c = new LatenessComponent(name, dcp, core);
+		final LatenessComponent c = new LatenessComponent(name, core);
 
 		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 
@@ -74,7 +74,7 @@ public class LatenessComponentTest {
 		final String name = "name";
 		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = null;
-		final LatenessComponent c = new LatenessComponent(name, dcp, core);
+		final LatenessComponent c = new LatenessComponent(name, core);
 
 		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 

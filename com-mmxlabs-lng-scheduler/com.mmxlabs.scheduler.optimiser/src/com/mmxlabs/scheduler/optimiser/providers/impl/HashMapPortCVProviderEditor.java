@@ -18,13 +18,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
  */
 public final class HashMapPortCVProviderEditor implements IPortCVProviderEditor {
 
-	private final String name;
-
 	private final Map<IPort, Integer> map = new HashMap<IPort, Integer>();
-
-	public HashMapPortCVProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public int getPortCV(final IPort port) {
@@ -42,7 +36,7 @@ public final class HashMapPortCVProviderEditor implements IPortCVProviderEditor 
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

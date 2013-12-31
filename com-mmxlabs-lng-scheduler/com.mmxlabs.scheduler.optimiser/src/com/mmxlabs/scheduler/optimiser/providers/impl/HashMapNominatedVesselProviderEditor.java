@@ -20,18 +20,13 @@ import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
  */
 public class HashMapNominatedVesselProviderEditor implements INominatedVesselProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, IVessel> elementToVesselMap = new HashMap<>();
 	private final Map<IResource, IVessel> resourceToVesselMap = new HashMap<>();
 
-	public HashMapNominatedVesselProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

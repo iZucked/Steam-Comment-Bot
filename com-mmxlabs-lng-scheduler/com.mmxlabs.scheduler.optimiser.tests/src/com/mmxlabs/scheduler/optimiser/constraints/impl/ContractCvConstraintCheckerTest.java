@@ -40,8 +40,8 @@ public class ContractCvConstraintCheckerTest {
 	@Test
 	public void testConstraint() {
 		//
-		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor("slots");
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("types");
+		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor();
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 
 		final ContractCvConstraintChecker checker = createChecker("name", portTypeProvider, portSlotProvider);
 

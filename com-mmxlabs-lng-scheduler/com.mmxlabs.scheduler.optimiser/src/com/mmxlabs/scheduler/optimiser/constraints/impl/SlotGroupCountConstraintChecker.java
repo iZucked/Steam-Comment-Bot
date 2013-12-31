@@ -9,13 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
@@ -36,7 +37,10 @@ import com.mmxlabs.scheduler.optimiser.providers.SlotGroup;
 public class SlotGroupCountConstraintChecker implements IReducingContraintChecker {
 	private final String name;
 
+	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
 	private ISlotGroupCountProvider slotGroupProvider;
 
 	/**
@@ -62,11 +66,8 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 		return name;
 	}
 
-	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
-
-		this.slotGroupProvider = optimisationData.getDataComponentProvider(SchedulerConstants.DCP_slotGroupProvider, ISlotGroupCountProvider.class);
-		this.vesselProvider = optimisationData.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+	@Inject
+	public void init() {
 
 		// Initialise state. Create tracker for each slot group and record the "count";
 		for (final SlotGroup group : slotGroupProvider.getGroups()) {
@@ -149,5 +150,10 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 	@Override
 	public boolean checkConstraints(final ISequences sequences) {
 		return checkConstraints(sequences, null);
+	}
+
+	@Override
+	public void setOptimisationData(IOptimisationData optimisationData) {
+
 	}
 }

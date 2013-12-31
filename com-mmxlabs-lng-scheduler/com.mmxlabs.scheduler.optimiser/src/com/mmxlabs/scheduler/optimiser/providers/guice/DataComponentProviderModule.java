@@ -34,7 +34,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.builder.impl.XYPortEuclideanDistanceCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -143,12 +142,12 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IXYPortDistanceCalculator.class).to(XYPortEuclideanDistanceCalculator.class);
 		bind(XYPortEuclideanDistanceCalculator.class).in(Singleton.class);
 
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 
 		bind(IVesselProvider.class).toInstance(vesselProvider);
 		bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 
-		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
+		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>("");
 		bind(new TypeLiteral<IMultiMatrixEditor<IPort, Integer>>() {
 		}).toInstance(portDistanceProvider);
 		bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
@@ -163,28 +162,28 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IOrderedSequenceElementsDataComponentProviderEditor orderedSequenceElementsEditor;
 		final IElementDurationProviderEditor elementDurationsProvider;
 		if (USE_INDEXED_DCPS) {
-			portProvider = new IndexedPortEditor(SchedulerConstants.DCP_portProvider);
-			portSlotsProvider = new IndexedPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
-			portTypeProvider = new IndexedPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
+			portProvider = new IndexedPortEditor();
+			portSlotsProvider = new IndexedPortSlotEditor();
+			portTypeProvider = new IndexedPortTypeEditor();
 
-			timeWindowProvider = new IndexedTimeWindowEditor(SchedulerConstants.DCP_timeWindowProvider);
-			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor(SchedulerConstants.DCP_orderedElementsProvider);
+			timeWindowProvider = new IndexedTimeWindowEditor("");
+			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor("");
 
-			elementDurationsProvider = new IndexedElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
+			elementDurationsProvider = new IndexedElementDurationEditor("");
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE));
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>("", Integer.MAX_VALUE));
 		} else {
-			portProvider = new HashMapPortEditor(SchedulerConstants.DCP_portProvider);
-			portSlotsProvider = new HashMapPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
-			portTypeProvider = new HashMapPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
+			portProvider = new HashMapPortEditor();
+			portSlotsProvider = new HashMapPortSlotEditor();
+			portTypeProvider = new HashMapPortTypeEditor();
 
-			timeWindowProvider = new TimeWindowDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider);
-			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider);
-			elementDurationsProvider = new HashMapElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
+			timeWindowProvider = new TimeWindowDataComponentProvider("");
+			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider("");
+			elementDurationsProvider = new HashMapElementDurationEditor("");
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE));
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>("", Integer.MAX_VALUE));
 		}
 		bind(IPortProvider.class).toInstance(portProvider);
 		bind(IPortProviderEditor.class).toInstance(portProvider);
@@ -204,98 +203,97 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IElementDurationProvider.class).toInstance(elementDurationsProvider);
 		bind(IElementDurationProviderEditor.class).toInstance(elementDurationsProvider);
 
-		final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider = new ResourceAllocationConstraintProvider(SchedulerConstants.DCP_resourceAllocationProvider);
+		final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider = new ResourceAllocationConstraintProvider("");
 		bind(IResourceAllocationConstraintDataComponentProvider.class).toInstance(resourceAllocationProvider);
 		bind(IResourceAllocationConstraintDataComponentProviderEditor.class).toInstance(resourceAllocationProvider);
 
-		final IStartEndRequirementProviderEditor startEndRequirementProvider = new HashMapStartEndRequirementEditor(SchedulerConstants.DCP_startEndRequirementProvider);
+		final IStartEndRequirementProviderEditor startEndRequirementProvider = new HashMapStartEndRequirementEditor();
 		bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
 		bind(IStartEndRequirementProviderEditor.class).toInstance(startEndRequirementProvider);
 
-		final IPortExclusionProviderEditor portExclusionProvider = new HashMapPortExclusionProvider(SchedulerConstants.DCP_portExclusionProvider);
+		final IPortExclusionProviderEditor portExclusionProvider = new HashMapPortExclusionProvider();
 		bind(IPortExclusionProvider.class).toInstance(portExclusionProvider);
 		bind(IPortExclusionProviderEditor.class).toInstance(portExclusionProvider);
 
-		final IReturnElementProviderEditor returnElementProvider = new HashMapReturnElementProviderEditor(SchedulerConstants.DCP_returnElementProvider);
+		final IReturnElementProviderEditor returnElementProvider = new HashMapReturnElementProviderEditor();
 		bind(IReturnElementProvider.class).toInstance(returnElementProvider);
 		bind(IReturnElementProviderEditor.class).toInstance(returnElementProvider);
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor(SchedulerConstants.DCP_routePriceProvider, IMultiMatrixProvider.Default_Key);
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor(IMultiMatrixProvider.Default_Key);
 		bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 		bind(IRouteCostProviderEditor.class).toInstance(routeCostProvider);
 
-		final ITotalVolumeLimitEditor totalVolumeLimits = new ArrayListVolumeAllocationEditor(SchedulerConstants.DCP_totalVolumeLimitProvider);
+		final ITotalVolumeLimitEditor totalVolumeLimits = new ArrayListVolumeAllocationEditor();
 		bind(ITotalVolumeLimitProvider.class).toInstance(totalVolumeLimits);
 		bind(ITotalVolumeLimitEditor.class).toInstance(totalVolumeLimits);
 
-		final IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor(SchedulerConstants.DCP_discountCurveProvider);
+		final IDiscountCurveProviderEditor discountCurveProvider = new HashMapDiscountCurveEditor();
 		bind(IDiscountCurveProvider.class).toInstance(discountCurveProvider);
 		bind(IDiscountCurveProviderEditor.class).toInstance(discountCurveProvider);
 
-		final HashSetCalculatorProviderEditor calculatorProvider = new HashSetCalculatorProviderEditor(SchedulerConstants.DCP_calculatorProvider);
+		final HashSetCalculatorProviderEditor calculatorProvider = new HashSetCalculatorProviderEditor();
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 		bind(ICalculatorProviderEditor.class).toInstance(calculatorProvider);
 
-		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor(SchedulerConstants.DCP_optionalElementsProvider);
+		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor("");
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
 
-		final IPortCostProviderEditor portCosts = new IndexedPortCostEditor(SchedulerConstants.DCP_portCostProvider);
+		final IPortCostProviderEditor portCosts = new IndexedPortCostEditor();
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
 
-		final ISlotGroupCountProviderEditor slotGroupCountProvider = new HashMapSlotGroupCountProviderEditor(SchedulerConstants.DCP_slotGroupProvider);
+		final ISlotGroupCountProviderEditor slotGroupCountProvider = new HashMapSlotGroupCountProviderEditor();
 		bind(ISlotGroupCountProvider.class).toInstance(slotGroupCountProvider);
 		bind(ISlotGroupCountProviderEditor.class).toInstance(slotGroupCountProvider);
 
-		final IVirtualVesselSlotProviderEditor virtualVesselSlotProviderEditor = new HashMapVirtualVesselSlotProviderEditor(SchedulerConstants.DCP_virtualVesselSlotProvider);
+		final IVirtualVesselSlotProviderEditor virtualVesselSlotProviderEditor = new HashMapVirtualVesselSlotProviderEditor();
 		bind(IVirtualVesselSlotProvider.class).toInstance(virtualVesselSlotProviderEditor);
 		bind(IVirtualVesselSlotProviderEditor.class).toInstance(virtualVesselSlotProviderEditor);
 
-		final HashMapEntityProviderEditor entityProviderEditor = new HashMapEntityProviderEditor(SchedulerConstants.DCP_entityProvider);
+		final HashMapEntityProviderEditor entityProviderEditor = new HashMapEntityProviderEditor();
 		bind(IEntityProvider.class).toInstance(entityProviderEditor);
 		bind(HashMapEntityProviderEditor.class).toInstance(entityProviderEditor);
 
-		final LazyDateKeyProviderEditor dateKeyProviderEditor = new LazyDateKeyProviderEditor(SchedulerConstants.DCP_dateKeyProvider);
+		final LazyDateKeyProviderEditor dateKeyProviderEditor = new LazyDateKeyProviderEditor();
 		bind(IDateKeyProvider.class).toInstance(dateKeyProviderEditor);
 		bind(IDateKeyProviderEditor.class).toInstance(dateKeyProviderEditor);
 
-		final HashMapShortCargoReturnElementProviderEditor shortCargoReturnElementProvider = new HashMapShortCargoReturnElementProviderEditor(SchedulerConstants.DCP_shortCargoReturnElementProvider);
+		final HashMapShortCargoReturnElementProviderEditor shortCargoReturnElementProvider = new HashMapShortCargoReturnElementProviderEditor();
 		bind(IShortCargoReturnElementProvider.class).toInstance(shortCargoReturnElementProvider);
 		bind(IShortCargoReturnElementProviderEditor.class).toInstance(shortCargoReturnElementProvider);
 
-		final HashMapCharterMarketProviderEditor charterMarketProviderEditor = new HashMapCharterMarketProviderEditor(SchedulerConstants.DCP_charterMarketProvider);
+		final HashMapCharterMarketProviderEditor charterMarketProviderEditor = new HashMapCharterMarketProviderEditor();
 		bind(ICharterMarketProvider.class).toInstance(charterMarketProviderEditor);
 		bind(ICharterMarketProviderEditor.class).toInstance(charterMarketProviderEditor);
 
-		final HashMapPortCVProviderEditor portCVProviderEditor = new HashMapPortCVProviderEditor(SchedulerConstants.DCP_portCVProvider);
+		final HashMapPortCVProviderEditor portCVProviderEditor = new HashMapPortCVProviderEditor();
 		bind(IPortCVProvider.class).toInstance(portCVProviderEditor);
 		bind(IPortCVProviderEditor.class).toInstance(portCVProviderEditor);
 
-		final HashMapAlternativeElementProviderEditor alternativeElementProviderEditor = new HashMapAlternativeElementProviderEditor(SchedulerConstants.DCP_alternativeElementProvider);
+		final HashMapAlternativeElementProviderEditor alternativeElementProviderEditor = new HashMapAlternativeElementProviderEditor();
 		bind(IAlternativeElementProvider.class).toInstance(alternativeElementProviderEditor);
 		bind(IAlternativeElementProviderEditor.class).toInstance(alternativeElementProviderEditor);
 
-		final HashMapShipToShipBindingProviderEditor shipToShipProviderEditor = new HashMapShipToShipBindingProviderEditor(SchedulerConstants.DCP_shipToShipElementProvider);
+		final HashMapShipToShipBindingProviderEditor shipToShipProviderEditor = new HashMapShipToShipBindingProviderEditor();
 		bind(IShipToShipBindingProvider.class).toInstance(shipToShipProviderEditor);
 		bind(IShipToShipBindingProviderEditor.class).toInstance(shipToShipProviderEditor);
 
-		final HashMapMarkToMarketProviderEditor markToMarketEditor = new HashMapMarkToMarketProviderEditor(SchedulerConstants.DCP_markToMarketElementProvider);
+		final HashMapMarkToMarketProviderEditor markToMarketEditor = new HashMapMarkToMarketProviderEditor();
 		bind(IMarkToMarketProvider.class).toInstance(markToMarketEditor);
 		bind(IMarkToMarketProviderEditor.class).toInstance(markToMarketEditor);
 
-		final HashMapNominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor(SchedulerConstants.DCP_nominatedVesselProvider);
+		final HashMapNominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor();
 		bind(INominatedVesselProvider.class).toInstance(nominatedVesselProviderEditor);
 		bind(INominatedVesselProviderEditor.class).toInstance(nominatedVesselProviderEditor);
-		
-		final HashMapShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor = new HashMapShippingHoursRestrictionProviderEditor(SchedulerConstants.DCP_shippingHoursRestrictionProvider);
+
+		final HashMapShippingHoursRestrictionProviderEditor shippingHoursRestrictionProviderEditor = new HashMapShippingHoursRestrictionProviderEditor();
 		bind(IShippingHoursRestrictionProvider.class).toInstance(shippingHoursRestrictionProviderEditor);
 		bind(IShippingHoursRestrictionProviderEditor.class).toInstance(shippingHoursRestrictionProviderEditor);
 
-		final HashMapPortVisitDurationProviderEditor portVisitDurationProviderEditor = new HashMapPortVisitDurationProviderEditor(SchedulerConstants.DCP_portVisitDurationProvider);
+		final HashMapPortVisitDurationProviderEditor portVisitDurationProviderEditor = new HashMapPortVisitDurationProviderEditor();
 		bind(IPortVisitDurationProvider.class).toInstance(portVisitDurationProviderEditor);
 		bind(IPortVisitDurationProviderEditor.class).toInstance(portVisitDurationProviderEditor);
-
 	}
 
 	/**
@@ -306,9 +304,9 @@ public class DataComponentProviderModule extends AbstractModule {
 	@Provides
 	public IMatrixEditor<IPort, Integer> getIMatrixEditor() {
 		if (USE_INDEXED_DCPS) {
-			return new IndexedMatrixEditor<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE);
+			return new IndexedMatrixEditor<IPort, Integer>("", Integer.MAX_VALUE);
 		} else {
-			return new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider, Integer.MAX_VALUE);
+			return new HashMapMatrixProvider<IPort, Integer>("", Integer.MAX_VALUE);
 		}
 	}
 }

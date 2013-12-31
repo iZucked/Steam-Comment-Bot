@@ -10,7 +10,6 @@ import java.util.TreeSet;
 
 import javax.management.timer.Timer;
 
-import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 
@@ -31,11 +30,6 @@ public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 	private static final int forwardExtend = 24 * 180;
 
 	/**
-	 * Name of this {@link IDataComponentProvider}
-	 */
-	private final String name;
-
-	/**
 	 * 
 	 */
 	private int lastExtent = Integer.MAX_VALUE;
@@ -46,13 +40,9 @@ public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 	 */
 	private final TreeSet<Integer> dateKeySet = new TreeSet<Integer>();
 
-	public LazyDateKeyProviderEditor(final String name) {
-		this.name = name;
-	}
-
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

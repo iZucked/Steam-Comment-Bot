@@ -40,7 +40,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.Resource;
-import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -1021,54 +1020,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
 
-		data.addDataComponentProvider(SchedulerConstants.DCP_discountCurveProvider, discountCurveProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_alternativeElementProvider, alternativeElementProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_vesselProvider, vesselProvider);
 		data.addDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, timeWindowProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, portDistanceProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, orderedSequenceElementsEditor);
-		data.addDataComponentProvider(SchedulerConstants.DCP_portProvider, portProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, portSlotsProvider);
 		data.addDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, elementDurationsProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, portTypeProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_portCostProvider, portCostProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_portCVProvider, portCVProvider);
-
 		data.addDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, resourceAllocationProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, startEndRequirementProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_portExclusionProvider, portExclusionProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_returnElementProvider, returnElementProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, routeCostProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_totalVolumeLimitProvider, totalVolumeLimits);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, calculatorProvider);
-
 		data.addDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, optionalElements);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_slotGroupProvider, slotGroupCountProvider);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_virtualVesselSlotProvider, virtualVesselSlotProviderEditor);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_dateKeyProvider, dateKeyProviderEditor);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_shortCargoReturnElementProvider, shortCargoReturnElementProviderEditor);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_markToMarketElementProvider, markToMarketProviderEditor);
-
-		for (final IBuilderExtension extension : extensions) {
-			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data)) {
-				data.addDataComponentProvider(provider.getFirst(), provider.getSecond());
-			}
-		}
+		data.addDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, orderedSequenceElementsEditor);
 
 		for (final IBuilderExtension extension : extensions) {
 			extension.finishBuilding(data);

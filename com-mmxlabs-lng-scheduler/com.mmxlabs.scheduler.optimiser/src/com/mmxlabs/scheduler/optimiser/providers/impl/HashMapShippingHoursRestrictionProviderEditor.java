@@ -18,18 +18,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
  */
 public class HashMapShippingHoursRestrictionProviderEditor implements IShippingHoursRestrictionProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, Integer> hoursMap = new HashMap<>();
 	private final Map<ISequenceElement, ITimeWindow> baseTimeMap = new HashMap<>();
 
-	public HashMapShippingHoursRestrictionProviderEditor(final String name) {
-		this.name = name;
-	}
-
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override
@@ -43,7 +37,7 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 		if (hoursMap.containsKey(element)) {
 			return hoursMap.get(element);
 		}
-		return IShippingHoursRestrictionProviderEditor.RESTRICTION_UNDEFINED;
+		return RESTRICTION_UNDEFINED;
 	}
 
 	@Override

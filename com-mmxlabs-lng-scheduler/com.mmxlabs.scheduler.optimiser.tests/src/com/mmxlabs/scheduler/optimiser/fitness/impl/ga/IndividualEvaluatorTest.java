@@ -318,7 +318,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -411,7 +411,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -512,7 +512,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -617,7 +617,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -718,7 +718,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");

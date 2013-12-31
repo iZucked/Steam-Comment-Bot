@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -16,37 +17,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 public class RouteCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent {
 
+	@Inject
 	private IRouteCostProvider routeCostProvider;
+	@Inject
 	private IVesselProvider vesselProvider;
-	private final String routePriceProviderKey;
-	private final String vesselProviderKey;
 
-	public RouteCostFitnessComponent(final String name, final String routePriceProviderKey, final String vesselProviderKey, final CargoSchedulerFitnessCore core) {
+	public RouteCostFitnessComponent(final String name, final CargoSchedulerFitnessCore core) {
 		super(name, core);
-		this.routePriceProviderKey = routePriceProviderKey;
-		this.vesselProviderKey = vesselProviderKey;
-	}
-
-	@Override
-	public void init(final IOptimisationData data) {
-		setRouteCostProvider(data.getDataComponentProvider(routePriceProviderKey, IRouteCostProvider.class));
-		setVesselProvider(data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class));
-	}
-
-	public IRouteCostProvider getRouteCostProvider() {
-		return routeCostProvider;
-	}
-
-	public void setRouteCostProvider(final IRouteCostProvider routePriceProvider) {
-		this.routeCostProvider = routePriceProvider;
-	}
-
-	public IVesselProvider getVesselProvider() {
-		return vesselProvider;
-	}
-
-	public void setVesselProvider(final IVesselProvider vesselProvider) {
-		this.vesselProvider = vesselProvider;
 	}
 
 	private IVesselClass vesselClass;

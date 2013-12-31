@@ -13,14 +13,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 
 public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, IPortSlot> portSlotMap = new HashMap<ISequenceElement, IPortSlot>();
 	private final Map<IPortSlot, ISequenceElement> elementMap = new HashMap<IPortSlot, ISequenceElement>();
-
-	public HashMapPortSlotEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public void setPortSlot(final ISequenceElement element, final IPortSlot portSlot) {
@@ -45,7 +39,7 @@ public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

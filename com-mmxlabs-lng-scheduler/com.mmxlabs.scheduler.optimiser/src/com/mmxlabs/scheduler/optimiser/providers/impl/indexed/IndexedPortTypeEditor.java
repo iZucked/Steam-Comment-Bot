@@ -11,13 +11,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class IndexedPortTypeEditor implements IPortTypeProviderEditor {
-	private final String name;
 	private final IIndexMap<ISequenceElement, PortType> portTypes = new ArrayIndexMap<ISequenceElement, PortType>();
-
-	public IndexedPortTypeEditor(final String name) {
-		super();
-		this.name = name;
-	}
 
 	@Override
 	public PortType getPortType(final ISequenceElement sequenceElement) {
@@ -26,7 +20,7 @@ public class IndexedPortTypeEditor implements IPortTypeProviderEditor {
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

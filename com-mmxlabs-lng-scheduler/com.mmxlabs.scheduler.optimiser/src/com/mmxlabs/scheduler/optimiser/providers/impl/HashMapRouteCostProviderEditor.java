@@ -14,13 +14,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 
 public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor {
 
-	public HashMapRouteCostProviderEditor(final String name, final String defaultKey) {
+	public HashMapRouteCostProviderEditor(final String defaultKey) {
 		super();
-		this.name = name;
 		this.defaultKey = defaultKey;
 	}
 
-	final String name;
 	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> pricesByRouteClassAndState = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
 
 	private final Map<String, Long> defaultPrices = new HashMap<String, Long>();
@@ -60,7 +58,7 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

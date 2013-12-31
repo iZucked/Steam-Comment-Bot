@@ -13,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class IndexedPortCostEditor implements IPortCostProviderEditor {
-	final String name;
 	
 	class PortCosts {
 		private final IIndexMap<IVessel, LongFastEnumMap<PortType>> contents = 
@@ -37,10 +36,6 @@ public class IndexedPortCostEditor implements IPortCostProviderEditor {
 	
 	final IIndexMap<IPort, PortCosts> content = new ArrayIndexMap<IPort, PortCosts>();
 	
-	public IndexedPortCostEditor(final String name) {
-		super();
-		this.name = name;
-	}
 
 	@Override
 	public long getPortCost(final IPort port, final IVessel vessel, final PortType portType) {
@@ -51,7 +46,7 @@ public class IndexedPortCostEditor implements IPortCostProviderEditor {
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

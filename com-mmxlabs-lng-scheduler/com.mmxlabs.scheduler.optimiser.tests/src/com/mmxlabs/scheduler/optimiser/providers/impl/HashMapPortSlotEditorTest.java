@@ -13,20 +13,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 public class HashMapPortSlotEditorTest {
 
-
-	@Test
-	public void testHashMapPortSlotEditor() {
-
-		final String name = "name";
-		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor(name);
-		Assert.assertSame(name, editor.getName());
-	}
-
 	@Test
 	public void testGetSetPortSlot() {
 
-		final String name = "name";
-		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor(name);
+		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor();
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
 		final IPortSlot portSlot = Mockito.mock(IPortSlot.class);
 
@@ -43,8 +33,7 @@ public class HashMapPortSlotEditorTest {
 	@Test
 	public void testDispose() {
 
-		final String name = "name";
-		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor(name);
+		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor();
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
 		final IPortSlot portSlot = Mockito.mock(IPortSlot.class);
 

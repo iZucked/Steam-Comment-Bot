@@ -46,10 +46,10 @@ public class PortExclusionConstraintCheckerTest {
 	@Test
 	public void testConstraint() {
 		//
-		final IPortExclusionProviderEditor exclusionProvider = new HashMapPortExclusionProvider("exclusions");
-		final IPortProviderEditor portProvider = new HashMapPortEditor("ports");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vessels");
-		final INominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor("nominated");
+		final IPortExclusionProviderEditor exclusionProvider = new HashMapPortExclusionProvider();
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final INominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor();
 
 		final PortExclusionConstraintChecker checker = createChecker("name", vesselProvider, nominatedVesselProviderEditor, portProvider, exclusionProvider);
 
@@ -99,10 +99,10 @@ public class PortExclusionConstraintCheckerTest {
 	@Test
 	public void testConstraintNominatedVessel() {
 		//
-		final IPortExclusionProviderEditor exclusionProvider = new HashMapPortExclusionProvider("exclusions");
-		final IPortProviderEditor portProvider = new HashMapPortEditor("ports");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vessels");
-		final INominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor("nominated");
+		final IPortExclusionProviderEditor exclusionProvider = new HashMapPortExclusionProvider();
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
+		final INominatedVesselProviderEditor nominatedVesselProviderEditor = new HashMapNominatedVesselProviderEditor();
 
 		final PortExclusionConstraintChecker checker = createChecker("name", vesselProvider, nominatedVesselProviderEditor, portProvider, exclusionProvider);
 

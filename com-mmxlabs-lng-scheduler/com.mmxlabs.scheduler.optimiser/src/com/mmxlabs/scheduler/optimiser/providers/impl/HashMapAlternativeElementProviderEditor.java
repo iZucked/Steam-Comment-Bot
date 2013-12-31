@@ -17,12 +17,6 @@ public class HashMapAlternativeElementProviderEditor implements IAlternativeElem
 
 	private final HashBiMap<ISequenceElement, ISequenceElement> map = HashBiMap.create();
 
-	private final String name;
-
-	public HashMapAlternativeElementProviderEditor(final String name) {
-		this.name = name;
-	}
-
 	@Override
 	public boolean hasAlternativeElement(final ISequenceElement element) {
 		return map.containsKey(element) || map.containsValue(element);
@@ -44,7 +38,7 @@ public class HashMapAlternativeElementProviderEditor implements IAlternativeElem
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

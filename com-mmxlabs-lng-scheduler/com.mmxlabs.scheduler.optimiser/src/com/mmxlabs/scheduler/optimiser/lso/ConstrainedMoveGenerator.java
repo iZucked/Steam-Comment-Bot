@@ -29,7 +29,6 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
@@ -151,7 +150,16 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private IAlternativeElementProvider alternativeElementProvider;
 
 	@Inject
+	private IVesselProvider vesselProvider;
+
+	@com.google.inject.Inject(optional = true)
+	private IOptionalElementsProvider optionalElementsProvider;
+
+	@Inject
 	private Injector injector;
+
+	@Inject
+	private IPortTypeProvider portTypeProvider;
 
 	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
@@ -166,8 +174,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		// LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
 		checker.disallowLateness();
 		final IOptimisationData data = context.getOptimisationData();
-
-		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 
 		// create a massive lookup table, caching all legal sequencing decisions
 		// this might be a terrible idea, we could just keep the checker instead
@@ -213,9 +219,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		this.shuffleMoveGenerator = new ShuffleElementsMoveGenerator(this);
 		injector.injectMembers(shuffleMoveGenerator);
 
-		if (context.getOptimisationData().getDataComponentProviders().contains(SchedulerConstants.DCP_optionalElementsProvider)) {
-			final IOptionalElementsProvider optionalElementsProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider,
-					IOptionalElementsProvider.class);
+		if (optionalElementsProvider != null) {
 			if (optionalElementsProvider.getOptionalElements().size() > 0) {
 				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit(this);
 				injector.injectMembers(optionalMoveGenerator);
@@ -225,7 +229,6 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		} else {
 			this.optionalMoveGenerator = null;
 		}
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final IResource resource : data.getResources()) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {

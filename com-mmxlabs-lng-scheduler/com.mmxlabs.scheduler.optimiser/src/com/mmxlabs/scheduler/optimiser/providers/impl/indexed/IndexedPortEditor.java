@@ -13,16 +13,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 public class IndexedPortEditor implements IPortProviderEditor {
 	final IIndexMap<ISequenceElement, IPort> ports = new ArrayIndexMap<ISequenceElement, IPort>();
 
-	final String name;
-
-	public IndexedPortEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override
