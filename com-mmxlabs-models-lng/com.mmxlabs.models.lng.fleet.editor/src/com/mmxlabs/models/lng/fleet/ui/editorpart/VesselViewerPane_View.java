@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
@@ -134,7 +135,7 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 							final LockableAction edit = new LockableAction("Edit...") {
 								public void run() {
 									final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
-									dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
+									dcd.open(getJointModelEditorPart(), jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
 								}
 							};
 							addActionToMenu(edit, submenu);

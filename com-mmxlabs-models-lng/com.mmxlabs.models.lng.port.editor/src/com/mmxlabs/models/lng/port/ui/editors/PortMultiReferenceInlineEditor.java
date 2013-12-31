@@ -35,7 +35,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -63,9 +63,9 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
-		super.display(location, context, input, range);
+		super.display(dialogContext, context, input, range);
 	}
 
 	@Override

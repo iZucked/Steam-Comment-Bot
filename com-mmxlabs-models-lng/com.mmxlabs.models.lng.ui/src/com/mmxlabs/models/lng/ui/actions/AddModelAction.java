@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;

@@ -42,10 +42,10 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorControlFactory;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
@@ -221,9 +221,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
-		super.display(location, root, object, range, dbc);
+		super.display(dialogContext, root, object, range, dbc);
 		final MMXObject eo = (MMXObject) object;
 		esPricing.init(eo);
 		esWindow.init(eo);

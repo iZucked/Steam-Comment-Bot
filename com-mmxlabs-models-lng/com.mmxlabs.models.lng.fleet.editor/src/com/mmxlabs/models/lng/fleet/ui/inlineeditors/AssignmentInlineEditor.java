@@ -49,9 +49,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -247,7 +247,7 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 		if (inputObject != null) {
 			inputObject.eAdapters().remove(AssignmentInlineEditor.this);
 		}

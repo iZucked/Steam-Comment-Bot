@@ -77,6 +77,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
+import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -119,6 +120,7 @@ public class CreateStripDialog extends FormDialog {
 	private EClass referenceClass;
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
+	//private final IDialogEditingContext dialogContext;
 	private EObject sample;
 	private Text pattern_n;
 	private Label label1;
@@ -144,6 +146,7 @@ public class CreateStripDialog extends FormDialog {
 			@Nullable final EObject selectedObject) {
 		super(parentShell);
 		this.scenarioEditingLocation = createScenarioEditingLocation(originalScenarioEditingLocation);
+		//this.dialogContext = dialogContext;
 		this.stripType = stripType;
 		createSample(selectedObject);
 	}
@@ -152,6 +155,7 @@ public class CreateStripDialog extends FormDialog {
 			@Nullable final EObject selectedObject) {
 		super(parentShell);
 		this.scenarioEditingLocation = createScenarioEditingLocation(originalScenarioEditingLocation);
+		//this.dialogContext = dialogContext;
 		this.stripType = stripType;
 		createSample(selectedObject);
 	}
@@ -456,9 +460,9 @@ public class CreateStripDialog extends FormDialog {
 			toolkit.adapt(template);
 
 			final IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(sample.eClass());
-			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), scenarioEditingLocation, toolkit);
+			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), new DefaultDialogEditingContext(null, scenarioEditingLocation), toolkit);
 			templateDetailComposite.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
-			templateDetailComposite.display(scenarioEditingLocation, scenarioEditingLocation.getRootObject(), sample, null, dbc);
+			templateDetailComposite.display(new DefaultDialogEditingContext(null, scenarioEditingLocation), scenarioEditingLocation.getRootObject(), sample, null, dbc);
 		}
 
 		// Preview Table with generated options
