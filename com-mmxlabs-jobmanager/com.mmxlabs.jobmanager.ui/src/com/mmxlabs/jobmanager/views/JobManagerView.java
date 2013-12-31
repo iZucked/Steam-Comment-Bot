@@ -24,8 +24,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -84,8 +82,6 @@ public class JobManagerView extends ViewPart {
 	private Action pauseAction;
 	private Action stopAction;
 	private Action removeAction;
-
-	private Action doubleClickAction;
 
 	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
 
@@ -157,18 +153,6 @@ public class JobManagerView extends ViewPart {
 		public Image getColumnImage(final Object obj, final int index) {
 
 			// TODO: Cache images -- they need to be disposed
-
-			if (index == 0) {
-//				if (obj instanceof IJobDescriptor) {
-//					final IJobDescriptor job = (IJobDescriptor) obj;
-//					// if (jobManager.getSelectedJobs().contains(job)) {
-//					// return getCachedImage("/icons/console_view.gif");
-//					// } else {
-//					return null;
-//					// }
-//				}
-			}
-
 			if (index == 1) {
 				if (obj instanceof IJobDescriptor) {
 					final IJobDescriptor job = (IJobDescriptor) obj;
@@ -418,7 +402,6 @@ public class JobManagerView extends ViewPart {
 
 		makeActions();
 		hookContextMenu();
-		hookDoubleClickAction();
 		contributeToActionBars();
 
 		final Transfer[] dropTransferTypes = new Transfer[] { ResourceTransfer.getInstance() };
@@ -595,45 +578,6 @@ public class JobManagerView extends ViewPart {
 		removeAction.setToolTipText("Abort and remove Job from view");
 		removeAction.setImageDescriptor(Activator.getImageDescriptor("/icons/elcl16/rem_co.gif"));
 		removeAction.setDisabledImageDescriptor(Activator.getImageDescriptor("/icons/dlcl16/rem_co.gif"));
-
-//		toggleDisplayAction = new Action() {
-//			@Override
-//			public void run() {
-//
-//				final Iterator<IJobDescriptor> itr = getTreeSelectionIterator();
-//				while (itr.hasNext()) {
-////					final IJobDescriptor job = itr.next();
-//					// jobManager.toggleJobSelection(job);
-//				}
-//			}
-//		};
-//		toggleDisplayAction.setText("Toggle Display Flag");
-//		toggleDisplayAction.setToolTipText("Toggle whether or not a job is linked to views");
-//		toggleDisplayAction.setImageDescriptor(Activator.getImageDescriptor("/icons/console_view.gif"));
-
-		doubleClickAction = new Action() {
-
-			@Override
-			public void run() {
-				// final Iterator<IJobDescriptor> itr = getTableSelectionIterator();
-				// while (itr.hasNext()) {
-				// final IJobDescriptor job = itr.next();
-				// jobManager.toggleJobSelection(job);
-				// }
-				// }
-			}
-		};
-		doubleClickAction.setText("Set visible job");
-
-	}
-
-	private void hookDoubleClickAction() {
-		viewer.addDoubleClickListener(new IDoubleClickListener() {
-			@Override
-			public void doubleClick(final DoubleClickEvent event) {
-				doubleClickAction.run();
-			}
-		});
 	}
 
 	/**
@@ -656,9 +600,6 @@ public class JobManagerView extends ViewPart {
 
 	private void updateActionEnablement(final ISelection selection) {
 
-		// final IStructuredSelection selection = (IStructuredSelection) viewer
-		// .getSelection();
-		//
 		if (selection.isEmpty()) {
 			startAction.setEnabled(false);
 			pauseAction.setEnabled(false);
@@ -668,7 +609,6 @@ public class JobManagerView extends ViewPart {
 			boolean startEnabled = false;
 			boolean pauseEnabled = false;
 			boolean stopEnabled = false;
-			boolean toogleDisplayEnabled = false;
 
 			if (selection instanceof IStructuredSelection) {
 				// Loop through jobs enabling buttons as valid. Operations
@@ -682,44 +622,35 @@ public class JobManagerView extends ViewPart {
 					switch (control.getJobState()) {
 					case CREATED:
 						startEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case CANCELLED:
 						startEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case COMPLETED:
 						startEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case INITIALISED:
 						startEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case PAUSED:
 						startEnabled = true;
 						stopEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case PAUSING:
 						stopEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case RESUMING:
 						stopEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case RUNNING:
 						pauseEnabled = true;
 						stopEnabled = true;
-						toogleDisplayEnabled = true;
 						break;
 					case UNKNOWN:
 						break;
 					default:
 						pauseEnabled = false;
 						stopEnabled = false;
-						toogleDisplayEnabled = false;
 						break;
 					}
 				}
