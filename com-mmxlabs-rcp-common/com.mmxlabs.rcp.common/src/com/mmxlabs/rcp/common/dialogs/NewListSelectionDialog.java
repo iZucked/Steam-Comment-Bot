@@ -67,83 +67,83 @@ public class NewListSelectionDialog extends Dialog {
 	private final HashSet<Object> allSelectedElements = new HashSet<Object>();
 	private final HashSet<Object> filteredElements = new HashSet<Object>();
 	private Object[] dialogResult;
-	
+
 	// TODO: use eclipse TreeNode and TreeNodeContentProvider classes?
 	private class TreeNode {
 		final Object data;
 		// not final, because we mess with these on expansion
-		List<TreeNode> children; 
+		List<TreeNode> children;
 		TreeNode parent;
-		
-		TreeNode(TreeNode parent, Object data) {
+
+		TreeNode(final TreeNode parent, final Object data) {
 			this.parent = parent;
 			this.data = data;
 			this.children = new ArrayList<TreeNode>();
 		}
 
 		/**
-		 * Creates a new tree node populated with children created from
-		 * a list of objects. 
+		 * Creates a new tree node populated with children created from a list of objects.
+		 * 
 		 * @param parent
 		 * @param data
 		 * @param children
 		 */
-		TreeNode(TreeNode parent, Object data, List<Object> children) {
+		TreeNode(final TreeNode parent, final Object data, final List<Object> children) {
 			this(parent, data);
-			for (final Object child: children) {
+			for (final Object child : children) {
 				this.children.add(new TreeNode(this, child));
 			}
 		}
-		
-		Object [] getChildData() {
-			int n = children.size();
-			Object [] result = new Object[n];
-			
+
+		Object[] getChildData() {
+			final int n = children.size();
+			final Object[] result = new Object[n];
+
 			for (int i = 0; i < n; i++) {
 				result[i] = children.get(i);
 			}
-			
+
 			return result;
 		}
-		
+
 	}
-	
+
 	private class LookupTreeContentProvider implements ITreeContentProvider {
-		protected TreeNode tree; 
-		final Map<Object, TreeNode> lookup = new HashMap<Object, TreeNode>(); // we associate viewer objects with TreeNodes 
-		
-		public void associateNodes(TreeNode node, Map<Object, TreeNode> map) {
+		protected TreeNode tree;
+		final Map<Object, TreeNode> lookup = new HashMap<Object, TreeNode>(); // we associate viewer objects with TreeNodes
+
+		public void associateNodes(final TreeNode node, final Map<Object, TreeNode> map) {
 			map.put(node.data, node);
-			for (TreeNode child: node.children) {
+			for (final TreeNode child : node.children) {
 				associateNodes(child, map);
 			}
 		}
-		
-		protected TreeNode makeTree(Object newInput) {
+
+		protected TreeNode makeTree(final Object newInput) {
 			return tree;
 		}
-		
+
 		@Override
 		public void dispose() {
 		}
 
 		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 			tree = makeTree(newInput);
 			lookup.clear();
 			associateNodes(tree, lookup);
 		}
 
 		@Override
-		public Object[] getElements(Object inputElement) {
+		public Object[] getElements(final Object inputElement) {
 			// TODO Auto-generated method stub
-			//return null;
+			// return null;
 			return tree.getChildData();
 		}
 
 		@Override
-		public Object[] getChildren(Object parentElement) {
-			TreeNode node = lookup.get(parentElement);
+		public Object[] getChildren(final Object parentElement) {
+			final TreeNode node = lookup.get(parentElement);
 			if (node != null) {
 				return node.getChildData();
 			}
@@ -151,8 +151,8 @@ public class NewListSelectionDialog extends Dialog {
 		}
 
 		@Override
-		public Object getParent(Object element) {
-			TreeNode node = lookup.get(element);
+		public Object getParent(final Object element) {
+			final TreeNode node = lookup.get(element);
 			if (node != null && node.parent != null) {
 				return node.parent.data;
 			}
@@ -160,66 +160,63 @@ public class NewListSelectionDialog extends Dialog {
 		}
 
 		@Override
-		public boolean hasChildren(Object element) {
-			TreeNode node = lookup.get(element);
+		public boolean hasChildren(final Object element) {
+			final TreeNode node = lookup.get(element);
 			if (node != null) {
 				return node.children.size() > 0;
 			}
 			return false;
 		}
-		
+
 	}
-	
+
 	private class SimpleGroupedElementProvider extends LookupTreeContentProvider {
 		final IStructuredContentProvider delegate;
 		final List<ILabelProvider> groupings = new LinkedList<ILabelProvider>();
-		
-		final Map<Object, TreeNode> lookup = new HashMap<Object, TreeNode>(); // we associate viewer objects with TreeNodes 
-		
+
 		/**
 		 * 
 		 * @param provider
-		 * @param groupings The groups, at each hierarchical level, to display contents under.
+		 * @param groupings
+		 *            The groups, at each hierarchical level, to display contents under.
 		 */
-		SimpleGroupedElementProvider(IStructuredContentProvider provider) {
+		SimpleGroupedElementProvider(final IStructuredContentProvider provider) {
 			delegate = provider;
-			//this.groupings = groupings;
+			// this.groupings = groupings;
 		}
-		
+
 		@Override
 		public void dispose() {
 			delegate.dispose();
 			super.dispose();
 		}
-		
+
 		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 			delegate.inputChanged(viewer, newInput, newInput);
 			super.inputChanged(viewer, newInput, newInput);
 		}
-		
+
 		@Override
-		protected TreeNode makeTree(Object inputObject) {
+		protected TreeNode makeTree(final Object inputObject) {
 			// create the root node with the list of all tree elements as its children
-			TreeNode tree = new TreeNode(null, null, Arrays.asList(delegate.getElements(inputObject)));
+			final TreeNode tree = new TreeNode(null, null, Arrays.asList(delegate.getElements(inputObject)));
 			// expand it according to the groupings we were given
 			recursivelyExpandNode(tree, groupings, 0);
 			return tree;
 		}
-		
+
 		/**
 		 * Takes a TreeNode object with a list of ordinary objects as children.
 		 * 
-		 * Given a label provider, categorises the children by label and then
-		 * replaces the node's children with a list of categories (each a TreeNode with
-		 * its own list of children).
+		 * Given a label provider, categorises the children by label and then replaces the node's children with a list of categories (each a TreeNode with its own list of children).
 		 */
-		void expandNode(final TreeNode node, final ILabelProvider labeller) {			
+		void expandNode(final TreeNode node, final ILabelProvider labeller) {
 			final Map<String, TreeNode> groups = new TreeMap<String, TreeNode>();
-			
+
 			// attach each Object to a labelled node (creating one if it doesn't already exist)
-			for (final TreeNode child: node.children) {
-				String label = labeller.getText(child.data);
+			for (final TreeNode child : node.children) {
+				final String label = labeller.getText(child.data);
 				TreeNode groupNode = groups.get(label);
 				if (groupNode == null) {
 					groupNode = new TreeNode(node, label);
@@ -233,36 +230,34 @@ public class NewListSelectionDialog extends Dialog {
 			node.children = new ArrayList<TreeNode>(groups.values());
 		}
 
-
 		/**
-		 * Calls expandNode recursively to expand an entire tree's worth of nodes.
-		 * Uses a depth parameter for clarity and to avoid gotchas with list modification.
+		 * Calls expandNode recursively to expand an entire tree's worth of nodes. Uses a depth parameter for clarity and to avoid gotchas with list modification.
 		 */
-		void recursivelyExpandNode(final TreeNode node, final List<ILabelProvider> labellers, int depth) {
+		void recursivelyExpandNode(final TreeNode node, final List<ILabelProvider> labellers, final int depth) {
 			// terminate recursion if we have run out of labeller levels
 			if (depth >= labellers.size()) {
 				return;
 			}
-			
+
 			// expand the node using the appropriate labeller
 			expandNode(node, labellers.get(depth));
 
 			// and recurse over the node's children
-			for (final Object childNode: node.children) {
-				recursivelyExpandNode((TreeNode) childNode, labellers, depth+1);
+			for (final Object childNode : node.children) {
+				recursivelyExpandNode((TreeNode) childNode, labellers, depth + 1);
 			}
 		}
-		
+
 	}
 
 	public NewListSelectionDialog(final Shell parentShell, final Object input, final IStructuredContentProvider contentProvider, final ILabelProvider labelProvider) {
 		super(parentShell);
 		this.input = input;
 
-		SimpleGroupedElementProvider gep = new SimpleGroupedElementProvider(contentProvider);
+		final SimpleGroupedElementProvider gep = new SimpleGroupedElementProvider(contentProvider);
 		this.contentProvider = gep;
 		this.labelProvider = labelProvider;
-		//this.labelProvider = gep.wrapLabelProvider(labelProvider);
+		// this.labelProvider = gep.wrapLabelProvider(labelProvider);
 	}
 
 	@Override
@@ -277,40 +272,36 @@ public class NewListSelectionDialog extends Dialog {
 		final Composite inner = new Composite(box, SWT.NONE);
 		inner.setLayout(new GridLayout(2, false));
 		// Create view within inner.
-		
-		final Label lr = new Label(inner,SWT.NONE);
+
+		final Label lr = new Label(inner, SWT.NONE);
 		lr.setText("Filter:");
 		lr.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		final Text tr = new Text(inner, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
-		
+
 		final List<String> filters = new ArrayList<String>();
 
 		tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		tr.addModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				filters.clear();
 				final String match = tr.getText().trim();
 				if (!match.isEmpty()) {
 					final String[] parts = match.split(",");
 					for (final String p : parts) {
 						final String p2 = p.toLowerCase().trim();
-						if (p2.isEmpty())continue;
+						if (p2.isEmpty())
+							continue;
 						filters.add(p2);
 					}
 				}
-				
+
 				/*
-				// remove from allSelectedElements everything which is still showing 
-				// in the viewer 
-				allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
-				// add to allSelectedElements everything showing and selected in the viewer
-				allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
-				// re-filter the viewer
-				viewer.refresh();
-				// and select only those elements which are in allSelectedElements 
-				viewer.setCheckedElements(contentProvider.getViewerElements(allSelectedElements.toArray()));
-				*/
+				 * // remove from allSelectedElements everything which is still showing // in the viewer
+				 * allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray()))); // add to allSelectedElements everything showing and selected in the
+				 * viewer allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements()))); // re-filter the viewer viewer.refresh(); // and select only those
+				 * elements which are in allSelectedElements viewer.setCheckedElements(contentProvider.getViewerElements(allSelectedElements.toArray()));
+				 */
 			}
 		});
 		viewer = new CheckboxTreeViewer(inner, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
@@ -323,20 +314,23 @@ public class NewListSelectionDialog extends Dialog {
 
 		viewer.addFilter(new ViewerFilter() {
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 				filteredElements.remove(element);
-				if (filters.isEmpty()) return true;
-				if (contentProvider.hasChildren(element)) return true;
+				if (filters.isEmpty())
+					return true;
+				if (contentProvider.hasChildren(element))
+					return true;
 				final String t = labelProvider.getText(element).toLowerCase();
-				
+
 				for (final String f : filters) {
-					if (t.contains(f)) return true;
+					if (t.contains(f))
+						return true;
 				}
 				filteredElements.add(element);
 				return false;
 			}
 		});
-		
+
 		if (columns.size() > 0) {
 			for (final Pair<String, CellLabelProvider> column : columns) {
 				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);
@@ -351,8 +345,8 @@ public class NewListSelectionDialog extends Dialog {
 		inner.setLayoutData(new GridData(GridData.FILL_BOTH));
 		viewer.setInput(input);
 		/*
-		viewer.setCheckedElements(contentProvider.getViewerElements(initialSelection));
-		*/
+		 * viewer.setCheckedElements(contentProvider.getViewerElements(initialSelection));
+		 */
 		viewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
@@ -371,25 +365,25 @@ public class NewListSelectionDialog extends Dialog {
 	@Override
 	protected void okPressed() {
 		/*
-		// Remove everything shown in the viewer from allSelectedElements
-		allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
-		// Add everything selected in the viewer from allSelectedElements
-		allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
-		*/
+		 * // Remove everything shown in the viewer from allSelectedElements allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray()))); // Add
+		 * everything selected in the viewer from allSelectedElements allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
+		 */
 
 		// Return the contents of allSelectedElements, sorted alphabetically
 		dialogResult = allSelectedElements.toArray();
-		
-		Comparator<Object> c = new Comparator<Object>() {
 
+		final Comparator<Object> c = new Comparator<Object>() {
+
+			@SuppressWarnings("unchecked")
 			@Override
-			public int compare(Object arg0, Object arg1) {
+			public int compare(final Object arg0, final Object arg1) {
 				// No compare method for Pair objects (consider adding to base class?)
-				Pair p0 = (Pair<String, ?>) arg0;
-				Pair p1 = (Pair<String, ?>) arg1;
-				
+				final Pair<String, ?> p0 = (Pair<String, ?>) arg0;
+				final Pair<String, ?> p1 = (Pair<String, ?>) arg1;
+
 				return ((String) p0.getFirst()).compareTo((String) p1.getFirst());
-			}};
+			}
+		};
 		Arrays.sort(dialogResult, c);
 		super.okPressed();
 	}
@@ -423,7 +417,7 @@ public class NewListSelectionDialog extends Dialog {
 	 */
 	public void addColumn(final String title, final ColumnLabelProvider columnLabelProvider) {
 		this.columns.add(new Pair<String, CellLabelProvider>(title, columnLabelProvider));
-		//this.columns.add(new Pair<String, CellLabelProvider>(title, contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty())));
+		// this.columns.add(new Pair<String, CellLabelProvider>(title, contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty())));
 	}
 
 	public String getTitle() {
@@ -483,11 +477,11 @@ public class NewListSelectionDialog extends Dialog {
 			viewer.setSubtreeChecked(element, true);
 		}
 	}
-	
+
 	/**
 	 * @since 2.0
 	 */
-	public void setComparator(ViewerComparator vc) {
+	public void setComparator(final ViewerComparator vc) {
 		comparator = vc;
 	}
 }
