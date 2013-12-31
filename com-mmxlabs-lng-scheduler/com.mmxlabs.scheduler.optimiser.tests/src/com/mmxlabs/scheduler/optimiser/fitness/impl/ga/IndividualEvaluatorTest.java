@@ -170,6 +170,7 @@ public class IndividualEvaluatorTest {
 	 * 
 	 * @param evaluator
 	 */
+	@SuppressWarnings("unchecked")
 	private void createFullyInitialisedEvaluator(final IndividualEvaluator evaluator) {
 
 		final AbstractSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -273,6 +274,7 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testGetSetDistanceProvider() {
 		final IndividualEvaluator evaluator = new IndividualEvaluator();
+		@SuppressWarnings("unchecked")
 		final IMultiMatrixProvider<IPort, Integer> value = Mockito.mock(IMultiMatrixProvider.class);
 		Assert.assertNull(evaluator.getDistanceProvider());
 		evaluator.setDistanceProvider(value);
