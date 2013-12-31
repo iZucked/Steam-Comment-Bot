@@ -169,14 +169,11 @@ public class CargoEconsReport extends ViewPart {
 			}
 		};
 
-		// Disable copy-to-clipboard ad the "-" get badly interpretted by excel
 		final Action packAction = PackActionFactory.createPackColumnsAction(viewer);
-		// final Action copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(viewer);
-		//
+		final Action copyAction = CopyToClipboardActionFactory.createCopyToClipboardAction(viewer);
 		getViewSite().getActionBars().getToolBarManager().add(packAction);
-		// getViewSite().getActionBars().getToolBarManager().add(copyAction);
-		//
-		// getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
+		getViewSite().getActionBars().getToolBarManager().add(copyAction);
+		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
 
 		getSite().getPage().addSelectionListener(selectionListener);
 	}
@@ -209,15 +206,15 @@ public class CargoEconsReport extends ViewPart {
 
 		// @formatter:off
 		BUY_COST_TOTAL("Purchase Cost", "$", DollarsFormat), 
-		BUY_VOLUME_IN_MMBTU("- Volume", "mmBTu", VolumeMMBtuFormat),
+		BUY_VOLUME_IN_MMBTU("> Volume", "mmBTu", VolumeMMBtuFormat),
 		SHIPPING_COST_TOTAL("Shipping Cost", "$", DollarsFormat),
-		SHIPPING_BUNKERS_COST_TOTAL("- Bunkers", "$", DollarsFormat), 
-		SHIPPING_PORT_COST_TOTAL("- Port", "$", DollarsFormat), 
-		SHIPPING_CANAL_COST_TOTAL("- Canal", "$", DollarsFormat), 
-		SHIPPING_BOIL_OFF_COST_TOTAL("- Boil-off", "$", DollarsFormat), 
-		SHIPPING_CHARTER_COST_TOTAL("- Charter fees", "$", DollarsFormat), 
+		SHIPPING_BUNKERS_COST_TOTAL("> Bunkers", "$", DollarsFormat), 
+		SHIPPING_PORT_COST_TOTAL("> Port", "$", DollarsFormat), 
+		SHIPPING_CANAL_COST_TOTAL("> Canal", "$", DollarsFormat), 
+		SHIPPING_BOIL_OFF_COST_TOTAL("> Boil-off", "$", DollarsFormat), 
+		SHIPPING_CHARTER_COST_TOTAL("> Charter fees", "$", DollarsFormat), 
 		SELL_REVENUE_TOTAL("Sale Revenue", "$", DollarsFormat),
-		SELL_VOLUME_IN_MMBTU("- Volume", "mmBtu", VolumeMMBtuFormat),
+		SELL_VOLUME_IN_MMBTU("> Volume", "mmBtu", VolumeMMBtuFormat),
 		PNL_TOTAL("P&L", "$", DollarsFormat),
 		PNL_TOTAL_NO_TC("P&L (Ex. TC)", "$", DollarsFormat),
 		PNL_PER_MMBTU("Margin", "$/mmBTu", DollarsPerMMBtuFormat);
