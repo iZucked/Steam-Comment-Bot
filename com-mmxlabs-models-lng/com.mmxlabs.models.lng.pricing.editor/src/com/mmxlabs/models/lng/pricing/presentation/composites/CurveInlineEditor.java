@@ -57,8 +57,8 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ILabelLayoutDataProvidingEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 
 /**
@@ -374,11 +374,11 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	}
 	
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		// override the layout data set by default
 		control.setLayoutData(layoutData);
 		originalInput = input;
-		super.display(location, context, input, range);
+		super.display(dialogContext, context, input, range);
 	}
 
 	@Override

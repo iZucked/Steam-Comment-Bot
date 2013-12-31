@@ -11,7 +11,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
@@ -22,8 +22,8 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  */
 public class NamedIndexContainerTopLevelComposite extends DefaultTopLevelComposite {
 
-	public NamedIndexContainerTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-		super(parent, style, location, toolkit);
+	public NamedIndexContainerTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		super(parent, style, dialogContext, toolkit);
 	}
 
 	/**

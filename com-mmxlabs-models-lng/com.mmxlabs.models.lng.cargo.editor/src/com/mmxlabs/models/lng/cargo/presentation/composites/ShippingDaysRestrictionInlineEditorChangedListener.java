@@ -15,8 +15,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 
 /**
@@ -71,7 +71,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 	}
 
 	@Override
-	public void postDisplay(final IInlineEditor editor, final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+	public void postDisplay(final IInlineEditor editor, final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 		this.editor = editor;
 		this.input = object;
 		if (input instanceof LoadSlot) {

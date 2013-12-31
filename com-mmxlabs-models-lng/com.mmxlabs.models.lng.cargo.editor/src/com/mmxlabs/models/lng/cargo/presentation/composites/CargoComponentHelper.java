@@ -31,9 +31,9 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -132,13 +132,14 @@ public class CargoComponentHelper extends BaseComponentHelper {
 
 		editor.addNotificationChangedListener(new IInlineEditorExternalNotificationListener() {
 
-			private IScenarioEditingLocation location;
+			//private IScenarioEditingLocation location;
+			private IDialogEditingContext dialogContext;
 
 			private EObject input;
 
 			@Override
-			public void postDisplay(final IInlineEditor editor, final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-				this.location = location;
+			public void postDisplay(final IInlineEditor editor, final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+				this.dialogContext = dialogContext;
 				this.input = object;
 			}
 
@@ -147,8 +148,8 @@ public class CargoComponentHelper extends BaseComponentHelper {
 				if (notification.getFeature() == FleetPackage.eINSTANCE.getAssignableElement_Locked()) {
 					editor.setEditorEnabled(!notification.getNewBooleanValue());
 					if (notification.getNewBooleanValue()) {
-						final ICommandHandler handler = location.getDefaultCommandHandler();
-						handler.handleCommand(SetCommand.create(location.getEditingDomain(), input, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), false), input,
+						final ICommandHandler handler = dialogContext.getScenarioEditingLocation().getDefaultCommandHandler();
+						handler.handleCommand(SetCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), input, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), false), input,
 								CargoPackage.eINSTANCE.getCargo_AllowRewiring());
 					}
 				}

@@ -13,8 +13,8 @@ import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 
 public class ShippingCostRowEditorListener implements IInlineEditorExternalNotificationListener {
@@ -39,7 +39,7 @@ public class ShippingCostRowEditorListener implements IInlineEditorExternalNotif
 	}
 
 	@Override
-	public void postDisplay(final IInlineEditor editor, final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+	public void postDisplay(final IInlineEditor editor, final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 		this.editor = editor;
 		this.input = object;
 

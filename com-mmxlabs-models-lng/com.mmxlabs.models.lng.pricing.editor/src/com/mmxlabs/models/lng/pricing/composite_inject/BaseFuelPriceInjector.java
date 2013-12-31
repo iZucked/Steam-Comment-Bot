@@ -25,9 +25,9 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 
@@ -81,10 +81,10 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			}
 
 			@Override
-			public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+			public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 				for (final EObject r : range) {
 					if (r instanceof BaseFuelCost && ((BaseFuelCost) r).getFuel() == object) {
-						numberEditor.display(location, scenario, r, range);
+						numberEditor.display(dialogContext, scenario, r, range);
 						return;
 					}
 				}

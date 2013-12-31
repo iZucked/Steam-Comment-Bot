@@ -15,8 +15,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 
@@ -26,14 +26,14 @@ import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
  */
 public class UnitCostMatrixDisplayCompositeFactory extends DefaultDisplayCompositeFactory {
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		return new DefaultDetailComposite(composite, SWT.NONE, toolkit) {
 			@Override
-			public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+			public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 				if (object instanceof UnitCostMatrix) {
 					((UnitCostMatrix) object).getCostLines().clear();
 				}
-				super.display(location, root, object, range, dbc);
+				super.display(dialogContext, root, object, range, dbc);
 			}
 		};
 	}

@@ -20,8 +20,8 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 
 /**
@@ -37,7 +37,7 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
  */
 public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters, U extends EObject> extends IInlineEditorEnablementWrapper {
 	private boolean enabled = false;
-	private IScenarioEditingLocation location = null;
+	private IDialogEditingContext dialogContext = null;
 	private MMXRootObject scenario;
 	private Collection<EObject> range = null;
 	private final Class<T> paramsClass;
@@ -68,7 +68,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 								enabled = true;
 								// setEditorEnabled(enabled);
 								// setEditorVisible(enabled);
-								super.display(location, scenario, r, range);
+								super.display(dialogContext, scenario, r, range);
 								setEditorVisible(enabled);
 								return true;
 							}
@@ -89,7 +89,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 					// FIXME: Almost works correctly, first time round the label is not visible, but the text is set correctly.
 					//
 					// setEditorVisible(true);
-					super.display(location, scenario, paramsClass.cast(notification.getNewValue()), range);
+					super.display(dialogContext, scenario, paramsClass.cast(notification.getNewValue()), range);
 					setEditorVisible(enabled);
 					return true;
 
@@ -109,9 +109,9 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 
-		this.location = location;
+		this.dialogContext = dialogContext;
 		this.scenario = scenario;
 		this.range = range;
 
@@ -130,17 +130,17 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 			if (range != null) {
 				for (final EObject r : range) {
 					if (slotContractParamsClass.isInstance(r)) {
-						super.display(location, scenario, r, range);
+						super.display(dialogContext, scenario, r, range);
 						setEditorVisible(true);
 						return;
 					}
 				}
 			}
-			super.display(location, scenario, null, range);
+			super.display(dialogContext, scenario, null, range);
 			setEditorVisible(true);
 		} else {
 			enabled = false;
-			super.display(location, scenario, null, range);
+			super.display(dialogContext, scenario, null, range);
 			setEditorVisible(false);
 		}
 	}

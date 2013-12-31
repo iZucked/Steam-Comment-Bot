@@ -32,20 +32,20 @@ import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.parameters.presentation.ParametersEditorPlugin;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 
 public class OptimiserSettingsToplevelComposite extends DefaultTopLevelComposite {
-	public OptimiserSettingsToplevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-		super(parent, style, location, toolkit);
+	public OptimiserSettingsToplevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		super(parent, style, dialogContext, toolkit);
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
-		super.display(location, root, object, range, dbc);
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+		super.display(dialogContext, root, object, range, dbc);
 		// display sub-things
 		final Composite lower = toolkit.createComposite(this);
 		final GridData gd = new GridData();

@@ -29,8 +29,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
@@ -59,8 +59,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	 */
 	// protected IDisplayComposite bottomLevel = null;
 
-	public CargoTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, FormToolkit toolkit) {
-		super(parent, style, location, toolkit);
+	public CargoTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
+		super(parent, style, dialogContext, toolkit);
 		setLayoutProvider(new DefaultDisplayCompositeLayoutProvider() {
 			// used for children in "middle" composite
 			@Override
@@ -72,7 +72,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
@@ -115,14 +115,14 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		// bottomLevel.setCommandHandler(commandHandler);
 		// bottomLevel.setEditorWrapper(editorWrapper);
 
-		topLevel.display(location, root, object, range, dbc);
+		topLevel.display(dialogContext, root, object, range, dbc);
 		// bottomLevel.display(location, root, object, range);
 
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(location, root, childObjectsItr.next(), range, dbc);
+			children.next().display(dialogContext, root, childObjectsItr.next(), range, dbc);
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row
@@ -185,7 +185,7 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 			toolkit.adapt(g2);
 
 			final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass())
-					.createSublevelComposite(g2, value.eClass(), location, toolkit);
+					.createSublevelComposite(g2, value.eClass(), dialogContext, toolkit);
 
 			sub.setCommandHandler(commandHandler);
 			sub.setEditorWrapper(editorWrapper);

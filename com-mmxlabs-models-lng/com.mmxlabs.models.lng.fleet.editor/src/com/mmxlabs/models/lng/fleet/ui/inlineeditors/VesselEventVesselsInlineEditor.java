@@ -16,12 +16,13 @@ import org.eclipse.emf.edit.command.SetCommand;
 import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.MultiReferenceInlineEditor;
 
 public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 
-	private IScenarioEditingLocation location;
+	//private IScenarioEditingLocation location;
+	private IDialogEditingContext dialogContext;
 	private Collection<EObject> range;
 
 	public VesselEventVesselsInlineEditor(final EStructuralFeature feature) {
@@ -29,10 +30,10 @@ public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		this.location = location;
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+		this.dialogContext = dialogContext;
 		this.range = range;
-		super.display(location, context, input, range);
+		super.display(dialogContext, context, input, range);
 	}
 
 	@Override

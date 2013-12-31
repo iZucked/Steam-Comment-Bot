@@ -12,16 +12,16 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 
 public class JourneyDisplayCompositeFactory extends DefaultDisplayCompositeFactory {
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-		final DefaultDetailComposite s = (DefaultDetailComposite) super.createSublevelComposite(parent, eClass, location, toolkit);
+	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		final DefaultDetailComposite s = (DefaultDetailComposite) super.createSublevelComposite(parent, eClass, dialogContext, toolkit);
 
 		s.setLayoutProvider(new DefaultDisplayCompositeLayoutProvider() {
 			@Override
