@@ -17,9 +17,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory {
 
@@ -27,15 +27,15 @@ public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory 
 	 * @since 6.0
 	 */
 	@Override
-	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-		return new DefaultTopLevelComposite(parent, SWT.NONE, location, toolkit);
+	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		return new DefaultTopLevelComposite(parent, SWT.NONE, dialogContext, toolkit);
 	}
 
 	/**
 	 * @since 6.0
 	 */
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
+	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		return new DefaultDetailComposite(parent, SWT.NONE, toolkit);
 	}
 

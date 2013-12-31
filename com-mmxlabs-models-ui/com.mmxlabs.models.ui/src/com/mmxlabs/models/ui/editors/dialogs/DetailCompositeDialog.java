@@ -83,7 +83,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
 
-	private IScenarioEditingLocation scenarioEditingLocation;
+	//private IScenarioEditingLocation scenarioEditingLocation;
 
 	private IDisplayComposite displayComposite;
 	/**
@@ -337,6 +337,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			return;
 		}
 		final EObject selection = inputs.get(selectedObjectIndex);
+		final IScenarioEditingLocation sel = location;
 
 		getShell().setText("Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " + (1 + selectedObjectIndex) + " of " + inputs.size());
 
@@ -346,7 +347,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
-		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), scenarioEditingLocation, toolkit);
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), new DefaultDialogEditingContext(null, location), toolkit);
 
 		/**
 		 * Allow the child composites to trigger a complete redisplay of the editor components. E.g.
@@ -372,7 +373,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		// Create a new instance with the current adapter factory.
 		// TODO: Dispose?
-		copyDialogToClipboardEditorWrapper = new CopyDialogToClipboard(scenarioEditingLocation.getAdapterFactory());
+		copyDialogToClipboardEditorWrapper = new CopyDialogToClipboard(sel.getAdapterFactory());
 		// Hook via editor wrappers
 		displayComposite.setEditorWrapper(copyDialogToClipboardEditorWrapper);
 
@@ -391,7 +392,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection), dbc);
+		displayComposite.display(new DefaultDialogEditingContext(null, location), rootObject, duplicate, ranges.get(selection), dbc);
 
 		getShell().layout(true, true);
 
@@ -676,8 +677,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		this.returnDuplicates = returnDuplicates;
 	}
 
-	public int open(final IScenarioEditingLocation editorPart, final MMXRootObject rootObject, final List<EObject> objects) {
-		return open(editorPart, rootObject, objects, false);
+	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final List<EObject> objects) {
+		return open(location, rootObject, objects, false);
 
 	}
 
@@ -689,6 +690,9 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private EObject sidebarContainer;
 
+	//private IDialogEditingContext dialogContext;
+	private IScenarioEditingLocation location;
+
 	/**
 	 * This version of the open method also displays the sidebar and allows for creation and deletion of objects in the sidebar.
 	 * 
@@ -698,9 +702,10 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * @param containment
 	 * @return
 	 */
-	public int open(final IScenarioEditingLocation part, final MMXRootObject rootObject, final EObject container, final EReference containment) {
-		this.scenarioEditingLocation = part;
-		dialogValidationSupport = new DialogValidationSupport(scenarioEditingLocation.getExtraValidationContext());
+	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final EObject container, final EReference containment) {
+		this.location = location;
+		final IScenarioEditingLocation sel = location;
+		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
 		this.rootObject = rootObject;
 		lockedForEditing = false;
 		this.inputs.clear();
@@ -712,7 +717,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		this.sidebarContainer = container;
 		this.sidebarContainment = containment;
 
-		scenarioEditingLocation.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
+		sel.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
 		try {
 			final int value = open();
 			if (value == OK) {
@@ -777,14 +782,15 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				}
 			}
 
-			scenarioEditingLocation.popExtraValidationContext();
+			sel.popExtraValidationContext();
 		}
 	}
 
-	public int open(final IScenarioEditingLocation part, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
-		this.scenarioEditingLocation = part;
-		dialogValidationSupport = new DialogValidationSupport(scenarioEditingLocation.getExtraValidationContext());
-		scenarioEditingLocation.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
+	public int open(final IScenarioEditingLocation location, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
+		this.location = location;
+		final IScenarioEditingLocation sel = location;
+		dialogValidationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
+		sel.pushExtraValidationContext(dialogValidationSupport.getValidationContext());
 		this.rootObject = rootObject;
 		lockedForEditing = locked;
 		this.inputs.clear();
@@ -870,7 +876,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				}
 			}
 
-			scenarioEditingLocation.popExtraValidationContext();
+			sel.popExtraValidationContext();
 		}
 	}
 

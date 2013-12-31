@@ -13,7 +13,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 /**
  * Extension of {@link DefaultDetailComposite} which adds support for extensions in {@link MMXObject#getExtensions()}
@@ -30,9 +30,9 @@ public class MMXObjectDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject root, EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+	public void display(final IDialogEditingContext dialogContext, MMXRootObject root, EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		// handle extension fields.
-		super.display(location, root, object, range, dbc);
+		super.display(dialogContext, root, object, range, dbc);
 	}
 
 }

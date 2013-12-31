@@ -23,12 +23,12 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorControlFactory;
 
 /**
@@ -109,7 +109,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	 * @since 6.0
 	 */
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 		final EClass eClass = object.eClass();
 		setLayout(layoutProvider.createDetailLayout(root, object));
 		if (eClass != displayedClass) {
@@ -118,7 +118,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 			createControls(root, object, dbc);
 		}
 		for (final IInlineEditor editor : editors) {
-			editor.display(location, root, object, range);
+			editor.display(dialogContext, root, object, range);
 		}
 	}
 

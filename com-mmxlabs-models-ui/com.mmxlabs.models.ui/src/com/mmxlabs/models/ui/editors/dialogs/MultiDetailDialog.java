@@ -6,7 +6,6 @@ package com.mmxlabs.models.ui.editors.dialogs;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -109,7 +108,8 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	private List<EObject> editedObjects;
 	private final Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
 	private IDisplayCompositeFactory displayCompositeFactory;
-	private IScenarioEditingLocation scenarioEditingLocation;
+	//private IScenarioEditingLocation scenarioEditingLocation;
+	private IDialogEditingContext dialogContext;
 
 	public MultiDetailDialog(final Shell parentShell, final MMXRootObject root, final ICommandHandler commandHandler) {
 		super(parentShell);
@@ -169,7 +169,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
 		createProxies();
 
-		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation, toolkit);
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, dialogContext, toolkit);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		displayComposite.setEditorWrapper(wrapper);
@@ -190,7 +190,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			}
 		};
 		displayComposite.setCommandHandler(immediate);
-		displayComposite.display(scenarioEditingLocation, rootObject, proxies.get(proxies.size() - 1), proxies, dbc);
+		displayComposite.display(dialogContext, rootObject, proxies.get(proxies.size() - 1), proxies, dbc);
 		disableControls();
 		resizeAndCenter();
 	}
@@ -370,8 +370,8 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		commandHandler.getEditingDomain().getCommandStack().execute(command);
 	}
 
-	public int open(final IScenarioEditingLocation part, final List<EObject> objects) {
-		this.scenarioEditingLocation = part;
+	public int open(final IScenarioEditingLocation location, final List<EObject> objects) {
+		this.dialogContext = new DefaultDialogEditingContext(null, location);
 
 		this.editedObjects = objects;
 		editingClass = EMFUtils.findCommonSuperclass(objects);
@@ -532,8 +532,8 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 				}
 
 				@Override
-				public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-					proxy.display(location, scenario, object, range);
+				public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+					proxy.display(dialogContext, scenario, object, range);
 					key.setFirst(proxy.getEditorTarget());
 				}
 

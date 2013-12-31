@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
@@ -66,7 +66,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		if (input == null) {
 			valueProvider = null;
 		} else {
@@ -75,7 +75,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 				log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
 			}
 		}
-		super.display(location, context, input, range);
+		super.display(dialogContext, context, input, range);
 	}
 
 	@Override

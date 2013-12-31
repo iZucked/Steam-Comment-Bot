@@ -10,10 +10,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 /**
  * This is an interface for things which can render EObjects from {@link MMXRootObject}s (scenarios, roughly speaking) to the display.
@@ -44,7 +43,7 @@ public interface IDisplayComposite {
 	 * @param value
 	 * @since 6.0
 	 */
-	public void display(IScenarioEditingLocation location, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc);
+	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc);
 
 	/**
 	 * Sets the command handler for any stuff that goes on in this composite.
