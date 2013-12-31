@@ -40,7 +40,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -67,6 +66,15 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	@Inject
 	private IInitialSequenceBuilder builder;
 
+	@Inject
+	private IVesselProvider vp;
+	@Inject
+	private IPortSlotProvider psp;
+	@Inject
+	private IStartEndRequirementProvider serp;
+	@Inject
+	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -89,11 +97,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
 		 */
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
-
-		final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		final IStartEndRequirementProvider serp = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-		final IVirtualVesselSlotProvider virtualVesselSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_virtualVesselSlotProvider, IVirtualVesselSlotProvider.class);
 
 		// Add in start elements
 		for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {

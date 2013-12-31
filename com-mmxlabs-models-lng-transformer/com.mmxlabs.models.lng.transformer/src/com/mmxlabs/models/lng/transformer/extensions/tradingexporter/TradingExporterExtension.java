@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
@@ -57,6 +59,10 @@ public class TradingExporterExtension implements IExporterExtension {
 	private ModelEntityMap entities;
 	private IAnnotatedSolution annotatedSolution;
 	private Schedule outputSchedule;
+	@Inject
+	private IPortSlotProvider slotProvider;
+	@Inject
+	private IVesselProvider vesselProvider;
 
 	@Override
 	public void startExporting(final Schedule outputSchedule, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
@@ -68,8 +74,6 @@ public class TradingExporterExtension implements IExporterExtension {
 	@Override
 	public void finishExporting() {
 		// final EList<BookedRevenue> revenues = outputSchedule.getRevenue();
-		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		final IVesselProvider vesselProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
 			{
 				final IProfitAndLossAnnotation profitAndLossWithTimeCharter = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss,
@@ -328,11 +332,11 @@ public class TradingExporterExtension implements IExporterExtension {
 	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container, final boolean includeTimeCharterRate) {
-		
+
 		if (profitAndLoss == null) {
 			return;
 		}
-		
+
 		int totalGroupValue = 0;
 		int totalGroupValuePreTax = 0;
 		final GroupProfitAndLoss groupProfitAndLoss = ScheduleFactory.eINSTANCE.createGroupProfitAndLoss();
@@ -352,7 +356,7 @@ public class TradingExporterExtension implements IExporterExtension {
 			final LegalEntity entity = entities.getModelObject(entry.getEntity(), LegalEntity.class);
 			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
 			int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
-			
+
 			if (!groupProfitMap.containsKey(entity)) {
 				groupProfitMap.put(entity, new int[2]);
 			}

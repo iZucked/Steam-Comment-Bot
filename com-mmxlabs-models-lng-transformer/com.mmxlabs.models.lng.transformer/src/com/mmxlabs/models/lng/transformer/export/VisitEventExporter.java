@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -49,15 +51,15 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
  * 
  */
 public class VisitEventExporter extends BaseAnnotationExporter {
+	@Inject
 	private IPortSlotProvider portSlotProvider;
+	@Inject
 	private IPortTypeProvider portTypeProvider;
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<IPortSlot, CargoAllocation>();
 	private Port lastPortVisited = null;
 
 	@Override
 	public void init() {
-		this.portSlotProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		this.portTypeProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 		allocations.clear();
 	}
 

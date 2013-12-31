@@ -44,7 +44,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -65,9 +64,13 @@ public class AnnotatedSolutionExporter {
 	private static final Logger log = LoggerFactory.getLogger(AnnotatedSolutionExporter.class);
 	private final List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
 	private final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
+	@Inject
+	private IVesselProvider vesselProvider;
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	@Inject
-	private List<IExporterExtension> extensions ;
+	private List<IExporterExtension> extensions;
 
 	@Inject
 	private Injector injector;
@@ -83,12 +86,20 @@ public class AnnotatedSolutionExporter {
 	}
 
 	public AnnotatedSolutionExporter() {
+	}
+
+	@Inject
+	public void init() {
 		final VisitEventExporter visitExporter = new VisitEventExporter();
 		exporters.add(new IdleEventExporter(visitExporter));
 		exporters.add(new CooldownExporter(visitExporter));
 		exporters.add(new JourneyEventExporter());
 		exporters.add(new GeneratedCharterOutEventExporter(visitExporter));
 		exporters.add(visitExporter);
+
+		for (IAnnotationExporter ext : exporters) {
+			injector.injectMembers(ext);
+		}
 	}
 
 	public void addExporterExtension(final IExporterExtension extension) {
@@ -99,10 +110,7 @@ public class AnnotatedSolutionExporter {
 	 * @since 3.0
 	 */
 	public Schedule exportAnnotatedSolution(final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
-		final IOptimisationData data = annotatedSolution.getContext().getOptimisationData();
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
-		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		final Schedule output = factory.createSchedule();
 
 		// go through the annotated solution and build stuff for the EMF;
@@ -113,7 +121,7 @@ public class AnnotatedSolutionExporter {
 
 		// prepare exporters
 		for (final IAnnotationExporter exporter : exporters) {
-			//injector.injectMembers(exporter);
+			// injector.injectMembers(exporter);
 			exporter.setOutput(output);
 			exporter.setModelEntityMap(entities);
 			exporter.setAnnotatedSolution(annotatedSolution);
@@ -332,7 +340,7 @@ public class AnnotatedSolutionExporter {
 			// Setup next/prev events.
 			Event prev = null;
 			for (final Event event : events) {
-				
+
 				if (prev != null) {
 					prev.setNextEvent(event);
 					event.setPreviousEvent(prev);
