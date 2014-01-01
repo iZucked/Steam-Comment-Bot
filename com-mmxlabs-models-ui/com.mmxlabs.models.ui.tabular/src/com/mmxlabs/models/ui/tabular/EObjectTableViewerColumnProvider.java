@@ -81,6 +81,14 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 				return getMessages(s);
 			}
 		}
+		
+		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
+			final String toolTip = this.eObjectTableViewer.delegateToolTipProvider.getToolTipText(element);
+			if (toolTip != null) {
+				return toolTip;
+			}
+		}
+
 		return super.getToolTipText(element);
 	}
 

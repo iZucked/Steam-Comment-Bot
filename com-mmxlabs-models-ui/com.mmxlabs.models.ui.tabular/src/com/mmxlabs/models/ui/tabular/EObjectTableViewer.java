@@ -87,6 +87,8 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	protected IColorProvider delegateColourProvider;
 
+	protected IToolTipProvider delegateToolTipProvider;
+
 	/**
 	 * @since 4.0
 	 */
@@ -575,6 +577,14 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 	public void setColourProvider(final IColorProvider delegateColourProvider) {
 		this.delegateColourProvider = delegateColourProvider;
+	}
+
+	public IToolTipProvider getToolTipProvider() {
+		return delegateToolTipProvider;
+	}
+
+	public void setToolTipProvider(final IToolTipProvider delegateToolTipProvider) {
+		this.delegateToolTipProvider = delegateToolTipProvider;
 	}
 
 	/**
