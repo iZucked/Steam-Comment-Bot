@@ -79,6 +79,7 @@ import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.IToolTipProvider;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -161,6 +162,39 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// TODO: API subject to change!
 		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
 
+		
+		scenarioViewer.setToolTipProvider(new IToolTipProvider() {
+			
+			@Override
+			public String getToolTipText(Object element) {
+
+				DerivedIndex<?> di = null;
+//				if(element instanceof NamedIndexContainer<?>){
+//					NamedIndexContainer<?> namedIndexContainer = (NamedIndexContainer<?>) element;
+//					Index<?> data = namedIndexContainer.getData();
+//					if (data instanceof DerivedIndex) {
+//						di = (DerivedIndex<?>) data;				
+//					}					
+//				}
+//				else if (element instanceof DerivedIndex) {
+//					di = (DerivedIndex<?>) element;
+//				}
+//				
+				Index<?> index = getIndex(element);
+				if(index instanceof DerivedIndex<?>){
+					return ((DerivedIndex<?>) index).getExpression();
+				}
+				else{
+					return null;
+				}
+					
+					
+//				return index instanceof DerivedIndex<?> ? di.getExpression() : null;
+			
+//				return di != null ? di.getExpression() : null;
+			}
+		});
+		
 		final GridViewerColumn nameColumn = addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {
