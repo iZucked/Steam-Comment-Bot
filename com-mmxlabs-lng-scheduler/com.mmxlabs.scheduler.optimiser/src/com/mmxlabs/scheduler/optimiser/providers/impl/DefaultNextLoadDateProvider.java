@@ -9,6 +9,8 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -19,6 +21,29 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProviderEditor;
 
 public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor {
+
+	private static class DefaultNextLoadDate implements INextLoadDate {
+
+		private final int time;
+		private final ILoadOption loadOption;
+
+		DefaultNextLoadDate(final int time, final ILoadOption loadOption) {
+			this.time = time;
+			this.loadOption = loadOption;
+		}
+
+		@Override
+		public int getTime() {
+			return time;
+		}
+
+		@Override
+		@Nullable
+		public ILoadOption getNextSlot() {
+			return loadOption;
+		}
+
+	}
 
 	private final Map<ILoadPriceCalculator, Integer> contractToConstantSpeedMap = new HashMap<>();
 	private final Map<ILoadPriceCalculator, Rule> contractToRuleMap = new HashMap<>();
@@ -40,7 +65,7 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 	}
 
 	@Override
-	public int getNextLoadDate(final ILoadOption origin, final IPort fromPort, final int time, final IVessel vessel) {
+	public INextLoadDate getNextLoadDate(final ILoadOption origin, final IPort fromPort, final int time, final IVessel vessel) {
 
 		final ILoadPriceCalculator contract = origin.getLoadPriceCalculator();
 		final Rule rule = contractToRuleMap.get(contract);
@@ -84,9 +109,9 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 		}
 
 		if (nextSlot == null) {
-			return returnTime;
+			return new DefaultNextLoadDate(returnTime, null);
 		} else {
-			return Math.max(returnTime, nextSlot.getTimeWindow().getStart());
+			return new DefaultNextLoadDate(Math.max(returnTime, nextSlot.getTimeWindow().getStart()), nextSlot);
 		}
 	}
 
