@@ -36,8 +36,8 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Override
-	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, int dischargeDuration, @NonNull final IVessel vessel,
-			final int notionalSpeed, final int cargoCVValue, @NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
+	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, int dischargeDuration,
+			@NonNull final IVessel vessel, final int notionalSpeed, final int cargoCVValue, @NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 
@@ -72,11 +72,10 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot,
-					notionalDischargeSlot);
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot);
 
-			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, notionalReturnTime - dischargeDuration - dischargeTime,
-					notionalDischargeSlot, notionalReturnSlot);
+			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, notionalReturnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
+					notionalReturnSlot);
 
 			final PortDetails loadDetails = new PortDetails();
 			loadDetails.setOptions(new PortOptions());
@@ -105,7 +104,61 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 	@Nullable
 	public VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,
 			@NonNull IVessel vessel, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice) {
-		
-		throw new UnsupportedOperationException("Not yet implemented");
+
+		final VoyagePlan notionalPlan = new VoyagePlan();
+
+		final Integer distance = distanceProvider.get(route).get(loadPort, dischargePort);
+		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
+			return null;
+		}
+
+		final int[] arrivalTimes = new int[] { loadTime, dischargeTime, returnTime };
+
+		final LoadSlot notionalLoadSlot = new LoadSlot();
+		notionalLoadSlot.setPort(loadPort);
+		notionalLoadSlot.setTimeWindow(new TimeWindow(loadTime, loadTime));
+		notionalLoadSlot.setCargoCVValue(cargoCVValue);
+		notionalLoadSlot.setCooldownForbidden(true);
+		notionalLoadSlot.setMaxLoadVolume(vessel.getCargoCapacity());
+		notionalLoadSlot.setMinLoadVolume(vessel.getCargoCapacity());
+
+		final DischargeSlot notionalDischargeSlot = new DischargeSlot();
+		notionalDischargeSlot.setPort(dischargePort);
+		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
+		notionalDischargeSlot.setDischargePriceCalculator(salesPrice);
+
+		final PortSlot notionalReturnSlot = new EndPortSlot();
+		notionalReturnSlot.setPort(loadPort);
+		notionalReturnSlot.setTimeWindow(new TimeWindow(returnTime, returnTime));
+
+		// Calculate new voyage requirements
+		{
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot);
+
+			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, returnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
+					notionalReturnSlot);
+
+			final PortDetails loadDetails = new PortDetails();
+			loadDetails.setOptions(new PortOptions());
+			loadDetails.getOptions().setPortSlot(notionalLoadSlot);
+			loadDetails.getOptions().setVisitDuration(loadDuration);
+
+			final PortDetails dischargeDetails = new PortDetails();
+			dischargeDetails.setOptions(new PortOptions());
+			dischargeDetails.getOptions().setPortSlot(notionalDischargeSlot);
+			dischargeDetails.getOptions().setVisitDuration(dischargeDuration);
+
+			final PortDetails returnDetails = new PortDetails();
+			returnDetails.setOptions(new PortOptions());
+			returnDetails.getOptions().setPortSlot(notionalReturnSlot);
+			returnDetails.getOptions().setVisitDuration(0);
+
+			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
+			notionalPlan.setSequence(sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
+
+			return notionalPlan;
+		}
+
 	}
 }
