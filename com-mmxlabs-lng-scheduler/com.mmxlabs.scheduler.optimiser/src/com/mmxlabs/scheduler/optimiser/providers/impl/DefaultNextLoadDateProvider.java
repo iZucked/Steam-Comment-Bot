@@ -119,7 +119,7 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 	public void addSlotForContract(final ILoadPriceCalculator contract, final ILoadOption slot) {
 		final Set<ILoadOption> slots;
 		if (contractToSlotsMap.containsKey(contract)) {
-			slots = contractToSlotsMap.get(slot);
+			slots = contractToSlotsMap.get(contract);
 		} else {
 			slots = new TreeSet<>(new SlotComparator());
 			contractToSlotsMap.put(contract, slots);
