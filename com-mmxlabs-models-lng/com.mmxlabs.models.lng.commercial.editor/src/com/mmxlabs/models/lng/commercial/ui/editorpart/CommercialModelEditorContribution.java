@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -76,8 +77,8 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 				return true;
 			} else if (dcsd.getTarget() instanceof SalesContract) {
 				return true;
-			} else if (dcsd.getTarget() instanceof ExpressionPriceParameters) {
-				final ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters) dcsd.getTarget();
+			} else if (dcsd.getTarget() instanceof LNGPriceCalculatorParameters) {
+				final LNGPriceCalculatorParameters expressionPriceParameters = (LNGPriceCalculatorParameters) dcsd.getTarget();
 				if (expressionPriceParameters.eContainer() instanceof Contract) {
 					return true;
 				}
@@ -95,8 +96,8 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 			editorPart.setActivePage(pageNumber);
 
 			EObject target = dcsd.getTarget();
-			if (target instanceof ExpressionPriceParameters) {
-				final ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters) target;
+			if (target instanceof LNGPriceCalculatorParameters) {
+				final LNGPriceCalculatorParameters expressionPriceParameters = (LNGPriceCalculatorParameters) target;
 				if (expressionPriceParameters.eContainer() instanceof Contract) {
 					target = expressionPriceParameters.eContainer();
 				}
