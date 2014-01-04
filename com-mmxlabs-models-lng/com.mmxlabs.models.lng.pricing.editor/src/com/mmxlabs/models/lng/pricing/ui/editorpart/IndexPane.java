@@ -43,6 +43,7 @@ import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -162,36 +163,48 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// TODO: API subject to change!
 		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
 
-		
+		ColumnViewerToolTipSupport.enableFor((ColumnViewer) scenarioViewer, ToolTip.NO_RECREATE);
+
 		scenarioViewer.setToolTipProvider(new IToolTipProvider() {
+			
 			
 			@Override
 			public String getToolTipText(Object element) {
-
-				DerivedIndex<?> di = null;
-//				if(element instanceof NamedIndexContainer<?>){
-//					NamedIndexContainer<?> namedIndexContainer = (NamedIndexContainer<?>) element;
-//					Index<?> data = namedIndexContainer.getData();
-//					if (data instanceof DerivedIndex) {
-//						di = (DerivedIndex<?>) data;				
-//					}					
+//
+//				Index<?> index = getIndex(element);
+//				if(index instanceof DerivedIndex<?>){
+//					return ((DerivedIndex<?>) index).getExpression();
 //				}
-//				else if (element instanceof DerivedIndex) {
-//					di = (DerivedIndex<?>) element;
+//				else{
+//					return null;
 //				}
-//				
-				Index<?> index = getIndex(element);
-				if(index instanceof DerivedIndex<?>){
-					return ((DerivedIndex<?>) index).getExpression();
+				
+				if (element instanceof NamedIndexContainer<?>) {
+					Index<?> index = ((NamedIndexContainer<?>) element).getData();
+					if (index instanceof DerivedIndex<?>) {
+						return ((DerivedIndex<?>) index).getExpression();
+					}
 				}
-				else{
-					return null;
-				}
-					
-					
-//				return index instanceof DerivedIndex<?> ? di.getExpression() : null;
+				return null;
+			}
+			@Override
+			public Point getToolTipShift(Object object) {
+				return new Point(5, 5);
+			}
 			
-//				return di != null ? di.getExpression() : null;
+			@Override
+			public int getToolTipDisplayDelayTime(Object object) {
+				return 100; // msec
+			}
+			
+			@Override
+			public int getToolTipTimeDisplayed(Object object) {
+				return 5000; // msec
+			}
+			
+			@Override
+			public Image getToolTipImage(Object object) {
+				return null;
 			}
 		});
 		
@@ -603,34 +616,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 					return null;
 				}
-				
-				@SuppressWarnings("rawtypes")
-				@Override
-				public String getToolTipText(Object element) {
-					if (element instanceof NamedIndexContainer<?>) {
-						Index index = ((NamedIndexContainer) element).getData();
-						if (index instanceof DerivedIndex<?>) {
-							return ((DerivedIndex) index).getExpression();
-						}
-					}
-					return null;
-				}
-				
-				@Override
-				public Point getToolTipShift(Object object) {
-					return new Point(5, 5);
-				}
-				
-				@Override
-				public int getToolTipDisplayDelayTime(Object object) {
-					return 100; // msec
-				}
-				
-				@Override
-				public int getToolTipTimeDisplayed(Object object) {
-					return 5000; // msec
-				}
-				
 			});
 		}
 	}
