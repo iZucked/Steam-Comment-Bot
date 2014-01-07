@@ -414,6 +414,29 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.PortsPriceMap} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PortsPriceMapItemProvider portsPriceMapItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.PortsPriceMap}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPortsPriceMapAdapter() {
+		if (portsPriceMapItemProvider == null) {
+			portsPriceMapItemProvider = new PortsPriceMapItemProvider(this);
+		}
+
+		return portsPriceMapItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -556,6 +579,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (charterIndexItemProvider != null) charterIndexItemProvider.dispose();
 		if (baseFuelIndexItemProvider != null) baseFuelIndexItemProvider.dispose();
 		if (namedIndexContainerItemProvider != null) namedIndexContainerItemProvider.dispose();
+		if (portsPriceMapItemProvider != null) portsPriceMapItemProvider.dispose();
 	}
 
 }

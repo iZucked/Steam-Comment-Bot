@@ -1,15 +1,18 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
+
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -18,17 +21,14 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CooldownPrice} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.PortsPriceMap} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CooldownPriceItemProvider
-	extends PortsPriceMapItemProvider
+public class PortsPriceMapItemProvider
+	extends MMXObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -41,7 +41,7 @@ public class CooldownPriceItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CooldownPriceItemProvider(AdapterFactory adapterFactory) {
+	public PortsPriceMapItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -56,19 +56,65 @@ public class CooldownPriceItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addPortsPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This returns CooldownPrice.gif.
+	 * This adds a property descriptor for the Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortsPriceMap_ports_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortsPriceMap_ports_feature", "_UI_PortsPriceMap_type"),
+				 PricingPackage.Literals.PORTS_PRICE_MAP__PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PortsPriceMap_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PortsPriceMap_index_feature", "_UI_PortsPriceMap_type"),
+				 PricingPackage.Literals.PORTS_PRICE_MAP__INDEX,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns PortsPriceMap.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CooldownPrice"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/PortsPriceMap"));
 	}
 
 	/**
@@ -79,7 +125,7 @@ public class CooldownPriceItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_CooldownPrice_type");
+		return getString("_UI_PortsPriceMap_type");
 	}
 
 	/**

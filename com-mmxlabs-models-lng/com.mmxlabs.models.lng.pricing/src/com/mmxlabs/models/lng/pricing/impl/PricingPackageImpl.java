@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PortsPriceMap;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -146,6 +147,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass namedIndexContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portsPriceMapEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -521,24 +529,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCooldownPrice_Ports() {
-		return (EReference)cooldownPriceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCooldownPrice_Index() {
-		return (EReference)cooldownPriceEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -594,6 +584,33 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EAttribute getNamedIndexContainer_Units() {
 		return (EAttribute)namedIndexContainerEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPortsPriceMap() {
+		return portsPriceMapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortsPriceMap_Ports() {
+		return (EReference)portsPriceMapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortsPriceMap_Index() {
+		return (EReference)portsPriceMapEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -668,8 +685,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(portCostEntryEClass, PORT_COST_ENTRY__COST);
 
 		cooldownPriceEClass = createEClass(COOLDOWN_PRICE);
-		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__PORTS);
-		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__INDEX);
 
 		commodityIndexEClass = createEClass(COMMODITY_INDEX);
 
@@ -680,6 +695,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		namedIndexContainerEClass = createEClass(NAMED_INDEX_CONTAINER);
 		createEReference(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__DATA);
 		createEAttribute(namedIndexContainerEClass, NAMED_INDEX_CONTAINER__UNITS);
+
+		portsPriceMapEClass = createEClass(PORTS_PRICE_MAP);
+		createEReference(portsPriceMapEClass, PORTS_PRICE_MAP__PORTS);
+		createEReference(portsPriceMapEClass, PORTS_PRICE_MAP__INDEX);
 	}
 
 	/**
@@ -734,7 +753,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		routeCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		cooldownPriceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		cooldownPriceEClass.getESuperTypes().add(this.getPortsPriceMap());
 		g1 = createEGenericType(this.getNamedIndexContainer());
 		g2 = createEGenericType(ecorePackage.getEDoubleObject());
 		g1.getETypeArguments().add(g2);
@@ -749,6 +768,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		baseFuelIndexEClass.getEGenericSuperTypes().add(g1);
 		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		portsPriceMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -823,11 +843,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getPortCostEntry_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, PortCostEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cooldownPriceEClass, CooldownPrice.class, "CooldownPrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(theTypesPackage.getAPortSet());
-		g2 = createEGenericType(thePortPackage.getPort());
-		g1.getETypeArguments().add(g2);
-		initEReference(getCooldownPrice_Ports(), g1, null, "ports", null, 0, -1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCooldownPrice_Index(), this.getCommodityIndex(), null, "index", null, 1, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(commodityIndexEClass, CommodityIndex.class, "CommodityIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -841,6 +856,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getNamedIndexContainer_Data(), g1, null, "data", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNamedIndexContainer_Units(), ecorePackage.getEString(), "units", null, 0, 1, NamedIndexContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portsPriceMapEClass, PortsPriceMap.class, "PortsPriceMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getPortsPriceMap_Ports(), g1, null, "ports", null, 0, -1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortsPriceMap_Index(), this.getCommodityIndex(), null, "index", null, 1, 1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -39,8 +39,8 @@ public class CooldownCostsPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
-		addTypicalColumn("Ports", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getCooldownPrice_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		addTypicalColumn("Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCooldownPrice_Index(), getReferenceValueProviderCache(), getEditingDomain()));
+		addTypicalColumn("Ports", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getPortsPriceMap_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getPortsPriceMap_Index(), getReferenceValueProviderCache(), getEditingDomain()));
 		defaultSetTitle("Cooldown Costs");
 	}
 }

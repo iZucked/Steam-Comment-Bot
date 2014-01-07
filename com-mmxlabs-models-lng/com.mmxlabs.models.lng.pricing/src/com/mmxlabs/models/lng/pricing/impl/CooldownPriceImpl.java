@@ -24,36 +24,11 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * An implementation of the model object '<em><b>Cooldown Price</b></em>'.
  * <!-- end-user-doc -->
  * <p>
- * The following features are implemented:
- * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#getPorts <em>Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#getIndex <em>Index</em>}</li>
- * </ul>
  * </p>
  *
  * @generated
  */
-public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
-	/**
-	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<APortSet<Port>> ports;
-
-	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIndex()
-	 * @generated
-	 * @ordered
-	 */
-	protected CommodityIndex index;
-
+public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPrice {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -71,131 +46,6 @@ public class CooldownPriceImpl extends MMXObjectImpl implements CooldownPrice {
 	@Override
 	protected EClass eStaticClass() {
 		return PricingPackage.Literals.COOLDOWN_PRICE;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<APortSet<Port>> getPorts() {
-		if (ports == null) {
-			ports = new EObjectResolvingEList<APortSet<Port>>(APortSet.class, this, PricingPackage.COOLDOWN_PRICE__PORTS);
-		}
-		return ports;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	public CommodityIndex getIndex() {
-		if (index != null && index.eIsProxy()) {
-			InternalEObject oldIndex = (InternalEObject)index;
-			index = (CommodityIndex)eResolveProxy(oldIndex);
-			if (index != oldIndex) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
-			}
-		}
-		return index;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CommodityIndex basicGetIndex() {
-		return index;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 5.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setIndex(CommodityIndex newIndex) {
-		CommodityIndex oldIndex = index;
-		index = newIndex;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__PORTS:
-				return getPorts();
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				if (resolve) return getIndex();
-				return basicGetIndex();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__PORTS:
-				getPorts().clear();
-				getPorts().addAll((Collection<? extends APortSet<Port>>)newValue);
-				return;
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				setIndex((CommodityIndex)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__PORTS:
-				getPorts().clear();
-				return;
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				setIndex((CommodityIndex)null);
-				return;
-		}
-		super.eUnset(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__PORTS:
-				return ports != null && !ports.isEmpty();
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				return index != null;
-		}
-		return super.eIsSet(featureID);
 	}
 
 } // end of CooldownPriceImpl

@@ -91,7 +91,8 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port() });
-		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity() });
+		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity() });
+		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MaxQuantity() });
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 
 		pricingFeatures = new ArrayList<EStructuralFeature[]>();
@@ -249,7 +250,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		Layout l = layoutProvider.createDetailLayout(root, object);
 //		contentComposite.setLayout(new GridLayout(2, false));
 		 
-		GridLayout layout = new GridLayout(2, false);
+		GridLayout layout = new GridLayout(4, false);
 		layout.verticalSpacing = 8;
 		contentComposite.setLayout(layout);
 

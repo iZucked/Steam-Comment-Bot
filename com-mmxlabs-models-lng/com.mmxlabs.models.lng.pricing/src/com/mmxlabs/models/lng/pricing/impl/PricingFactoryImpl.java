@@ -43,7 +43,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 */
 	public static PricingFactory init() {
 		try {
-			PricingFactory thePricingFactory = (PricingFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/pricing/1/"); 
+			PricingFactory thePricingFactory = (PricingFactory)EPackage.Registry.INSTANCE.getEFactory(PricingPackage.eNS_URI);
 			if (thePricingFactory != null) {
 				return thePricingFactory;
 			}
@@ -86,6 +86,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.CHARTER_INDEX: return createCharterIndex();
 			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
 			case PricingPackage.NAMED_INDEX_CONTAINER: return createNamedIndexContainer();
+			case PricingPackage.PORTS_PRICE_MAP: return createPortsPriceMap();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -233,6 +234,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public <Value> NamedIndexContainer<Value> createNamedIndexContainer() {
 		NamedIndexContainerImpl<Value> namedIndexContainer = new NamedIndexContainerImpl<Value>();
 		return namedIndexContainer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortsPriceMap createPortsPriceMap() {
+		PortsPriceMapImpl portsPriceMap = new PortsPriceMapImpl();
+		return portsPriceMap;
 	}
 
 	/**
