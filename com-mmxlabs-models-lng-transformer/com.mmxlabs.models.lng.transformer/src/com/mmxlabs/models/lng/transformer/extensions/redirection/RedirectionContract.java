@@ -85,7 +85,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
-			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan originalPlan, final IDetailTree annotation) {
+			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final int vesselStartTime, final VoyagePlan originalPlan, final IDetailTree annotation) {
 
 		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(loadTime);
 		final int cargoCVValue = loadSlot.getCargoCVValue();
@@ -114,8 +114,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			final int baseDischargeTime = dischargeTime;
 			for (final String route : distanceProvider.getKeys()) {
 
-				int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
-				int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
+				final int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
+				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration, vessel, vessel
 						.getVesselClass().getMaxSpeed(), loadSlot.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), dischargePricePerMMBTu);
@@ -142,8 +142,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			long notionalShippingCosts = Long.MAX_VALUE;
 			String notionalRoute = null;
 			for (final String route : distanceProvider.getKeys()) {
-				int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
-				int dischargeDuration = durationProvider.getElementDuration(dischargeElement, vessel);
+				final int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
+				final int dischargeDuration = durationProvider.getElementDuration(dischargeElement, vessel);
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), dischargeSlot.getPort(), originalLoadTime, loadDuration, dischargeTime, dischargeDuration, vessel, vessel
 						.getVesselClass().getMaxSpeed(), loadSlot.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), dischargePricePerMMBTu);
 
@@ -213,8 +213,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			final int baseDischargeTime = transferTime;
 			for (final String route : distanceProvider.getKeys()) {
 				// Notional Costs - Purchase port to base destination
-				int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
-				int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
+				final int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
+				final int dischargeDuration = portVisitDurationProvider.getVisitDuration(baseSalesMarketPort, PortType.Discharge);
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration, vessel, vessel
 						.getVesselClass().getMaxSpeed(), loadOption.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), actualSalesPricePerMMBTu);
@@ -242,8 +242,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			String notionalRoute = null;
 			for (final String route : distanceProvider.getKeys()) {
 
-				int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
-				int dischargeDuration = durationProvider.getElementDuration(dischargeElement, vessel);
+				final int loadDuration = durationProvider.getElementDuration(loadElement, vessel);
+				final int dischargeDuration = durationProvider.getElementDuration(dischargeElement, vessel);
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadOption.getPort(), dischargeOption.getPort(), originalLoadTime, loadDuration, transferTime, dischargeDuration, vessel,
 						vessel.getVesselClass().getMaxSpeed(), loadOption.getCargoCVValue(), route, vessel.getVesselClass().getBaseFuelUnitPrice(), actualSalesPricePerMMBTu);
@@ -295,18 +295,20 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Override
 	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final List<IPortSlot> slots, final int[] arrivalTimes, final long[] volumes, final int[] dischargePricesPerMMBTu,
-			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
+			final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, IDischargeSlot dischargeSlot, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
+	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int transferTime, final int dischargePricePerMMBTu,
+			final long transferVolumeInM3, final IDetailTree annotations) {
 		return calculateLoadPricePerMMBTu(loadOption, dischargeSlot, transferTime, dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
 
 	@Override
-	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, IDischargeOption dischargeOption, int transferTime, int dischargePricePerMMBTu, long transferVolumeInM3, IDetailTree annotations) {
+	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu,
+			final long transferVolumeInM3, final IDetailTree annotations) {
 		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
 }
