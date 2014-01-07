@@ -146,20 +146,20 @@ public class ScheduleCalculatorTest {
 		when(markToMarketProvider.getMarketForElement(element5)).thenReturn(market5);
 
 		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
-		when(volumeAllocator.allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot1)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot2)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot3)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
-		when(volumeAllocator.allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot4)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
+		when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), anyListOf(Integer.class))).thenReturn(allocationAnnotation);
 
 		scheduleCalculator.calculateMarkToMarketPNL(sequences, annotatedSolution);
 
 		List<Integer> expectedList = Lists.newArrayList(Integer.valueOf(10), Integer.valueOf(10));
 
 		// Verify that our slots were correctly matched against MTM slots
-		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot1)), eq(expectedList));
-		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot2)), eq(expectedList));
-		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot3)), eq(expectedList));
-		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), argThat(new VoyagePlanMatcher(portSlot4)), eq(expectedList));
+		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot1)), eq(expectedList));
+		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot2)), eq(expectedList));
+		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), eq(expectedList));
+		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), eq(expectedList));
 
 		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
 		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());

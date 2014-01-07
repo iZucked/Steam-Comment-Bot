@@ -141,7 +141,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				}
 
 				final IDetailsSequenceElement[] newSequence = currentSequence.clone();
-				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
+				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, seq.getStartTime(), vp, arrivalTimes);
 
 				if (originalLoad != null) {
 
@@ -252,7 +252,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes, 0);
 
-		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
+		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, seq.getStartTime(), newVoyagePlan, arrivalTimes);
 		final long newPnLValue = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
 		return newPnLValue;
 	}

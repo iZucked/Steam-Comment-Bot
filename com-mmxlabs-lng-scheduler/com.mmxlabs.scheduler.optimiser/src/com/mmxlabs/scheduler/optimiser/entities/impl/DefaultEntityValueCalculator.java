@@ -152,7 +152,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							final ILoadSlot loadSlot = (ILoadSlot) loadOption;
 							final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeOption;
 							loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3,
-									vessel, plan, entityDetails);
+									vessel,vesselStartTime, plan, entityDetails);
 						} else if (loadOption instanceof ILoadSlot) {
 							// FOB Sale
 							loadOption.getLoadPriceCalculator().calculatePriceForFOBSalePerMMBTu((ILoadSlot) loadOption, dischargeOption, transferTime, dischargePricePerMMBTu, transferVolumeInM3,
@@ -166,12 +166,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					}
 					{
 						additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel,
-								plan, entityDetails);
+								vesselStartTime, plan, entityDetails);
 					}
 
 				} else {
 					additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel,
-							plan, null);
+							vesselStartTime, plan, null);
 				}
 
 				// Sum up entity p&L

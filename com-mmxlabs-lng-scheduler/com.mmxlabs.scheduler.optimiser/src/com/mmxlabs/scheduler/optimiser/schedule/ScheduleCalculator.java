@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
@@ -307,7 +308,7 @@ public class ScheduleCalculator {
 			}
 
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, time, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 

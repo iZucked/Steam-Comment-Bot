@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -35,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -220,12 +222,12 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * @return
 	 * @since 5.0
 	 */
-	public final AllocationRecord addCargo(final VoyagePlan plan, final IVessel vessel, final ArrayList<PortDetails> ports, final ArrayList<VoyageDetails> voyages, final ArrayList<Integer> slotTimes,
-			long initialLngVolume) {
+	public final AllocationRecord addCargo(final VoyagePlan plan, final IVessel vessel, int vesselStartTime, final ArrayList<PortDetails> ports, final ArrayList<VoyageDetails> voyages,
+			final ArrayList<Integer> slotTimes, long initialLngVolume) {
 		final PortDetails[] portDetails = ports.toArray(new PortDetails[ports.size()]);
 		final VoyageDetails[] voyageDetails = voyages.toArray(new VoyageDetails[voyages.size()]);
 		final Integer[] times = slotTimes.toArray(new Integer[slotTimes.size()]);
-		return addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel, initialLngVolume);
+		return addCargo(plan, portDetails, voyageDetails, times, plan.getLNGFuelVolume(), vessel, vesselStartTime, initialLngVolume);
 	}
 
 	@Override
@@ -236,7 +238,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		for (final ScheduledSequence sequence : sequences) {
 			planIterator.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());
 			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
-
+			int vesselStartTime = sequence.getStartTime();
 			PortDetails loadDetails = null;
 			PortDetails dischargeDetails = null;
 			VoyagePlan plan = null;
@@ -258,7 +260,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 					// Ensure voyages size is greater than zero - otherwise this is really a special/virtual cargo - such as FOB/DES which is handled separately
 					if (plan != null && cargoPortDetails.size() >= 2 && voyages.size() > 0) {
-						AllocationRecord cargoAllocation = addCargo(plan, vessel, cargoPortDetails, voyages, slotTimes, lngRolledOver);//
+						AllocationRecord cargoAllocation = addCargo(plan, vessel, vesselStartTime, cargoPortDetails, voyages, slotTimes, lngRolledOver);//
 						lngRolledOver = cargoAllocation.minEndVolumeInM3;
 					}
 					// Clear the lists
@@ -308,7 +310,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 			// Handle any left over bits
 			if (plan != null && cargoPortDetails.size() >= 2 && voyages.size() > 0) {
-				addCargo(plan, vessel, cargoPortDetails, voyages, slotTimes, lngRolledOver);
+				addCargo(plan, vessel, vesselStartTime, cargoPortDetails, voyages, slotTimes, lngRolledOver);
 			}
 
 		}
@@ -328,7 +330,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * @since 5.0
 	 */
 	@Override
-	public IAllocationAnnotation allocate(final IVessel vessel, final VoyagePlan plan, final List<Integer> arrivalTimes) {
+	public IAllocationAnnotation allocate(final IVessel vessel, int vesselStartTime, final VoyagePlan plan, final List<Integer> arrivalTimes) {
 
 		PortDetails loadDetails = null;
 		PortDetails dischargeDetails = null;
@@ -344,8 +346,21 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		int dischargePricePerMMBTu = 0;
 		int loadPricePerMMBTu = 0;
 		long maximumDischargeVolumeInM3 = 0;
+		// Rough estimate of required array size
+		IDetailsSequenceElement[] sequence = plan.getSequence();
+		List<IPortSlot> slots = new ArrayList<>(sequence.length / 2 + 1);
+
+		for (int i = 0; i < sequence.length - 1; ++i) {
+			IDetailsSequenceElement element = sequence[i];
+			if (element instanceof PortDetails) {
+				final PortDetails pd = (PortDetails) element;
+				final IPortSlot slot = pd.getOptions().getPortSlot();
+				slots.add(slot);
+			}
+		}
+
 		int idx = -1;
-		for (final Object object : plan.getSequence()) {
+		for (final Object object : sequence) {
 			if (object instanceof PortDetails) {
 				++idx;
 				final PortDetails pd = (PortDetails) object;
@@ -387,7 +402,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 						final long loadVolumeInM3 = maximumDischargeVolumeInM3 + forcedLoadVolumeInM3;
 						loadPricePerMMBTu = loadOption.getLoadPriceCalculator().calculateFOBPricePerMMBTu((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, loadTime, dischargeTime,
-								dischargePricePerMMBTu, loadVolumeInM3, maximumDischargeVolumeInM3, vessel, plan, null);
+								dischargePricePerMMBTu, loadVolumeInM3, maximumDischargeVolumeInM3, vessel, vesselStartTime, plan, null);
 
 						dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBTu, cargoCVValue);
 						loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
@@ -485,7 +500,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * @since 5.0
 	 */
 	public AllocationRecord addCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3,
-			final IVessel vessel, long initialLngVolume) {
+			final IVessel vessel, int vesselStartTime, long initialLngVolume) {
 		// TODO: REMOVE HACK!
 		if (portDetails.length == 2) {
 			final PortDetails loadDetails = portDetails[0];
@@ -493,9 +508,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			final VoyageDetails ladenLeg = legs.length > 0 ? legs[0] : null;
 			final VoyageDetails ballastLeg = legs.length > 1 ? legs[1] : null;
 
-			return addLoadDischargeCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, times[0], times[1], requiredFuelVolumeInM3, vessel, initialLngVolume);
+			return addLoadDischargeCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, times[0], times[1], requiredFuelVolumeInM3, vessel, vesselStartTime, initialLngVolume);
 		} else {
-			return addComplexCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel, initialLngVolume);
+			return addComplexCargo(plan, portDetails, legs, times, requiredFuelVolumeInM3, vessel, vesselStartTime, initialLngVolume);
 		}
 	}
 
@@ -504,7 +519,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * @since 5.0
 	 */
 	public AllocationRecord addLoadDischargeCargo(final VoyagePlan plan, final PortDetails loadDetails, final VoyageDetails ladenLeg, final PortDetails dischargeDetails,
-			final VoyageDetails ballastLeg, final int loadTime, final int dischargeTime, final long requiredFuelVolumeInM3, final IVessel vessel, final long startHeel) {
+			final VoyageDetails ballastLeg, final int loadTime, final int dischargeTime, final long requiredFuelVolumeInM3, final IVessel vessel, int vesselStartTime, final long startHeel) {
 
 		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
@@ -513,7 +528,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		slotTimes.put(loadSlot, loadTime);
 		slotTimes.put(dischargeSlot, dischargeTime);
 
-		final IPortSlot[] slots = { loadSlot, dischargeSlot };
+		final List<IPortSlot> slots = Lists.newArrayList(loadSlot, dischargeSlot);
 
 		final long endHeelRequired = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0l;
 		final long dischargeHeelRequired = plan.getRemainingHeelType() == HeelType.DISCHARGE ? plan.getRemainingHeelInM3() : 0l;
@@ -536,7 +551,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		// FIXME: Why do we pass in max discharge value?
 		final long loadVolumeInM3 = maximumDischargeVolumeInM3 + requiredFuelVolumeInM3;
 		final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBtu, loadVolumeInM3,
-				maximumDischargeVolumeInM3, vessel, plan, null);
+				maximumDischargeVolumeInM3, vessel, vesselStartTime, plan, null);
 		final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBtu, cargoCVValue);
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
@@ -544,8 +559,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int[] pricesPerMMBTu = { loadPricePerMMBTu, dischargePricePerMMBtu };
 		final int[] times = { loadTime, dischargeTime };
 
-		final AllocationRecord result = new AllocationRecord(vessel, vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu,
-				times, plan);
+		final AllocationRecord result = new AllocationRecord(vessel, vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, endHeelRequired, dischargeHeelRequired, slots.toArray(new IPortSlot[2]),
+				pricesPerM3, pricesPerMMBTu, times, plan);
 		constraints.add(result);
 
 		cargoCount++;
@@ -647,7 +662,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 * @since 5.0
 	 */
 	public AllocationRecord addComplexCargo(final VoyagePlan plan, final PortDetails[] portDetails, final VoyageDetails[] legs, final Integer[] times, final long requiredFuelVolumeInM3,
-			final IVessel vessel, long startHeel) {
+			final IVessel vessel, int vesselStartTime, long startHeel) {
 
 		final long vesselCapacityInM3 = vessel.getCargoCapacity();
 		final IPortSlot[] slots = new IPortSlot[portDetails.length];
@@ -697,7 +712,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			final ILoadPriceCalculator calculator = loadSlot.getLoadPriceCalculator();
 			assert (calculator instanceof SimpleContract);
 
-			final int loadPricePerMMBTu = calculator.calculateFOBPricePerMMBTu(null, null, times[0], 0, 0, 0, 0, null, null, null);
+			final int loadPricePerMMBTu = calculator.calculateFOBPricePerMMBTu(null, null, times[0], 0, 0, 0, 0, null, vesselStartTime, null, null);
 
 			final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 			final long loadVolumeInM3 = totalDischargeVolume + requiredFuelVolumeInM3;
