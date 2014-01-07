@@ -288,8 +288,10 @@ public class LNGScenarioTransformer {
 		findEarliestAndLatestTimes();
 
 		dateHelper.setEarliestTime(earliestTime);
+		dateHelper.setEarliestTime(earliestTime);
 		// set earliest and latest times into entities
 		entities.setEarliestDate(earliestTime);
+		entities.setLatestDate(latestTime);
 
 		/**
 		 * First, create all the market curves (should these come through the builder?)
