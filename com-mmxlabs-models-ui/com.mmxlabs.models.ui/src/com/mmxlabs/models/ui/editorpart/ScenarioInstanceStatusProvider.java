@@ -4,17 +4,11 @@
  */
 package com.mmxlabs.models.ui.editorpart;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 
-import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -23,8 +17,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * @author Simon Goodall
  * 
  */
-public class ScenarioInstanceStatusProvider implements IStatusProvider {
-	private final Set<IStatusChangedListener> listeners = new HashSet<IStatusChangedListener>();
+public class ScenarioInstanceStatusProvider extends DefaultStatusProvider {
 	private ScenarioInstance scenarioInstance;
 	final EContentAdapter validationAdapter = new EContentAdapter() {
 		@Override
@@ -63,21 +56,4 @@ public class ScenarioInstanceStatusProvider implements IStatusProvider {
 		return (IStatus) scenarioInstance.getAdapters().get(IStatus.class);
 	}
 
-	@Override
-	public void addStatusChangedListener(final IStatusChangedListener l) {
-		listeners.add(l);
-
-	}
-
-	@Override
-	public void removeStatusChangedListener(final IStatusChangedListener l) {
-		listeners.remove(l);
-	}
-
-	private void fireStatusChanged(final IStatus status) {
-		final List<IStatusChangedListener> copy = new ArrayList<IStatusChangedListener>(listeners);
-		for (final IStatusChangedListener l : copy) {
-			l.onStatusChanged(this, status);
-		}
-	}
 }
