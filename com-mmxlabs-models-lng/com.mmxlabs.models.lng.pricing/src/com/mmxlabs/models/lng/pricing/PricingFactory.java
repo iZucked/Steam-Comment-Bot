@@ -163,6 +163,15 @@ public interface PricingFactory extends EFactory {
 	PortsPriceMap createPortsPriceMap();
 
 	/**
+	 * Returns a new object of class '<em>Ports Expression Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Ports Expression Map</em>'.
+	 * @generated
+	 */
+	PortsExpressionMap createPortsExpressionMap();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
