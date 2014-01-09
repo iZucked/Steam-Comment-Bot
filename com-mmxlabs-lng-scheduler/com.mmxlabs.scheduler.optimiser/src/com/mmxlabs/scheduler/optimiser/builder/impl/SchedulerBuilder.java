@@ -1107,9 +1107,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, ZeroCurve.getInstance(), type, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0,
 				virtualClass.getCargoCapacity());
 		// Bind every slot to its vessel
-		IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
+		final IPortSlot portSlot = portSlotsProvider.getPortSlot(element);
 		assert portSlot != null;
-		constrainSlotToVessels(portSlot, Collections.singleton(virtualVessel));
+		freezeSlotToVessel(portSlot, virtualVessel);
 
 		virtualVesselMap.put(element, virtualVessel);
 		virtualVesselSlotProviderEditor.setVesselForElement(virtualVessel, element);
@@ -1579,7 +1579,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if ((vessels == null) || vessels.isEmpty()) {
 			slotVesselRestrictions.remove(slot);
 		} else {
-			slotVesselRestrictions.put(slot, vessels);
+			slotVesselRestrictions.put(slot, new HashSet<>(vessels));
 		}
 	}
 
@@ -1588,7 +1588,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		if ((vesselClasses == null) || vesselClasses.isEmpty()) {
 			slotVesselClassRestrictions.remove(slot);
 		} else {
-			slotVesselClassRestrictions.put(slot, vesselClasses);
+			slotVesselClassRestrictions.put(slot, new HashSet<>(vesselClasses));
 		}
 	}
 
@@ -1625,6 +1625,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final Map<IDischargeOption, Collection<IPort>> fobSalesToLoadPorts = new HashMap<>();
 	private final Map<ILoadOption, Collection<IPort>> desPurchasesToDischargePorts = new HashMap<>();
 
+	/**
+	 * A {@link Set} of {@link IPortSlot} which cannot be moved to another vessel/resource. This is populated be calls to {@link #freezeSlotToVessel(IPortSlot, IVessel)}.
+	 */
+	private final Set<IPortSlot> frozenSlots = new HashSet<>();
+
 	@Override
 	public void bindDischargeSlotsToDESPurchase(@NonNull final ILoadOption desPurchase, final Collection<IPort> dischargePorts) {
 		desPurchasesToDischargePorts.put(desPurchase, new ArrayList<>(dischargePorts));
@@ -1646,6 +1651,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(desPurchase));
 			for (final IDischargeOption option : dischargeSlots) {
+
+				// Skip frozen slots
+				if (frozenSlots.contains(option)) {
+					continue;
+				}
 
 				if (option instanceof DischargeSlot) {
 
@@ -1693,6 +1703,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(fobSale));
 
 			for (final ILoadOption option : loadSlots) {
+
+				// Skip frozen slots
+				if (frozenSlots.contains(option)) {
+					continue;
+				}
 
 				if (option instanceof LoadSlot) {
 
@@ -1914,5 +1929,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
 		assert element != null;
 		shippingHoursRestrictionProviderEditor.setShippingHoursRestriction(element, baseTime, hours);
+	}
+
+	@Override
+	public void freezeSlotToVessel(final IPortSlot portSlot, final IVessel vessel) {
+		constrainSlotToVessels(portSlot, Collections.singleton(vessel));
+		this.frozenSlots.add(portSlot);
 	}
 }
