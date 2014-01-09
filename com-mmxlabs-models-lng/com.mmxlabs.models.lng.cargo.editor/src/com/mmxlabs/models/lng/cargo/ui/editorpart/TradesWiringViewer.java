@@ -137,6 +137,7 @@ import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
+import com.mmxlabs.models.ui.tabular.DefaultToolTipProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
@@ -194,6 +195,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final CargoEditorMenuHelper menuHelper;
 
 	private final Image lockedImage;
+	private final Image notesImage;
 
 	private IStatusChangedListener statusChangedListener;
 
@@ -208,6 +210,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		this.cec = new CargoEditingCommands(scenarioEditingLocation.getEditingDomain(), scenarioModel, scenarioModel.getPortfolioModel());
 		this.menuHelper = new CargoEditorMenuHelper(part.getSite().getShell(), scenarioEditingLocation, scenarioModel, scenarioModel.getPortfolioModel());
 		lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
+		notesImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_NOTES);
 	}
 
 	@Override
@@ -428,6 +431,34 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 		};
+				
+		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
+			
+			@Override
+			public String getToolTipText(Object element) {
+				RowData rd = ((RowData) element);
+				LoadSlot ls = rd.getLoadSlot();
+				DischargeSlot ds = rd.getDischargeSlot();
+				
+				String lString = ls!=null ? (ls.getNotes()!= null ? ls.getNotes(): "") : "";
+				String dString = ds!=null ? (ds.getNotes()!= null ? ds.getNotes(): "") : "";
+				if(lString.length() + dString.length() == 0){
+					return null;
+				}
+				else {
+					if(lString.length() > 40) lString = lString.substring(0, 40) + "...";
+					if(dString.length() > 40) dString = dString.substring(0, 40) + "...";
+					return lString + "\n\n" + dString;
+				}
+			}
+			
+			@Override
+			public Point getToolTipShift(Object object) {
+				return new Point(10, 10);
+			}
+		});
+		
+		
 		final MenuManager mgr = new MenuManager();
 
 		contextMenuExtensions = TradesTableContextMenuExtensionUtil.getContextMenuExtensions();
@@ -759,7 +790,31 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+//		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+		{
+			BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.DISCHARGE);
+			final GridViewerColumn idColumn = addTradesColumn(dischargeColumns, "D-ID", manipulator, assignmentPath);
+			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
+				@Override
+				public Image getImage(final Object element) {
+
+					if (element instanceof RowData) {
+						final RowData rowDataItem = (RowData) element;
+						Object object = assignmentPath.get(rowDataItem);
+						if (object instanceof DischargeSlot) {
+							DischargeSlot ds = (DischargeSlot) object;
+
+							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
+								return notesImage;
+							}
+						}
+					}
+
+					return super.getImage(element);
+				}
+			});			
+		}
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(true, Type.SLOT_OR_CARGO);
