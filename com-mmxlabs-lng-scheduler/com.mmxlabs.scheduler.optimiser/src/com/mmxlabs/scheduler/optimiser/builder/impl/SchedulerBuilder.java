@@ -1932,7 +1932,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void freezeSlotToVessel(final IPortSlot portSlot, final IVessel vessel) {
+	public void freezeSlotToVessel(@NonNull final IPortSlot portSlot, @NonNull final IVessel vessel) {
 		constrainSlotToVessels(portSlot, Collections.singleton(vessel));
 		this.frozenSlots.add(portSlot);
 	}

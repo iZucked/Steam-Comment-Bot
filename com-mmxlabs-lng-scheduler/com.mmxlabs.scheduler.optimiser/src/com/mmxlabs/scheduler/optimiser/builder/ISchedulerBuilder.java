@@ -563,7 +563,7 @@ public interface ISchedulerBuilder {
 	void addTotalVolumeConstraint(Set<IPort> ports, boolean loads, boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow);
 
 	/**
-	 * Constrains the given slot to lie only on the given vessels.
+	 * Constrains the given slot to lie only on the given vessels. Note: Special vessels such as those for DES Purchases and FOB Sales are still permitted.
 	 * 
 	 * Note that this does not ensure the compatibility of any other constraints; for example, if you use {@link #setVesselClassInaccessiblePorts(IVesselClass, Set)} to prevent vessels of this class
 	 * from visiting the port for this slot, you will have an unsolvable scenario.
@@ -759,5 +759,5 @@ public interface ISchedulerBuilder {
 	 * @param portSlot
 	 * @param vessel
 	 */
-	void freezeSlotToVessel(IPortSlot portSlot, IVessel vessel);
+	void freezeSlotToVessel(@NonNull IPortSlot portSlot, @NonNull IVessel vessel);
 }
