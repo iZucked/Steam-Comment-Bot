@@ -87,6 +87,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.BASE_FUEL_INDEX: return createBaseFuelIndex();
 			case PricingPackage.NAMED_INDEX_CONTAINER: return createNamedIndexContainer();
 			case PricingPackage.PORTS_PRICE_MAP: return createPortsPriceMap();
+			case PricingPackage.PORTS_EXPRESSION_MAP: return createPortsExpressionMap();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -244,6 +245,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PortsPriceMap createPortsPriceMap() {
 		PortsPriceMapImpl portsPriceMap = new PortsPriceMapImpl();
 		return portsPriceMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortsExpressionMap createPortsExpressionMap() {
+		PortsExpressionMapImpl portsExpressionMap = new PortsExpressionMapImpl();
+		return portsExpressionMap;
 	}
 
 	/**

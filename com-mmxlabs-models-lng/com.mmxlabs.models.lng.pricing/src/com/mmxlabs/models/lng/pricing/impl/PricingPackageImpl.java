@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.NamedIndexContainer;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
+import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
 import com.mmxlabs.models.lng.pricing.PortsPriceMap;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -154,6 +155,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass portsPriceMapEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portsExpressionMapEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -618,6 +626,33 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getPortsExpressionMap() {
+		return portsExpressionMapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortsExpressionMap_Ports() {
+		return (EReference)portsExpressionMapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPortsExpressionMap_Expression() {
+		return (EAttribute)portsExpressionMapEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -699,6 +734,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		portsPriceMapEClass = createEClass(PORTS_PRICE_MAP);
 		createEReference(portsPriceMapEClass, PORTS_PRICE_MAP__PORTS);
 		createEReference(portsPriceMapEClass, PORTS_PRICE_MAP__INDEX);
+
+		portsExpressionMapEClass = createEClass(PORTS_EXPRESSION_MAP);
+		createEReference(portsExpressionMapEClass, PORTS_EXPRESSION_MAP__PORTS);
+		createEAttribute(portsExpressionMapEClass, PORTS_EXPRESSION_MAP__EXPRESSION);
 	}
 
 	/**
@@ -769,6 +808,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		namedIndexContainerEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		portsPriceMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		portsExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -863,6 +903,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getPortsPriceMap_Ports(), g1, null, "ports", null, 0, -1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortsPriceMap_Index(), this.getCommodityIndex(), null, "index", null, 1, 1, PortsPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portsExpressionMapEClass, PortsExpressionMap.class, "PortsExpressionMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getPortsExpressionMap_Ports(), g1, null, "ports", null, 0, -1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortsExpressionMap_Expression(), ecorePackage.getEString(), "expression", null, 0, 1, PortsExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
