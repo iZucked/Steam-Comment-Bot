@@ -60,8 +60,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class AbstractOptimisationResultTester {
 
 	/**
-	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. 
-	 * Should be run as part of a plugin test. 
+	 * Toggle between storing fitness names and values in a properties file and testing the current fitnesses against the stored values. Should be run as part of a plugin test.
 	 */
 	private static final boolean storeFitnessMap = false;
 
@@ -147,7 +146,10 @@ public class AbstractOptimisationResultTester {
 			if (context == null) {
 				throw new NullPointerException("Context cannot be null");
 			}
-			final int version = migrationRegistry.getLastReleaseVersion(context);
+			int version = migrationRegistry.getLatestContextVersion(context);
+			if (version < 0) {
+				version = migrationRegistry.getLastReleaseVersion(context);
+			}
 			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
 		}
 		// Create two scenario runners.
@@ -224,7 +226,10 @@ public class AbstractOptimisationResultTester {
 			if (context == null) {
 				throw new NullPointerException("Context cannot be null");
 			}
-			final int version = migrationRegistry.getLastReleaseVersion(context);
+			int version = migrationRegistry.getLatestContextVersion(context);
+			if (version < 0) {
+				version = migrationRegistry.getLastReleaseVersion(context);
+			}
 			ScenarioTools.storeToFile(copy, new File("C:/temp/scen.lingo"), context, version);
 		}
 		// Create two scenario runners.

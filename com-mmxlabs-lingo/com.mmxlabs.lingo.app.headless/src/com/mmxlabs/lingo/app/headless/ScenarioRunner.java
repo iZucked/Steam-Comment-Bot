@@ -58,9 +58,8 @@ public class ScenarioRunner {
 	public final Injector getInjector() {
 		return injector;
 	}
-	
-	private LNGTransformer transformer;
 
+	private LNGTransformer transformer;
 
 	public ScenarioRunner(final LNGScenarioModel scenario, final SettingsOverride settings) {
 		this.scenario = scenario;
@@ -89,7 +88,7 @@ public class ScenarioRunner {
 		final EnumMap<ModuleType, List<Module>> localOverrides = Maps.newEnumMap(IOptimiserInjectorService.ModuleType.class);
 		localOverrides.put(IOptimiserInjectorService.ModuleType.Module_ParametersModule, Collections.<Module> singletonList(new SettingsOverrideModule(settings)));
 
-		transformer = new LNGTransformer(scenario, optimiserSettings, localOverrides);
+		transformer = new LNGTransformer(scenario, optimiserSettings, localOverrides, LNGTransformer.HINT_OPTIMISE_LSO);
 
 		injector = transformer.getInjector();
 
