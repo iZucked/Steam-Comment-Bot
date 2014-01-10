@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseVolumeAllocator.AllocationRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICustomVolumeAllocator;
 
 public class RedirectionVolumeAllocator implements ICustomVolumeAllocator {
