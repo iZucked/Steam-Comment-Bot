@@ -172,6 +172,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				options.setCharterOutHourlyRate(bestPrice);
 
 				// Construct a new VPO instance (TODO - use injection provider)
+				// TODO: Use the central caching VPO?
 				final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
 				vpo.setVessel(vessel, seq.getStartTime(), vessel.getVesselClass().getBaseFuelUnitPrice());
 
