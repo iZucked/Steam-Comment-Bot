@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.EvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.OptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.OptimiserSettingsModule;
@@ -194,6 +195,7 @@ public class LNGTransformer {
 
 		installModuleOverrides(modules, new OptimiserSettingsModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_ParametersModule);
 
+		installModuleOverrides(modules, new EvaluationModule(hints), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_Evaluation);
 		if (performOptimisation) {
 			installModuleOverrides(modules, new OptimisationModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_Optimisation);
 		}
