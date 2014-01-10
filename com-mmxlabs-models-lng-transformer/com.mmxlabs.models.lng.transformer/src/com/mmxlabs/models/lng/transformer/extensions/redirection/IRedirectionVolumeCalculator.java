@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseVolumeAllocator.AllocationRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 
 public interface IRedirectionVolumeCalculator {
 
