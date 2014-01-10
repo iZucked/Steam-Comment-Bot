@@ -299,7 +299,7 @@ public class CargoEditorMenuHelper {
 
 				public void run() {
 
-					Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
+					final Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
 					final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, value);
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}
@@ -338,7 +338,8 @@ public class CargoEditorMenuHelper {
 				final Action action = new Action("Unassign") {
 					@Override
 					public void run() {
-						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE);
+						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
+								SetCommand.UNSET_VALUE);
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 					}
 				};
@@ -1061,11 +1062,31 @@ public class CargoEditorMenuHelper {
 				final LoadSlot loadSlot = (LoadSlot) slot;
 				if (SlotClassifier.classify(loadSlot) != SlotType.DES_Buy) {
 					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, !loadSlot.isDESPurchase()));
+					if (loadSlot.isDESPurchase()) {
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+					} else {
+						final Cargo cargo = loadSlot.getCargo();
+						if (cargo != null) {
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+						}
+					}
 				}
 			} else if (slot instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 				if (SlotClassifier.classify(dischargeSlot) != SlotType.FOB_Sale) {
 					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, !dischargeSlot.isFOBSale()));
+					if (dischargeSlot.isFOBSale()) {
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+					} else {
+						final Cargo cargo = dischargeSlot.getCargo();
+						if (cargo != null) {
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+						}
+					}
 				}
 			}
 
