@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -46,41 +47,55 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 						final Object element = iterator.next();
 						if (element instanceof Container) {
 							final Container container = (Container) element;
-		
+
 							itemsToDelete.add(container);
 						}
 					}
-		
+
 					final List<EObject> filtered = EcoreUtil.filterDescendants(itemsToDelete);
 					int totalChildCount = 0;
 					for (final EObject object : filtered) {
 						totalChildCount += ((Container) object).getContainedInstanceCount();
 					}
-		
+
 					if (totalChildCount > 0) {
 						final MessageDialog dialog = new MessageDialog(HandlerUtil.getActiveShell(event), "Delete selection and contents?", null,
-								"Do you really want to delete the selection and all and its contents (" + totalChildCount + " scenarios)", MessageDialog.CONFIRM, new String[] { "Don't Delete", "Delete" }, 1);
+								"Do you really want to delete the selection and all and its contents (" + totalChildCount + " scenarios)", MessageDialog.CONFIRM, new String[] { "Don't Delete",
+										"Delete" }, 1);
 						if (dialog.open() != 1) {
-							return ;
+							return;
 						}
 					}
-					for (final EObject object : filtered) {
-						final Container container = (Container) object;
-		
+					List<ScenarioInstance> scenarios = new LinkedList<>();
+
+					
+					// Find scenarios to save/close editor
+					List<EObject> search = new LinkedList<>(filtered);
+					while (!search.isEmpty()) {
+						final Container container = (Container)search.remove(0);
+						search.addAll(container.getElements());
 						if (container instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) container;
-							if (scenarioInstance.getInstance() != null) {
-		
-								// Deselect from view
-								Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
-		
-								final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
-								final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
-								// TODO: Prompt to save?
-								activePage.closeEditors(editorReferences, false);
-							}
+							scenarios.add(scenarioInstance);
 						}
-		
+					}
+					for (final ScenarioInstance scenarioInstance : scenarios) {
+						if (scenarioInstance.getInstance() != null) {
+
+							// Deselect from view
+							Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
+
+							final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
+							final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+							// TODO: Prompt to save?
+							activePage.closeEditors(editorReferences, false);
+						}
+					}
+					
+					// Finally delete
+					for (final EObject object : filtered) {
+						final Container container = (Container) object;
+
 						final IScenarioService service = container.getScenarioService();
 						service.delete(container);
 					}
