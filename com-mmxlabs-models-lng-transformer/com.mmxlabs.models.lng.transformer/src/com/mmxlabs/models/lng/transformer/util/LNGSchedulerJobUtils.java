@@ -292,7 +292,8 @@ public class LNGSchedulerJobUtils {
 						// Record different cargoes as possibly unused cargoes and remove the reference
 						if (slot.getCargo() != loadCargo) {
 							possibleUnusedCargoes.add(slot.getCargo());
-							unsetCargoSlots.add(slot);
+							unsetCargoSlots.addAll(slot.getCargo().getSlots());
+							unsetCargoSlots.remove(slot);
 							// nullCommands.add(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_Cargo(), SetCommand.UNSET_VALUE));
 						}
 
@@ -365,7 +366,7 @@ public class LNGSchedulerJobUtils {
 
 		// Remove any used cargoes from the possibly unused list
 		possibleUnusedCargoes.removeAll(usedCargoes);
-		// Make sure there is no null reference4
+		// Make sure there is no null reference
 		possibleUnusedCargoes.remove(null);
 
 		// For slots which are no longer used, remove the cargo
