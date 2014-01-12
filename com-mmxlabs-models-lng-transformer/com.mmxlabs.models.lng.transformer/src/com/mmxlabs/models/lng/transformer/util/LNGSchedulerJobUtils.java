@@ -17,6 +17,7 @@ import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -381,7 +382,7 @@ public class LNGSchedulerJobUtils {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
 					cmd.append(SetCommand.create(domain, c, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
-//					cmd.append(DeleteCommand.create(domain, c));
+					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
 			if (eObj instanceof SpotSlot) {
