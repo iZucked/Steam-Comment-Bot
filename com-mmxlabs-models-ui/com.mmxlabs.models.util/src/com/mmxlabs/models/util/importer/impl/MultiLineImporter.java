@@ -220,11 +220,13 @@ public class MultiLineImporter extends DefaultClassImporter {
 				continue;
 			}
 			final String lcrn = reference.getName().toLowerCase();
-			if (row.containsKey(lcrn)) {
-				// The reference itself is present, so do a lookup later
-				final String referentName = row.get(lcrn).trim();
-				if (!referentName.isEmpty()) {
-					context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row.get(lcrn), context));
+			if (!reference.isContainment()) {
+				if (row.containsKey(lcrn)) {
+					// The reference itself is present, so do a lookup later
+					final String referentName = row.get(lcrn).trim();
+					if (!referentName.isEmpty()) {
+						context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row.get(lcrn), context));
+					}
 				}
 			} else {
 				// The reference is missing entirely
