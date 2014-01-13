@@ -84,12 +84,12 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 		} else if (notification.getFeature() == MMXCorePackage.eINSTANCE.getMMXObject_Extensions()) {
 			if (notification.getNotifier() instanceof Slot) {
 				// If an instance of the slot specific code has just been added, then display it
-				if (paramsClass.isInstance(notification.getNewValue())) {
+				if (slotContractParamsClass.isInstance(notification.getNewValue())) {
 					enabled = true;
 					// FIXME: Almost works correctly, first time round the label is not visible, but the text is set correctly.
 					//
 					// setEditorVisible(true);
-					super.display(location, scenario, paramsClass.cast(notification.getNewValue()), range);
+					super.display(location, scenario, slotContractParamsClass.cast(notification.getNewValue()), range);
 					setEditorVisible(enabled);
 					return true;
 
