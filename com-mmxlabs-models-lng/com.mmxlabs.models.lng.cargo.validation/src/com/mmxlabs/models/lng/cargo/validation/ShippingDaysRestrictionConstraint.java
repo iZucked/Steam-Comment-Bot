@@ -36,9 +36,6 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Check that the end of any cargo's discharge window is not before the start of its load window.
- * 
- * @author Tom Hinton
  * 
  */
 public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstraint {
@@ -103,6 +100,22 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 						failures.add(dsd);
 					}
+				} else if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy) {
+					final Cargo cargo = loadSlot.getCargo();
+					if (cargo != null) {
+						for (final Slot slot : cargo.getSlots()) {
+							if (slot instanceof DischargeSlot) {
+								final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+								if (loadSlot.getPort() != dischargeSlot.getPort()) {
+									final String message = String.format("DES Purchase|%s is not divertable, but is linked to a DES Sale at a different discharge port", loadSlot.getName());
+									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.ERROR);
+									dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());
+									failures.add(dsd);
+								}
+							}
+						}
+					}
 				}
 			} else if (object instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
@@ -119,6 +132,22 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
 						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
 						failures.add(dsd);
+					}
+				} else if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
+					final Cargo cargo = dischargeSlot.getCargo();
+					if (cargo != null) {
+						for (final Slot slot : cargo.getSlots()) {
+							if (slot instanceof LoadSlot) {
+								final LoadSlot loadSlot = (LoadSlot) slot;
+								if (loadSlot.getPort() != dischargeSlot.getPort()) {
+									final String message = String.format("FOB Sale|%s is not divertable, but is linked to a FOB Purchase at a different load port", dischargeSlot.getName());
+									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.ERROR);
+									dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
+									failures.add(dsd);
+								}
+							}
+						}
 					}
 				}
 			}
