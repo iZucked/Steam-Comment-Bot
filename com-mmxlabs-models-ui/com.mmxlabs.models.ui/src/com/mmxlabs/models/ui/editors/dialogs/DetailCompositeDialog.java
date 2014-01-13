@@ -728,7 +728,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
 				}
 				try {
-					cc.append(dialogEcoreCopier.createEditCommand());
+					cc.append(dialogEcoreCopier.createEditCommand(editingDomain));
 				} finally {
 					if (editingDomain instanceof CommandProviderAwareEditingDomain) {
 						((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
@@ -836,7 +836,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 						((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
 					}
 					try {
-						cc.append(dialogEcoreCopier.createEditCommand());
+						cc.append(dialogEcoreCopier.createEditCommand(editingDomain));
 					} finally {
 						if (editingDomain instanceof CommandProviderAwareEditingDomain) {
 							((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);

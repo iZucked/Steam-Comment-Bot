@@ -41,7 +41,7 @@ public class DialogEcoreCopierTest {
 		Assert.assertEquals(originalValue, simpleObject.getAttribute());
 		Assert.assertEquals(newValue, copy.getAttribute());
 
-		final Command cmd = copier.createEditCommand();
+		final Command cmd = copier.createEditCommand(null);
 
 		cmd.execute();
 
@@ -112,7 +112,7 @@ public class DialogEcoreCopierTest {
 
 		// Do something?
 
-		final Command cmd = copier.createEditCommand();
+		final Command cmd = copier.createEditCommand(null);
 
 		cmd.execute();
 
@@ -212,7 +212,7 @@ public class DialogEcoreCopierTest {
 		// Do something?
 		copySimpleObject.setAttribute(newValue);
 
-		final Command cmd = copier.createEditCommand();
+		final Command cmd = copier.createEditCommand(null);
 
 		cmd.execute();
 
