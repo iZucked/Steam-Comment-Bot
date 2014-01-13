@@ -659,7 +659,7 @@ public class LNGScenarioTransformer {
 					final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
 					if (cargo != null) {
 						// bind slots to vessel
-						builder.constrainSlotToVessels(portSlot, Collections.singleton(vessel));
+						builder.freezeSlotToVessel(portSlot, vessel);
 						// bind sequencing as well - this forces
 						// previousSlot to come before currentSlot.
 						if (prevSlot != null) {
@@ -671,7 +671,7 @@ public class LNGScenarioTransformer {
 			} else if (assignableElement instanceof VesselEvent) {
 				final IVesselEventPortSlot slot = entities.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
 				if (slot != null) {
-					builder.constrainSlotToVessels(slot, Collections.singleton(vessel));
+					builder.freezeSlotToVessel(slot, vessel);
 				}
 			}
 		}
