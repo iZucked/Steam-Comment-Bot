@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * 
  * @author Simon Goodall
  * 
+ * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface ISchedulerBuilder {
 
@@ -563,7 +564,7 @@ public interface ISchedulerBuilder {
 	void addTotalVolumeConstraint(Set<IPort> ports, boolean loads, boolean discharges, long maximumTotalVolume, ITimeWindow timeWindow);
 
 	/**
-	 * Constrains the given slot to lie only on the given vessels.
+	 * Constrains the given slot to lie only on the given vessels. Note: Special vessels such as those for DES Purchases and FOB Sales are still permitted.
 	 * 
 	 * Note that this does not ensure the compatibility of any other constraints; for example, if you use {@link #setVesselClassInaccessiblePorts(IVesselClass, Set)} to prevent vessels of this class
 	 * from visiting the port for this slot, you will have an unsolvable scenario.
@@ -752,4 +753,12 @@ public interface ISchedulerBuilder {
 	 */
 	void setShippingHoursRestriction(@NonNull IPortSlot slot, @NonNull ITimeWindow baseTime, int hours);
 
+	/**
+	 * Freeze a {@link IPortSlot} to a single {@link IVessel}. Unlike {@link #constrainSlotToVessels(IPortSlot, Set)} which still permits allocations to special vessels, this method restricts purely
+	 * to the specified {@link IVessel}
+	 * 
+	 * @param portSlot
+	 * @param vessel
+	 */
+	void freezeSlotToVessel(@NonNull IPortSlot portSlot, @NonNull IVessel vessel);
 }
