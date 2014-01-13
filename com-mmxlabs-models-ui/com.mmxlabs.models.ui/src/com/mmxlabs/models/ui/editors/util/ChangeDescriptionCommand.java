@@ -6,10 +6,18 @@ package com.mmxlabs.models.ui.editors.util;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
-import org.eclipse.emf.common.command.AbstractCommand;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.change.ChangeDescription;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
+
+import com.mmxlabs.common.Pair;
 
 /**
  * Class to wrap a {@link ChangeDescription} in a {@link Command}
@@ -17,13 +25,20 @@ import org.eclipse.emf.ecore.change.ChangeDescription;
  * @since 3.1
  * 
  */
-public class ChangeDescriptionCommand extends AbstractCommand {
+public class ChangeDescriptionCommand extends CompoundCommand {
 	private ChangeDescription changeDescription;
 	private Collection<?> affectedObjects;
+	private final Map<Pair<EObject, EReference>, Collection<EObject>> objectsAdded;
+	private final Collection<EObject> objectsRemoved;
+	private final EditingDomain domain;
 
-	public ChangeDescriptionCommand(final ChangeDescription changeDescription, final Collection<?> affectedObjects) {
+	public ChangeDescriptionCommand(final EditingDomain domain, final ChangeDescription changeDescription, final Collection<?> affectedObjects,
+			final Map<Pair<EObject, EReference>, Collection<EObject>> objectsAdded, final Collection<EObject> objectsRemoved) {
+		this.domain = domain;
 		this.changeDescription = changeDescription;
 		this.affectedObjects = affectedObjects;
+		this.objectsAdded = objectsAdded;
+		this.objectsRemoved = objectsRemoved;
 	}
 
 	@Override
@@ -46,15 +61,23 @@ public class ChangeDescriptionCommand extends AbstractCommand {
 	@Override
 	public void execute() {
 		changeDescription.applyAndReverse();
+		for (final Map.Entry<Pair<EObject, EReference>, Collection<EObject>> e : objectsAdded.entrySet()) {
+			final Pair<EObject, EReference> p = e.getKey();
+			final Collection<EObject> objects = e.getValue();
+			appendAndExecute(AddCommand.create(domain, p.getFirst(), p.getSecond(), objects));
+		}
+		appendAndExecute(DeleteCommand.create(domain, objectsRemoved));
 	}
 
 	@Override
 	public void undo() {
+		super.undo();
 		changeDescription.applyAndReverse();
 	}
 
 	@Override
 	public void redo() {
 		changeDescription.applyAndReverse();
+		super.redo();
 	}
 }
