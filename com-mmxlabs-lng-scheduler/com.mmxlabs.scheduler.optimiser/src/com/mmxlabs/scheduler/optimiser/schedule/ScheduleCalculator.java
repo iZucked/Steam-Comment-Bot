@@ -28,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
