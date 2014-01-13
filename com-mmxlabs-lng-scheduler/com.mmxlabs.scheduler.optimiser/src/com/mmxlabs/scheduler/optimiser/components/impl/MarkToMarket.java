@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
  * 
@@ -26,18 +27,21 @@ public class MarkToMarket implements IMarkToMarket {
 
 	private final int cv;
 
-	public MarkToMarket(@NonNull final ISalesPriceCalculator salesPriceCalculator) {
-		this(null, 0, salesPriceCalculator);
+	private final IEntity entity;
+
+	public MarkToMarket(@NonNull final ISalesPriceCalculator salesPriceCalculator, final IEntity entity) {
+		this(null, 0, salesPriceCalculator, entity);
 	}
 
-	public MarkToMarket(final ILoadPriceCalculator loadPriceCalculator, final int cv, final ISalesPriceCalculator salesPriceCalculator) {
+	public MarkToMarket(final ILoadPriceCalculator loadPriceCalculator, final int cv, final ISalesPriceCalculator salesPriceCalculator, final IEntity entity) {
 		this.loadPriceCalculator = loadPriceCalculator;
 		this.salesPriceCalculator = salesPriceCalculator;
 		this.cv = cv;
+		this.entity = entity;
 	}
 
-	public MarkToMarket(@NonNull final ILoadPriceCalculator loadPriceCalculator, final int cv) {
-		this(loadPriceCalculator, cv, null);
+	public MarkToMarket(@NonNull final ILoadPriceCalculator loadPriceCalculator, final int cv, final IEntity entity) {
+		this(loadPriceCalculator, cv, null, entity);
 	}
 
 	@Override
@@ -57,4 +61,8 @@ public class MarkToMarket implements IMarkToMarket {
 		return cv;
 	}
 
+	@Override
+	public IEntity getEntity() {
+		return entity;
+	}
 }

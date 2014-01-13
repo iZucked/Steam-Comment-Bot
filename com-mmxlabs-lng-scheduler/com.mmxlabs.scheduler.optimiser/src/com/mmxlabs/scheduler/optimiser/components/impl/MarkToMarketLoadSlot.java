@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
+import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -20,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @since 6.0
  * 
  */
-public class MarkToMarketLoadSlot implements ILoadSlot {
+public class MarkToMarketLoadSlot implements ILoadSlot, IMarkToMarketOption {
 	private final IMarkToMarket markToMarket;
 	private final IDischargeOption dischargeOption;
 
@@ -84,4 +85,8 @@ public class MarkToMarketLoadSlot implements ILoadSlot {
 		return false;
 	}
 
+	@Override
+	public IMarkToMarket getMarkToMarket() {
+		return markToMarket;
+	}
 }

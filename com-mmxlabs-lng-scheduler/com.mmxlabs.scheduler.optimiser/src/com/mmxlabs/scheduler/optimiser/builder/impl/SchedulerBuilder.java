@@ -90,6 +90,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
@@ -1822,8 +1823,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IMarkToMarket createDESPurchaseMTM(@NonNull final Set<IPort> marketPorts, final int cargoCVValue, @NonNull final ILoadPriceCalculator priceCalculator) {
-		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue);
+	public IMarkToMarket createDESPurchaseMTM(@NonNull final Set<IPort> marketPorts, final int cargoCVValue, @NonNull final ILoadPriceCalculator priceCalculator, final IEntity entity) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue, entity);
 
 		for (final IPort port : marketPorts) {
 			desPurchaseMTMPortMap.put(port, mtm);
@@ -1836,9 +1837,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IMarkToMarket createFOBSaleMTM(@NonNull final Set<IPort> marketPorts, @NonNull final ISalesPriceCalculator priceCalculator) {
+	public IMarkToMarket createFOBSaleMTM(@NonNull final Set<IPort> marketPorts, @NonNull final ISalesPriceCalculator priceCalculator, final IEntity entity) {
 
-		final MarkToMarket mtm = new MarkToMarket(priceCalculator);
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator, entity);
 
 		for (final IPort port : marketPorts) {
 			fobSaleMTMPortMap.put(port, mtm);
@@ -1852,8 +1853,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IMarkToMarket createFOBPurchaseMTM(@NonNull final Set<IPort> marketPorts, final int cargoCVValue, @NonNull final ILoadPriceCalculator priceCalculator) {
-		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue);
+	public IMarkToMarket createFOBPurchaseMTM(@NonNull final Set<IPort> marketPorts, final int cargoCVValue, @NonNull final ILoadPriceCalculator priceCalculator, final IEntity entity) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue, entity);
 
 		for (final IPort port : marketPorts) {
 			fobPurchaseMTMPortMap.put(port, mtm);
@@ -1866,8 +1867,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IMarkToMarket createDESSalesMTM(@NonNull final Set<IPort> marketPorts, @NonNull final ISalesPriceCalculator priceCalculator) {
-		final MarkToMarket mtm = new MarkToMarket(priceCalculator);
+	public IMarkToMarket createDESSalesMTM(@NonNull final Set<IPort> marketPorts, @NonNull final ISalesPriceCalculator priceCalculator, final IEntity entity) {
+		final MarkToMarket mtm = new MarkToMarket(priceCalculator, entity);
 
 		for (final IPort port : marketPorts) {
 			desSaleMTMPortMap.put(port, mtm);

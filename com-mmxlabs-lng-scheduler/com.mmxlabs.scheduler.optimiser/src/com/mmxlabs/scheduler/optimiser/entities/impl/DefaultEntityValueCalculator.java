@@ -15,6 +15,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -32,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -124,7 +126,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			taxTime = time;
 
 			final long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
-			final IEntity entity = entityProvider.getEntityForSlot(slot);
+			IEntity entity = entityProvider.getEntityForSlot(slot);
+			if (slot instanceof IMarkToMarketOption) {
+				final IMarkToMarketOption mtmSlot = (IMarkToMarketOption) slot;
+				entity = mtmSlot.getMarkToMarket().getEntity();
+			}
 			seenEntities.add(entity);
 			assert entity != null;
 
@@ -152,7 +158,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							final ILoadSlot loadSlot = (ILoadSlot) loadOption;
 							final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeOption;
 							loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3,
-									vessel, plan, entityDetails);
+									vessel, vesselStartTime, plan, entityDetails);
 						} else if (loadOption instanceof ILoadSlot) {
 							// FOB Sale
 							loadOption.getLoadPriceCalculator().calculatePriceForFOBSalePerMMBTu((ILoadSlot) loadOption, dischargeOption, transferTime, dischargePricePerMMBTu, transferVolumeInM3,
