@@ -76,11 +76,11 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.tabular.DefaultToolTipProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.IToolTipProvider;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -165,45 +165,16 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 		ColumnViewerToolTipSupport.enableFor((ColumnViewer) scenarioViewer, ToolTip.NO_RECREATE);
 
-		scenarioViewer.setToolTipProvider(new IToolTipProvider() {
-			
-			
+		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
+						
 			@Override
 			public String getToolTipText(Object element) {
-//
-//				Index<?> index = getIndex(element);
-//				if(index instanceof DerivedIndex<?>){
-//					return ((DerivedIndex<?>) index).getExpression();
-//				}
-//				else{
-//					return null;
-//				}
-				
 				if (element instanceof NamedIndexContainer<?>) {
 					Index<?> index = ((NamedIndexContainer<?>) element).getData();
 					if (index instanceof DerivedIndex<?>) {
 						return ((DerivedIndex<?>) index).getExpression();
 					}
 				}
-				return null;
-			}
-			@Override
-			public Point getToolTipShift(Object object) {
-				return new Point(5, 5);
-			}
-			
-			@Override
-			public int getToolTipDisplayDelayTime(Object object) {
-				return 100; // msec
-			}
-			
-			@Override
-			public int getToolTipTimeDisplayed(Object object) {
-				return 5000; // msec
-			}
-			
-			@Override
-			public Image getToolTipImage(Object object) {
 				return null;
 			}
 		});

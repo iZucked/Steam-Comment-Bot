@@ -316,11 +316,19 @@ public class BulkImportPage extends WizardPage {
 
 		public RadioSelectionGroup(Composite parent, String title, int style, String[] labels, int[] values) {
 			super(parent, style);
-			group = new Group(parent, style);
+			group = new Group(this, style);
 			for (String label : labels) {
 				addButton(label);
 			}
-			setLayout(new GridLayout(1, false));
+			GridLayout gl = new GridLayout(1, false);
+			gl.marginLeft = 0;
+			gl.marginWidth = 0;
+			setLayout(gl);
+//			GridData gd = new GridData();
+//			gd.verticalIndent = 0;
+//			gd.horizontalIndent = 0;
+////			gd.grabExcessHorizontalSpace = true;
+//			setLayoutData(gd);
 			group.setLayout(new GridLayout(labels.length, false));
 			GridData groupLayoutData = new GridData();
 			group.setLayoutData(groupLayoutData);

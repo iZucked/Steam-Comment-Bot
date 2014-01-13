@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.actuals/src" modelPluginID="com.mmxlabs.models.lng.actuals"
+    modelName="Actuals" importerID="org.eclipse.emf.importer.ecore" complianceLevel="7.0"
+    copyrightFields="false">
+  <foreignModel>actuals.ecore</foreignModel>
+  <genPackages prefix="Actuals" disposableProviderFactory="true" ecorePackage="actuals.ecore#/">
+    <genClasses image="false" ecoreClass="actuals.ecore#//SlotActuals">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/CV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/volume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/mmBtu"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/portCharges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/baseFuelConsumption"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="actuals.ecore#//CargoActuals">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/baseFuelPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/volume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/insurancePremium"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/crewBonus"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference actuals.ecore#//CargoActuals/buyActuals"/>
+    </genClasses>
+    <genClasses ecoreClass="actuals.ecore#//BuyActuals"/>
+    <genClasses ecoreClass="actuals.ecore#//SellActuals"/>
+  </genPackages>
+</genmodel:GenModel>

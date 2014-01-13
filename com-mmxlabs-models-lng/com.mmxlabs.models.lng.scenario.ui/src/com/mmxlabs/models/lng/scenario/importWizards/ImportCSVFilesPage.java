@@ -151,7 +151,20 @@ public class ImportCSVFilesPage extends WizardPage {
 
 		top.setLayout(new GridLayout(1, false));
 
-		final Button auto = new Button(top, SWT.NONE);
+		Composite holder = new Composite(top, SWT.NONE);
+		GridLayout gl = new GridLayout(3, false);
+		gl.marginLeft = 0;
+		gl.marginWidth = 0;
+		holder.setLayout(gl);
+		
+//		GridData gd = new GridData();
+//		gd.verticalIndent = 0;
+//		gd.horizontalIndent = 0;
+////		gd.grabExcessHorizontalSpace = true;
+//		holder.setLayoutData(gd);
+
+
+		final Button auto = new Button(holder, SWT.NONE);
 		auto.setText("Choose &Directory...");
 
 		auto.addSelectionListener(new SelectionAdapter() {
@@ -191,9 +204,9 @@ public class ImportCSVFilesPage extends WizardPage {
 			}
 		});
 
-		csvSelectionGroup = new RadioSelectionGroup(top, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
+		csvSelectionGroup = new RadioSelectionGroup(holder, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
 
-		decimalSelectionGroup = new RadioSelectionGroup(top, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
+		decimalSelectionGroup = new RadioSelectionGroup(holder, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
 		// get the default export directory from the settings
 		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
 		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
