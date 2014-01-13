@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -707,7 +708,7 @@ public interface ISchedulerBuilder {
 	 * @since 6.0
 	 */
 	@NonNull
-	IMarkToMarket createDESPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
+	IMarkToMarket createDESPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator, IEntity entity);
 
 	/**
 	 * Create a Mark-To-Market market for FOB sales valid against the given set of {@link IPort}s
@@ -715,7 +716,7 @@ public interface ISchedulerBuilder {
 	 * @since 6.0
 	 */
 	@NonNull
-	IMarkToMarket createFOBSaleMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
+	IMarkToMarket createFOBSaleMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator, IEntity entity);
 
 	/**
 	 * Create a Mark-To-Market market for FOB Purchases valid against the given set of {@link IPort}s
@@ -725,7 +726,7 @@ public interface ISchedulerBuilder {
 	 * @since 6.0
 	 */
 	@NonNull
-	IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator);
+	IMarkToMarket createFOBPurchaseMTM(@NonNull Set<IPort> marketPorts, int cargoCVValue, @NonNull ILoadPriceCalculator priceCalculator, IEntity entity);
 
 	/**
 	 * Create a Mark-To-Market market for DES sales valid against the given set of {@link IPort}s
@@ -733,7 +734,7 @@ public interface ISchedulerBuilder {
 	 * @since 6.0
 	 */
 	@NonNull
-	IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator);
+	IMarkToMarket createDESSalesMTM(@NonNull Set<IPort> marketPorts, @NonNull ISalesPriceCalculator priceCalculator, IEntity entity);
 
 	/**
 	 * For DES Purchases and FOB Sales specify the nominated vessel

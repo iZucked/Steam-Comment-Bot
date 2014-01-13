@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
+import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -19,7 +20,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author Simon Goodall
  * @since 6.0
  */
-public class MarkToMarketDischargeOption implements IDischargeOption {
+public class MarkToMarketDischargeOption implements IDischargeOption, IMarkToMarketOption {
 
 	private final IMarkToMarket markToMarket;
 	private ILoadOption loadOption;
@@ -76,6 +77,11 @@ public class MarkToMarketDischargeOption implements IDischargeOption {
 
 	@Override
 	public int getPricingDate() {
-		return  IPortSlot.NO_PRICING_DATE;
+		return IPortSlot.NO_PRICING_DATE;
+	}
+
+	@Override
+	public IMarkToMarket getMarkToMarket() {
+		return markToMarket;
 	}
 }

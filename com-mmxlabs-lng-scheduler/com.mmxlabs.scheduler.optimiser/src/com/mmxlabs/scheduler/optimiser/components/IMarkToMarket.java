@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
  * An object representing a Mark-to-Market market representing either a DES Purchase and/or FOB Sale. This holds the pricing calculators and CV value for the market.
@@ -39,4 +40,5 @@ public interface IMarkToMarket {
 	 */
 	int getCVValue();
 
+	IEntity getEntity();
 }
