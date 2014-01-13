@@ -126,6 +126,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -1758,7 +1759,7 @@ public class LNGScenarioTransformer {
 
 					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
-					final IMarkToMarket optMarket = builder.createDESPurchaseMTM(marketPorts, cargoCVValue, priceCalculator);
+					final IMarkToMarket optMarket = builder.createDESPurchaseMTM(marketPorts, cargoCVValue, priceCalculator, entities.getOptimiserObject(market.getEntity(), IEntity.class));
 					entities.addModelObject(market, optMarket);
 
 				}
@@ -1790,7 +1791,7 @@ public class LNGScenarioTransformer {
 						throw new IllegalStateException("No valid price calculator found");
 					}
 
-					final IMarkToMarket optMarket = builder.createDESSalesMTM(marketPorts, priceCalculator);
+					final IMarkToMarket optMarket = builder.createDESSalesMTM(marketPorts, priceCalculator, entities.getOptimiserObject(market.getEntity(), IEntity.class));
 					entities.addModelObject(market, optMarket);
 
 				}
@@ -1821,7 +1822,7 @@ public class LNGScenarioTransformer {
 					if (priceCalculator == null) {
 						throw new IllegalStateException("No valid price calculator found");
 					}
-					final IMarkToMarket optMarket = builder.createFOBSaleMTM(marketPorts, priceCalculator);
+					final IMarkToMarket optMarket = builder.createFOBSaleMTM(marketPorts, priceCalculator, entities.getOptimiserObject(market.getEntity(), IEntity.class));
 					entities.addModelObject(market, optMarket);
 				}
 			}
@@ -1853,7 +1854,7 @@ public class LNGScenarioTransformer {
 					}
 					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getNotionalPort().getCvValue());
 
-					final IMarkToMarket optMarket = builder.createFOBPurchaseMTM(marketPorts, cargoCVValue, priceCalculator);
+					final IMarkToMarket optMarket = builder.createFOBPurchaseMTM(marketPorts, cargoCVValue, priceCalculator, entities.getOptimiserObject(market.getEntity(), IEntity.class));
 					entities.addModelObject(market, optMarket);
 				}
 			}
