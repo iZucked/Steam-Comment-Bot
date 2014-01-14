@@ -79,6 +79,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.editors.dialogs.NullDialogController;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -460,9 +461,9 @@ public class CreateStripDialog extends FormDialog {
 			toolkit.adapt(template);
 
 			final IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(sample.eClass());
-			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), new DefaultDialogEditingContext(null, scenarioEditingLocation), toolkit);
+			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation), toolkit);
 			templateDetailComposite.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
-			templateDetailComposite.display(new DefaultDialogEditingContext(null, scenarioEditingLocation), scenarioEditingLocation.getRootObject(), sample, null, dbc);
+			templateDetailComposite.display(new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation), scenarioEditingLocation.getRootObject(), sample, null, dbc);
 		}
 
 		// Preview Table with generated options

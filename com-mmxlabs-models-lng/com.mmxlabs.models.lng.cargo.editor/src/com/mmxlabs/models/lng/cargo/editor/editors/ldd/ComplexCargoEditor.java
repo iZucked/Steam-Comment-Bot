@@ -69,6 +69,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.editors.dialogs.NullDialogController;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
@@ -108,13 +109,13 @@ public class ComplexCargoEditor extends Dialog {
 
 	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
-		this.dialogContext = new DefaultDialogEditingContext(null, scenarioEditingLocation);
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation);
 		this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
 	public ComplexCargoEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
-		this.dialogContext = new DefaultDialogEditingContext(null, scenarioEditingLocation);
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation);
 		
 		//this.scenarioEditingLocation = scenarioEditingLocation;
 	}
