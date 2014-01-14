@@ -1,12 +1,14 @@
 package com.mmxlabs.models.ui.editors.dialogs;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class DefaultDialogEditingContext implements IDialogEditingContext {
 	private final IDialogController dialogController;
 	private final IScenarioEditingLocation scenarioEditingLocation;
 
-	public DefaultDialogEditingContext(final IDialogController dc, final IScenarioEditingLocation sel) {
+	public DefaultDialogEditingContext(@NonNull final IDialogController dc, @NonNull final IScenarioEditingLocation sel) {
 		dialogController = dc;
 		scenarioEditingLocation = sel;
 	}
