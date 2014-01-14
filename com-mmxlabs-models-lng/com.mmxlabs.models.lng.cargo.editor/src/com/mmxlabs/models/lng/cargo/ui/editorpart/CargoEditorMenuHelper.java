@@ -901,7 +901,7 @@ public class CargoEditorMenuHelper {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 					}
 					dischargeSlot.setWindowStart(source.getWindowStart());
-					if (loadSlot.isDESPurchase()) {
+					if (dischargeSlot.isFOBSale()) {
 						dischargeSlot.setPort(source.getPort());
 					}
 				} else {
@@ -913,7 +913,7 @@ public class CargoEditorMenuHelper {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
 						loadSlot.setWindowStart(source.getWindowStart());
 					}
-					if (dischargeSlot.isFOBSale()) {
+					if (loadSlot.isDESPurchase()) {
 						loadSlot.setPort(source.getPort());
 					}
 				}
