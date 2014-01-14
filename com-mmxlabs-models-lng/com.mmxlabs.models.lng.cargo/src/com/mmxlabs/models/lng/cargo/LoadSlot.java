@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
+
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Load Slot</b></em>'.
@@ -16,6 +18,7 @@ package com.mmxlabs.models.lng.cargo;
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -187,12 +190,77 @@ public interface LoadSlot extends Slot {
 	void setTransferFrom(DischargeSlot value);
 
 	/**
+	 * Returns the value of the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * The default value is <code>"Any"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.CargoDeliveryType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sales Delivery Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sales Delivery Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @see #isSetSalesDeliveryType()
+	 * @see #unsetSalesDeliveryType()
+	 * @see #setSalesDeliveryType(CargoDeliveryType)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_SalesDeliveryType()
+	 * @model default="Any" unsettable="true"
+	 * @generated
+	 */
+	CargoDeliveryType getSalesDeliveryType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sales Delivery Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @see #isSetSalesDeliveryType()
+	 * @see #unsetSalesDeliveryType()
+	 * @see #getSalesDeliveryType()
+	 * @generated
+	 */
+	void setSalesDeliveryType(CargoDeliveryType value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetSalesDeliveryType()
+	 * @see #getSalesDeliveryType()
+	 * @see #setSalesDeliveryType(CargoDeliveryType)
+	 * @generated
+	 */
+	void unsetSalesDeliveryType();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Sales Delivery Type</em>' attribute is set.
+	 * @see #unsetSalesDeliveryType()
+	 * @see #getSalesDeliveryType()
+	 * @see #setSalesDeliveryType(CargoDeliveryType)
+	 * @generated
+	 */
+	boolean isSetSalesDeliveryType();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	double getSlotOrDelegatedCV();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	CargoDeliveryType getSlotOrContractDeliveryType();
 
 } // end of  LoadSlot
 

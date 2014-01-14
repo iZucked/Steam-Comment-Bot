@@ -674,13 +674,22 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__CARGO_CV = CONTRACT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__SALES_DELIVERY_TYPE = CONTRACT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 1;
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -1149,6 +1158,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getPurchaseContract_CargoCV();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sales Delivery Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType()
+	 * @see #getPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getPurchaseContract_SalesDeliveryType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.TaxRate <em>Tax Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1482,6 +1502,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PURCHASE_CONTRACT__CARGO_CV = eINSTANCE.getPurchaseContract_CargoCV();
+
+		/**
+		 * The meta object literal for the '<em><b>Sales Delivery Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURCHASE_CONTRACT__SALES_DELIVERY_TYPE = eINSTANCE.getPurchaseContract_SalesDeliveryType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.

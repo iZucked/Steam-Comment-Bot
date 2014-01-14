@@ -551,12 +551,30 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLoadSlot_SalesDeliveryType() {
+		return (EAttribute)loadSlotEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EOperation getLoadSlot__GetSlotOrDelegatedCV() {
 		return loadSlotEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getLoadSlot__GetSlotOrContractDeliveryType() {
+		return loadSlotEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -825,7 +843,9 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(loadSlotEClass, LOAD_SLOT__ARRIVE_COLD);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__DES_PURCHASE);
 		createEReference(loadSlotEClass, LOAD_SLOT__TRANSFER_FROM);
+		createEAttribute(loadSlotEClass, LOAD_SLOT__SALES_DELIVERY_TYPE);
 		createEOperation(loadSlotEClass, LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV);
+		createEOperation(loadSlotEClass, LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE);
 
 		dischargeSlotEClass = createEClass(DISCHARGE_SLOT);
 		createEAttribute(dischargeSlotEClass, DISCHARGE_SLOT__FOB_SALE);
@@ -968,8 +988,11 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getLoadSlot_ArriveCold(), ecorePackage.getEBoolean(), "arriveCold", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getLoadSlot_DESPurchase(), ecorePackage.getEBoolean(), "DESPurchase", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLoadSlot_TransferFrom(), this.getDischargeSlot(), this.getDischargeSlot_TransferTo(), "transferFrom", null, 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadSlot_SalesDeliveryType(), theTypesPackage.getCargoDeliveryType(), "salesDeliveryType", "Any", 0, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getLoadSlot__GetSlotOrDelegatedCV(), ecorePackage.getEDouble(), "getSlotOrDelegatedCV", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getLoadSlot__GetSlotOrContractDeliveryType(), theTypesPackage.getCargoDeliveryType(), "getSlotOrContractDeliveryType", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(dischargeSlotEClass, DischargeSlot.class, "DischargeSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDischargeSlot_FOBSale(), ecorePackage.getEBoolean(), "FOBSale", null, 0, 1, DischargeSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

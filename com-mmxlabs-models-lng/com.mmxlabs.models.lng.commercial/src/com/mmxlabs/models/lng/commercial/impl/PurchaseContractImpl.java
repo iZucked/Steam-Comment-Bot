@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +21,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -53,6 +55,24 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 */
 	protected boolean cargoCVESet;
 
+	/**
+	 * The default value of the '{@link #getSalesDeliveryType() <em>Sales Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSalesDeliveryType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CargoDeliveryType SALES_DELIVERY_TYPE_EDEFAULT = CargoDeliveryType.ANY;
+	/**
+	 * The cached value of the '{@link #getSalesDeliveryType() <em>Sales Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSalesDeliveryType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoDeliveryType salesDeliveryType = SALES_DELIVERY_TYPE_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -123,11 +143,34 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CargoDeliveryType getSalesDeliveryType() {
+		return salesDeliveryType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSalesDeliveryType(CargoDeliveryType newSalesDeliveryType) {
+		CargoDeliveryType oldSalesDeliveryType = salesDeliveryType;
+		salesDeliveryType = newSalesDeliveryType == null ? SALES_DELIVERY_TYPE_EDEFAULT : newSalesDeliveryType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE, oldSalesDeliveryType, salesDeliveryType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				return getCargoCV();
+			case CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE:
+				return getSalesDeliveryType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -142,6 +185,9 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 		switch (featureID) {
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				setCargoCV((Double)newValue);
+				return;
+			case CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE:
+				setSalesDeliveryType((CargoDeliveryType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -158,6 +204,9 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				unsetCargoCV();
 				return;
+			case CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE:
+				setSalesDeliveryType(SALES_DELIVERY_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -172,6 +221,8 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 		switch (featureID) {
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
 				return isSetCargoCV();
+			case CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE:
+				return salesDeliveryType != SALES_DELIVERY_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -188,6 +239,8 @@ public class PurchaseContractImpl extends ContractImpl implements PurchaseContra
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (cargoCV: ");
 		if (cargoCVESet) result.append(cargoCV); else result.append("<unset>");
+		result.append(", salesDeliveryType: ");
+		result.append(salesDeliveryType);
 		result.append(')');
 		return result.toString();
 	}

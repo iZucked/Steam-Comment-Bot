@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.commercial;
 
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -14,6 +16,7 @@ package com.mmxlabs.models.lng.commercial;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,6 +82,36 @@ public interface PurchaseContract extends Contract {
 	 * @generated
 	 */
 	boolean isSetCargoCV();
+
+	/**
+	 * Returns the value of the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * The default value is <code>"Any"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.CargoDeliveryType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sales Delivery Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sales Delivery Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @see #setSalesDeliveryType(CargoDeliveryType)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_SalesDeliveryType()
+	 * @model default="Any"
+	 * @generated
+	 */
+	CargoDeliveryType getSalesDeliveryType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sales Delivery Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @see #getSalesDeliveryType()
+	 * @generated
+	 */
+	void setSalesDeliveryType(CargoDeliveryType value);
 } // end of  PurchaseContract
 
 // finish type fixing

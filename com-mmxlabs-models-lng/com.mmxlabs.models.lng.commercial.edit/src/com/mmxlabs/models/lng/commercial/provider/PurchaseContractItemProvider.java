@@ -59,6 +59,7 @@ public class PurchaseContractItemProvider
 			super.getPropertyDescriptors(object);
 
 			addCargoCVPropertyDescriptor(object);
+			addSalesDeliveryTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -82,6 +83,28 @@ public class PurchaseContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sales Delivery Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSalesDeliveryTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_PurchaseContract_salesDeliveryType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_PurchaseContract_salesDeliveryType_feature", "_UI_PurchaseContract_type"),
+				 CommercialPackage.Literals.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -113,6 +136,7 @@ public class PurchaseContractItemProvider
 
 		switch (notification.getFeatureID(PurchaseContract.class)) {
 			case CommercialPackage.PURCHASE_CONTRACT__CARGO_CV:
+			case CommercialPackage.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

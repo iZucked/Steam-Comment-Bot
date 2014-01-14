@@ -911,13 +911,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__TRANSFER_FROM = SLOT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SALES_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 4;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1060,13 +1069,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = SLOT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = SLOT_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 1;
+	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
@@ -2009,6 +2027,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__TRANSFER_FROM = LOAD_SLOT__TRANSFER_FROM;
 
 	/**
+	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SALES_DELIVERY_TYPE = LOAD_SLOT__SALES_DELIVERY_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2165,6 +2192,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE;
 
 	/**
 	 * The number of operations of the '<em>Spot Load Slot</em>' class.
@@ -3205,6 +3241,17 @@ public interface CargoPackage extends EPackage {
 	EReference getLoadSlot_TransferFrom();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sales Delivery Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_SalesDeliveryType();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV() <em>Get Slot Or Delegated CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -3214,6 +3261,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getLoadSlot__GetSlotOrDelegatedCV();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrContractDeliveryType() <em>Get Slot Or Contract Delivery Type</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrContractDeliveryType()
+	 * @generated
+	 */
+	EOperation getLoadSlot__GetSlotOrContractDeliveryType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.DischargeSlot <em>Discharge Slot</em>}'.
@@ -3808,6 +3865,14 @@ public interface CargoPackage extends EPackage {
 		EReference LOAD_SLOT__TRANSFER_FROM = eINSTANCE.getLoadSlot_TransferFrom();
 
 		/**
+		 * The meta object literal for the '<em><b>Sales Delivery Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__SALES_DELIVERY_TYPE = eINSTANCE.getLoadSlot_SalesDeliveryType();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegated CV</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * @since 8.0
@@ -3815,6 +3880,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = eINSTANCE.getLoadSlot__GetSlotOrDelegatedCV();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Delivery Type</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = eINSTANCE.getLoadSlot__GetSlotOrContractDeliveryType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.

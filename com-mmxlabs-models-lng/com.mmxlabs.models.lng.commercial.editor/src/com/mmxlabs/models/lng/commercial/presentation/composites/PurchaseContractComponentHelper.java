@@ -65,6 +65,7 @@ public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
+		add_salesDeliveryTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -74,5 +75,14 @@ public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cargoCVEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV));
+	}
+
+	/**
+	 * Create the editor for the salesDeliveryType feature on PurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_salesDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE));
 	}
 }

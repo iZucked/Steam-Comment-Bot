@@ -1,28 +1,29 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
-package com.mmxlabs.models.lng.pricing.presentation.composites;
+package com.mmxlabs.models.lng.commercial.presentation.composites;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-
-import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+
 /**
- * A component helper for Index instances
+ * A component helper for SlotContractParams instances
  *
  * @generated
  */
-public class IndexComponentHelper extends BaseComponentHelper {
+public class SlotContractParamsComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -30,7 +31,7 @@ public class IndexComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public IndexComponentHelper() {
+	public SlotContractParamsComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -39,18 +40,19 @@ public class IndexComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public IndexComponentHelper(IAdapterManager adapterManager) {
+	public SlotContractParamsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using Index as the supertype
+	 * add editors to a composite, using SlotContractParams as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.INDEX);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.SLOT_CONTRACT_PARAMS);	
 	}
 	
 	/**

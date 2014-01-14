@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -64,6 +65,32 @@ public class ShippingTypeConstraint extends AbstractModelMultiConstraint {
 						final String error = String.format(format, featureCheckedName, requiredCargoType.getName(), cargoType.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(error, IStatus.ERROR));
 						dsd.addEObjectAndFeature(dischargeSlot, featureChecked);
+						failures.add(dsd);
+					}
+				}
+				
+				if (slot instanceof LoadSlot) {
+
+					final LoadSlot loadSlot = (LoadSlot) slot;
+
+					// get the required cargo type from the delivery slot or the contract
+					if (loadSlot.isSetSalesDeliveryType()) {
+						requiredCargoType = loadSlot.getSalesDeliveryType();
+						featureChecked = CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE;
+						featureCheckedName = "slot";
+					} else {
+						final Contract contract = loadSlot.getContract();
+						requiredCargoType = loadSlot.getSlotOrContractDeliveryType();
+						if (contract instanceof SalesContract) {
+							featureChecked = CargoPackage.Literals.SLOT__CONTRACT;
+							featureCheckedName = String.format("Purchase contract '%s'", contract.getName());
+						}
+					}
+					if (requiredCargoType != CargoDeliveryType.ANY && cargoType != requiredCargoType) {
+						final String format = "%s specifies '%s' sale but cargo shipping type is '%s'.";
+						final String error = String.format(format, featureCheckedName, requiredCargoType.getName(), cargoType.getName());
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(error, IStatus.ERROR));
+						dsd.addEObjectAndFeature(loadSlot, featureChecked);
 						failures.add(dsd);
 					}
 				}
