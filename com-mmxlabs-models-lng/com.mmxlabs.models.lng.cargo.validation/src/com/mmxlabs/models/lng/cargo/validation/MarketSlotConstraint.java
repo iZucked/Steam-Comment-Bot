@@ -16,6 +16,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
@@ -41,6 +42,13 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 
 			final SpotSlot spotSlot = (SpotSlot) object;
 			final SpotMarket market = spotSlot.getMarket();
+			if (market == null) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + ((Slot)spotSlot).getName()
+						+ "] needs a market set."), IStatus.WARNING);
+				dsd.addEObjectAndFeature(spotSlot, CargoPackage.eINSTANCE.getSpotSlot_Market());
+				failures.add(dsd);
+			}
+			
 
 			if (spotSlot instanceof SpotLoadSlot) {
 				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
