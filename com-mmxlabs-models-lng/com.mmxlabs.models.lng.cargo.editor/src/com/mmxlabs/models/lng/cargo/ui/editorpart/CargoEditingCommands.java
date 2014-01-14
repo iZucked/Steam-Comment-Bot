@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.Activator;
@@ -95,6 +96,10 @@ public class CargoEditingCommands {
 		newLoad.setDESPurchase(isDESPurchase);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setMarket(market);
+		if (market instanceof FOBPurchasesMarket) {
+			final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) market;
+			newLoad.setPort((Port) fobPurchasesMarket.getNotionalPort());
+		}
 		// newLoad.setContract((Contract) market.getContract());
 		newLoad.setOptional(true);
 		newLoad.setName("");
