@@ -66,10 +66,9 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 						for (final EObject r : slot.getExtensions()) {
 							if (slotContractParamsClass.isInstance(r)) {
 								enabled = true;
-								// setEditorEnabled(enabled);
-								// setEditorVisible(enabled);
 								super.display(dialogContext, scenario, r, range);
 								setEditorVisible(enabled);
+								getLabel().pack();
 								return true;
 							}
 						}
@@ -86,14 +85,14 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 				// If an instance of the slot specific code has just been added, then display it
 				if (slotContractParamsClass.isInstance(notification.getNewValue())) {
 					enabled = true;
-					// FIXME: Almost works correctly, first time round the label is not visible, but the text is set correctly.
-					//
-					// setEditorVisible(true);
 					super.display(dialogContext, scenario, slotContractParamsClass.cast(notification.getNewValue()), range);
 					setEditorVisible(enabled);
+					getLabel().pack();
 					return true;
 
 				}
+				enabled = false;
+				super.display(dialogContext, scenario, null, range);
 				setEditorVisible(false);
 				return true;
 			}
