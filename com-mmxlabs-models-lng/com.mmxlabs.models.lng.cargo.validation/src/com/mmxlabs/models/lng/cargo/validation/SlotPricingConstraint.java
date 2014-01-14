@@ -12,6 +12,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class SlotPricingConstraint extends AbstractModelConstraint {
@@ -22,13 +23,17 @@ public class SlotPricingConstraint extends AbstractModelConstraint {
 		if (target instanceof Slot) {
 			final Slot slot = (Slot) target;
 
-			if (!slot.isSetPriceExpression() && !slot.isSetContract()) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A contract or price expression must be set"));
-				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
-				return dsd;
-			}
+			if (slot instanceof SpotSlot) {
+				// Skip check!
+			} else {
 
+				if (!slot.isSetPriceExpression() && !slot.isSetContract()) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A contract or price expression must be set"));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
+					return dsd;
+				}
+			}
 		}
 		return ctx.createSuccessStatus();
 	}
