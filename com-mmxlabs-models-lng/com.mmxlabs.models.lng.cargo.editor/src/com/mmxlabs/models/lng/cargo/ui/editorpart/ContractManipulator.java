@@ -22,10 +22,14 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.actions.CopyProjectAction;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -76,8 +80,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 					return NONE;
 				}
 
-				if (element instanceof Contract) {
-					return ((Contract) element).getName();
+				if (element instanceof NamedObject) {
+					return ((NamedObject) element).getName();
 				}
 				return super.getText(element);
 			}
@@ -95,8 +99,13 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	}
 
 	public void doSetValue(final Object object, final Object value) {
-		if (value instanceof Contract) {
+		if (value instanceof SpotMarket) {
+			runSetCommand(object, (SpotMarket) value);
+			runSetCommand(object, (Contract) null);
+			runSetCommand(object, (String) null);
+		} else if (value instanceof Contract) {
 			runSetCommand(object, (Contract) value);
+			runSetCommand(object, (String) null);
 		} else {
 			final String text = (String) value;
 			if (NONE.equals(text)) {
@@ -140,6 +149,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
 			return eObject.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
+		} else if (CargoPackage.Literals.SPOT_SLOT.isInstance(eObject)) {
+			return eObject.eGet(CargoPackage.Literals.SPOT_SLOT__MARKET);
 		} else if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_Contract())) {
 			return eObject.eGet(CargoPackage.eINSTANCE.getSlot_Contract());
 		} else {
@@ -157,11 +168,18 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	}
 
 	private void setEditorValues(final ComboBoxViewerCellEditor editor, final EObject slot) {
-		final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
 
 		final List<Object> valueList = new ArrayList<Object>();
-		for (final Pair<String, EObject> value : values) {
-			valueList.add(value.getSecond());
+		if (CargoPackage.Literals.SPOT_SLOT.isInstance(slot)) {
+			final EObject market = (EObject) slot.eGet(CargoPackage.Literals.SPOT_SLOT__MARKET);
+			if (market != null) {
+				valueList.add(market);
+			}
+		} else {
+			final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
+			for (final Pair<String, EObject> value : values) {
+				valueList.add(value.getSecond());
+			}
 		}
 
 		if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
@@ -206,6 +224,21 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		} else {
 			doSetValue(object, value);
 		}
+	}
+
+	private void runSetCommand(final Object object, final SpotMarket value) {
+		final Object currentValue = reallyGetValue(object);
+		if (((currentValue == null) && (value == null)) || (((currentValue != null) && (value != null)) && currentValue.equals(value))) {
+			return;
+		}
+		final Command command;
+		if (value == null) {
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSpotSlot_Market(), SetCommand.UNSET_VALUE));
+
+		} else {
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSpotSlot_Market(), value));
+		}
+		editingDomain.getCommandStack().execute(command);
 	}
 
 	private void runSetCommand(final Object object, final Contract value) {
@@ -256,8 +289,9 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		final EObject eObject = (EObject) object;
 		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
 			return "" + eObject.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
+		} else if (CargoPackage.Literals.SPOT_SLOT.isInstance(eObject)) {
+			return eObject.eGet(CargoPackage.Literals.SPOT_SLOT__MARKET);
 		}
-
 		return eObject.eGet(CargoPackage.eINSTANCE.getSlot_Contract());
 	}
 
