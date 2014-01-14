@@ -36,7 +36,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 public class ShippingTypeRequirementTransformer implements IContractTransformer {
 
 	@Inject
-	private IShippingTypeRequirementProviderEditor desPermissionProviderEditor;
+	private IShippingTypeRequirementProviderEditor shippingTypeProviderEditor;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -52,7 +52,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	 * @since 3.0
 	 */
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable final SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
@@ -60,7 +60,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	 * @since 3.0
 	 */
 	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable final PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
@@ -69,21 +69,35 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
 		if (modelSlot instanceof LoadSlot) {
-			if (((LoadSlot) modelSlot).isDESPurchase()) {
-				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
+			final LoadSlot loadSlot = (LoadSlot) modelSlot;
+			// Set the slot type
+			if (loadSlot.isDESPurchase()) {
+				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
 			} else {
-				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
+				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
 			}
+
+			// Set the required match type
+			final CargoDeliveryType cargoType = loadSlot.getSlotOrContractDeliveryType();
+			if (cargoType != CargoDeliveryType.ANY) {
+				shippingTypeProviderEditor.setPurchaseSlotRequiredDeliveryType(sequenceElement, cargoType);
+			}
+
 		}
 
 		else if (modelSlot instanceof DischargeSlot) {
-			DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
-			CargoDeliveryType cargoType = CargoDeliveryType.ANY;
+			final DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
 
-			cargoType = dischargeSlot.getSlotOrContractDeliveryType();
-
+			// Set the slot type
+			if (dischargeSlot.isFOBSale()) {
+				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.NOT_SHIPPED);
+			} else {
+				shippingTypeProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);
+			}
+			// Set the required match type
+			final CargoDeliveryType cargoType = dischargeSlot.getSlotOrContractDeliveryType();
 			if (cargoType != CargoDeliveryType.ANY) {
-				desPermissionProviderEditor.setSalesSlotRequiredPurchaseType(sequenceElement, cargoType);
+				shippingTypeProviderEditor.setSalesSlotRequiredDeliveryType(sequenceElement, cargoType);
 			}
 		}
 	}

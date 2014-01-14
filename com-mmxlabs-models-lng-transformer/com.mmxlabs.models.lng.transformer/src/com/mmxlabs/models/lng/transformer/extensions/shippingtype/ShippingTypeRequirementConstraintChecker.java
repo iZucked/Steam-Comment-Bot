@@ -28,10 +28,24 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
-		CargoDeliveryType requiredShippingType = shippingTypeRequirementProvider.getSalesSlotRequiredDeliveryType(second);
-		
-		if (requiredShippingType != null && requiredShippingType != CargoDeliveryType.ANY) {
-			return requiredShippingType == shippingTypeRequirementProvider.getPurchaseSlotDeliveryType(first);
+		{
+			final CargoDeliveryType requiredShippingType = shippingTypeRequirementProvider.getSalesSlotRequiredDeliveryType(second);
+
+			if (requiredShippingType != null && requiredShippingType != CargoDeliveryType.ANY) {
+				if (requiredShippingType != shippingTypeRequirementProvider.getPurchaseSlotDeliveryType(first)) {
+					return false;
+				}
+			}
+		}
+		{
+			final CargoDeliveryType requiredShippingType = shippingTypeRequirementProvider.getPurchaseSlotRequiredDeliveryType(first);
+
+			if (requiredShippingType != null && requiredShippingType != CargoDeliveryType.ANY) {
+
+				if (requiredShippingType != shippingTypeRequirementProvider.getSalesSlotDeliveryType(second)) {
+					return false;
+				}
+			}
 		}
 
 		return true;
@@ -39,13 +53,23 @@ public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseCo
 
 	@Override
 	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		CargoDeliveryType requiredShippingType = shippingTypeRequirementProvider.getSalesSlotRequiredDeliveryType(second);
-		CargoDeliveryType shippingType = shippingTypeRequirementProvider.getPurchaseSlotDeliveryType(first);
-		
-		if (requiredShippingType != null && requiredShippingType != shippingType) {
-			return String.format("Required shipping delivery type of %s does not match purchase delivery type of %s.", requiredShippingType.getName(), shippingType.getName());
+		{
+			final CargoDeliveryType requiredShippingType = shippingTypeRequirementProvider.getSalesSlotRequiredDeliveryType(second);
+			final CargoDeliveryType shippingType = shippingTypeRequirementProvider.getPurchaseSlotDeliveryType(first);
+
+			if (requiredShippingType != null && requiredShippingType != shippingType) {
+				return String.format("Required shipping delivery type of %s does not match purchase delivery type of %s.", requiredShippingType.getName(), shippingType.getName());
+			}
 		}
-		
+		{
+			final CargoDeliveryType requiredShippingType = shippingTypeRequirementProvider.getPurchaseSlotRequiredDeliveryType(first);
+			final CargoDeliveryType shippingType = shippingTypeRequirementProvider.getSalesSlotDeliveryType(second);
+
+			if (requiredShippingType != null && requiredShippingType != shippingType) {
+				return String.format("Required shipping delivery type of %s does not match sales delivery type of %s.", requiredShippingType.getName(), shippingType.getName());
+			}
+		}
+
 		return null;
 	}
 }

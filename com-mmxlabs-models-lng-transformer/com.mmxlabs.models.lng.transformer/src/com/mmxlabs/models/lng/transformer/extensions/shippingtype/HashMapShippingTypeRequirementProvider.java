@@ -14,11 +14,13 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public class HashMapShippingTypeRequirementProvider implements IShippingTypeRequirementProviderEditor {
 	final String name;
-	
+
 	final HashMap<ISequenceElement, CargoDeliveryType> salesSlotsShippingRequirements = new HashMap<ISequenceElement, CargoDeliveryType>();
 	final HashMap<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingTypes = new HashMap<ISequenceElement, CargoDeliveryType>();
+	final HashMap<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingRequirements = new HashMap<ISequenceElement, CargoDeliveryType>();
+	final HashMap<ISequenceElement, CargoDeliveryType> salesSlotsShippingTypes = new HashMap<ISequenceElement, CargoDeliveryType>();
 
-	public HashMapShippingTypeRequirementProvider(String name) {
+	public HashMapShippingTypeRequirementProvider(final String name) {
 		this.name = name;
 	}
 
@@ -30,29 +32,44 @@ public class HashMapShippingTypeRequirementProvider implements IShippingTypeRequ
 	@Override
 	public void dispose() {
 		salesSlotsShippingRequirements.clear();
-		purchaseSlotsShippingTypes.clear();		
+		salesSlotsShippingTypes.clear();
+		purchaseSlotsShippingRequirements.clear();
+		purchaseSlotsShippingTypes.clear();
 	}
-	
-	public void setPurchaseSlotDeliveryType(ISequenceElement element, CargoDeliveryType cargoType) {
+
+	public void setPurchaseSlotDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
 		purchaseSlotsShippingTypes.put(element, cargoType);
 	}
 
-	public void setSalesSlotRequiredPurchaseType(ISequenceElement element, CargoDeliveryType cargoType) {
+	public void setSalesSlotRequiredDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
 		salesSlotsShippingRequirements.put(element, cargoType);
 	}
 
 	@Override
-	public CargoDeliveryType getPurchaseSlotDeliveryType(
-			ISequenceElement element) {
-		// TODO Auto-generated method stub
+	public CargoDeliveryType getPurchaseSlotDeliveryType(final ISequenceElement element) {
 		return purchaseSlotsShippingTypes.get(element);
 	}
 
 	@Override
-	public CargoDeliveryType getSalesSlotRequiredDeliveryType(
-			ISequenceElement element) {
-		// TODO Auto-generated method stub
+	public CargoDeliveryType getSalesSlotRequiredDeliveryType(final ISequenceElement element) {
 		return salesSlotsShippingRequirements.get(element);
 	}
 
+	public void setSalesSlotDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
+		salesSlotsShippingTypes.put(element, cargoType);
+	}
+
+	public void setPurchaseSlotRequiredDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
+		purchaseSlotsShippingRequirements.put(element, cargoType);
+	}
+
+	@Override
+	public CargoDeliveryType getSalesSlotDeliveryType(final ISequenceElement element) {
+		return salesSlotsShippingTypes.get(element);
+	}
+
+	@Override
+	public CargoDeliveryType getPurchaseSlotRequiredDeliveryType(final ISequenceElement element) {
+		return purchaseSlotsShippingRequirements.get(element);
+	}
 }
