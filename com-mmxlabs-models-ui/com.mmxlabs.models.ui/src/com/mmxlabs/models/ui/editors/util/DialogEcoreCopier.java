@@ -126,14 +126,16 @@ public class DialogEcoreCopier {
 		for (final EObject eObj : this.objectsAdded) {
 			eObj.eAdapters().remove(adapter);
 			final EObject copy = eObj.eContainer();
-			final EObject original = originals.get(copies.indexOf(copy));
-			final Pair<EObject, EReference> p = new Pair<>(original, eObj.eContainmentFeature());
-			if (objectsAddedMap.containsKey(p)) {
-				objectsAddedMap.get(p).add(eObj);
-			} else {
-				final Set<EObject> s = new HashSet<>();
-				s.add(eObj);
-				objectsAddedMap.put(p, s);
+			if (copies.contains(copy)) {
+				final EObject original = originals.get(copies.indexOf(copy));
+				final Pair<EObject, EReference> p = new Pair<>(original, eObj.eContainmentFeature());
+				if (objectsAddedMap.containsKey(p)) {
+					objectsAddedMap.get(p).add(eObj);
+				} else {
+					final Set<EObject> s = new HashSet<>();
+					s.add(eObj);
+					objectsAddedMap.put(p, s);
+				}
 			}
 		}
 		final Collection<EObject> originalObjectsRemoved = new ArrayList<>(objectsRemoved.size());
