@@ -10,9 +10,12 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.AbstractPairwiseConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * An implementation of {@link IPairwiseConstraintChecker} to forbid certain {@link ISequenceElement} pairings
+ * 
+ * FIXME: Properly handle multiple loads and discharges within the {@link VoyagePlan}
  * 
  * @since 2.0
  */
