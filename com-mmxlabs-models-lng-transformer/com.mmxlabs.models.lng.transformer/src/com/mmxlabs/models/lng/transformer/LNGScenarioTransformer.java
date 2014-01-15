@@ -1372,10 +1372,7 @@ public class LNGScenarioTransformer {
 								marketGroupSlots.add(desPurchaseSlot);
 							}
 						}
-						if (marketSlots.size() > count) {
-							// Take this count and add into a constraint.
-							builder.createSlotGroupCount(marketSlots, count);
-						}
+						builder.createSlotGroupCount(marketSlots, count);
 					}
 				}
 
@@ -1383,7 +1380,8 @@ public class LNGScenarioTransformer {
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
-						builder.createSlotGroupCount(marketGroupSlots, count);
+						// Disabled until UI available
+//						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
@@ -1490,10 +1488,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						if (marketSlots.size() > count) {
-							// Take this count and add into a constraint.
-							builder.createSlotGroupCount(marketSlots, count);
-						}
+						builder.createSlotGroupCount(marketSlots, count);
 					}
 				}
 
@@ -1501,7 +1496,7 @@ public class LNGScenarioTransformer {
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
-						builder.createSlotGroupCount(marketGroupSlots, count);
+//						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
@@ -1603,10 +1598,7 @@ public class LNGScenarioTransformer {
 								marketGroupSlots.add(desSalesSlot);
 							}
 						}
-						if (marketSlots.size() > count) {
-							// Take this count and add into a constraint.
-							builder.createSlotGroupCount(marketSlots, count);
-						}
+						builder.createSlotGroupCount(marketSlots, count);
 					}
 				}
 
@@ -1614,7 +1606,7 @@ public class LNGScenarioTransformer {
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
-						builder.createSlotGroupCount(marketGroupSlots, count);
+//						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
@@ -1717,10 +1709,7 @@ public class LNGScenarioTransformer {
 								marketGroupSlots.add(fobPurchaseSlot);
 							}
 						}
-						if (marketSlots.size() > count) {
-							// Take this count and add into a constraint.
-							builder.createSlotGroupCount(marketSlots, count);
-						}
+						builder.createSlotGroupCount(marketSlots, count);
 					}
 				}
 
@@ -1728,7 +1717,7 @@ public class LNGScenarioTransformer {
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
-						builder.createSlotGroupCount(marketGroupSlots, count);
+//						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
