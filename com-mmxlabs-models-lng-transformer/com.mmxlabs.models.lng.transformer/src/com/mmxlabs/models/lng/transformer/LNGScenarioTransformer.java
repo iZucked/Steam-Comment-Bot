@@ -1068,10 +1068,29 @@ public class LNGScenarioTransformer {
 				}
 				dischargePriceCalculator = new PriceExpressionContract(curve);
 			}
-
+		} else if (dischargeSlot instanceof SpotSlot) {
+			final SpotSlot spotSlot = (SpotSlot) dischargeSlot;
+			final SpotMarket market = spotSlot.getMarket();
+			
+			final IContractTransformer transformer = contractTransformersByEClass.get(market.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + market.getPriceInfo().eClass().getName());
+			}
+			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(null, market.getPriceInfo());
+			if (calculator == null) {
+				throw new IllegalStateException("Unable to transform contract");
+			}
+			// TODO?
+//			entities.addModelObject(c, calculator);
+	
+			dischargePriceCalculator = calculator;
 		} else if (dischargeSlot.isSetContract()) {
 			dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), ISalesPriceCalculator.class);
 		} else {
+			dischargePriceCalculator = null;
+		} 
+
+		if (dischargePriceCalculator == null) {
 			throw new IllegalStateException("Discharge Slot has no contract or other pricing data");
 		}
 
@@ -1169,10 +1188,32 @@ public class LNGScenarioTransformer {
 				}
 				loadPriceCalculator = new PriceExpressionContract(curve);
 			}
+			
+		} else if (loadSlot instanceof SpotSlot) {
+			final SpotSlot spotSlot = (SpotSlot) loadSlot;
+			final SpotMarket market = spotSlot.getMarket();
+			
+			final IContractTransformer transformer = contractTransformersByEClass.get(market.getPriceInfo().eClass());
+			if (transformer == null) {
+				throw new IllegalStateException("No Price Parameters transformer registered for  " + market.getPriceInfo().eClass().getName());
+			}
+			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(null, market.getPriceInfo());
+			if (calculator == null) {
+				throw new IllegalStateException("Unable to transform contract");
+			}
+			// TODO?
+//			entities.addModelObject(c, calculator);
+	
+			loadPriceCalculator = calculator;
+
 		} else if (loadSlot.isSetContract()) {
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
 			loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator.class);
 		} else {
+			loadPriceCalculator = null;
+		}
+		
+		if (loadPriceCalculator == null){
 			throw new IllegalStateException("Load Slot has no contract or other pricing data");
 		}
 
