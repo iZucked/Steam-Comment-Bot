@@ -76,23 +76,6 @@
 			modelClass="com.mmxlabs.models.lng.spotmarkets.SpotAvailability" />
 		
 	</extension>
-	<extension
-       point="org.eclipse.ui.views">
-    <view
-          category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView"
-          id="com.mmxlabs.models.lng.spotmarkets.editor.views.FOBSalesSpotMarketView"
-          name="FOB Sales Spot Markets"
-          restorable="true">
-    </view>
-    <view
-          category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView"
-          id="com.mmxlabs.models.lng.spotmarkets.editor.views.DESPurchaseSpotMarketView"
-          name="DES Purchase Spot Markets"
-          restorable="true">
-    </view>
- </extension>
   <extension
        point="com.mmxlabs.models.util.import.attributes">
     <attributeImporter
