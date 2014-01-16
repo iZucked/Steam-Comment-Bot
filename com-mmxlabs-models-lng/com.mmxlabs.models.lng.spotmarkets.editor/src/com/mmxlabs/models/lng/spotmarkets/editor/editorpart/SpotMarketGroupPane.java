@@ -13,6 +13,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -46,30 +47,36 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;
 		final SpotMarketsPackage pp = SpotMarketsPackage.eINSTANCE;
 
+		CommercialPackage ppp = CommercialPackage.eINSTANCE;
+		
 		final IReferenceValueProviderProvider provider = getReferenceValueProviderCache();
 
 		addTypicalColumn("Name", new BasicAttributeManipulator(mmx.getNamedObject_Name(), getEditingDomain()));
 		switch (spotType) {
 		case DES_PURCHASE:
 			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getDESPurchaseMarket_Contract(), provider, getEditingDomain()));
-			addTypicalColumn("CV", new BasicAttributeManipulator(pp.getDESPurchaseMarket_Cv(), getEditingDomain()));
 			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
+			addTypicalColumn("CV", new BasicAttributeManipulator(pp.getDESPurchaseMarket_Cv(), getEditingDomain()));
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
 			break;
 		case DES_SALE:
 			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getDESSalesMarket_Contract(), provider, getEditingDomain()));
-			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getDESSalesMarket_NotionalPort(), provider, getEditingDomain()));
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
 			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
+			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getDESSalesMarket_NotionalPort(), provider, getEditingDomain()));
 			break;
 		case FOB_PURCHASE:
 			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_Contract(), provider, getEditingDomain()));
-			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_NotionalPort(), provider, getEditingDomain()));
-			addTypicalColumn("CV", new NumericAttributeManipulator(pp.getFOBPurchasesMarket_Cv(), getEditingDomain()));
 			addTypicalColumn("Count", new BasicAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
+			addTypicalColumn("CV", new NumericAttributeManipulator(pp.getFOBPurchasesMarket_Cv(), getEditingDomain()));
+			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_NotionalPort(), provider, getEditingDomain()));
 			break;
 		case FOB_SALE:
 			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getFOBSalesMarket_Contract(), provider, getEditingDomain()));
-			addTypicalColumn("Ports", new MultipleReferenceManipulator(pp.getFOBSalesMarket_OriginPorts(), provider, getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
 			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
+			addTypicalColumn("Ports", new MultipleReferenceManipulator(pp.getFOBSalesMarket_OriginPorts(), provider, getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 			break;
 		}
 	}
