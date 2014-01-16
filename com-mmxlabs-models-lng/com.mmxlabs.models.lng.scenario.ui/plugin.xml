@@ -142,25 +142,25 @@
                locationURI="menu:data?after=additions">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
-                  label="Bulk import price curves"
+                  label="Import Price Curves"
                   style="push">
             </command>
          </menuContribution>
          <menuContribution
                allPopups="false"
-               locationURI="menu:data?after=additions">
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
-                  label="Bulk import cargoes"
+                  label="Import Cargoes"
                   style="push">
             </command>
          </menuContribution>
           <menuContribution
                allPopups="false"
-               locationURI="menu:data?after=additions">
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler">
             <command
                   commandId="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
-                  label="Shared Scenario Data Import"
+                  label="Import Shared Scenario Data"
                   style="push">
             </command>
          </menuContribution>

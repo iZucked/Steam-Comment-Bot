@@ -28,6 +28,8 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -274,7 +276,7 @@ public class BulkImportPage extends WizardPage {
 	}
 
 	public String getImportFilename() {
-		return importFileEditor.getStringValue();
+		return ""; //importFileEditor.getStringValue();
 	}
 
 	public char getCsvSeparator() {
@@ -316,22 +318,29 @@ public class BulkImportPage extends WizardPage {
 
 		public RadioSelectionGroup(Composite parent, String title, int style, String[] labels, int[] values) {
 			super(parent, style);
+			
+			GridLayout layout = new GridLayout(1, true);
+//			layout.marginRight = 0;
+			layout.marginWidth = 0;
+			setLayout(layout);
+//			GridData gd = new GridData();
+//			gd.verticalIndent = 0;
+//			gd.horizontalIndent = 0;
+//			gd.grabExcessHorizontalSpace = true;
+//			setLayoutData(gd);
+			
 			group = new Group(this, style);
 			for (String label : labels) {
 				addButton(label);
 			}
 			GridLayout gl = new GridLayout(1, false);
 			gl.marginLeft = 0;
+			gl.marginRight = 0;
 			gl.marginWidth = 0;
 			setLayout(gl);
-//			GridData gd = new GridData();
-//			gd.verticalIndent = 0;
-//			gd.horizontalIndent = 0;
-////			gd.grabExcessHorizontalSpace = true;
-//			setLayoutData(gd);
 			group.setLayout(new GridLayout(labels.length, false));
 			GridData groupLayoutData = new GridData();
-			group.setLayoutData(groupLayoutData);
+//			group.setLayoutData(groupLayoutData);
 			group.setText(title);
 			this.values = values;
 		}
@@ -343,6 +352,11 @@ public class BulkImportPage extends WizardPage {
 			buttons.add(button);
 
 			button.setText(text);
+//			GridData gd = new GridData();
+////			gd.verticalIndent = 0;
+////			gd.horizontalIndent = 0;
+////			gd.grabExcessHorizontalSpace = true;
+//			button.setLayoutData(gd);
 			button.addSelectionListener(new SelectionListener() {
 
 				@Override
@@ -378,31 +392,74 @@ public class BulkImportPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		final Composite container = new Composite(parent, SWT.BORDER);
+		final Composite container = new Composite(parent, SWT.NONE);
 
 		// set the layout for the whole functional region
-		final GridLayout layout = new GridLayout(1, true);
-		layout.verticalSpacing = 9;
+		final GridLayout layout = new GridLayout(2, false);
+		layout.verticalSpacing = 0;
+		layout.marginBottom = 0;
+		layout.marginRight = 0;
+		layout.marginWidth = 0;
 		container.setLayout(layout);
 		GridData ld = new GridData();
-		ld.widthHint = 400;
+		ld.verticalIndent = 0;
+		ld.horizontalAlignment = SWT.FILL;
+		ld.grabExcessHorizontalSpace = true;
 		container.setLayoutData(ld);
 
-		// dataImportGroup = new RadioSelectionGroup(container, "Data to import", SWT.NONE, new String[] {"Price curves", "Cargoes"}, new int[] {CHOICE_COMMODITY_INDICES, CHOICE_CARGOES});
-		// dataImportGroup.setSelectedIndex(0);
+		Composite datafileC = new Composite(container, SWT.NONE);
+		GridData gd = new GridData();
+		gd.horizontalAlignment = SWT.FILL;
+		gd.grabExcessHorizontalSpace = true;
+		gd.horizontalSpan = 2;
+		datafileC.setLayoutData(gd);
+		
+		importFileEditor = new FileFieldEditor("Data file", "Data file", datafileC);
+		importFileEditor.setFileExtensions(new String[] { "*.csv" });
+		importFileEditor.getTextControl(datafileC).addModifyListener(new ModifyListener() {
 
+			@Override
+			public void modifyText(ModifyEvent e) {
+				BulkImportPage.this.getContainer().updateButtons();
+			}
+		});
+
+//		Composite separatorsC = new Composite(container, SWT.BORDER);
+//		final RowLayout l = new RowLayout();//(2, false);
+//		l.marginLeft = 0;
+//		l.marginRight = 0;
+//		l.marginWidth = 0;
+//
+//////		layout.verticalSpacing = 9;
+////		layout.marginWidth = 0;
+////		layout.verticalSpacing= 0;
+////		layout.horizontalSpacing= 0;
+//		separatorsC.setLayout(l);
+//		GridData gd2 = new GridData();
+////		gd.horizontalIndent = 0;
+//		gd2.horizontalAlignment = SWT.FILL;
+//		gd2.horizontalSpan = 2;
+////		gd2.verticalIndent = 0;
+//		separatorsC.setLayoutData(gd2);
+//		
 		// create a radiobutton group for specifying CSV import
 		csvSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
-		GridData csvLayoutData = new GridData();
-		csvLayoutData.widthHint = 500;
-		// csvLayoutData.grabExcessHorizontalSpace = true;
+				GridData csvLayoutData = new GridData();
+//		csvLayoutData.widthHint = 220;
+//		csvLayoutData.horizontalIndent = 0;
+//		csvLayoutData.verticalIndent = 0;
+		csvLayoutData.grabExcessHorizontalSpace = true;
+		csvLayoutData.horizontalAlignment = SWT.FILL;
 		csvSelectionGroup.setLayoutData(csvLayoutData);
 
 		// create a radiobutton group for specifying CSV import
 		decimalSelectionGroup = new RadioSelectionGroup(container, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
 		GridData decimalLayoutData = new GridData();
-		decimalLayoutData.widthHint = 500;
-		// csvLayoutData.grabExcessHorizontalSpace = true;
+//		decimalLayoutData.widthHint = 220;	
+//		decimalLayoutData.horizontalIndent = 0;
+//		decimalLayoutData.verticalIndent = 0;
+		decimalLayoutData.grabExcessHorizontalSpace = true;
+		decimalLayoutData.horizontalAlignment = SWT.FILL;
 		decimalSelectionGroup.setLayoutData(decimalLayoutData);
 
 		// get the default export directory from the settings
@@ -420,30 +477,27 @@ public class BulkImportPage extends WizardPage {
 		csvSelectionGroup.setSelectedIndex(delimiterValue);
 		decimalSelectionGroup.setSelectedIndex(decimalValue);
 
-		importFileEditor = new FileFieldEditor("Data file", "Data file", csvSelectionGroup);
-		importFileEditor.setFileExtensions(new String[] { "*.csv" });
-
-		importFileEditor.getTextControl(csvSelectionGroup).addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-				BulkImportPage.this.getContainer().updateButtons();
-			}
-		});
-
 		// create a radiobutton group for specifying how scenarios are selected
 		String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
 		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
 				CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
 		scenarioSelectionGroup.setSelectedIndex(0);
+		GridData gd3 = new GridData() ;
+		gd3.horizontalAlignment = SWT.FILL;
+		gd3.grabExcessHorizontalSpace= true;
+		gd3.horizontalSpan = 2;
+		scenarioSelectionGroup.setLayoutData(gd3);
 
 		// create a container for the scenario tree control (so we can hide it)
-		final Composite viewerComposite = new Composite(container, SWT.BORDER);
+		final Composite viewerComposite = new Composite(container, SWT.NONE);
 		viewerComposite.setLayout(new GridLayout(1, true));
 		GridData viewerCompositeLayoutData = new GridData();
-		viewerCompositeLayoutData.widthHint = 450;
+//		viewerCompositeLayoutData.widthHint = 250;
 		viewerCompositeLayoutData.grabExcessVerticalSpace = true;
+		viewerCompositeLayoutData.grabExcessHorizontalSpace = true;
 		viewerCompositeLayoutData.verticalAlignment = SWT.FILL;
+		viewerCompositeLayoutData.horizontalAlignment = SWT.FILL;
+		viewerCompositeLayoutData.horizontalSpan = 2;
 		viewerComposite.setLayoutData(viewerCompositeLayoutData);
 
 		// create a control to display the scenario tree
@@ -453,9 +507,10 @@ public class BulkImportPage extends WizardPage {
 		scenarioTreeViewer.setAutoExpandLevel(3);
 		scenarioTreeViewer.setInput(getServices());
 		GridData viewerLayoutData = new GridData();
-		viewerLayoutData.widthHint = 400;
 		viewerLayoutData.grabExcessVerticalSpace = true;
+		viewerLayoutData.grabExcessHorizontalSpace = true;
 		viewerLayoutData.verticalAlignment = SWT.FILL;
+		viewerLayoutData.horizontalAlignment = SWT.FILL;
 		scenarioTreeViewer.getTree().setLayoutData(viewerLayoutData);
 
 		// when a parent element checkbox is clicked in the tree, propagate the change to its descendants
