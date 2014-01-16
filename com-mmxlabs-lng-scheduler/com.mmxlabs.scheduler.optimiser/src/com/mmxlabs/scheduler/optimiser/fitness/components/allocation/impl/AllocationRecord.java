@@ -85,19 +85,7 @@ public final class AllocationRecord {
 			annotation.setSlotPricePerM3(slots[i], pricesPerM3[i]);
 			annotation.setSlotPricePerMMBTu(slots[i], pricesPerMMBTu[i]);
 			annotation.setSlotTime(slots[i], slotTimes[i]);
-		}
-
-		// load/discharge case
-		if (slots.length == 2) {
-			annotation.setSlotVolumeInM3(slots[0], allocations[0]);
-			annotation.setSlotVolumeInM3(slots[1], allocations[1]);
-		}
-		// LDD case
-		else {
-			for (int j = 1; j < slots.length; j++) {
-				final IDischargeOption discharge = (IDischargeOption) slots[j];
-				annotation.setSlotVolumeInM3(discharge, discharge.getMaxDischargeVolume());
-			}
+			annotation.setSlotVolumeInM3(slots[i], allocations[i]);
 		}
 
 		return annotation;
