@@ -238,12 +238,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final int warmingTimeInHours = idleTimeInHours - deltaTimeInHours;
 
 						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
-							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() /* + vesselClass.getCooldownTime() */))) {
+							// If we are permitted to cooldown, then cooldown
+							if (options.getAllowCooldown()) { // && (idleTimeInHours > (vesselClass.getWarmupTime() /* + vesselClass.getCooldownTime() */))) {
 								// Set this on the voyage rather than the port details as the final port details is usually ignored in further processing
 								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
 								// don't use any idle base during the cooldown
 								// remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 							} else {
+								
+								// Else, increase required heel quantity to avoid a cooldown.
+								// TODO: This may force a load/discharge violation rather than pricing the cooldown.
+								
 								// warming time = idle - delta
 								// therefore we need
 								// idle - delta = vesselClass.getWarmupTime();
@@ -631,6 +636,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		{
 			final PortDetails details = (PortDetails) sequence[0];
 			final IPortSlot slot = details.getOptions().getPortSlot();
+			
 			// set available heel if we start from a heel options slot
 			if ((slot instanceof IHeelOptionsPortSlot)) {
 				availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
@@ -912,7 +918,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
-				final boolean shouldBeCold = details.getOptions().shouldBeCold();
+				final boolean shouldBeCold = details.getOptions().shouldBeCold() && !details.getOptions().getAllowCooldown();
 				final long fuelConsumption = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 				if (shouldBeCold && (fuelConsumption > 0)) {
 

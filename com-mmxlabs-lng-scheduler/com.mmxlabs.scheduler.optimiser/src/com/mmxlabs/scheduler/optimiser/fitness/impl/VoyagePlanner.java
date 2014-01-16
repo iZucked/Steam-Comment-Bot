@@ -149,19 +149,13 @@ public class VoyagePlanner {
 					options.setAllowCooldown(true);
 				}
 			} else {
-				if (useNBO) {
-					if (thisPort.shouldVesselsArriveCold()) {
-						// we don't want to use cooldown ever
-						options.setAllowCooldown(false);
-					} else {
-						// we have a choice
-						options.setAllowCooldown(false);
-						optimiser.addChoice(new CooldownVoyagePlanChoice(options));
-					}
+				if (thisPort.shouldVesselsArriveCold()) {
+					// we don't want to use cooldown ever
+					options.setAllowCooldown(false);
 				} else {
-					// we have to allow cooldown, because there is no
-					// NBO.
-					options.setAllowCooldown(true);
+					// we have a choice
+					options.setAllowCooldown(false);
+					optimiser.addChoice(new CooldownVoyagePlanChoice(options));
 				}
 			}
 		} else {

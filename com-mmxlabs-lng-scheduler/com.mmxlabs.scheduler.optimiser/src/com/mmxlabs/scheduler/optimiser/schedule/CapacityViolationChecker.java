@@ -183,7 +183,7 @@ public class CapacityViolationChecker {
 					} else if (e instanceof VoyageDetails) {
 						final VoyageDetails voyageDetails = (VoyageDetails) e;
 
-						final boolean shouldBeCold = voyageDetails.getOptions().shouldBeCold();
+						final boolean shouldBeCold = voyageDetails.getOptions().shouldBeCold() && !voyageDetails.getOptions().getAllowCooldown();
 						final long fuelConsumption = voyageDetails.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 						if (shouldBeCold && (fuelConsumption > 0)) {
 							// Despite requring to be cold, we still have some cooldown volume. Record this volume so the next port visit can allocate it properly
