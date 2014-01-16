@@ -86,6 +86,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 				if (slotContractParamsClass.isInstance(notification.getNewValue())) {
 					enabled = true;
 					super.display(dialogContext, scenario, slotContractParamsClass.cast(notification.getNewValue()), range);
+					super.display(location, scenario, slotContractParamsClass.cast(notification.getNewValue()), range);
 					setEditorVisible(enabled);
 					getLabel().pack();
 					return true;
