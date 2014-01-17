@@ -108,7 +108,7 @@ public class DialogEcoreCopier {
 		this.changeRecorder = new ChangeRecorder(copies);
 	}
 
-	public Command createEditCommand(EditingDomain domain) {
+	public Command createEditCommand(final EditingDomain domain) {
 		if (changeRecorder == null) {
 			throw new IllegalStateException("Change record already cleaned up.");
 		}
@@ -141,7 +141,7 @@ public class DialogEcoreCopier {
 		final Collection<EObject> originalObjectsRemoved = new ArrayList<>(objectsRemoved.size());
 		for (final EObject eObj : this.objectsRemoved) {
 			eObj.eAdapters().remove(adapter);
-			for (Map.Entry<EObject, EObject> e : copier.entrySet()) {
+			for (final Map.Entry<EObject, EObject> e : copier.entrySet()) {
 				if (e.getValue() == eObj) {
 					originalObjectsRemoved.add(e.getKey());
 				}
