@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
+import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -16,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
  */
 public interface ISalesPriceCalculator extends ICalculator {
 	/**
-	 * This method will be called once before any of the slots in the argument are evaluated using {@link #calculateSalesUnitPrice(IDischargeOption, int)}, to allow for shared pre-computation.
+	 * This method will be called once before any of the slots in the argument are evaluated using {@link #calculateSalesUnitPrice(IDischargeOption, int, IDetailTree)}, to allow for shared pre-computation.
 	 * 
 	 * Note the {@link ScheduledSequences} object will be in an incomplete state at this point in time.
 	 * 
@@ -28,9 +29,9 @@ public interface ISalesPriceCalculator extends ICalculator {
 
 	/**
 	 * Find the unit price in dollars per mmbtu for gas at the given slot, at the given time.
-	 * 
-	 * @param slot
 	 * @param time
+	 * @param annotations TODO
+	 * @param slot
 	 */
-	public int calculateSalesUnitPrice(IDischargeOption option, int time);
+	public int calculateSalesUnitPrice(IDischargeOption option, int time, IDetailTree annotations);
 }

@@ -286,7 +286,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 						// compute purchase price from contract
 						// this is not ideal.
-						dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, dischargeTime);
+						dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, dischargeTime, null);
 						long maxLoadVolumeInM3 = loadOption.getMaxLoadVolume();
 						if (maxLoadVolumeInM3 == 0) {
 							maxLoadVolumeInM3 = vesselCapacityInM3;
@@ -345,7 +345,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 				// compute purchase price from contract
 				// this is not ideal.
-				dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, time);
+				dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, time, null);
 
 				// TODO this value is incorrect for netback and profit sharing cases
 				// the load price per MMBTu is the notional maximum price
@@ -434,7 +434,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		// compute purchase price from contract
 		// this is not ideal.
-		final int dischargePricePerMMBtu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, dischargeTime);
+		final int dischargePricePerMMBtu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, dischargeTime, null);
 		long maxLoadVolumeInM3 = loadSlot.getMaxLoadVolume();
 		if (maxLoadVolumeInM3 == 0) {
 			maxLoadVolumeInM3 = vesselCapacityInM3;
@@ -504,7 +504,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		// compute purchase price from contract
 		// this is not ideal.
-		final int dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, time);
+		final int dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, time, null);
 
 		// If there is a nominated vessel, then use it's capacity to clamp transfer volume.
 		// TODO: Note BOG may in reality further restrict the transfer volume
@@ -597,7 +597,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 				totalDischargeVolume += volume;
 
-				final int dischargePricePerMMBtu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, times[i]);
+				final int dischargePricePerMMBtu = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, times[i], null);
 				final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBtu, cargoCVValue);
 
 				pricesPerM3[i] = dischargePricePerM3;

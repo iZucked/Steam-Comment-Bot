@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
@@ -26,7 +27,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(final IDischargeOption option, final int time) {
+	public int calculateSalesUnitPrice(final IDischargeOption option, final int time, IDetailTree annotations) {
 		return price;
 	}
 
