@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -85,6 +86,26 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("Type", objectFormatter, sp.getEvent__Type());
 
 		addColumn("ID", objectFormatter, sp.getEvent__Name());
+
+		
+		addColumn("Contract", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				final Event se = (Event) object;
+				if(se instanceof SlotVisit){ 
+					SlotVisit sv = (SlotVisit) se;
+					Contract c = sv.getSlotAllocation().getContract();
+					if(c != null) return c.getName();
+				}
+				return null;
+			}
+
+			@Override
+			public Comparable getComparable(final Object object) {
+				return ((Event) object).getDuration();
+			}
+
+		});
 
 		dateColumn = addColumn("Start Date", calendarFormatter, sp.getEvent__GetLocalStart());
 
