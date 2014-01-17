@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
@@ -132,11 +133,11 @@ public class ScheduleTestModule extends AbstractModule {
 	private IConstraintCheckerRegistry createConstraintRegistry(Injector injector) {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
 
-		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory("");
+		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
 		injector.injectMembers(constraintFactory);
 
-		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory("");
+		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
 		injector.injectMembers(constraintFactory2);
 
@@ -209,9 +210,9 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IInitialSequenceBuilder provideIInitialSequenceBuilder(final List<IPairwiseConstraintChecker> pairwiseCheckers) {
+	private IInitialSequenceBuilder provideIInitialSequenceBuilder(Injector injector, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
 		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(pairwiseCheckers);
-
+		injector.injectMembers(builder);
 		return builder;
 	}
 

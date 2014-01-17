@@ -8,6 +8,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -36,24 +39,6 @@ public class LatenessComponentTest {
 	}
 
 	@Test
-	public void testInit() {
-
-		final String name = "name";
-		final String dcp = "dcp";
-		final CargoSchedulerFitnessCore core = null;
-		final LatenessComponent c = new LatenessComponent(name, core);
-
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
-
-		final IStartEndRequirementProvider startEndRequirementProvider = Mockito.mock(IStartEndRequirementProvider.class);
-
-		Mockito.when(data.getDataComponentProvider(dcp, IStartEndRequirementProvider.class)).thenReturn(startEndRequirementProvider);
-
-		c.init(data);
-		Mockito.verify(data).getDataComponentProvider(dcp, IStartEndRequirementProvider.class);
-	}
-
-	@Test
 	public void testEvaluateSequence() {
 
 		// the penalty per 1 unit (hour?) of late. As set in LatenessComponent.
@@ -73,11 +58,21 @@ public class LatenessComponentTest {
 		final String name = "name";
 		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = null;
-		final LatenessComponent c = new LatenessComponent(name, core);
 
 		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 
 		final IStartEndRequirementProvider startEndRequirementProvider = Mockito.mock(IStartEndRequirementProvider.class);
+
+		Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
+			}
+		});
+		final LatenessComponent c = new LatenessComponent(name, core);
+
+		injector.injectMembers(c);
 
 		final IResource resource = Mockito.mock(IResource.class);
 
