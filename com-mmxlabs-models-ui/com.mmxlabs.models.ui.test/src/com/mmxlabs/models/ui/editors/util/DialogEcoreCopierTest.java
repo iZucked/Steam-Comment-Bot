@@ -6,7 +6,12 @@ package com.mmxlabs.models.ui.editors.util;
 
 import junit.framework.Assert;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.junit.Test;
 
 import com.mmxlabs.models.ui.test.model.ModelFactory;
@@ -41,7 +46,11 @@ public class DialogEcoreCopierTest {
 		Assert.assertEquals(originalValue, simpleObject.getAttribute());
 		Assert.assertEquals(newValue, copy.getAttribute());
 
-		final Command cmd = copier.createEditCommand(null);
+		
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory();
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+		final Command cmd = copier.createEditCommand(ed);
 
 		cmd.execute();
 
@@ -112,7 +121,10 @@ public class DialogEcoreCopierTest {
 
 		// Do something?
 
-		final Command cmd = copier.createEditCommand(null);
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory();
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+		final Command cmd = copier.createEditCommand(ed);
 
 		cmd.execute();
 
@@ -212,7 +224,10 @@ public class DialogEcoreCopierTest {
 		// Do something?
 		copySimpleObject.setAttribute(newValue);
 
-		final Command cmd = copier.createEditCommand(null);
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory();
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, new BasicCommandStack());
+		final Command cmd = copier.createEditCommand(ed);
 
 		cmd.execute();
 
