@@ -4,8 +4,6 @@ package com.mmxlabs.models.lng.commercial.presentation.composites;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +18,11 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * A component helper for SlotContractParams instances
+ * A component helper for ContractExpressionMapEntry instances
  *
  * @generated
  */
-public class SlotContractParamsComponentHelper extends BaseComponentHelper {
+public class ContractExpressionMapEntryComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -32,7 +30,7 @@ public class SlotContractParamsComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public SlotContractParamsComponentHelper() {
+	public ContractExpressionMapEntryComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -41,19 +39,18 @@ public class SlotContractParamsComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public SlotContractParamsComponentHelper(IAdapterManager adapterManager) {
+	public ContractExpressionMapEntryComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using SlotContractParams as the supertype
+	 * add editors to a composite, using ContractExpressionMapEntry as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.SLOT_CONTRACT_PARAMS);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.CONTRACT_EXPRESSION_MAP_ENTRY);	
 	}
 	
 	/**
@@ -64,5 +61,23 @@ public class SlotContractParamsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_contractEditor(detailComposite, topClass);
+		add_expressionEditor(detailComposite, topClass);
+	}
+	/**
+	 * Create the editor for the contract feature on ContractExpressionMapEntry
+	 *
+	 * @generated
+	 */
+	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT_EXPRESSION_MAP_ENTRY__CONTRACT));
+	}
+	/**
+	 * Create the editor for the expression feature on ContractExpressionMapEntry
+	 *
+	 * @generated
+	 */
+	protected void add_expressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION));
 	}
 }

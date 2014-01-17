@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
@@ -97,6 +98,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass slotContractParamsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass contractExpressionMapEntryEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -486,6 +494,33 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getContractExpressionMapEntry() {
+		return contractExpressionMapEntryEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getContractExpressionMapEntry_Contract() {
+		return (EReference)contractExpressionMapEntryEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getContractExpressionMapEntry_Expression() {
+		return (EAttribute)contractExpressionMapEntryEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -564,6 +599,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
 
 		slotContractParamsEClass = createEClass(SLOT_CONTRACT_PARAMS);
+
+		contractExpressionMapEntryEClass = createEClass(CONTRACT_EXPRESSION_MAP_ENTRY);
+		createEReference(contractExpressionMapEntryEClass, CONTRACT_EXPRESSION_MAP_ENTRY__CONTRACT);
+		createEAttribute(contractExpressionMapEntryEClass, CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -661,6 +700,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotContractParamsEClass, SlotContractParams.class, "SlotContractParams", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(contractExpressionMapEntryEClass, ContractExpressionMapEntry.class, "ContractExpressionMapEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getContractExpressionMapEntry_Contract(), this.getContract(), null, "contract", null, 0, 1, ContractExpressionMapEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContractExpressionMapEntry_Expression(), ecorePackage.getEString(), "expression", null, 0, 1, ContractExpressionMapEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");

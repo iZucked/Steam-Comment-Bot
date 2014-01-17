@@ -91,6 +91,15 @@ public interface CommercialFactory extends EFactory {
 	ExpressionPriceParameters createExpressionPriceParameters();
 
 	/**
+	 * Returns a new object of class '<em>Contract Expression Map Entry</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Contract Expression Map Entry</em>'.
+	 * @generated
+	 */
+	ContractExpressionMapEntry createContractExpressionMapEntry();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

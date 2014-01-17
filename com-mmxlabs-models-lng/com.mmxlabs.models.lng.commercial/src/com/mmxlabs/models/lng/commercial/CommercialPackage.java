@@ -866,6 +866,43 @@ public interface CommercialPackage extends EPackage {
 	int SLOT_CONTRACT_PARAMS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl <em>Contract Expression Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractExpressionMapEntry()
+	 * @generated
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY = 9;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY__CONTRACT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION = 1;
+
+	/**
+	 * The number of structural features of the '<em>Contract Expression Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -874,7 +911,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 9;
+	int CONTRACT_TYPE = 10;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1250,6 +1287,38 @@ public interface CommercialPackage extends EPackage {
 	EClass getSlotContractParams();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry <em>Contract Expression Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contract Expression Map Entry</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry
+	 * @generated
+	 */
+	EClass getContractExpressionMapEntry();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getContract()
+	 * @see #getContractExpressionMapEntry()
+	 * @generated
+	 */
+	EReference getContractExpressionMapEntry_Contract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getExpression <em>Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getExpression()
+	 * @see #getContractExpressionMapEntry()
+	 * @generated
+	 */
+	EAttribute getContractExpressionMapEntry_Expression();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1581,6 +1650,32 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SLOT_CONTRACT_PARAMS = eINSTANCE.getSlotContractParams();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl <em>Contract Expression Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractExpressionMapEntry()
+		 * @generated
+		 */
+		EClass CONTRACT_EXPRESSION_MAP_ENTRY = eINSTANCE.getContractExpressionMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT_EXPRESSION_MAP_ENTRY__CONTRACT = eINSTANCE.getContractExpressionMapEntry_Contract();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION = eINSTANCE.getContractExpressionMapEntry_Expression();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
