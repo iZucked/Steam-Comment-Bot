@@ -14,6 +14,7 @@ import com.google.inject.spi.TypeListener;
 import com.mmxlabs.rcp.common.loginject.Log;
 
 public class SLF4JTypeListener implements TypeListener {
+	@Override
 	public <T> void hear(TypeLiteral<T> typeLiteral, TypeEncounter<T> typeEncounter) {
 		for (Field field : typeLiteral.getRawType().getDeclaredFields()) {
 			// TODO: Add in other types of Logger

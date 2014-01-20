@@ -5,7 +5,6 @@
 package com.mmxlabs.ganttviewer.actions;
 
 import java.util.Calendar;
-import java.util.List;
 
 import javax.management.timer.Timer;
 
@@ -40,18 +39,21 @@ public class PackAction extends Action {
 		if (composite == null || composite.getVisibleBounds() == null) {
 			return;
 		}
-		
+
 		Calendar earliestDate = null;
 		Calendar latestDate = null;
 
-		for (final GanttEvent event : (List<GanttEvent>) composite.getEvents()) {
-			final Calendar startDate = event.getEarliestStartDate();
-			final Calendar endDate = event.getLatestEndDate();
-			if ((earliestDate == null) || startDate.before(earliestDate)) {
-				earliestDate = startDate;
-			}
-			if ((latestDate == null) || endDate.after(latestDate)) {
-				latestDate = endDate;
+		for (final Object obj : composite.getEvents()) {
+			if (obj instanceof GanttEvent) {
+				final GanttEvent event = (GanttEvent) obj;
+				final Calendar startDate = event.getEarliestStartDate();
+				final Calendar endDate = event.getLatestEndDate();
+				if ((earliestDate == null) || startDate.before(earliestDate)) {
+					earliestDate = startDate;
+				}
+				if ((latestDate == null) || endDate.after(latestDate)) {
+					latestDate = endDate;
+				}
 			}
 		}
 

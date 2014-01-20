@@ -65,7 +65,6 @@ public class ListSelectionDialog extends Dialog {
 	private final GroupedElementProvider contentProvider;
 	private final Object input;
 	private final List<Pair<String, CellLabelProvider>> columns = new LinkedList<Pair<String, CellLabelProvider>>();
-	private final LinkedList<ILabelProvider> groupStack = new LinkedList<ILabelProvider>();
 	private final HashSet<Object> allSelectedElements = new HashSet<Object>();
 	private final HashSet<Object> filteredElements = new HashSet<Object>();
 	private Object[] initialSelection = new Object[0];
@@ -80,7 +79,7 @@ public class ListSelectionDialog extends Dialog {
 
 		private G lastTop;
 		private Object lastInput;
-		
+
 		private class E {
 			public final Object value;
 			public final G parent;
@@ -154,7 +153,7 @@ public class ListSelectionDialog extends Dialog {
 		public void dispose() {
 			delegate.dispose();
 		}
-		
+
 		@Override
 		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 			lastTop = null;
@@ -408,10 +407,6 @@ public class ListSelectionDialog extends Dialog {
 
 			return result.toArray();
 		}
-
-		public Object getViewerElement(Object o) {
-			return originalToViewer.get(o);
-		}
 	}
 
 	public ListSelectionDialog(final Shell parentShell, final Object input, final IStructuredContentProvider contentProvider, final ILabelProvider labelProvider) {
@@ -435,37 +430,38 @@ public class ListSelectionDialog extends Dialog {
 		final Composite inner = new Composite(box, SWT.NONE);
 		inner.setLayout(new GridLayout(2, false));
 		// Create view within inner.
-		
-		final Label lr = new Label(inner,SWT.NONE);
+
+		final Label lr = new Label(inner, SWT.NONE);
 		lr.setText("Filter:");
 		lr.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 		final Text tr = new Text(inner, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
-		
+
 		final List<String> filters = new ArrayList<String>();
 
 		tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		tr.addModifyListener(new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				filters.clear();
 				final String match = tr.getText().trim();
 				if (!match.isEmpty()) {
 					final String[] parts = match.split(",");
 					for (final String p : parts) {
 						final String p2 = p.toLowerCase().trim();
-						if (p2.isEmpty())continue;
+						if (p2.isEmpty())
+							continue;
 						filters.add(p2);
 					}
 				}
-				
-				// remove from allSelectedElements everything which is still showing 
-				// in the viewer 
+
+				// remove from allSelectedElements everything which is still showing
+				// in the viewer
 				allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
 				// add to allSelectedElements everything showing and selected in the viewer
 				allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
 				// re-filter the viewer
 				viewer.refresh();
-				// and select only those elements which are in allSelectedElements 
+				// and select only those elements which are in allSelectedElements
 				viewer.setCheckedElements(contentProvider.getViewerElements(allSelectedElements.toArray()));
 			}
 		});
@@ -476,20 +472,23 @@ public class ListSelectionDialog extends Dialog {
 
 		viewer.addFilter(new ViewerFilter() {
 			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
+			public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 				filteredElements.remove(element);
-				if (filters.isEmpty()) return true;
-				if (contentProvider.hasChildren(element)) return true;
+				if (filters.isEmpty())
+					return true;
+				if (contentProvider.hasChildren(element))
+					return true;
 				final String t = labelProvider.getText(element).toLowerCase();
-				
+
 				for (final String f : filters) {
-					if (t.contains(f)) return true;
+					if (t.contains(f))
+						return true;
 				}
 				filteredElements.add(element);
 				return false;
 			}
 		});
-		
+
 		if (columns.size() > 0) {
 			for (final Pair<String, CellLabelProvider> column : columns) {
 				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);
@@ -528,17 +527,19 @@ public class ListSelectionDialog extends Dialog {
 
 		// Return the contents of allSelectedElements, sorted alphabetically
 		dialogResult = allSelectedElements.toArray();
-		
-		Comparator<Object> c = new Comparator<Object>() {
 
+		final Comparator<Object> c = new Comparator<Object>() {
+
+			@SuppressWarnings("unchecked")
 			@Override
-			public int compare(Object arg0, Object arg1) {
+			public int compare(final Object arg0, final Object arg1) {
 				// No compare method for Pair objects (consider adding to base class?)
-				Pair p0 = (Pair<String, ?>) arg0;
-				Pair p1 = (Pair<String, ?>) arg1;
-				
+				final Pair<String, ?> p0 = (Pair<String, ?>) arg0;
+				final Pair<String, ?> p1 = (Pair<String, ?>) arg1;
+
 				return ((String) p0.getFirst()).compareTo((String) p1.getFirst());
-			}};
+			}
+		};
 		Arrays.sort(dialogResult, c);
 		super.okPressed();
 	}

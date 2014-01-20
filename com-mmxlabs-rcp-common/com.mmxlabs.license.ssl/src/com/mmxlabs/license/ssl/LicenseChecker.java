@@ -219,7 +219,6 @@ public final class LicenseChecker {
 		return null;
 	}
 
-	@SuppressWarnings("resource")
 	private static KeyStore getEclipseHomeLicense() throws CertificateException, FileNotFoundException {
 
 		InputStream inStream = null;

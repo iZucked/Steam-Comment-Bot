@@ -87,10 +87,12 @@ public class GanttChartViewer extends StructuredViewer {
 				chartViewer.fireDoubleClick(new DoubleClickEvent(chartViewer, new StructuredSelection(getSelectionFromObjects(Collections.singletonList(event)))));
 			}
 
+			@SuppressWarnings("rawtypes")
 			@Override
 			public void eventSelected(final GanttEvent event, final java.util.List allSelectedEvents, final org.eclipse.swt.events.MouseEvent me) {
 
 				// Use reverse map to get underlying objects
+				@SuppressWarnings("unchecked")
 				final List<Object> selectedObjects = getSelectionFromObjects(allSelectedEvents);
 
 				// Create a selection object and fire the selection change hook
@@ -157,6 +159,7 @@ public class GanttChartViewer extends StructuredViewer {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected List<?> getSelectionFromWidget() {
 
