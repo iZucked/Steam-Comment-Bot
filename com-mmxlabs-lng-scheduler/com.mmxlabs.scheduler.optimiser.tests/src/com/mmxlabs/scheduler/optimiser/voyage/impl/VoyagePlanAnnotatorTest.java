@@ -71,7 +71,7 @@ public class VoyagePlanAnnotatorTest {
 		dischargeSlot2.setPort(port2);
 		dischargeSlot2.setMaxDischargeVolume(50000);
 
-		final IPortSlotProviderEditor portSlotEditor = new HashMapPortSlotEditor("name");
+		final IPortSlotProviderEditor portSlotEditor = new HashMapPortSlotEditor();
 		portSlotEditor.setPortSlot(element1, loadSlot1);
 		portSlotEditor.setPortSlot(element2, dischargeSlot1);
 		portSlotEditor.setPortSlot(element3, loadSlot2);

@@ -13,16 +13,11 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 
 public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
-	private final String name;
 	private final IIndexMap<ISequenceElement, IPortSlot> slots = new ArrayIndexMap<ISequenceElement, IPortSlot>();
 
 	// TODO maybe make this indexed as well, although the getElement method is not called in the main loop
 	private final HashMap<IPortSlot, ISequenceElement> elements = new HashMap<IPortSlot, ISequenceElement>();
 
-	public IndexedPortSlotEditor(final String name) {
-		super();
-		this.name = name;
-	}
 
 	@Override
 	public final IPortSlot getPortSlot(final ISequenceElement element) {
@@ -36,7 +31,7 @@ public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
@@ -27,7 +25,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -44,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @author Simon Goodall
  * @deprecated Needs updating for various API changes in past
  */
+@Deprecated
 public final class IndividualEvaluator implements IIndividualEvaluator<ByteArrayIndividual> {
 
 	private AbstractSequenceScheduler sequenceScheduler;
@@ -86,9 +84,9 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 	 */
 	private int[] windowStarts;
 
-	@Inject
-	private VoyagePlanIterator voyagePlanIterator;
-	private ICargoSchedulerFitnessComponent[] iteratingComponents;
+//	@Inject
+//	private VoyagePlanIterator voyagePlanIterator;
+//	private ICargoSchedulerFitnessComponent[] iteratingComponents;
 
 	// private List<ICargoSchedulerFitnessComponent> iteratingComponents =
 	// new ArrayList<ICargoSchedulerFitnessComponent>();

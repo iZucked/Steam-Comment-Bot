@@ -14,17 +14,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 public class HashMapPortEditorTest {
 
 	@Test
-	public void testHashMapPortEditor() {
-		final String name = "name";
-		final HashMapPortEditor editor = new HashMapPortEditor(name);
-		Assert.assertSame(name, editor.getName());
-	}
-
-	@Test
 	public void testGetSetPortForElement() {
 
-		final String name = "name";
-		final HashMapPortEditor editor = new HashMapPortEditor(name);
+		final HashMapPortEditor editor = new HashMapPortEditor();
 
 		final IPort port = Mockito.mock(IPort.class);
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
@@ -39,8 +31,7 @@ public class HashMapPortEditorTest {
 	@Test
 	public void testDispose() {
 
-		final String name = "name";
-		final HashMapPortEditor editor = new HashMapPortEditor(name);
+		final HashMapPortEditor editor = new HashMapPortEditor();
 
 		final IPort port = Mockito.mock(IPort.class);
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);

@@ -18,14 +18,10 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
  * 
  */
 public class HashSetCalculatorProviderEditor implements ICalculatorProviderEditor {
-	private final String name;
+
 	private final LinkedHashSet<ILoadPriceCalculator> loadPriceCalculators = new LinkedHashSet<ILoadPriceCalculator>();
 	private final LinkedHashSet<ISalesPriceCalculator> salesPriceCalculators = new LinkedHashSet<ISalesPriceCalculator>();
 	private final LinkedHashSet<ICooldownPriceCalculator> cooldownPriceCalculators = new LinkedHashSet<ICooldownPriceCalculator>();
-
-	public HashSetCalculatorProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public Collection<ILoadPriceCalculator> getLoadPriceCalculators() {
@@ -59,7 +55,7 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

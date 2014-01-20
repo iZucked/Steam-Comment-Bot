@@ -24,24 +24,21 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class HashMapPortVisitDurationProviderEditor implements IPortVisitDurationProviderEditor {
 
-	private final String name;
-
 	private int defaultValue;
 
 	private final Map<IPort, Map<PortType, Integer>> visitDurationsMap = new HashMap<>();
 
-	public HashMapPortVisitDurationProviderEditor(final String name, final int defaultValue) {
-		this.name = name;
+	public HashMapPortVisitDurationProviderEditor(final int defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 
-	public HashMapPortVisitDurationProviderEditor(final String name) {
-		this(name, 0);
+	public HashMapPortVisitDurationProviderEditor() {
+		this(0);
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

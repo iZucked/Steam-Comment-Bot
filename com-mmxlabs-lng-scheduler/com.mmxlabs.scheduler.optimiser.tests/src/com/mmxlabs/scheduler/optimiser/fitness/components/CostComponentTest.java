@@ -10,16 +10,12 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
-import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -27,31 +23,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class CostComponentTest {
-
-	@Test
-	public void testInit() {
-		final String name = "name";
-		final CargoSchedulerFitnessCore core = null;
-		final List<FuelComponent> fuelComponents = Collections.emptyList();
-		final CostComponent c = new CostComponent(name, fuelComponents, core);
-
-		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
-
-		final String key = "provider-discount-curve";
-		final String componentName = "name";
-
-		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
-		final IDiscountCurveProvider discountCurveProvider = Mockito.mock(IDiscountCurveProvider.class);
-		final ICurve curve = Mockito.mock(ICurve.class);
-
-		Mockito.when(data.getDataComponentProvider(key, classDiscountCurveProvider)).thenReturn(discountCurveProvider);
-		Mockito.when(discountCurveProvider.getDiscountCurve(componentName)).thenReturn(curve);
-
-		c.init(data);
-
-		Mockito.verify(data).getDataComponentProvider(key, classDiscountCurveProvider);
-		Mockito.verify(discountCurveProvider).getDiscountCurve(Matchers.eq(componentName));
-	}
 
 	@Test
 	public void testEvaluateSequence() {
@@ -126,7 +97,7 @@ public class CostComponentTest {
 	@Test
 	public void testCostComponent() {
 		final String name = "name";
-		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore();
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(null);
 		final List<FuelComponent> fuelComponents = Collections.emptyList();
 		final CostComponent c = new CostComponent(name, fuelComponents, core);
 

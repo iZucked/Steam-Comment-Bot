@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
@@ -38,55 +39,60 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  */
 public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
-	private final List<ICargoSchedulerFitnessComponent> schedulerComponents;
-	private final List<ICargoFitnessComponent> allComponents;
+	private final List<ICargoSchedulerFitnessComponent> schedulerComponents = new ArrayList<>(8);
+	private final List<ICargoFitnessComponent> allComponents = new ArrayList<>();
 
 	@Inject
 	private ISchedulerFactory schedulerFactory;
+
+	@Inject
+	private Injector injector;
 
 	/**
 	 * {@link ISequenceScheduler} instance created from the {@link ISchedulerFactory}
 	 */
 	private ISequenceScheduler scheduler;
 
-	public CargoSchedulerFitnessCore() {
-		allComponents = new ArrayList<ICargoFitnessComponent>();
-		schedulerComponents = new ArrayList<ICargoSchedulerFitnessComponent>(8);
-		schedulerComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, SchedulerConstants.DCP_startEndRequirementProvider, this));
+	@Inject
+	public void injectComponents() {
+		for (final Object obj : allComponents) {
+			injector.injectMembers(obj);
+		}
+	}
 
-		schedulerComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
+	private void init() {
+		final List<ICargoSchedulerFitnessComponent> localComponents = new ArrayList<>(8);
+		localComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, this));
 
-		schedulerComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.NBO, FuelComponent.FBO, FuelComponent.IdleNBO),
+		localComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
+
+		localComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.NBO, FuelComponent.FBO, FuelComponent.IdleNBO),
 				this));
 
-		schedulerComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.Base, FuelComponent.Base_Supplemental,
+		localComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.Base, FuelComponent.Base_Supplemental,
 				FuelComponent.IdleBase, FuelComponent.PilotLight, FuelComponent.IdlePilotLight), this));
 
-		schedulerComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.Cooldown), this));
+		localComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.Cooldown), this));
 
-		schedulerComponents.add(new CharterCostFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider, // not sure if this
-				// should be here or
-				// somewhere else
-				this));
+		localComponents.add(new CharterCostFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME, this));
 
-		schedulerComponents.add(new RouteCostFitnessComponent(CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, SchedulerConstants.DCP_routePriceProvider,
-				SchedulerConstants.DCP_vesselProvider, this));
+		localComponents.add(new RouteCostFitnessComponent(CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, this));
 
 		// schedulerComponents.add(new CargoAllocatingSchedulerComponent(CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider,
 		// SchedulerConstants.DCP_totalVolumeLimitProvider, SchedulerConstants.DCP_portSlotsProvider, this));
 
 		// schedulerComponents.add(new CharterOutFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider, this));
 
-		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider,
-				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
+		localComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this));
 
-		schedulerComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, this));
+		localComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, this));
 
-		allComponents.addAll(schedulerComponents);
+		schedulerComponents.addAll(localComponents);
+		allComponents.addAll(localComponents);
 	}
 
 	public CargoSchedulerFitnessCore(final Iterable<ICargoFitnessComponentProvider> externalComponentProviders) {
-		this();
+		init();
 		if (externalComponentProviders != null) {
 			for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {
 				final ICargoFitnessComponent component = provider.createComponent(this);

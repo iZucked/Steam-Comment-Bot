@@ -210,9 +210,9 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IInitialSequenceBuilder provideIInitialSequenceBuilder(final List<IPairwiseConstraintChecker> pairwiseCheckers) {
+	private IInitialSequenceBuilder provideIInitialSequenceBuilder(Injector injector, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
 		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(pairwiseCheckers);
-
+		injector.injectMembers(builder);
 		return builder;
 	}
 

@@ -59,14 +59,8 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 	@Inject
 	private IDateKeyProvider dateKeyProvider;
 
-	private final String name;
-
 	private final Map<IVesselClass, List<Pair<ICurve, Integer>>> charterInOptions = new HashMap<IVesselClass, List<Pair<ICurve, Integer>>>();
 	private final Map<IVesselClass, List<Pair<ICurve, Integer>>> charterOutOptions = new HashMap<IVesselClass, List<Pair<ICurve, Integer>>>();
-
-	public HashMapCharterMarketProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public Collection<CharterMarketOptions> getCharterInOptions(final IVesselClass vesselClass, final int time) {
@@ -92,7 +86,7 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

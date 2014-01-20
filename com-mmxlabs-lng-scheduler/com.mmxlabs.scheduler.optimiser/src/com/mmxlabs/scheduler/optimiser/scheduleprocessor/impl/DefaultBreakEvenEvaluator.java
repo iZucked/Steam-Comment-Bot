@@ -82,7 +82,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// Grab the current list of arrival times and update the rolling currentTime
 				// 5 as we know that is the max we need (currently - a single cargo)
 				final List<Integer> arrivalTimes = new ArrayList<Integer>();
-				int dischargeIdx = -1;
 				final IDetailsSequenceElement[] currentSequence = vp.getSequence();
 				List<ISequenceElement> sequenceElements = new LinkedList<>();
 
@@ -121,7 +120,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 									}
 									missingSalesPrice = true;
 									originalDischarge = dischargeOption;
-									dischargeIdx = idx;
 								}
 							}
 						}
@@ -143,7 +141,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				}
 
 				final IDetailsSequenceElement[] newSequence = currentSequence.clone();
-				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
+				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, seq.getStartTime(), vp, arrivalTimes);
 
 				if (originalLoad != null) {
 
@@ -239,7 +237,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					// final IDischargeOption beSlot;
 					((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
 					// Redundant? Search should have found this....
-					final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes);
+					final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes, 0);
 					seq.getVoyagePlans().set(vpIdx, newVoyagePlan);
 				}
 			}
@@ -252,9 +250,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		// Overwrite current break even price with test price
 		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
 
-		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes);
+		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(seq.getResource(), sequenceElements, seq.getStartTime(), arrivalTimes, 0);
 
-		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
+		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, seq.getStartTime(), newVoyagePlan, arrivalTimes);
 		final long newPnLValue = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
 		return newPnLValue;
 	}

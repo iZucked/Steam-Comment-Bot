@@ -20,16 +20,9 @@ public class HashMapShortCargoReturnElementProviderEditor implements IShortCargo
 	final private HashMap<ILoadOption, ISequenceElement> loadOptionMap = new HashMap<ILoadOption, ISequenceElement>();
 	final private HashMap<ISequenceElement, ISequenceElement> loadElementMap = new HashMap<ISequenceElement, ISequenceElement>();
 
-	private final String name;
-
-	public HashMapShortCargoReturnElementProviderEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

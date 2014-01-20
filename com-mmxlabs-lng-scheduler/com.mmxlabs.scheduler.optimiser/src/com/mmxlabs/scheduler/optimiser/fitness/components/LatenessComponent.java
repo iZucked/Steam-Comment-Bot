@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
@@ -29,26 +28,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
 	private long accumulator = 0;
-	private final String dcpStartendrequirementprovider;
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
 
-	public IStartEndRequirementProvider getStartEndRequirementProvider() {
-		return startEndRequirementProvider;
-	}
-
-	public void setStartEndRequirementProvider(final IStartEndRequirementProvider startEndRequirementProvider) {
-		this.startEndRequirementProvider = startEndRequirementProvider;
-	}
-
-	public LatenessComponent(final String name, final String dcpStartendrequirementprovider, final CargoSchedulerFitnessCore core) {
+	public LatenessComponent(final String name, final CargoSchedulerFitnessCore core) {
 		super(name, core);
-		this.dcpStartendrequirementprovider = dcpStartendrequirementprovider;
-	}
-
-	@Override
-	public void init(final IOptimisationData data) {
-		setStartEndRequirementProvider(data.getDataComponentProvider(dcpStartendrequirementprovider, IStartEndRequirementProvider.class));
 	}
 
 	/*

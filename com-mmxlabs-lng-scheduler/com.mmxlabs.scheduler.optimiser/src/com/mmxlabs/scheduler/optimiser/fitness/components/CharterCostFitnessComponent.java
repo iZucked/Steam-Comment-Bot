@@ -4,10 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -19,18 +20,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 
 public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
+	@Inject
 	private IVesselProvider vesselProvider;
 
-	final String vesselProviderKey;
 
-	public CharterCostFitnessComponent(final String name, final String vesselProviderKey, final CargoSchedulerFitnessCore core) {
+	public CharterCostFitnessComponent(final String name, final CargoSchedulerFitnessCore core) {
 		super(name, core);
-		this.vesselProviderKey = vesselProviderKey;
-	}
-
-	@Override
-	public void init(final IOptimisationData data) {
-		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 	}
 
 	int firstLoadTime = -1;

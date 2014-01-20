@@ -170,6 +170,7 @@ public class IndividualEvaluatorTest {
 	 * 
 	 * @param evaluator
 	 */
+	@SuppressWarnings("unchecked")
 	private void createFullyInitialisedEvaluator(final IndividualEvaluator evaluator) {
 
 		final AbstractSequenceScheduler scheduler = new MockSequenceScheduler();
@@ -273,6 +274,7 @@ public class IndividualEvaluatorTest {
 	@Test
 	public void testGetSetDistanceProvider() {
 		final IndividualEvaluator evaluator = new IndividualEvaluator();
+		@SuppressWarnings("unchecked")
 		final IMultiMatrixProvider<IPort, Integer> value = Mockito.mock(IMultiMatrixProvider.class);
 		Assert.assertNull(evaluator.getDistanceProvider());
 		evaluator.setDistanceProvider(value);
@@ -318,7 +320,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -411,7 +413,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -512,7 +514,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -617,7 +619,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");
@@ -718,7 +720,7 @@ public class IndividualEvaluatorTest {
 		Mockito.when(vesselProvider.getVessel(resource)).thenReturn(vessel);
 		evaluator.setVesselProvider(vesselProvider);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor("portProvider");
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		evaluator.setPortProvider(portProvider);
 
 		final IPort port1 = Mockito.mock(IPort.class, "port-1");

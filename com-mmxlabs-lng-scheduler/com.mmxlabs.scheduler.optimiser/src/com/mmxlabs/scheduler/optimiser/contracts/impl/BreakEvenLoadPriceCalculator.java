@@ -39,7 +39,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	 */
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerM3,
-			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
+			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		return price;
 	}
 
@@ -56,8 +56,8 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	 * @since 8.0
 	 */
 	@Override
-	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, final long transferVolumeInM3,
-			final IDetailTree annotations) {
+	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu,
+			final long transferVolumeInM3, final IDetailTree annotations) {
 		return price;
 	}
 
@@ -66,7 +66,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	 */
 	@Override
 	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final List<IPortSlot> slots, final int[] arrivalTimes, final long[] volumes, final int[] dischargePricesPerMMBTu,
-			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
+			final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		return 0;
 	}
 

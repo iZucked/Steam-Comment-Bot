@@ -48,8 +48,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT1() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -86,8 +86,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT2() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -124,8 +124,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString1() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -162,8 +162,8 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString2() {
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -203,8 +203,8 @@ public class PortTypeConstraintCheckerTest {
 	 */
 	@Test
 	public void testCheckSequence1() {
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -235,8 +235,8 @@ public class PortTypeConstraintCheckerTest {
 	 */
 	@Test
 	public void testCheckSequence2() {
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -258,8 +258,8 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckSequence3() {
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -281,8 +281,8 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckSequence4() {
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -310,8 +310,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence5() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -345,8 +345,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence6() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -378,8 +378,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence7() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -411,8 +411,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence8() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -442,8 +442,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence9() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -473,8 +473,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence10() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -506,8 +506,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence11() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -539,8 +539,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence12() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -572,8 +572,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence13() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -605,8 +605,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence14() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
@@ -636,8 +636,8 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence15() {
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 

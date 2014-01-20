@@ -19,12 +19,6 @@ public class HashMapStartEndRequirementEditor implements IStartEndRequirementPro
 	protected HashMap<IResource, ISequenceElement> startElements = new HashMap<IResource, ISequenceElement>();
 	protected HashMap<IResource, ISequenceElement> endElements = new HashMap<IResource, ISequenceElement>();
 
-	private final String name;
-
-	public HashMapStartEndRequirementEditor(final String name) {
-		this.name = name;
-	}
-
 	@Override
 	public IStartEndRequirement getStartRequirement(final IResource resource) {
 		return startRequirements.get(resource);
@@ -37,7 +31,7 @@ public class HashMapStartEndRequirementEditor implements IStartEndRequirementPro
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

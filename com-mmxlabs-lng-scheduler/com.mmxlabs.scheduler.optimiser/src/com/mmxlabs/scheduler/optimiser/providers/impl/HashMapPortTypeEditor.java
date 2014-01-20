@@ -13,13 +13,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class HashMapPortTypeEditor implements IPortTypeProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, PortType> portTypes = new HashMap<ISequenceElement, PortType>();
-
-	public HashMapPortTypeEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public void setPortType(final ISequenceElement sequenceElement, final PortType portType) {
@@ -43,6 +37,6 @@ public final class HashMapPortTypeEditor implements IPortTypeProviderEditor {
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 }

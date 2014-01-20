@@ -45,7 +45,7 @@ public interface IVolumeAllocator {
 	 * @return
 	 * @since 5.0
 	 */
-	public IAllocationAnnotation allocate(IVessel vessel, VoyagePlan plan, List<Integer> arrivalTimes);
+	public IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes);
 
 	public void dispose();
 

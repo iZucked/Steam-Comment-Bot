@@ -69,4 +69,8 @@ public class MarkToMarketVessel implements IVessel {
 	public int getIndex() {
 		return -1;
 	}
+
+	public IMarkToMarket getMarkToMarket() {
+		return markToMarket;
+	}
 }

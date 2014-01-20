@@ -15,17 +15,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEdito
  */
 public class HashMapShipToShipBindingProviderEditor implements IShipToShipBindingProviderEditor {
 
-	private final String name;
-
 	private final Map<IPortSlot, IPortSlot> transferElementMap = new HashMap<IPortSlot, IPortSlot>();
-
-	public HashMapShipToShipBindingProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

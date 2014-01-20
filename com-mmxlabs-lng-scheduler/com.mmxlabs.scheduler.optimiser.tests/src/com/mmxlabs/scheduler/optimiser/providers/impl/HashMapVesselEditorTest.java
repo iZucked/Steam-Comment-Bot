@@ -16,9 +16,7 @@ public class HashMapVesselEditorTest {
 
 	@Test
 	public void testHashMapVesselEditor() {
-		final String name = "name";
-		final HashMapVesselEditor editor = new HashMapVesselEditor(name);
-		Assert.assertSame(name, editor.getName());
+		final HashMapVesselEditor editor = new HashMapVesselEditor();
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
 		final IVessel vessel1 = Mockito.mock(IVessel.class, "vessel-1");
@@ -34,8 +32,7 @@ public class HashMapVesselEditorTest {
 
 	@Test
 	public void testDispose() {
-		final String name = "name";
-		final HashMapVesselEditor editor = new HashMapVesselEditor(name);
+		final HashMapVesselEditor editor = new HashMapVesselEditor();
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
 		final IVessel vessel1 = Mockito.mock(IVessel.class, "vessel-1");

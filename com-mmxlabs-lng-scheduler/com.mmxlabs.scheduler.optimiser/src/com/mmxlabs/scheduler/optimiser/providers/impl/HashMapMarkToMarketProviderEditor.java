@@ -22,13 +22,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
  */
 public class HashMapMarkToMarketProviderEditor implements IMarkToMarketProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, IMarkToMarket> marketMap = new HashMap<ISequenceElement, IMarkToMarket>();
-
-	public HashMapMarkToMarketProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	@Nullable
@@ -38,7 +32,7 @@ public class HashMapMarkToMarketProviderEditor implements IMarkToMarketProviderE
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

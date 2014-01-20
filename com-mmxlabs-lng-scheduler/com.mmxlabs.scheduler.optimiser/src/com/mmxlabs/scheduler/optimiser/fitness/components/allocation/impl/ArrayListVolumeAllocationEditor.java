@@ -18,13 +18,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolum
  */
 public class ArrayListVolumeAllocationEditor implements ITotalVolumeLimitEditor {
 
-	public ArrayListVolumeAllocationEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
-	private final String name;
-
 	private ArrayList<ITotalVolumeLimit> totalVolumeLimits = new ArrayList<ITotalVolumeLimit>();
 
 	@Override
@@ -39,7 +32,7 @@ public class ArrayListVolumeAllocationEditor implements ITotalVolumeLimitEditor 
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +32,6 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -60,10 +61,29 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	 */
 	private static final int INITIAL_MAX_LATENESS = 48;
 
+	@Inject
+	private IPortTypeProvider portTypeProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
+
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
+
+	@Inject
+	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IOptionalElementsProvider optionalElementsProvider;
+	@Inject
+	private IAlternativeElementProvider alternativeElementProvider;
+	@Inject
+	private IResourceAllocationConstraintDataComponentProvider racdcp;
+
 	private TravelTimeConstraintChecker travelTimeChecker;
 
 	private List<IPairwiseConstraintChecker> pairwiseCheckers;
-	
+
 	class ChunkChecker {
 		private final LegalSequencingChecker checker;
 
@@ -112,7 +132,6 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 	}
 
-
 	public ConstrainedInitialSequenceBuilder(final List<IPairwiseConstraintChecker> pairwiseCheckers) {
 		this.pairwiseCheckers = pairwiseCheckers;
 		for (final IPairwiseConstraintChecker checker : pairwiseCheckers) {
@@ -130,19 +149,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			resourceSuggestion = Collections.emptyMap();
 		}
 
-		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
-
-		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-
-		final IStartEndRequirementProvider startEndRequirementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-
-		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-
-		final IOptionalElementsProvider optionalElementsProvider = data.getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
-
 		final LegalSequencingChecker checker = new LegalSequencingChecker(data, pairwiseCheckers);
-
-		final IAlternativeElementProvider alternativeElementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_alternativeElementProvider, IAlternativeElementProvider.class);
 
 		final int initialMaxLateness = (travelTimeChecker == null) ? 0 : travelTimeChecker.getMaxLateness();
 
@@ -247,9 +254,6 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 
 		final Map<IResource, SequenceChunk> endChunks = new LinkedHashMap<IResource, SequenceChunk>();
-
-		final IResourceAllocationConstraintDataComponentProvider racdcp = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider,
-				IResourceAllocationConstraintDataComponentProvider.class);
 
 		// Build up chunks for elements which only have one follower
 		final List<SequenceChunk> chunks = new LinkedList<SequenceChunk>();

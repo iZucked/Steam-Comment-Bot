@@ -238,12 +238,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						final int warmingTimeInHours = idleTimeInHours - deltaTimeInHours;
 
 						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
-							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() /* + vesselClass.getCooldownTime() */))) {
+							// If we are permitted to cooldown, then cooldown
+							if (options.getAllowCooldown()) { // && (idleTimeInHours > (vesselClass.getWarmupTime() /* + vesselClass.getCooldownTime() */))) {
 								// Set this on the voyage rather than the port details as the final port details is usually ignored in further processing
 								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
 								// don't use any idle base during the cooldown
 								// remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 							} else {
+								
+								// Else, increase required heel quantity to avoid a cooldown.
+								// TODO: This may force a load/discharge violation rather than pricing the cooldown.
+								
 								// warming time = idle - delta
 								// therefore we need
 								// idle - delta = vesselClass.getWarmupTime();
@@ -599,6 +604,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @param dischargeTime
 	 * @param loadTime
+	 * @return Number of capacity constraints which had to be violated in the allocation
 	 * @since 8.0
 	 */
 	@Override
@@ -630,6 +636,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		{
 			final PortDetails details = (PortDetails) sequence[0];
 			final IPortSlot slot = details.getOptions().getPortSlot();
+			
 			// set available heel if we start from a heel options slot
 			if ((slot instanceof IHeelOptionsPortSlot)) {
 				availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
@@ -706,8 +713,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.DISCHARGE);
 					} else {
 						// Add heel to the voyage consumed quantity for capacity constraint purposes. However it is not tracked otherwise
-						// TODO: Roll over into new voyage plan
-						lngCommitmentInM3 += remainingHeelInM3;
+						
+						// following line was in default branch but not in heel_tracking - why? 
+						// lngCommitmentInM3 += remainingHeelInM3;
 						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
 					}
 				}
@@ -724,8 +732,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		} else {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
-			if (lngCommitmentInM3 > availableHeelinM3) {
+			long remainingHeelInM3 = availableHeelinM3 - lngCommitmentInM3;
+
+			// if our fuel requirements exceed our onboard fuel 
+			if (remainingHeelInM3 < 0) {
 				++violationsCount;
+			}
+			else if (remainingHeelInM3 > 0) {
+				voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
 			}
 
 			// Look up the heel options CV value if present
@@ -867,7 +881,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// We cannot load more than is available or which would exceed
 		// vessel capacity.
 		final long upperLoadLimitInM3 = Math.min(cargoCapacityInM3, maxLoadVolumeInM3);
-
+		
 		if (minLoadVolumeInM3 > cargoCapacityInM3) {
 			++violationsCount;
 		}
@@ -878,18 +892,18 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		// This is the smallest amount of gas we can load
 		if (minLoadVolumeInM3 - lngCommitmentInM3 > maxDischargeVolumeInM3) {
-			/*
-			 * note - this might not be a genuine violation since rolling over the excess LNG may be permissible and in some cases it is even commercially desirable, but restrictions on LNG
-			 * destination or complications from profit share contracts make it a potential violation, and we err on the side of caution
-			 */
+			/* note - this might not be a genuine violation since rolling over the excess LNG may be permissible
+			 * and in some cases it is even commercially desirable, but restrictions on LNG destination or
+			 * complications from profit share contracts make it a potential violation, and we err on the side
+			 * of caution
+			 */ 
 
 			// load breach -- need to load less than we are permitted
 			++violationsCount;
 		}
-
+		
 		// The load should cover at least the fuel usage plus the heel (or the min discharge, whichever is greater)
 		if (Math.max(minDischargeVolumeInM3, heelToDischarge) + lngCommitmentInM3 > upperLoadLimitInM3) {
-			final long fuelRequirements = lngCommitmentInM3 + heelToDischarge;
 			++violationsCount;
 		}
 		return violationsCount;
@@ -904,7 +918,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
-				final boolean shouldBeCold = details.getOptions().shouldBeCold();
+				final boolean shouldBeCold = details.getOptions().shouldBeCold() && !details.getOptions().getAllowCooldown();
 				final long fuelConsumption = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 				if (shouldBeCold && (fuelConsumption > 0)) {
 

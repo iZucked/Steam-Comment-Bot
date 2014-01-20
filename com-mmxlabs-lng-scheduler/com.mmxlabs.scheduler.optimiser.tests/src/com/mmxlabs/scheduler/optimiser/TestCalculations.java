@@ -474,7 +474,7 @@ public class TestCalculations {
 	/**
 	 * Like case 1, but force a higher travelling speed to get idle time + FBO
 	 */
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings("unused")
 	@Test
 	public void testCalculations2() {
 
@@ -876,7 +876,7 @@ public class TestCalculations {
 	/**
 	 * Like case 1, but force a higher travelling speed to get idle time + Base_Supplemental (make NBO more costly than Base)
 	 */
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings("unused")
 	@Test
 	public void testCalculations3() {
 

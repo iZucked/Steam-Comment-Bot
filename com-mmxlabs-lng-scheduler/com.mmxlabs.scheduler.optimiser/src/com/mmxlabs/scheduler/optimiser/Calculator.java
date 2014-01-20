@@ -140,34 +140,6 @@ public final class Calculator {
 	 * @param value
 	 * @return scaled version of value
 	 */
-	private static long scale(final int value) {
-		return ScaleFactor * value;
-	}
-
-	/**
-	 * @since 2.0
-	 */
-	private static long scale(final long value) {
-		return ScaleFactor * value;
-	}
-
-	private static long descale(final long value) {
-		return value / ScaleFactor;
-	}
-
-	/**
-	 * Scale a float
-	 * 
-	 * @param f
-	 * @return scaled float
-	 */
-	private static long scale(final float f) {
-		return (long) (ScaleFactor * f);
-	}
-
-	private static int scaleToInt(final double d) {
-		return (int) (ScaleFactor * d);
-	}
 
 	/**
 	 * Multiply a long by a double, returning the result as a long, rounded
@@ -190,16 +162,4 @@ public final class Calculator {
 	public static long multiply(final long a, final long b) {
 		return (a * b) / ScaleFactor;
 	}
-
-	/**
-	 * Simple division between scaled integer based values
-	 * 
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	private static long divide(final long a, final long b) {
-		return (a * ScaleFactor) / b;
-	}
-
 }

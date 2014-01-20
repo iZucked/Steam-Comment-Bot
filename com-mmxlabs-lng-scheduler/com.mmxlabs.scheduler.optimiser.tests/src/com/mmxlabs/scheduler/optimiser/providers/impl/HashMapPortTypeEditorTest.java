@@ -13,13 +13,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class HashMapPortTypeEditorTest {
 
-
 	@Test
 	public void testHashMapPortTypeEditor() {
 
-		final String name = "name";
-		final HashMapPortTypeEditor editor = new HashMapPortTypeEditor(name);
-		Assert.assertSame(name, editor.getName());
+		final HashMapPortTypeEditor editor = new HashMapPortTypeEditor();
 
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
 		Assert.assertSame(PortType.Unknown, editor.getPortType(element));

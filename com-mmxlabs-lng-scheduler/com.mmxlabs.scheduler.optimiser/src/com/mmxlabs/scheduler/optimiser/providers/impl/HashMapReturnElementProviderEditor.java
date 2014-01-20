@@ -22,16 +22,9 @@ public class HashMapReturnElementProviderEditor implements IReturnElementProvide
 
 	final private HashMap<IPort, Map<IResource, ISequenceElement>> returnElements = new HashMap<IPort, Map<IResource, ISequenceElement>>();
 
-	private final String name;
-
-	public HashMapReturnElementProviderEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

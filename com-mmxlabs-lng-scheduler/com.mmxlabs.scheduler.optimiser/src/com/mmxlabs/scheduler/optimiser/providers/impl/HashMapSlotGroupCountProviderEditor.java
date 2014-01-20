@@ -17,17 +17,12 @@ import com.mmxlabs.scheduler.optimiser.providers.SlotGroup;
 
 public final class HashMapSlotGroupCountProviderEditor implements ISlotGroupCountProviderEditor {
 
-	private final String name;
 	private final Map<ISequenceElement, Collection<SlotGroup>> elementToGroups = new HashMap<ISequenceElement, Collection<SlotGroup>>();
 	private final List<SlotGroup> slotGroups = new LinkedList<SlotGroup>();
 
-	public HashMapSlotGroupCountProviderEditor(final String name) {
-		this.name = name;
-	}
-
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

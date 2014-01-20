@@ -17,12 +17,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 public class HashMapDiscountCurveEditor implements IDiscountCurveProviderEditor {
 	private final HashMap<String, ICurve> map = new HashMap<String, ICurve>();
 	private final ICurve unit = new ConstantValueCurve(1);
-	final String name;
-
-	public HashMapDiscountCurveEditor(final String name) {
-		super();
-		this.name = name;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -42,7 +36,7 @@ public class HashMapDiscountCurveEditor implements IDiscountCurveProviderEditor 
 	 */
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	/*

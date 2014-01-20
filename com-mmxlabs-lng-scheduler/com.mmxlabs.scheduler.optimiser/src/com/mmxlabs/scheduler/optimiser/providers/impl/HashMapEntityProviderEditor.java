@@ -23,17 +23,11 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 	private final LinkedHashSet<IEntity> entities = new LinkedHashSet<IEntity>();
 	private final HashMap<IPortSlot, IEntity> entitiesBySlot = new HashMap<IPortSlot, IEntity>();
 
-	private final String name;
 	private IEntity shippingEntity;
-
-	public HashMapEntityProviderEditor(final String name) {
-		super();
-		this.name = name;
-	}
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

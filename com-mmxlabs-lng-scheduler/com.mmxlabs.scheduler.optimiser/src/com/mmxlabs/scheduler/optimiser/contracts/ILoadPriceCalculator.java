@@ -53,7 +53,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @since 8.0
 	 */
 	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePricePerMMBTu, long loadVolumeInM3, long dischargeVolumeInM3,
-			IVessel vessel, VoyagePlan plan, IDetailTree annotations);
+			IVessel vessel, int vesselStartTime, VoyagePlan plan, IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when the cargo is a DES Purchase
@@ -96,6 +96,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
 	 * @since 8.0
 	 */
-	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumesInM3, int[] dischargePricesPerMMBTu, IVessel vessel, VoyagePlan plan,
-			IDetailTree annotations);
+	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumesInM3, int[] dischargePricesPerMMBTu, IVessel vessel,
+			int vesselStartTime, VoyagePlan plan, IDetailTree annotations);
 }

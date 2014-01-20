@@ -40,7 +40,6 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
@@ -127,16 +126,16 @@ public final class AbstractSequenceSchedulerTest {
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 		final ISequenceElement element4 = new SequenceElement(index, "element4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider);
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("");
 
 		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
 		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
 		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
 		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(timeWindow4));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>("");
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("");
 		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
@@ -145,22 +144,22 @@ public final class AbstractSequenceSchedulerTest {
 		defaultDistanceProvider.set(port3, port4, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("");
 		durationsProvider.setDefaultValue(duration);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(SchedulerConstants.DCP_portProvider);
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
 		portProvider.setPortForElement(port3, element3);
 		portProvider.setPortForElement(port4, element4);
 
-		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
+		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor();
 		portSlotProvider.setPortSlot(element1, loadSlot1);
 		portSlotProvider.setPortSlot(element2, dischargeSlot1);
 		portSlotProvider.setPortSlot(element3, loadSlot2);
 		portSlotProvider.setPortSlot(element4, dischargeSlot2);
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		portTypeProvider.setPortType(element1, PortType.Load);
 		portTypeProvider.setPortType(element2, PortType.Discharge);
 		portTypeProvider.setPortType(element3, PortType.Load);
@@ -176,7 +175,7 @@ public final class AbstractSequenceSchedulerTest {
 
 		vessel.setVesselClass(vesselClass);
 
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		vesselProvider.setVesselResource(resource, vessel);
 
 		final List<ISequenceElement> elements = CollectionsUtil.makeArrayList(element1, element2, element3, element4);
@@ -388,15 +387,15 @@ public final class AbstractSequenceSchedulerTest {
 		final ISequenceElement element2 = new SequenceElement(index, "element2");
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider);
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("");
 
 		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
 		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
 		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>("");
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>(SchedulerConstants.DCP_portDistanceProvider);
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("");
 		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
@@ -404,20 +403,20 @@ public final class AbstractSequenceSchedulerTest {
 		defaultDistanceProvider.set(port2, port3, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor(SchedulerConstants.DCP_elementDurationsProvider);
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("");
 		durationsProvider.setDefaultValue(duration);
 
-		final IPortProviderEditor portProvider = new HashMapPortEditor(SchedulerConstants.DCP_portProvider);
+		final IPortProviderEditor portProvider = new HashMapPortEditor();
 		portProvider.setPortForElement(port1, element1);
 		portProvider.setPortForElement(port2, element2);
 		portProvider.setPortForElement(port3, element3);
 
-		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor(SchedulerConstants.DCP_portSlotsProvider);
+		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor();
 		portSlotProvider.setPortSlot(element1, loadSlot1);
 		portSlotProvider.setPortSlot(element2, dischargeSlot1);
 		portSlotProvider.setPortSlot(element3, loadSlot2);
 
-		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor(SchedulerConstants.DCP_portTypeProvider);
+		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		portTypeProvider.setPortType(element1, PortType.Load);
 		portTypeProvider.setPortType(element2, PortType.Discharge);
 		portTypeProvider.setPortType(element3, PortType.Load);
@@ -431,7 +430,7 @@ public final class AbstractSequenceSchedulerTest {
 		vesselClass.setCargoCapacity(100000);
 		vessel.setVesselClass(vesselClass);
 
-		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor(SchedulerConstants.DCP_vesselProvider);
+		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
 		vesselProvider.setVesselResource(resource, vessel);
 
 		final List elements = CollectionsUtil.makeArrayList(element1, element2, element3);

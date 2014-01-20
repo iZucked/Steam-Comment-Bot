@@ -20,6 +20,8 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.CargoType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -39,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * This class performs capacity violation checks on the scenario as a whole after the volume allocator has run so we can use actual load and discharge volumes. This class calls
@@ -81,8 +84,6 @@ public class CapacityViolationChecker {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 			final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 
-			long remainingHeelInM3 = 0;
-
 			// Determine vessel capacity
 			long vesselCapacityInM3 = Long.MAX_VALUE;
 			if (nominatedVessel != null) {
@@ -93,12 +94,15 @@ public class CapacityViolationChecker {
 
 			// Forced cooldown volumes are stored on the VoyageDetails, so record the last one for use in the next iteration so we can record the cooldown at the port
 			long lastForcedCooldownVolume = -1;
-
+			long remainingHeelInM3 = 0;
+			PortDetails lastHeelDetails = null;
 			// Loop over all voyage plans in turn. We Use the VoyagePlan directly to obtain allocation annotations
 			for (final VoyagePlan voyagePlan : scheduledSequence.getVoyagePlans()) {
 				// Get the allocation annotation if this is a cargo, otherwise this will be null
 				final IAllocationAnnotation allocationAnnotation = scheduledSequences.getAllocations().get(voyagePlan);
 
+				ILoadOption buy = null;
+				IDischargeOption sell = null;
 				for (int idx = 0; idx < voyagePlan.getSequence().length - 1; ++idx) {
 					final IDetailsSequenceElement e = voyagePlan.getSequence()[idx];
 					if (e instanceof PortDetails) {
@@ -112,13 +116,14 @@ public class CapacityViolationChecker {
 						if (portSlot instanceof ILoadOption) {
 							final ILoadOption loadOption = (ILoadOption) portSlot;
 
+							buy = loadOption;
+
 							if (volumeInM3 > loadOption.getMaxLoadVolume()) {
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume());
 							} else if (volumeInM3 < loadOption.getMinLoadVolume()) {
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3);
 							}
 
-							// TODO: Consider remaining heel on first load!
 							if (remainingHeelInM3 + volumeInM3 > vesselCapacityInM3) {
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3);
 							}
@@ -126,6 +131,9 @@ public class CapacityViolationChecker {
 							remainingHeelInM3 = 0;
 						} else if (portSlot instanceof IDischargeOption) {
 							final IDischargeOption dischargeOption = (IDischargeOption) portSlot;
+
+							sell = dischargeOption;
+
 							if (volumeInM3 > dischargeOption.getMaxDischargeVolume()) {
 								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume());
 							} else if (volumeInM3 < dischargeOption.getMinDischargeVolume()) {
@@ -150,10 +158,16 @@ public class CapacityViolationChecker {
 									}
 								}
 
+								if (remainingHeelInM3 > 0) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
+									// Reset as we do not handle pushing remaining heel into a vessel event voyage
+									remainingHeelInM3 = 0;
+								}
+
 								// Check the voyage requirements are within the heel level
-								if (voyagePlan.getLNGFuelVolume() + voyagePlan.getRemainingHeelInM3() > initialHeelInM3) {
-									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_HEEL,
-											voyagePlan.getLNGFuelVolume() + voyagePlan.getRemainingHeelInM3() - initialHeelInM3);
+								if (voyagePlan.getLNGFuelVolume() + remainingHeelInM3 > initialHeelInM3) {
+									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_HEEL, voyagePlan.getLNGFuelVolume() + remainingHeelInM3
+											- initialHeelInM3);
 								}
 							}
 						}
@@ -169,7 +183,7 @@ public class CapacityViolationChecker {
 					} else if (e instanceof VoyageDetails) {
 						final VoyageDetails voyageDetails = (VoyageDetails) e;
 
-						final boolean shouldBeCold = voyageDetails.getOptions().shouldBeCold();
+						final boolean shouldBeCold = voyageDetails.getOptions().shouldBeCold() && !voyageDetails.getOptions().getAllowCooldown();
 						final long fuelConsumption = voyageDetails.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 						if (shouldBeCold && (fuelConsumption > 0)) {
 							// Despite requring to be cold, we still have some cooldown volume. Record this volume so the next port visit can allocate it properly
@@ -182,11 +196,34 @@ public class CapacityViolationChecker {
 					}
 				}
 
-				// TODO: Enable once HEEL_TRACKING branch is merged in
-				// remainingHeelInM3 = voyagePlan.getRemainingHeelInM3();
+				// TODO: Handle multiple load/discharge case
+				if (buy != null && sell != null) {
+					CargoType cargoType = CargoTypeUtil.getCargoType(buy, sell);
+					if (cargoType == CargoType.SHIPPED) {
+						lastHeelDetails = (PortDetails) voyagePlan.getSequence()[voyagePlan.getSequence().length - 1];
+					} else {
+						lastHeelDetails = (PortDetails) voyagePlan.getSequence()[1];
+					}
+				} else {
+					lastHeelDetails = (PortDetails) voyagePlan.getSequence()[voyagePlan.getSequence().length - 1];
+				}
+
+				if (allocationAnnotation != null) {
+					remainingHeelInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+				} else {
+					if (voyagePlan.getRemainingHeelType() == HeelType.END) {
+						remainingHeelInM3 = voyagePlan.getRemainingHeelInM3();
+					} else {
+						remainingHeelInM3 = 0;
+					}
+				}
+			}
+
+			// Handle anything left over at the end of the schedule
+			if (remainingHeelInM3 > 0) {
+				addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
 			}
 		}
-
 	}
 
 	/**

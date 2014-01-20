@@ -19,14 +19,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEdito
  */
 public final class HashMapVirtualVesselSlotProviderEditor implements IVirtualVesselSlotProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, IVessel> elementVesselMap = new HashMap<ISequenceElement, IVessel>();
 	private final Map<IVessel, ISequenceElement> vesselElementMap = new HashMap<IVessel, ISequenceElement>();
-
-	public HashMapVirtualVesselSlotProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public IVessel getVesselForElement(final ISequenceElement element) {
@@ -56,7 +50,7 @@ public final class HashMapVirtualVesselSlotProviderEditor implements IVirtualVes
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

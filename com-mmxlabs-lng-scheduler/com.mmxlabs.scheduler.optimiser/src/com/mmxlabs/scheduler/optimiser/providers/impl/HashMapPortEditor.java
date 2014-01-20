@@ -19,13 +19,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
  */
 public final class HashMapPortEditor implements IPortProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, IPort> map = new HashMap<ISequenceElement, IPort>();
-
-	public HashMapPortEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public IPort getPortForElement(final ISequenceElement element) {
@@ -43,7 +37,7 @@ public final class HashMapPortEditor implements IPortProviderEditor {
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override

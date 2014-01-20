@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * @since 7.1
@@ -148,19 +149,13 @@ public class VoyagePlanner {
 					options.setAllowCooldown(true);
 				}
 			} else {
-				if (useNBO) {
-					if (thisPort.shouldVesselsArriveCold()) {
-						// we don't want to use cooldown ever
-						options.setAllowCooldown(false);
-					} else {
-						// we have a choice
-						options.setAllowCooldown(false);
-						optimiser.addChoice(new CooldownVoyagePlanChoice(options));
-					}
+				if (thisPort.shouldVesselsArriveCold()) {
+					// we don't want to use cooldown ever
+					options.setAllowCooldown(false);
 				} else {
-					// we have to allow cooldown, because there is no
-					// NBO.
-					options.setAllowCooldown(true);
+					// we have a choice
+					options.setAllowCooldown(false);
+					optimiser.addChoice(new CooldownVoyagePlanChoice(options));
 				}
 			}
 		} else {
@@ -230,6 +225,9 @@ public class VoyagePlanner {
 
 		int prevVisitDuration = 0;
 		final Iterator<ISequenceElement> itr = sequence.iterator();
+
+		long heelVolumeInM3 = 0;
+
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final ISequenceElement element = itr.next();
 
@@ -288,11 +286,17 @@ public class VoyagePlanner {
 				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
 				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 				if (!shortCargoEnd) {
-					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 					if (plan == null) {
 						return null;
 					}
 					voyagePlans.add(plan);
+
+					if (plan.getRemainingHeelType() == HeelType.END) {
+						heelVolumeInM3 = plan.getRemainingHeelInM3();
+					} else {
+						heelVolumeInM3 = 0;
+					}
 				}
 
 				if (isShortsSequence) {
@@ -323,7 +327,7 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 			if (plan == null) {
 				return null;
 			}
@@ -341,7 +345,7 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer> arrivalTimes) {
+	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer> arrivalTimes, final long heelVolumeInM3) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
@@ -424,7 +428,7 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			return getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser);
+			return getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 		}
 		return null;
 	}
@@ -436,12 +440,14 @@ public class VoyagePlanner {
 	 *            An alternating list of PortOptions and VoyageOptions objects
 	 * @param arrivalTimes
 	 * @param optimiser
+	 * @param heelVolumeInM3
 	 * @return An optimised VoyagePlan
 	 */
-	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser) {
+	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser, final long heelVolumeInM3) {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
+		optimiser.setStartHeel(heelVolumeInM3);
 		optimiser.init();
 		final VoyagePlan result = optimiser.optimise();
 		if (result == null) {
@@ -476,8 +482,8 @@ public class VoyagePlanner {
 
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<IOptionsSequenceElement> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) {
-		final VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser);
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<IOptionsSequenceElement> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser, final long startHeel) {
+		final VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser, startHeel);
 		if (plan == null) {
 			return false;
 		}

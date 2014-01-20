@@ -51,11 +51,11 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		final ILoadOption loadSlot = (ILoadOption) slots[0];
 
 		// how much room is there in the tanks?
-		final long availableCargoSpace = constraint.vesselCapacityInM3;
+		final long availableCargoSpace = constraint.vesselCapacityInM3 - constraint.startVolumeInM3;
 
 		// how much fuel will be required over and above what we start with in the tanks?
 		// note: this is the fuel consumption plus any heel quantity required at discharge
-		final long fuelDeficit = constraint.requiredFuelVolumeInM3 + constraint.dischargeHeelInM3;
+		final long fuelDeficit = constraint.requiredFuelVolumeInM3 + constraint.dischargeHeelInM3 - constraint.startVolumeInM3;
 
 		// greedy assumption: always load as much as possible
 		long loadVolume = capValueWithZeroDefault(loadSlot.getMaxLoadVolume(), availableCargoSpace);
@@ -68,7 +68,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		}
 
 		// the amount of LNG available for discharge
-		long unusedVolume = loadVolume - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3;
+		long unusedVolume = loadVolume + constraint.startVolumeInM3 - constraint.minEndVolumeInM3 - constraint.requiredFuelVolumeInM3;
 
 		// available volume is non-negative
 		assert (unusedVolume >= 0);
@@ -81,8 +81,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			// greedy assumption: always discharge as much as possible
 			final long dischargeVolume = capValueWithZeroDefault(dischargeSlot.getMaxDischargeVolume(), unusedVolume);
-			// TODO: report min discharge constraint violation if appropriate
-
 			result[1] = dischargeVolume;
 			unusedVolume -= dischargeVolume;
 
@@ -105,7 +103,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 					result[i] = minDischargeVolume;
 				} else {
 					result[i] = unusedVolume;
-					// TODO: report min discharge constraint violation
 				}
 				unusedVolume -= result[i];
 
@@ -122,14 +119,14 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			for (int i = 0; i < nDischargeSlots && unusedVolume > 0; i++) {
 				// start at the most profitable slot and cycle through them in order
 				// TODO: would be better to sort them by profitability, but needs to be done efficiently
-				final int index = 1 + ((i + mostProfitableDischargeIndex) % nDischargeSlots);
+				final int index = 1 + ((i + (mostProfitableDischargeIndex - 1)) % nDischargeSlots);
 
 				final IDischargeOption slot = (IDischargeOption) slots[index];
-				// discharge all remaining volume at this slot, up to the slot maximum
-				final long volume = Math.min(slot.getMaxDischargeVolume(), unusedVolume);
+				// discharge all remaining volume at this slot, up to the different in  slot maximum and minimum
+				final long volume = Math.min(slot.getMaxDischargeVolume() - slot.getMinDischargeVolume(), unusedVolume);
 				// reduce the remaining available volume
-				unusedVolume -= volume - result[index];
-				result[index] = volume;
+				unusedVolume -= volume;
+				result[index] += volume;
 			}
 
 			// Note this currently does nothing as the next() method in the allocator iterator (BaseCargoAllocator) ignores this data and looks directly on the discharge slot.
@@ -144,7 +141,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		// if there is any leftover volume after discharge
 		if (unusedVolume > 0) {
 			// we use a conservative heuristic: load exactly as much as we need, subject to constraints
-			final long revisedLoadVolume = loadVolume - unusedVolume;
+			final long revisedLoadVolume = Math.max(0, loadVolume - unusedVolume);
 
 			// TODO: report min load constraint violation if necessary
 
@@ -156,8 +153,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			 */
 		}
 
-		constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3;
-		// constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3 + unusedVolume;
+		// constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3;
+		constraint.allocatedEndVolumeInM3 = constraint.minEndVolumeInM3 + unusedVolume;
 
 		result[0] = loadVolume;
 
@@ -169,14 +166,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl. BaseCargoAllocator#allocateSpareVolume()
 	 */
 	@Override
-	protected long[] allocateSpareVolume() {
+	protected void allocateSpareVolume() {
 		for (final AllocationRecord constraint : constraints) {
 
 			if (!handleRedirectionVolumes(constraint)) {
 				allocateBasicSlotVolumes(constraint);
 			}
 		}
-		return null;
 	}
 
 	/**

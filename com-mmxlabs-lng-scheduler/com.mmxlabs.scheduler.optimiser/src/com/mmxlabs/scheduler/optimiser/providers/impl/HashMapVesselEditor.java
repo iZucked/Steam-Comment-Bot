@@ -19,14 +19,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
  */
 public final class HashMapVesselEditor implements IVesselProviderEditor {
 
-	private final String name;
-
 	private final Map<IResource, IVessel> resourceVesselMap = new HashMap<IResource, IVessel>();
 	private final Map<IVessel, IResource> vesselResourceMap = new HashMap<IVessel, IResource>();
-
-	public HashMapVesselEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public IVessel getVessel(final IResource resource) {
@@ -56,7 +50,7 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 
 	@Override
 	public String getName() {
-		return name;
+		return "";
 	}
 
 	@Override
