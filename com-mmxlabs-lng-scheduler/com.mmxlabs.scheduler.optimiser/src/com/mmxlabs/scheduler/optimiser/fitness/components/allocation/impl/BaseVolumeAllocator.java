@@ -57,28 +57,24 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
-	/**
-	 * All the constraints to take into account, indexed bu cargo
-	 */
-	final ArrayList<AllocationRecord> constraints = new ArrayList<AllocationRecord>();
-
 	@Inject
 	protected ITotalVolumeLimitProvider cargoAllocationProvider;
-
-	/**
-	 * Maps from slots to arrival times; subclasses need this to determine whether a slot lies in a given gas year.
-	 */
-	private final Map<IPortSlot, Integer> slotTimes = new HashMap<IPortSlot, Integer>();
-
-	private int cargoCount;
-
-	// private long[] allocation;
 
 	@Inject
 	private IVesselProvider vesselProvider;
 
 	@Inject
 	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
+
+	/**
+	 * All the constraints to take into account, indexed bu cargo
+	 */
+	protected final ArrayList<AllocationRecord> constraints = new ArrayList<AllocationRecord>();
+
+	/**
+	 * Maps from slots to arrival times; subclasses need this to determine whether a slot lies in a given gas year.
+	 */
+	private final Map<IPortSlot, Integer> slotTimes = new HashMap<IPortSlot, Integer>();
 
 	public BaseVolumeAllocator() {
 		super();
@@ -108,8 +104,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	 */
 	@Override
 	public void reset() {
-		cargoCount = 0;
-
 		slotTimes.clear();
 		constraints.clear();
 	}
@@ -460,8 +454,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				pricesPerM3, pricesPerMMBTu, times, plan);
 		constraints.add(result);
 
-		cargoCount++;
-
 		return result;
 	}
 
@@ -549,8 +541,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int[] times = { time, time };
 
 		constraints.add(new AllocationRecord(nominatedVessel, vesselCapacityInM3, slots, pricesPerM3, pricesPerMMBTu, times, plan));
-
-		cargoCount++;
 	}
 
 	/**
@@ -622,7 +612,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final AllocationRecord result = new AllocationRecord(vessel, vesselCapacityInM3, requiredFuelVolumeInM3, startHeel, endHeelRequired, dischargeHeelRequired, slots, pricesPerM3, pricesPerMMBTu,
 				slotTimes, plan);
 		constraints.add(result);
-		cargoCount++;
 		return result;
 	}
 
