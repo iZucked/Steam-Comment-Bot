@@ -135,6 +135,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			VoyagePlan plan = null;
 			long lngRolledOver = 0; // the lng volume rolled over from the previous voyage plan in m3
 
+			// TODO: All this info should be accessible from ScheduledSequences
+			
 			final ArrayList<PortDetails> cargoPortDetails = new ArrayList<PortDetails>();
 			final ArrayList<Integer> slotTimes = new ArrayList<Integer>();
 			final ArrayList<VoyageDetails> voyages = new ArrayList<VoyageDetails>();

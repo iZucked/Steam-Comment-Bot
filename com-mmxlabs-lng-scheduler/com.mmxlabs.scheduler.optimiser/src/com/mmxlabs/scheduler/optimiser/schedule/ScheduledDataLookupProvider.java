@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * NOT THREAD SAFE
  * 
  * TODO: This should be rolled into the core API more directly - i.e. not useful until volume allocation has run, evaluators can cause data to be invalid etc...
+ * TODO: Build cache into the {@link ScheduledSequences} API
  * 
  * @author Simon Goodall
  * @since 8.0
