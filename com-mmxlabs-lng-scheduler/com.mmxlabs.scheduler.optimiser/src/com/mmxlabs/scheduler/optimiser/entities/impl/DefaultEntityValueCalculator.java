@@ -285,6 +285,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long value;
 		final long revenue;
 		final long generatedCharterOutRevenue;
+		final long generatedCharterOutCost;
 		{
 			final long shippingCost = getShippingCosts(plan, vessel, true, includeTimeCharterInFitness, vesselStartTime, null);
 			final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
@@ -296,9 +297,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 
 			generatedCharterOutRevenue = getGeneratedCharterOutRevenue(plan, vessel);
+			generatedCharterOutCost = getGeneratedCharterOutCosts(plan, vessel, true, vesselStartTime, null);
 
 			// Calculate the value for the fitness function
-			value = shippingEntity.getTaxedProfit(revenue + generatedCharterOutRevenue - shippingCost, planStartTime);
+			value = shippingEntity.getTaxedProfit(revenue + generatedCharterOutRevenue - generatedCharterOutCost - shippingCost, planStartTime);
 		}
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null) {
