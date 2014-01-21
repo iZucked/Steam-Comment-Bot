@@ -85,7 +85,6 @@ public final class Vessel extends IndexedObject implements IVessel {
 	 */
 	@Override
 	public long getCargoCapacity() {
-		// TODO Auto-generated method stub
 		return cargoCapacity;
 	}
 	
