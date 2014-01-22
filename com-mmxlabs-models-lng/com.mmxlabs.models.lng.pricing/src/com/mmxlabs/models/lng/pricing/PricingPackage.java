@@ -931,6 +931,61 @@ public interface PricingPackage extends EPackage {
 	int PORTS_EXPRESSION_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl <em>Ports Split Price Map</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitPriceMap()
+	 * @generated
+	 */
+	int PORTS_SPLIT_PRICE_MAP = 17;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_PRICE_MAP__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_PRICE_MAP__PORTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Index H1</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_PRICE_MAP__INDEX_H1 = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Index H2</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_PRICE_MAP__INDEX_H2 = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Ports Split Price Map</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_PRICE_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1427,6 +1482,49 @@ public interface PricingPackage extends EPackage {
 	EAttribute getPortsExpressionMap_Expression();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap <em>Ports Split Price Map</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Ports Split Price Map</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap
+	 * @generated
+	 */
+	EClass getPortsSplitPriceMap();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Ports</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getPorts()
+	 * @see #getPortsSplitPriceMap()
+	 * @generated
+	 */
+	EReference getPortsSplitPriceMap_Ports();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH1 <em>Index H1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index H1</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH1()
+	 * @see #getPortsSplitPriceMap()
+	 * @generated
+	 */
+	EReference getPortsSplitPriceMap_IndexH1();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH2 <em>Index H2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index H2</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitPriceMap#getIndexH2()
+	 * @see #getPortsSplitPriceMap()
+	 * @generated
+	 */
+	EReference getPortsSplitPriceMap_IndexH2();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1856,6 +1954,40 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORTS_EXPRESSION_MAP__EXPRESSION = eINSTANCE.getPortsExpressionMap_Expression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl <em>Ports Split Price Map</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitPriceMapImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitPriceMap()
+		 * @generated
+		 */
+		EClass PORTS_SPLIT_PRICE_MAP = eINSTANCE.getPortsSplitPriceMap();
+
+		/**
+		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORTS_SPLIT_PRICE_MAP__PORTS = eINSTANCE.getPortsSplitPriceMap_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Index H1</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORTS_SPLIT_PRICE_MAP__INDEX_H1 = eINSTANCE.getPortsSplitPriceMap_IndexH1();
+
+		/**
+		 * The meta object literal for the '<em><b>Index H2</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORTS_SPLIT_PRICE_MAP__INDEX_H2 = eINSTANCE.getPortsSplitPriceMap_IndexH2();
 
 	}
 

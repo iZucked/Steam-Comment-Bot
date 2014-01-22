@@ -6,24 +6,25 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for PortsExpressionMap instances
+ * A component helper for PortsSplitPriceMap instances
  *
  * @generated
  */
-public class PortsExpressionMapComponentHelper extends BaseComponentHelper {
+public class PortsSplitPriceMapComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -31,7 +32,7 @@ public class PortsExpressionMapComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PortsExpressionMapComponentHelper() {
+	public PortsSplitPriceMapComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -40,19 +41,19 @@ public class PortsExpressionMapComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PortsExpressionMapComponentHelper(IAdapterManager adapterManager) {
+	public PortsSplitPriceMapComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using PortsExpressionMap as the supertype
+	 * add editors to a composite, using PortsSplitPriceMap as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORTS_EXPRESSION_MAP);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORTS_SPLIT_PRICE_MAP);	
 	}
 	
 	/**
@@ -64,22 +65,31 @@ public class PortsExpressionMapComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_portsEditor(detailComposite, topClass);
-		add_expressionEditor(detailComposite, topClass);
+		add_indexH1Editor(detailComposite, topClass);
+		add_indexH2Editor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the ports feature on PortsExpressionMap
+	 * Create the editor for the ports feature on PortsSplitPriceMap
 	 *
 	 * @generated
 	 */
 	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORTS_SPLIT_PRICE_MAP__PORTS));
 	}
 	/**
-	 * Create the editor for the expression feature on PortsExpressionMap
+	 * Create the editor for the indexH1 feature on PortsSplitPriceMap
 	 *
 	 * @generated
 	 */
-	protected void add_expressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION));
+	protected void add_indexH1Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORTS_SPLIT_PRICE_MAP__INDEX_H1));
+	}
+	/**
+	 * Create the editor for the indexH2 feature on PortsSplitPriceMap
+	 *
+	 * @generated
+	 */
+	protected void add_indexH2Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORTS_SPLIT_PRICE_MAP__INDEX_H2));
 	}
 }

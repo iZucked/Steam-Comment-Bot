@@ -184,7 +184,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getPortCost(VesselClass vesselClass, PortCapability activity) {
+	public int getPortCost(final VesselClass vesselClass, final PortCapability activity) {
 		for (final PortCostEntry entry : getEntries()) {
 			if (entry.getActivity() == activity) {
 				if (isSetReferenceCapacity()) {
