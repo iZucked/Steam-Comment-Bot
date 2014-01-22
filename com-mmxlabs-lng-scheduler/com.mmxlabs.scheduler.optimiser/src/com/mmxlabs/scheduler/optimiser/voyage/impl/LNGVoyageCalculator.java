@@ -733,6 +733,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			long remainingHeelInM3 = availableHeelinM3 - lngCommitmentInM3;
+			
+			// Store this value now as we may change it below during the heel calculations
+			voyagePlan.setLNGFuelVolume(lngCommitmentInM3);
 
 			// if our fuel requirements exceed our onboard fuel 
 			if (remainingHeelInM3 < 0) {
