@@ -93,7 +93,7 @@ public class VesselStateColourScheme extends ColourScheme {
 		int alpha = 255;
 		if(element instanceof Event) {
 			Event ev = (Event) (element);
-			if(isLocked(ev, viewer) && !isOutsideTimeWindow(ev)) alpha = Faded_Alpha;
+//			if(isLocked(ev, viewer) && !isOutsideTimeWindow(ev)) alpha = Faded_Alpha;
 		}
 		else if (element instanceof GeneratedCharterOut) {
 			alpha -= 20;			
