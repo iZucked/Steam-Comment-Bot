@@ -75,6 +75,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 			for (final VoyagePlan vp : seq.getVoyagePlans()) {
 
+				long startingHeelInM3 = vp.getStartingHeelInM3();
 				// First step, find a ballast leg which is long enough to charter-out
 				boolean isCargoPlan = false;
 				// Grab the current list of arrival times and update the rolling currentTime
@@ -175,7 +176,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 				// TODO: Use the central caching VPO?
 				final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
 				vpo.setVessel(vessel, seq.getStartTime(), vessel.getVesselClass().getBaseFuelUnitPrice());
-
+				vpo.setStartHeel(startingHeelInM3);
 				// Install our new alternative sequence
 				vpo.setBasicSequence(newRawSequence);
 
@@ -226,7 +227,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					// Keep
 				} else {
 					// Overwrite details
-					voyageCalculator.calculateVoyagePlan(vp, vessel, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newVoyagePlan.getSequence());
+					voyageCalculator.calculateVoyagePlan(vp, vessel, startingHeelInM3, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newVoyagePlan.getSequence());
 				}
 			}
 		}

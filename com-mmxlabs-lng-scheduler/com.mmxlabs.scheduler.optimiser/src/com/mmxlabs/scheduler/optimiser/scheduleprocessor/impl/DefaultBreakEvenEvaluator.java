@@ -75,6 +75,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// for (final VoyagePlan vp : seq.getVoyagePlans()) {
 				VoyagePlan vp = seq.getVoyagePlans().get(vpIdx);
 
+				long startingHeelInM3 = vp.getStartingHeelInM3();
+				
 				boolean isCargoPlan = false;
 				boolean missingPurchasePrice = false;
 				boolean missingSalesPrice = false;
@@ -186,7 +188,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 						vp.setSequence(newSequence);
 					} else {
-						voyageCalculator.calculateVoyagePlan(vp, vessel, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newSequence);
+						voyageCalculator.calculateVoyagePlan(vp, vessel, startingHeelInM3, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newSequence);
 					}
 				} else if (originalDischarge != null) {
 

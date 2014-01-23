@@ -445,7 +445,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
 
-		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor( "Default");
+		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("Default");
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
 		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
 		calc.setPortCVProvider(mockPortCVProvider);
@@ -569,7 +569,7 @@ public class LNGVoyageCalculatorTest {
 			arrivalTimes.add(0);
 		}
 
-		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, 0, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -639,7 +639,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, baseFuelInternalPrice, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -714,7 +714,7 @@ public class LNGVoyageCalculatorTest {
 			arrivalTimes.add(0);
 		}
 		final VoyagePlan plan = new VoyagePlan();
-		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, 0, arrivalTimes, sequence);
 
 	}
 
@@ -794,7 +794,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, baseFuelInternalPrice, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -872,7 +872,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, 0, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, 0, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -956,7 +956,7 @@ public class LNGVoyageCalculatorTest {
 		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
 			arrivalTimes.add(0);
 		}
-		calc.calculateVoyagePlan(plan, vessel, baseFuelInternalPrice, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, arrivalTimes, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);

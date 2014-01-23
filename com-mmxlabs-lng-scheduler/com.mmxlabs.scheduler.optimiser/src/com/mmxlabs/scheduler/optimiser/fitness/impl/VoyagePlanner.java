@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -228,6 +229,11 @@ public class VoyagePlanner {
 			final IPort thisPort = portProvider.getPortForElement(element);
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
+
+			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
+			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
+				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
+			}
 
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
@@ -437,7 +443,8 @@ public class VoyagePlanner {
 	 * @param heelVolumeInM3
 	 * @return An optimised VoyagePlan
 	 */
-	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser, final long heelVolumeInM3) {
+	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser,
+			final long heelVolumeInM3) {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
@@ -476,7 +483,8 @@ public class VoyagePlanner {
 
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<IOptionsSequenceElement> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser, final long startHeel) {
+	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<IOptionsSequenceElement> currentSequence, final List<Integer> currentTimes,
+			final IVoyagePlanOptimiser optimiser, final long startHeel) {
 		final VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser, startHeel);
 		if (plan == null) {
 			return false;

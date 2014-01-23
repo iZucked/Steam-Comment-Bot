@@ -410,7 +410,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray(new IDetailsSequenceElement[0]));
+		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		return currentPlan;
 	}
