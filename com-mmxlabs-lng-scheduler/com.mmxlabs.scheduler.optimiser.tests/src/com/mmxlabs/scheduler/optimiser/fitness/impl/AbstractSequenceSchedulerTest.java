@@ -214,7 +214,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions1.setVessel(vessel);
 		expectedVoyageOptions1.setVesselState(VesselState.Laden);
 		expectedVoyageOptions1.setNBOSpeed(15000);
-		expectedVoyageOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
@@ -232,7 +231,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions2.setVessel(vessel);
 		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 		expectedVoyageOptions2.setNBOSpeed(15000);
-		expectedVoyageOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
 		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
@@ -248,7 +246,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions3.setVessel(vessel);
 		expectedVoyageOptions3.setVesselState(VesselState.Laden);
 		expectedVoyageOptions3.setNBOSpeed(15000);
-		expectedVoyageOptions3.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.clone();
 		expectedVoyageOptions3a.setRoute(IMultiMatrixProvider.Default_Key);
@@ -470,7 +467,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions1.setVessel(vessel);
 		expectedVoyageOptions1.setVesselState(VesselState.Laden);
 		expectedVoyageOptions1.setNBOSpeed(15000);
-		expectedVoyageOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
@@ -488,7 +484,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions2.setVessel(vessel);
 		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 		expectedVoyageOptions2.setNBOSpeed(15000);
-		expectedVoyageOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
 		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);

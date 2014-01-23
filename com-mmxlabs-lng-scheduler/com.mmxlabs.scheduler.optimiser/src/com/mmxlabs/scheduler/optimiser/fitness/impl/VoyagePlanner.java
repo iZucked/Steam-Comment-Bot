@@ -110,18 +110,12 @@ public class VoyagePlanner {
 			final IHeelOptionsPortSlot heelOptionsSlot = (IHeelOptionsPortSlot) prevPortSlot;
 			// options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), heelOptions.getHeelOptions().getHeelLimit()));
 			if (heelOptionsSlot.getHeelOptions().getHeelLimit() > 0) {
-				options.setAvailableLNG(heelOptionsSlot.getHeelOptions().getHeelLimit());
 				useNBO = true;
 				forceNBO = true;
+			} else {
+				useNBO = false;
+				forceNBO = false;
 			}
-		} else if (useNBO) {
-			options.setAvailableLNG(vessel.getCargoCapacity());
-		} else {
-			options.setAvailableLNG(0);
-		}
-
-		if (options.getAvailableLNG() == 0) {
-			useNBO = false;
 		}
 
 		if ((prevPortType == PortType.DryDock) || (prevPortType == PortType.Maintenance)) {

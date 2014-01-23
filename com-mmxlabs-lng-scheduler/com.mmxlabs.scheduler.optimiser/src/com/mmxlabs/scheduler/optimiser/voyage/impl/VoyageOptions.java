@@ -68,7 +68,6 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		setUseNBOForIdle(options.useNBOForIdle());
 		setRoute(options.getRoute());
 		setVesselState(options.getVesselState());
-		setAvailableLNG(options.getAvailableLNG());
 		setAllowCooldown(options.getAllowCooldown());
 		setShouldBeCold(options.shouldBeCold());
 		setCharterOutHourlyRate(options.getCharterOutHourlyRate());
@@ -163,14 +162,6 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.vesselState = vesselState;
 	}
 
-	public long getAvailableLNG() {
-		return availableLNG;
-	}
-
-	public void setAvailableLNG(final long availableLNG) {
-		assert availableLNG >= 0 : "available LNG should be non-negative for every voyage";
-		this.availableLNG = availableLNG;
-	}
 
 	public final boolean getAllowCooldown() {
 		return cooldown;
