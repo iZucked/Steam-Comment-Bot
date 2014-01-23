@@ -52,6 +52,7 @@ public final class VoyagePlan implements Cloneable {
 	private int violationsCount;
 	private boolean ignoreEnd;
 
+	private long startingHeelInM3;
 	private long remainingHeelInM3;
 
 	private HeelType remainingHeelType = HeelType.NONE;
@@ -63,8 +64,9 @@ public final class VoyagePlan implements Cloneable {
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
-			final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd, final long remainingHeelInM3, final HeelType remainingHeelType) {
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
+			final LongFastEnumMap<FuelComponent> routeAdditionalConsumption, final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd,
+			final long startingHeelInM3, final long remainingHeelInM3, final HeelType remainingHeelType) {
 		super();
 		this.sequence = sequence;
 		this.fuelConsumptions = fuelConsumptions;
@@ -73,6 +75,7 @@ public final class VoyagePlan implements Cloneable {
 		this.lngFuelVolume = fuelVolume;
 		this.violationsCount = violationsCount;
 		this.ignoreEnd = ignoreEnd;
+		this.startingHeelInM3 = startingHeelInM3;
 		this.remainingHeelInM3 = remainingHeelInM3;
 		this.remainingHeelType = remainingHeelType;
 	}
@@ -143,6 +146,7 @@ public final class VoyagePlan implements Cloneable {
 					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)
 					&& Objects.equal(routeAdditionalConsumption, plan.routeAdditionalConsumption)
 					&& Objects.equal(fuelCosts, plan.fuelCosts)
+					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
 					&& Objects.equal(remainingHeelType, plan.remainingHeelType)
 					;
@@ -171,7 +175,8 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, remainingHeelInM3, remainingHeelType);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, startingHeelInM3, remainingHeelInM3,
+				remainingHeelType);
 	}
 
 	/**
@@ -239,5 +244,13 @@ public final class VoyagePlan implements Cloneable {
 	 */
 	public HeelType getRemainingHeelType() {
 		return remainingHeelType;
+	}
+
+	public long getStartingHeelInM3() {
+		return startingHeelInM3;
+	}
+
+	public void setStartingHeelInM3(final long startingHeelInM3) {
+		this.startingHeelInM3 = startingHeelInM3;
 	}
 }
