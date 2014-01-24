@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -133,35 +134,40 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			PortDetails loadDetails = null;
 			PortDetails dischargeDetails = null;
 			VoyagePlan plan = null;
-			long lngRolledOver = 0; // the lng volume rolled over from the previous voyage plan in m3
 
 			// TODO: All this info should be accessible from ScheduledSequences
-			
+
 			final ArrayList<PortDetails> cargoPortDetails = new ArrayList<PortDetails>();
 			final ArrayList<Integer> slotTimes = new ArrayList<Integer>();
 			final ArrayList<VoyageDetails> voyages = new ArrayList<VoyageDetails>();
 			IPortSlot lastSlot = null;
 			plan = planIterator.getCurrentPlan();
+			// long lngRolledOver = 0; // the lng volume rolled over from the previous voyage plan in m3
+			long lngRolledOver = plan.getStartingHeelInM3();
 
 			while (planIterator.hasNextObject()) {
 				assert plan != null;
 				final Object object;
 				if (planIterator.nextObjectIsStartOfPlan()) {
-
 					// The AbstractSequencesScheduler breaks up the VoyagePlans in the desired fashion, make use of that information here.
 					// Previously this code attempted to replicate that logic - and then map to a voyage plan. This was not very reliable.
 
 					// Ensure voyages size is greater than zero - otherwise this is really a special/virtual cargo - such as FOB/DES which is handled separately
 					if (plan != null && cargoPortDetails.size() >= 2 && voyages.size() > 0) {
-						AllocationRecord cargoAllocation = addCargo(plan, vessel, vesselStartTime, cargoPortDetails, voyages, slotTimes, lngRolledOver);//
-						lngRolledOver = cargoAllocation.minEndVolumeInM3;
+						addCargo(plan, vessel, vesselStartTime, cargoPortDetails, voyages, slotTimes, lngRolledOver);//
 					}
 					// Clear the lists
 					slotTimes.clear();
 					cargoPortDetails.clear();
 					voyages.clear();
 
-					lngRolledOver = plan.getRemainingHeelInM3();
+					// FIXME: This is only the min heel rollover, not any excess load volume
+					// Update LNG rollover quantity
+					if (plan.getRemainingHeelType() == HeelType.END) {
+						lngRolledOver = plan.getRemainingHeelInM3();
+					} else {
+						lngRolledOver = 0;
+					}
 
 					object = planIterator.nextObject();
 					plan = planIterator.getCurrentPlan();
