@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.custom.ST;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
