@@ -13,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public final class AllocationRecord {
 	/** The LNG volume which the vessel starts with (the start heel) */
-	final long startVolumeInM3;
+	public final long startVolumeInM3;
 
 	/** The capacity of the vessel carrying the cargo */
 	final long vesselCapacityInM3;
