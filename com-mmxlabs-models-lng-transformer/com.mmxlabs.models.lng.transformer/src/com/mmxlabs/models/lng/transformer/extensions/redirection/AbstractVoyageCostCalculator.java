@@ -65,7 +65,6 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		final VoyageOptions voyageOptions = new VoyageOptions();
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
-		voyageOptions.setAvailableLNG(vessel.getCargoCapacity());
 		voyageOptions.setDistance(distance);
 		voyageOptions.setFromPortSlot(from);
 		voyageOptions.setNBOSpeed(vessel.getVesselClass().getMinNBOSpeed(vesselState));
