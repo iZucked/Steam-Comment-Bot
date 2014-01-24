@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.extensions.redirection;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.swt.custom.ST;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
@@ -37,7 +38,7 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 
 	@Override
 	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, int dischargeDuration,
-			@NonNull final IVessel vessel, final int notionalSpeed, final int cargoCVValue, @NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
+			@NonNull final IVessel vessel, long startHeelInM3, final int notionalSpeed, final int cargoCVValue, @NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 
@@ -94,7 +95,7 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel,startHeelInM3, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
 
 			return notionalPlan;
 		}
@@ -103,7 +104,7 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 	@Override
 	@Nullable
 	public VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,
-			@NonNull IVessel vessel, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice) {
+			@NonNull IVessel vessel, long startHeelInM3,int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 
@@ -155,7 +156,7 @@ public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculato
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, startHeelInM3, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
 
 			return notionalPlan;
 		}
