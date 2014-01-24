@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.RouteVoyagePlanChoice;
@@ -61,6 +62,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
+	@Inject
+	private IVoyagePlanOptimiser vpo;
+
+	
 	@Override
 	public void processSchedule(final ScheduledSequences scheduledSequences) {
 		// Charter Out Optimisation... Detect potential charter out opportunities.
@@ -174,7 +179,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 				// Construct a new VPO instance (TODO - use injection provider)
 				// TODO: Use the central caching VPO?
-				final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
+//				final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
+				vpo.reset();
 				vpo.setVessel(vessel, seq.getStartTime(), vessel.getVesselClass().getBaseFuelUnitPrice());
 				vpo.setStartHeel(startingHeelInM3);
 				// Install our new alternative sequence
