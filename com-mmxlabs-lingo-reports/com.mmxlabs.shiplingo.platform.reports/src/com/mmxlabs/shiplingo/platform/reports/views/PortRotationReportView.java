@@ -252,6 +252,9 @@ public class PortRotationReportView extends EMFReportView {
 				if (object instanceof Cooldown) {
 					total += ((Cooldown) object).getCost();
 				}
+				if (object instanceof PortVisit) {
+					total += ((PortVisit) object).getPortCost();
+				}
 
 				return (int) total;
 			}
