@@ -925,4 +925,16 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			sb.append("\n");
 		}
 	}
+	
+	@Override
+	public boolean close() {
+		
+		if (displayComposite != null) {
+//			displayComposite.display(new DefaultDialogEditingContext(dialogController, location), null, null, null, dbc);
+			displayComposite.getComposite().dispose();
+			displayComposite = null;
+		}
+		
+		return super.close();
+	}
 }
