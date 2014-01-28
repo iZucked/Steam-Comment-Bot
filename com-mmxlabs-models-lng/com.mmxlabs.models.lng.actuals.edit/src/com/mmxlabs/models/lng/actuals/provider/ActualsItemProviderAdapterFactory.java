@@ -95,6 +95,29 @@ public class ActualsItemProviderAdapterFactory extends ActualsAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.actuals.CargoActuals} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CargoActualsItemProvider cargoActualsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.actuals.CargoActuals}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCargoActualsAdapter() {
+		if (cargoActualsItemProvider == null) {
+			cargoActualsItemProvider = new CargoActualsItemProvider(this);
+		}
+
+		return cargoActualsItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.actuals.LoadActuals} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -246,6 +269,7 @@ public class ActualsItemProviderAdapterFactory extends ActualsAdapterFactory imp
 	@Override
 	public void dispose() {
 		if (actualsModelItemProvider != null) actualsModelItemProvider.dispose();
+		if (cargoActualsItemProvider != null) cargoActualsItemProvider.dispose();
 		if (loadActualsItemProvider != null) loadActualsItemProvider.dispose();
 		if (dischargeActualsItemProvider != null) dischargeActualsItemProvider.dispose();
 	}

@@ -2,8 +2,6 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
-import org.eclipse.emf.ecore.EObject;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Load Actuals</b></em>'.
@@ -14,5 +12,5 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface LoadActuals extends EObject {
+public interface LoadActuals extends SlotActuals {
 } // LoadActuals

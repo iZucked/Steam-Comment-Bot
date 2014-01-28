@@ -23,7 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  *
  * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals()
- * @model abstract="true"
+ * @model
  * @generated
  */
 public interface CargoActuals extends EObject {
@@ -132,7 +132,7 @@ public interface CargoActuals extends EObject {
 	void setCrewBonus(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Actuals</b></em>' reference list.
+	 * Returns the value of the '<em><b>Actuals</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.actuals.SlotActuals}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -140,9 +140,9 @@ public interface CargoActuals extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Actuals</em>' reference list.
+	 * @return the value of the '<em>Actuals</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_Actuals()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<SlotActuals> getActuals();

@@ -3,13 +3,12 @@
 package com.mmxlabs.models.lng.actuals.provider;
 
 
+import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -17,7 +16,6 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.actuals.DischargeActuals} object.
@@ -26,7 +24,7 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
  * @generated
  */
 public class DischargeActualsItemProvider
-	extends ItemProviderAdapter
+	extends SlotActualsItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -77,7 +75,8 @@ public class DischargeActualsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_DischargeActuals_type");
+		DischargeActuals dischargeActuals = (DischargeActuals)object;
+		return getString("_UI_DischargeActuals_type") + " " + dischargeActuals.getCV();
 	}
 
 	/**
@@ -103,17 +102,6 @@ public class DischargeActualsItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return ActualsEditPlugin.INSTANCE;
 	}
 
 }

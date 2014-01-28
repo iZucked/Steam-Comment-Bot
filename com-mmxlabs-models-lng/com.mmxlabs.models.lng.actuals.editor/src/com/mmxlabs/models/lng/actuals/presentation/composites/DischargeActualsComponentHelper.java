@@ -4,18 +4,16 @@ package com.mmxlabs.models.lng.actuals.presentation.composites;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
 
 /**
  * A component helper for DischargeActuals instances
@@ -41,6 +39,7 @@ public class DischargeActualsComponentHelper extends BaseComponentHelper {
 	 */
 	public DischargeActualsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(ActualsPackage.Literals.SLOT_ACTUALS));
 	}
 	
 	/**
