@@ -286,6 +286,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 							final Path name = ev.context();
 							final Path child = dir.resolve(name);
 
+							log.debug("Event " + ev.kind().name() + " - " + child);
 							// if directory is created, and watching recursively, then
 							// register it and its sub-directories
 							if (kind == ENTRY_CREATE) {
@@ -397,6 +398,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 		for (final Map.Entry<WatchKey, Path> e : keys.entrySet()) {
 			if (e.getValue().equals(dir)) {
+				log.debug("Unwatching " + dir.toString());
 				final WatchKey key = e.getKey();
 				key.cancel();
 				keys.remove(key);
