@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -43,12 +44,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
 
 	@Inject
-	private IVesselProvider vesselProvider;
-
-	@Inject
-	private ILNGVoyageCalculator voyageCalculator;
-
-	@Inject
 	private IEntityValueCalculator entityValueCalculator;
 
 	@Inject
@@ -65,19 +60,12 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
-		// // Charter Out Optimisation... Detect potential charter out opportunities.
-		// for (final ScheduledSequence seq : scheduledSequences) {
-		//
-		// final IVessel vessel = vesselProvider.getVessel(seq.getResource());
-		// if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
-		// continue;
-		// }
-		//
-		// int currentTime = seq.getStartTime();
-		//
-		// for (final VoyagePlan vp : seq.getVoyagePlans()) {
 
-		long startingHeelInM3 = vp.getStartingHeelInM3();
+		if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+			return null; // continue;
+		}
+
+		long startingHeelInM3 = 0;// vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
 		boolean isCargoPlan = false;
 		// Grab the current list of arrival times and update the rolling currentTime
@@ -239,11 +227,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			return null;
 		} else {
 			// Overwrite details
-			// voyageCalculator.calculateVoyagePlan(vp, vessel, startingHeelInM3, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newVoyagePlan.getSequence());
-
 			return new Pair<>(newVoyagePlan, newAllocation);
 		}
-		// }
-		// }
 	}
 }
