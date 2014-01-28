@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -100,7 +99,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			// Output allocation info
 			// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
-			// TODO: Break up IAllocatiobAnnotation to pull out fuel use as a separate chunk.
+			// TODO: Break up IAllocationAnnotation to pull out fuel use as a separate chunk.
 			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
 
 			eAllocation = allocations.get(slot);
@@ -125,7 +124,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			// final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
 			if (slot instanceof ILoadOption) {
 				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), ((ILoadOption) slot).getCargoCVValue());
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			} else {
@@ -139,7 +138,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 					throw new IllegalStateException("Discharge Slot without a Load Slot");
 				}
 				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), cargoCV);
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			}

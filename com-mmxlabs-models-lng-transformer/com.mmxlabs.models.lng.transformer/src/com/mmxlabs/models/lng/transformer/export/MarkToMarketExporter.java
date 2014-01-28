@@ -112,12 +112,12 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			}
 
 			if (slot instanceof ILoadOption) {
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), ((ILoadOption) slot).getCargoCVValue());
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 
 			} else {
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), cargoCV);
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			}
@@ -138,11 +138,11 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 				// Look up price and add to MarketAllocation.
 				final IPortSlot mtmSlot = slots.iterator().next();
 				if (mtmSlot instanceof ILoadOption) {
-					final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(mtmSlot), cargoCV);
+					final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(mtmSlot);
 					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 
 				} else {
-					final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(mtmSlot), cargoCV);
+					final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(mtmSlot);
 					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				}
 
