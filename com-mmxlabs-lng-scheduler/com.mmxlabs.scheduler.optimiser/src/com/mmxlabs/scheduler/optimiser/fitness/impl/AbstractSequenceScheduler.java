@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,6 +24,9 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -39,6 +44,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public abstract class AbstractSequenceScheduler extends AbstractLoggingSequenceScheduler implements ISequenceScheduler {
 
+	@Inject
+	private IVolumeAllocator volumeAllocator;
+	
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
@@ -99,7 +107,21 @@ public abstract class AbstractSequenceScheduler extends AbstractLoggingSequenceS
 		final int times[] = new int[sequence.size()];
 		Arrays.fill(times, startTime);
 		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
-		return new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
+		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
+		
+		
+		IVessel vessel = vesselProvider.getVessel(resource);
+		int vesselStartTime = startTime;
+		
+		// TODO: This is not the place!
+		final AllocationRecord record = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, currentPlan, CollectionsUtil.toArrayList(times));
+		if (record != null) {
+			
+			scheduledSequence.getAllocations().put(currentPlan, volumeAllocator.allocate(record));
+		} else {
+			scheduledSequence.getAllocations().put(currentPlan, null);
+		}
+		return scheduledSequence;
 	}
 
 	/**
@@ -134,11 +156,13 @@ public abstract class AbstractSequenceScheduler extends AbstractLoggingSequenceS
 		// Get start time
 		final int startTime = arrivalTimes[0];
 
-		final List<VoyagePlan> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final Map<VoyagePlan, IAllocationAnnotation> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		if (voyagePlans == null) {
 			return null;
 		}
 
-		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, new ArrayList<>(voyagePlans.keySet()), arrivalTimes);
+		scheduledSequence.getAllocations().putAll(voyagePlans);
+		return scheduledSequence;
 	}
 }

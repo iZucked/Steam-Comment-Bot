@@ -38,6 +38,7 @@ public final class VoyagePlan implements Cloneable {
 		 * Remaining heel is left at end of voyage. It should be included in total consumed voyage gas, then discarded
 		 */
 		END,
+
 		/**
 		 * Remaining heel will be discharged.
 		 */

@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -29,6 +30,7 @@ public final class ScheduledSequence {
 	private final Map<VoyagePlan, List<Integer>> voyagePlanToArrivalTimes = new HashMap<>();
 	private final List<IPortSlot> sequencePortSlots;
 	private VoyagePlan lastPlan;
+	private Map<VoyagePlan, IAllocationAnnotation> allocations = new HashMap<VoyagePlan, IAllocationAnnotation>();
 
 	/**
 	 * @since 2.0
@@ -145,4 +147,12 @@ public final class ScheduledSequence {
 			lastPlan = currentPlan;
 		}
 	}
+
+	public Map<VoyagePlan, IAllocationAnnotation> getAllocations() {
+		return allocations;
+	}
+
+//	public void setAllocations(final Map<VoyagePlan, IAllocationAnnotation> allocations) {
+//		this.allocations = allocations;
+//	}
 }

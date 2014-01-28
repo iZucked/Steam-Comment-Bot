@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -73,8 +75,8 @@ public class ScheduleCalculator {
 	@Inject
 	private ICalculatorProvider calculatorProvider;
 
-	@com.google.inject.Inject(optional = true)
-	private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
+	// @com.google.inject.Inject(optional = true)
+	// private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
 
 	@com.google.inject.Inject(optional = true)
 	private IBreakEvenEvaluator breakEvenEvaluator;
@@ -122,9 +124,9 @@ public class ScheduleCalculator {
 			breakEvenEvaluator.processSchedule(scheduledSequences);
 		}
 
-		if (generatedCharterOutEvaluator != null) {
-			generatedCharterOutEvaluator.processSchedule(scheduledSequences);
-		}
+		// if (generatedCharterOutEvaluator != null) {
+		// generatedCharterOutEvaluator.processSchedule(scheduledSequences);
+		// }
 
 		if (annotatedSolution != null) {
 			// Do basic voyageplan annotation
@@ -145,22 +147,34 @@ public class ScheduleCalculator {
 		// and then compute the resulting P&L fitness components.
 
 		// Compute load volumes and prices
-		final Map<VoyagePlan, IAllocationAnnotation> allocations = volumeAllocator.allocate(scheduledSequences);
+		final Map<VoyagePlan, IAllocationAnnotation> allocations = new HashMap<>();
+		for (ScheduledSequence seq : scheduledSequences) {
+			if (seq.getAllocations() != null) {
+				for (Map.Entry<VoyagePlan, IAllocationAnnotation> e : seq.getAllocations().entrySet()) {
+					if (e.getValue() != null) {
+						allocations.put(e.getKey(), e.getValue());
+					}
+				}
+			}
+		}
+		scheduledSequences.getAllocations();
 		scheduledSequences.setAllocations(allocations);
 		// Store annotations if required
 		if (annotatedSolution != null) {
 
 			// TODO: Feed into the VPA!
 
-			annotatedSolution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, allocations);
+			// annotatedSolution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, allocations);
 
 			// now add some more data for each load slot
 			final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 			for (final IAllocationAnnotation annotation : allocations.values()) {
-				final List<IPortSlot> slots = annotation.getSlots();
-				for (final IPortSlot portSlot : slots) {
-					final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
-					elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
+				if (annotation != null) {
+					final List<IPortSlot> slots = annotation.getSlots();
+					for (final IPortSlot portSlot : slots) {
+						final ISequenceElement portElement = portSlotProvider.getElement(portSlot);
+						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
+					}
 				}
 			}
 		}
@@ -307,7 +321,8 @@ public class ScheduleCalculator {
 			}
 
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, time, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+			final AllocationRecord allocationRecord = volumeAllocator.createAllocationRecord(vessel, time, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(allocationRecord);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 

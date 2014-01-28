@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -19,44 +21,52 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public interface IVolumeAllocator {
-	/**
-	 * Set the {@link ITotalVolumeLimitProvider} which informs the allocator of any global constraints on load/discharge volumes
-	 * 
-	 * @param tvlp
-	 */
-	public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider tvlp);
+	// /**
+	// * Set the {@link ITotalVolumeLimitProvider} which informs the allocator of any global constraints on load/discharge volumes
+	// *
+	// * @param tvlp
+	// */
+	// public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider tvlp);
+	//
+	// public void init();
+	//
+	// /**
+	// * Return a bunch of {@link IAllocationAnnotation}s for the given {@link ScheduledSequences} keyed off {@link VoyagePlan}s.
+	// *
+	// * These should include the correct load prices/volumes for each allocated cargo.
+	// *
+	// * @param sequences
+	// * @return
+	// */
+	// public Map<VoyagePlan, IAllocationAnnotation> allocate(ScheduledSequences sequences);
 
-	public void init();
+//	/**
+//	 * Given a single {@link VoyagePlan} calculate "best as" the cargo allocation. By "best as" this means allocation without the other cargo volumes. Typically this will mean maxing out the load.
+//	 * 
+//	 * @param voyagePlan
+//	 * @return
+//	 * @since 5.0
+//	 */
+	
+	
+	IAllocationAnnotation allocate(AllocationRecord allocationRecord);
 
-	/**
-	 * Return a bunch of {@link IAllocationAnnotation}s for the given {@link ScheduledSequences} keyed off {@link VoyagePlan}s.
-	 * 
-	 * These should include the correct load prices/volumes for each allocated cargo.
-	 * 
-	 * @param sequences
-	 * @return
-	 */
-	public Map<VoyagePlan, IAllocationAnnotation> allocate(ScheduledSequences sequences);
+	// public void dispose();
+	//
+	// /**
+	// * Forget anything that's happened in the last allocation step.
+	// */
+	// void reset();
+	//
+	// /**
+	// * @param dataComponentProvider
+	// */
+	// public void setVesselProvider(IVesselProvider dataComponentProvider);
+	//
+	// public AllocationRecord createVolumeRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> currentTimes);
+	//
+	// public AllocationAnnotation allocate(AllocationRecord record);
 
-	/**
-	 * Given a single {@link VoyagePlan} calculate "best as" the cargo allocation. By "best as" this means allocation without the other cargo volumes. Typically this will mean maxing out the load.
-	 * 
-	 * @param voyagePlan
-	 * @return
-	 * @since 5.0
-	 */
-	public IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes);
-
-	public void dispose();
-
-	/**
-	 * Forget anything that's happened in the last allocation step.
-	 */
-	void reset();
-
-	/**
-	 * @param dataComponentProvider
-	 */
-	public void setVesselProvider(IVesselProvider dataComponentProvider);
+	AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes);
 
 }

@@ -24,10 +24,8 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	 */
 	public class SlotAllocationAnnotation {
 		public long volumeInM3;
-		public int pricePerM3;
-		/**
-		 * @since 8.0
-		 */
+		public long volumeInMMBTu;
+//		public int pricePerM3;
 		public int pricePerMMBTu;
 		public int startTime;
 	}
@@ -37,6 +35,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	private long fuelVolumeInM3;
 
+	private long startHeelVolumeInM3;
 	private long remainingHeelVolumeInM3;
 
 	@Override
@@ -122,19 +121,19 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		getOrCreateSlotAllocation(slot).startTime = time;
 	}
 
-	/**
-	 * @since 5.0
-	 */
-	@Override
-	public int getSlotPricePerM3(final IPortSlot slot) {
-		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
-		if (allocation != null) {
-			return allocation.pricePerM3;
-		}
-		// TODO: throw an exception instead of returning magic value
-		return -1;
-	}
-	
+//	/**
+//	 * @since 5.0
+//	 */
+//	@Override
+//	public int getSlotPricePerM3(final IPortSlot slot) {
+//		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+//		if (allocation != null) {
+//			return allocation.pricePerM3;
+//		}
+//		// TODO: throw an exception instead of returning magic value
+//		return -1;
+//	}
+
 	/**
 	 * @since 8.0
 	 */
@@ -148,13 +147,13 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return -1;
 	}
 
-	/**
-	 * @since 5.0
-	 */
-	public void setSlotPricePerM3(final IPortSlot slot, final int price) {
-		getOrCreateSlotAllocation(slot).pricePerM3 = price;
-	}
-	
+//	/**
+//	 * @since 5.0
+//	 */
+//	public void setSlotPricePerM3(final IPortSlot slot, final int price) {
+//		getOrCreateSlotAllocation(slot).pricePerM3 = price;
+//	}
+
 	/**
 	 * @since 8.0
 	 */
@@ -162,34 +161,43 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;
 	}
 
-	/**
-	 * @since 6.0
-	 */
 	@Override
 	public long getSlotVolumeInM3(final IPortSlot slot) {
-		long result = -1;
 
-		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
 		if (allocation != null) {
-			result = allocation.volumeInM3;
+			return allocation.volumeInM3;
 		}
 
-		/*
-			
-			return hackResult;
-		}
-		*/
-		
-
-		// TODO: throw an exception instead of returning magic value
-		return result;
+		return 0;
 	}
 
-	/**
-	 * @since 5.0
-	 */
-	public void setSlotVolumeInM3(final IPortSlot slot, final long volume) {
-		getOrCreateSlotAllocation(slot).volumeInM3 = volume;
+	public void setSlotVolumeInM3(final IPortSlot slot, final long volumeInM3) {
+		getOrCreateSlotAllocation(slot).volumeInM3 = volumeInM3;
+	}
+
+	@Override
+	public long getSlotVolumeInMMBTu(final IPortSlot slot) {
+
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.volumeInMMBTu;
+		}
+
+		return 0;
+	}
+
+	public void setSlotVolumeInMMBTu(final IPortSlot slot, final long volumeInMMBTu) {
+		getOrCreateSlotAllocation(slot).volumeInMMBTu = volumeInMMBTu;
+	}
+
+	@Override
+	public long getStartHeelVolumeInM3() {
+		return startHeelVolumeInM3;
+	}
+
+	public void setStartHeelVolumeInM3(long startHeelVolumeInM3) {
+		this.startHeelVolumeInM3 = startHeelVolumeInM3;
 	}
 
 }
