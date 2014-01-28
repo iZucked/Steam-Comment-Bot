@@ -56,11 +56,23 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case ActualsPackage.ACTUALS_MODEL: return createActualsModel();
 			case ActualsPackage.LOAD_ACTUALS: return createLoadActuals();
 			case ActualsPackage.DISCHARGE_ACTUALS: return createDischargeActuals();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ActualsModel createActualsModel() {
+		ActualsModelImpl actualsModel = new ActualsModelImpl();
+		return actualsModel;
 	}
 
 	/**

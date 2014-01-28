@@ -22,6 +22,15 @@ public interface ActualsFactory extends EFactory {
 	ActualsFactory eINSTANCE = com.mmxlabs.models.lng.actuals.impl.ActualsFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Model</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Model</em>'.
+	 * @generated
+	 */
+	ActualsModel createActualsModel();
+
+	/**
 	 * Returns a new object of class '<em>Load Actuals</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

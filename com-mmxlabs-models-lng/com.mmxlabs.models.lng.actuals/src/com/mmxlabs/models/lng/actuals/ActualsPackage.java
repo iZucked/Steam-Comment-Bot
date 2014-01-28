@@ -57,6 +57,43 @@ public interface ActualsPackage extends EPackage {
 	ActualsPackage eINSTANCE = com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.impl.ActualsModelImpl <em>Model</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsModelImpl
+	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getActualsModel()
+	 * @generated
+	 */
+	int ACTUALS_MODEL = 0;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Actuals</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTUALS_MODEL__CARGO_ACTUALS = 0;
+
+	/**
+	 * The number of structural features of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTUALS_MODEL_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Model</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTUALS_MODEL_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl <em>Slot Actuals</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -64,7 +101,7 @@ public interface ActualsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getSlotActuals()
 	 * @generated
 	 */
-	int SLOT_ACTUALS = 0;
+	int SLOT_ACTUALS = 1;
 
 	/**
 	 * The feature id for the '<em><b>CV</b></em>' attribute.
@@ -137,7 +174,7 @@ public interface ActualsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getCargoActuals()
 	 * @generated
 	 */
-	int CARGO_ACTUALS = 1;
+	int CARGO_ACTUALS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
@@ -210,7 +247,7 @@ public interface ActualsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getLoadActuals()
 	 * @generated
 	 */
-	int LOAD_ACTUALS = 2;
+	int LOAD_ACTUALS = 3;
 
 	/**
 	 * The number of structural features of the '<em>Load Actuals</em>' class.
@@ -238,7 +275,7 @@ public interface ActualsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getDischargeActuals()
 	 * @generated
 	 */
-	int DISCHARGE_ACTUALS = 3;
+	int DISCHARGE_ACTUALS = 4;
 
 	/**
 	 * The number of structural features of the '<em>Discharge Actuals</em>' class.
@@ -258,6 +295,27 @@ public interface ActualsPackage extends EPackage {
 	 */
 	int DISCHARGE_ACTUALS_OPERATION_COUNT = 0;
 
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.actuals.ActualsModel <em>Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Model</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ActualsModel
+	 * @generated
+	 */
+	EClass getActualsModel();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.actuals.ActualsModel#getCargoActuals <em>Cargo Actuals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Cargo Actuals</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ActualsModel#getCargoActuals()
+	 * @see #getActualsModel()
+	 * @generated
+	 */
+	EReference getActualsModel_CargoActuals();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.actuals.SlotActuals <em>Slot Actuals</em>}'.
@@ -432,6 +490,24 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	interface Literals {
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.impl.ActualsModelImpl <em>Model</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.actuals.impl.ActualsModelImpl
+		 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getActualsModel()
+		 * @generated
+		 */
+		EClass ACTUALS_MODEL = eINSTANCE.getActualsModel();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Actuals</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ACTUALS_MODEL__CARGO_ACTUALS = eINSTANCE.getActualsModel_CargoActuals();
+
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl <em>Slot Actuals</em>}' class.
 		 * <!-- begin-user-doc -->
