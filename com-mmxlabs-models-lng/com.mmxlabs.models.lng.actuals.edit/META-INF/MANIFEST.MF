@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: com.mmxlabs.models.lng.actuals.edit;singleton:=true
+Bundle-Version: 8.0.3.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: com.mmxlabs.models.lng.actuals.provider.ActualsEditPlugin$Implementation
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: com.mmxlabs.models.lng.actuals.provider
+Require-Bundle: org.eclipse.core.runtime,
+ com.mmxlabs.models.lng.actuals;visibility:=reexport,
+ org.eclipse.emf.edit;visibility:=reexport
+Bundle-ActivationPolicy: lazy

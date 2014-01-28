@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated actuals -->
+      <editor
+            id="com.mmxlabs.models.lng.actuals.presentation.ActualsEditorID"
+            name="%_UI_ActualsEditor_label"
+            icon="icons/full/obj16/ActualsModelFile.gif"
+            extensions="actuals"
+            class="com.mmxlabs.models.lng.actuals.presentation.ActualsEditor"
+            contributorClass="com.mmxlabs.models.lng.actuals.presentation.ActualsActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
