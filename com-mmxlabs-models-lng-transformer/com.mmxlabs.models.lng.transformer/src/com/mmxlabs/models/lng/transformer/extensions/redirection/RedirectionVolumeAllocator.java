@@ -18,31 +18,31 @@ public class RedirectionVolumeAllocator implements ICustomVolumeAllocator {
 
 	@Override
 	public boolean canHandle(final AllocationRecord constraint) {
+//
+//		if (constraint.slots.size() == 2) {
+//			if (constraint.slots.get(0) instanceof ILoadOption) {
+//				final ILoadOption iLoadOption = (ILoadOption) constraint.slots.get(0);
+//				if (iLoadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
+//					return true;
+//				}
+//			}
+//
+//		}
 
-		if (constraint.slots.length == 2) {
-			if (constraint.slots[0] instanceof ILoadOption) {
-				final ILoadOption iLoadOption = (ILoadOption) constraint.slots[0];
-				if (iLoadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
-					return true;
-				}
-			}
-
-		}
-
-		return false;
+		return true;
 	}
 
 	@Override
 	public void handle(final AllocationRecord constraint) {
 
-		if (constraint.slots.length == 2) {
-			if (constraint.slots[0] instanceof ILoadOption) {
-				final ILoadOption iLoadOption = (ILoadOption) constraint.slots[0];
+//		if (constraint.slots.size() == 2) {
+			if (constraint.slots.get(0) instanceof ILoadOption) {
+				final ILoadOption iLoadOption = (ILoadOption) constraint.slots.get(0);
 				if (iLoadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
 					final IRedirectionVolumeCalculator calc = (IRedirectionVolumeCalculator) iLoadOption.getLoadPriceCalculator();
-					calc.calculateVolumes(constraint);
+					calc.modifyAllocationRecord(constraint);
 				}
 			}
-		}
+//		}
 	}
 }
