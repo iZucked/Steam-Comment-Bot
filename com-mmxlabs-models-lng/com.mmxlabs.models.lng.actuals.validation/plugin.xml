@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.emf.validation.constraintProviders">
+      <category
+            id="com.mmxlabs.models.lng.actuals.validation.base"
+            mandatory="true"
+            name="Actuals Validation">
+      </category>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/actuals/1/">
+         </package>
+         <constraints
+               categories=" com.mmxlabs.models.lng.actuals.validation.base">
+         </constraints>
+      </constraintProvider>
+   </extension>
+
+</plugin>
