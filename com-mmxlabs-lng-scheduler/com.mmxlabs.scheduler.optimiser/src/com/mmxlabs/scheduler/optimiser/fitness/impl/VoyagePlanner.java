@@ -112,7 +112,7 @@ public class VoyagePlanner {
 			// options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), heelOptions.getHeelOptions().getHeelLimit()));
 			if (heelOptionsSlot.getHeelOptions().getHeelLimit() > 0) {
 				useNBO = true;
-				forceNBO = true;
+				forceNBO = false;
 			} else {
 				useNBO = false;
 				forceNBO = false;
