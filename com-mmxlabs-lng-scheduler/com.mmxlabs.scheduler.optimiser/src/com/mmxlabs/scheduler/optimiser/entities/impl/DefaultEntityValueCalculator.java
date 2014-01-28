@@ -108,11 +108,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		IEntity baseEntity = null;
 		// Extract data
 		int idx = 0;
+		int cargoCVValue = 0;
 		for (final IPortSlot slot : slots) {
 
 			IEntity entity = entityProvider.getEntityForSlot(slot);
 			if (slot instanceof ILoadOption) {
 				final ILoadOption loadOption = (ILoadOption) slot;
+				cargoCVValue = loadOption.getCargoCVValue();
 				// First load slot is the base entity
 				if (baseEntity == null) {
 					baseEntity = entity;
@@ -140,7 +142,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		for (final IPortSlot slot : slots) {
 
 			// Determined by volume allocator
-//			final long volumeInM3 = currentAllocation.getSlotVolumeInM3(slot);
+			final long volumeInM3 = currentAllocation.getSlotVolumeInM3(slot);
 			final long volumeInMMBtu = currentAllocation.getSlotVolumeInMMBTu(slot);
 			// final int pricePerM3 = currentAllocation.getSlotPricePerM3(slot);
 			final int time = currentAllocation.getSlotTime(slot);
@@ -204,7 +206,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// }
 				
 				((AllocationAnnotation)currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
-				long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
+				
+				int pricePerM3 = Calculator.costPerM3FromMMBTu(pricePerMMBTu, cargoCVValue);
+
+				long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
+//				long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
 				// Sum up entity p&L
 				addEntityProfit(entityProfit, entity, -value);
 				addEntityProfit(entityProfit, entity, additionProfitAndLoss);
@@ -214,7 +220,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					baseEntity = entity;
 				}
 			} else if (slot instanceof IDischargeOption) {
-				long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
+				int pricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricesPerMMBTu[idx], cargoCVValue);
+
+				long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
+
+//				long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
 				((AllocationAnnotation)currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
 				// final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				// Buy/Sell at same quantity.
