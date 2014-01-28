@@ -2,6 +2,10 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="actuals" nsURI="http://www.mmxlabs.com/models/lng/actuals/1/"
     nsPrefix="lng.actuals">
+  <eClassifiers xsi:type="ecore:EClass" name="ActualsModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargoActuals" upperBound="-1"
+        eType="#//CargoActuals" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotActuals" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="CV" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>

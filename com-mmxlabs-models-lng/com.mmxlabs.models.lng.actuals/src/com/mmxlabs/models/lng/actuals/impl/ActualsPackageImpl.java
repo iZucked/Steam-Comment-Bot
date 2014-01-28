@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.actuals.impl;
 
 import com.mmxlabs.models.lng.actuals.ActualsFactory;
+import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
@@ -23,6 +24,13 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * @generated
  */
 public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass actualsModelEClass = null;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -110,6 +118,26 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ActualsPackage.eNS_URI, theActualsPackage);
 		return theActualsPackage;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getActualsModel() {
+		return actualsModelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getActualsModel_CargoActuals() {
+		return (EReference)actualsModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -281,6 +309,9 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		isCreated = true;
 
 		// Create classes and their features
+		actualsModelEClass = createEClass(ACTUALS_MODEL);
+		createEReference(actualsModelEClass, ACTUALS_MODEL__CARGO_ACTUALS);
+
 		slotActualsEClass = createEClass(SLOT_ACTUALS);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CV);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__VOLUME);
@@ -330,6 +361,9 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		// Add supertypes to classes
 
 		// Initialize classes, features, and operations; add parameters
+		initEClass(actualsModelEClass, ActualsModel.class, "ActualsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getActualsModel_CargoActuals(), this.getCargoActuals(), null, "cargoActuals", null, 0, -1, ActualsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(slotActualsEClass, SlotActuals.class, "SlotActuals", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSlotActuals_CV(), ecorePackage.getEFloat(), "CV", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_Volume(), ecorePackage.getEFloat(), "volume", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

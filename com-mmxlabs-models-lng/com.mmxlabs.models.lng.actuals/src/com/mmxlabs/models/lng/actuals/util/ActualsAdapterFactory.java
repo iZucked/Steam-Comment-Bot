@@ -68,6 +68,10 @@ public class ActualsAdapterFactory extends AdapterFactoryImpl {
 	protected ActualsSwitch<Adapter> modelSwitch =
 		new ActualsSwitch<Adapter>() {
 			@Override
+			public Adapter caseActualsModel(ActualsModel object) {
+				return createActualsModelAdapter();
+			}
+			@Override
 			public Adapter caseSlotActuals(SlotActuals object) {
 				return createSlotActualsAdapter();
 			}
@@ -102,6 +106,20 @@ public class ActualsAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.actuals.ActualsModel <em>Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.actuals.ActualsModel
+	 * @generated
+	 */
+	public Adapter createActualsModelAdapter() {
+		return null;
+	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.actuals.SlotActuals <em>Slot Actuals</em>}'.
