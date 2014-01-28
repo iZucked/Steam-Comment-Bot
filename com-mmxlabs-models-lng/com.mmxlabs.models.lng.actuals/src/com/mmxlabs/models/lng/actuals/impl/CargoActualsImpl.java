@@ -10,14 +10,17 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,7 +39,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *
  * @generated
  */
-public abstract class CargoActualsImpl extends EObjectImpl implements CargoActuals {
+public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	/**
 	 * The default value of the '{@link #getBaseFuelPrice() <em>Base Fuel Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -118,7 +121,7 @@ public abstract class CargoActualsImpl extends EObjectImpl implements CargoActua
 	protected int crewBonus = CREW_BONUS_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getActuals() <em>Actuals</em>}' reference list.
+	 * The cached value of the '{@link #getActuals() <em>Actuals</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getActuals()
@@ -246,9 +249,23 @@ public abstract class CargoActualsImpl extends EObjectImpl implements CargoActua
 	@Override
 	public EList<SlotActuals> getActuals() {
 		if (actuals == null) {
-			actuals = new EObjectResolvingEList<SlotActuals>(SlotActuals.class, this, ActualsPackage.CARGO_ACTUALS__ACTUALS);
+			actuals = new EObjectContainmentEList.Resolving<SlotActuals>(SlotActuals.class, this, ActualsPackage.CARGO_ACTUALS__ACTUALS);
 		}
 		return actuals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ActualsPackage.CARGO_ACTUALS__ACTUALS:
+				return ((InternalEList<?>)getActuals()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

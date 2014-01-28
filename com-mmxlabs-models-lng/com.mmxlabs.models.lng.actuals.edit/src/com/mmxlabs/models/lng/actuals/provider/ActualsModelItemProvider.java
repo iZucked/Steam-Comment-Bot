@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.actuals.provider;
 
 
+import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 
@@ -145,6 +146,11 @@ public class ActualsModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ActualsPackage.Literals.ACTUALS_MODEL__CARGO_ACTUALS,
+				 ActualsFactory.eINSTANCE.createCargoActuals()));
 	}
 
 	/**

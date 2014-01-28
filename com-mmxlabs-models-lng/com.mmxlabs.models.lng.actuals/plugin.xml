@@ -10,7 +10,8 @@
       <!-- @generated actuals -->
       <package
             uri="http://www.mmxlabs.com/models/lng/actuals/1/"
-            class="com.mmxlabs.models.lng.actuals.ActualsPackage"/>
+            class="com.mmxlabs.models.lng.actuals.ActualsPackage"
+            genModel="model/actuals.genmodel"/>
    </extension>
 
 </plugin>

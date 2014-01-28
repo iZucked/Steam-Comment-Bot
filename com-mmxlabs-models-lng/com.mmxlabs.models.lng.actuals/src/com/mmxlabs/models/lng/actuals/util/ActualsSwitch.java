@@ -87,12 +87,14 @@ public class ActualsSwitch<T> extends Switch<T> {
 			case ActualsPackage.LOAD_ACTUALS: {
 				LoadActuals loadActuals = (LoadActuals)theEObject;
 				T result = caseLoadActuals(loadActuals);
+				if (result == null) result = caseSlotActuals(loadActuals);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case ActualsPackage.DISCHARGE_ACTUALS: {
 				DischargeActuals dischargeActuals = (DischargeActuals)theEObject;
 				T result = caseDischargeActuals(dischargeActuals);
+				if (result == null) result = caseSlotActuals(dischargeActuals);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

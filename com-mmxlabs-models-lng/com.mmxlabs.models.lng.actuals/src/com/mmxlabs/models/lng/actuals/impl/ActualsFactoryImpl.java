@@ -57,6 +57,7 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case ActualsPackage.ACTUALS_MODEL: return createActualsModel();
+			case ActualsPackage.CARGO_ACTUALS: return createCargoActuals();
 			case ActualsPackage.LOAD_ACTUALS: return createLoadActuals();
 			case ActualsPackage.DISCHARGE_ACTUALS: return createDischargeActuals();
 			default:
@@ -73,6 +74,16 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	public ActualsModel createActualsModel() {
 		ActualsModelImpl actualsModel = new ActualsModelImpl();
 		return actualsModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CargoActuals createCargoActuals() {
+		CargoActualsImpl cargoActuals = new CargoActualsImpl();
+		return cargoActuals;
 	}
 
 	/**

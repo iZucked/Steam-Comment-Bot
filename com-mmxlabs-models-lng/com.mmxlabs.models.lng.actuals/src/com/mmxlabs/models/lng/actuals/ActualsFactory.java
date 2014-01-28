@@ -31,6 +31,15 @@ public interface ActualsFactory extends EFactory {
 	ActualsModel createActualsModel();
 
 	/**
+	 * Returns a new object of class '<em>Cargo Actuals</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cargo Actuals</em>'.
+	 * @generated
+	 */
+	CargoActuals createCargoActuals();
+
+	/**
 	 * Returns a new object of class '<em>Load Actuals</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

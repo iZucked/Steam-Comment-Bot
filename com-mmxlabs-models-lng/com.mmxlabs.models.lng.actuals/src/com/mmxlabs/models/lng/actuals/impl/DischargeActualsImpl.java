@@ -7,8 +7,6 @@ import com.mmxlabs.models.lng.actuals.DischargeActuals;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Discharge Actuals</b></em>'.
@@ -18,7 +16,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class DischargeActualsImpl extends EObjectImpl implements DischargeActuals {
+public class DischargeActualsImpl extends SlotActualsImpl implements DischargeActuals {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -213,7 +213,7 @@ public interface ActualsPackage extends EPackage {
 	int CARGO_ACTUALS__CREW_BONUS = 3;
 
 	/**
-	 * The feature id for the '<em><b>Actuals</b></em>' reference list.
+	 * The feature id for the '<em><b>Actuals</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -250,13 +250,58 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS = 3;
 
 	/**
+	 * The feature id for the '<em><b>CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__CV = SLOT_ACTUALS__CV;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__VOLUME = SLOT_ACTUALS__VOLUME;
+
+	/**
+	 * The feature id for the '<em><b>Mm Btu</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__MM_BTU = SLOT_ACTUALS__MM_BTU;
+
+	/**
+	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__PORT_CHARGES = SLOT_ACTUALS__PORT_CHARGES;
+
+	/**
+	 * The feature id for the '<em><b>Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
+
+	/**
 	 * The number of structural features of the '<em>Load Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_ACTUALS_FEATURE_COUNT = 0;
+	int LOAD_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Load Actuals</em>' class.
@@ -265,7 +310,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_ACTUALS_OPERATION_COUNT = 0;
+	int LOAD_ACTUALS_OPERATION_COUNT = SLOT_ACTUALS_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl <em>Discharge Actuals</em>}' class.
@@ -278,13 +323,58 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS = 4;
 
 	/**
+	 * The feature id for the '<em><b>CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__CV = SLOT_ACTUALS__CV;
+
+	/**
+	 * The feature id for the '<em><b>Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__VOLUME = SLOT_ACTUALS__VOLUME;
+
+	/**
+	 * The feature id for the '<em><b>Mm Btu</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__MM_BTU = SLOT_ACTUALS__MM_BTU;
+
+	/**
+	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__PORT_CHARGES = SLOT_ACTUALS__PORT_CHARGES;
+
+	/**
+	 * The feature id for the '<em><b>Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_ACTUALS_FEATURE_COUNT = 0;
+	int DISCHARGE_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Discharge Actuals</em>' class.
@@ -293,7 +383,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_ACTUALS_OPERATION_COUNT = 0;
+	int DISCHARGE_ACTUALS_OPERATION_COUNT = SLOT_ACTUALS_OPERATION_COUNT + 0;
 
 
 	/**
@@ -437,10 +527,10 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getCargoActuals_CrewBonus();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getActuals <em>Actuals</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getActuals <em>Actuals</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Actuals</em>'.
+	 * @return the meta object for the containment reference list '<em>Actuals</em>'.
 	 * @see com.mmxlabs.models.lng.actuals.CargoActuals#getActuals()
 	 * @see #getCargoActuals()
 	 * @generated
@@ -601,7 +691,7 @@ public interface ActualsPackage extends EPackage {
 		EAttribute CARGO_ACTUALS__CREW_BONUS = eINSTANCE.getCargoActuals_CrewBonus();
 
 		/**
-		 * The meta object literal for the '<em><b>Actuals</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Actuals</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

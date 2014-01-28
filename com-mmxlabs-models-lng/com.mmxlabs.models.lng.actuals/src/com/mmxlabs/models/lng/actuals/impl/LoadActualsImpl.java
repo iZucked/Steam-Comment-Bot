@@ -7,8 +7,6 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Load Actuals</b></em>'.
@@ -18,7 +16,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class LoadActualsImpl extends EObjectImpl implements LoadActuals {
+public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
