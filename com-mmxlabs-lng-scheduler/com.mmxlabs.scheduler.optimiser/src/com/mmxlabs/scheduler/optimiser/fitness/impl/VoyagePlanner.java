@@ -95,7 +95,6 @@ public class VoyagePlanner {
 	@com.google.inject.Inject(optional = true)
 	private IBreakEvenEvaluator breakEvenEvaluator;
 
-	
 	@com.google.inject.Inject(optional = true)
 	private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
 
@@ -399,15 +398,6 @@ public class VoyagePlanner {
 			}
 		}
 
-		
-		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences, scheduledSequences);
-		}
-		// Prime the load price calculators with the scheduled result
-		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
-			calculator.prepareEvaluation(sequences, scheduledSequences);
-		}
-
 		// FIXME: This should be more customisable
 
 		// Execute custom logic to manipulate the schedule and choices
@@ -432,8 +422,6 @@ public class VoyagePlanner {
 			}
 		}
 
-		
-		
 		if (!planSet) {
 			voyagePlansList.add(plan);
 			// TODO: Non-cargo cases?
@@ -755,7 +743,7 @@ public class VoyagePlanner {
 	 * @return
 	 * @throws InfeasibleVoyageException
 	 */
-	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	private ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
@@ -784,7 +772,7 @@ public class VoyagePlanner {
 		scheduledSequence.getAllocations().putAll(voyagePlans);
 		return scheduledSequence;
 	}
-	
+
 	final public ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
 		// Virtual vessels are those operated by a third party, for FOB and DES situations.
 		// Should we compute a schedule for them anyway? The arrival times don't mean much,
@@ -815,15 +803,14 @@ public class VoyagePlanner {
 		Arrays.fill(times, startTime);
 		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
 		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
-		
-		
+
 		IVessel vessel = vesselProvider.getVessel(resource);
 		int vesselStartTime = startTime;
-		
+
 		// TODO: This is not the place!
 		final AllocationRecord record = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, currentPlan, CollectionsUtil.toArrayList(times));
 		if (record != null) {
-			
+
 			scheduledSequence.getAllocations().put(currentPlan, volumeAllocator.allocate(record));
 		} else {
 			scheduledSequence.getAllocations().put(currentPlan, null);
@@ -831,9 +818,16 @@ public class VoyagePlanner {
 		return scheduledSequence;
 	}
 
-
 	public ScheduledSequences schedule(final ISequences sequences, final int[][] arrivalTimes) {
 		final ScheduledSequences result = new ScheduledSequences();
+
+		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
+			shippingCalculator.prepareEvaluation(sequences);
+		}
+		// Prime the load price calculators with the scheduled result
+		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
+			calculator.prepareEvaluation(sequences);
+		}
 
 		final List<IResource> resources = sequences.getResources();
 
@@ -841,7 +835,7 @@ public class VoyagePlanner {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
 
-			final ScheduledSequence scheduledSequence = voyagePlanner.schedule(resource, sequence, arrivalTimes[i]);
+			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
 			if (scheduledSequence == null) {
 				return null;
 			}
@@ -850,5 +844,5 @@ public class VoyagePlanner {
 
 		return result;
 	}
-	
+
 }

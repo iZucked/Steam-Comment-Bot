@@ -27,11 +27,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
 
-	/**
-	 * @since 8.0
-	 */
 	@Override
-	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 
 	}
 
@@ -44,7 +41,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	 * @since 8.0
 	 */
 	@Override
-	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot,  IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
+	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
 			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		final int loadPricingDate = loadSlot == null ? IPortSlot.NO_PRICING_DATE : loadSlot.getPricingDate();
 		final int pricingDate = (loadPricingDate == IPortSlot.NO_PRICING_DATE ? loadTime : loadPricingDate);

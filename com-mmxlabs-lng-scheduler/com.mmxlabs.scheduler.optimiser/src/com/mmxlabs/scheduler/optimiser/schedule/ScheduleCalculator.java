@@ -34,20 +34,15 @@ import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVessel;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
@@ -72,14 +67,8 @@ public class ScheduleCalculator {
 	@Inject
 	private IVolumeAllocator volumeAllocator;
 
-	@Inject
-	private ICalculatorProvider calculatorProvider;
-
-	// @com.google.inject.Inject(optional = true)
-	// private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
-
-	@com.google.inject.Inject(optional = true)
-	private IBreakEvenEvaluator breakEvenEvaluator;
+//	@Inject
+//	private ICalculatorProvider calculatorProvider;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -109,24 +98,13 @@ public class ScheduleCalculator {
 			scheduledDataLookupProvider.reset();
 		}
 
-		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences, scheduledSequences);
-		}
-		// Prime the load price calculators with the scheduled result
-		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
-			calculator.prepareEvaluation(sequences, scheduledSequences);
-		}
-
-		// FIXME: This should be more customisable
-
-		// Execute custom logic to manipulate the schedule and choices
-		if (breakEvenEvaluator != null) {
-			breakEvenEvaluator.processSchedule(scheduledSequences);
-		}
-
-		// if (generatedCharterOutEvaluator != null) {
-		// generatedCharterOutEvaluator.processSchedule(scheduledSequences);
-		// }
+//		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
+//			shippingCalculator.prepareEvaluation(sequences);
+//		}
+//		// Prime the load price calculators with the scheduled result
+//		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
+//			calculator.prepareEvaluation(sequences);
+//		}
 
 		if (annotatedSolution != null) {
 			// Do basic voyageplan annotation

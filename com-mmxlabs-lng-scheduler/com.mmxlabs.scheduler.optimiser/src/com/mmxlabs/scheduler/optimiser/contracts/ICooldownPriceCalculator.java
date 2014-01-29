@@ -24,7 +24,7 @@ public interface ICooldownPriceCalculator extends ICalculator {
 	 * @param scheduledSequences
 	 * @since 8.0
 	 */
-	public void prepareEvaluation(ISequences sequences, ScheduledSequences scheduledSequences);
+	public void prepareEvaluation(ISequences sequences);
 
 	/**
 	 * Find the unit price in dollars per mmbtu for gas at the given {@link ILoadSlot}, at the given time.

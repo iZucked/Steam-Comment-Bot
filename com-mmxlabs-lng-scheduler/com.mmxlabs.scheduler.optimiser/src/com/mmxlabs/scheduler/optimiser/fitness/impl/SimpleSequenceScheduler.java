@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -20,8 +19,10 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -32,7 +33,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * 
  */
 public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
-
 
 	@Inject
 	private ITimeWindowDataComponentProvider timeWindowProvider;
@@ -45,22 +45,37 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Inject
 	private VoyagePlanner voyagePlanner;
-	
+
+	@Inject
+	private ICalculatorProvider calculatorProvider;
+
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-		final ScheduledSequences answer = new ScheduledSequences();
 
-		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			answer.add(schedule(entry.getKey(), entry.getValue()));
+		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
+			shippingCalculator.prepareEvaluation(sequences);
+		}
+		// Prime the load price calculators with the scheduled result
+		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
+			calculator.prepareEvaluation(sequences);
 		}
 
+		final ScheduledSequences answer = new ScheduledSequences();
+
+		int[][] arrivalTimes = new int[sequences.size()][];
+		int idx = 0;
+		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
+			arrivalTimes[idx++] = schedule(entry.getKey(), entry.getValue());
+		}
+
+		voyagePlanner.schedule(sequences, arrivalTimes);
 		return answer;
 	}
 
-	public ScheduledSequence schedule(final IResource resource, final ISequence sequence) {
+	private int[] schedule(final IResource resource, final ISequence sequence) {
 
 		final int[] arrivalTimes = new int[sequence.size()];
 
@@ -80,10 +95,8 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
 				timeWindowStart = lastTimeWindowStart
-						+ Calculator.getTimeFromSpeedDistance(
-								vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(),
-								distanceProvider.get(IMultiMatrixProvider.Default_Key).get(portProvider.getPortForElement(sequence.get(idx - 1)),
-										portProvider.getPortForElement(element)));
+						+ Calculator.getTimeFromSpeedDistance(vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(),
+								distanceProvider.get(IMultiMatrixProvider.Default_Key).get(portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element)));
 			} else {
 				for (final ITimeWindow window : timeWindows) {
 					timeWindowStart = Math.min(timeWindowStart, window.getStart());
@@ -91,12 +104,7 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 			}
 			arrivalTimes[idx++] = timeWindowStart;
 		}
-		return voyagePlanner.schedule(resource, sequence, arrivalTimes);
-	}
-
-	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
-		return schedule(sequences, solution);
+		return arrivalTimes;
 	}
 
 	@Override

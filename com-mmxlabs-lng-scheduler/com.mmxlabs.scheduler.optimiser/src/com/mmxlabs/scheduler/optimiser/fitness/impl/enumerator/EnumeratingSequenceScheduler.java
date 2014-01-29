@@ -149,7 +149,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Inject
 	private IPortProvider portProvider;
-	
+
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
@@ -158,10 +158,10 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Inject
 	private IElementDurationProvider durationProvider;
-	
+
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Inject
 	private VoyagePlanner voyagePlanner;
 
@@ -223,10 +223,10 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 */
 	private boolean lastEvaluationWasBestResult = false;
 
-	/**
+	 /**
 	 * The last result which was accepted externally, for the purposes of doing partial evaluations.
 	 */
-	private ScheduledSequences lastAcceptedResult = null;
+	 private ScheduledSequences lastAcceptedResult = null;
 
 	/**
 	 * Contains the last valid value calculated by evaluate(). TODO this is ugly.
@@ -243,40 +243,35 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-		return schedule(sequences, sequences.getResources(), solution);
-	}
-
-	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		setSequences(sequences);
 		resetBest();
 
 		startLogEntry(1);
-		prepare(getResourceIndices(sequences, affectedResources));
+		prepare();
 		enumerate(0, 0);
 		endLogEntry();
 
 		return reEvaluateAndGetBestResult(solution);
 	}
 
-	/**
-	 * @param sequences
-	 * @param affectedResources
-	 * @return
-	 */
-	protected int[] getResourceIndices(final ISequences sequences, final Collection<IResource> affectedResources) {
-		final List<IResource> resources = sequences.getResources();
-
-		final int[] affectedIndices = new int[affectedResources.size()];
-		int k = 0;
-		for (int i = 0; i < resources.size(); i++) {
-			if (affectedResources.contains(resources.get(i))) {
-				affectedIndices[k++] = i;
-			}
-		}
-
-		return affectedIndices;
-	}
+//	/**
+//	 * @param sequences
+//	 * @param affectedResources
+//	 * @return
+//	 */
+//	protected int[] getResourceIndices(final ISequences sequences, final Collection<IResource> affectedResources) {
+//		final List<IResource> resources = sequences.getResources();
+//
+//		final int[] affectedIndices = new int[affectedResources.size()];
+//		int k = 0;
+//		for (int i = 0; i < resources.size(); i++) {
+//			if (affectedResources.contains(resources.get(i))) {
+//				affectedIndices[k++] = i;
+//			}
+//		}
+//
+//		return affectedIndices;
+//	}
 
 	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
 		if (bestResult == null) {
@@ -300,21 +295,21 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		this.sequences = sequences;
 	}
 
-	protected final void prepare(final int[] indices) {
-		final int size = sequences.size();
-		bindings.clear();
-
-		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
-			prepare();
-			return;
-		}
-
-		for (final int i : indices) {
-			// for (int i = 0; i < size; i++) {
-			prepare(i);
-		}
-		imposeShipToShipConstraints();
-	}
+//	protected final void prepare() {
+//		final int size = sequences.size();
+//		bindings.clear();
+//
+//		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
+//			prepare();
+//			return;
+//		}
+//
+////		for (final int i : indices) {
+//		 for (int i = 0; i < size; i++) {
+//			prepare(i);
+//		}
+//		imposeShipToShipConstraints();
+//	}
 
 	protected ScheduledSequences getBestResult() {
 		return bestResult;
@@ -464,7 +459,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 				// Must be on different routes
 				assert discharge_seq != load_seq;
-				
+
 				recalculateDischarge = false;
 				recalculateLoad = false;
 
@@ -515,7 +510,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
 	 * @param maxValue
-s	 * 
+	 *            s *
 	 * @param sequence
 	 * @return
 	 */
@@ -706,68 +701,72 @@ s	 *
 	 * 
 	 * @return true if the result is the new best case, false otherwise
 	 */
-	protected boolean evaluate() {
-		return evaluate(getResourceIndices(sequences, sequences.getResources()));
-		// count++;
-		//
-		// final ScheduledSequences scheduledSequences = super.schedule(sequences, arrivalTimes);
-		//
-		// if (scheduledSequences == null)
-		// return false;
-		//
-		// lastValue = evaluator.evaluateSchedule(scheduledSequences);
-		//
-		// logValue(lastValue);
-		//
-		// if (lastValue < bestValue) {
-		// lastEvaluationWasBestResult = true;
-		// bestIndex = count;
-		// // if (bestValue == Long.MAX_VALUE) {
-		// // initialValue = value;
-		// // }
-		// bestValue = lastValue;
-		// bestResult = scheduledSequences;
-		// // System.err.println(String.format("%.2f%% gain at %d (%s)", (100.0
-		// // * (initialValue - bestValue))/initialValue, count,
-		// // Long.toString(bestValue)));
-		// return true;
-		// } else {
-		// lastEvaluationWasBestResult = false;
-		// }
-		// return false;
-	}
+	// protected boolean evaluate() {
+	// return evaluate(getResourceIndices(sequences, sequences.getResources()));
+	// // count++;
+	// //
+	// // final ScheduledSequences scheduledSequences = super.schedule(sequences, arrivalTimes);
+	// //
+	// // if (scheduledSequences == null)
+	// // return false;
+	// //
+	// // lastValue = evaluator.evaluateSchedule(scheduledSequences);
+	// //
+	// // logValue(lastValue);
+	// //
+	// // if (lastValue < bestValue) {
+	// // lastEvaluationWasBestResult = true;
+	// // bestIndex = count;
+	// // // if (bestValue == Long.MAX_VALUE) {
+	// // // initialValue = value;
+	// // // }
+	// // bestValue = lastValue;
+	// // bestResult = scheduledSequences;
+	// // // System.err.println(String.format("%.2f%% gain at %d (%s)", (100.0
+	// // // * (initialValue - bestValue))/initialValue, count,
+	// // // Long.toString(bestValue)));
+	// // return true;
+	// // } else {
+	// // lastEvaluationWasBestResult = false;
+	// // }
+	// // return false;
+	// }
 
 	@Override
 	public void acceptLastSchedule() {
 		lastAcceptedResult = bestResult;
 	}
 
-	protected boolean evaluate(int[] changedSequences) {
-		if (lastAcceptedResult == null) {
-			changedSequences = getResourceIndices(sequences, sequences.getResources());
-		}
+	protected boolean evaluate() {
+//		int[] changedSequences = getResourceIndices(sequences, sequences.getResources());
+		// if (lastAcceptedResult == null) {
+		// changedSequences = getResourceIndices(sequences, sequences.getResources());
+		// }
 
 		count++;
 
-		final List<IResource> resources = sequences.getResources();
+		// final List<IResource> resources = sequences.getResources();
 
-		final ScheduledSequences scheduledSequences = new ScheduledSequences();
-
-		if (lastAcceptedResult != null) {
-			scheduledSequences.addAll(lastAcceptedResult);
-		} else {
-			for (int i = 0; i < sequences.size(); i++) {
-				scheduledSequences.add(null);
-			}
+		final ScheduledSequences scheduledSequences = voyagePlanner.schedule(sequences, arrivalTimes);
+		if (scheduledSequences == null) {
+			return false;
 		}
-
-		for (final int index : changedSequences) {
-			final ScheduledSequence sequence = voyagePlanner.schedule(resources.get(index), sequences.getSequence(index), arrivalTimes[index]);
-			if (sequence == null) {
-				return false; // break out now, something bad has happened
-			}
-			scheduledSequences.set(index, sequence);
-		}
+		//
+		// if (lastAcceptedResult != null) {
+		// scheduledSequences.addAll(lastAcceptedResult);
+		// } else {
+		// for (int i = 0; i < sequences.size(); i++) {
+		// scheduledSequences.add(null);
+		// }
+		// }
+		//
+		// for (final int index : changedSequences) {
+		// final ScheduledSequence sequence = voyagePlanner.schedule(sequences, arrivalTimes);
+		// if (sequence == null) {
+		// return false; // break out now, something bad has happened
+		// }
+		// scheduledSequences.set(index, sequence);
+		// }
 
 		if (evaluator != null) {
 			lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, null);

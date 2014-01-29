@@ -20,17 +20,6 @@ import com.mmxlabs.optimiser.core.ISequences;
 public interface ISequenceScheduler {
 
 	/**
-	 * Schedule the given set of sequences, returning a {@link ScheduledSequences}.
-	 * 
-	 * It is now the schedulers job to make sure that the schedule returned is the last one evaluated.
-	 * 
-	 * This is in the interests of saving an unnecessary evaluation in the cargo scheduler fitness core in the event that the scheduler evaluates a schedule and then returns it directly.
-	 * 
-	 * @return
-	 */
-	ScheduledSequences schedule(ISequences sequences, final Collection<IResource> affectedResources, IAnnotatedSolution solution);
-
-	/**
 	 * Like {@link #schedule(ISequences, Collection, boolean)}, but with all resources needing evaluation.
 	 * 
 	 * @param sequences
