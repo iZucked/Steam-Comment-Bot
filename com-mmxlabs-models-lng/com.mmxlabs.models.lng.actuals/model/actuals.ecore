@@ -12,6 +12,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mmBtu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCharges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelConsumption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CargoActuals">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>

@@ -27,7 +27,7 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	 */
 	public static ActualsFactory init() {
 		try {
-			ActualsFactory theActualsFactory = (ActualsFactory)EPackage.Registry.INSTANCE.getEFactory(ActualsPackage.eNS_URI);
+			ActualsFactory theActualsFactory = (ActualsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/actuals/1/"); 
 			if (theActualsFactory != null) {
 				return theActualsFactory;
 			}
