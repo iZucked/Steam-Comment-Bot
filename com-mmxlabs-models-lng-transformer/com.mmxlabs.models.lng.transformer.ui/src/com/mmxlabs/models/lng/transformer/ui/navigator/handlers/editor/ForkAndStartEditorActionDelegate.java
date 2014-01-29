@@ -29,7 +29,6 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -43,51 +42,43 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 	}
 
 	@Override
-	public void run(final IAction action) {
+	protected void doRun(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings, final boolean optimising,
+			final String k) {
 
-		if (editor != null) {
-			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
-				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
-				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
+		final IScenarioService scenarioService = instance.getScenarioService();
 
-				final IScenarioService scenarioService = instance.getScenarioService();
-
-				try {
-					final Set<String> existingNames = new HashSet<String>();
-					for (final Container c : instance.getElements()) {
-						if (c instanceof Folder) {
-							existingNames.add(((Folder) c).getName());
-						} else if (c instanceof ScenarioInstance) {
-							existingNames.add(((ScenarioInstance) c).getName());
-						}
-					}
-
-					final String namePrefix = "O~" + instance.getName();
-					String newName = namePrefix;
-					int counter = 1;
-					while (existingNames.contains(newName)) {
-						newName = namePrefix + " (" + counter++ + ")";
-					}
-
-					final String finalNewName = getNewName(instance.getName(), newName);
-					if (finalNewName != null) {
-						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
-
-						fork.setName(finalNewName);
-
-						try {
-							OpenScenarioUtils.openScenarioInstance(editor.getSite().getPage(), fork);
-						} catch (final PartInitException e) {
-							log.error(e.getMessage(), e);
-						}
-
-						OptimisationHelper.evaluateScenarioInstance(jobManager, fork, null, false, optimising, ScenarioLock.OPTIMISER);
-					}
-				} catch (final IOException e) {
-					throw new RuntimeException("Unable to fork scenario", e);
+		try {
+			final Set<String> existingNames = new HashSet<String>();
+			for (final Container c : instance.getElements()) {
+				if (c instanceof Folder) {
+					existingNames.add(((Folder) c).getName());
+				} else if (c instanceof ScenarioInstance) {
+					existingNames.add(((ScenarioInstance) c).getName());
 				}
 			}
+
+			final String namePrefix = "O~" + instance.getName();
+			String newName = namePrefix;
+			int counter = 1;
+			while (existingNames.contains(newName)) {
+				newName = namePrefix + " (" + counter++ + ")";
+			}
+
+			final String finalNewName = getNewName(instance.getName(), newName);
+			if (finalNewName != null) {
+				final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
+
+				fork.setName(finalNewName);
+
+				try {
+					OpenScenarioUtils.openScenarioInstance(editor.getSite().getPage(), fork);
+				} catch (final PartInitException e) {
+					log.error(e.getMessage(), e);
+				}
+				OptimisationHelper.evaluateScenarioInstance(jobManager, fork, parameterMode, promptForOptimiserSettings, optimising, k);
+			}
+		} catch (final IOException e) {
+			throw new RuntimeException("Unable to fork scenario", e);
 		}
 	}
 
