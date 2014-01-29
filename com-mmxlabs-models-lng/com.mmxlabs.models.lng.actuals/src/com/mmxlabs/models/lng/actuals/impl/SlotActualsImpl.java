@@ -5,10 +5,12 @@ package com.mmxlabs.models.lng.actuals.impl;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 
+import com.mmxlabs.models.lng.cargo.Slot;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
@@ -24,6 +26,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getMmBtu <em>Mm Btu</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getSlot <em>Slot</em>}</li>
  * </ul>
  * </p>
  *
@@ -129,6 +132,16 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @ordered
 	 */
 	protected int baseFuelConsumption = BASE_FUEL_CONSUMPTION_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected Slot slot;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -269,6 +282,44 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Slot getSlot() {
+		if (slot != null && slot.eIsProxy()) {
+			InternalEObject oldSlot = (InternalEObject)slot;
+			slot = (Slot)eResolveProxy(oldSlot);
+			if (slot != oldSlot) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ActualsPackage.SLOT_ACTUALS__SLOT, oldSlot, slot));
+			}
+		}
+		return slot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Slot basicGetSlot() {
+		return slot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSlot(Slot newSlot) {
+		Slot oldSlot = slot;
+		slot = newSlot;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__SLOT, oldSlot, slot));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -282,6 +333,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getPortCharges();
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return getBaseFuelConsumption();
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				if (resolve) return getSlot();
+				return basicGetSlot();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -308,6 +362,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				setSlot((Slot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -336,6 +393,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption(BASE_FUEL_CONSUMPTION_EDEFAULT);
 				return;
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				setSlot((Slot)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -358,6 +418,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return portCharges != PORT_CHARGES_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				return slot != null;
 		}
 		return super.eIsSet(featureID);
 	}
