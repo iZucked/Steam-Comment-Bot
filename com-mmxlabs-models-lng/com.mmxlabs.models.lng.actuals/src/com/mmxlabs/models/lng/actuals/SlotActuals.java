@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
+import com.mmxlabs.models.lng.cargo.Slot;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -17,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getMmBtu <em>Mm Btu</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}</li>
  * </ul>
  * </p>
  *
@@ -154,5 +156,31 @@ public interface SlotActuals extends EObject {
 	 * @generated
 	 */
 	void setBaseFuelConsumption(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Slot</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Slot</em>' reference.
+	 * @see #setSlot(Slot)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Slot()
+	 * @model
+	 * @generated
+	 */
+	Slot getSlot();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Slot</em>' reference.
+	 * @see #getSlot()
+	 * @generated
+	 */
+	void setSlot(Slot value);
 
 } // SlotActuals

@@ -149,13 +149,22 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = 4;
 
 	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS__SLOT = 5;
+
+	/**
 	 * The number of structural features of the '<em>Slot Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_FEATURE_COUNT = 5;
+	int SLOT_ACTUALS_FEATURE_COUNT = 6;
 
 	/**
 	 * The number of operations of the '<em>Slot Actuals</em>' class.
@@ -295,6 +304,15 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
 
 	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__SLOT = SLOT_ACTUALS__SLOT;
+
+	/**
 	 * The number of structural features of the '<em>Load Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -366,6 +384,15 @@ public interface ActualsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__SLOT = SLOT_ACTUALS__SLOT;
 
 	/**
 	 * The number of structural features of the '<em>Discharge Actuals</em>' class.
@@ -471,6 +498,17 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotActuals_BaseFuelConsumption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getSlot()
+	 * @see #getSlotActuals()
+	 * @generated
+	 */
+	EReference getSlotActuals_Slot();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.actuals.CargoActuals <em>Cargo Actuals</em>}'.
@@ -647,6 +685,14 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = eINSTANCE.getSlotActuals_BaseFuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_ACTUALS__SLOT = eINSTANCE.getSlotActuals_Slot();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl <em>Cargo Actuals</em>}' class.

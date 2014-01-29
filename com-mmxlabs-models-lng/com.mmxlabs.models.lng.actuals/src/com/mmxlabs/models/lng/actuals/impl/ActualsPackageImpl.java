@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -105,6 +106,9 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		isInited = true;
 
+		// Initialize simple dependencies
+		CargoPackage.eINSTANCE.eClass();
+
 		// Create package meta-data objects
 		theActualsPackage.createPackageContents();
 
@@ -198,6 +202,15 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	@Override
 	public EAttribute getSlotActuals_BaseFuelConsumption() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotActuals_Slot() {
+		return (EReference)slotActualsEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -318,6 +331,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__MM_BTU);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__PORT_CHARGES);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__BASE_FUEL_CONSUMPTION);
+		createEReference(slotActualsEClass, SLOT_ACTUALS__SLOT);
 
 		cargoActualsEClass = createEClass(CARGO_ACTUALS);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__BASE_FUEL_PRICE);
@@ -354,6 +368,9 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
+		// Obtain other dependent packages
+		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+
 		// Create type parameters
 
 		// Set bounds for type parameters
@@ -372,6 +389,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getSlotActuals_MmBtu(), ecorePackage.getEInt(), "mmBtu", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_PortCharges(), ecorePackage.getEInt(), "portCharges", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_BaseFuelConsumption(), ecorePackage.getEInt(), "baseFuelConsumption", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotActuals_Slot(), theCargoPackage.getSlot(), null, "slot", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoActualsEClass, CargoActuals.class, "CargoActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCargoActuals_BaseFuelPrice(), ecorePackage.getEFloat(), "baseFuelPrice", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

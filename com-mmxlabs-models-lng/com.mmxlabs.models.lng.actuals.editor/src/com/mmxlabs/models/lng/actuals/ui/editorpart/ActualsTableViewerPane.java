@@ -95,7 +95,9 @@ import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerValidationSupport;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.ReadOnlyManipulatorWrapper;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -546,22 +548,24 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 
-		addActualsColumn(cargoColumns, "Base Fuel Price", new NumericAttributeManipulator(pkg.getCargoActuals_BaseFuelPrice(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
-		addActualsColumn(cargoColumns, "Crew Bonus", new NumericAttributeManipulator(pkg.getCargoActuals_CrewBonus(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
-		addActualsColumn(cargoColumns, "Insurance Premium", new NumericAttributeManipulator(pkg.getCargoActuals_InsurancePremium(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
-		addActualsColumn(cargoColumns, "Volume", new NumericAttributeManipulator(pkg.getCargoActuals_Volume(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
-
+		addActualsColumn(loadColumns, "L-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)), new RowDataEMFPath(false, Type.LOAD, pkg.getSlotActuals_Slot()));
 		addActualsColumn(loadColumns, "Base Fuel Consumption", new NumericAttributeManipulator(pkg.getSlotActuals_BaseFuelConsumption(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addActualsColumn(loadColumns, "CV", new NumericAttributeManipulator(pkg.getSlotActuals_CV(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addActualsColumn(loadColumns, "mmBtu", new NumericAttributeManipulator(pkg.getSlotActuals_MmBtu(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addActualsColumn(loadColumns, "Port Charges", new NumericAttributeManipulator(pkg.getSlotActuals_PortCharges(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addActualsColumn(loadColumns, "Volume", new NumericAttributeManipulator(pkg.getSlotActuals_Volume(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 
+		addActualsColumn(dischargeColumns, "D-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)), new RowDataEMFPath(false, Type.DISCHARGE, pkg.getSlotActuals_Slot()));
 		addActualsColumn(dischargeColumns, "Base Fuel Consumption", new NumericAttributeManipulator(pkg.getSlotActuals_BaseFuelConsumption(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addActualsColumn(dischargeColumns, "CV", new NumericAttributeManipulator(pkg.getSlotActuals_CV(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addActualsColumn(dischargeColumns, "mmBtu", new NumericAttributeManipulator(pkg.getSlotActuals_MmBtu(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addActualsColumn(dischargeColumns, "Port Charges", new NumericAttributeManipulator(pkg.getSlotActuals_PortCharges(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		addActualsColumn(dischargeColumns, "Volume", new NumericAttributeManipulator(pkg.getSlotActuals_Volume(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+
+		addActualsColumn(cargoColumns, "Base Fuel Price", new NumericAttributeManipulator(pkg.getCargoActuals_BaseFuelPrice(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
+		addActualsColumn(cargoColumns, "Crew Bonus", new NumericAttributeManipulator(pkg.getCargoActuals_CrewBonus(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
+		addActualsColumn(cargoColumns, "Insurance Premium", new NumericAttributeManipulator(pkg.getCargoActuals_InsurancePremium(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
+		addActualsColumn(cargoColumns, "Volume", new NumericAttributeManipulator(pkg.getCargoActuals_Volume(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
 	}
 
 	public RootData setActualsData(final ActualsModel actualModel) {
