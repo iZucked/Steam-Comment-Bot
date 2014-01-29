@@ -32,9 +32,11 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -147,6 +149,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Inject
 	private IPortProvider portProvider;
+	
+	@Inject
+	private IRouteCostProvider routeCostProvider;
 
 	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
@@ -156,6 +161,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	
 	@Inject
 	private IVesselProvider vesselProvider;
+	
+	@Inject
+	private VoyagePlanner voyagePlanner;
 
 	/**
 	 * Resize one of the integer buffers above
@@ -754,7 +762,7 @@ s	 *
 		}
 
 		for (final int index : changedSequences) {
-			final ScheduledSequence sequence = super.schedule(resources.get(index), sequences.getSequence(index), arrivalTimes[index]);
+			final ScheduledSequence sequence = voyagePlanner.schedule(resources.get(index), sequences.getSequence(index), arrivalTimes[index]);
 			if (sequence == null) {
 				return false; // break out now, something bad has happened
 			}

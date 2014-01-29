@@ -46,6 +46,9 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 	@Inject
 	private IVesselProvider vesselProvider;
 	
+	@Inject
+	private VoyagePlanner voyagePlanner;
+	
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 		final ScheduledSequences answer = new ScheduledSequences();
@@ -88,7 +91,7 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 			}
 			arrivalTimes[idx++] = timeWindowStart;
 		}
-		return super.schedule(resource, sequence, arrivalTimes);
+		return voyagePlanner.schedule(resource, sequence, arrivalTimes);
 	}
 
 	@Override
