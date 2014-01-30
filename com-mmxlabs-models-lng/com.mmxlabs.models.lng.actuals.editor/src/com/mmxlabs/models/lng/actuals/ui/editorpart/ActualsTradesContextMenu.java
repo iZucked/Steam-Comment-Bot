@@ -139,6 +139,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 					// Create actuals and map data from cargo
 					final CargoActuals cargoActuals = ActualsFactory.eINSTANCE.createCargoActuals();
 					cargoActuals.setCargo(cargo);
+					cargoActuals.setCargoReference(cargo.getName());
 					if (cargo.getAssignment() instanceof Vessel) {
 						cargoActuals.setVessel((Vessel) cargo.getAssignment());
 					}
