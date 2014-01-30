@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.actuals.provider;
 
 
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
 import java.util.Collection;
 import java.util.List;
@@ -10,12 +11,15 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.actuals.LoadActuals} object.
@@ -52,8 +56,31 @@ public class LoadActualsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addContractTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Contract Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContractTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadActuals_contractType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadActuals_contractType_feature", "_UI_LoadActuals_type"),
+				 ActualsPackage.Literals.LOAD_ACTUALS__CONTRACT_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -75,8 +102,10 @@ public class LoadActualsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		LoadActuals loadActuals = (LoadActuals)object;
-		return getString("_UI_LoadActuals_type") + " " + loadActuals.getCV();
+		String label = ((LoadActuals)object).getCounterparty();
+		return label == null || label.length() == 0 ?
+			getString("_UI_LoadActuals_type") :
+			getString("_UI_LoadActuals_type") + " " + label;
 	}
 
 	/**
@@ -89,6 +118,12 @@ public class LoadActualsItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(LoadActuals.class)) {
+			case ActualsPackage.LOAD_ACTUALS__CONTRACT_TYPE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

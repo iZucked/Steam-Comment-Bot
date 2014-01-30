@@ -27,7 +27,7 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	 */
 	public static ActualsFactory init() {
 		try {
-			ActualsFactory theActualsFactory = (ActualsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/actuals/1/"); 
+			ActualsFactory theActualsFactory = (ActualsFactory)EPackage.Registry.INSTANCE.getEFactory(ActualsPackage.eNS_URI);
 			if (theActualsFactory != null) {
 				return theActualsFactory;
 			}
@@ -81,6 +81,7 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public CargoActuals createCargoActuals() {
 		CargoActualsImpl cargoActuals = new CargoActualsImpl();
 		return cargoActuals;

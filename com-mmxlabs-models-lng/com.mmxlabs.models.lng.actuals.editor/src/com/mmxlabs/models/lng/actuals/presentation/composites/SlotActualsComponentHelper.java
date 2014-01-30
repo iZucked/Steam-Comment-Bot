@@ -60,12 +60,19 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_slotEditor(detailComposite, topClass);
+		add_counterpartyEditor(detailComposite, topClass);
+		add_operationsStartEditor(detailComposite, topClass);
+		add_operationsEndEditor(detailComposite, topClass);
+		add_titleTransferPointEditor(detailComposite, topClass);
+		add_volumeInM3Editor(detailComposite, topClass);
+		add_volumeInMMBtuEditor(detailComposite, topClass);
+		add_priceDOLEditor(detailComposite, topClass);
+		add_penaltyEditor(detailComposite, topClass);
+		add_notesEditor(detailComposite, topClass);
 		add_CVEditor(detailComposite, topClass);
-		add_volumeEditor(detailComposite, topClass);
-		add_mmBtuEditor(detailComposite, topClass);
 		add_portChargesEditor(detailComposite, topClass);
 		add_baseFuelConsumptionEditor(detailComposite, topClass);
-		add_slotEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the CV feature on SlotActuals
@@ -74,22 +81,6 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_CVEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__CV));
-	}
-	/**
-	 * Create the editor for the volume feature on SlotActuals
-	 *
-	 * @generated
-	 */
-	protected void add_volumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__VOLUME));
-	}
-	/**
-	 * Create the editor for the mmBtu feature on SlotActuals
-	 *
-	 * @generated
-	 */
-	protected void add_mmBtuEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__MM_BTU));
 	}
 	/**
 	 * Create the editor for the portCharges feature on SlotActuals
@@ -115,5 +106,86 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_slotEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__SLOT));
+	}
+
+	/**
+	 * Create the editor for the counterparty feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_counterpartyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__COUNTERPARTY));
+	}
+
+	/**
+	 * Create the editor for the operationsStart feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_operationsStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START));
+	}
+
+	/**
+	 * Create the editor for the operationsEnd feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_operationsEndEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END));
+	}
+
+	/**
+	 * Create the editor for the titleTransferPoint feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_titleTransferPointEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT));
+	}
+
+	/**
+	 * Create the editor for the volumeInM3 feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_volumeInM3Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__VOLUME_IN_M3));
+	}
+
+	/**
+	 * Create the editor for the volumeInMMBtu feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_volumeInMMBtuEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__VOLUME_IN_MM_BTU));
+	}
+
+	/**
+	 * Create the editor for the priceDOL feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_priceDOLEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__PRICE_DOL));
+	}
+
+	/**
+	 * Create the editor for the penalty feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_penaltyEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__PENALTY));
+	}
+
+	/**
+	 * Create the editor for the notes feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_notesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__NOTES));
 	}
 }

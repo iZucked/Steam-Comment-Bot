@@ -5,6 +5,7 @@ package com.mmxlabs.models.lng.actuals.presentation.composites;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -60,5 +61,15 @@ public class LoadActualsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_contractTypeEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the contractType feature on LoadActuals
+	 *
+	 * @generated
+	 */
+	protected void add_contractTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.LOAD_ACTUALS__CONTRACT_TYPE));
 	}
 }

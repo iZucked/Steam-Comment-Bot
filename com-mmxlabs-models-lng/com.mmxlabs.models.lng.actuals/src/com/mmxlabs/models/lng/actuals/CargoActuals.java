@@ -2,6 +2,8 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -14,11 +16,18 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getActuals <em>Actuals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getContractYear <em>Contract Year</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getOperationNumber <em>Operation Number</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getSubOperationNumber <em>Sub Operation Number</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getSellerID <em>Seller ID</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargoReference <em>Cargo Reference</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargoReferenceSeller <em>Cargo Reference Seller</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getVolume <em>Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getInsurancePremium <em>Insurance Premium</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCrewBonus <em>Crew Bonus</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getActuals <em>Actuals</em>}</li>
  * </ul>
  * </p>
  *
@@ -36,12 +45,12 @@ public interface CargoActuals extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Base Fuel Price</em>' attribute.
-	 * @see #setBaseFuelPrice(float)
+	 * @see #setBaseFuelPrice(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_BaseFuelPrice()
 	 * @model
 	 * @generated
 	 */
-	float getBaseFuelPrice();
+	double getBaseFuelPrice();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getBaseFuelPrice <em>Base Fuel Price</em>}' attribute.
@@ -51,33 +60,7 @@ public interface CargoActuals extends EObject {
 	 * @see #getBaseFuelPrice()
 	 * @generated
 	 */
-	void setBaseFuelPrice(float value);
-
-	/**
-	 * Returns the value of the '<em><b>Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Volume</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Volume</em>' attribute.
-	 * @see #setVolume(float)
-	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_Volume()
-	 * @model
-	 * @generated
-	 */
-	float getVolume();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getVolume <em>Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Volume</em>' attribute.
-	 * @see #getVolume()
-	 * @generated
-	 */
-	void setVolume(float value);
+	void setBaseFuelPrice(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Insurance Premium</b></em>' attribute.
@@ -146,5 +129,213 @@ public interface CargoActuals extends EObject {
 	 * @generated
 	 */
 	EList<SlotActuals> getActuals();
+
+	/**
+	 * Returns the value of the '<em><b>Contract Year</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contract Year</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contract Year</em>' attribute.
+	 * @see #setContractYear(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_ContractYear()
+	 * @model
+	 * @generated
+	 */
+	int getContractYear();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getContractYear <em>Contract Year</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contract Year</em>' attribute.
+	 * @see #getContractYear()
+	 * @generated
+	 */
+	void setContractYear(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Operation Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Operation Number</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Operation Number</em>' attribute.
+	 * @see #setOperationNumber(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_OperationNumber()
+	 * @model
+	 * @generated
+	 */
+	int getOperationNumber();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getOperationNumber <em>Operation Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Operation Number</em>' attribute.
+	 * @see #getOperationNumber()
+	 * @generated
+	 */
+	void setOperationNumber(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Sub Operation Number</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sub Operation Number</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sub Operation Number</em>' attribute.
+	 * @see #setSubOperationNumber(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_SubOperationNumber()
+	 * @model
+	 * @generated
+	 */
+	int getSubOperationNumber();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getSubOperationNumber <em>Sub Operation Number</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sub Operation Number</em>' attribute.
+	 * @see #getSubOperationNumber()
+	 * @generated
+	 */
+	void setSubOperationNumber(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Seller ID</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Seller ID</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Seller ID</em>' attribute.
+	 * @see #setSellerID(String)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_SellerID()
+	 * @model
+	 * @generated
+	 */
+	String getSellerID();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getSellerID <em>Seller ID</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Seller ID</em>' attribute.
+	 * @see #getSellerID()
+	 * @generated
+	 */
+	void setSellerID(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Cargo Reference</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo Reference</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo Reference</em>' attribute.
+	 * @see #setCargoReference(String)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_CargoReference()
+	 * @model
+	 * @generated
+	 */
+	String getCargoReference();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargoReference <em>Cargo Reference</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo Reference</em>' attribute.
+	 * @see #getCargoReference()
+	 * @generated
+	 */
+	void setCargoReference(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Cargo Reference Seller</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo Reference Seller</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo Reference Seller</em>' attribute.
+	 * @see #setCargoReferenceSeller(String)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_CargoReferenceSeller()
+	 * @model
+	 * @generated
+	 */
+	String getCargoReferenceSeller();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargoReferenceSeller <em>Cargo Reference Seller</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo Reference Seller</em>' attribute.
+	 * @see #getCargoReferenceSeller()
+	 * @generated
+	 */
+	void setCargoReferenceSeller(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel</em>' reference.
+	 * @see #setVessel(Vessel)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_Vessel()
+	 * @model
+	 * @generated
+	 */
+	Vessel getVessel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getVessel <em>Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel</em>' reference.
+	 * @see #getVessel()
+	 * @generated
+	 */
+	void setVessel(Vessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Cargo</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo</em>' reference.
+	 * @see #setCargo(Cargo)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_Cargo()
+	 * @model
+	 * @generated
+	 */
+	Cargo getCargo();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargo <em>Cargo</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cargo</em>' reference.
+	 * @see #getCargo()
+	 * @generated
+	 */
+	void setCargo(Cargo value);
 
 } // CargoActuals

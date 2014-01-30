@@ -62,12 +62,195 @@ public class CargoActualsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addContractYearPropertyDescriptor(object);
+			addOperationNumberPropertyDescriptor(object);
+			addSubOperationNumberPropertyDescriptor(object);
+			addSellerIDPropertyDescriptor(object);
+			addCargoReferencePropertyDescriptor(object);
+			addCargoReferenceSellerPropertyDescriptor(object);
+			addVesselPropertyDescriptor(object);
+			addCargoPropertyDescriptor(object);
 			addBaseFuelPricePropertyDescriptor(object);
-			addVolumePropertyDescriptor(object);
 			addInsurancePremiumPropertyDescriptor(object);
 			addCrewBonusPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Contract Year feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContractYearPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_contractYear_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_contractYear_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__CONTRACT_YEAR,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Operation Number feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOperationNumberPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_operationNumber_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_operationNumber_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__OPERATION_NUMBER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Sub Operation Number feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSubOperationNumberPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_subOperationNumber_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_subOperationNumber_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__SUB_OPERATION_NUMBER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Seller ID feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSellerIDPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_sellerID_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_sellerID_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__SELLER_ID,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cargo Reference feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoReferencePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_cargoReference_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_cargoReference_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cargo Reference Seller feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoReferenceSellerPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_cargoReferenceSeller_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_cargoReferenceSeller_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE_SELLER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_vessel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_vessel_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__VESSEL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cargo feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCargoPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_cargo_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_cargo_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__CARGO,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**
@@ -84,28 +267,6 @@ public class CargoActualsItemProvider
 				 getString("_UI_CargoActuals_baseFuelPrice_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_baseFuelPrice_feature", "_UI_CargoActuals_type"),
 				 ActualsPackage.Literals.CARGO_ACTUALS__BASE_FUEL_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoActuals_volume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_volume_feature", "_UI_CargoActuals_type"),
-				 ActualsPackage.Literals.CARGO_ACTUALS__VOLUME,
 				 true,
 				 false,
 				 false,
@@ -197,7 +358,7 @@ public class CargoActualsItemProvider
 	@Override
 	public String getText(Object object) {
 		CargoActuals cargoActuals = (CargoActuals)object;
-		return getString("_UI_CargoActuals_type") + " " + cargoActuals.getBaseFuelPrice();
+		return getString("_UI_CargoActuals_type") + " " + cargoActuals.getContractYear();
 	}
 
 	/**
@@ -212,8 +373,13 @@ public class CargoActualsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CargoActuals.class)) {
+			case ActualsPackage.CARGO_ACTUALS__CONTRACT_YEAR:
+			case ActualsPackage.CARGO_ACTUALS__OPERATION_NUMBER:
+			case ActualsPackage.CARGO_ACTUALS__SUB_OPERATION_NUMBER:
+			case ActualsPackage.CARGO_ACTUALS__SELLER_ID:
+			case ActualsPackage.CARGO_ACTUALS__CARGO_REFERENCE:
+			case ActualsPackage.CARGO_ACTUALS__CARGO_REFERENCE_SELLER:
 			case ActualsPackage.CARGO_ACTUALS__BASE_FUEL_PRICE:
-			case ActualsPackage.CARGO_ACTUALS__VOLUME:
 			case ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM:
 			case ActualsPackage.CARGO_ACTUALS__CREW_BONUS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

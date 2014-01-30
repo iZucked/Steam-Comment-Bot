@@ -61,12 +61,19 @@ public class SlotActualsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addSlotPropertyDescriptor(object);
+			addCounterpartyPropertyDescriptor(object);
+			addOperationsStartPropertyDescriptor(object);
+			addOperationsEndPropertyDescriptor(object);
+			addTitleTransferPointPropertyDescriptor(object);
+			addVolumeInM3PropertyDescriptor(object);
+			addVolumeInMMBtuPropertyDescriptor(object);
+			addPriceDOLPropertyDescriptor(object);
+			addPenaltyPropertyDescriptor(object);
+			addNotesPropertyDescriptor(object);
 			addCVPropertyDescriptor(object);
-			addVolumePropertyDescriptor(object);
-			addMmBtuPropertyDescriptor(object);
 			addPortChargesPropertyDescriptor(object);
 			addBaseFuelConsumptionPropertyDescriptor(object);
-			addSlotPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -89,50 +96,6 @@ public class SlotActualsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Volume feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVolumePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SlotActuals_volume_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_volume_feature", "_UI_SlotActuals_type"),
-				 ActualsPackage.Literals.SLOT_ACTUALS__VOLUME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Mm Btu feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMmBtuPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SlotActuals_mmBtu_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_mmBtu_feature", "_UI_SlotActuals_type"),
-				 ActualsPackage.Literals.SLOT_ACTUALS__MM_BTU,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -204,6 +167,204 @@ public class SlotActualsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Counterparty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCounterpartyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_counterparty_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_counterparty_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__COUNTERPARTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Operations Start feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOperationsStartPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_operationsStart_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_operationsStart_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Operations End feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOperationsEndPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_operationsEnd_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_operationsEnd_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Title Transfer Point feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addTitleTransferPointPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_titleTransferPoint_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_titleTransferPoint_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume In M3 feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeInM3PropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_volumeInM3_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_volumeInM3_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__VOLUME_IN_M3,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Volume In MM Btu feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVolumeInMMBtuPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_volumeInMMBtu_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_volumeInMMBtu_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__VOLUME_IN_MM_BTU,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Price DOL feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceDOLPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_priceDOL_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_priceDOL_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__PRICE_DOL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Penalty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPenaltyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_penalty_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_penalty_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__PENALTY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Notes feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_notes_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_notes_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__NOTES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -241,8 +402,10 @@ public class SlotActualsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		SlotActuals slotActuals = (SlotActuals)object;
-		return getString("_UI_SlotActuals_type") + " " + slotActuals.getCV();
+		String label = ((SlotActuals)object).getCounterparty();
+		return label == null || label.length() == 0 ?
+			getString("_UI_SlotActuals_type") :
+			getString("_UI_SlotActuals_type") + " " + label;
 	}
 
 	/**
@@ -257,9 +420,15 @@ public class SlotActualsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SlotActuals.class)) {
+			case ActualsPackage.SLOT_ACTUALS__COUNTERPARTY:
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_START:
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_END:
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3:
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU:
+			case ActualsPackage.SLOT_ACTUALS__PRICE_DOL:
+			case ActualsPackage.SLOT_ACTUALS__PENALTY:
+			case ActualsPackage.SLOT_ACTUALS__NOTES:
 			case ActualsPackage.SLOT_ACTUALS__CV:
-			case ActualsPackage.SLOT_ACTUALS__VOLUME:
-			case ActualsPackage.SLOT_ACTUALS__MM_BTU:
 			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
