@@ -25,7 +25,7 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 	public static final String ACTUALS_KEY = "ACTUALS";
 	final static Map<String, String> inputs = new LinkedHashMap<String, String>();
 
-	private IClassImporter actualsImporter = new ActualsModelImporter();
+	private ActualsModelImporter actualsImporter = new ActualsModelImporter();
 
 	static {
 		inputs.put(ACTUALS_KEY, "Cargo Actuals");
@@ -74,7 +74,7 @@ public class ActualsModelExtraImporter implements IExtraModelImporter {
 					for (final EObject eObj : cargoModel.getExtensions()) {
 						if (eObj instanceof ActualsModel) {
 							final ActualsModel actualsModel = (ActualsModel) eObj;
-							output.put(ACTUALS_KEY, actualsImporter.exportObjects(actualsModel.getCargoActuals(), context));
+							output.put(ACTUALS_KEY, actualsImporter.exportActuals(actualsModel.getCargoActuals(), context));
 						}
 					}
 				}
