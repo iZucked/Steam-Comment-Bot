@@ -60,11 +60,18 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_actualsEditor(detailComposite, topClass);
+		add_contractYearEditor(detailComposite, topClass);
+		add_operationNumberEditor(detailComposite, topClass);
+		add_subOperationNumberEditor(detailComposite, topClass);
+		add_sellerIDEditor(detailComposite, topClass);
+		add_cargoReferenceEditor(detailComposite, topClass);
+		add_cargoReferenceSellerEditor(detailComposite, topClass);
+		add_vesselEditor(detailComposite, topClass);
+		add_cargoEditor(detailComposite, topClass);
 		add_baseFuelPriceEditor(detailComposite, topClass);
-		add_volumeEditor(detailComposite, topClass);
 		add_insurancePremiumEditor(detailComposite, topClass);
 		add_crewBonusEditor(detailComposite, topClass);
-		add_actualsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseFuelPrice feature on CargoActuals
@@ -73,14 +80,6 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseFuelPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__BASE_FUEL_PRICE));
-	}
-	/**
-	 * Create the editor for the volume feature on CargoActuals
-	 *
-	 * @generated
-	 */
-	protected void add_volumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__VOLUME));
 	}
 	/**
 	 * Create the editor for the insurancePremium feature on CargoActuals
@@ -105,5 +104,77 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_actualsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__ACTUALS));
+	}
+
+	/**
+	 * Create the editor for the contractYear feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_contractYearEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CONTRACT_YEAR));
+	}
+
+	/**
+	 * Create the editor for the operationNumber feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_operationNumberEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__OPERATION_NUMBER));
+	}
+
+	/**
+	 * Create the editor for the subOperationNumber feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_subOperationNumberEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__SUB_OPERATION_NUMBER));
+	}
+
+	/**
+	 * Create the editor for the sellerID feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_sellerIDEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__SELLER_ID));
+	}
+
+	/**
+	 * Create the editor for the cargoReference feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_cargoReferenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE));
+	}
+
+	/**
+	 * Create the editor for the cargoReferenceSeller feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_cargoReferenceSellerEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CARGO_REFERENCE_SELLER));
+	}
+
+	/**
+	 * Create the editor for the vessel feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL));
+	}
+
+	/**
+	 * Create the editor for the cargo feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_cargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CARGO));
 	}
 }

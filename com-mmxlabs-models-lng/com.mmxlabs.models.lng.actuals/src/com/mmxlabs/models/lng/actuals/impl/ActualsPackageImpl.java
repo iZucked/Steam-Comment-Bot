@@ -11,6 +11,8 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -161,27 +163,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getSlotActuals_CV() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSlotActuals_Volume() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getSlotActuals_MmBtu() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -191,7 +173,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getSlotActuals_PortCharges() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -201,7 +183,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getSlotActuals_BaseFuelConsumption() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -209,8 +191,99 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getSlotActuals_Slot() {
-		return (EReference)slotActualsEClass.getEStructuralFeatures().get(5);
+		return (EReference)slotActualsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_Counterparty() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_OperationsStart() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_OperationsEnd() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSlotActuals_TitleTransferPoint() {
+		return (EReference)slotActualsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_VolumeInM3() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_VolumeInMMBtu() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_PriceDOL() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_Penalty() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_Notes() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -230,17 +303,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getCargoActuals_BaseFuelPrice() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getCargoActuals_Volume() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -250,7 +313,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getCargoActuals_InsurancePremium() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -260,7 +323,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getCargoActuals_CrewBonus() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -270,7 +333,87 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EReference getCargoActuals_Actuals() {
-		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(4);
+		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoActuals_ContractYear() {
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoActuals_OperationNumber() {
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoActuals_SubOperationNumber() {
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoActuals_SellerID() {
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoActuals_CargoReference() {
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getCargoActuals_CargoReferenceSeller() {
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCargoActuals_Vessel() {
+		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getCargoActuals_Cargo() {
+		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -289,8 +432,28 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getLoadActuals_ContractType() {
+		return (EAttribute)loadActualsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDischargeActuals() {
 		return dischargeActualsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDischargeActuals_DeliveryType() {
+		return (EAttribute)dischargeActualsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -326,23 +489,39 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEReference(actualsModelEClass, ACTUALS_MODEL__CARGO_ACTUALS);
 
 		slotActualsEClass = createEClass(SLOT_ACTUALS);
+		createEReference(slotActualsEClass, SLOT_ACTUALS__SLOT);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__COUNTERPARTY);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__OPERATIONS_START);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__OPERATIONS_END);
+		createEReference(slotActualsEClass, SLOT_ACTUALS__TITLE_TRANSFER_POINT);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__VOLUME_IN_M3);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__VOLUME_IN_MM_BTU);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__PRICE_DOL);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__PENALTY);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__NOTES);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CV);
-		createEAttribute(slotActualsEClass, SLOT_ACTUALS__VOLUME);
-		createEAttribute(slotActualsEClass, SLOT_ACTUALS__MM_BTU);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__PORT_CHARGES);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__BASE_FUEL_CONSUMPTION);
-		createEReference(slotActualsEClass, SLOT_ACTUALS__SLOT);
 
 		cargoActualsEClass = createEClass(CARGO_ACTUALS);
+		createEReference(cargoActualsEClass, CARGO_ACTUALS__ACTUALS);
+		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__CONTRACT_YEAR);
+		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__OPERATION_NUMBER);
+		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__SUB_OPERATION_NUMBER);
+		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__SELLER_ID);
+		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__CARGO_REFERENCE);
+		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__CARGO_REFERENCE_SELLER);
+		createEReference(cargoActualsEClass, CARGO_ACTUALS__VESSEL);
+		createEReference(cargoActualsEClass, CARGO_ACTUALS__CARGO);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__BASE_FUEL_PRICE);
-		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__VOLUME);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__INSURANCE_PREMIUM);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__CREW_BONUS);
-		createEReference(cargoActualsEClass, CARGO_ACTUALS__ACTUALS);
 
 		loadActualsEClass = createEClass(LOAD_ACTUALS);
+		createEAttribute(loadActualsEClass, LOAD_ACTUALS__CONTRACT_TYPE);
 
 		dischargeActualsEClass = createEClass(DISCHARGE_ACTUALS);
+		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__DELIVERY_TYPE);
 	}
 
 	/**
@@ -370,6 +549,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		// Obtain other dependent packages
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
+		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
+		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
 
 		// Create type parameters
 
@@ -384,23 +565,39 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEReference(getActualsModel_CargoActuals(), this.getCargoActuals(), null, "cargoActuals", null, 0, -1, ActualsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotActualsEClass, SlotActuals.class, "SlotActuals", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSlotActuals_CV(), ecorePackage.getEFloat(), "CV", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotActuals_Volume(), ecorePackage.getEFloat(), "volume", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotActuals_MmBtu(), ecorePackage.getEInt(), "mmBtu", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotActuals_Slot(), theCargoPackage.getSlot(), null, "slot", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_Counterparty(), ecorePackage.getEString(), "counterparty", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_OperationsStart(), ecorePackage.getEDate(), "operationsStart", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_OperationsEnd(), ecorePackage.getEDate(), "operationsEnd", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotActuals_TitleTransferPoint(), thePortPackage.getPort(), null, "titleTransferPoint", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_VolumeInM3(), ecorePackage.getEFloat(), "volumeInM3", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_VolumeInMMBtu(), ecorePackage.getEInt(), "volumeInMMBtu", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_PriceDOL(), ecorePackage.getEDouble(), "priceDOL", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_Penalty(), ecorePackage.getEString(), "penalty", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_CV(), ecorePackage.getEDouble(), "CV", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_PortCharges(), ecorePackage.getEInt(), "portCharges", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_BaseFuelConsumption(), ecorePackage.getEInt(), "baseFuelConsumption", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSlotActuals_Slot(), theCargoPackage.getSlot(), null, "slot", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoActualsEClass, CargoActuals.class, "CargoActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getCargoActuals_BaseFuelPrice(), ecorePackage.getEFloat(), "baseFuelPrice", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCargoActuals_Volume(), ecorePackage.getEFloat(), "volume", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoActuals_Actuals(), this.getSlotActuals(), null, "actuals", null, 0, -1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_ContractYear(), ecorePackage.getEInt(), "contractYear", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_OperationNumber(), ecorePackage.getEInt(), "operationNumber", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_SubOperationNumber(), ecorePackage.getEInt(), "subOperationNumber", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_SellerID(), ecorePackage.getEString(), "sellerID", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_CargoReference(), ecorePackage.getEString(), "cargoReference", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_CargoReferenceSeller(), ecorePackage.getEString(), "cargoReferenceSeller", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoActuals_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoActuals_Cargo(), theCargoPackage.getCargo(), null, "cargo", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_InsurancePremium(), ecorePackage.getEInt(), "insurancePremium", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_CrewBonus(), ecorePackage.getEInt(), "crewBonus", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargoActuals_Actuals(), this.getSlotActuals(), null, "actuals", null, 0, -1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(loadActualsEClass, LoadActuals.class, "LoadActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLoadActuals_ContractType(), ecorePackage.getEString(), "contractType", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dischargeActualsEClass, DischargeActuals.class, "DischargeActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDischargeActuals_DeliveryType(), ecorePackage.getEString(), "deliveryType", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

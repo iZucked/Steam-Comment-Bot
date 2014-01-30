@@ -5,6 +5,7 @@ package com.mmxlabs.models.lng.actuals.presentation.composites;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -60,5 +61,15 @@ public class DischargeActualsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_deliveryTypeEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the deliveryType feature on DischargeActuals
+	 *
+	 * @generated
+	 */
+	protected void add_deliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.DISCHARGE_ACTUALS__DELIVERY_TYPE));
 	}
 }

@@ -3,6 +3,8 @@
 package com.mmxlabs.models.lng.actuals;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.Port;
+import java.util.Date;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -13,12 +15,19 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCounterparty <em>Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsStart <em>Operations Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsEnd <em>Operations End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getTitleTransferPoint <em>Title Transfer Point</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getVolumeInM3 <em>Volume In M3</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getVolumeInMMBtu <em>Volume In MM Btu</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPriceDOL <em>Price DOL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPenalty <em>Penalty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCV <em>CV</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getVolume <em>Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getMmBtu <em>Mm Btu</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}</li>
  * </ul>
  * </p>
  *
@@ -36,12 +45,12 @@ public interface SlotActuals extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>CV</em>' attribute.
-	 * @see #setCV(float)
+	 * @see #setCV(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_CV()
 	 * @model
 	 * @generated
 	 */
-	float getCV();
+	double getCV();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCV <em>CV</em>}' attribute.
@@ -51,59 +60,7 @@ public interface SlotActuals extends EObject {
 	 * @see #getCV()
 	 * @generated
 	 */
-	void setCV(float value);
-
-	/**
-	 * Returns the value of the '<em><b>Volume</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Volume</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Volume</em>' attribute.
-	 * @see #setVolume(float)
-	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Volume()
-	 * @model
-	 * @generated
-	 */
-	float getVolume();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getVolume <em>Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Volume</em>' attribute.
-	 * @see #getVolume()
-	 * @generated
-	 */
-	void setVolume(float value);
-
-	/**
-	 * Returns the value of the '<em><b>Mm Btu</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Mm Btu</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Mm Btu</em>' attribute.
-	 * @see #setMmBtu(int)
-	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_MmBtu()
-	 * @model
-	 * @generated
-	 */
-	int getMmBtu();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getMmBtu <em>Mm Btu</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Mm Btu</em>' attribute.
-	 * @see #getMmBtu()
-	 * @generated
-	 */
-	void setMmBtu(int value);
+	void setCV(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Port Charges</b></em>' attribute.
@@ -182,5 +139,239 @@ public interface SlotActuals extends EObject {
 	 * @generated
 	 */
 	void setSlot(Slot value);
+
+	/**
+	 * Returns the value of the '<em><b>Counterparty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Counterparty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Counterparty</em>' attribute.
+	 * @see #setCounterparty(String)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Counterparty()
+	 * @model
+	 * @generated
+	 */
+	String getCounterparty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCounterparty <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Counterparty</em>' attribute.
+	 * @see #getCounterparty()
+	 * @generated
+	 */
+	void setCounterparty(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Operations Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Operations Start</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Operations Start</em>' attribute.
+	 * @see #setOperationsStart(Date)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_OperationsStart()
+	 * @model
+	 * @generated
+	 */
+	Date getOperationsStart();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsStart <em>Operations Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Operations Start</em>' attribute.
+	 * @see #getOperationsStart()
+	 * @generated
+	 */
+	void setOperationsStart(Date value);
+
+	/**
+	 * Returns the value of the '<em><b>Operations End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Operations End</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Operations End</em>' attribute.
+	 * @see #setOperationsEnd(Date)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_OperationsEnd()
+	 * @model
+	 * @generated
+	 */
+	Date getOperationsEnd();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getOperationsEnd <em>Operations End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Operations End</em>' attribute.
+	 * @see #getOperationsEnd()
+	 * @generated
+	 */
+	void setOperationsEnd(Date value);
+
+	/**
+	 * Returns the value of the '<em><b>Title Transfer Point</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Title Transfer Point</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Title Transfer Point</em>' reference.
+	 * @see #setTitleTransferPoint(Port)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_TitleTransferPoint()
+	 * @model
+	 * @generated
+	 */
+	Port getTitleTransferPoint();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getTitleTransferPoint <em>Title Transfer Point</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Title Transfer Point</em>' reference.
+	 * @see #getTitleTransferPoint()
+	 * @generated
+	 */
+	void setTitleTransferPoint(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume In M3</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume In M3</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume In M3</em>' attribute.
+	 * @see #setVolumeInM3(float)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_VolumeInM3()
+	 * @model
+	 * @generated
+	 */
+	float getVolumeInM3();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getVolumeInM3 <em>Volume In M3</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume In M3</em>' attribute.
+	 * @see #getVolumeInM3()
+	 * @generated
+	 */
+	void setVolumeInM3(float value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume In MM Btu</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume In MM Btu</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume In MM Btu</em>' attribute.
+	 * @see #setVolumeInMMBtu(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_VolumeInMMBtu()
+	 * @model
+	 * @generated
+	 */
+	int getVolumeInMMBtu();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getVolumeInMMBtu <em>Volume In MM Btu</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume In MM Btu</em>' attribute.
+	 * @see #getVolumeInMMBtu()
+	 * @generated
+	 */
+	void setVolumeInMMBtu(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Price DOL</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price DOL</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price DOL</em>' attribute.
+	 * @see #setPriceDOL(double)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_PriceDOL()
+	 * @model
+	 * @generated
+	 */
+	double getPriceDOL();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPriceDOL <em>Price DOL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price DOL</em>' attribute.
+	 * @see #getPriceDOL()
+	 * @generated
+	 */
+	void setPriceDOL(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Penalty</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Penalty</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Penalty</em>' attribute.
+	 * @see #setPenalty(String)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Penalty()
+	 * @model
+	 * @generated
+	 */
+	String getPenalty();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPenalty <em>Penalty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Penalty</em>' attribute.
+	 * @see #getPenalty()
+	 * @generated
+	 */
+	void setPenalty(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Notes</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Notes</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Notes</em>' attribute.
+	 * @see #setNotes(String)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Notes()
+	 * @model
+	 * @generated
+	 */
+	String getNotes();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getNotes <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Notes</em>' attribute.
+	 * @see #getNotes()
+	 * @generated
+	 */
+	void setNotes(String value);
 
 } // SlotActuals

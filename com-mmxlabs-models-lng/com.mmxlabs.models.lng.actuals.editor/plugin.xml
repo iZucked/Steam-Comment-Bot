@@ -77,5 +77,26 @@
             targetEClass="com.mmxlabs.models.lng.actuals.LoadActuals">
       </factory>
    </extension>
+   <extension
+         point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
+      <TradesTableContextMenuExtension
+            class="com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsTradesContextMenu">
+      </TradesTableContextMenuExtension>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.ui.valueproviders">
+      <valueProvider
+            factory="com.mmxlabs.models.lng.actuals.presentation.valueproviders.ActualsSlotValueProviderFactory"
+            id="com.mmxlabs.models.lng.actuals.presentation.valueproviders.ActualsSlotValueProviderFactory.LoadActuals"
+            ownerEClass="com.mmxlabs.models.lng.actuals.LoadActuals"
+            referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+      </valueProvider>
+      <valueProvider
+            factory="com.mmxlabs.models.lng.actuals.presentation.valueproviders.ActualsSlotValueProviderFactory"
+            id="com.mmxlabs.models.lng.actuals.presentation.valueproviders.ActualsSlotValueProviderFactory.DischargeActuals"
+            ownerEClass="com.mmxlabs.models.lng.actuals.DischargeActuals"
+            referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+      </valueProvider>
+   </extension>
 
 </plugin>

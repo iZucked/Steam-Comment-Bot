@@ -6,6 +6,8 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.Port;
+import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -21,18 +23,205 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getSlot <em>Slot</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCounterparty <em>Counterparty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getOperationsStart <em>Operations Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getOperationsEnd <em>Operations End</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getTitleTransferPoint <em>Title Transfer Point</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getVolumeInM3 <em>Volume In M3</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getVolumeInMMBtu <em>Volume In MM Btu</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPriceDOL <em>Price DOL</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPenalty <em>Penalty</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCV <em>CV</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getVolume <em>Volume</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getMmBtu <em>Mm Btu</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getSlot <em>Slot</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals {
+	/**
+	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSlot()
+	 * @generated
+	 * @ordered
+	 */
+	protected Slot slot;
+
+	/**
+	 * The default value of the '{@link #getCounterparty() <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COUNTERPARTY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCounterparty() <em>Counterparty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCounterparty()
+	 * @generated
+	 * @ordered
+	 */
+	protected String counterparty = COUNTERPARTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getOperationsStart() <em>Operations Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationsStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date OPERATIONS_START_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getOperationsStart() <em>Operations Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationsStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date operationsStart = OPERATIONS_START_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getOperationsEnd() <em>Operations End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationsEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Date OPERATIONS_END_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getOperationsEnd() <em>Operations End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOperationsEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected Date operationsEnd = OPERATIONS_END_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getTitleTransferPoint() <em>Title Transfer Point</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTitleTransferPoint()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port titleTransferPoint;
+
+	/**
+	 * The default value of the '{@link #getVolumeInM3() <em>Volume In M3</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeInM3()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final float VOLUME_IN_M3_EDEFAULT = 0.0F;
+
+	/**
+	 * The cached value of the '{@link #getVolumeInM3() <em>Volume In M3</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeInM3()
+	 * @generated
+	 * @ordered
+	 */
+	protected float volumeInM3 = VOLUME_IN_M3_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVolumeInMMBtu() <em>Volume In MM Btu</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeInMMBtu()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VOLUME_IN_MM_BTU_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getVolumeInMMBtu() <em>Volume In MM Btu</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVolumeInMMBtu()
+	 * @generated
+	 * @ordered
+	 */
+	protected int volumeInMMBtu = VOLUME_IN_MM_BTU_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPriceDOL() <em>Price DOL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPriceDOL()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double PRICE_DOL_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getPriceDOL() <em>Price DOL</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPriceDOL()
+	 * @generated
+	 * @ordered
+	 */
+	protected double priceDOL = PRICE_DOL_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPenalty() <em>Penalty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPenalty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PENALTY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPenalty() <em>Penalty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPenalty()
+	 * @generated
+	 * @ordered
+	 */
+	protected String penalty = PENALTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NOTES_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNotes()
+	 * @generated
+	 * @ordered
+	 */
+	protected String notes = NOTES_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getCV() <em>CV</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -41,7 +230,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float CV_EDEFAULT = 0.0F;
+	protected static final double CV_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getCV() <em>CV</em>}' attribute.
@@ -51,47 +240,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected float cv = CV_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getVolume() <em>Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final float VOLUME_EDEFAULT = 0.0F;
-
-	/**
-	 * The cached value of the '{@link #getVolume() <em>Volume</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolume()
-	 * @generated
-	 * @ordered
-	 */
-	protected float volume = VOLUME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getMmBtu() <em>Mm Btu</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMmBtu()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int MM_BTU_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getMmBtu() <em>Mm Btu</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMmBtu()
-	 * @generated
-	 * @ordered
-	 */
-	protected int mmBtu = MM_BTU_EDEFAULT;
+	protected double cv = CV_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getPortCharges() <em>Port Charges</em>}' attribute.
@@ -134,16 +283,6 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected int baseFuelConsumption = BASE_FUEL_CONSUMPTION_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getSlot() <em>Slot</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSlot()
-	 * @generated
-	 * @ordered
-	 */
-	protected Slot slot;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -168,7 +307,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public float getCV() {
+	public double getCV() {
 		return cv;
 	}
 
@@ -177,58 +316,11 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setCV(float newCV) {
-		float oldCV = cv;
+	public void setCV(double newCV) {
+		double oldCV = cv;
 		cv = newCV;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__CV, oldCV, cv));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public float getVolume() {
-		return volume;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setVolume(float newVolume) {
-		float oldVolume = volume;
-		volume = newVolume;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__VOLUME, oldVolume, volume));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getMmBtu() {
-		return mmBtu;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setMmBtu(int newMmBtu) {
-		int oldMmBtu = mmBtu;
-		mmBtu = newMmBtu;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__MM_BTU, oldMmBtu, mmBtu));
 	}
 
 	/**
@@ -282,6 +374,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Slot getSlot() {
 		if (slot != null && slot.eIsProxy()) {
 			InternalEObject oldSlot = (InternalEObject)slot;
@@ -308,6 +401,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setSlot(Slot newSlot) {
 		Slot oldSlot = slot;
 		slot = newSlot;
@@ -321,21 +415,260 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
+	public String getCounterparty() {
+		return counterparty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCounterparty(String newCounterparty) {
+		String oldCounterparty = counterparty;
+		counterparty = newCounterparty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__COUNTERPARTY, oldCounterparty, counterparty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Date getOperationsStart() {
+		return operationsStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOperationsStart(Date newOperationsStart) {
+		Date oldOperationsStart = operationsStart;
+		operationsStart = newOperationsStart;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__OPERATIONS_START, oldOperationsStart, operationsStart));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Date getOperationsEnd() {
+		return operationsEnd;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setOperationsEnd(Date newOperationsEnd) {
+		Date oldOperationsEnd = operationsEnd;
+		operationsEnd = newOperationsEnd;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__OPERATIONS_END, oldOperationsEnd, operationsEnd));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Port getTitleTransferPoint() {
+		if (titleTransferPoint != null && titleTransferPoint.eIsProxy()) {
+			InternalEObject oldTitleTransferPoint = (InternalEObject)titleTransferPoint;
+			titleTransferPoint = (Port)eResolveProxy(oldTitleTransferPoint);
+			if (titleTransferPoint != oldTitleTransferPoint) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ActualsPackage.SLOT_ACTUALS__TITLE_TRANSFER_POINT, oldTitleTransferPoint, titleTransferPoint));
+			}
+		}
+		return titleTransferPoint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetTitleTransferPoint() {
+		return titleTransferPoint;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTitleTransferPoint(Port newTitleTransferPoint) {
+		Port oldTitleTransferPoint = titleTransferPoint;
+		titleTransferPoint = newTitleTransferPoint;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__TITLE_TRANSFER_POINT, oldTitleTransferPoint, titleTransferPoint));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public float getVolumeInM3() {
+		return volumeInM3;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVolumeInM3(float newVolumeInM3) {
+		float oldVolumeInM3 = volumeInM3;
+		volumeInM3 = newVolumeInM3;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3, oldVolumeInM3, volumeInM3));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getVolumeInMMBtu() {
+		return volumeInMMBtu;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVolumeInMMBtu(int newVolumeInMMBtu) {
+		int oldVolumeInMMBtu = volumeInMMBtu;
+		volumeInMMBtu = newVolumeInMMBtu;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU, oldVolumeInMMBtu, volumeInMMBtu));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public double getPriceDOL() {
+		return priceDOL;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPriceDOL(double newPriceDOL) {
+		double oldPriceDOL = priceDOL;
+		priceDOL = newPriceDOL;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__PRICE_DOL, oldPriceDOL, priceDOL));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getPenalty() {
+		return penalty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setPenalty(String newPenalty) {
+		String oldPenalty = penalty;
+		penalty = newPenalty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__PENALTY, oldPenalty, penalty));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getNotes() {
+		return notes;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setNotes(String newNotes) {
+		String oldNotes = notes;
+		notes = newNotes;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__NOTES, oldNotes, notes));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				if (resolve) return getSlot();
+				return basicGetSlot();
+			case ActualsPackage.SLOT_ACTUALS__COUNTERPARTY:
+				return getCounterparty();
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_START:
+				return getOperationsStart();
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_END:
+				return getOperationsEnd();
+			case ActualsPackage.SLOT_ACTUALS__TITLE_TRANSFER_POINT:
+				if (resolve) return getTitleTransferPoint();
+				return basicGetTitleTransferPoint();
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3:
+				return getVolumeInM3();
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU:
+				return getVolumeInMMBtu();
+			case ActualsPackage.SLOT_ACTUALS__PRICE_DOL:
+				return getPriceDOL();
+			case ActualsPackage.SLOT_ACTUALS__PENALTY:
+				return getPenalty();
+			case ActualsPackage.SLOT_ACTUALS__NOTES:
+				return getNotes();
 			case ActualsPackage.SLOT_ACTUALS__CV:
 				return getCV();
-			case ActualsPackage.SLOT_ACTUALS__VOLUME:
-				return getVolume();
-			case ActualsPackage.SLOT_ACTUALS__MM_BTU:
-				return getMmBtu();
 			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
 				return getPortCharges();
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return getBaseFuelConsumption();
-			case ActualsPackage.SLOT_ACTUALS__SLOT:
-				if (resolve) return getSlot();
-				return basicGetSlot();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -348,23 +681,44 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				setSlot((Slot)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__COUNTERPARTY:
+				setCounterparty((String)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_START:
+				setOperationsStart((Date)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_END:
+				setOperationsEnd((Date)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__TITLE_TRANSFER_POINT:
+				setTitleTransferPoint((Port)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3:
+				setVolumeInM3((Float)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU:
+				setVolumeInMMBtu((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__PRICE_DOL:
+				setPriceDOL((Double)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__PENALTY:
+				setPenalty((String)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__NOTES:
+				setNotes((String)newValue);
+				return;
 			case ActualsPackage.SLOT_ACTUALS__CV:
-				setCV((Float)newValue);
-				return;
-			case ActualsPackage.SLOT_ACTUALS__VOLUME:
-				setVolume((Float)newValue);
-				return;
-			case ActualsPackage.SLOT_ACTUALS__MM_BTU:
-				setMmBtu((Integer)newValue);
+				setCV((Double)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
 				setPortCharges((Integer)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption((Integer)newValue);
-				return;
-			case ActualsPackage.SLOT_ACTUALS__SLOT:
-				setSlot((Slot)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -378,23 +732,44 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				setSlot((Slot)null);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__COUNTERPARTY:
+				setCounterparty(COUNTERPARTY_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_START:
+				setOperationsStart(OPERATIONS_START_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_END:
+				setOperationsEnd(OPERATIONS_END_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__TITLE_TRANSFER_POINT:
+				setTitleTransferPoint((Port)null);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3:
+				setVolumeInM3(VOLUME_IN_M3_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU:
+				setVolumeInMMBtu(VOLUME_IN_MM_BTU_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__PRICE_DOL:
+				setPriceDOL(PRICE_DOL_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__PENALTY:
+				setPenalty(PENALTY_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__NOTES:
+				setNotes(NOTES_EDEFAULT);
+				return;
 			case ActualsPackage.SLOT_ACTUALS__CV:
 				setCV(CV_EDEFAULT);
-				return;
-			case ActualsPackage.SLOT_ACTUALS__VOLUME:
-				setVolume(VOLUME_EDEFAULT);
-				return;
-			case ActualsPackage.SLOT_ACTUALS__MM_BTU:
-				setMmBtu(MM_BTU_EDEFAULT);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
 				setPortCharges(PORT_CHARGES_EDEFAULT);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption(BASE_FUEL_CONSUMPTION_EDEFAULT);
-				return;
-			case ActualsPackage.SLOT_ACTUALS__SLOT:
-				setSlot((Slot)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -408,18 +783,32 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ActualsPackage.SLOT_ACTUALS__SLOT:
+				return slot != null;
+			case ActualsPackage.SLOT_ACTUALS__COUNTERPARTY:
+				return COUNTERPARTY_EDEFAULT == null ? counterparty != null : !COUNTERPARTY_EDEFAULT.equals(counterparty);
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_START:
+				return OPERATIONS_START_EDEFAULT == null ? operationsStart != null : !OPERATIONS_START_EDEFAULT.equals(operationsStart);
+			case ActualsPackage.SLOT_ACTUALS__OPERATIONS_END:
+				return OPERATIONS_END_EDEFAULT == null ? operationsEnd != null : !OPERATIONS_END_EDEFAULT.equals(operationsEnd);
+			case ActualsPackage.SLOT_ACTUALS__TITLE_TRANSFER_POINT:
+				return titleTransferPoint != null;
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3:
+				return volumeInM3 != VOLUME_IN_M3_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU:
+				return volumeInMMBtu != VOLUME_IN_MM_BTU_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__PRICE_DOL:
+				return priceDOL != PRICE_DOL_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__PENALTY:
+				return PENALTY_EDEFAULT == null ? penalty != null : !PENALTY_EDEFAULT.equals(penalty);
+			case ActualsPackage.SLOT_ACTUALS__NOTES:
+				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case ActualsPackage.SLOT_ACTUALS__CV:
 				return cv != CV_EDEFAULT;
-			case ActualsPackage.SLOT_ACTUALS__VOLUME:
-				return volume != VOLUME_EDEFAULT;
-			case ActualsPackage.SLOT_ACTUALS__MM_BTU:
-				return mmBtu != MM_BTU_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
 				return portCharges != PORT_CHARGES_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
-			case ActualsPackage.SLOT_ACTUALS__SLOT:
-				return slot != null;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -434,12 +823,24 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (CV: ");
+		result.append(" (counterparty: ");
+		result.append(counterparty);
+		result.append(", operationsStart: ");
+		result.append(operationsStart);
+		result.append(", operationsEnd: ");
+		result.append(operationsEnd);
+		result.append(", volumeInM3: ");
+		result.append(volumeInM3);
+		result.append(", volumeInMMBtu: ");
+		result.append(volumeInMMBtu);
+		result.append(", priceDOL: ");
+		result.append(priceDOL);
+		result.append(", penalty: ");
+		result.append(penalty);
+		result.append(", notes: ");
+		result.append(notes);
+		result.append(", CV: ");
 		result.append(cv);
-		result.append(", volume: ");
-		result.append(volume);
-		result.append(", mmBtu: ");
-		result.append(mmBtu);
 		result.append(", portCharges: ");
 		result.append(portCharges);
 		result.append(", baseFuelConsumption: ");
