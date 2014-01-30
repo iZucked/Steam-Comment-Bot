@@ -21,6 +21,22 @@
          </package>
          <constraints
                categories=" com.mmxlabs.models.lng.actuals.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.actuals.validation.CargoActualsConstraint"
+                  id="com.mmxlabs.models.lng.actuals.validation.CargoActualsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Cargo Actuals Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CargoActuals">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
