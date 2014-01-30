@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
+import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
 public class CargoValueProviderFactory implements IReferenceValueProviderFactory {
@@ -33,6 +34,8 @@ public class CargoValueProviderFactory implements IReferenceValueProviderFactory
 				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_LoadSlots());
 			} else if (CargoPackage.eINSTANCE.getDischargeSlot().isSuperTypeOf(reference.getEReferenceType())) {
 				return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots());
+			} else if (CargoPackage.eINSTANCE.getSlot().isSuperTypeOf(reference.getEReferenceType())) {
+				return new MergedReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots());
 			}
 		}
 		return null;

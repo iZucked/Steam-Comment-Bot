@@ -127,6 +127,11 @@
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.DischargeSlot"
           referenceEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.Slot"
+          referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
