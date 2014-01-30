@@ -109,6 +109,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenu
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -413,7 +414,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public EObject getElementForNotificationTarget(final EObject source) {
-				if (source instanceof LoadSlot) {
+
+				if (source instanceof SlotContractParams) {
+					return source.eContainer();
+				} else if (source instanceof LoadSlot) {
 					return source;
 				} else if (source instanceof DischargeSlot) {
 					return source;
@@ -431,34 +435,34 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 		};
-				
+
 		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
-			
+
 			@Override
 			public String getToolTipText(Object element) {
 				RowData rd = ((RowData) element);
 				LoadSlot ls = rd.getLoadSlot();
 				DischargeSlot ds = rd.getDischargeSlot();
-				
-				String lString = ls!=null ? (ls.getNotes()!= null ? ls.getNotes(): "") : "";
-				String dString = ds!=null ? (ds.getNotes()!= null ? ds.getNotes(): "") : "";
-				if(lString.length() + dString.length() == 0){
+
+				String lString = ls != null ? (ls.getNotes() != null ? ls.getNotes() : "") : "";
+				String dString = ds != null ? (ds.getNotes() != null ? ds.getNotes() : "") : "";
+				if (lString.length() + dString.length() == 0) {
 					return null;
-				}
-				else {
-					if(lString.length() > 40) lString = lString.substring(0, 40) + "...";
-					if(dString.length() > 40) dString = dString.substring(0, 40) + "...";
+				} else {
+					if (lString.length() > 40)
+						lString = lString.substring(0, 40) + "...";
+					if (dString.length() > 40)
+						dString = dString.substring(0, 40) + "...";
 					return lString + "\n\n" + dString;
 				}
 			}
-			
+
 			@Override
 			public Point getToolTipShift(Object object) {
 				return new Point(10, 10);
 			}
 		});
-		
-		
+
 		final MenuManager mgr = new MenuManager();
 
 		contextMenuExtensions = TradesTableContextMenuExtensionUtil.getContextMenuExtensions();
@@ -790,7 +794,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		}), new RowDataEMFPath(false, Type.DISCHARGE_ALLOCATION));
 
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
-//		addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
+		// addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
 			BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.DISCHARGE);
@@ -813,7 +817,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					return super.getImage(element);
 				}
-			});			
+			});
 		}
 		{
 			final AssignmentManipulator assignmentManipulator = new AssignmentManipulator(scenarioEditingLocation);

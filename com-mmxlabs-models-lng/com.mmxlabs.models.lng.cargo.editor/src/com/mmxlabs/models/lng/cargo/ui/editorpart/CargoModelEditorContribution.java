@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
@@ -15,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -53,6 +55,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				return true;
 			} else if (dcsd.getTarget() instanceof DischargeSlot) {
 				return true;
+			} else if (dcsd.getTarget() instanceof SlotContractParams) {
+				return true;
 			}
 		}
 
@@ -66,13 +70,17 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			Cargo cargo = null;
 			LoadSlot loadSlot = null;
 			DischargeSlot dischargeSlot = null;
-			if (dcsd.getTarget() instanceof Cargo) {
-				cargo = (Cargo) dcsd.getTarget();
-			} else if (dcsd.getTarget() instanceof LoadSlot) {
-				loadSlot = (LoadSlot) dcsd.getTarget();
+			EObject target = dcsd.getTarget();
+			if (target instanceof SlotContractParams) {
+				target = target.eContainer();
+			}
+			if (target instanceof Cargo) {
+				cargo = (Cargo) target;
+			} else if (target instanceof LoadSlot) {
+				loadSlot = (LoadSlot) target;
 				cargo = loadSlot.getCargo();
-			} else if (dcsd.getTarget() instanceof DischargeSlot) {
-				dischargeSlot = (DischargeSlot) dcsd.getTarget();
+			} else if (target instanceof DischargeSlot) {
+				dischargeSlot = (DischargeSlot) target;
 				cargo = dischargeSlot.getCargo();
 			}
 			if (cargo != null) {
