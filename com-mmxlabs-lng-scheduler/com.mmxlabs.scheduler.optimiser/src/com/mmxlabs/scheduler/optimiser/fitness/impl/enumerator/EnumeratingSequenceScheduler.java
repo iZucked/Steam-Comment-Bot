@@ -219,7 +219,9 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		}
 
 		if (evaluator != null) {
-			evaluator.evaluateSchedule(sequences, scheduledSequences, solution);
+			long evaluateSchedule = evaluator.evaluateSchedule(sequences, scheduledSequences, solution);
+			// Make sure we re-evaluate to the same state!
+			assert evaluateSchedule == bestValue;
 		}
 		return scheduledSequences;
 	}
