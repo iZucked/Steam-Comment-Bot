@@ -23,7 +23,7 @@ public final class AllocationRecord {
 	// final long vesselCapacityInM3;
 
 	/** The quantity of LNG which <em>must</em> be loaded for a given cargo (for fuel) */
-	public   long requiredFuelVolumeInM3;
+	public long requiredFuelVolumeInM3;
 
 	/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
 	public  long minEndVolumeInM3;
