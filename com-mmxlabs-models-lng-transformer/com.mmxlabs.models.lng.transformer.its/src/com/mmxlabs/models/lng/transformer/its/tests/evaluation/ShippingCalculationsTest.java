@@ -2493,7 +2493,7 @@ public class ShippingCalculationsTest {
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
 
 		// Min heel in m3
-		checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+//		checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		checker.baseFuelPricePerM3 = 100;
 		checker.setupOrdinaryFuelCosts();
