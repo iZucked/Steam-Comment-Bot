@@ -67,8 +67,8 @@ public class ScheduleCalculator {
 	@Inject
 	private IVolumeAllocator volumeAllocator;
 
-//	@Inject
-//	private ICalculatorProvider calculatorProvider;
+	// @Inject
+	// private ICalculatorProvider calculatorProvider;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -85,26 +85,11 @@ public class ScheduleCalculator {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	public IAnnotatedSolution calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
-		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotatedSolution.setSequences(sequences);
-		calculateSchedule(sequences, scheduledSequences, annotatedSolution);
-		return annotatedSolution;
-	}
-
 	public void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
 		if (scheduledDataLookupProvider != null) {
 			scheduledDataLookupProvider.reset();
 		}
-
-//		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-//			shippingCalculator.prepareEvaluation(sequences);
-//		}
-//		// Prime the load price calculators with the scheduled result
-//		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
-//			calculator.prepareEvaluation(sequences);
-//		}
 
 		if (annotatedSolution != null) {
 			// Do basic voyageplan annotation

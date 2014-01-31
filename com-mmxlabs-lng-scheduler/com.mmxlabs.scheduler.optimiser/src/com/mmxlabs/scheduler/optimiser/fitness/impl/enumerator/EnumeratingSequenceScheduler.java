@@ -274,13 +274,19 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 //	}
 
 	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
-		if (bestResult == null) {
+		
+		final ScheduledSequences scheduledSequences = voyagePlanner.schedule(sequences, arrivalTimes, solution);
+		if (scheduledSequences == null) {
 			return null;
 		}
+		
+//		if (bestResult == null) {
+//			return null;
+//		}
 		if (evaluator != null) {
-			evaluator.evaluateSchedule(sequences, bestResult, solution);
+			evaluator.evaluateSchedule(sequences, scheduledSequences, solution);
 		}
-		return bestResult;
+		return scheduledSequences;
 	}
 
 	protected final void resetBest() {
@@ -747,7 +753,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 		// final List<IResource> resources = sequences.getResources();
 
-		final ScheduledSequences scheduledSequences = voyagePlanner.schedule(sequences, arrivalTimes);
+		final ScheduledSequences scheduledSequences = voyagePlanner.schedule(sequences, arrivalTimes, null);
 		if (scheduledSequences == null) {
 			return false;
 		}

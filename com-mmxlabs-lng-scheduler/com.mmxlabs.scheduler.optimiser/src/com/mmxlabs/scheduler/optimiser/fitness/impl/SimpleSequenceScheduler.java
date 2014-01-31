@@ -9,6 +9,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -53,7 +56,7 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 	private ICalculatorProvider calculatorProvider;
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
@@ -71,7 +74,7 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 			arrivalTimes[idx++] = schedule(entry.getKey(), entry.getValue());
 		}
 
-		voyagePlanner.schedule(sequences, arrivalTimes);
+		voyagePlanner.schedule(sequences, arrivalTimes, solution);
 		return answer;
 	}
 

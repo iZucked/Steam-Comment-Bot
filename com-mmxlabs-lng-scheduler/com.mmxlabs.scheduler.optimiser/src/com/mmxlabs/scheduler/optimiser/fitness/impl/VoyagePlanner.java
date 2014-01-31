@@ -15,9 +15,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -47,10 +51,12 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -97,6 +103,9 @@ public class VoyagePlanner {
 	@com.google.inject.Inject(optional = true)
 	private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
 
+	@Inject
+	private ScheduleCalculator scheduleCalculator;
+
 	/**
 	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
 	 * messes with the VPO).
@@ -110,7 +119,7 @@ public class VoyagePlanner {
 	 * @param useNBO
 	 * @return
 	 */
-	final public VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVessel vessel, final VesselState vesselState, final int availableTime, final ISequenceElement element,
+	private VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVessel vessel, final VesselState vesselState, final int availableTime, final ISequenceElement element,
 			final ISequenceElement prevElement, final VoyageOptions previousOptions, final IVoyagePlanOptimiser optimiser, boolean useNBO) {
 
 		final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(vesselState);
@@ -370,7 +379,7 @@ public class VoyagePlanner {
 	}
 
 	// TODO: Better naming?
-	public long generateVoyagePlan(final IVessel vessel, final int vesselStartTime, final LinkedHashMap<VoyagePlan, IAllocationAnnotation> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
+	private long generateVoyagePlan(final IVessel vessel, final int vesselStartTime, final LinkedHashMap<VoyagePlan, IAllocationAnnotation> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
 			final List<Integer> currentTimes, long heelVolumeInM3, VoyagePlan plan) {
 
 		// TODO: Handle LNG at end of charter out
@@ -610,7 +619,7 @@ public class VoyagePlanner {
 	 * @param sequence
 	 * @return
 	 */
-	final public boolean[] findSequenceBreaks(final ISequence sequence) {
+	private boolean[] findSequenceBreaks(final ISequence sequence) {
 		final boolean[] result = new boolean[sequence.size()];
 
 		int idx = 0;
@@ -642,7 +651,7 @@ public class VoyagePlanner {
 	 * @param sequence
 	 * @return
 	 */
-	final public VesselState[] findVesselStates(final ISequence sequence) {
+	private VesselState[] findVesselStates(final ISequence sequence) {
 		final VesselState[] result = new VesselState[sequence.size()];
 
 		VesselState state = VesselState.Ballast;
@@ -689,7 +698,7 @@ public class VoyagePlanner {
 	 * @param sequence
 	 * @return
 	 */
-	final public VesselState[] findVesselStates(final List<ISequenceElement> elements) {
+	private VesselState[] findVesselStates(final List<ISequenceElement> elements) {
 		final VesselState[] result = new VesselState[elements.size()];
 
 		VesselState state = VesselState.Ballast;
@@ -772,7 +781,7 @@ public class VoyagePlanner {
 		return scheduledSequence;
 	}
 
-	final public ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
+	private ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
 		// Virtual vessels are those operated by a third party, for FOB and DES situations.
 		// Should we compute a schedule for them anyway? The arrival times don't mean much,
 		// but contracts need this kind of information to make up numbers with.
@@ -817,7 +826,7 @@ public class VoyagePlanner {
 		return scheduledSequence;
 	}
 
-	public ScheduledSequences schedule(final ISequences sequences, final int[][] arrivalTimes) {
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable IAnnotatedSolution solution) {
 		final ScheduledSequences result = new ScheduledSequences();
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
@@ -841,6 +850,8 @@ public class VoyagePlanner {
 			result.add(scheduledSequence);
 		}
 
+		scheduleCalculator.calculateSchedule(sequences, result, solution);
+		
 		return result;
 	}
 
