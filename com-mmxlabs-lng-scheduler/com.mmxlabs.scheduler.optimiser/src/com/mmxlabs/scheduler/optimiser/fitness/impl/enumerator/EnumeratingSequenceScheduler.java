@@ -235,16 +235,11 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-		return schedule(sequences, sequences.getResources(), solution);
-	}
-
-	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		setSequences(sequences);
 		resetBest();
 
 		startLogEntry(1);
-		prepare(getResourceIndices(sequences, affectedResources));
+		prepare(getResourceIndices(sequences, sequences.getResources()));
 		enumerate(0, 0);
 		endLogEntry();
 

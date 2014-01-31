@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;

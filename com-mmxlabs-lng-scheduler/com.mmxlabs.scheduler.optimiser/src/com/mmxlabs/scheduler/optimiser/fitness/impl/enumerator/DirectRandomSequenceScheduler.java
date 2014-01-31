@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
-import java.util.Collection;
 import java.util.Random;
 
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
@@ -32,17 +30,12 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-		return schedule(sequences, sequences.getResources(), solution);
-	}
-
-	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		random = new Random(seed);
 
 		setSequences(sequences);
 		resetBest();
 
-		final int[] resourceIndices = getResourceIndices(sequences, affectedResources);
+		final int[] resourceIndices = getResourceIndices(sequences, sequences.getResources());
 
 		prepare(resourceIndices);
 

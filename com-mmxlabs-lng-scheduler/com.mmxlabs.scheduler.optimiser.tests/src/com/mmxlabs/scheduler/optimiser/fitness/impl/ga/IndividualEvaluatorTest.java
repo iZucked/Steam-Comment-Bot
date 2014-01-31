@@ -65,11 +65,6 @@ public class IndividualEvaluatorTest {
 		}
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-		}
-
-		@Override
 		public void acceptLastSchedule() {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
