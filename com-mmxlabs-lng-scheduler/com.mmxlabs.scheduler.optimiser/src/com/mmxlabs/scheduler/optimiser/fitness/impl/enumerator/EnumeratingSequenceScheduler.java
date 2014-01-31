@@ -213,6 +213,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
 
+		// TODO: Trigger only if solution != null?
+
 		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
 		if (scheduledSequences == null) {
 			return null;
