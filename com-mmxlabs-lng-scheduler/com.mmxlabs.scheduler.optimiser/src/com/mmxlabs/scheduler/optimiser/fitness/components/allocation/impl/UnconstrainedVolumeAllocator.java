@@ -177,34 +177,4 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		return annotation;
 	}
-
-	// /*
-	// * (non-Javadoc)
-	// *
-	// * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl. BaseCargoAllocator#allocateSpareVolume()
-	// */
-	// @Override
-	// protected void allocateSpareVolume() {
-	// for (final AllocationRecord constraint : constraints) {
-	//
-	// if (!handleRedirectionVolumes(constraint)) {
-	// allocateBasicSlotVolumes(constraint);
-	// }
-	// }
-	// }
-	//
-	// /**
-	// * @since 8.0
-	// */
-	// protected boolean handleRedirectionVolumes(final AllocationRecord constraint) {
-	//
-	// if (redirectionVolumeAllocator != null) {
-	// if (redirectionVolumeAllocator.canHandle(constraint)) {
-	// redirectionVolumeAllocator.handle(constraint);
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-
 }
