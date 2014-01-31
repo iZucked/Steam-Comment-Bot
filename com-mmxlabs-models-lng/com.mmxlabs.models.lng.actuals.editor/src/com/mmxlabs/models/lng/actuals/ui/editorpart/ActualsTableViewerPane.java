@@ -1,5 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.actuals.ui.editorpart;
@@ -500,10 +499,10 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		 * 
 		 * toolbar.appendToGroup(VIEW_GROUP, filter);
 		 */
-
-		final Action addAction = new AddAction("Add");
-		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
-		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
+		addAction = null;
+		// final Action addAction = new AddAction("Add");
+		// addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		// toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 
 		final Action filterAction = new FilterMenuAction("Filter");
 		filterAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.ui.tabular", "/icons/filter.gif"));
@@ -524,15 +523,15 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 				});
 			}
 		}
-
-		if (addAction != null) {
-			// if we can't add one, we can't duplicate one either.
-			final Action dupAction = createDuplicateAction();
-
-			if (dupAction != null) {
-				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
-			}
-		}
+		//
+		// if (addAction != null) {
+		// // if we can't add one, we can't duplicate one either.
+		// final Action dupAction = createDuplicateAction();
+		//
+		// if (dupAction != null) {
+		// toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
+		// }
+		// }
 		deleteAction = createDeleteAction();
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
@@ -573,6 +572,11 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		addActualsColumn(cargoColumns, "Base Fuel Price", new NumericAttributeManipulator(pkg.getCargoActuals_BaseFuelPrice(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
 		addActualsColumn(cargoColumns, "Crew Bonus", new NumericAttributeManipulator(pkg.getCargoActuals_CrewBonus(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
 		addActualsColumn(cargoColumns, "Insurance Premium", new NumericAttributeManipulator(pkg.getCargoActuals_InsurancePremium(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
+	}
+
+	@Override
+	protected Action createAddAction(EReference containment) {
+		return null;
 	}
 
 	public RootData setActualsData(final ActualsModel actualModel) {
