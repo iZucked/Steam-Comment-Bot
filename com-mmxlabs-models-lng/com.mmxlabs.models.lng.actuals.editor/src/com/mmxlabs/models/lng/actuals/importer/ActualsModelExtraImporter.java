@@ -15,7 +15,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.CSVReader;
-import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IImportContext;

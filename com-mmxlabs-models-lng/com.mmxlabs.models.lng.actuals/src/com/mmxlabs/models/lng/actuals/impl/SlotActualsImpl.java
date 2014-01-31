@@ -4,14 +4,15 @@ package com.mmxlabs.models.lng.actuals.impl;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
-
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
+
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import org.eclipse.emf.common.notify.Notification;
-
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -316,6 +317,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCV(double newCV) {
 		double oldCV = cv;
 		cv = newCV;
@@ -367,6 +369,18 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		baseFuelConsumption = newBaseFuelConsumption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION, oldBaseFuelConsumption, baseFuelConsumption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public String getTimeZone(EAttribute attribute) {
+		if (getTitleTransferPoint() == null) return "UTC";
+		if (getTitleTransferPoint().getTimeZone() == null) return "UTC";
+		return getTitleTransferPoint().getTimeZone();
 	}
 
 	/**
@@ -811,6 +825,20 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case ActualsPackage.SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE:
+				return getTimeZone((EAttribute)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**

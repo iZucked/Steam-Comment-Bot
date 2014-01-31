@@ -2,6 +2,7 @@
  */
 package com.mmxlabs.models.lng.actuals;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -110,7 +111,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__SLOT = 0;
+	int SLOT_ACTUALS__SLOT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Counterparty</b></em>' attribute.
@@ -119,7 +120,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__COUNTERPARTY = 1;
+	int SLOT_ACTUALS__COUNTERPARTY = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Operations Start</b></em>' attribute.
@@ -128,7 +129,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__OPERATIONS_START = 2;
+	int SLOT_ACTUALS__OPERATIONS_START = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Operations End</b></em>' attribute.
@@ -137,7 +138,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__OPERATIONS_END = 3;
+	int SLOT_ACTUALS__OPERATIONS_END = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Title Transfer Point</b></em>' reference.
@@ -146,7 +147,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__TITLE_TRANSFER_POINT = 4;
+	int SLOT_ACTUALS__TITLE_TRANSFER_POINT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Volume In M3</b></em>' attribute.
@@ -155,7 +156,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__VOLUME_IN_M3 = 5;
+	int SLOT_ACTUALS__VOLUME_IN_M3 = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Volume In MM Btu</b></em>' attribute.
@@ -164,7 +165,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__VOLUME_IN_MM_BTU = 6;
+	int SLOT_ACTUALS__VOLUME_IN_MM_BTU = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Price DOL</b></em>' attribute.
@@ -173,7 +174,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__PRICE_DOL = 7;
+	int SLOT_ACTUALS__PRICE_DOL = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Penalty</b></em>' attribute.
@@ -182,7 +183,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__PENALTY = 8;
+	int SLOT_ACTUALS__PENALTY = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
@@ -191,7 +192,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__NOTES = 9;
+	int SLOT_ACTUALS__NOTES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>CV</b></em>' attribute.
@@ -200,7 +201,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__CV = 10;
+	int SLOT_ACTUALS__CV = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
@@ -209,7 +210,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__PORT_CHARGES = 11;
+	int SLOT_ACTUALS__PORT_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel Consumption</b></em>' attribute.
@@ -218,7 +219,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = 12;
+	int SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Slot Actuals</em>' class.
@@ -227,7 +228,16 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_FEATURE_COUNT = 13;
+	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The number of operations of the '<em>Slot Actuals</em>' class.
@@ -236,7 +246,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_OPERATION_COUNT = 0;
+	int SLOT_ACTUALS_OPERATION_COUNT = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl <em>Cargo Actuals</em>}' class.
@@ -520,6 +530,15 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
 	 * The number of operations of the '<em>Load Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -672,6 +691,15 @@ public interface ActualsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
 	 * The number of operations of the '<em>Discharge Actuals</em>' class.

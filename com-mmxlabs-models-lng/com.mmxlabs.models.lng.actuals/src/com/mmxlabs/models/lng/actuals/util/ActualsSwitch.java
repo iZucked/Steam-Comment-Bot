@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.actuals.util;
 
 import com.mmxlabs.models.lng.actuals.*;
 
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -75,6 +76,7 @@ public class ActualsSwitch<T> extends Switch<T> {
 			case ActualsPackage.SLOT_ACTUALS: {
 				SlotActuals slotActuals = (SlotActuals)theEObject;
 				T result = caseSlotActuals(slotActuals);
+				if (result == null) result = caseITimezoneProvider(slotActuals);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -88,6 +90,7 @@ public class ActualsSwitch<T> extends Switch<T> {
 				LoadActuals loadActuals = (LoadActuals)theEObject;
 				T result = caseLoadActuals(loadActuals);
 				if (result == null) result = caseSlotActuals(loadActuals);
+				if (result == null) result = caseITimezoneProvider(loadActuals);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -95,6 +98,7 @@ public class ActualsSwitch<T> extends Switch<T> {
 				DischargeActuals dischargeActuals = (DischargeActuals)theEObject;
 				T result = caseDischargeActuals(dischargeActuals);
 				if (result == null) result = caseSlotActuals(dischargeActuals);
+				if (result == null) result = caseITimezoneProvider(dischargeActuals);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -174,6 +178,21 @@ public class ActualsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDischargeActuals(DischargeActuals object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseITimezoneProvider(ITimezoneProvider object) {
 		return null;
 	}
 

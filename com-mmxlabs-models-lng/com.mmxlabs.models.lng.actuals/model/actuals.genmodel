@@ -14,22 +14,40 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference actuals.ecore#//ActualsModel/cargoActuals"/>
     </genClasses>
     <genClasses image="false" ecoreClass="actuals.ecore#//SlotActuals">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/CV"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/volume"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/mmBtu"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/portCharges"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/baseFuelConsumption"/>
       <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference actuals.ecore#//SlotActuals/slot"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/counterparty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/operationsStart"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/operationsEnd"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference actuals.ecore#//SlotActuals/titleTransferPoint"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/volumeInM3"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/volumeInMMBtu"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/priceDOL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/penalty"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/notes"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/CV"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/portCharges"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//SlotActuals/baseFuelConsumption"/>
     </genClasses>
     <genClasses image="false" ecoreClass="actuals.ecore#//CargoActuals">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference actuals.ecore#//CargoActuals/actuals"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/contractYear"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/operationNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/subOperationNumber"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/sellerID"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/cargoReference"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/cargoReferenceSeller"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference actuals.ecore#//CargoActuals/vessel"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference actuals.ecore#//CargoActuals/cargo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/baseFuelPrice"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/volume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/insurancePremium"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//CargoActuals/crewBonus"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference actuals.ecore#//CargoActuals/actuals"/>
     </genClasses>
-    <genClasses ecoreClass="actuals.ecore#//LoadActuals"/>
-    <genClasses ecoreClass="actuals.ecore#//DischargeActuals"/>
+    <genClasses ecoreClass="actuals.ecore#//LoadActuals">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//LoadActuals/contractType"/>
+    </genClasses>
+    <genClasses ecoreClass="actuals.ecore#//DischargeActuals">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute actuals.ecore#//DischargeActuals/deliveryType"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
