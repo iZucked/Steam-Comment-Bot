@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -548,6 +549,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
+		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 		CargoPackage theCargoPackage = (CargoPackage)EPackage.Registry.INSTANCE.getEPackage(CargoPackage.eNS_URI);
 		PortPackage thePortPackage = (PortPackage)EPackage.Registry.INSTANCE.getEPackage(PortPackage.eNS_URI);
 		FleetPackage theFleetPackage = (FleetPackage)EPackage.Registry.INSTANCE.getEPackage(FleetPackage.eNS_URI);
@@ -557,6 +559,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		slotActualsEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 		loadActualsEClass.getESuperTypes().add(this.getSlotActuals());
 		dischargeActualsEClass.getESuperTypes().add(this.getSlotActuals());
 

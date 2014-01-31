@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.actuals.presentation.composites;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -40,6 +41,7 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	 */
 	public SlotActualsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ITIMEZONE_PROVIDER));
 	}
 	
 	/**

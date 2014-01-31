@@ -293,6 +293,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setBaseFuelPrice(double newBaseFuelPrice) {
 		double oldBaseFuelPrice = baseFuelPrice;
 		baseFuelPrice = newBaseFuelPrice;

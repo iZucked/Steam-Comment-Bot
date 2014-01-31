@@ -4,8 +4,8 @@ package com.mmxlabs.models.lng.actuals;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import java.util.Date;
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model abstract="true"
  * @generated
  */
-public interface SlotActuals extends EObject {
+public interface SlotActuals extends ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->

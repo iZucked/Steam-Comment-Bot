@@ -6,7 +6,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoActuals" upperBound="-1"
         eType="#//CargoActuals" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SlotActuals" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="SlotActuals" abstract="true" eSuperTypes="../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="counterparty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationsStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
