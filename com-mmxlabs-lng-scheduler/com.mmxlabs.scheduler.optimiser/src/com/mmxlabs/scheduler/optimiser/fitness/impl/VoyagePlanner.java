@@ -51,7 +51,6 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -143,7 +142,7 @@ public class VoyagePlanner {
 			// options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), heelOptions.getHeelOptions().getHeelLimit()));
 			if (heelOptionsSlot.getHeelOptions().getHeelLimit() > 0) {
 				useNBO = true;
-				forceNBO = true;
+				forceNBO = false;
 			} else {
 				useNBO = false;
 				forceNBO = false;

@@ -159,7 +159,7 @@ public class CapacityViolationChecker {
 								}
 
 								if (remainingHeelInM3 > 0) {
-									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
+//									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
 									// Reset as we do not handle pushing remaining heel into a vessel event voyage
 									remainingHeelInM3 = 0;
 								}
@@ -221,7 +221,7 @@ public class CapacityViolationChecker {
 
 			// Handle anything left over at the end of the schedule
 			if (remainingHeelInM3 > 0) {
-				addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
+//				addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
 			}
 		}
 	}

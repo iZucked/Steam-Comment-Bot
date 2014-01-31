@@ -1,5 +1,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import java.util.List;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;

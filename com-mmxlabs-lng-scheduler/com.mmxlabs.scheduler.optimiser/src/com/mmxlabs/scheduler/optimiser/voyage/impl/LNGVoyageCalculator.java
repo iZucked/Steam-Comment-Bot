@@ -724,7 +724,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 			long remainingHeelInM3 = startHeelInM3 - lngCommitmentInM3;
-			
+
 			// Store this value now as we may change it below during the heel calculations
 			voyagePlan.setLNGFuelVolume(lngCommitmentInM3);
 
@@ -798,9 +798,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 
-		// Check for cooldown violations and add to the violations count
-		violationsCount += checkCooldownViolations(loadIdx, dischargeIdx, sequence);
-
 		// Store results in plan
 		voyagePlan.setSequence(sequence);
 
@@ -822,6 +819,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
 
+		// Weight non cooldown violations heavier than cooldown
+		violationsCount *= 2;
+		// Check for cooldown violations and add to the violations count
+		violationsCount += checkCooldownViolations(loadIdx, dischargeIdx, sequence);
 		voyagePlan.setViolationsCount(violationsCount);
 
 		return violationsCount;
@@ -914,9 +915,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final long fuelConsumption = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 				if (shouldBeCold && (fuelConsumption > 0)) {
 
-					if ((loadIdx != -1) && (dischargeIdx != -1)) {
-						++cooldownViolations;
-					}
+					// if ((loadIdx != -1)) {
+					++cooldownViolations;
+					// }
 
 				}
 			} else {

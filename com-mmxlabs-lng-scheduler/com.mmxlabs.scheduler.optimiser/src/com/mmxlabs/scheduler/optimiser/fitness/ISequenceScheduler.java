@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 import java.util.Collection;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
 
