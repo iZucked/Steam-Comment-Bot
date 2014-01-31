@@ -12,10 +12,12 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+
 /**
  * @since 8.0
  */
-public abstract class AbstractLoggingSequenceScheduler {
+public abstract class AbstractLoggingSequenceScheduler implements ISequenceScheduler {
 
 	private static final Logger log = LoggerFactory.getLogger(AbstractLoggingSequenceScheduler.class);
 

@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 /**
  * Simple scheduler. Try to arrive at the {@link ITimeWindow} start.
@@ -35,7 +36,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @author Simon Goodall
  * 
  */
-public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
+public final class SimpleSequenceScheduler extends AbstractLoggingSequenceScheduler {
 
 	@Inject
 	private ITimeWindowDataComponentProvider timeWindowProvider;
@@ -50,7 +51,7 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private VoyagePlanner voyagePlanner;
+	private ScheduleCalculator scheduleCalculator;
 
 	@Inject
 	private ICalculatorProvider calculatorProvider;
@@ -74,7 +75,7 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 			arrivalTimes[idx++] = schedule(entry.getKey(), entry.getValue());
 		}
 
-		voyagePlanner.schedule(sequences, arrivalTimes, solution);
+		scheduleCalculator.schedule(sequences, arrivalTimes, solution);
 		return answer;
 	}
 

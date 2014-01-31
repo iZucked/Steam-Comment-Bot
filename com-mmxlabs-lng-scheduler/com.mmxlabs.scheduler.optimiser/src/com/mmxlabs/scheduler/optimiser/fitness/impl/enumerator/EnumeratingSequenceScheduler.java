@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,9 +28,8 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -41,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 /**
  * A sequence scheduler which enumerates possible combinations of arrival times explicitly, rather than using the GA byte array decoding method. This should be subclassable into a random sequence
@@ -49,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author hinton
  * 
  */
-public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
+public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
 
 	private static final int DISCHARGE_SEQUENCE_INDEX_OFFSET = 0;
 	private static final int DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET = 1;
@@ -163,44 +162,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private VoyagePlanner voyagePlanner;
-
-	/**
-	 * Resize one of the integer buffers above
-	 */
-	private final void resize(final int[][] arrays, final int arrayIndex, final int size) {
-		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
-			arrays[arrayIndex] = new int[(size)];
-		}
-	}
-
-	/**
-	 * Resize one of the boolean buffers above.
-	 */
-	private void resize(final boolean[][] arrays, final int arrayIndex, final int size) {
-		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
-			arrays[arrayIndex] = new boolean[(size)];
-		}
-	}
-
-	/**
-	 * Resize all the integer buffers for a given route
-	 * 
-	 * @param arrayIndex
-	 * @param size
-	 */
-	private final void resizeAll(final int sequenceIndex, final int size) {
-		resize(arrivalTimes, sequenceIndex, size);
-		resize(windowStartTime, sequenceIndex, size);
-		resize(windowEndTime, sequenceIndex, size);
-		resize(minTimeToNextElement, sequenceIndex, size);
-		resize(maxTimeToNextElement, sequenceIndex, size);
-
-		resize(isVirtual, sequenceIndex, size);
-		resize(useTimeWindow, sequenceIndex, size);
-
-		sizes[sequenceIndex] = size;
-	}
+	private ScheduleCalculator scheduleCalculator;
 
 	/**
 	 * The sequences being evaluated at the moment
@@ -222,11 +184,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * True if the last time we called evaluate() we evaluated the best result in this cycle.
 	 */
 	private boolean lastEvaluationWasBestResult = false;
-
-	 /**
-	 * The last result which was accepted externally, for the purposes of doing partial evaluations.
-	 */
-	 private ScheduledSequences lastAcceptedResult = null;
 
 	/**
 	 * Contains the last valid value calculated by evaluate(). TODO this is ugly.
@@ -254,35 +211,13 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		return reEvaluateAndGetBestResult(solution);
 	}
 
-//	/**
-//	 * @param sequences
-//	 * @param affectedResources
-//	 * @return
-//	 */
-//	protected int[] getResourceIndices(final ISequences sequences, final Collection<IResource> affectedResources) {
-//		final List<IResource> resources = sequences.getResources();
-//
-//		final int[] affectedIndices = new int[affectedResources.size()];
-//		int k = 0;
-//		for (int i = 0; i < resources.size(); i++) {
-//			if (affectedResources.contains(resources.get(i))) {
-//				affectedIndices[k++] = i;
-//			}
-//		}
-//
-//		return affectedIndices;
-//	}
-
 	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
-		
-		final ScheduledSequences scheduledSequences = voyagePlanner.schedule(sequences, arrivalTimes, solution);
+
+		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
 		if (scheduledSequences == null) {
 			return null;
 		}
-		
-//		if (bestResult == null) {
-//			return null;
-//		}
+
 		if (evaluator != null) {
 			evaluator.evaluateSchedule(sequences, scheduledSequences, solution);
 		}
@@ -300,22 +235,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	protected final void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
 	}
-
-//	protected final void prepare() {
-//		final int size = sequences.size();
-//		bindings.clear();
-//
-//		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
-//			prepare();
-//			return;
-//		}
-//
-////		for (final int i : indices) {
-//		 for (int i = 0; i < size; i++) {
-//			prepare(i);
-//		}
-//		imposeShipToShipConstraints();
-//	}
 
 	protected ScheduledSequences getBestResult() {
 		return bestResult;
@@ -526,6 +445,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			// TODO: Implement something here rather than rely on VoyagePlanner
 			return;
 		}
 
@@ -702,77 +622,19 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		}
 	}
 
-	/**
-	 * Use {@link #evaluator} to evaluate the current arrival times array, and if it is the best solution so far take a copy of the result.
-	 * 
-	 * @return true if the result is the new best case, false otherwise
-	 */
-	// protected boolean evaluate() {
-	// return evaluate(getResourceIndices(sequences, sequences.getResources()));
-	// // count++;
-	// //
-	// // final ScheduledSequences scheduledSequences = super.schedule(sequences, arrivalTimes);
-	// //
-	// // if (scheduledSequences == null)
-	// // return false;
-	// //
-	// // lastValue = evaluator.evaluateSchedule(scheduledSequences);
-	// //
-	// // logValue(lastValue);
-	// //
-	// // if (lastValue < bestValue) {
-	// // lastEvaluationWasBestResult = true;
-	// // bestIndex = count;
-	// // // if (bestValue == Long.MAX_VALUE) {
-	// // // initialValue = value;
-	// // // }
-	// // bestValue = lastValue;
-	// // bestResult = scheduledSequences;
-	// // // System.err.println(String.format("%.2f%% gain at %d (%s)", (100.0
-	// // // * (initialValue - bestValue))/initialValue, count,
-	// // // Long.toString(bestValue)));
-	// // return true;
-	// // } else {
-	// // lastEvaluationWasBestResult = false;
-	// // }
-	// // return false;
-	// }
-
 	@Override
 	public void acceptLastSchedule() {
-		lastAcceptedResult = bestResult;
+
 	}
 
 	protected boolean evaluate() {
-//		int[] changedSequences = getResourceIndices(sequences, sequences.getResources());
-		// if (lastAcceptedResult == null) {
-		// changedSequences = getResourceIndices(sequences, sequences.getResources());
-		// }
 
 		count++;
 
-		// final List<IResource> resources = sequences.getResources();
-
-		final ScheduledSequences scheduledSequences = voyagePlanner.schedule(sequences, arrivalTimes, null);
+		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, null);
 		if (scheduledSequences == null) {
 			return false;
 		}
-		//
-		// if (lastAcceptedResult != null) {
-		// scheduledSequences.addAll(lastAcceptedResult);
-		// } else {
-		// for (int i = 0; i < sequences.size(); i++) {
-		// scheduledSequences.add(null);
-		// }
-		// }
-		//
-		// for (final int index : changedSequences) {
-		// final ScheduledSequence sequence = voyagePlanner.schedule(sequences, arrivalTimes);
-		// if (sequence == null) {
-		// return false; // break out now, something bad has happened
-		// }
-		// scheduledSequences.set(index, sequence);
-		// }
 
 		if (evaluator != null) {
 			lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, null);
@@ -901,5 +763,42 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 */
 	public int[][] getArrivalTimes() {
 		return arrivalTimes;
+	}
+
+	/**
+	 * Resize one of the integer buffers above
+	 */
+	private final void resize(final int[][] arrays, final int arrayIndex, final int size) {
+		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
+			arrays[arrayIndex] = new int[(size)];
+		}
+	}
+
+	/**
+	 * Resize one of the boolean buffers above.
+	 */
+	private void resize(final boolean[][] arrays, final int arrayIndex, final int size) {
+		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
+			arrays[arrayIndex] = new boolean[(size)];
+		}
+	}
+
+	/**
+	 * Resize all the integer buffers for a given route
+	 * 
+	 * @param arrayIndex
+	 * @param size
+	 */
+	private final void resizeAll(final int sequenceIndex, final int size) {
+		resize(arrivalTimes, sequenceIndex, size);
+		resize(windowStartTime, sequenceIndex, size);
+		resize(windowEndTime, sequenceIndex, size);
+		resize(minTimeToNextElement, sequenceIndex, size);
+		resize(maxTimeToNextElement, sequenceIndex, size);
+
+		resize(isVirtual, sequenceIndex, size);
+		resize(useTimeWindow, sequenceIndex, size);
+
+		sizes[sequenceIndex] = size;
 	}
 }

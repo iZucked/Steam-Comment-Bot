@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,15 +14,18 @@ import java.util.Map;
 
 import javax.inject.Provider;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -34,12 +40,17 @@ import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -67,8 +78,8 @@ public class ScheduleCalculator {
 	@Inject
 	private IVolumeAllocator volumeAllocator;
 
-	// @Inject
-	// private ICalculatorProvider calculatorProvider;
+	@Inject
+	private ICalculatorProvider calculatorProvider;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -85,7 +96,127 @@ public class ScheduleCalculator {
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	public void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
+	@Inject
+	private VoyagePlanner voyagePlanner;
+
+	/**
+	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
+	 * between elements may be too short (i.e. because the vessel is already travelling at max speed). In such cases, if adjustArrivals is true, then arrival times will be adjusted in the
+	 * {@link VoyagePlan}s. Otherwise null will be returned.
+	 * 
+	 * @param resource
+	 * @param sequence
+	 * @param arrivalTimes
+	 *            Array of arrival times at each {@link ISequenceElement} in the {@link ISequence}
+	 * @return
+	 * @throws InfeasibleVoyageException
+	 */
+	private ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+		final IVessel vessel = vesselProvider.getVessel(resource);
+
+		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			// Virtual vessels are those operated by a third party, for FOB and DES situations.
+			// Should we compute a schedule for them anyway? The arrival times don't mean much,
+			// but contracts need this kind of information to make up numbers with.
+			return desOrFobSchedule(resource, sequence);
+		}
+
+		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+
+		// TODO: document this code path
+		if (isShortsSequence && arrivalTimes.length == 0) {
+			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
+		}
+
+		// Get start time
+		final int startTime = arrivalTimes[0];
+
+		final Map<VoyagePlan, IAllocationAnnotation> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		if (voyagePlans == null) {
+			return null;
+		}
+
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, new ArrayList<>(voyagePlans.keySet()), arrivalTimes);
+		scheduledSequence.getAllocations().putAll(voyagePlans);
+		return scheduledSequence;
+	}
+
+	private ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
+		// Virtual vessels are those operated by a third party, for FOB and DES situations.
+		// Should we compute a schedule for them anyway? The arrival times don't mean much,
+		// but contracts need this kind of information to make up numbers with.
+		final List<IDetailsSequenceElement> currentSequence = new ArrayList<IDetailsSequenceElement>(5);
+		final VoyagePlan currentPlan = new VoyagePlan();
+
+		boolean startSet = false;
+		int startTime = 0;
+		for (final ISequenceElement element : sequence) {
+
+			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+
+			// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
+			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
+				startTime = thisPortSlot.getTimeWindow().getStart();
+				startSet = true;
+			}
+			final PortOptions portOptions = new PortOptions();
+			final PortDetails portDetails = new PortDetails();
+			portDetails.setOptions(portOptions);
+			portOptions.setVisitDuration(0);
+			portOptions.setPortSlot(thisPortSlot);
+			currentSequence.add(portDetails);
+
+		}
+		// TODO: This should come from the ISequencesScheduler
+		final int times[] = new int[sequence.size()];
+		Arrays.fill(times, startTime);
+		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
+		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
+
+		IVessel vessel = vesselProvider.getVessel(resource);
+		int vesselStartTime = startTime;
+
+		// TODO: This is not the place!
+		final AllocationRecord record = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, currentPlan, CollectionsUtil.toArrayList(times));
+		if (record != null) {
+
+			scheduledSequence.getAllocations().put(currentPlan, volumeAllocator.allocate(record));
+		} else {
+			scheduledSequence.getAllocations().put(currentPlan, null);
+		}
+		return scheduledSequence;
+	}
+
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable IAnnotatedSolution solution) {
+		final ScheduledSequences result = new ScheduledSequences();
+
+		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
+			shippingCalculator.prepareEvaluation(sequences);
+		}
+		// Prime the load price calculators with the scheduled result
+		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
+			calculator.prepareEvaluation(sequences);
+		}
+
+		final List<IResource> resources = sequences.getResources();
+
+		for (int i = 0; i < sequences.size(); i++) {
+			final ISequence sequence = sequences.getSequence(i);
+			final IResource resource = resources.get(i);
+
+			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+			if (scheduledSequence == null) {
+				return null;
+			}
+			result.add(scheduledSequence);
+		}
+
+		calculateSchedule(sequences, result, solution);
+
+		return result;
+	}
+
+	private void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
 		if (scheduledDataLookupProvider != null) {
 			scheduledDataLookupProvider.reset();

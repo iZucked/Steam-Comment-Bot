@@ -35,8 +35,6 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		setSequences(sequences);
 		resetBest();
 
-		// final int[] resourceIndices = getResourceIndices(sequences, sequences.getResources());
-
 		prepare();
 
 		final int sampleCount = samplingUpperBound;
