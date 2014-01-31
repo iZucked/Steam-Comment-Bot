@@ -61,7 +61,7 @@ public interface Location extends EObject {
 	 * @return the value of the '<em>Lat</em>' attribute.
 	 * @see #setLat(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_Lat()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##.###'"
 	 * @generated
 	 */
 	double getLat();
