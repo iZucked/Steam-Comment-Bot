@@ -154,11 +154,20 @@ public class ScheduleCalculator {
 
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 
+			// Determine transfer time
 			// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
-				startTime = thisPortSlot.getTimeWindow().getStart();
-				startSet = true;
+				
+				if (thisPortSlot instanceof ILoadSlot) {
+					startTime = thisPortSlot.getTimeWindow().getStart();
+					startSet = true;
+				}
+				if (thisPortSlot instanceof IDischargeSlot) {
+					startTime = thisPortSlot.getTimeWindow().getStart();
+					startSet = true;
+				}
 			}
+			
 			final PortOptions portOptions = new PortOptions();
 			final PortDetails portDetails = new PortDetails();
 			portDetails.setOptions(portOptions);
