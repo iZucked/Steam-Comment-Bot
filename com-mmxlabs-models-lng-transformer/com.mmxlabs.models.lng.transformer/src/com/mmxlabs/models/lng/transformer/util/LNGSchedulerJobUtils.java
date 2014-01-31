@@ -464,7 +464,11 @@ public class LNGSchedulerJobUtils {
 
 		// run a scheduler on the sequences - there is no SchedulerFitnessEvaluator to guide it!
 		final ISequenceScheduler scheduler = injector.getInstance(DirectRandomSequenceScheduler.class);
-		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
+		
+		// The output data structured, a solution with all the output data as annotations
+		final AnnotatedSolution solution = new AnnotatedSolution();
+		solution.setSequences(sequences);
+		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
 
 		// Make sure a schedule was created.
 		if (scheduledSequences == null) {
@@ -472,11 +476,6 @@ public class LNGSchedulerJobUtils {
 			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
 		}
 
-		// Get a ScheduleCalculator to process the schedule and obtain output data
-		final ScheduleCalculator scheduleCalculator = injector.getInstance(ScheduleCalculator.class);
-
-		// The output data structured, a solution with all the output data as annotations
-		final AnnotatedSolution solution = (AnnotatedSolution) scheduleCalculator.calculateSchedule(sequences, scheduledSequences);
 		// Create a fake context
 		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
 		return solution;
