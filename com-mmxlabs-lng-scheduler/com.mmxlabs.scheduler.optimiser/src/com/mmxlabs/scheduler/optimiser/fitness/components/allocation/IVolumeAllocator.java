@@ -5,68 +5,51 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.List;
-import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICustomVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Interface for volume allocation logic.
  * 
- * @author hinton
+ * @author Simon Goodall, hinton
  * 
  */
 public interface IVolumeAllocator {
-	// /**
-	// * Set the {@link ITotalVolumeLimitProvider} which informs the allocator of any global constraints on load/discharge volumes
-	// *
-	// * @param tvlp
-	// */
-	// public void setTotalVolumeLimitProvider(ITotalVolumeLimitProvider tvlp);
-	//
-	// public void init();
-	//
-	// /**
-	// * Return a bunch of {@link IAllocationAnnotation}s for the given {@link ScheduledSequences} keyed off {@link VoyagePlan}s.
-	// *
-	// * These should include the correct load prices/volumes for each allocated cargo.
-	// *
-	// * @param sequences
-	// * @return
-	// */
-	// public Map<VoyagePlan, IAllocationAnnotation> allocate(ScheduledSequences sequences);
 
-//	/**
-//	 * Given a single {@link VoyagePlan} calculate "best as" the cargo allocation. By "best as" this means allocation without the other cargo volumes. Typically this will mean maxing out the load.
-//	 * 
-//	 * @param voyagePlan
-//	 * @return
-//	 * @since 5.0
-//	 */
-	
-	
-	IAllocationAnnotation allocate(AllocationRecord allocationRecord);
+	/**
+	 * Directly create an {@link IAllocationAnnotation} from input data. Internally this should call {@link #createAllocationRecord(IVessel, int, VoyagePlan, List)}, delegate to a
+	 * {@link ICustomVolumeAllocator} and then invoke {@link #allocate(AllocationRecord)}. This method is preferred over the other two for standard volume allocation.
+	 * 
+	 * @param vessel
+	 * @param vesselStartTime
+	 * @param plan
+	 * @param arrivalTimes
+	 * @return
+	 */
+	IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes);
 
-	// public void dispose();
-	//
-	// /**
-	// * Forget anything that's happened in the last allocation step.
-	// */
-	// void reset();
-	//
-	// /**
-	// * @param dataComponentProvider
-	// */
-	// public void setVesselProvider(IVesselProvider dataComponentProvider);
-	//
-	// public AllocationRecord createVolumeRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> currentTimes);
-	//
-	// public AllocationAnnotation allocate(AllocationRecord record);
-
+	/**
+	 * Creates and returns the initial {@link AllocationRecord} instance based on input data. This can be modified before passing to {@link #allocate(AllocationRecord)}. This method should be called
+	 * in cases where the {@link ICustomVolumeAllocator} is not expected to be invoked.
+	 * 
+	 * @param vessel
+	 * @param vesselStartTime
+	 * @param plan
+	 * @param arrivalTimes
+	 * @return
+	 */
 	AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes);
+
+	/**
+	 * Given the {@link AllocationRecord}, perform the volume allocation to create an {@link IAllocationAnnotation}. This method should be called in cases where the {@link ICustomVolumeAllocator} is
+	 * not expected to be invoked.
+	 * 
+	 * @param allocationRecord
+	 * @return
+	 */
+	IAllocationAnnotation allocate(AllocationRecord allocationRecord);
 
 }

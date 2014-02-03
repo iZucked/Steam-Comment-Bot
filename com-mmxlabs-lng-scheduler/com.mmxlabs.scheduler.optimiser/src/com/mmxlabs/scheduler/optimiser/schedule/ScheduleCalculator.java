@@ -157,7 +157,7 @@ public class ScheduleCalculator {
 			// Determine transfer time
 			// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
-				
+
 				if (thisPortSlot instanceof ILoadSlot) {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;
@@ -167,7 +167,7 @@ public class ScheduleCalculator {
 					startSet = true;
 				}
 			}
-			
+
 			final PortOptions portOptions = new PortOptions();
 			final PortDetails portDetails = new PortDetails();
 			portDetails.setOptions(portOptions);
@@ -186,13 +186,9 @@ public class ScheduleCalculator {
 		int vesselStartTime = startTime;
 
 		// TODO: This is not the place!
-		final AllocationRecord record = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, currentPlan, CollectionsUtil.toArrayList(times));
-		if (record != null) {
+		final IAllocationAnnotation annotation = volumeAllocator.allocate(vessel, vesselStartTime, currentPlan, CollectionsUtil.toArrayList(times));
+		scheduledSequence.getAllocations().put(currentPlan, annotation);
 
-			scheduledSequence.getAllocations().put(currentPlan, volumeAllocator.allocate(record));
-		} else {
-			scheduledSequence.getAllocations().put(currentPlan, null);
-		}
 		return scheduledSequence;
 	}
 
@@ -424,8 +420,7 @@ public class ScheduleCalculator {
 			}
 
 			// Create an allocation annotation.
-			final AllocationRecord allocationRecord = volumeAllocator.createAllocationRecord(vessel, time, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(allocationRecord);
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, time, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 

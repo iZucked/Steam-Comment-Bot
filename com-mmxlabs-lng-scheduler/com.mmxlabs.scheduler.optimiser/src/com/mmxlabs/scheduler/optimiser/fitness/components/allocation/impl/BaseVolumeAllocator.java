@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -210,6 +211,19 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
+	public IAllocationAnnotation allocate(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final List<Integer> arrivalTimes) {
+		final AllocationRecord allocationRecord = createAllocationRecord(vessel, vesselStartTime, plan, arrivalTimes);
+		if (allocationRecord == null) {
+			return null;
+		}
+		if (allocationRecordModifier != null) {
+			allocationRecordModifier.modifyAllocationRecord(allocationRecord);
+		}
+		return allocate(allocationRecord);
+	}
+
+	@Override
+	@Nullable
 	public AllocationRecord createAllocationRecord(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final List<Integer> arrivalTimes) {
 
 		// if (not cargo plan) {
@@ -318,7 +332,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final AllocationRecord allocationRecord = new AllocationRecord(slotVessel, startVolumeInM3, requiredFuelVolumeInM3, minEndVolumeInM3, dischargeHeelInM3, slots, slotTimes, minVolumes,
 				maxVolumes);
 		if (allocationRecordModifier != null) {
-			allocationRecordModifier.handle(allocationRecord);
+			allocationRecordModifier.modifyAllocationRecord(allocationRecord);
 		}
 
 		return allocationRecord;

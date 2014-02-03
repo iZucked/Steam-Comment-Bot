@@ -29,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -409,8 +408,8 @@ public class VoyagePlanner {
 		if (!planSet) {
 			voyagePlansList.add(plan);
 			// TODO: Non-cargo cases?
-			final AllocationRecord record = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, plan, currentTimes);
-			if (record == null) {
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
+			if (allocationAnnotation == null) {
 				// not a cargo plan?
 				voyagePlansMap.put(plan, null);
 				if (plan.getRemainingHeelType() == HeelType.END) {
@@ -419,7 +418,6 @@ public class VoyagePlanner {
 					heelVolumeInM3 = 0;
 				}
 			} else {
-				final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(record);
 				voyagePlansMap.put(plan, allocationAnnotation);
 				heelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 			}
