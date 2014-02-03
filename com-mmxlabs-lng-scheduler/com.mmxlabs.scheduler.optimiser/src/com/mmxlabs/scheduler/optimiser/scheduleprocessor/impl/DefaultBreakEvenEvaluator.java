@@ -172,7 +172,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 								final long dischargeVolumeInMMBTu = currentAllocation.getSlotVolumeInMMBTu(portSlot);
 
 								IDischargeOption dischargeOption = ((IDischargeOption) portSlot);
-								final int dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption,
+								final int dischargePricePerMMBTu = dischargeOption.getDischargePriceCalculator().estimateSalesUnitPrice(dischargeOption,
 										currentAllocation.getSlotTime(dischargeOption), null);
 								totalSalesRevenue += Calculator.costFromConsumption(dischargeVolumeInMMBTu, dischargePricePerMMBTu);
 							}

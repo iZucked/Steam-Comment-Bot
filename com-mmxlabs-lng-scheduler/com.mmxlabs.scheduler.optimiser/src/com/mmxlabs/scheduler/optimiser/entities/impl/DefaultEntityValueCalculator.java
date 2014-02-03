@@ -102,8 +102,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final int[] dischargePricesPerMMBTu = new int[slots.size()];
 		final long[] slotVolumesInM3 = new long[slots.size()];
 		final int[] arrivalTimes = new int[slots.size()];
-		
-		
+
 		// Entity additional costs are assigned to - typically the load slot
 		IEntity baseEntity = null;
 		// Extract data
@@ -124,9 +123,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IDetailTree entityDetails = (exportElement == null) ? null : getEntityDetails(entityDetailsMap, entity);
 
 			if (slot instanceof IDischargeOption) {
+
+				// Special case! May not be correct for LLD case
+				final ILoadOption loadOption = (ILoadOption) slots.get(0);
+
 				IDischargeOption dischargeOption = (IDischargeOption) slot;
-				dischargePricesPerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, currentAllocation.getSlotTime(slot), entityDetails);
-				((AllocationAnnotation)currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
+				dischargePricesPerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(loadOption, dischargeOption, currentAllocation.getSlotTime(loadOption),
+						currentAllocation.getSlotTime(dischargeOption), currentAllocation.getSlotVolumeInMMBTu(slot), entityDetails);
+				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
 
 			} else {
 				dischargePricesPerMMBTu[idx] = Integer.MAX_VALUE;
@@ -136,7 +140,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			idx++;
 		}
-
 
 		idx = 0;
 		for (final IPortSlot slot : slots) {
@@ -204,13 +207,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel,
 				// vesselStartTime, plan, null);
 				// }
-				
-				((AllocationAnnotation)currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
-				
+
+				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
+
 				int pricePerM3 = Calculator.costPerM3FromMMBTu(pricePerMMBTu, cargoCVValue);
 
 				long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
-//				long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
+				// long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
 				// Sum up entity p&L
 				addEntityProfit(entityProfit, entity, -value);
 				addEntityProfit(entityProfit, entity, additionProfitAndLoss);
@@ -224,8 +227,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
 
-//				long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
-				((AllocationAnnotation)currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
+				// long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
+				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
 				// final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				// Buy/Sell at same quantity.
 				// TODO: Transfer price
