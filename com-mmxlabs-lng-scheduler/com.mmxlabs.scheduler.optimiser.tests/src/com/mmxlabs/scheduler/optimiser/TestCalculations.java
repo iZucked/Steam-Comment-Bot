@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -18,12 +19,14 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
+import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
@@ -44,7 +47,9 @@ import com.mmxlabs.scheduler.optimiser.events.ILoadEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
@@ -54,11 +59,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Set of unit tests to check that the expected costs are calculated from an input set of data.
@@ -140,9 +147,7 @@ public class TestCalculations {
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 		final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
 
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
-		injector.injectMembers(scheduler);
-		final VoyagePlanAnnotator annotator = injector.getInstance(VoyagePlanAnnotator.class);
+		final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
 		final IResource resource = vesselProvider.getResource(vessel1);
 
@@ -157,12 +162,10 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
-
-		Assert.assertNotNull(scheduledSequence);
-
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotator.annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), annotatedSolution, expectedArrivalTimes);
+		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+		final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+		Assert.assertNotNull(scheduledSequence);
 
 		// TODO: Start checking results
 		{
@@ -543,8 +546,7 @@ public class TestCalculations {
 		final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
 		final VoyagePlanAnnotator annotator = injector.getInstance(VoyagePlanAnnotator.class);
 
-		final SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
-		injector.injectMembers(scheduler);
+		final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
 		final IResource resource = vesselProvider.getResource(vessel1);
 
@@ -556,15 +558,13 @@ public class TestCalculations {
 		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
+		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
-
-		Assert.assertNotNull(scheduledSequence);
-
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotator.annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), annotatedSolution, expectedArrivalTimes);
+		final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+		Assert.assertNotNull(scheduledSequence);
 
 		// TODO: Start checking results
 		{
@@ -942,10 +942,8 @@ public class TestCalculations {
 		final IVesselProvider vesselProvider = injector.getInstance(IVesselProvider.class);
 		final IPortSlotProvider portSlotProvider = injector.getInstance(IPortSlotProvider.class);
 		final IStartEndRequirementProvider startEndProvider = injector.getInstance(IStartEndRequirementProvider.class);
-		final VoyagePlanAnnotator annotator = injector.getInstance(VoyagePlanAnnotator.class);
 
-		final SimpleSequenceScheduler scheduler = new SimpleSequenceScheduler();
-		injector.injectMembers(scheduler);
+		final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
 		final IResource resource = vesselProvider.getResource(vessel1);
 
@@ -960,13 +958,10 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
-
-		Assert.assertNotNull(scheduledSequence);
-
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotator.annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), annotatedSolution, expectedArrivalTimes);
-
+		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+		final ScheduledSequences scheduledSequence = scheduler.schedule(sequences, new int[][] { expectedArrivalTimes }, annotatedSolution);
+		Assert.assertNotNull(scheduledSequence);
 		// TODO: Start checking results
 		{
 			Assert.assertNull(annotatedSolution.getElementAnnotations().getAnnotation(startElement, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class));
@@ -1290,19 +1285,6 @@ public class TestCalculations {
 		}
 	}
 
-	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
-
-		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-		}
-
-		@Override
-		public void acceptLastSchedule() {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-		}
-	}
-
 	private Injector createTestInjector() {
 
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new AbstractModule() {
@@ -1311,6 +1293,28 @@ public class TestCalculations {
 				bind(VoyagePlanIterator.class);
 				bind(VoyagePlanAnnotator.class);
 				bind(VoyagePlanner.class);
+				bind(ScheduleCalculator.class);
+				bind(IVolumeAllocator.class).toInstance(new IVolumeAllocator() {
+
+					@Override
+					public AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes) {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public IAllocationAnnotation allocate(AllocationRecord allocationRecord) {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes) {
+						// TODO Auto-generated method stub
+						return null;
+					}
+				});
+				;
 				bind(SchedulerBuilder.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);

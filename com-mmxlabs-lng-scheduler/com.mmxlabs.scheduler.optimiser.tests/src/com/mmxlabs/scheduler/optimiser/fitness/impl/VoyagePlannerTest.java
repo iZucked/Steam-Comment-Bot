@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,11 +31,9 @@ import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -47,8 +47,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -71,7 +70,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public final class AbstractSequenceSchedulerTest {
+public final class VoyagePlannerTest {
 
 	/**
 	 * Test high level inputs for a a two {@link VoyagePlan} sequence. Outputs cannot easily be tested with e JMock'd {@link IVoyagePlanOptimiser} so we just expect something to come out.
@@ -83,7 +82,6 @@ public final class AbstractSequenceSchedulerTest {
 	@Test
 	public void testSchedule_1() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
 		final Port port1 = new Port(index, "port1");
 		final Port port2 = new Port(index, "port2");
@@ -197,11 +195,12 @@ public final class AbstractSequenceSchedulerTest {
 				bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+				bind(VoyagePlanner.class);
 			}
 		});
 
 		// Init scheduler and ensure all required components are in place
-		injector.injectMembers(scheduler);
+		VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
@@ -308,7 +307,7 @@ public final class AbstractSequenceSchedulerTest {
 		final int[] arrivalTimes2 = new int[] { 15, 20 };
 
 		// Schedule sequence
-		final ScheduledSequence plans = scheduler.schedule(resource, sequence, arrivalTimes);
+		final LinkedHashMap<VoyagePlan, IAllocationAnnotation> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
@@ -338,7 +337,7 @@ public final class AbstractSequenceSchedulerTest {
 		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes2)));
 
 		Assert.assertNotNull(plans);
-		Assert.assertEquals(2, plans.getVoyagePlans().size());
+		Assert.assertEquals(2, plans.size());
 	}
 
 	/**
@@ -351,7 +350,6 @@ public final class AbstractSequenceSchedulerTest {
 	@Test
 	public void testSchedule_2() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
 		final Port port1 = new Port(index, "port1");
 		final Port port2 = new Port(index, "port2");
@@ -450,11 +448,12 @@ public final class AbstractSequenceSchedulerTest {
 				bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+				bind(VoyagePlanner.class);
 			}
 		});
 
 		// Init scheduler and ensure all required components are in place
-		injector.injectMembers(scheduler);
+		VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
@@ -533,7 +532,7 @@ public final class AbstractSequenceSchedulerTest {
 		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
-		final ScheduledSequence plansAndTime = scheduler.schedule(resource, sequence, arrivalTimes);
+		final LinkedHashMap<VoyagePlan, IAllocationAnnotation> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
@@ -557,8 +556,8 @@ public final class AbstractSequenceSchedulerTest {
 
 		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes)));
 
-		Assert.assertNotNull(plansAndTime);
-		final List<VoyagePlan> plans = plansAndTime.getVoyagePlans();
+		Assert.assertNotNull(voyagePlans);
+		final List<VoyagePlan> plans = new ArrayList<>(voyagePlans.keySet());
 		Assert.assertEquals(1, plans.size());
 
 		// TODO: Check plan details are as expected
@@ -586,25 +585,4 @@ public final class AbstractSequenceSchedulerTest {
 		// ((PortDetails) outputSequence[4]).getStartTime());
 		Assert.assertEquals(1, ((PortDetails) outputSequence[4]).getOptions().getVisitDuration());
 	}
-
-	/**
-	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of abstract class in tests
-	 * 
-	 * @author Simon Goodall
-	 * 
-	 */
-	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
-
-		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-
-		}
-
-		@Override
-		public void acceptLastSchedule() {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-		}
-	}
-
 }
