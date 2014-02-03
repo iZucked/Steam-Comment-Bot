@@ -149,7 +149,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		 */
 
 		// if there is any leftover volume after discharge
-		if (unusedVolume > 0) {
+		if (constraint.preferShortLoadOverLeftoverHeel && unusedVolume > 0) {
 			// we use a conservative heuristic: load exactly as much as we need, subject to constraints
 			final long revisedLoadVolume = Math.max(0, loadVolume - unusedVolume);
 
