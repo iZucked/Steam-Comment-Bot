@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer;
+package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,6 +33,8 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;

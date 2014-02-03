@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.util;
+package com.mmxlabs.models.lng.transformer.extensions;
 
 import org.eclipse.emf.common.util.EList;
 

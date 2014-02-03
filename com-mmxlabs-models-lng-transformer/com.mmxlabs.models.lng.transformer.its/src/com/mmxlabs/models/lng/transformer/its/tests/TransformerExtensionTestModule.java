@@ -12,7 +12,6 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
-import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
@@ -26,6 +25,7 @@ import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IPostExportProcessorFactory;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
+import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;

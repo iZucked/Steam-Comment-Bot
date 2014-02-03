@@ -12,8 +12,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import com.mmxlabs.models.lng.analytics.DestinationType;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;

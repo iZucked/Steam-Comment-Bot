@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Models: LNG Transformer
-Bundle-SymbolicName: com.mmxlabs.models.lng.transformer;singleton:=true
+Bundle-Name: Models: LNG Transformer Extensions
+Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.extensions;singleton:=true
 Bundle-Version: 7.1.1.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -18,15 +18,19 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scheduler.optimiser;bundle-version="[9.0.0,10.0.0)",
  com.mmxlabs.models.common;bundle-version="[4.0.0,5.0.0)",
  com.mmxlabs.scenario.service.util;bundle-version="[5.1.0,6.0.0)",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[8.0.0,9.0.0)"
-Export-Package: com.mmxlabs.models.lng.transformer,
- com.mmxlabs.models.lng.transformer.contracts,
- com.mmxlabs.models.lng.transformer.export,
- com.mmxlabs.models.lng.transformer.inject,
- com.mmxlabs.models.lng.transformer.inject.modules,
- com.mmxlabs.models.lng.transformer.util
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[8.0.0,9.0.0)",
+ com.mmxlabs.models.lng.transformer;bundle-version="7.1.1"
+Export-Package: com.mmxlabs.models.lng.transformer.extensions,
+ com.mmxlabs.models.lng.transformer.extensions.common,
+ com.mmxlabs.models.lng.transformer.extensions.entities,
+ com.mmxlabs.models.lng.transformer.extensions.modules,
+ com.mmxlabs.models.lng.transformer.extensions.redirection,
+ com.mmxlabs.models.lng.transformer.extensions.restrictedelements,
+ com.mmxlabs.models.lng.transformer.extensions.shippingtype,
+ com.mmxlabs.models.lng.transformer.extensions.simplecontracts,
+ com.mmxlabs.models.lng.transformer.extensions.tradingexporter
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator
-Bundle-Module: com.mmxlabs.models.lng.transformer.inject.modules.TransformerActivatorModule
+Bundle-Module: com.mmxlabs.models.lng.transformer.extensions.modules.TransformerExtensionsActivatorModule

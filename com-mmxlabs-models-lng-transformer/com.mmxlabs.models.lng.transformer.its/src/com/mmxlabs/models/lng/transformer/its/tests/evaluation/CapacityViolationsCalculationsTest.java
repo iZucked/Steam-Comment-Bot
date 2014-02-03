@@ -1,6 +1,5 @@
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -17,7 +16,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.ShippingCalculationsTest.Expectations;
 
 // TODO: Extends causes tests to be re-applied
 public class CapacityViolationsCalculationsTest extends ShippingCalculationsTest {

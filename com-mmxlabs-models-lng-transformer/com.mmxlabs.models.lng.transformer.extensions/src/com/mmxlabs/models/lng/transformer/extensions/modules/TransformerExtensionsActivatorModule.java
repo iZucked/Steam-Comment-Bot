@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.inject.modules;
+package com.mmxlabs.models.lng.transformer.extensions.modules;
 
 import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRe
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
 
+
 /**
  * Module to register Transformer extension factories as a service
  * 
@@ -19,7 +20,7 @@ import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExpo
  * @since 2.0
  * 
  */
-public class TransformerActivatorModule extends PeaberryActivationModule {
+public class TransformerExtensionsActivatorModule extends PeaberryActivationModule {
 
 	@Override
 	protected void configure() {
