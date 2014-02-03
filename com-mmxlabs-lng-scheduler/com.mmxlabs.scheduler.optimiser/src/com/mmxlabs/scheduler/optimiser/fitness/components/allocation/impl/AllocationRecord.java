@@ -1,10 +1,10 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import java.util.List;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Record class for allocation constraints per
@@ -16,8 +16,11 @@ public final class AllocationRecord {
 	/** The LNG volume which the vessel starts with (the start heel) */
 	public final long startVolumeInM3;
 
-	public final IVessel vessel;
-	// public final VoyagePlan voyagePlan;
+	public final IVessel resourceVessel;
+	public final VoyagePlan resourceVoyagePlan;
+
+	public IVessel nominatedVessel;
+	public VoyagePlan nominatedVoyagePlan;
 
 	// /** The capacity of the vessel carrying the cargo */
 	// final long vesselCapacityInM3;
@@ -26,47 +29,47 @@ public final class AllocationRecord {
 	public long requiredFuelVolumeInM3;
 
 	/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
-	public  long minEndVolumeInM3;
-
-	/**
-	 * Hack: magic number calculated by LNGVoyageCalculator representing the amount of heel which should be present after the load -> discharge voyage but can be discharged after idling. Should be
-	 * equal to the minimum heel value minus the idle consumption. There must be a better way of doing this.
-	 */
-	public  long dischargeHeelInM3;
-	//
-	// /** The LNG volume which will actually remain at the end of the voyage */
-	// public long allocatedEndVolumeInM3;
-
-	// /** Prices of LNG at each load / discharge slot in the cargo */
-	// public final int[] slotPricesPerM3;
-	// public final int[] slotPricesPerMMBTu;
+	public long minEndVolumeInM3;
 
 	public final List<Integer> slotTimes;
 
 	/** Slots in the cargo */
 	public final List<IPortSlot> slots;
 
-	// public final long[] allocations;
+	/**
+	 * The minimum transfer volume indexed by port slot
+	 */
 	public final List<Long> minVolumes;
+	/**
+	 * The maximum transfer volume indexed by port slot
+	 */
 	public final List<Long> maxVolumes;
-	
-//	public final List<Long> violationMinVolumes;
-//	public final List<Long> violationMaxVolumes;
+
+	/**
+	 * The minimum transfer volume for capacity violation purposes indexed by port slot
+	 */
+	public final List<Long> violationMinVolumes;
+	/**
+	 * The maximum transfer volume for capacity violation purposes indexed by port slot
+	 */
+	public final List<Long> violationMaxVolumes;
 
 	// Set to false to maximise load volume and push gas into next loading
 	public boolean preferShortLoadOverLeftoverHeel = true;
 
-	public AllocationRecord(final IVessel vessel, final long startVolumeInM3, final long requiredFuelVolumeInM3, final long minEndVolumeInM3, final long dischargeHeelInM3,
-			final List<IPortSlot> slots, final List<Integer> times, List<Long> minVolumes, List<Long> maxVolumes) {
-		this.vessel = vessel;
+	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final long startVolumeInM3, final long requiredFuelVolumeInM3, final long minEndVolumeInM3,
+			final List<IPortSlot> slots, final List<Integer> times, List<Long> minVolumes, List<Long> maxVolumes, List<Long> violationMinVolumes, List<Long> violationMaxVolumes) {
+		this.resourceVessel = resourceVessel;
+		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.startVolumeInM3 = startVolumeInM3;
 		this.requiredFuelVolumeInM3 = requiredFuelVolumeInM3;
 		this.minEndVolumeInM3 = minEndVolumeInM3;
-		this.dischargeHeelInM3 = dischargeHeelInM3;
 		this.slotTimes = times;
 		this.slots = slots;
 		this.minVolumes = minVolumes;
 		this.maxVolumes = maxVolumes;
+		this.violationMinVolumes = violationMinVolumes;
+		this.violationMaxVolumes = violationMaxVolumes;
 	}
 
 }

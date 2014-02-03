@@ -66,10 +66,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	@Nullable
 	public AllocationRecord createAllocationRecord(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final List<Integer> arrivalTimes) {
 
-		final long startVolumeInM3 = plan.getStartingHeelInM3();
-		final long requiredFuelVolumeInM3 = plan.getLNGFuelVolume();
 		final long minEndVolumeInM3 = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0;
-		final long dischargeHeelInM3 = plan.getRemainingHeelType() == HeelType.DISCHARGE ? plan.getRemainingHeelInM3() : 0;
 
 		// Rough estimate of required array size
 		final IDetailsSequenceElement[] sequence = plan.getSequence();
@@ -141,7 +138,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		}
 
 		final List<Integer> slotTimes;
-		final IVessel slotVessel = nominatedVessel != null ? nominatedVessel : vessel;
 		if (transferTime != null) {
 			slotTimes = new ArrayList<Integer>(sequence.length - 1);
 			for (int i = 0; i < sequence.length - 1; ++i) {
@@ -151,11 +147,11 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			slotTimes = new ArrayList<Integer>(arrivalTimes);
 		}
 
-		final AllocationRecord allocationRecord = new AllocationRecord(slotVessel, startVolumeInM3, requiredFuelVolumeInM3, minEndVolumeInM3, dischargeHeelInM3, slots, slotTimes, minVolumes,
-				maxVolumes);
-		if (allocationRecordModifier != null) {
-			allocationRecordModifier.modifyAllocationRecord(allocationRecord);
-		}
+		// Use min/max volumes as default capacity violation bounds
+		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes, minVolumes, maxVolumes,
+				new ArrayList<>(minVolumes), new ArrayList<>(maxVolumes));
+
+		allocationRecord.nominatedVessel = nominatedVessel;
 
 		return allocationRecord;
 	}

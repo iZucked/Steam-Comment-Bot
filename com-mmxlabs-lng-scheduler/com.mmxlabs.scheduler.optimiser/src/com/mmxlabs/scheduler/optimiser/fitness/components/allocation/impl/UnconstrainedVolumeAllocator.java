@@ -6,11 +6,11 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.List;
 
-import com.google.inject.Inject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 
 /**
@@ -52,12 +52,14 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
 
+		final IVessel vessel = constraint.nominatedVessel != null ? constraint.nominatedVessel : constraint.resourceVessel;
+
 		// how much room is there in the tanks?
-		final long availableCargoSpace = constraint.vessel.getCargoCapacity() - constraint.startVolumeInM3;
+		final long availableCargoSpace = vessel.getCargoCapacity() - constraint.startVolumeInM3;
 
 		// how much fuel will be required over and above what we start with in the tanks?
 		// note: this is the fuel consumption plus any heel quantity required at discharge
-		final long fuelDeficit = constraint.requiredFuelVolumeInM3 + constraint.dischargeHeelInM3 - constraint.startVolumeInM3;
+		final long fuelDeficit = constraint.requiredFuelVolumeInM3 - constraint.startVolumeInM3;
 
 		// greedy assumption: always load as much as possible
 		long loadVolume = capValueWithZeroDefault(constraint.maxVolumes.get(0), availableCargoSpace);
