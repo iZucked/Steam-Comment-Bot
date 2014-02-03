@@ -26,6 +26,7 @@ Export-Package: com.mmxlabs.models.lng.transformer.extensions,
  com.mmxlabs.models.lng.transformer.extensions.entities,
  com.mmxlabs.models.lng.transformer.extensions.modules,
  com.mmxlabs.models.lng.transformer.extensions.redirection,
+ com.mmxlabs.models.lng.transformer.extensions.redirection.impl,
  com.mmxlabs.models.lng.transformer.extensions.restrictedelements,
  com.mmxlabs.models.lng.transformer.extensions.shippingtype,
  com.mmxlabs.models.lng.transformer.extensions.simplecontracts,
@@ -33,5 +34,4 @@ Export-Package: com.mmxlabs.models.lng.transformer.extensions,
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator
 Bundle-Module: com.mmxlabs.models.lng.transformer.extensions.modules.TransformerExtensionsActivatorModule
