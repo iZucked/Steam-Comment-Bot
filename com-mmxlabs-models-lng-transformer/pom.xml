@@ -16,14 +16,14 @@
 	</parent>
 
 	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-lng-types.hg</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-lng-types.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-models-lng-types</url>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-lng-transformer.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-lng-transformer.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-models-lng-transformer</url>
 	</scm>
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.models.lng.types/</url>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.models.lng.transformer/</url>
 	</ciManagement>
 
 	<modules>
@@ -32,11 +32,15 @@
 
 		<module>com.mmxlabs.models.lng.transformer</module>
 
+		<module>com.mmxlabs.models.lng.transformer.extensions</module>
+
 		<module>com.mmxlabs.models.lng.transformer.ui</module>
 
 		<module>com.mmxlabs.models.lng.liveevaluator</module>
 
 		<module>com.mmxlabs.models.lng.transformer.tests</module>
+
+		<module>com.mmxlabs.models.lng.transformer.extensions.tests</module>
 
 		<module>com.mmxlabs.models.lng.transformer.feature</module>
 
