@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeParams <em>Volume Params</em>}</li>
  * </ul>
  * </p>
  *
@@ -306,6 +307,32 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setContractType(ContractType value);
+
+	/**
+	 * Returns the value of the '<em><b>Volume Params</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Volume Params</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Volume Params</em>' containment reference.
+	 * @see #setVolumeParams(VolumeParams)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_VolumeParams()
+	 * @model containment="true"
+	 * @generated
+	 */
+	VolumeParams getVolumeParams();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeParams <em>Volume Params</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Volume Params</em>' containment reference.
+	 * @see #getVolumeParams()
+	 * @generated
+	 */
+	void setVolumeParams(VolumeParams value);
 
 } // end of  Contract
 

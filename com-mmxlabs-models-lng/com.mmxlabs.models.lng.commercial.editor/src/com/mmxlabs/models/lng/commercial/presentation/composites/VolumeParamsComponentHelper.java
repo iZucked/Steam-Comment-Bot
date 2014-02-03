@@ -1,30 +1,28 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.presentation.composites;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+
 /**
- * A component helper for LegalEntity instances
+ * A component helper for VolumeParams instances
  *
  * @generated
  */
-public class LegalEntityComponentHelper extends BaseComponentHelper {
+public class VolumeParamsComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -32,7 +30,7 @@ public class LegalEntityComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public LegalEntityComponentHelper() {
+	public VolumeParamsComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -41,20 +39,18 @@ public class LegalEntityComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public LegalEntityComponentHelper(IAdapterManager adapterManager) {
+	public VolumeParamsComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using LegalEntity as the supertype
+	 * add editors to a composite, using VolumeParams as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.LEGAL_ENTITY);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.VOLUME_PARAMS);	
 	}
 	
 	/**
@@ -65,15 +61,5 @@ public class LegalEntityComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_taxRatesEditor(detailComposite, topClass);
-	}
-
-	/**
-	 * Create the editor for the taxRates feature on LegalEntity
-	 *
-	 * @generated NO
-	 */
-	protected void add_taxRatesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES));
 	}
 }

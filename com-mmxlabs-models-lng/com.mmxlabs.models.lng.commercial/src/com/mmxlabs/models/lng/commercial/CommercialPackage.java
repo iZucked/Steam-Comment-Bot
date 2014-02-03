@@ -332,13 +332,22 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__CONTRACT_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Volume Params</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__VOLUME_PARAMS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -481,6 +490,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Params</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__VOLUME_PARAMS = CONTRACT__VOLUME_PARAMS;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -662,6 +680,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Volume Params</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__VOLUME_PARAMS = CONTRACT__VOLUME_PARAMS;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -903,6 +930,25 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT_EXPRESSION_MAP_ENTRY_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl <em>Volume Params</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeParams()
+	 * @generated
+	 */
+	int VOLUME_PARAMS = 10;
+
+	/**
+	 * The number of structural features of the '<em>Volume Params</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_PARAMS_FEATURE_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -911,7 +957,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 10;
+	int CONTRACT_TYPE = 11;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1127,6 +1173,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_ContractType();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.Contract#getVolumeParams <em>Volume Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Volume Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getVolumeParams()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_VolumeParams();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1317,6 +1374,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getContractExpressionMapEntry_Expression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.VolumeParams <em>Volume Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Volume Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeParams
+	 * @generated
+	 */
+	EClass getVolumeParams();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
@@ -1517,6 +1584,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__CONTRACT_TYPE = eINSTANCE.getContract_ContractType();
 
 		/**
+		 * The meta object literal for the '<em><b>Volume Params</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__VOLUME_PARAMS = eINSTANCE.getContract_VolumeParams();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1676,6 +1751,16 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION = eINSTANCE.getContractExpressionMapEntry_Expression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl <em>Volume Params</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeParams()
+		 * @generated
+		 */
+		EClass VOLUME_PARAMS = eINSTANCE.getVolumeParams();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
