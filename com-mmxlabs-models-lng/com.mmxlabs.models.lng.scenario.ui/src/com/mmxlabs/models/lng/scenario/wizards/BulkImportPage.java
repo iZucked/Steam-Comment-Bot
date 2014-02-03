@@ -274,7 +274,7 @@ public class BulkImportPage extends WizardPage {
 	}
 
 	public String getImportFilename() {
-		return ""; //importFileEditor.getStringValue();
+		return importFileEditor.getStringValue();
 	}
 
 	public char getCsvSeparator() {
