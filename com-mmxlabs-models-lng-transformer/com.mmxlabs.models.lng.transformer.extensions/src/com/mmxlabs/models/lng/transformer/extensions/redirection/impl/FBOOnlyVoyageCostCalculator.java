@@ -27,7 +27,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public class RedirectionVoyageCostCalculator extends AbstractVoyageCostCalculator {
+public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
