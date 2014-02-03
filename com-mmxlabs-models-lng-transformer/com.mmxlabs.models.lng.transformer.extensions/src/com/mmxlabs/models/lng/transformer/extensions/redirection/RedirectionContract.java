@@ -289,7 +289,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 
 	}
 
