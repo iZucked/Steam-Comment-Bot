@@ -266,8 +266,6 @@ public class VoyagePlanner {
 				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
 			}
 
-			final long startHeelInM3 = heelVolumeInM3;
-
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
 			int shortCargoReturnArrivalTime = 0;
@@ -353,7 +351,6 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-
 			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 			if (plan == null) {
 				return null;
@@ -436,7 +433,7 @@ public class VoyagePlanner {
 		{
 			final IDetailsSequenceElement[] sequence = plan.getSequence();
 			long currentHeelInM3 = startHeelVolumeInM3;
-
+			long totalVoyageBOG = 0;
 			for (int i = 0; i < sequence.length - 1; ++i) {
 				final IDetailsSequenceElement e = sequence[i];
 				if (e instanceof PortDetails) {
@@ -468,9 +465,12 @@ public class VoyagePlanner {
 						voyageBOGInM3 += voyageDetails.getFuelConsumption(fuel, FuelUnit.M3);
 						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
 					}
+					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;
 				}
 			}
+			// Sanity check these calculations match expected values
+			assert totalVoyageBOG == plan.getLNGFuelVolume();
 			assert endHeelVolumeInM3 == currentHeelInM3;
 		}
 
@@ -588,15 +588,15 @@ public class VoyagePlanner {
 	 *            An alternating list of PortOptions and VoyageOptions objects
 	 * @param arrivalTimes
 	 * @param optimiser
-	 * @param heelVolumeInM3
+	 * @param startHeelVolumeInM3
 	 * @return An optimised VoyagePlan
 	 */
 	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser,
-			final long heelVolumeInM3) {
+			final long startHeelVolumeInM3) {
 		// Run sequencer evaluation
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
-		optimiser.setStartHeel(heelVolumeInM3);
+		optimiser.setStartHeel(startHeelVolumeInM3);
 		optimiser.init();
 		final VoyagePlan result = optimiser.optimise();
 		if (result == null) {
