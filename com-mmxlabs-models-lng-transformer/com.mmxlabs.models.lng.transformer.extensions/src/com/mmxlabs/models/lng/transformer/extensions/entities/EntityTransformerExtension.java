@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -53,7 +54,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
 
-		for (final LegalEntity e : commercialModel.getEntities()) {
+		for (final BaseLegalEntity e : commercialModel.getEntities()) {
 			final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(e, dateAndCurveHelper, map.getEarliestDate());
 
 			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve);
@@ -66,7 +67,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	public void finishTransforming() {
 
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
-		final LegalEntity shipping = commercialModel.getShippingEntity();
+		final BaseLegalEntity shipping = commercialModel.getShippingEntity();
 
 		setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
 
@@ -75,7 +76,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		for (final Slot slot : slots) {
 			final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
-				LegalEntity slotEntity = null;
+				BaseLegalEntity slotEntity = null;
 //				if (slot.isSetPriceInfo()) {
 //					slotEntity = slot.getPriceInfo().getEntity();
 //				} else 
