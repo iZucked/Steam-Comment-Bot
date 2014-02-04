@@ -24,17 +24,21 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
@@ -44,11 +48,15 @@ import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -65,6 +73,12 @@ public class ScheduleCalculatorTest {
 		final ICalculatorProvider calculatorProvider = mock(ICalculatorProvider.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final INominatedVesselProvider nominatedVesselProvider = mock(INominatedVesselProvider.class);
+		final IMultiMatrixProvider<IPort, Integer> distanceProvider = mock(IMultiMatrixProvider.class);
+		final IPortProvider portProvider = mock(IPortProvider.class);
+		final IPortTypeProvider portTypeProvider = mock(IPortTypeProvider.class);
+		final IRouteCostProvider routeCostProvider = mock(IRouteCostProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = mock(IVoyagePlanOptimiser.class);
+		final IElementDurationProvider elementDurationProvider = mock(IElementDurationProvider.class);
 		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
 
 		class TestModule extends AbstractModule {
@@ -78,6 +92,14 @@ public class ScheduleCalculatorTest {
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IPortCostProvider.class).toInstance(portCostProvider);
 				bind(INominatedVesselProvider.class).toInstance(nominatedVesselProvider);
+				bind(IElementDurationProvider.class).toInstance(elementDurationProvider);
+				bind(IPortProvider.class).toInstance(portProvider);
+				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
+
+				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
+				}).toInstance(distanceProvider);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());

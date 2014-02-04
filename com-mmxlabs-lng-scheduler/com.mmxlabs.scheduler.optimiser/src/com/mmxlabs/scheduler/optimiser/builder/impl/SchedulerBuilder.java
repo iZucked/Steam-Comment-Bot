@@ -90,7 +90,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
@@ -327,7 +326,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE", false, new ICooldownPriceCalculator() {
 			@Override
-			public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+			public void prepareEvaluation(final ISequences sequences) {
 			}
 
 			@Override

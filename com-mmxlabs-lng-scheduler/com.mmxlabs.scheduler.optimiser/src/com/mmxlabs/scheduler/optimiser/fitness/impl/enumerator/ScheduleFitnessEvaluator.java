@@ -25,17 +25,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class ScheduleFitnessEvaluator {
 
 	@Inject
-	private ScheduleCalculator scheduleCalculator;
-
-	@Inject
 	private VoyagePlanIterator vpIterator;
 
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
 	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution solution) {
-
-		// Process the schedule
-		scheduleCalculator.calculateSchedule(sequences, scheduledSequences, solution);
 
 		// Evaluate fitness components
 		final long[] fitnesses = new long[fitnessComponents.size()];

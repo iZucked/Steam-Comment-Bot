@@ -141,9 +141,9 @@ public class TestPriceExpressionContract {
 		final IDischargeSlot dischargeSlotNoPricingDate = mock(IDischargeSlot.class);
 		when(dischargeSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
-		final int salesPriceWithPricingDate = contract.calculateSalesUnitPrice(dischargeSlotWithPricingDate, dischargeTime, null);
+		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(dischargeSlotWithPricingDate, dischargeTime, null);
 
-		final int salesPriceNoPricingDate = contract.calculateSalesUnitPrice(dischargeSlotNoPricingDate, dischargeTime, null);
+		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(dischargeSlotNoPricingDate, dischargeTime, null);
 
 		verify(curve).getValueAtPoint(pricingDate);
 		verify(curve).getValueAtPoint(dischargeTime);

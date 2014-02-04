@@ -32,7 +32,7 @@ public final class SchedulerConstants {
 	public static final String AI_capacityViolationInfo = "info-capacity-violation";
 	public static final String AI_portCostInfo = "info-port-cost";
 
-	public static final String G_AI_allocations = "general-info-all-allocations";
+//	public static final String G_AI_allocations = "general-info-all-allocations";
 	/**
 	 * @since 2.0
 	 */

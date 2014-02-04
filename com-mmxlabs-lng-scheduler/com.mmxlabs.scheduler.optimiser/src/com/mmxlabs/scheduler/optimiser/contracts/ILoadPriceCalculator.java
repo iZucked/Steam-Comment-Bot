@@ -28,13 +28,10 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * This will be called with a {@link ISequences} instance once before any of the load slots therein contained have their prices calculated with the
 	 * {@link #calculateLoadUnitPrice(ILoadSlot, IDischargeSlot, int, int, int)} method.
 	 * 
-	 * Note the {@link ScheduledSequences} object will be in an incomplete state at this point in time.
-	 * 
 	 * @param sequences
-	 * @param scheduledSequences
 	 * @since 8.0
 	 */
-	public void prepareEvaluation(ISequences sequences, ScheduledSequences scheduledSequences);
+	public void prepareEvaluation(ISequences sequences);
 
 	/**
 	 * Find the price (in $/M3) for loading at the given slot. Although every argument here except loadSlot and loadVolume can be found in the previous call to

@@ -6,6 +6,9 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -25,7 +28,7 @@ public interface ISequenceScheduler {
 	 * @param forExport
 	 * @return
 	 */
-	ScheduledSequences schedule(ISequences sequences, IAnnotatedSolution solution);
+	ScheduledSequences schedule(@NonNull ISequences sequences, @Nullable IAnnotatedSolution solution);
 
 	/**
 	 * The caller can use this to avoid full evaluation on the next cycle if a schedule is accepted.

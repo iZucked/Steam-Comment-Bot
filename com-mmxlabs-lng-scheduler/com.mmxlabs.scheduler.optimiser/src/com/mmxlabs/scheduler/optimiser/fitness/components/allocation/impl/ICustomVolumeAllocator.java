@@ -4,30 +4,20 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-
 /**
- * Implementation of the {@link ICustomVolumeAllocator} permit the default behaviour of an {@link IVolumeAllocator} to change on a per cargo basis.
+ * The {@link ICustomVolumeAllocator} is given an {@link AllocationRecord} after the initial values have been configured but before the volume allocation process. This permits external code to modify
+ * the values - e.g. adjusting volume constraints for specific cases.
  * 
  * @author Simon Goodall
- * @since 8.0
  * 
  */
 public interface ICustomVolumeAllocator {
 
 	/**
-	 * Returns true if this {@link ICustomVolumeAllocator} wishes to take over the volume allocation
-	 * 
-	 * @param constraint
-	 * @return
-	 */
-	boolean canHandle(AllocationRecord constraint);
-
-	/**
-	 * Perform the volume allocation instead of the main {@link IVolumeAllocator}. This assume a prior call to {@link #canHandle(AllocationRecord)} has returned true.
+	 * Pass an {@link AllocationRecord} to the {@link ICustomVolumeAllocator} to inspect and modify if required.
 	 * 
 	 * @param constraint
 	 */
-	void handle(AllocationRecord constraint);
+	void modifyAllocationRecord(AllocationRecord constraint);
 
 }

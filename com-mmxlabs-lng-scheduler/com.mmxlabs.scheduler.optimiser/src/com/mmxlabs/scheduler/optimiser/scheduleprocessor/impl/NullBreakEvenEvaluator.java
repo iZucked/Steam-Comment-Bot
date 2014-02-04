@@ -4,21 +4,26 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl;
 
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import java.util.List;
+
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Empty implementation of {@link IBreakEvenEvaluator}
  * 
  * @author Simon Goodall
- * @since 8.0
  * 
  */
 public class NullBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	@Override
-	public void processSchedule(final ScheduledSequences scheduledSequences) {
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, IVessel vessel, VoyagePlan vp, List<Integer> arrivalTimes) {
 		// Does nothing
+		return null;
 	}
 
 }

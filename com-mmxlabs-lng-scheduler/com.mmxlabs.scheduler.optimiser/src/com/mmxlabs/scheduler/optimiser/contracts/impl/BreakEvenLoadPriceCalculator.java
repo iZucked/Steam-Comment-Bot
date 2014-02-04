@@ -26,11 +26,8 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 
 	private int price;
 
-	/**
-	 * @since 8.0
-	 */
 	@Override
-	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 		price = 0;
 	}
 
