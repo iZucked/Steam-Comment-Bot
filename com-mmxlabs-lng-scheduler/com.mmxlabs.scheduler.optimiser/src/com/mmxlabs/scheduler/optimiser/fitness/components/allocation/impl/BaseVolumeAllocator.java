@@ -147,9 +147,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			slotTimes = new ArrayList<Integer>(arrivalTimes);
 		}
 
-		// Use min/max volumes as default capacity violation bounds
-		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes, minVolumes, maxVolumes,
-				new ArrayList<>(minVolumes), new ArrayList<>(maxVolumes));
+		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes, minVolumes, maxVolumes);
 
 		allocationRecord.nominatedVessel = nominatedVessel;
 
