@@ -67,6 +67,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case CommercialPackage.COMMERCIAL_MODEL: return createCommercialModel();
+			case CommercialPackage.BASE_LEGAL_ENTITY: return createBaseLegalEntity();
 			case CommercialPackage.LEGAL_ENTITY: return createLegalEntity();
 			case CommercialPackage.CONTRACT: return createContract();
 			case CommercialPackage.SALES_CONTRACT: return createSalesContract();
@@ -117,6 +118,16 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public CommercialModel createCommercialModel() {
 		CommercialModelImpl commercialModel = new CommercialModelImpl();
 		return commercialModel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseLegalEntity createBaseLegalEntity() {
+		BaseLegalEntityImpl baseLegalEntity = new BaseLegalEntityImpl();
+		return baseLegalEntity;
 	}
 
 	/**

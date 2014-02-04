@@ -1,15 +1,22 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.provider;
 
+
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -18,20 +25,16 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.CommercialModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.BaseLegalEntity} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CommercialModelItemProvider
+public class BaseLegalEntityItemProvider
 	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -45,7 +48,7 @@ public class CommercialModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommercialModelItemProvider(AdapterFactory adapterFactory) {
+	public BaseLegalEntityItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -60,29 +63,29 @@ public class CommercialModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addShippingEntityPropertyDescriptor(object);
+			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Shipping Entity feature.
+	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addShippingEntityPropertyDescriptor(Object object) {
+	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CommercialModel_shippingEntity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CommercialModel_shippingEntity_feature", "_UI_CommercialModel_type"),
-				 CommercialPackage.Literals.COMMERCIAL_MODEL__SHIPPING_ENTITY,
+				 getString("_UI_NamedObject_name_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
+				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -99,9 +102,7 @@ public class CommercialModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
+			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
 		}
 		return childrenFeatures;
 	}
@@ -120,14 +121,14 @@ public class CommercialModelItemProvider
 	}
 
 	/**
-	 * This returns CommercialModel.gif.
+	 * This returns BaseLegalEntity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CommercialModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BaseLegalEntity"));
 	}
 
 	/**
@@ -138,10 +139,10 @@ public class CommercialModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((CommercialModel)object).getUuid();
+		String label = ((BaseLegalEntity)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CommercialModel_type") :
-			getString("_UI_CommercialModel_type") + " " + label;
+			getString("_UI_BaseLegalEntity_type") :
+			getString("_UI_BaseLegalEntity_type") + " " + label;
 	}
 
 	/**
@@ -155,10 +156,11 @@ public class CommercialModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(CommercialModel.class)) {
-			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
-			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
-			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+		switch (notification.getFeatureID(BaseLegalEntity.class)) {
+			case CommercialPackage.BASE_LEGAL_ENTITY__NAME:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__TAX_RATES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -178,23 +180,8 @@ public class CommercialModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES,
-				 CommercialFactory.eINSTANCE.createBaseLegalEntity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES,
-				 CommercialFactory.eINSTANCE.createLegalEntity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSalesContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createPurchaseContract()));
+				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES,
+				 CommercialFactory.eINSTANCE.createTaxRate()));
 	}
 
 }

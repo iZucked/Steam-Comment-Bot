@@ -42,7 +42,7 @@ public class EntityTaxRateRangeConstraint extends AbstractModelConstraint  {
 			if (rates.isEmpty()) {
 				String failureMessage = String.format("Entity '%s' has no tax data", entity.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
+				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
 				return dsd;				
 			}
 
@@ -62,7 +62,7 @@ public class EntityTaxRateRangeConstraint extends AbstractModelConstraint  {
 				if (entry.getValue() > 1) {
 					String failureMessage = String.format("Entity '%s' has %d tax rate entries for the date '%s'.", entity.getName(), count, date);
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-					dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
+					dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
 					failures.add(dsd);									
 				}
 			}					

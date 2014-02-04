@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -64,10 +65,10 @@ public class LegalEntityImporter extends DefaultClassImporter {
 				final MMXRootObject rootObject = context.getRootObject();
 				if (rootObject instanceof LNGScenarioModel) {
 					final CommercialModel commercialModel = ((LNGScenarioModel) rootObject).getCommercialModel();
-					LegalEntity entity = finalEntity;
+					BaseLegalEntity entity = finalEntity;
 					if (entity == null) {
 						context.addProblem(context.createProblem("No shipping entity was specified. An arbitrary one was chosen.", true, true, true));
-						final EList<LegalEntity> entities = commercialModel.getEntities();
+						final EList<BaseLegalEntity> entities = commercialModel.getEntities();
 						if (!entities.isEmpty()) {
 							entity = entities.get(0);
 						}
@@ -136,7 +137,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 
 		}
 
-		entity.eSet(CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES, rates);
+		entity.eSet(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES, rates);
 		return result;
 
 	}
@@ -173,7 +174,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 
 		// determine which entity is the default shipping entity
-		LegalEntity shippingEntity = null;
+		BaseLegalEntity shippingEntity = null;
 		final MMXRootObject rootObject = context.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			shippingEntity = ((LNGScenarioModel) rootObject).getCommercialModel().getShippingEntity();
@@ -238,7 +239,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	}
 
 	protected boolean shouldImportReference(final EReference reference) {
-		return reference != CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES;
+		return reference != CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES;
 	}
 
 	public LegalEntity getShippingEntity() {

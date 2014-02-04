@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -46,7 +47,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<LegalEntity> entities;
+	protected EList<BaseLegalEntity> entities;
 
 	/**
 	 * The cached value of the '{@link #getSalesContracts() <em>Sales Contracts</em>}' containment reference list.
@@ -66,7 +67,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * @generated
 	 * @ordered
 	 */
-	protected LegalEntity shippingEntity;
+	protected BaseLegalEntity shippingEntity;
 
 	/**
 	 * The cached value of the '{@link #getPurchaseContracts() <em>Purchase Contracts</em>}' containment reference list.
@@ -102,9 +103,9 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<LegalEntity> getEntities() {
+	public EList<BaseLegalEntity> getEntities() {
 		if (entities == null) {
-			entities = new EObjectContainmentEList<LegalEntity>(LegalEntity.class, this, CommercialPackage.COMMERCIAL_MODEL__ENTITIES);
+			entities = new EObjectContainmentEList<BaseLegalEntity>(BaseLegalEntity.class, this, CommercialPackage.COMMERCIAL_MODEL__ENTITIES);
 		}
 		return entities;
 	}
@@ -126,10 +127,10 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity getShippingEntity() {
+	public BaseLegalEntity getShippingEntity() {
 		if (shippingEntity != null && shippingEntity.eIsProxy()) {
 			InternalEObject oldShippingEntity = (InternalEObject)shippingEntity;
-			shippingEntity = (LegalEntity)eResolveProxy(oldShippingEntity);
+			shippingEntity = (BaseLegalEntity)eResolveProxy(oldShippingEntity);
 			if (shippingEntity != oldShippingEntity) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY, oldShippingEntity, shippingEntity));
@@ -143,7 +144,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity basicGetShippingEntity() {
+	public BaseLegalEntity basicGetShippingEntity() {
 		return shippingEntity;
 	}
 
@@ -152,8 +153,8 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setShippingEntity(LegalEntity newShippingEntity) {
-		LegalEntity oldShippingEntity = shippingEntity;
+	public void setShippingEntity(BaseLegalEntity newShippingEntity) {
+		BaseLegalEntity oldShippingEntity = shippingEntity;
 		shippingEntity = newShippingEntity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY, oldShippingEntity, shippingEntity));
@@ -221,14 +222,14 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 		switch (featureID) {
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 				getEntities().clear();
-				getEntities().addAll((Collection<? extends LegalEntity>)newValue);
+				getEntities().addAll((Collection<? extends BaseLegalEntity>)newValue);
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
 				getSalesContracts().clear();
 				getSalesContracts().addAll((Collection<? extends SalesContract>)newValue);
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY:
-				setShippingEntity((LegalEntity)newValue);
+				setShippingEntity((BaseLegalEntity)newValue);
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				getPurchaseContracts().clear();
@@ -253,7 +254,7 @@ public class CommercialModelImpl extends UUIDObjectImpl implements CommercialMod
 				getSalesContracts().clear();
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__SHIPPING_ENTITY:
-				setShippingEntity((LegalEntity)null);
+				setShippingEntity((BaseLegalEntity)null);
 				return;
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
 				getPurchaseContracts().clear();
