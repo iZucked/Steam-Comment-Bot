@@ -239,7 +239,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				while (watchThreadRunning) {
 
 					// wait for key to be signalled
-					WatchKey key;
+					final WatchKey key;
 					try {
 						// Yield every 2 seconds to check running state
 						key = watcher.poll(2, TimeUnit.SECONDS);
@@ -252,80 +252,88 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					if (key == null) {
 						continue;
 					}
+					Display.getDefault().syncExec(new Runnable() {
 
-					lock.writeLock().lock();
-					try {
-						final Path dir = keys.get(key);
-						if (dir == null) {
-							// note - potential race condition between key being created and added to map and events firing. We typically get here for the source dir of a moveInto operation/
-							// This can happen as the write lock is stalled by the op read lock after the watcher poll() returns an event.
-							final boolean valid = key.reset();
-							if (!valid) {
-								keys.remove(key);
+						@Override
+						public void run() {
+							lock.writeLock().lock();
+							try {
+								final Path dir = keys.get(key);
+								if (dir == null) {
+									// note - potential race condition between key being created and added to map and events firing. We typically get here for the source dir of a moveInto operation/
+									// This can happen as the write lock is stalled by the op read lock after the watcher poll() returns an event.
+									final boolean valid = key.reset();
+									if (!valid) {
+										keys.remove(key);
 
-								// all directories are inaccessible
-								if (keys.isEmpty()) {
-									break;
+										// all directories are inaccessible
+										if (keys.isEmpty()) {
+											watchThreadRunning = false;
+											return;
+										}
+									}
+									return;
 								}
+
+								for (final WatchEvent<?> event : key.pollEvents()) {
+									final Kind<?> kind = event.kind();
+
+									// TBD - provide example of how OVERFLOW event is handled
+									if (kind == OVERFLOW) {
+										continue;
+									}
+
+									// Context for directory entry event is the file name of entry
+									@SuppressWarnings("unchecked")
+									final WatchEvent<Path> ev = (WatchEvent<Path>) (event);
+									// Work out filename - if renamed or deleted, the old name will no longer exist on filesystem.
+									final Path name = ev.context();
+									final Path child = dir.resolve(name);
+
+									log.debug("Event " + ev.kind().name() + " - " + child);
+									// if directory is created, and watching recursively, then
+									// register it and its sub-directories
+									if (kind == ENTRY_CREATE) {
+										try {
+											recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
+										} catch (final IOException e) {
+											log.error(e.getMessage(), e);
+										}
+									}
+
+									else if (kind == ENTRY_DELETE) {
+
+										final String pathKey = child.normalize().toString();
+										if (folderMap.containsKey(pathKey)) {
+											removeFolder(child);
+										} else if (scenarioMap.containsKey(pathKey)) {
+											removeFile(child);
+										}
+									} else if (kind == ENTRY_MODIFY) {
+										//
+										if (Files.isRegularFile(child)) {
+											addFile(child);
+										}
+									}
+								}
+
+								// reset key and remove from set if directory no longer accessible
+								final boolean valid = key.reset();
+								if (!valid) {
+									keys.remove(key);
+
+									// all directories are inaccessible
+									if (keys.isEmpty()) {
+										watchThreadRunning = false;
+										return;
+									}
+								}
+							} finally {
+								lock.writeLock().unlock();
 							}
-							continue;
+
 						}
-
-						for (final WatchEvent<?> event : key.pollEvents()) {
-							final Kind<?> kind = event.kind();
-
-							// TBD - provide example of how OVERFLOW event is handled
-							if (kind == OVERFLOW) {
-								continue;
-							}
-
-							// Context for directory entry event is the file name of entry
-							@SuppressWarnings("unchecked")
-							final WatchEvent<Path> ev = (WatchEvent<Path>) (event);
-							// Work out filename - if renamed or deleted, the old name will no longer exist on filesystem.
-							final Path name = ev.context();
-							final Path child = dir.resolve(name);
-
-							log.debug("Event " + ev.kind().name() + " - " + child);
-							// if directory is created, and watching recursively, then
-							// register it and its sub-directories
-							if (kind == ENTRY_CREATE) {
-								try {
-									recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
-								}
-							}
-
-							else if (kind == ENTRY_DELETE) {
-
-								final String pathKey = child.normalize().toString();
-								if (folderMap.containsKey(pathKey)) {
-									removeFolder(child);
-								} else if (scenarioMap.containsKey(pathKey)) {
-									removeFile(child);
-								}
-							} else if (kind == ENTRY_MODIFY) {
-								//
-								if (Files.isRegularFile(child)) {
-									addFile(child);
-								}
-							}
-						}
-
-						// reset key and remove from set if directory no longer accessible
-						final boolean valid = key.reset();
-						if (!valid) {
-							keys.remove(key);
-
-							// all directories are inaccessible
-							if (keys.isEmpty()) {
-								break;
-							}
-						}
-					} finally {
-						lock.writeLock().unlock();
-					}
+					});
 				}
 			};
 		};
@@ -743,7 +751,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		log.debug("makeFolder: " + parent.getName() + " ::  " + name);
 
-		
 		lock.readLock().lock();
 		try {
 			final Path path;
