@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -24,6 +26,7 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private static final long serialVersionUID = 1L;
 
 	private Map<VoyagePlan, IAllocationAnnotation> allocations = null;
+	private Map<IPortSlot, IHeelLevelAnnotation> heelLevels = null;
 
 	public final Map<VoyagePlan, IAllocationAnnotation> getAllocations() {
 		return allocations;
@@ -31,6 +34,14 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 
 	public final void setAllocations(final Map<VoyagePlan, IAllocationAnnotation> allocations) {
 		this.allocations = allocations;
+	}
+
+	public final Map<IPortSlot, IHeelLevelAnnotation> getHeelLevels() {
+		return heelLevels;
+	}
+
+	public final void setHeelLevels(final Map<IPortSlot, IHeelLevelAnnotation> heelLevels) {
+		this.heelLevels = heelLevels;
 	}
 
 	/**

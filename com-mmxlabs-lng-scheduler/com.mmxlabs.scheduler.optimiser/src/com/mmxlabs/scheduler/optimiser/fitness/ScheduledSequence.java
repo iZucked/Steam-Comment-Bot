@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
@@ -30,7 +31,8 @@ public final class ScheduledSequence {
 	private final Map<VoyagePlan, List<Integer>> voyagePlanToArrivalTimes = new HashMap<>();
 	private final List<IPortSlot> sequencePortSlots;
 	private VoyagePlan lastPlan;
-	private Map<VoyagePlan, IAllocationAnnotation> allocations = new HashMap<VoyagePlan, IAllocationAnnotation>();
+	private Map<IPortSlot, IHeelLevelAnnotation> heelLevels = new HashMap<>();
+	private Map<VoyagePlan, IAllocationAnnotation> allocations = new HashMap<>();
 
 	/**
 	 * @since 2.0
@@ -152,7 +154,7 @@ public final class ScheduledSequence {
 		return allocations;
 	}
 
-//	public void setAllocations(final Map<VoyagePlan, IAllocationAnnotation> allocations) {
-//		this.allocations = allocations;
-//	}
+	public Map<IPortSlot, IHeelLevelAnnotation> getHeelLevels() {
+		return heelLevels;
+	}
 }

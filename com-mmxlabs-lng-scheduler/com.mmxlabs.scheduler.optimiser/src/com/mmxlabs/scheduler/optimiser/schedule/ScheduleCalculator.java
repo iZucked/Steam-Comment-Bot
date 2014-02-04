@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
@@ -27,6 +28,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -131,13 +133,26 @@ public class ScheduleCalculator {
 		// Get start time
 		final int startTime = arrivalTimes[0];
 
-		final Map<VoyagePlan, IAllocationAnnotation> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		if (voyagePlans == null) {
 			return null;
 		}
 
-		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, new ArrayList<>(voyagePlans.keySet()), arrivalTimes);
-		scheduledSequence.getAllocations().putAll(voyagePlans);
+		// Process results to put on ScheduledSequences
+		final List<VoyagePlan> voyagePlansList = new ArrayList<>(voyagePlans.size());
+		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelsMap = new HashMap<>();
+		final Map<VoyagePlan, IAllocationAnnotation> allocationsMap = new HashMap<>();
+
+		for (final Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation> t : voyagePlans) {
+			voyagePlansList.add(t.getFirst());
+			heelLevelsMap.putAll(t.getSecond());
+			allocationsMap.put(t.getFirst(), t.getThird());
+		}
+
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, voyagePlansList, arrivalTimes);
+		scheduledSequence.getAllocations().putAll(allocationsMap);
+		scheduledSequence.getHeelLevels().putAll(heelLevelsMap);
+
 		return scheduledSequence;
 	}
 
@@ -180,10 +195,10 @@ public class ScheduleCalculator {
 		final int times[] = new int[sequence.size()];
 		Arrays.fill(times, startTime);
 		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
-		ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
+		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
 
-		IVessel vessel = vesselProvider.getVessel(resource);
-		int vesselStartTime = startTime;
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		final int vesselStartTime = startTime;
 
 		// TODO: This is not the place!
 		final IAllocationAnnotation annotation = volumeAllocator.allocate(vessel, vesselStartTime, currentPlan, CollectionsUtil.toArrayList(times));
@@ -192,7 +207,7 @@ public class ScheduleCalculator {
 		return scheduledSequence;
 	}
 
-	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable IAnnotatedSolution solution) {
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, @NonNull final int[][] arrivalTimes, @Nullable final IAnnotatedSolution solution) {
 		final ScheduledSequences result = new ScheduledSequences();
 
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
@@ -247,17 +262,30 @@ public class ScheduleCalculator {
 
 		// Compute load volumes and prices
 		final Map<VoyagePlan, IAllocationAnnotation> allocations = new HashMap<>();
-		for (ScheduledSequence seq : scheduledSequences) {
+		for (final ScheduledSequence seq : scheduledSequences) {
 			if (seq.getAllocations() != null) {
-				for (Map.Entry<VoyagePlan, IAllocationAnnotation> e : seq.getAllocations().entrySet()) {
+				for (final Map.Entry<VoyagePlan, IAllocationAnnotation> e : seq.getAllocations().entrySet()) {
 					if (e.getValue() != null) {
 						allocations.put(e.getKey(), e.getValue());
 					}
 				}
 			}
 		}
-		scheduledSequences.getAllocations();
 		scheduledSequences.setAllocations(allocations);
+
+		final Map<IPortSlot, IHeelLevelAnnotation> heelLevels = new HashMap<>();
+		for (final ScheduledSequence seq : scheduledSequences) {
+			if (seq.getAllocations() != null) {
+				for (final Map.Entry<IPortSlot, IHeelLevelAnnotation> e : seq.getHeelLevels().entrySet()) {
+					if (e.getValue() != null) {
+						heelLevels.put(e.getKey(), e.getValue());
+					}
+				}
+			}
+		}
+
+		scheduledSequences.setHeelLevels(heelLevels);
+
 		// Store annotations if required
 		if (annotatedSolution != null) {
 
@@ -275,6 +303,11 @@ public class ScheduleCalculator {
 						elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
 					}
 				}
+			}
+
+			for (Map.Entry<IPortSlot, IHeelLevelAnnotation> e : heelLevels.entrySet()) {
+				final ISequenceElement portElement = portSlotProvider.getElement(e.getKey());
+				elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_heelLevelInfo, e.getValue());
 			}
 		}
 

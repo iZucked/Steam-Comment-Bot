@@ -5,14 +5,16 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -20,6 +22,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.annotations.impl.HeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -37,7 +41,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -210,7 +218,7 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public LinkedHashMap<VoyagePlan, IAllocationAnnotation> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	final public List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 
 		// TODO: Handle FOB/DES cargoes also
 
@@ -225,7 +233,7 @@ public class VoyagePlanner {
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
-		final LinkedHashMap<VoyagePlan, IAllocationAnnotation> voyagePlansMap = new LinkedHashMap<>();
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap = new LinkedList<>();
 		final List<VoyagePlan> voyagePlansList = new LinkedList<>();
 
 		final List<IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<IOptionsSequenceElement>(5);
@@ -253,9 +261,12 @@ public class VoyagePlanner {
 			final PortType portType = portTypeProvider.getPortType(element);
 
 			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
+			// TODO: Move (back?)into VPO code
 			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
 				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
 			}
+
+			final long startHeelInM3 = heelVolumeInM3;
 
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
@@ -308,7 +319,7 @@ public class VoyagePlanner {
 				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
 				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 				if (!shortCargoEnd) {
-					VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
+					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 					if (plan == null) {
 						return null;
 					}
@@ -343,7 +354,7 @@ public class VoyagePlanner {
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
 
-			VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
+			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
 			if (plan == null) {
 				return null;
 			}
@@ -354,27 +365,27 @@ public class VoyagePlanner {
 	}
 
 	// TODO: Better naming?
-	private long generateVoyagePlan(final IVessel vessel, final int vesselStartTime, final LinkedHashMap<VoyagePlan, IAllocationAnnotation> voyagePlansMap, final List<VoyagePlan> voyagePlansList,
-			final List<Integer> currentTimes, long heelVolumeInM3, VoyagePlan plan) {
+	private long generateVoyagePlan(final IVessel vessel, final int vesselStartTime, final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap,
+			final List<VoyagePlan> voyagePlansList, final List<Integer> currentTimes, final long startHeelVolumeInM3, VoyagePlan plan) {
 
 		// TODO: Handle LNG at end of charter out
-
+		long endHeelVolumeInM3 = 0;
 		boolean planSet = false;
+		IAllocationAnnotation allocationAnnotation = null;
 		if (generatedCharterOutEvaluator != null) {
-			Pair<VoyagePlan, IAllocationAnnotation> p = generatedCharterOutEvaluator.processSchedule(vesselStartTime, vessel, plan, currentTimes);
+			final Pair<VoyagePlan, IAllocationAnnotation> p = generatedCharterOutEvaluator.processSchedule(vesselStartTime, vessel, plan, currentTimes);
 			if (p != null) {
 				plan = p.getFirst();
 				voyagePlansList.add(p.getFirst());
-				final IAllocationAnnotation allocationAnnotation = p.getSecond();
-				voyagePlansMap.put(plan, allocationAnnotation);
+				allocationAnnotation = p.getSecond();
 
 				if (allocationAnnotation != null) {
-					heelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 				} else {
 					if (plan.getRemainingHeelType() == HeelType.END) {
-						heelVolumeInM3 = plan.getRemainingHeelInM3();
+						endHeelVolumeInM3 = plan.getRemainingHeelInM3();
 					} else {
-						heelVolumeInM3 = 0;
+						endHeelVolumeInM3 = 0;
 					}
 				}
 				planSet = true;
@@ -385,20 +396,19 @@ public class VoyagePlanner {
 
 		// Execute custom logic to manipulate the schedule and choices
 		if (breakEvenEvaluator != null) {
-			Pair<VoyagePlan, IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vessel, plan, currentTimes);
+			final Pair<VoyagePlan, IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vessel, plan, currentTimes);
 			if (p != null) {
 				plan = p.getFirst();
 				voyagePlansList.add(p.getFirst());
-				final IAllocationAnnotation allocationAnnotation = p.getSecond();
-				voyagePlansMap.put(plan, allocationAnnotation);
+				allocationAnnotation = p.getSecond();
 
 				if (allocationAnnotation != null) {
-					heelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 				} else {
 					if (plan.getRemainingHeelType() == HeelType.END) {
-						heelVolumeInM3 = plan.getRemainingHeelInM3();
+						endHeelVolumeInM3 = plan.getRemainingHeelInM3();
 					} else {
-						heelVolumeInM3 = 0;
+						endHeelVolumeInM3 = 0;
 					}
 				}
 				planSet = true;
@@ -408,21 +418,66 @@ public class VoyagePlanner {
 		if (!planSet) {
 			voyagePlansList.add(plan);
 			// TODO: Non-cargo cases?
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
+			allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
 			if (allocationAnnotation == null) {
 				// not a cargo plan?
-				voyagePlansMap.put(plan, null);
 				if (plan.getRemainingHeelType() == HeelType.END) {
-					heelVolumeInM3 = plan.getRemainingHeelInM3();
+					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
 				} else {
-					heelVolumeInM3 = 0;
+					endHeelVolumeInM3 = 0;
 				}
 			} else {
-				voyagePlansMap.put(plan, allocationAnnotation);
-				heelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+				endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 			}
 		}
-		return heelVolumeInM3;
+
+		// Generate heel level annotations
+		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
+		{
+			final IDetailsSequenceElement[] sequence = plan.getSequence();
+			long currentHeelInM3 = startHeelVolumeInM3;
+
+			for (int i = 0; i < sequence.length - 1; ++i) {
+				final IDetailsSequenceElement e = sequence[i];
+				if (e instanceof PortDetails) {
+					final PortDetails portDetails = (PortDetails) e;
+					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
+					final long start = currentHeelInM3;
+					if (allocationAnnotation != null) {
+						if (portSlot.getPortType() == PortType.Load) {
+							currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(portSlot);
+						} else if (portSlot.getPortType() == PortType.Discharge) {
+							currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(portSlot);
+						}
+					} else {
+						if (portSlot instanceof IHeelOptionsPortSlot) {
+							final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
+							currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
+						} else {
+							currentHeelInM3 = 0;
+						}
+					}
+					final long end = currentHeelInM3;
+
+					final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(start, end);
+					heelLevelAnnotations.put(portSlot, heelLevelAnnotation);
+				} else if (e instanceof VoyageDetails) {
+					final VoyageDetails voyageDetails = (VoyageDetails) e;
+					long voyageBOGInM3 = 0;
+					for (final FuelComponent fuel : FuelComponent.getLNGFuelComponents()) {
+						voyageBOGInM3 += voyageDetails.getFuelConsumption(fuel, FuelUnit.M3);
+						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
+					}
+					currentHeelInM3 -= voyageBOGInM3;
+				}
+			}
+			assert endHeelVolumeInM3 == currentHeelInM3;
+		}
+
+		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, allocationAnnotation));
+
+		return endHeelVolumeInM3;
+
 	}
 
 	/**
