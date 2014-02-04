@@ -18,42 +18,19 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICusto
  */
 public class DESRedirectionVolumeAllocator implements ICustomVolumeAllocator {
 
-//	@Override
-//	public boolean canHandle(final AllocationRecord constraint) {
-//
-////		if (constraint.slots.size() == 2) {
-////			if (constraint.slots.get(0) instanceof ILoadOption) {
-////				final ILoadOption iLoadOption = (ILoadOption) constraint.slots.get(0);
-////				if (iLoadOption instanceof ILoadSlot) {
-////					// Only handle DES Purchases
-////					return false;
-////				}
-////				if (iLoadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
-////					return true;
-////				}
-////			}
-////
-////		}
-//
-//		return true;
-//	}
-
 	@Override
 	public void modifyAllocationRecord(final AllocationRecord constraint) {
 
-//		if (constraint.slots.size() == 2) {
-			if (constraint.slots.get(0) instanceof ILoadOption) {
-				final ILoadOption iLoadOption = (ILoadOption) constraint.slots.get(0);
-//				if (iLoadOption instanceof ILoadSlot) {
-//					// Only handle DES Purchases
-//					return;
-//				}
-				// Instance of
-				if (iLoadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
-					final IRedirectionVolumeCalculator calc = (IRedirectionVolumeCalculator) iLoadOption.getLoadPriceCalculator();
-					calc.modifyAllocationRecord(constraint);
-				}
+		if (constraint.slots.get(0) instanceof ILoadOption) {
+			final ILoadOption loadOption = (ILoadOption) constraint.slots.get(0);
+			if (loadOption instanceof ILoadSlot) {
+				// Only handle DES Purchases
+				return;
 			}
-//		}
+			if (loadOption.getLoadPriceCalculator() instanceof IRedirectionVolumeCalculator) {
+				final IRedirectionVolumeCalculator calc = (IRedirectionVolumeCalculator) loadOption.getLoadPriceCalculator();
+				calc.modifyAllocationRecord(constraint);
+			}
+		}
 	}
 }
