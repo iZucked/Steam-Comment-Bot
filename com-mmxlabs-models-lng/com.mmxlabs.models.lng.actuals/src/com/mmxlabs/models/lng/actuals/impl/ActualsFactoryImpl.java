@@ -4,7 +4,9 @@ package com.mmxlabs.models.lng.actuals.impl;
 
 import com.mmxlabs.models.lng.actuals.*;
 
+import java.util.Calendar;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -71,6 +73,36 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	 * @generated
 	 */
 	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case ActualsPackage.CALENDAR:
+				return createCalendarFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case ActualsPackage.CALENDAR:
+				return convertCalendarToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ActualsModel createActualsModel() {
 		ActualsModelImpl actualsModel = new ActualsModelImpl();
 		return actualsModel;
@@ -107,6 +139,24 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	public DischargeActuals createDischargeActuals() {
 		DischargeActualsImpl dischargeActuals = new DischargeActualsImpl();
 		return dischargeActuals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Calendar createCalendarFromString(EDataType eDataType, String initialValue) {
+		return (Calendar)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertCalendarToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**
