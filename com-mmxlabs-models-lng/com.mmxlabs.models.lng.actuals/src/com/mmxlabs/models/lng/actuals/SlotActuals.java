@@ -5,6 +5,7 @@ package com.mmxlabs.models.lng.actuals;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -113,6 +114,22 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setBaseFuelConsumption(int value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.actuals.Calendar" required="true"
+	 * @generated
+	 */
+	Calendar getLocalStart();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="com.mmxlabs.models.lng.actuals.Calendar" required="true"
+	 * @generated
+	 */
+	Calendar getLocalEnd();
 
 	/**
 	 * Returns the value of the '<em><b>Slot</b></em>' reference.

@@ -8,7 +8,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
@@ -369,6 +372,32 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		baseFuelConsumption = newBaseFuelConsumption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION, oldBaseFuelConsumption, baseFuelConsumption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Calendar getLocalStart() {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getOperationsStart());
+		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
+		return calendar;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public Calendar getLocalEnd() {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(getOperationsEnd());
+		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END)));
+		return calendar;
 	}
 
 	/**
@@ -835,6 +864,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
+			case ActualsPackage.SLOT_ACTUALS___GET_LOCAL_START:
+				return getLocalStart();
+			case ActualsPackage.SLOT_ACTUALS___GET_LOCAL_END:
+				return getLocalEnd();
 			case ActualsPackage.SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}

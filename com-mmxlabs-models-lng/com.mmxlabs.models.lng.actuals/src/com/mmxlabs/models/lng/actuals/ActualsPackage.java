@@ -5,6 +5,8 @@ package com.mmxlabs.models.lng.actuals;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -240,13 +242,31 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS___GET_LOCAL_START = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS___GET_LOCAL_END = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Slot Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_OPERATION_COUNT = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
+	int SLOT_ACTUALS_OPERATION_COUNT = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl <em>Cargo Actuals</em>}' class.
@@ -539,6 +559,24 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS___GET_LOCAL_START = SLOT_ACTUALS___GET_LOCAL_START;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS___GET_LOCAL_END = SLOT_ACTUALS___GET_LOCAL_END;
+
+	/**
 	 * The number of operations of the '<em>Load Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -702,6 +740,24 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = SLOT_ACTUALS___GET_TIME_ZONE__EATTRIBUTE;
 
 	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS___GET_LOCAL_START = SLOT_ACTUALS___GET_LOCAL_START;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS___GET_LOCAL_END = SLOT_ACTUALS___GET_LOCAL_END;
+
+	/**
 	 * The number of operations of the '<em>Discharge Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -709,6 +765,17 @@ public interface ActualsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_ACTUALS_OPERATION_COUNT = SLOT_ACTUALS_OPERATION_COUNT + 0;
+
+
+	/**
+	 * The meta object id for the '<em>Calendar</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.util.Calendar
+	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getCalendar()
+	 * @generated
+	 */
+	int CALENDAR = 5;
 
 
 	/**
@@ -774,6 +841,26 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotActuals_BaseFuelConsumption();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getLocalStart() <em>Get Local Start</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Start</em>' operation.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getLocalStart()
+	 * @generated
+	 */
+	EOperation getSlotActuals__GetLocalStart();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getLocalEnd() <em>Get Local End</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local End</em>' operation.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getLocalEnd()
+	 * @generated
+	 */
+	EOperation getSlotActuals__GetLocalEnd();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getSlot <em>Slot</em>}'.
@@ -1070,6 +1157,17 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getDischargeActuals_DeliveryType();
 
 	/**
+	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Calendar</em>'.
+	 * @see java.util.Calendar
+	 * @model instanceClass="java.util.Calendar"
+	 * @generated
+	 */
+	EDataType getCalendar();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1143,6 +1241,22 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = eINSTANCE.getSlotActuals_BaseFuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT_ACTUALS___GET_LOCAL_START = eINSTANCE.getSlotActuals__GetLocalStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local End</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT_ACTUALS___GET_LOCAL_END = eINSTANCE.getSlotActuals__GetLocalEnd();
 
 		/**
 		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
@@ -1365,6 +1479,16 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISCHARGE_ACTUALS__DELIVERY_TYPE = eINSTANCE.getDischargeActuals_DeliveryType();
+
+		/**
+		 * The meta object literal for the '<em>Calendar</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.util.Calendar
+		 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getCalendar()
+		 * @generated
+		 */
+		EDataType CALENDAR = eINSTANCE.getCalendar();
 
 	}
 
