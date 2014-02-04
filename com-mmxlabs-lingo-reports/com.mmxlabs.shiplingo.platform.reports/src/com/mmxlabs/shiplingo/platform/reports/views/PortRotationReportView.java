@@ -146,6 +146,26 @@ public class PortRotationReportView extends EMFReportView {
 				return null;
 			}
 		});
+		addColumn("Heel Start", "In m3", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				if (object instanceof PortVisit) {
+					final PortVisit pv = (PortVisit) object;
+					return pv.getHeelAtStart();
+				}
+				return null;
+			}
+		});
+		addColumn("Heel End", "In m3", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				if (object instanceof PortVisit) {
+					final PortVisit pv = (PortVisit) object;
+					return pv.getHeelAtEnd();
+				}
+				return null;
+			}
+		});
 
 		for (final Fuel fuelName : Fuel.values()) {
 			addColumn(fuelName.toString(), "In " + fuelQuanityUnits.get(fuelName), new IntegerFormatter() {
