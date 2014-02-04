@@ -93,7 +93,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 * A {@link ReadWriteLock} to co-ordinate access between file system watcher and manipulation code. In this case the "write" lock is the watcher and the read locks belong to the manipulation code.
 	 * Multiple Filesystem change operations are permitted (this may be a flawed assumption) but the filesystem watch code runs exclusively.
 	 */
-	private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+	private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
 	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
 		@Override
@@ -108,7 +108,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
-					final Path newName = path.getParent().resolve(notification.getNewStringValue() + ".lingo");
+					// Append .lingo if it is a scenario
+					final String ext = c instanceof ScenarioInstance ? ".lingo" : "";
+					final Path newName = path.getParent().resolve(notification.getNewStringValue() + ext);
 					lock.readLock().lock();
 					try {
 						// Remove from tree as file system watcher will re-add
