@@ -621,6 +621,24 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getEvent_HeelAtStart() {
+		return (EAttribute)eventEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getEvent_HeelAtEnd() {
+		return (EAttribute)eventEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getEvent__GetDuration() {
 		return eventEClass.getEOperations().get(0);
 	}
@@ -1547,6 +1565,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(eventEClass, EVENT__NEXT_EVENT);
 		createEReference(eventEClass, EVENT__SEQUENCE);
 		createEAttribute(eventEClass, EVENT__CHARTER_COST);
+		createEAttribute(eventEClass, EVENT__HEEL_AT_START);
+		createEAttribute(eventEClass, EVENT__HEEL_AT_END);
 		createEOperation(eventEClass, EVENT___GET_DURATION);
 		createEOperation(eventEClass, EVENT___GET_LOCAL_START);
 		createEOperation(eventEClass, EVENT___GET_LOCAL_END);
@@ -1782,6 +1802,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getEvent_NextEvent(), this.getEvent(), this.getEvent_PreviousEvent(), "nextEvent", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEvent_Sequence(), this.getSequence(), this.getSequence_Events(), "sequence", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getEvent_CharterCost(), ecorePackage.getEInt(), "charterCost", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEvent_HeelAtStart(), ecorePackage.getEInt(), "heelAtStart", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEvent_HeelAtEnd(), ecorePackage.getEInt(), "heelAtEnd", null, 0, 1, Event.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getEvent__GetDuration(), ecorePackage.getEInt(), "getDuration", 1, 1, IS_UNIQUE, IS_ORDERED);
 

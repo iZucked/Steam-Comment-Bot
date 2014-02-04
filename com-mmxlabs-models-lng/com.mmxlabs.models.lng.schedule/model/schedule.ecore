@@ -103,6 +103,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" eType="#//Sequence"
         eOpposite="#//Sequence/events"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelAtStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelAtEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit #//ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
