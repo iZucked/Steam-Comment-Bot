@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
+import com.mmxlabs.models.lng.commercial.VolumeParams;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -105,6 +106,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass contractExpressionMapEntryEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass volumeParamsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -360,6 +368,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getContract_VolumeParams() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSalesContract() {
 		return salesContractEClass;
 	}
@@ -521,6 +538,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getVolumeParams() {
+		return volumeParamsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -579,6 +605,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(contractEClass, CONTRACT__PRICE_INFO);
 		createEAttribute(contractEClass, CONTRACT__NOTES);
 		createEAttribute(contractEClass, CONTRACT__CONTRACT_TYPE);
+		createEReference(contractEClass, CONTRACT__VOLUME_PARAMS);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
 		createEAttribute(salesContractEClass, SALES_CONTRACT__MIN_CV_VALUE);
@@ -603,6 +630,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		contractExpressionMapEntryEClass = createEClass(CONTRACT_EXPRESSION_MAP_ENTRY);
 		createEReference(contractExpressionMapEntryEClass, CONTRACT_EXPRESSION_MAP_ENTRY__CONTRACT);
 		createEAttribute(contractExpressionMapEntryEClass, CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION);
+
+		volumeParamsEClass = createEClass(VOLUME_PARAMS);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -680,6 +709,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getContract_PriceInfo(), this.getLNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_ContractType(), this.getContractType(), "contractType", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContract_VolumeParams(), this.getVolumeParams(), null, "volumeParams", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSalesContract_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -704,6 +734,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(contractExpressionMapEntryEClass, ContractExpressionMapEntry.class, "ContractExpressionMapEntry", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContractExpressionMapEntry_Contract(), this.getContract(), null, "contract", null, 0, 1, ContractExpressionMapEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContractExpressionMapEntry_Expression(), ecorePackage.getEString(), "expression", null, 0, 1, ContractExpressionMapEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(volumeParamsEClass, VolumeParams.class, "VolumeParams", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");

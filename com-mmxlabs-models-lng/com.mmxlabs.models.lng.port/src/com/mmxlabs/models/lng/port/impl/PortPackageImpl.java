@@ -691,7 +691,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   source, 
 		   new String[] {
 			 "showOtherNames", "true"
-		   });	
+		   });		
 	}
 
 	/**
@@ -704,6 +704,12 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
 		addAnnotation
 		  (getLocation_Lat(), 
+		   source, 
+		   new String[] {
+			 "formatString", "-##.###"
+		   });		
+		addAnnotation
+		  (getLocation_Lon(), 
 		   source, 
 		   new String[] {
 			 "formatString", "-##.###"

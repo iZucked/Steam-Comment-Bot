@@ -43,6 +43,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="#//ContractType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="volumeParams" eType="#//VolumeParams"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
@@ -79,4 +81,5 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" eType="#//Contract"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VolumeParams" abstract="true"/>
 </ecore:EPackage>

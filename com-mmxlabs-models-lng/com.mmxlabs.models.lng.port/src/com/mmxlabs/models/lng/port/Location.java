@@ -87,7 +87,7 @@ public interface Location extends EObject {
 	 * @return the value of the '<em>Lon</em>' attribute.
 	 * @see #setLon(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getLocation_Lon()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-##.###'"
 	 * @generated
 	 */
 	double getLon();

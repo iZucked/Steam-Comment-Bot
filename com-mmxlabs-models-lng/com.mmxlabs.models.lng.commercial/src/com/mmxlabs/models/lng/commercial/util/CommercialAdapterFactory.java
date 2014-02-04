@@ -120,6 +120,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createContractExpressionMapEntryAdapter();
 			}
 			@Override
+			public Adapter caseVolumeParams(VolumeParams object) {
+				return createVolumeParamsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -291,6 +295,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createContractExpressionMapEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.VolumeParams <em>Volume Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeParams
+	 * @generated
+	 */
+	public Adapter createVolumeParamsAdapter() {
 		return null;
 	}
 

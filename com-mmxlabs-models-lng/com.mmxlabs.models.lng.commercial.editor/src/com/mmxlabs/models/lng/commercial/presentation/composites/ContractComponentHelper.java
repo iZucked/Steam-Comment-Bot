@@ -77,6 +77,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_priceInfoEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 		add_contractTypeEditor(detailComposite, topClass);
+		add_volumeParamsEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -96,6 +97,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_contractTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE));
+	}
+
+	/**
+	 * Create the editor for the volumeParams feature on Contract
+	 *
+	 * @generated NOT
+	 */
+	protected void add_volumeParamsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__VOLUME_PARAMS));
 	}
 
 	/**
