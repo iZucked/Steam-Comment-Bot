@@ -635,6 +635,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			// Loop over targets and move (rename)
 			for (final Container c : elements) {
 
+				if (c.getParent() == destination) {
+					continue;
+				}
+				
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
 					try {
