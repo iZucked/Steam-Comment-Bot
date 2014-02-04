@@ -29,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -293,6 +294,16 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		// set up hire cost
 		portVisit.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(visitEvent.getCharterCost()));
+
+		// Output allocation info
+		// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
+		// TODO: Break up IAllocationAnnotation to pull out fuel use as a separate chunk.
+		final IHeelLevelAnnotation heelLevel = (IHeelLevelAnnotation) annotations.get(SchedulerConstants.AI_heelLevelInfo);
+
+		if (heelLevel != null) {
+			portVisit.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelLevel.getStartHeelInM3()));
+			portVisit.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelLevel.getEndHeelInM3()));
+		}
 
 		return portVisit;
 	}
