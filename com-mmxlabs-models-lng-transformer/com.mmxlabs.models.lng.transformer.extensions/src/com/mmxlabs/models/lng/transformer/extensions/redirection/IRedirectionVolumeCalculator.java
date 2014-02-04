@@ -8,6 +8,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.Alloca
 
 public interface IRedirectionVolumeCalculator {
 
-	void calculateVolumes(AllocationRecord constraint);
+	void modifyAllocationRecord(AllocationRecord constraint);
 
 }

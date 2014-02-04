@@ -19,12 +19,14 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.common;bundle-version="[4.0.0,5.0.0)",
  com.mmxlabs.scenario.service.util;bundle-version="[5.1.0,6.0.0)",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.models.lng.transformer;bundle-version="7.1.1"
+ com.mmxlabs.models.lng.transformer;bundle-version="7.1.1",
+ com.google.guava;bundle-version="13.0.1"
 Export-Package: com.mmxlabs.models.lng.transformer.extensions,
  com.mmxlabs.models.lng.transformer.extensions.common,
  com.mmxlabs.models.lng.transformer.extensions.entities,
  com.mmxlabs.models.lng.transformer.extensions.modules,
  com.mmxlabs.models.lng.transformer.extensions.redirection,
+ com.mmxlabs.models.lng.transformer.extensions.redirection.impl,
  com.mmxlabs.models.lng.transformer.extensions.restrictedelements,
  com.mmxlabs.models.lng.transformer.extensions.shippingtype,
  com.mmxlabs.models.lng.transformer.extensions.simplecontracts,
@@ -32,5 +34,4 @@ Export-Package: com.mmxlabs.models.lng.transformer.extensions,
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator
 Bundle-Module: com.mmxlabs.models.lng.transformer.extensions.modules.TransformerExtensionsActivatorModule
