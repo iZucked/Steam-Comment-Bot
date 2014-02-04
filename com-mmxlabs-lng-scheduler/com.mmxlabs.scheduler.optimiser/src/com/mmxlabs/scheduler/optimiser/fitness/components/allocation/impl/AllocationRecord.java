@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -13,6 +14,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @since 8.0
  */
 public final class AllocationRecord {
+
+	public enum AllocationMode {
+		Shipped, Transfer
+	}
+
 	/** The LNG volume which the vessel starts with (the start heel) */
 	public final long startVolumeInM3;
 
@@ -48,6 +54,8 @@ public final class AllocationRecord {
 	// Set to false to maximise load volume and push gas into next loading
 	public boolean preferShortLoadOverLeftoverHeel = true;
 
+	public AllocationMode allocationMode;
+
 	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final long startVolumeInM3, final long requiredFuelVolumeInM3, final long minEndVolumeInM3,
 			final List<IPortSlot> slots, final List<Integer> times, List<Long> minVolumes, List<Long> maxVolumes) {
 		this.resourceVessel = resourceVessel;
@@ -59,6 +67,7 @@ public final class AllocationRecord {
 		this.slots = slots;
 		this.minVolumes = minVolumes;
 		this.maxVolumes = maxVolumes;
+		this.allocationMode = (resourceVessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || resourceVessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) ? AllocationMode.Transfer
+				: AllocationMode.Shipped;
 	}
-
 }
