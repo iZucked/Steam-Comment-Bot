@@ -27,13 +27,12 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -46,9 +45,6 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Inject
 	private IVoyageCostCalculator redirVCC;
-
-	@Inject
-	private IEntityValueCalculator entityValueCalculator;
 
 	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
@@ -70,6 +66,8 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	@Inject
 	private ICharterRateCalculator charterRateCalculator;
+	@Inject
+	private ShippingCostHelper shippingCostHelper;
 
 	private final ICurve purchasePriceCurve;
 	// private final ICurve salesPriceCurve;
@@ -130,7 +128,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					continue;
 				}
 				final IDetailTree details[] = annotation == null ? null : new IDetailTree[2];
-				final long costs = entityValueCalculator.getShippingCosts(plan, vessel, false, true, originalLoadTime, details);
+				final long costs = shippingCostHelper.getShippingCosts(plan, vessel, false, true);
 				if (baseRouteAnnotation != null && details != null) {
 					baseRouteAnnotation.addChild(route, "").addChild(details[0]);
 				}
@@ -161,7 +159,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					continue;
 				}
 				final IDetailTree details[] = annotation == null ? null : new IDetailTree[2];
-				final long costs = entityValueCalculator.getShippingCosts(plan, vessel, false, true, originalLoadTime, details);
+				final long costs = shippingCostHelper.getShippingCosts(plan, vessel, false, true);
 				if (currentRouteAnnotation != null && details != null) {
 					currentRouteAnnotation.addChild(route, "").addChild(details[0]);
 				}
@@ -236,7 +234,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					continue;
 				}
 				final IDetailTree details[] = annotations == null ? null : new IDetailTree[2];
-				final long costs = entityValueCalculator.getShippingCosts(plan, vessel, false, true, originalLoadTime, details);
+				final long costs = shippingCostHelper.getShippingCosts(plan, vessel, false, true);
 				if (baseRouteAnnotation != null && details != null) {
 					baseRouteAnnotation.addChild(route, "").addChild(details[0]);
 				}
@@ -267,7 +265,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 					continue;
 				}
 				final IDetailTree details[] = annotations == null ? null : new IDetailTree[2];
-				final long costs = entityValueCalculator.getShippingCosts(plan, vessel, false, true, originalLoadTime, details);
+				final long costs = shippingCostHelper.getShippingCosts(plan, vessel, false, true);
 				if (currentRouteAnnotation != null && details != null) {
 					currentRouteAnnotation.addChild(route, "").addChild(details[0]);
 				}
