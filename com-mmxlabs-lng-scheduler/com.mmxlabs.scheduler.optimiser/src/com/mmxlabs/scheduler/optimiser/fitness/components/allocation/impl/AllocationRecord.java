@@ -56,10 +56,13 @@ public final class AllocationRecord {
 
 	public AllocationMode allocationMode;
 
-	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final long startVolumeInM3, final long requiredFuelVolumeInM3, final long minEndVolumeInM3,
+	public int vesselStartTime;
+
+	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3, final long requiredFuelVolumeInM3, final long minEndVolumeInM3,
 			final List<IPortSlot> slots, final List<Integer> times, List<Long> minVolumes, List<Long> maxVolumes) {
 		this.resourceVessel = resourceVessel;
 		this.resourceVoyagePlan = resourceVoyagePlan;
+		this.vesselStartTime = vesselStartTime;
 		this.startVolumeInM3 = startVolumeInM3;
 		this.requiredFuelVolumeInM3 = requiredFuelVolumeInM3;
 		this.minEndVolumeInM3 = minEndVolumeInM3;

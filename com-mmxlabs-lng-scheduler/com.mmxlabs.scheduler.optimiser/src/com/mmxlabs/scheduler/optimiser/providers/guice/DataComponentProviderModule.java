@@ -85,11 +85,13 @@ import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
@@ -301,6 +303,9 @@ public class DataComponentProviderModule extends AbstractModule {
 		final DefaultNextLoadDateProvider nexDateProviderEditor = new DefaultNextLoadDateProvider();
 		bind(INextLoadDateProvider.class).toInstance(nexDateProviderEditor);
 		bind(INextLoadDateProviderEditor.class).toInstance(nexDateProviderEditor);
+
+		bind(DefaultVesselCharterCurveProvider.class).in(Singleton.class);
+		bind(IVesselCharterInRateProvider.class).to(DefaultVesselCharterCurveProvider.class);
 	}
 
 	/**

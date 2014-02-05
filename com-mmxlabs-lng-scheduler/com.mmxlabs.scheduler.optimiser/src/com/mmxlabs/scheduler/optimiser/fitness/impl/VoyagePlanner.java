@@ -31,12 +31,14 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -88,6 +90,9 @@ public class VoyagePlanner {
 
 	@com.google.inject.Inject(optional = true)
 	private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
+
+	@Inject
+	private ICharterRateCalculator charterRateCalculator;
 
 	/**
 	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
@@ -229,7 +234,7 @@ public class VoyagePlanner {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		// TODO: Extract out further for custom base fuel pricing logic?
 		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		voyagePlanOptimiser.setVessel(vessel, vesselStartTime, baseFuelPricePerMT);
+		voyagePlanOptimiser.setVessel(vessel, baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -317,7 +322,8 @@ public class VoyagePlanner {
 				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
 				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 				if (!shortCargoEnd) {
-					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
+					final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
+					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 					if (plan == null) {
 						return null;
 					}
@@ -351,7 +357,8 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
+			final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
+			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 			if (plan == null) {
 				return null;
 			}
@@ -488,11 +495,12 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int vesselStartTime, final List<Integer> arrivalTimes, long heelVolumeInM3) {
+	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int vesselCharterInRatePerDay, final List<Integer> arrivalTimes,
+			long heelVolumeInM3) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		voyagePlanOptimiser.setVessel(vessel, vesselStartTime, baseFuelPricePerMT);
+		voyagePlanOptimiser.setVessel(vessel, baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -576,7 +584,7 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			return getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
+			return getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 		}
 		return null;
 	}
@@ -592,8 +600,9 @@ public class VoyagePlanner {
 	 * @return An optimised VoyagePlan
 	 */
 	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser,
-			final long startHeelVolumeInM3) {
+			final long startHeelVolumeInM3, final int vesselCharterInRatePerDay) {
 		// Run sequencer evaluation
+		optimiser.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
 		optimiser.setStartHeel(startHeelVolumeInM3);

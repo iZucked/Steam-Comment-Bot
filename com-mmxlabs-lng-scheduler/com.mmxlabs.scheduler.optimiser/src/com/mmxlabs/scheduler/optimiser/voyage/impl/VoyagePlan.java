@@ -46,6 +46,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	private IDetailsSequenceElement[] sequence;
+	private int charterInRatePerDay;
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
@@ -65,11 +66,12 @@ public final class VoyagePlan implements Cloneable {
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final int charterInRatePerDay, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
 			final LongFastEnumMap<FuelComponent> routeAdditionalConsumption, final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd,
 			final long startingHeelInM3, final long remainingHeelInM3, final HeelType remainingHeelType) {
 		super();
 		this.sequence = sequence;
+		this.charterInRatePerDay = charterInRatePerDay;
 		this.fuelConsumptions = fuelConsumptions;
 		this.routeAdditionalConsumption = routeAdditionalConsumption;
 		this.fuelCosts = fuelCosts;
@@ -143,6 +145,7 @@ public final class VoyagePlan implements Cloneable {
 			// @formatter:off
 			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
 					&& Objects.equal(sequence, plan.sequence)
+					&& Objects.equal(charterInRatePerDay, plan.charterInRatePerDay)
 					&& Objects.equal(violationsCount, plan.violationsCount)
 					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)
 					&& Objects.equal(routeAdditionalConsumption, plan.routeAdditionalConsumption)
@@ -159,8 +162,8 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", routeAdditionalConsumption=" + routeAdditionalConsumption + ", fuelCosts="
-				+ fuelCosts + "]";
+		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", charterInRatePerDay=" + charterInRatePerDay + ", fuelConsumptions=" + fuelConsumptions + ", routeAdditionalConsumption="
+				+ routeAdditionalConsumption + ", fuelCosts=" + fuelCosts + "]";
 	}
 
 	@Override
@@ -176,8 +179,8 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, startingHeelInM3, remainingHeelInM3,
-				remainingHeelType);
+		return new VoyagePlan(clonedSequence, charterInRatePerDay, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, startingHeelInM3,
+				remainingHeelInM3, remainingHeelType);
 	}
 
 	/**
@@ -253,5 +256,13 @@ public final class VoyagePlan implements Cloneable {
 
 	public void setStartingHeelInM3(final long startingHeelInM3) {
 		this.startingHeelInM3 = startingHeelInM3;
+	}
+
+	public int getCharterInRatePerDay() {
+		return charterInRatePerDay;
+	}
+
+	public void setCharterInRatePerDay(final int charterInRatePerDay) {
+		this.charterInRatePerDay = charterInRatePerDay;
 	}
 }

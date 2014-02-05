@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
+import java.awt.MultipleGradientPaint.CycleMethod;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -88,28 +89,29 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 		vpi.reset();
 
-		final ICurve charterCostCurve;
-		switch (vessel.getVesselInstanceType()) {
-		case SPOT_CHARTER:
-			charterCostCurve = vessel.getHourlyCharterInPrice();
-			break;
-		case TIME_CHARTER:
-			charterCostCurve = vessel.getHourlyCharterInPrice();
-			break;
-		case CARGO_SHORTS:
-			charterCostCurve = vessel.getHourlyCharterInPrice();
-			break;
-		default:
-			charterCostCurve = null;
-			break;
-		}
-		final int charterRate = charterCostCurve == null ? 0 : charterCostCurve.getValueAtPoint(arrivalTimes[0]);
+		// final ICurve charterCostCurve;
+		// switch (vessel.getVesselInstanceType()) {
+		// case SPOT_CHARTER:
+		// charterCostCurve = vessel.getHourlyCharterInPrice();
+		// break;
+		// case TIME_CHARTER:
+		// charterCostCurve = vessel.getHourlyCharterInPrice();
+		// break;
+		// case CARGO_SHORTS:
+		// charterCostCurve = vessel.getHourlyCharterInPrice();
+		// break;
+		// default:
+		// charterCostCurve = null;
+		// break;
+		// }
+		// final int charterRate = charterCostCurve == null ? 0 : charterCostCurve.getValueAtPoint(arrivalTimes[0]);
 
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
 
 			final int currentTime = vpi.getCurrentTime();
-
+			VoyagePlan currentPlan = vpi.getCurrentPlan();
+			int charterRatePerDay = currentPlan.getCharterInRatePerDay();
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
 				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
@@ -133,7 +135,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					visit = new PortVisitEventImpl();
 				}
 
-				// TODO: Set on the port details object 
+				// TODO: Set on the port details object
 				// Port Costs
 				{
 					final long cost = portCostProvider.getPortCost(currentPortSlot.getPort(), vessel, currentPortSlot.getPortType());
@@ -153,7 +155,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				visit.setPortSlot(currentPortSlot);
 
 				visit.setDuration(visitDuration);
-				visit.setHireCost(Calculator.quantityFromRateTime(charterRate, visitDuration));
+				visit.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, visitDuration) / 24);
 				solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_visitInfo, visit);
 
 				visit.setStartTime(currentTime); // details.getStartTime()
@@ -186,7 +188,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				journey.setRouteCost(details.getRouteCost());
 
 				journey.setDuration(travelTime);
-				journey.setHireCost(Calculator.quantityFromRateTime(charterRate, travelTime));
+				journey.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, travelTime) / 24);
 				journey.setSpeed(details.getSpeed());
 
 				for (final FuelComponent fuel : travelFuelComponents) {
@@ -225,7 +227,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					// Calculate revenue
 					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutHourlyRate(), idleTime));
-					charterOut.setHireCost(Calculator.quantityFromRateTime(charterRate, idleTime));
+					charterOut.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, idleTime) / 24);
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
 				} else {
@@ -236,7 +238,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					idle.setStartTime(currentTime + travelTime);
 					idle.setDuration(idleTime);
-					idle.setHireCost(Calculator.quantityFromRateTime(charterRate, idleTime));
+					idle.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, idleTime) / 24);
 					idle.setEndTime(currentTime + travelTime + idleTime);
 					idle.setSequenceElement(element);
 

@@ -60,6 +60,8 @@ public interface IVoyagePlanOptimiser {
 	void setBasicSequence(final List<IOptionsSequenceElement> basicSequence);
 
 	void setArrivalTimes(final List<Integer> currentTimes);
+	
+	void setVesselCharterInRatePerDay(int charterInRatePerDay);
 
 	/**
 	 * Get the {@link IVessel} to evaluate voyages against.
@@ -74,7 +76,7 @@ public interface IVoyagePlanOptimiser {
 	 * @param vessel
 	 * @since 8.0
 	 */
-	void setVessel(final IVessel vessel, final int vesselStartTime, int baseFuelPricePerMT);
+	void setVessel(final IVessel vessel, int baseFuelPricePerMT);
 
 	/**
 	 * Once optimised, returns the best {@link VoyagePlan} cost.

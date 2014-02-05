@@ -82,9 +82,9 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	 * @since 8.0
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final int vesselStartTime, final int baseFuelPricePerMT) {
-		delegate.setVessel(vessel, vesselStartTime, baseFuelPricePerMT);
-		reference.setVessel(vessel, vesselStartTime, baseFuelPricePerMT);
+	public void setVessel(final IVessel vessel, final int baseFuelPricePerMT) {
+		delegate.setVessel(vessel, baseFuelPricePerMT);
+		reference.setVessel(vessel, baseFuelPricePerMT);
 	}
 
 	@Override
@@ -122,11 +122,17 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	@Override
 	public void setStartHeel(long heelVolumeInM3) {
 		delegate.setStartHeel(heelVolumeInM3);
-		reference.setStartHeel(heelVolumeInM3);		
+		reference.setStartHeel(heelVolumeInM3);
 	}
 
 	@Override
 	public long getStartHeel() {
 		return delegate.getStartHeel();
+	}
+
+	@Override
+	public void setVesselCharterInRatePerDay(int charterInRatePerDay) {
+		delegate.setVesselCharterInRatePerDay(charterInRatePerDay);
+		reference.setVesselCharterInRatePerDay(charterInRatePerDay);
 	}
 }

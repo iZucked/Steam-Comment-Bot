@@ -17,6 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -58,6 +59,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	private IVoyagePlanOptimiser vpo;
 
+	@Inject
+	private ICharterRateCalculator charterRateCalculator;
+
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
 
@@ -65,7 +69,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			return null; // continue;
 		}
 
-		long startingHeelInM3 =  vp.getStartingHeelInM3();
+		long startingHeelInM3 = vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
 		boolean isCargoPlan = false;
 		// Grab the current list of arrival times and update the rolling currentTime
@@ -166,8 +170,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// Construct a new VPO instance (TODO - use injection provider)
 		// TODO: Use the central caching VPO?
 		// final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
+
 		vpo.reset();
-		vpo.setVessel(vessel, vesselStartTime, vessel.getVesselClass().getBaseFuelUnitPrice());
+		vpo.setVessel(vessel, vessel.getVesselClass().getBaseFuelUnitPrice());
+		vpo.setVesselCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, arrivalTimes.get(0)));
 		vpo.setStartHeel(startingHeelInM3);
 		// Install our new alternative sequence
 		vpo.setBasicSequence(newRawSequence);
