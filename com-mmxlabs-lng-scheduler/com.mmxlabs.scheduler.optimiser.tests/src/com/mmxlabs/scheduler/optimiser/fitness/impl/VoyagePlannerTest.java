@@ -49,6 +49,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
@@ -198,6 +200,7 @@ public final class VoyagePlannerTest {
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(VoyagePlanner.class);
+				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 			}
 		});
 
@@ -313,7 +316,7 @@ public final class VoyagePlannerTest {
 		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
 
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
@@ -452,6 +455,8 @@ public final class VoyagePlannerTest {
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(VoyagePlanner.class);
+				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
+
 			}
 		});
 
@@ -538,7 +543,8 @@ public final class VoyagePlannerTest {
 		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
+
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
 

@@ -45,6 +45,8 @@ import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOpti
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -80,6 +82,7 @@ public class ScheduleCalculatorTest {
 		final IVoyagePlanOptimiser voyagePlanOptimiser = mock(IVoyagePlanOptimiser.class);
 		final IElementDurationProvider elementDurationProvider = mock(IElementDurationProvider.class);
 		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
+		final ICharterRateCalculator charterRateCalculator = mock(ICharterRateCalculator.class);
 
 		class TestModule extends AbstractModule {
 			@Override
@@ -97,6 +100,7 @@ public class ScheduleCalculatorTest {
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
+				bind(ICharterRateCalculator.class).toInstance(charterRateCalculator);
 
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);
