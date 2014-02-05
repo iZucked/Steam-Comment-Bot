@@ -8,7 +8,10 @@ import java.util.Collection;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
+import com.google.inject.Singleton;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -34,6 +37,9 @@ public class EvaluationModule extends AbstractModule {
 
 		// Register default implementations
 		bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
+		
+		bind(VesselStartDateCharterRateCalculator.class).in(Singleton.class);
+		bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 
 		if (hints != null) {
 			for (final String hint : hints) {
