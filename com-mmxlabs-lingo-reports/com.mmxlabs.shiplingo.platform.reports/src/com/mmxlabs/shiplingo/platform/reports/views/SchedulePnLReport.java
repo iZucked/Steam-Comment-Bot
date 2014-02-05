@@ -19,9 +19,9 @@ import org.eclipse.swt.widgets.Display;
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
@@ -364,7 +364,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 								final CommercialModel commercialModel = rootObject.getCommercialModel();
 								if (commercialModel != null) {
-									for (final LegalEntity e : commercialModel.getEntities()) {
+									for (final BaseLegalEntity e : commercialModel.getEntities()) {
 										addPNLColumn(e.getName());
 									}
 								}
