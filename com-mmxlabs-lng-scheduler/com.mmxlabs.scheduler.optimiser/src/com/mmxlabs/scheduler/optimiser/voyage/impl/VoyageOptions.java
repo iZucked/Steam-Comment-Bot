@@ -50,7 +50,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 	private VesselState vesselState;
 	
-	private int charterOutHourlyRate;
+	private int charterOutDailyRate;
 
 	public VoyageOptions() {
 
@@ -70,7 +70,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		setVesselState(options.getVesselState());
 		setAllowCooldown(options.getAllowCooldown());
 		setShouldBeCold(options.shouldBeCold());
-		setCharterOutHourlyRate(options.getCharterOutHourlyRate());
+		setCharterOutDailyRate(options.getCharterOutDailyRate());
 		setCharterOutIdleTime(options.isCharterOutIdleTime());
 	}
 
@@ -232,7 +232,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		// @formatter:off
 		return Objects.toStringHelper(VoyageOptions.class)
 				.add("charterOutIdleTime", charterOutIdleTime)
-				.add("charterOutHourlyRate", charterOutHourlyRate)
+				.add("charterOutDailyRate", charterOutDailyRate)
 				.add("distance", distance)
 				.add("vessel", vessel)
 				.add("fromPortSlot", fromPortSlot)
@@ -267,18 +267,12 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.charterOutIdleTime = charterOutIdleTime;
 	}
 
-	/**
-	 * @since 2.0
-	 */
-	public int getCharterOutHourlyRate() {
-		return charterOutHourlyRate;
+	public int getCharterOutDailyRate() {
+		return charterOutDailyRate;
 	}
 
-	/**
-	 * @since 2.0
-	 */
-	public void setCharterOutHourlyRate(final int charterOutHourlyRate) {
-		this.charterOutHourlyRate = charterOutHourlyRate;
+	public void setCharterOutDailyRate(final int charterOutDailyRate) {
+		this.charterOutDailyRate = charterOutDailyRate;
 	}
 
 }

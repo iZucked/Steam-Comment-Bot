@@ -46,13 +46,13 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
+			hireRate = vessel.getDailyCharterInPrice();
 			break;
 		case TIME_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
+			hireRate = vessel.getDailyCharterInPrice();
 			break;
 		case CARGO_SHORTS:
-			hireRate = vessel.getHourlyCharterInPrice();
+			hireRate = vessel.getDailyCharterInPrice();
 			break;
 		default:
 			// we are not interested in this sequence - we won't

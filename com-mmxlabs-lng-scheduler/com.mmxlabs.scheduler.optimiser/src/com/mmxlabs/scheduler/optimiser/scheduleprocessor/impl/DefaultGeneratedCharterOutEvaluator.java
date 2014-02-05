@@ -29,10 +29,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.RouteVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
-import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -165,7 +163,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		newRawSequence.set(ballastIdx, options);
 		// Turn on chartering
 		options.setCharterOutIdleTime(true);
-		options.setCharterOutHourlyRate(bestDailyPrice / 24);
+		options.setCharterOutDailyRate(bestDailyPrice);
 
 		// Construct a new VPO instance (TODO - use injection provider)
 		// TODO: Use the central caching VPO?

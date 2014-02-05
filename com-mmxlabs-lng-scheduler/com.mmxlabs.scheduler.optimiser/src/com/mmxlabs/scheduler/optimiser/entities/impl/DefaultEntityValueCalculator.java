@@ -529,8 +529,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (obj instanceof VoyageDetails) {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
-					final long hourlyCharterOutPrice = voyageDetails.getOptions().getCharterOutHourlyRate();
-					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice, voyageDetails.getIdleTime());
+					final long hourlyCharterOutPrice = voyageDetails.getOptions().getCharterOutDailyRate();
+					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice, voyageDetails.getIdleTime()) / 24l;
 				}
 			}
 		}
