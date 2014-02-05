@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -21,6 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -39,7 +39,9 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -307,7 +309,8 @@ public final class VoyagePlannerTest {
 		final int[] arrivalTimes2 = new int[] { 15, 20 };
 
 		// Schedule sequence
-		final LinkedHashMap<VoyagePlan, IAllocationAnnotation> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		// final LinkedHashMap<VoyagePlan, IAllocationAnnotation> plans =
+		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
@@ -532,7 +535,7 @@ public final class VoyagePlannerTest {
 		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
-		final LinkedHashMap<VoyagePlan, IAllocationAnnotation> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
@@ -557,8 +560,7 @@ public final class VoyagePlannerTest {
 		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes)));
 
 		Assert.assertNotNull(voyagePlans);
-		final List<VoyagePlan> plans = new ArrayList<>(voyagePlans.keySet());
-		Assert.assertEquals(1, plans.size());
+		Assert.assertEquals(1, voyagePlans.size());
 
 		// TODO: Check plan details are as expected
 		// TODO: Return a default plan from VPO and check expected output is
@@ -566,7 +568,7 @@ public final class VoyagePlannerTest {
 		// TODO: Can we return different objects for each invocation?
 		//
 		// // Check plan 1
-		final VoyagePlan plan1 = plans.get(0);
+		final VoyagePlan plan1 = voyagePlans.get(0).getFirst();
 		Assert.assertSame(testVoyagePlan, plan1);
 
 		final Object[] outputSequence = testVoyagePlan.getSequence();

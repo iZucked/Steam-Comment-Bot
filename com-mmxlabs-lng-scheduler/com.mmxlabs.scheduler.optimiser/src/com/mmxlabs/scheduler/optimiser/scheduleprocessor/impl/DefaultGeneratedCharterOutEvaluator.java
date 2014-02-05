@@ -65,7 +65,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			return null; // continue;
 		}
 
-		long startingHeelInM3 = 0;// vp.getStartingHeelInM3();
+		long startingHeelInM3 =  vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
 		boolean isCargoPlan = false;
 		// Grab the current list of arrival times and update the rolling currentTime

@@ -24,6 +24,7 @@ public final class SchedulerConstants {
 	public static final String AI_journeyInfo = "info-journey";
 	public static final String AI_visitInfo = "info-visit";
 	public static final String AI_volumeAllocationInfo = "info-volume-allocation";
+	public static final String AI_heelLevelInfo = "info-heel-level";
 	/**
 	 * @since 2.0
 	 */

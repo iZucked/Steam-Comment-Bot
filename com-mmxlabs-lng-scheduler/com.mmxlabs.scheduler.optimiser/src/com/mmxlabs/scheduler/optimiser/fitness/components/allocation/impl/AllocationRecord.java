@@ -45,20 +45,11 @@ public final class AllocationRecord {
 	 */
 	public final List<Long> maxVolumes;
 
-	/**
-	 * The minimum transfer volume for capacity violation purposes indexed by port slot
-	 */
-	public final List<Long> violationMinVolumes;
-	/**
-	 * The maximum transfer volume for capacity violation purposes indexed by port slot
-	 */
-	public final List<Long> violationMaxVolumes;
-
 	// Set to false to maximise load volume and push gas into next loading
 	public boolean preferShortLoadOverLeftoverHeel = true;
 
 	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final long startVolumeInM3, final long requiredFuelVolumeInM3, final long minEndVolumeInM3,
-			final List<IPortSlot> slots, final List<Integer> times, List<Long> minVolumes, List<Long> maxVolumes, List<Long> violationMinVolumes, List<Long> violationMaxVolumes) {
+			final List<IPortSlot> slots, final List<Integer> times, List<Long> minVolumes, List<Long> maxVolumes) {
 		this.resourceVessel = resourceVessel;
 		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.startVolumeInM3 = startVolumeInM3;
@@ -68,8 +59,6 @@ public final class AllocationRecord {
 		this.slots = slots;
 		this.minVolumes = minVolumes;
 		this.maxVolumes = maxVolumes;
-		this.violationMinVolumes = violationMinVolumes;
-		this.violationMaxVolumes = violationMaxVolumes;
 	}
 
 }
