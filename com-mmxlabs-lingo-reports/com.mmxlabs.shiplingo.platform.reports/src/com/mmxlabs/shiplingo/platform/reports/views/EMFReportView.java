@@ -448,7 +448,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private final String helpContextId;
 	private ScenarioViewerSynchronizer jobManagerListener;
 
-	private IScenarioViewerSynchronizerOutput synchronizerOutput = null;
+	protected IScenarioViewerSynchronizerOutput synchronizerOutput = null;
 
 	private ColumnHandler scheduleColumnHandler;
 
