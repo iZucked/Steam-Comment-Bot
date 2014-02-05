@@ -24,6 +24,7 @@ import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
@@ -38,6 +39,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
@@ -49,9 +52,22 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
+/**
+ * 
+ * For each VoyagePlan in the schedule the evaluate(...) methods work out: 
+ * - discharge and purchase prices for the VP, then the 
+ * - "additionalPnL" (e.g. upside calculations). 
+ * - calculate shipping cost (from VP contents)
+ * - calculates charter-out P&L (from VP contents)
+ * 
+ * Two evaluate methods cover cargo and non-cargo VoyagePlans.
+ * 
+ * @author proshun
+ */
 public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	private static final boolean includeTimeCharterInFitness = true;
@@ -276,6 +292,58 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 
+		
+		{
+			
+			if(currentAllocation.getSlots().size()>2) throw new IllegalStateException("Only L-D cargoes are supported for calculation of working capital"); 
+			
+			long totalCostOfWorkingCapital = 0;
+			long workingCapital = 0;
+			final Object[] sequence = plan.getSequence();
+			final int k = sequence.length;
+			int rate = OptimiserUnitConvertor.convertToInternalConversionFactor(0.15);
+			for (int i = 0; i < k; i++) {
+				final Object o = sequence[i];
+				if (o instanceof PortDetails) {
+					PortOptions po = ((PortDetails) o).getOptions();
+					IPortSlot ps = po.getPortSlot();					
+					if(ps.getPortType() == PortType.Load){						
+						
+						int price = currentAllocation.getSlotPricePerMMBTu(ps);
+						long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
+						workingCapital += price * vol; 
+			//			Calculator.convert...; ??
+					}
+					else if(ps.getPortType() == PortType.Discharge){						
+					
+						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) po.getVisitDuration(), rate)/(365l*24l);
+						// reset WC contribution - decrement for LDD or LLD cargoes!!						
+						workingCapital = 0;
+//						int price = currentAllocation.getSlotPricePerMMBTu(ps);
+//						long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
+//						workingCapital -= (price * vol); 
+//						workingCapital = (workingCapital<0) ? 0 : workingCapital;	
+					}
+				}
+				else {
+					final VoyageDetails voyageDetails = (VoyageDetails) o;					
+					if(voyageDetails.getOptions().getVesselState() == VesselState.Laden){
+						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) (voyageDetails.getTravelTime() + voyageDetails.getIdleTime()), rate)/(365l*24l);
+					}
+				}
+			}
+			// addEntityProfit(entityProfit, shippingEntity, -generatedCharterOutCosts);
+
+			if (annotatedSolution != null && exportElement != null) {
+				// Calculate P&L with TC rates
+				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, workingCapital, firstSlot, true);
+			}
+
+			
+			result += workingCapital;
+		}
+		
+		
 		// Cargo (not charter out) revenue
 		for (final Map.Entry<IEntity, Long> e : entityProfit.entrySet()) {
 			result += e.getKey().getTaxedProfit(e.getValue(), taxTime);
