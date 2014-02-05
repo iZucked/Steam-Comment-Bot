@@ -371,19 +371,19 @@ public class LNGScenarioTransformer {
 
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
-					final long dailyCost = OptimiserUnitConvertor.convertToInternalHourlyCost(parsed.evaluate(0).intValue());
+					final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(0).intValue()) / 24l ;
 					if (dailyCost != (int) dailyCost) {
 						throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
 					}
-					curve.setValueAfter(0, (int) dailyCost);
+					curve.setValueAfter(0, (int) dailyCost*24);
 				} else {
 
 					for (final int i : parsed.getChangePoints()) {
-						final long dailyCost = OptimiserUnitConvertor.convertToInternalHourlyCost(parsed.evaluate(i).intValue());
+						final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(i).intValue()) / 24l ;
 						if (dailyCost != (int) dailyCost) {
 							throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
 						}
-						curve.setValueAfter(i - 1, (int) dailyCost);
+						curve.setValueAfter(i - 1, (int) dailyCost*24);
 					}
 				}
 				entities.addModelObject(index, curve);
@@ -1072,7 +1072,7 @@ public class LNGScenarioTransformer {
 		} else if (dischargeSlot instanceof SpotSlot) {
 			final SpotSlot spotSlot = (SpotSlot) dischargeSlot;
 			final SpotMarket market = spotSlot.getMarket();
-			
+
 			final IContractTransformer transformer = contractTransformersByEClass.get(market.getPriceInfo().eClass());
 			if (transformer == null) {
 				throw new IllegalStateException("No Price Parameters transformer registered for  " + market.getPriceInfo().eClass().getName());
@@ -1082,14 +1082,14 @@ public class LNGScenarioTransformer {
 				throw new IllegalStateException("Unable to transform contract");
 			}
 			// TODO?
-//			entities.addModelObject(c, calculator);
-	
+			// entities.addModelObject(c, calculator);
+
 			dischargePriceCalculator = calculator;
 		} else if (dischargeSlot.isSetContract()) {
 			dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), ISalesPriceCalculator.class);
 		} else {
 			dischargePriceCalculator = null;
-		} 
+		}
 
 		if (dischargePriceCalculator == null) {
 			throw new IllegalStateException("Discharge Slot has no contract or other pricing data");
@@ -1189,11 +1189,11 @@ public class LNGScenarioTransformer {
 				}
 				loadPriceCalculator = new PriceExpressionContract(curve);
 			}
-			
+
 		} else if (loadSlot instanceof SpotSlot) {
 			final SpotSlot spotSlot = (SpotSlot) loadSlot;
 			final SpotMarket market = spotSlot.getMarket();
-			
+
 			final IContractTransformer transformer = contractTransformersByEClass.get(market.getPriceInfo().eClass());
 			if (transformer == null) {
 				throw new IllegalStateException("No Price Parameters transformer registered for  " + market.getPriceInfo().eClass().getName());
@@ -1203,8 +1203,8 @@ public class LNGScenarioTransformer {
 				throw new IllegalStateException("Unable to transform contract");
 			}
 			// TODO?
-//			entities.addModelObject(c, calculator);
-	
+			// entities.addModelObject(c, calculator);
+
 			loadPriceCalculator = calculator;
 
 		} else if (loadSlot.isSetContract()) {
@@ -1213,8 +1213,8 @@ public class LNGScenarioTransformer {
 		} else {
 			loadPriceCalculator = null;
 		}
-		
-		if (loadPriceCalculator == null){
+
+		if (loadPriceCalculator == null) {
 			throw new IllegalStateException("Load Slot has no contract or other pricing data");
 		}
 
@@ -1382,7 +1382,7 @@ public class LNGScenarioTransformer {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
 						// Disabled until UI available
-//						builder.createSlotGroupCount(marketGroupSlots, count);
+						// builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
@@ -1497,7 +1497,7 @@ public class LNGScenarioTransformer {
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
-//						builder.createSlotGroupCount(marketGroupSlots, count);
+						// builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
@@ -1607,7 +1607,7 @@ public class LNGScenarioTransformer {
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
-//						builder.createSlotGroupCount(marketGroupSlots, count);
+						// builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
@@ -1718,7 +1718,7 @@ public class LNGScenarioTransformer {
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
 					if (marketGroupSlots.size() > count) {
-//						builder.createSlotGroupCount(marketGroupSlots, count);
+						// builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
 
@@ -2052,10 +2052,10 @@ public class LNGScenarioTransformer {
 			final long heelLimit = vesselAvailability.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(vesselAvailability.getStartHeel().getVolumeAvailable())
 					: 0;
 
-			final int hourlyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalHourlyCost(dailyCharterInPrice);
-			final ICurve hourlyCharterInCurve = new ConstantValueCurve(hourlyCharterInRate);
+			final int dailyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(dailyCharterInPrice) / 24 * 24;
+			final ICurve dailyCharterInCurve = new ConstantValueCurve(dailyCharterInRate);
 
-			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve,
+			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), dailyCharterInCurve ,
 					vesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(vesselAvailability.getStartHeel().getCvValue()),
 					OptimiserUnitConvertor.convertToInternalPrice(vesselAvailability.getStartHeel().getPricePerMMBTU()),
