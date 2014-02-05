@@ -18,18 +18,6 @@ public class DefaultVesselCharterCurveProvider implements IVesselCharterInRatePr
 
 	@Override
 	public ICurve getCharterInRatePerDay(final IVessel vessel) {
-		final ICurve charterCostCurve = vessel.getHourlyCharterInPrice();
-		if (charterCostCurve == null) {
-			return null;
-		}
-		// Temp hack to convert to daily rate
-		return new ICurve() {
-
-			@Override
-			public int getValueAtPoint(final int point) {
-				return 24 * charterCostCurve.getValueAtPoint(point);
-			}
-		};
+		return vessel.getDailyCharterInPrice();
 	}
-
 }

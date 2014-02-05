@@ -672,9 +672,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final IStartEndRequirement start, final IStartEndRequirement end,
+	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve dailyCharterInRate, final IStartEndRequirement start, final IStartEndRequirement end,
 			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity) {
-		return this.createVessel(name, vesselClass, hourlyCharterInRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice, cargoCapacity);
+		return this.createVessel(name, vesselClass, dailyCharterInRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice, cargoCapacity);
 	}
 
 	/**
@@ -687,10 +687,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public List<IVessel> createSpotVessels(final String namePrefix, @NonNull final IVesselClass vesselClass, final int count, final ICurve hourlyCharterPrice) {
+	public List<IVessel> createSpotVessels(final String namePrefix, @NonNull final IVesselClass vesselClass, final int count, final ICurve dailyCharterInPrice) {
 		final List<IVessel> answer = new ArrayList<IVessel>(count);
 		for (int i = 0; i < count; i++) {
-			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), vesselClass, hourlyCharterPrice));
+			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), vesselClass, dailyCharterInPrice));
 		}
 		return answer;
 	}
@@ -705,11 +705,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createSpotVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve hourlyCharterInPrice) {
+	public IVessel createSpotVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve dailyCharterInPrice) {
 		final IStartEndRequirement start = createStartEndRequirement();
 		final IStartEndRequirement end = createStartEndRequirement();
 
-		return createVessel(name, vesselClass, hourlyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0, vesselClass.getCargoCapacity());
+		return createVessel(name, vesselClass, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0, vesselClass.getCargoCapacity());
 	}
 
 	/**
@@ -717,7 +717,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final VesselInstanceType vesselInstanceType,
+	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve dailyCharterInRate, final VesselInstanceType vesselInstanceType,
 			final IStartEndRequirement start, final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity) {
 
 		if (!vesselClasses.contains(vesselClass)) {
@@ -740,7 +740,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vessel.setVesselInstanceType(vesselInstanceType);
 
-		vessel.setHourlyCharterInPrice(hourlyCharterInRate);
+		vessel.setDailyCharterInPrice(dailyCharterInRate);
 
 		vessel.setCargoCapacity(cargoCapacity);
 

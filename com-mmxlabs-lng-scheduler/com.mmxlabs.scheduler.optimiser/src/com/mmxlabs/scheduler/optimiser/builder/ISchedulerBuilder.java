@@ -245,7 +245,7 @@ public interface ISchedulerBuilder {
 	 * @since 5.0
 	 */
 	@NonNull
-	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
+	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
 			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
 
 	/**
@@ -516,7 +516,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	List<IVessel> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve hourlyCharterInPrice);
+	List<IVessel> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve dailyCharterInPrice);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
@@ -529,7 +529,7 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@NonNull
-	IVessel createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInPrice);
+	IVessel createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice);
 
 	/**
 	 * Set the list of ports this vessel is not permitted to travel to.

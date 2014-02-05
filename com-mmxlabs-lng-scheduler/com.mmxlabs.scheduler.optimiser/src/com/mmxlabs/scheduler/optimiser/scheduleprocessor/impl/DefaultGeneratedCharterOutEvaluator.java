@@ -118,7 +118,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[ballastIdx];
 
 		boolean foundMarketPrice = false;
-		int bestPrice = 0;
+		int bestDailyPrice = 0;
 		final int time = ballastStartTime + ballastDetails.getTravelTime();
 
 		final int availableTime = ballastDetails.getOptions().getAvailableTime();
@@ -131,9 +131,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// Scan all the markets for a match
 		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
-			if (availableCharteringTime >= option.getMinDuration() && option.getCharterPrice() > bestPrice) {
+			if (availableCharteringTime >= option.getMinDuration() && option.getCharterPrice() > bestDailyPrice) {
 				foundMarketPrice = true;
-				bestPrice = option.getCharterPrice();
+				bestDailyPrice = option.getCharterPrice();
 			}
 		}
 		// Have we found a market?
@@ -165,7 +165,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		newRawSequence.set(ballastIdx, options);
 		// Turn on chartering
 		options.setCharterOutIdleTime(true);
-		options.setCharterOutHourlyRate(bestPrice);
+		options.setCharterOutHourlyRate(bestDailyPrice / 24);
 
 		// Construct a new VPO instance (TODO - use injection provider)
 		// TODO: Use the central caching VPO?
