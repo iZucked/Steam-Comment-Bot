@@ -105,11 +105,18 @@ public class AbstractOptimisationResultTester {
 
 		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, false);
 
-		MigrationHelper.migrateAndLoad(instance);
+		File f = null;
+		try {
+			f = MigrationHelper.migrateAndLoad(instance);
 
-		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
 
-		runScenario(originalScenario, url);
+			runScenario(originalScenario, url);
+		} finally {
+			if (f != null && f.exists()) {
+				f.delete();
+			}
+		}
 	}
 
 	public ScenarioRunner evaluateScenario(final URL url) throws Exception {
@@ -118,11 +125,18 @@ public class AbstractOptimisationResultTester {
 
 		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, false);
 
-		MigrationHelper.migrateAndLoad(instance);
+		File f = null;
+		try {
+			f = MigrationHelper.migrateAndLoad(instance);
 
-		final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
+			final LNGScenarioModel originalScenario = (LNGScenarioModel) instance.getInstance();
 
-		return evaluateScenario(originalScenario, url);
+			return evaluateScenario(originalScenario, url);
+		} finally {
+			if (f != null && f.exists()) {
+				f.delete();
+			}
+		}
 	}
 
 	/**

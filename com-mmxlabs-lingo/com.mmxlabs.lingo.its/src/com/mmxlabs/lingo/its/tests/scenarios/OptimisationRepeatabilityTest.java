@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.its.tests.scenarios;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -78,67 +79,74 @@ public class OptimisationRepeatabilityTest {
 	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, IncompleteScenarioException {
 		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), false);
 
-		MigrationHelper.migrateAndLoad(instance);
+		File f = null;
+		try {
+			f = MigrationHelper.migrateAndLoad(instance);
 
-		// Initial duplicate to remove e.g. eResource references.
-		final LNGScenarioModel originalScenario = EcoreUtil.copy((LNGScenarioModel) instance.getInstance());
+			// Initial duplicate to remove e.g. eResource references.
+			final LNGScenarioModel originalScenario = EcoreUtil.copy((LNGScenarioModel) instance.getInstance());
 
-		final ScenarioRunner[] scenarioRunners = new ScenarioRunner[numTries];
-		for (int i = 0; i < numTries; ++i) {
+			final ScenarioRunner[] scenarioRunners = new ScenarioRunner[numTries];
+			for (int i = 0; i < numTries; ++i) {
 
-			// TODO: Does EcoreUtil.copy work -- do we need to do it here?
-			final LNGScenarioModel copy = EcoreUtil.copy(originalScenario);
+				// TODO: Does EcoreUtil.copy work -- do we need to do it here?
+				final LNGScenarioModel copy = EcoreUtil.copy(originalScenario);
 
-			scenarioRunners[i] = new ScenarioRunner(copy);
-			scenarioRunners[i].init();
+				scenarioRunners[i] = new ScenarioRunner(copy);
+				scenarioRunners[i].init();
 
-			if (i > 0) {
-				// Ensure same initial schedules
-				final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getIntialSchedule(), scenarioRunners[0].getIntialSchedule());
+				if (i > 0) {
+					// Ensure same initial schedules
+					final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getIntialSchedule(), scenarioRunners[0].getIntialSchedule());
+					final Comparison comparison = EMFCompare.newComparator(scope).compare();
+
+					final EList<Diff> differences = comparison.getDifferences();
+					for (final Diff d : differences) {
+
+						System.err.println(d.toString());
+					}
+
+					Assert.assertTrue("initial solution 0 and " + i + " should be the same", differences.isEmpty());
+				}
+			}
+
+			// Run all the optimisations
+			for (int i = 0; i < numTries; ++i) {
+				scenarioRunners[i].run();
+				if (i > 0) {
+					// Ensure same final schedules
+
+					final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getFinalSchedule(), scenarioRunners[0].getFinalSchedule());
+					final Comparison comparison = EMFCompare.newComparator(scope).compare();
+
+					// Dump any differences to std.err before asserting
+					final EList<Diff> differences = comparison.getDifferences();
+					for (final Diff d : differences) {
+						System.err.println(d.toString());
+					}
+
+					Assert.assertTrue(differences.isEmpty());
+				}
+			}
+
+			// Ensure source model is unchanged
+			for (int i = 0; i < numTries; ++i) {
+
+				final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getScenario(), originalScenario);
 				final Comparison comparison = EMFCompare.newComparator(scope).compare();
 
 				final EList<Diff> differences = comparison.getDifferences();
-				for (final Diff d : differences) {
-
-					System.err.println(d.toString());
-				}
-
-				Assert.assertTrue("initial solution 0 and " + i + " should be the same", differences.isEmpty());
-			}
-		}
-
-		// Run all the optimisations
-		for (int i = 0; i < numTries; ++i) {
-			scenarioRunners[i].run();
-			if (i > 0) {
-				// Ensure same final schedules
-
-				final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getFinalSchedule(), scenarioRunners[0].getFinalSchedule());
-				final Comparison comparison = EMFCompare.newComparator(scope).compare();
-
 				// Dump any differences to std.err before asserting
-				final EList<Diff> differences = comparison.getDifferences();
 				for (final Diff d : differences) {
 					System.err.println(d.toString());
 				}
 
-				Assert.assertTrue(differences.isEmpty());
+				Assert.assertTrue("final solution 0 and " + i + " should be the same: " + differences, differences.isEmpty());
 			}
-		}
-
-		// Ensure source model is unchanged
-		for (int i = 0; i < numTries; ++i) {
-
-			final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getScenario(), originalScenario);
-			final Comparison comparison = EMFCompare.newComparator(scope).compare();
-
-			final EList<Diff> differences = comparison.getDifferences();
-			// Dump any differences to std.err before asserting
-			for (final Diff d : differences) {
-				System.err.println(d.toString());
+		} finally {
+			if (f != null && f.exists()) {
+				f.delete();
 			}
-
-			Assert.assertTrue("final solution 0 and " + i + " should be the same: " + differences, differences.isEmpty());
 		}
 	}
 }

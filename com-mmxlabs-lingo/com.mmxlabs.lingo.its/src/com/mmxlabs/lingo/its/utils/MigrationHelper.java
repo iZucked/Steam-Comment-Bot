@@ -63,7 +63,7 @@ public class MigrationHelper {
 
 	}
 
-	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
+	public static File migrateAndLoad(final ScenarioInstance instance) throws IOException {
 		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 
 		final ScenarioMigrationService migrationService = new ScenarioMigrationService();
@@ -81,6 +81,7 @@ public class MigrationHelper {
 		// migrator.performMigration(ss, instance);
 		scenarioService.setScenarioMigrationService(migrationService);
 
+		final File f;
 		{
 
 			final String subModelURI = instance.getRootObjectURI();
@@ -91,7 +92,7 @@ public class MigrationHelper {
 			final URI uri = scenarioService.resolveURI(subModelURI);
 			// Copy data files for manipulation
 			assert uri != null;
-			final File f = File.createTempFile("migration", ".xmi");
+			f = File.createTempFile("migration", ".xmi");
 			// Create a temp file and generate a URI to it to pass into migration code.
 			final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
 			assert tmpURI != null;
@@ -107,6 +108,8 @@ public class MigrationHelper {
 		}
 
 		scenarioService.load(instance);
+		
+		return f;
 	}
 
 	@SuppressWarnings("resource")
