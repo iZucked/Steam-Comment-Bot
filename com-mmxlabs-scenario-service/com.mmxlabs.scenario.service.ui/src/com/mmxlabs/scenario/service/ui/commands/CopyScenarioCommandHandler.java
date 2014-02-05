@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,7 +42,7 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 					final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
 					final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 
-					final ArrayList<String> tempFiles = new ArrayList<String>();
+					final ArrayList<File> tempFiles = new ArrayList<>();
 					final ArrayList<ScenarioInstance> instances = new ArrayList<ScenarioInstance>();
 					for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 						final Object element = iterator.next();
@@ -54,7 +55,10 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 							}
 						}
 					}
-					final String[] tempFilesArray = tempFiles.toArray(new String[tempFiles.size()]);
+					final String[] tempFilesArray = new String[tempFiles.size()];
+					for (int i = 0; i < tempFilesArray.length; ++i) {
+						tempFilesArray[i] = tempFiles.get(i).getAbsolutePath();
+					}
 					if (tempFilesArray.length > 0) {
 						clipboard.setContents(new Object[] { tempFilesArray, instances }, new Transfer[] { FileTransfer.getInstance(), LocalTransfer.getInstance() });
 					}
