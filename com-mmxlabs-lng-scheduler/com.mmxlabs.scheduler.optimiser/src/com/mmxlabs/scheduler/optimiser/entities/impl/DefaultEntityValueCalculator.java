@@ -58,11 +58,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * 
- * For each VoyagePlan in the schedule the evaluate(...) methods work out: 
- * - discharge and purchase prices for the VP, then the 
- * - "additionalPnL" (e.g. upside calculations). 
- * - calculate shipping cost (from VP contents)
- * - calculates charter-out P&L (from VP contents)
+ * For each VoyagePlan in the schedule the evaluate(...) methods work out: - discharge and purchase prices for the VP, then the - "additionalPnL" (e.g. upside calculations). - calculate shipping cost
+ * (from VP contents) - calculates charter-out P&L (from VP contents)
  * 
  * Two evaluate methods cover cargo and non-cargo VoyagePlans.
  * 
@@ -292,11 +289,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 
-		
 		{
-			
-			if(currentAllocation.getSlots().size()>2) throw new IllegalStateException("Only L-D cargoes are supported for calculation of working capital"); 
-			
+
+			if (currentAllocation.getSlots().size() > 2)
+				throw new IllegalStateException("Only L-D cargoes are supported for calculation of working capital");
+
 			long totalCostOfWorkingCapital = 0;
 			long workingCapital = 0;
 			final Object[] sequence = plan.getSequence();
@@ -306,29 +303,27 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final Object o = sequence[i];
 				if (o instanceof PortDetails) {
 					PortOptions po = ((PortDetails) o).getOptions();
-					IPortSlot ps = po.getPortSlot();					
-					if(ps.getPortType() == PortType.Load){						
-						
+					IPortSlot ps = po.getPortSlot();
+					if (ps.getPortType() == PortType.Load) {
+
 						int price = currentAllocation.getSlotPricePerMMBTu(ps);
 						long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
-						workingCapital += price * vol; 
-			//			Calculator.convert...; ??
-					}
-					else if(ps.getPortType() == PortType.Discharge){						
-					
-						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) po.getVisitDuration(), rate)/(365l*24l);
-						// reset WC contribution - decrement for LDD or LLD cargoes!!						
+						workingCapital += price * vol;
+						// Calculator.convert...; ??
+					} else if (ps.getPortType() == PortType.Discharge) {
+
+						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) po.getVisitDuration(), rate) / (365l * 24l);
+						// reset WC contribution - decrement for LDD or LLD cargoes!!
 						workingCapital = 0;
-//						int price = currentAllocation.getSlotPricePerMMBTu(ps);
-//						long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
-//						workingCapital -= (price * vol); 
-//						workingCapital = (workingCapital<0) ? 0 : workingCapital;	
+						// int price = currentAllocation.getSlotPricePerMMBTu(ps);
+						// long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
+						// workingCapital -= (price * vol);
+						// workingCapital = (workingCapital<0) ? 0 : workingCapital;
 					}
-				}
-				else {
-					final VoyageDetails voyageDetails = (VoyageDetails) o;					
-					if(voyageDetails.getOptions().getVesselState() == VesselState.Laden){
-						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) (voyageDetails.getTravelTime() + voyageDetails.getIdleTime()), rate)/(365l*24l);
+				} else {
+					final VoyageDetails voyageDetails = (VoyageDetails) o;
+					if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
+						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) (voyageDetails.getTravelTime() + voyageDetails.getIdleTime()), rate) / (365l * 24l);
 					}
 				}
 			}
@@ -339,11 +334,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, workingCapital, firstSlot, true);
 			}
 
-			
 			result += workingCapital;
 		}
-		
-		
+
 		// Cargo (not charter out) revenue
 		for (final Map.Entry<IEntity, Long> e : entityProfit.entrySet()) {
 			result += e.getKey().getTaxedProfit(e.getValue(), taxTime);
@@ -475,33 +468,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		}
 
-		final ICurve hireRate;
-		switch (vessel.getVesselInstanceType()) {
-		case SPOT_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
-			break;
-		case TIME_CHARTER:
-			if (includeTimeCharterCosts) {
-				hireRate = vessel.getHourlyCharterInPrice();
-			} else {
-				hireRate = null;
-			}
-			break;
-		case CARGO_SHORTS:
-			hireRate = vessel.getHourlyCharterInPrice();
-			break;
-		default:
-			hireRate = null;
-			break;
-		}
 		final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
-		final long hireCosts;
-		if (hireRate == null) {
-			hireCosts = 0;
-		} else {
-			final long hourlyCharterInPrice = hireRate.getValueAtPoint(vesselStartTime);
-			hireCosts = hourlyCharterInPrice * planDuration;
-		}
+
+		final int hireRatePerDay = plan.getCharterInRatePerDay();
+		long hireCosts = includeTimeCharterCosts ? (long) hireRatePerDay * (long) planDuration / 24l : 0l;
 		if (detailsRef != null) {
 			//
 
@@ -545,32 +515,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 
-		final ICurve hireRate;
-		switch (vessel.getVesselInstanceType()) {
-		case SPOT_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
-			break;
-		case TIME_CHARTER:
-			if (includeTimeCharterRates) {
-				hireRate = vessel.getHourlyCharterInPrice();
-			} else {
-				hireRate = null;
-			}
-			break;
-		case CARGO_SHORTS:
-			hireRate = vessel.getHourlyCharterInPrice();
-			break;
-		default:
-			hireRate = null;
-			break;
-		}
-		final long hireCosts;
-		if (hireRate == null) {
-			hireCosts = 0;
-		} else {
-			final long hourlyCharterInPrice = hireRate.getValueAtPoint(vesselStartTime);
-			hireCosts = hourlyCharterInPrice * planDuration;
-		}
+		final int hireRatePerDay = plan.getCharterInRatePerDay();
+		long hireCosts = (long) hireRatePerDay * (long) planDuration / 24l;
 
 		return hireCosts;
 	}
