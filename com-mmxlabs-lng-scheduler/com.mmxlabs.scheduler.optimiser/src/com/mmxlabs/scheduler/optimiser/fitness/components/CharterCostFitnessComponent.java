@@ -42,6 +42,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	protected boolean reallyStartSequence(final IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
+		//FIXME: Use VoyagePlans to get charter in rate
 		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
