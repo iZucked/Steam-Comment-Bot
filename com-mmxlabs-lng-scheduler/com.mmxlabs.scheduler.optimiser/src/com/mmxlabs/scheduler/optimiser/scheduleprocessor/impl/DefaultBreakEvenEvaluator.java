@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -56,6 +57,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	@Inject
 	private VoyagePlanner voyagePlanner;
+
+	@Inject
+	private ShippingCostHelper shippingCostHelper;
 
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
@@ -151,7 +155,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// Get the new cargo allocation.
 
 			// Purchase price in mmbtu = (sales revenue - shipping cost) / load volume in mmbtu
-			final long totalShippingCost = entityValueCalculator.getShippingCosts(vp, vessel, false, true, vesselStartTime, null);
+			final long totalShippingCost = shippingCostHelper.getShippingCosts(vp, vessel, false, true);
 			long totalSalesRevenue = 0;
 			long loadVolumeInM3 = 0;
 
@@ -202,26 +206,26 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			// Perform a binary search on sales price
 			// First find a valid interval
 			int minPricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(5.0);// Integer.MAX_VALUE;
-//			for (int idx = 0; idx < currentSequence.length; ++idx) {
-//
-//				final Object obj = currentSequence[idx];
-//				if (obj instanceof PortDetails) {
-//					final PortDetails details = (PortDetails) obj;
-//					if (idx != (currentSequence.length - 1)) {
-//
-//						if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
-//							ILoadOption loadOption = (ILoadOption) details.getOptions().getPortSlot();
-//							// TODO: Average?
-//							cvValue = loadOption.getCargoCVValue();
-//							// TODO: Average?
-//							int p = currentAllocation.getSlotPricePerMMBTu(loadOption);
-//							if (p < minPricePerMMBTu) {
-//								minPricePerMMBTu = p;
-//							}
-//						}
-//					}
-//				}
-//			}
+			// for (int idx = 0; idx < currentSequence.length; ++idx) {
+			//
+			// final Object obj = currentSequence[idx];
+			// if (obj instanceof PortDetails) {
+			// final PortDetails details = (PortDetails) obj;
+			// if (idx != (currentSequence.length - 1)) {
+			//
+			// if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
+			// ILoadOption loadOption = (ILoadOption) details.getOptions().getPortSlot();
+			// // TODO: Average?
+			// cvValue = loadOption.getCargoCVValue();
+			// // TODO: Average?
+			// int p = currentAllocation.getSlotPricePerMMBTu(loadOption);
+			// if (p < minPricePerMMBTu) {
+			// minPricePerMMBTu = p;
+			// }
+			// }
+			// }
+			// }
+			// }
 			long minPrice_Value = evaluateSalesPrice(vessel, vesselStartTime, arrivalTimes, sequenceElements, originalDischarge, minPricePerMMBTu);
 			while (minPrice_Value > 0) {
 				// Subtract $1

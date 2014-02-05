@@ -16,10 +16,8 @@ import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -35,22 +33,19 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -76,7 +71,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	private IPortSlotProvider slotProvider;
 
 	@Inject
-	private IPortCostProvider portCostProvider;
+	private ShippingCostHelper shippingCostHelper;
 
 	/**
 	 * evaluate the group value of the given cargo
@@ -120,13 +115,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		IEntity baseEntity = null;
 		// Extract data
 		int idx = 0;
-		int cargoCVValue = 0;
 		for (final IPortSlot slot : slots) {
 
-			IEntity entity = entityProvider.getEntityForSlot(slot);
+			final IEntity entity = entityProvider.getEntityForSlot(slot);
 			if (slot instanceof ILoadOption) {
-				final ILoadOption loadOption = (ILoadOption) slot;
-				cargoCVValue = loadOption.getCargoCVValue();
 				// First load slot is the base entity
 				if (baseEntity == null) {
 					baseEntity = entity;
@@ -140,7 +132,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// Special case! May not be correct for LLD case
 				final ILoadOption loadOption = (ILoadOption) slots.get(0);
 
-				IDischargeOption dischargeOption = (IDischargeOption) slot;
+				final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				dischargePricesPerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(loadOption, dischargeOption, currentAllocation.getSlotTime(loadOption),
 						currentAllocation.getSlotTime(dischargeOption), currentAllocation.getSlotVolumeInMMBTu(slot), entityDetails);
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
@@ -158,7 +150,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		for (final IPortSlot slot : slots) {
 
 			// Determined by volume allocator
-			final long volumeInM3 = currentAllocation.getSlotVolumeInM3(slot);
 			final long volumeInMMBtu = currentAllocation.getSlotVolumeInMMBTu(slot);
 			// final int pricePerM3 = currentAllocation.getSlotPricePerM3(slot);
 			final int time = currentAllocation.getSlotTime(slot);
@@ -223,7 +214,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
 
-				long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
+				final long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
 				// Sum up entity p&L
 				addEntityProfit(entityProfit, entity, -value);
 				addEntityProfit(entityProfit, entity, additionProfitAndLoss);
@@ -234,7 +225,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				}
 			} else if (slot instanceof IDischargeOption) {
 
-				long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
+				final long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
 				// final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				// Buy/Sell at same quantity.
@@ -263,14 +254,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		assert baseEntity != null;
 		// final long result;
 		{
-			final long shippingCosts = getShippingCosts(plan, vessel, false, includeTimeCharterInFitness, vesselStartTime, null);
+			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vessel, false, includeTimeCharterInFitness);
 			addEntityProfit(entityProfit, baseEntity, -shippingCosts);
 		}
 		long result = 0l;
 		{
-			final long generatedCharterOutRevenue = getGeneratedCharterOutRevenue(plan, vessel);
+			final long generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vessel);
 			// addEntityProfit(entityProfit, shippingEntity, generatedCharterOutRevenue);
-			final long generatedCharterOutCosts = getGeneratedCharterOutCosts(plan, vessel, includeTimeCharterInFitness, vesselStartTime, null);
+			final long generatedCharterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
 			// addEntityProfit(entityProfit, shippingEntity, -generatedCharterOutCosts);
 
 			result += generatedCharterOutRevenue - generatedCharterOutCosts;
@@ -283,7 +274,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			}
 		}
 
-		{
+		if (false) {
 
 			if (currentAllocation.getSlots().size() > 2)
 				throw new IllegalStateException("Only L-D cargoes are supported for calculation of working capital");
@@ -292,16 +283,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			long workingCapital = 0;
 			final Object[] sequence = plan.getSequence();
 			final int k = sequence.length;
-			int rate = OptimiserUnitConvertor.convertToInternalConversionFactor(0.15);
+			final int rate = OptimiserUnitConvertor.convertToInternalConversionFactor(0.15);
 			for (int i = 0; i < k; i++) {
 				final Object o = sequence[i];
 				if (o instanceof PortDetails) {
-					PortOptions po = ((PortDetails) o).getOptions();
-					IPortSlot ps = po.getPortSlot();
+					final PortOptions po = ((PortDetails) o).getOptions();
+					final IPortSlot ps = po.getPortSlot();
 					if (ps.getPortType() == PortType.Load) {
 
-						int price = currentAllocation.getSlotPricePerMMBTu(ps);
-						long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
+						final int price = currentAllocation.getSlotPricePerMMBTu(ps);
+						final long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
 						workingCapital += price * vol;
 						// Calculator.convert...; ??
 					} else if (ps.getPortType() == PortType.Discharge) {
@@ -385,7 +376,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long generatedCharterOutRevenue;
 		final long generatedCharterOutCost;
 		{
-			final long shippingCost = getShippingCosts(plan, vessel, true, includeTimeCharterInFitness, vesselStartTime, null);
+			final long shippingCost = shippingCostHelper.getShippingCosts(plan, vessel, true, includeTimeCharterInFitness);
 			final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
 			if (portDetails.getOptions().getPortSlot().getPortType() == PortType.CharterOut) {
 				final VesselEventPortSlot vesselEventPortSlot = (VesselEventPortSlot) portDetails.getOptions().getPortSlot();
@@ -394,8 +385,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				revenue = 0;
 			}
 
-			generatedCharterOutRevenue = getGeneratedCharterOutRevenue(plan, vessel);
-			generatedCharterOutCost = getGeneratedCharterOutCosts(plan, vessel, true, vesselStartTime, null);
+			generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vessel);
+			generatedCharterOutCost = shippingCostHelper.getGeneratedCharterOutCosts(plan);
 
 			// Calculate the value for the fitness function
 			value = shippingEntity.getTaxedProfit(revenue + generatedCharterOutRevenue - generatedCharterOutCost - shippingCost, planStartTime);
@@ -422,145 +413,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return value;
 	}
 
-	/**
-	 * @since 7.0
-	 */
-	@Override
-	public long getShippingCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final boolean includeTimeCharterCosts, final int vesselStartTime, final IDetailTree[] detailsRef) {
-
-		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-			return 0l;
-		}
-
-		// @formatter:off
-		final long shippingCosts = plan.getTotalRouteCost()
-				+ plan.getTotalFuelCost(FuelComponent.Base) 
-				+ plan.getTotalFuelCost(FuelComponent.Base_Supplemental)
-				+ plan.getTotalFuelCost(FuelComponent.Cooldown)
-				+ plan.getTotalFuelCost(FuelComponent.IdleBase)
-				+ plan.getTotalFuelCost(FuelComponent.IdlePilotLight)
-				+ plan.getTotalFuelCost(FuelComponent.PilotLight)
-				+ (includeLNG
-						? plan.getTotalFuelCost(FuelComponent.NBO) 
-						+ plan.getTotalFuelCost(FuelComponent.FBO) 
-						+ plan.getTotalFuelCost(FuelComponent.IdleNBO)
-						: 0);
-		// @formatter:on
-
-		long portCosts = 0;
-		final Object[] sequence = plan.getSequence();
-		for (int i = 0; i < sequence.length - 1; ++i) {
-			final Object obj = sequence[i];
-			if (obj instanceof PortDetails) {
-
-				final PortDetails portDetails = (PortDetails) obj;
-
-				final IPort port = portDetails.getOptions().getPortSlot().getPort();
-				final PortType portType = portDetails.getOptions().getPortSlot().getPortType();
-				portCosts += portCostProvider.getPortCost(port, vessel, portType);
-			}
-
-		}
-
-		final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
-
-		final int hireRatePerDay = plan.getCharterInRatePerDay();
-		long hireCosts = includeTimeCharterCosts ? (long) hireRatePerDay * (long) planDuration / 24l : 0l;
-		if (detailsRef != null) {
-			//
-
-			final DetailTree details = new DetailTree("Shipping Costs", new TotalCostDetailElement(shippingCosts + hireCosts + portCosts));
-			// Note: This is a hack to avoid changing the interface and the default case..... We need to decide on how to manage this whole property thing properly.
-			// If length == 2 rather than 1, grab all the details...
-			if (detailsRef.length == 2) {
-				//
-				details.addChild("Duration", new DurationDetailElement(planDuration));
-				details.addChild("Route Cost", new TotalCostDetailElement(plan.getTotalRouteCost()));
-				details.addChild("Base Fuel", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
-				details.addChild("Base Fuel Supplement", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
-				details.addChild("Cooldown", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));
-				details.addChild("Idle Base", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
-				details.addChild("Pilot Light", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
-				details.addChild("Idle Pilot Light", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
-				if (includeLNG) {
-					details.addChild("NBO", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
-					details.addChild("FBO", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
-					details.addChild("Idle NBO", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
-				}
-				details.addChild("Hire Costs", new TotalCostDetailElement(hireCosts));
-				details.addChild("Port Costs", new TotalCostDetailElement(portCosts));
-			}
-			detailsRef[0] = details;
-		}
-
-		return shippingCosts + portCosts + hireCosts;
-	}
-
-	private long getGeneratedCharterOutCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeTimeCharterRates, final int vesselStartTime, final IDetailTree[] detailsRef) {
-
-		int planDuration = 0;
-		for (final Object obj : plan.getSequence()) {
-
-			if (obj instanceof VoyageDetails) {
-				final VoyageDetails voyageDetails = (VoyageDetails) obj;
-				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
-					planDuration += voyageDetails.getIdleTime();
-				}
-			}
-		}
-
-		final int hireRatePerDay = plan.getCharterInRatePerDay();
-		long hireCosts = (long) hireRatePerDay * (long) planDuration / 24l;
-
-		return hireCosts;
-	}
-
-	private long getGeneratedCharterOutRevenue(final VoyagePlan plan, final IVessel vessel) {
-		long charterRevenue = 0;
-
-		for (final Object obj : plan.getSequence()) {
-
-			if (obj instanceof VoyageDetails) {
-				final VoyageDetails voyageDetails = (VoyageDetails) obj;
-				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
-					final long hourlyCharterOutPrice = voyageDetails.getOptions().getCharterOutDailyRate();
-					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice, voyageDetails.getIdleTime()) / 24l;
-				}
-			}
-		}
-		return charterRevenue;
-	}
-
-	private int getPartialPlanDuration(final VoyagePlan plan, final int skip) {
-		int planDuration = 0;
-		final Object[] sequence = plan.getSequence();
-		final int k = sequence.length - skip;
-		for (int i = 0; i < k; i++) {
-			final Object o = sequence[i];
-			if (o instanceof VoyageDetails) {
-				final VoyageDetails voyageDetails = (VoyageDetails) o;
-				planDuration += voyageDetails.getTravelTime();
-				if (!voyageDetails.getOptions().isCharterOutIdleTime()) {
-					planDuration += voyageDetails.getIdleTime();
-				}
-			} else {
-				planDuration += ((PortDetails) o).getOptions().getVisitDuration();
-			}
-		}
-		return planDuration;
-	}
-
 	private void generateShippingAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
 			final long revenue, final long cost, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG, final boolean includeTimeCharterRates) {
 		{
-			final long shippingCosts = getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates, vesselStartTime, null);
+			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates);
 			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */- cost - shippingCosts;
 			final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 
 			final DetailTree shippingDetails = new DetailTree();
-
-			final IDetailTree[] detailsRef = new IDetailTree[1];
-			getShippingCosts(plan, vessel, true, true, vesselStartTime, detailsRef);
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingTotalPretaxProfit, shippingDetails);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
@@ -573,7 +433,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot, final boolean includeTimeCharterRates) {
 		if (generatedCharterOutRevenue != 0) {
 
-			final long charterOutCosts = getGeneratedCharterOutCosts(plan, vessel, includeTimeCharterRates, vesselStartTime, null);
+			final long charterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
 			final long charterOutPretaxProfit = generatedCharterOutRevenue - charterOutCosts;
 			final long charterOutProfit = shippingEntity.getTaxedProfit(charterOutPretaxProfit, taxTime);
 
