@@ -223,10 +223,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
 
-				int pricePerM3 = Calculator.costPerM3FromMMBTu(pricePerMMBTu, cargoCVValue);
-
-				long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
-				// long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
+				long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
 				// Sum up entity p&L
 				addEntityProfit(entityProfit, entity, -value);
 				addEntityProfit(entityProfit, entity, additionProfitAndLoss);
@@ -236,11 +233,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					baseEntity = entity;
 				}
 			} else if (slot instanceof IDischargeOption) {
-				int pricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricesPerMMBTu[idx], cargoCVValue);
 
-				long value = Calculator.convertM3ToM3Price(volumeInM3, pricePerM3);
-
-				// long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
+				long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
 				// final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				// Buy/Sell at same quantity.
