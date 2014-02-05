@@ -75,7 +75,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 	private TableViewer tableViewer;
 	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private static EStructuralFeature editedAttribute = CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES;
+	private static EStructuralFeature editedAttribute = CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES;
 	private static EAttribute[] columnFeatures = { CommercialPackage.Literals.TAX_RATE__DATE, CommercialPackage.Literals.TAX_RATE__VALUE };
 	private static EAttribute column1Feature = columnFeatures[0];
 	private static EAttribute column2Feature = columnFeatures[1];

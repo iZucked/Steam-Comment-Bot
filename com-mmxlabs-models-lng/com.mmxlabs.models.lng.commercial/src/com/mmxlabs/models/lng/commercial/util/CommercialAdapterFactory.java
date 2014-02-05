@@ -84,6 +84,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createCommercialModelAdapter();
 			}
 			@Override
+			public Adapter caseBaseLegalEntity(BaseLegalEntity object) {
+				return createBaseLegalEntityAdapter();
+			}
+			@Override
 			public Adapter caseLegalEntity(LegalEntity object) {
 				return createLegalEntityAdapter();
 			}
@@ -166,6 +170,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCommercialModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity <em>Base Legal Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity
+	 * @generated
+	 */
+	public Adapter createBaseLegalEntityAdapter() {
 		return null;
 	}
 

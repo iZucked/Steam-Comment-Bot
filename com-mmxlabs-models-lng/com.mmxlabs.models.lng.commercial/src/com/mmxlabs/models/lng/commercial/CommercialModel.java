@@ -29,7 +29,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public interface CommercialModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Entities</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.LegalEntity}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.BaseLegalEntity}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Entities</em>' containment reference list isn't clear,
@@ -41,7 +41,7 @@ public interface CommercialModel extends UUIDObject {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<LegalEntity> getEntities();
+	EList<BaseLegalEntity> getEntities();
 
 	/**
 	 * Returns the value of the '<em><b>Sales Contracts</b></em>' containment reference list.
@@ -68,12 +68,12 @@ public interface CommercialModel extends UUIDObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Shipping Entity</em>' reference.
-	 * @see #setShippingEntity(LegalEntity)
+	 * @see #setShippingEntity(BaseLegalEntity)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel_ShippingEntity()
 	 * @model required="true"
 	 * @generated
 	 */
-	LegalEntity getShippingEntity();
+	BaseLegalEntity getShippingEntity();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity <em>Shipping Entity</em>}' reference.
@@ -83,7 +83,7 @@ public interface CommercialModel extends UUIDObject {
 	 * @see #getShippingEntity()
 	 * @generated
 	 */
-	void setShippingEntity(LegalEntity value);
+	void setShippingEntity(BaseLegalEntity value);
 
 	/**
 	 * Returns the value of the '<em><b>Purchase Contracts</b></em>' containment reference list.

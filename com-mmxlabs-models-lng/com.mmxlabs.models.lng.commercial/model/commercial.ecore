@@ -4,18 +4,19 @@
     nsPrefix="lng.commercial">
   <eClassifiers xsi:type="ecore:EClass" name="CommercialModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1"
-        eType="#//LegalEntity" containment="true"/>
+        eType="#//BaseLegalEntity" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="salesContracts" upperBound="-1"
         eType="#//SalesContract" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shippingEntity" lowerBound="1"
-        eType="#//LegalEntity"/>
+        eType="#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="purchaseContracts" upperBound="-1"
         eType="#//PurchaseContract" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LegalEntity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="BaseLegalEntity" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="taxRates" upperBound="-1"
         eType="#//TaxRate" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LegalEntity" eSuperTypes="#//BaseLegalEntity"/>
   <eClassifiers xsi:type="ecore:EClass" name="Contract" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
         eType="#//LegalEntity"/>

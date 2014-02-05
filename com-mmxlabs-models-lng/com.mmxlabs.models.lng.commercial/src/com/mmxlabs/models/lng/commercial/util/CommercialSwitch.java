@@ -87,9 +87,19 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.BASE_LEGAL_ENTITY: {
+				BaseLegalEntity baseLegalEntity = (BaseLegalEntity)theEObject;
+				T result = caseBaseLegalEntity(baseLegalEntity);
+				if (result == null) result = caseUUIDObject(baseLegalEntity);
+				if (result == null) result = caseNamedObject(baseLegalEntity);
+				if (result == null) result = caseMMXObject(baseLegalEntity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case CommercialPackage.LEGAL_ENTITY: {
 				LegalEntity legalEntity = (LegalEntity)theEObject;
 				T result = caseLegalEntity(legalEntity);
+				if (result == null) result = caseBaseLegalEntity(legalEntity);
 				if (result == null) result = caseUUIDObject(legalEntity);
 				if (result == null) result = caseNamedObject(legalEntity);
 				if (result == null) result = caseMMXObject(legalEntity);
@@ -184,6 +194,21 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCommercialModel(CommercialModel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Base Legal Entity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Base Legal Entity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBaseLegalEntity(BaseLegalEntity object) {
 		return null;
 	}
 
