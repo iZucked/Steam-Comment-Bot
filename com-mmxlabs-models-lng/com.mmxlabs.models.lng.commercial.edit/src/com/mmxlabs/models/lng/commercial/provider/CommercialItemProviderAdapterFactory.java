@@ -111,29 +111,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.BaseLegalEntity} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected BaseLegalEntityItemProvider baseLegalEntityItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.BaseLegalEntity}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createBaseLegalEntityAdapter() {
-		if (baseLegalEntityItemProvider == null) {
-			baseLegalEntityItemProvider = new BaseLegalEntityItemProvider(this);
-		}
-
-		return baseLegalEntityItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.LegalEntity} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -428,7 +405,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	 */
 	public void dispose() {
 		if (commercialModelItemProvider != null) commercialModelItemProvider.dispose();
-		if (baseLegalEntityItemProvider != null) baseLegalEntityItemProvider.dispose();
 		if (legalEntityItemProvider != null) legalEntityItemProvider.dispose();
 		if (contractItemProvider != null) contractItemProvider.dispose();
 		if (salesContractItemProvider != null) salesContractItemProvider.dispose();

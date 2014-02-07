@@ -33,15 +33,6 @@ public interface CommercialFactory extends EFactory {
 	CommercialModel createCommercialModel();
 
 	/**
-	 * Returns a new object of class '<em>Base Legal Entity</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Base Legal Entity</em>'.
-	 * @generated
-	 */
-	BaseLegalEntity createBaseLegalEntity();
-
-	/**
 	 * Returns a new object of class '<em>Legal Entity</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
