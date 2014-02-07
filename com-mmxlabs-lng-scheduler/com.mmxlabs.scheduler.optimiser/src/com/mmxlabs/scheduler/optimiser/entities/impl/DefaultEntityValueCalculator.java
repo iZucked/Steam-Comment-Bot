@@ -135,6 +135,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				dischargePricesPerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(loadOption, dischargeOption, currentAllocation.getSlotTime(loadOption),
 						currentAllocation.getSlotTime(dischargeOption), currentAllocation.getSlotVolumeInMMBTu(slot), entityDetails);
+
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
 
 			} else {
@@ -254,8 +255,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		assert baseEntity != null;
 		// final long result;
 		{
-			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vessel, false, includeTimeCharterInFitness);
-			addEntityProfit(entityProfit, baseEntity, -shippingCosts);
+			calculateShippingEntityCosts(entityProfit, vessel, plan, baseEntity, shippingEntity, false);
+			// final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vessel, false, includeTimeCharterInFitness);
+			// addEntityProfit(entityProfit, baseEntity, -shippingCosts);
 		}
 		long result = 0l;
 		{
@@ -470,4 +472,31 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
+	protected void calculateShippingEntityCosts(@NonNull final Map<IEntity, Long> entityProfit, final IVessel vessel, final VoyagePlan plan, final IEntity costBook, final IEntity shippingBook,
+			final boolean includeLNG) {
+
+		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			return;
+		}
+
+		final long shippingCosts = shippingCostHelper.getRouteExtraCosts(plan) + shippingCostHelper.getFuelCosts(plan, includeLNG);
+		final long portCosts = shippingCostHelper.getPortCosts(vessel, plan);
+		final long hireCosts = shippingCostHelper.getHireCosts(plan);
+
+		final long transferPrice = hireCosts;
+		if (costBook != shippingBook) {
+			// TODO:
+
+		}
+
+		final long totalShippingCosts = shippingCosts + portCosts;
+//		addEntityProfit(entityProfit, costBook, -totalShippingCosts);
+//		addEntityProfit(entityProfit, costBook, -transferPrice);
+//		addEntityProfit(entityProfit, shippingBook, +transferPrice);
+//		addEntityProfit(entityProfit, shippingBook, -hireCosts);
+		
+		addEntityProfit(entityProfit, costBook, -totalShippingCosts);
+		addEntityProfit(entityProfit, costBook, -hireCosts);
+
+	}
 }
