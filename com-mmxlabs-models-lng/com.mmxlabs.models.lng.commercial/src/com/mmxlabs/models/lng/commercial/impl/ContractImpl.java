@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -17,7 +18,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -81,7 +81,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 * @ordered
 	 */
-	protected LegalEntity entity;
+	protected BaseLegalEntity entity;
 
 	/**
 	 * The cached value of the '{@link #getAllowedPorts() <em>Allowed Ports</em>}' reference list.
@@ -298,10 +298,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity getEntity() {
+	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
-			entity = (LegalEntity)eResolveProxy(oldEntity);
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.CONTRACT__ENTITY, oldEntity, entity));
@@ -315,7 +315,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity basicGetEntity() {
+	public BaseLegalEntity basicGetEntity() {
 		return entity;
 	}
 
@@ -324,8 +324,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntity(LegalEntity newEntity) {
-		LegalEntity oldEntity = entity;
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__ENTITY, oldEntity, entity));
@@ -676,7 +676,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				setName((String)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ENTITY:
-				setEntity((LegalEntity)newValue);
+				setEntity((BaseLegalEntity)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
@@ -730,7 +730,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				setName(NAME_EDEFAULT);
 				return;
 			case CommercialPackage.CONTRACT__ENTITY:
-				setEntity((LegalEntity)null);
+				setEntity((BaseLegalEntity)null);
 				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();

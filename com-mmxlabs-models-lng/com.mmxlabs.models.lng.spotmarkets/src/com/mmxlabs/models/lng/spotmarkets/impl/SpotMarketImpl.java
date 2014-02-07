@@ -3,13 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -127,7 +127,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @generated
 	 * @ordered
 	 */
-	protected LegalEntity entity;
+	protected BaseLegalEntity entity;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -305,10 +305,10 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity getEntity() {
+	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
-			entity = (LegalEntity)eResolveProxy(oldEntity);
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.SPOT_MARKET__ENTITY, oldEntity, entity));
@@ -323,18 +323,17 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity basicGetEntity() {
+	public BaseLegalEntity basicGetEntity() {
 		return entity;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntity(LegalEntity newEntity) {
-		LegalEntity oldEntity = entity;
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__ENTITY, oldEntity, entity));
@@ -406,7 +405,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				setPriceInfo((LNGPriceCalculatorParameters)newValue);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
-				setEntity((LegalEntity)newValue);
+				setEntity((BaseLegalEntity)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -436,7 +435,7 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				setPriceInfo((LNGPriceCalculatorParameters)null);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
-				setEntity((LegalEntity)null);
+				setEntity((BaseLegalEntity)null);
 				return;
 		}
 		super.eUnset(featureID);

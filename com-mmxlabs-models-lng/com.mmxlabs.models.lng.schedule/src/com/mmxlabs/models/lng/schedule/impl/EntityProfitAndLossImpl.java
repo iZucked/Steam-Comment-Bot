@@ -6,13 +6,13 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
@@ -41,7 +41,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * @generated
 	 * @ordered
 	 */
-	protected LegalEntity entity;
+	protected BaseLegalEntity entity;
 
 	/**
 	 * The default value of the '{@link #getProfitAndLoss() <em>Profit And Loss</em>}' attribute.
@@ -109,10 +109,10 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity getEntity() {
+	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
-			entity = (LegalEntity)eResolveProxy(oldEntity);
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY, oldEntity, entity));
@@ -126,7 +126,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity basicGetEntity() {
+	public BaseLegalEntity basicGetEntity() {
 		return entity;
 	}
 
@@ -135,8 +135,8 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntity(LegalEntity newEntity) {
-		LegalEntity oldEntity = entity;
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY, oldEntity, entity));
@@ -214,7 +214,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY:
-				setEntity((LegalEntity)newValue);
+				setEntity((BaseLegalEntity)newValue);
 				return;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				setProfitAndLoss((Long)newValue);
@@ -235,7 +235,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY:
-				setEntity((LegalEntity)null);
+				setEntity((BaseLegalEntity)null);
 				return;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				setProfitAndLoss(PROFIT_AND_LOSS_EDEFAULT);

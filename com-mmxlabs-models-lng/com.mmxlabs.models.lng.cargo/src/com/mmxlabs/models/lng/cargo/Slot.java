@@ -3,11 +3,11 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -687,17 +687,16 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @return the value of the '<em>Entity</em>' reference.
 	 * @see #isSetEntity()
 	 * @see #unsetEntity()
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Entity()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	LegalEntity getEntity();
+	BaseLegalEntity getEntity();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Entity</em>' reference.
 	 * @see #isSetEntity()
@@ -705,7 +704,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #getEntity()
 	 * @generated
 	 */
-	void setEntity(LegalEntity value);
+	void setEntity(BaseLegalEntity value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference.
@@ -714,7 +713,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * <!-- end-user-doc -->
 	 * @see #isSetEntity()
 	 * @see #getEntity()
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @generated
 	 */
 	void unsetEntity();
@@ -727,7 +726,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @return whether the value of the '<em>Entity</em>' reference is set.
 	 * @see #unsetEntity()
 	 * @see #getEntity()
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @generated
 	 */
 	boolean isSetEntity();
@@ -928,7 +927,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @model kind="operation"
 	 * @generated
 	 */
-	LegalEntity getSlotOrDelegatedEntity();
+	BaseLegalEntity getSlotOrDelegatedEntity();
 
 	/**
 	 * <!-- begin-user-doc -->

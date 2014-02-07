@@ -6,9 +6,8 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.ecore.EObject;
-
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 
 /**
  * <!-- begin-user-doc -->
@@ -39,12 +38,12 @@ public interface EntityProfitAndLoss extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Entity</em>' reference.
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEntityProfitAndLoss_Entity()
 	 * @model
 	 * @generated
 	 */
-	LegalEntity getEntity();
+	BaseLegalEntity getEntity();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity <em>Entity</em>}' reference.
@@ -54,7 +53,7 @@ public interface EntityProfitAndLoss extends EObject {
 	 * @see #getEntity()
 	 * @generated
 	 */
-	void setEntity(LegalEntity value);
+	void setEntity(BaseLegalEntity value);
 
 	/**
 	 * Returns the value of the '<em><b>Profit And Loss</b></em>' attribute.

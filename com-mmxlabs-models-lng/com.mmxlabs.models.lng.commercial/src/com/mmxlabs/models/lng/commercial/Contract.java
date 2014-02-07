@@ -47,12 +47,12 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Entity</em>' reference.
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_Entity()
 	 * @model required="true"
 	 * @generated
 	 */
-	LegalEntity getEntity();
+	BaseLegalEntity getEntity();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getEntity <em>Entity</em>}' reference.
@@ -62,7 +62,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see #getEntity()
 	 * @generated
 	 */
-	void setEntity(LegalEntity value);
+	void setEntity(BaseLegalEntity value);
 
 	/**
 	 * Returns the value of the '<em><b>Allowed Ports</b></em>' reference list.
