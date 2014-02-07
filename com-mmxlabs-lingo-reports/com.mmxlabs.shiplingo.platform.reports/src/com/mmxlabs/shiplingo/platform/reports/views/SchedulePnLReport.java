@@ -12,6 +12,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
@@ -19,6 +20,7 @@ import org.eclipse.swt.widgets.Display;
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
@@ -364,7 +366,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 								final CommercialModel commercialModel = rootObject.getCommercialModel();
 								if (commercialModel != null) {
-									for (final LegalEntity e : commercialModel.getEntities()) {
+									for (final BaseLegalEntity e : commercialModel.getEntities()) {
 										addPNLColumn(e.getName());
 									}
 								}
