@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -152,7 +153,7 @@ public class SlotOverridesTest {
 		// don't override the first slot's entity
 		final Slot eSlot = msc.cargo.getSortedSlots().get(0);
 		// expect the entity from the contract
-		final LegalEntity eEntity = eSlot.getContract().getEntity();
+		final BaseLegalEntity eEntity = eSlot.getContract().getEntity();
 
 		// build the optimiser data
 		final SlotTester tester = new SlotTester(scenario);
@@ -163,7 +164,7 @@ public class SlotOverridesTest {
 		IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
 
 		// make sure it matches
-		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, LegalEntity.class));
+		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, BaseLegalEntity.class));
 	}
 
 	@Test

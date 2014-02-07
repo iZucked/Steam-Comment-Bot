@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -348,12 +349,12 @@ public class TradingExporterExtension implements IExporterExtension {
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
 
-		final Map<LegalEntity, int[]> groupProfitMap = new HashMap<LegalEntity, int[]>();
+		final Map<BaseLegalEntity, int[]> groupProfitMap = new HashMap<BaseLegalEntity, int[]>();
 
 		// We may see the same entity multiple times - so aggregate results
 		for (final IProfitAndLossEntry entry : entries) {
 
-			final LegalEntity entity = entities.getModelObject(entry.getEntity(), LegalEntity.class);
+			final BaseLegalEntity entity = entities.getModelObject(entry.getEntity(), BaseLegalEntity.class);
 			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
 			int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
 
@@ -364,7 +365,7 @@ public class TradingExporterExtension implements IExporterExtension {
 			groupProfitMap.get(entity)[1] += groupProfitPreTax;
 		}
 		// Now create output data on the unique set.
-		for (final Map.Entry<LegalEntity, int[]> e : groupProfitMap.entrySet()) {
+		for (final Map.Entry<BaseLegalEntity, int[]> e : groupProfitMap.entrySet()) {
 
 			final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
 			streamData.setEntity(e.getKey());
