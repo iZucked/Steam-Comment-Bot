@@ -7,9 +7,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;

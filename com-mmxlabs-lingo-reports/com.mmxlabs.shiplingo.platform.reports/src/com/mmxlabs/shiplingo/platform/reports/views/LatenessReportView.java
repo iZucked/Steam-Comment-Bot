@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 

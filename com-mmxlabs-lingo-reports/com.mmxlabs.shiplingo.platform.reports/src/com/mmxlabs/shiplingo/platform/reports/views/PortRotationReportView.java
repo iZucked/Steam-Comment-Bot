@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
