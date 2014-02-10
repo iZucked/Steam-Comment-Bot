@@ -10,8 +10,8 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -34,8 +34,8 @@ public class VesselAvailabilityDateConstraint extends AbstractModelConstraint {
 			if (va.isSetStartAfter() && va.isSetStartBy()) {
 				if (va.getStartAfter().after(va.getStartBy())) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(va.getVessel().getName(), "start"));
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_StartAfter());
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_StartBy());
+					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_StartAfter());
+					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_StartBy());
 					return dcsd;
 				}
 			}
@@ -43,8 +43,8 @@ public class VesselAvailabilityDateConstraint extends AbstractModelConstraint {
 			if (va.isSetEndAfter() && va.isSetEndBy()) {
 				if (va.getEndAfter().after(va.getEndBy())) {
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(va.getVessel().getName(), "end"));
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_EndAfter());
-					dcsd.addEObjectAndFeature(va, FleetPackage.eINSTANCE.getVesselAvailability_EndBy());
+					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_EndAfter());
+					dcsd.addEObjectAndFeature(va, CargoPackage.eINSTANCE.getVesselAvailability_EndBy());
 					return dcsd;
 				}
 			}

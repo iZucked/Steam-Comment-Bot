@@ -15,11 +15,11 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -77,7 +77,7 @@ public class VesselUniqueAvailabilityConstraint extends AbstractModelMultiConstr
 			if (conflicts != null && (conflicts.size() > 1 || conflicts.get(0) != availability)) {
 				// add a validation failure to the current availability
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("More than one availability assigned to same vessel."));
-				dcsd.addEObjectAndFeature(availability, FleetPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
+				dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 				statuses.add(dcsd);				
 			}			
 			

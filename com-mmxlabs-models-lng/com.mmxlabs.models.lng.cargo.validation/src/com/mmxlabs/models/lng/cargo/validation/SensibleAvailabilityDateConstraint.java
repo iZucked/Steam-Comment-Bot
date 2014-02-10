@@ -14,9 +14,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -24,10 +24,10 @@ public class SensibleAvailabilityDateConstraint  extends AbstractModelMultiConst
 
 	private Date earliestDate = new GregorianCalendar(2000,0,1).getTime();
 	private EStructuralFeature [] availabilityDateFields = { 
-			FleetPackage.Literals.VESSEL_AVAILABILITY__END_AFTER,
-			FleetPackage.Literals.VESSEL_AVAILABILITY__END_BY,
-			FleetPackage.Literals.VESSEL_AVAILABILITY__START_AFTER,
-			FleetPackage.Literals.VESSEL_AVAILABILITY__START_BY
+			CargoPackage.Literals.VESSEL_AVAILABILITY__END_AFTER,
+			CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY,
+			CargoPackage.Literals.VESSEL_AVAILABILITY__START_AFTER,
+			CargoPackage.Literals.VESSEL_AVAILABILITY__START_BY
 	};
 	
 	/**

@@ -14,9 +14,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -24,8 +24,8 @@ public class SensibleEventDateConstraint  extends AbstractModelMultiConstraint {
 
 	private Date earliestDate = new GregorianCalendar(2000,0,1).getTime();
 	private EStructuralFeature [] eventDateFields = { 
-			FleetPackage.Literals.VESSEL_EVENT__START_AFTER,
-			FleetPackage.Literals.VESSEL_EVENT__START_BY,
+			CargoPackage.Literals.VESSEL_EVENT__START_AFTER,
+			CargoPackage.Literals.VESSEL_EVENT__START_BY,
 	};
 	
 	/**

@@ -10,8 +10,8 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class VesselAvailabilityVesselConstraint extends AbstractModelConstraint {
@@ -23,7 +23,7 @@ public class VesselAvailabilityVesselConstraint extends AbstractModelConstraint 
 			VesselAvailability availability = (VesselAvailability) target;
 			if (availability.getVessel() == null) {
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel must be specified."));
-				dcsd.addEObjectAndFeature(availability, FleetPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
+				dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
 				return dcsd;
 			}
 		}

@@ -10,12 +10,12 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -58,7 +58,7 @@ public class EventDurationConstraint extends AbstractModelConstraint {
 			if (duration > max) {
 				String message = String.format("%s event duration %d days (> %d days maximum)", type, duration, max);
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dcsd.addEObjectAndFeature(event, FleetPackage.eINSTANCE.getVesselEvent_DurationInDays());
+				dcsd.addEObjectAndFeature(event, CargoPackage.eINSTANCE.getVesselEvent_DurationInDays());
 				return dcsd;
 			}
 

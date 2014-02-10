@@ -12,15 +12,14 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -40,19 +39,19 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			if (assignment.getAssignment() == null) {
 				return Activator.PLUGIN_ID;
 			}
-			ScenarioFleetModel scenarioFleetModel = null;
+			CargoModel cargoModel = null;
 			final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
 			final MMXRootObject rootObject = extraValidationContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
 				if (portfolioModel != null) {
-					scenarioFleetModel = portfolioModel.getScenarioFleetModel();
+					cargoModel = portfolioModel.getCargoModel();
 				}
 
 			}
 
-			if (scenarioFleetModel == null) {
+			if (cargoModel == null) {
 				return Activator.PLUGIN_ID;
 			}
 
@@ -60,7 +59,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				final Vessel vessel = (Vessel) assignment.getAssignment();
 
 				VesselAvailability vesselAvailability = null;
-				for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+				for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 					if (va.getVessel() == extraValidationContext.getOriginal(vessel) || va.getVessel() == extraValidationContext.getReplacement(vessel)) {
 						vesselAvailability = va;
 						break;
@@ -103,7 +102,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 								final String message = String.format("Vessel Event|%s is assigned to vessel %s but window date is before the vessel start date.", vesselEvent.getName(),
 										vessel.getName());
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
-								failure.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+								failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 								failures.add(failure);
 							}
 						} else if (vesselAvailability.isSetStartBy()) {
@@ -112,7 +111,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 							if (vesselEvent.getStartAfter().after(vesselAvailability.getEndBy())) {
 								final String message = String.format("Vessel Event|%s is assigned to vessel %s but window date is after the vessel end date.", vesselEvent.getName(), vessel.getName());
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
-								failure.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartAfter());
+								failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 								failures.add(failure);
 							}
 						}

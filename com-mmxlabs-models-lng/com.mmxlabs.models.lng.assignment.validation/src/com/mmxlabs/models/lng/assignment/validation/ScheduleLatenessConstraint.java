@@ -95,7 +95,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			failure.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 		}
 	}
 
@@ -107,7 +107,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			failure.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartAfter());
+			failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 		}
 	}
 
@@ -119,7 +119,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			return slot.getWindowStartWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy())));
+			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy())));
 			calendar.setTime(vesselEvent.getStartBy());
 			return calendar.getTime();
 		}
@@ -134,7 +134,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			return slot.getWindowEndWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartAfter())));
+			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartAfter())));
 			calendar.setTime(vesselEvent.getStartAfter());
 			return calendar.getTime();
 		}

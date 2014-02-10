@@ -10,9 +10,9 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -37,8 +37,8 @@ public class EventWindowConstraint extends AbstractModelConstraint {
 			if (windowSizeInDays > maxWindowSizeInDays) {
 				String message = String.format("Event duration %d days (> %d days maximum)", windowSizeInDays, maxWindowSizeInDays);
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dcsd.addEObjectAndFeature(event, FleetPackage.eINSTANCE.getVesselEvent_StartAfter());
-				dcsd.addEObjectAndFeature(event, FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+				dcsd.addEObjectAndFeature(event, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
+				dcsd.addEObjectAndFeature(event, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 				return dcsd;
 			}
 

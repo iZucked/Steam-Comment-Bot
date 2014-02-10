@@ -123,7 +123,7 @@ public class InaccessiblePortsConstraintTest {
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 		vessel1.setVesselClass(vesselClass1);
 
-		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
+		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
 		event.setAssignment(vessel1);
@@ -140,7 +140,7 @@ public class InaccessiblePortsConstraintTest {
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 		vessel1.setVesselClass(vesselClass1);
 
-		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
+		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
 		vessel1.getInaccessiblePorts().add(port1);
@@ -159,7 +159,7 @@ public class InaccessiblePortsConstraintTest {
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 		vessel1.setVesselClass(vesselClass1);
 
-		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
+		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
 		// Test restriction on vessel class
@@ -178,7 +178,7 @@ public class InaccessiblePortsConstraintTest {
 
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 
-		final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
+		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
 		// Test restriction on vessel class
@@ -201,7 +201,7 @@ public class InaccessiblePortsConstraintTest {
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 		vessel1.setVesselClass(vesselClass1);
 
-		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
+		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
 		event.setAssignment(vessel1);
@@ -218,7 +218,7 @@ public class InaccessiblePortsConstraintTest {
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 		vessel1.setVesselClass(vesselClass1);
 
-		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
+		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
 		vessel1.getInaccessiblePorts().add(port1);
@@ -237,7 +237,7 @@ public class InaccessiblePortsConstraintTest {
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 		vessel1.setVesselClass(vesselClass1);
 
-		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
+		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
 		// Test restriction on vessel class
@@ -256,7 +256,7 @@ public class InaccessiblePortsConstraintTest {
 
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 
-		final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
+		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
 		// Test restriction on vessel class

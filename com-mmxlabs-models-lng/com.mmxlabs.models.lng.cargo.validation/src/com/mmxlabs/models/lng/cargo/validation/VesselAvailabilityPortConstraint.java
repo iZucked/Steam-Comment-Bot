@@ -14,11 +14,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -64,7 +65,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 					final String message = String.format("Vessel %s's start requirement has multiple ports. Only one can be specified.", vessel.getName());
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_StartAt());
+					dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_StartAt());
 					statuses.add(dcsd);
 				}
 
@@ -75,7 +76,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 								p.getName(), vessel.getVesselClass().getName(), p.getName());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-						dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_StartAt());
+						dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_StartAt());
 						statuses.add(dcsd);
 
 					}
@@ -90,7 +91,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 								p.getName(), vessel.getVesselClass().getName(), p.getName());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-						dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_EndAt());
+						dcsd.addEObjectAndFeature(availablility, CargoPackage.eINSTANCE.getVesselAvailability_EndAt());
 						statuses.add(dcsd);
 
 					}
@@ -106,7 +107,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 
 				final HashSet<String> badPorts = new HashSet<String>();
 				final List<String> badVessels = new LinkedList<String>();
-				for (final VesselAvailability availability : portfolioModel.getScenarioFleetModel().getVesselAvailabilities()) {
+				for (final VesselAvailability availability : portfolioModel.getCargoModel().getVesselAvailabilities()) {
 					final Vessel v = availability.getVessel();
 					if (v != null && extraContext.getReplacement(vesselClass) == v.getVesselClass()) {
 

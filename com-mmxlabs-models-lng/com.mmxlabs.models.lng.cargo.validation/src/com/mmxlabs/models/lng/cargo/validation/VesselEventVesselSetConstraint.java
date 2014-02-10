@@ -12,11 +12,11 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -43,14 +43,14 @@ public class VesselEventVesselSetConstraint extends AbstractModelConstraint {
 				if (possibleVesselCount != 1) {
 					final String eventTypeString = (target instanceof MaintenanceEvent) ? "Maintenance" : "Drydock";
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(eventTypeString + " events must have exactly one allowed vessel. The current allowed vessel settings allow for " + possibleVesselCount + " fleet vessels."));
-					status.addEObjectAndFeature(ve, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
+					status.addEObjectAndFeature(ve, CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels());
 					return status;
 				}
 			}
 			else {
 				if (possibleVesselCount == 0) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel events must have at least one allowed vessel. The current allowed vessel settings exclude all fleet vessels."));
-					status.addEObjectAndFeature(ve, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
+					status.addEObjectAndFeature(ve, CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels());
 					return status;
 				}				
 			}

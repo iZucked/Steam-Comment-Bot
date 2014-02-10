@@ -11,9 +11,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -32,7 +32,7 @@ public class CharterOutConstraint extends AbstractModelMultiConstraint {
 			if (charterOutEvent.getHireRate() == 0) {
 				final String message = String.format("Charter out event %s has no hire cost set", charterOutEvent.getName());
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-				dcsd.addEObjectAndFeature(charterOutEvent, FleetPackage.eINSTANCE.getCharterOutEvent_HireRate());
+				dcsd.addEObjectAndFeature(charterOutEvent, CargoPackage.eINSTANCE.getCharterOutEvent_HireRate());
 				statuses.add(dcsd);
 			}
 

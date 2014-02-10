@@ -10,8 +10,8 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -36,7 +36,7 @@ public class TimeCharterCostConstraint extends AbstractModelConstraint {
 			if (vesselAvailability.isSetTimeCharterRate()) {
 				if (vesselAvailability.getTimeCharterRate() == 0) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselAvailability.getVessel().getName()));
-					status.addEObjectAndFeature(vesselAvailability, FleetPackage.eINSTANCE.getVesselAvailability_TimeCharterRate());
+					status.addEObjectAndFeature(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate());
 					return status;
 				}
 			}
