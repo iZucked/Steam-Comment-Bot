@@ -249,7 +249,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		}
 		// Shipping Entity for non-cargo costings
-		final IEntity shippingEntity = entityProvider.getShippingEntity();
+		 IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
+		if (shippingEntity == null) {
+			shippingEntity = baseEntity;
+		}
 
 		// Calculate the value for the fitness function
 		assert baseEntity != null;
@@ -371,7 +374,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 */
 	@Override
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
-		final IEntity shippingEntity = entityProvider.getShippingEntity();
+		 IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
+//			if (shippingEntity == null) {
+//				shippingEntity = baseEntity;
+//			}
 
 		final long value;
 		final long revenue;
