@@ -30,15 +30,15 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
@@ -253,13 +253,13 @@ public class CustomScenarioCreator {
 			final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 
 			fleetModel.getVessels().add(vessel);
-			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
+			final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
 			if (isTimeChartered) {
 				availability.setTimeCharterRate(10);
 			}
 			availability.setVessel(vessel);
 			availability.setStartHeel(heelOptions);
-			scenarioFleetModel.getVesselAvailabilities().add(availability);
+			cargoModel.getVesselAvailabilities().add(availability);
 			created[i] = vessel;
 		}
 
@@ -440,12 +440,12 @@ public class CustomScenarioCreator {
 		}
 
 		// Set up dry dock.
-		final DryDockEvent dryDock = FleetFactory.eINSTANCE.createDryDockEvent();
+		final DryDockEvent dryDock = CargoFactory.eINSTANCE.createDryDockEvent();
 		dryDock.setName("Drydock");
 		dryDock.setDurationInDays(durationDays);
 		dryDock.setPort(startPort);
 		// add to scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(dryDock);
+		cargoModel.getVesselEvents().add(dryDock);
 
 		// define the start and end time
 		dryDock.setStartAfter(start);
@@ -457,7 +457,7 @@ public class CustomScenarioCreator {
 	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
 			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
-		final CharterOutEvent charterOut = FleetFactory.eINSTANCE.createCharterOutEvent();
+		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
 
 		// the start and end of the charter out starting-window is 0, for simplicity.
 		charterOut.setStartAfter(startCharterOut);
@@ -481,7 +481,7 @@ public class CustomScenarioCreator {
 		charterOut.setHireRate(dailyCharterOutPrice);
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(charterOut);
+		cargoModel.getVesselEvents().add(charterOut);
 
 		return charterOut;
 	}
