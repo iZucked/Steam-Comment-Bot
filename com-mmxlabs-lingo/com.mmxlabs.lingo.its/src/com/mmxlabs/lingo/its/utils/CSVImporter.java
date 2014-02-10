@@ -31,7 +31,6 @@ import com.mmxlabs.models.lng.cargo.importer.CargoImporter;
 import com.mmxlabs.models.lng.cargo.importer.CargoModelImporter;
 import com.mmxlabs.models.lng.cargo.importer.DischargeSlotImporter;
 import com.mmxlabs.models.lng.cargo.importer.LoadSlotImporter;
-import com.mmxlabs.models.lng.cargo.importer.ScenarioFleetModelImporter;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter;
@@ -97,8 +96,8 @@ public class CSVImporter {
 		dataMap.put(FleetModelImporter.GROUPS_KEY, baseFileName + "/" + "Vessel Groups.csv");
 		dataMap.put(FleetModelImporter.VESSEL_CLASSES_KEY, baseFileName + "/" + "Vessel Classes.csv");
 		dataMap.put(FleetModelImporter.VESSELS_KEY, baseFileName + "/" + "Vessels.csv");
-		dataMap.put(ScenarioFleetModelImporter.EVENTS_KEY, baseFileName + "/" + "Events.csv");
-		dataMap.put(ScenarioFleetModelImporter.VESSEL_AVAILABILITY_KEY, baseFileName + "/" + "Vessel Availability.csv");
+		dataMap.put(CargoModelImporter.EVENTS_KEY, baseFileName + "/" + "Events.csv");
+		dataMap.put(CargoModelImporter.VESSEL_AVAILABILITY_KEY, baseFileName + "/" + "Vessel Availability.csv");
 
 		dataMap.put(AssignmentModelImporter.ASSIGNMENTS, baseFileName + "/" + "Assignments.csv");
 
