@@ -29,9 +29,12 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
@@ -39,15 +42,12 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
@@ -258,7 +258,7 @@ public class ScenarioTools {
 		PortModel portModel = scenario.getPortModel();
 
 		LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
+		CargoModel cargoModel = portfolioModel.getCargoModel();
 
 		final VesselClass vc = FleetFactory.eINSTANCE.createVesselClass();
 		final VesselStateAttributes laden = FleetFactory.eINSTANCE.createVesselStateAttributes();
@@ -321,14 +321,14 @@ public class ScenarioTools {
 		vessel.setVesselClass(vc);
 		vessel.setName("Vessel");
 
-		final VesselAvailability availablility = FleetFactory.eINSTANCE.createVesselAvailability();
+		final VesselAvailability availablility = CargoFactory.eINSTANCE.createVesselAvailability();
 
 		availablility.setVessel(vessel);
 		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		availablility.setStartHeel(heelOptions);
 
 		fleetModel.getVessels().add(vessel);
-		scenarioFleetModel.getVesselAvailabilities().add(availablility);
+		cargoModel.getVesselAvailabilities().add(availablility);
 
 		portModel.getPorts().add(A);
 		portModel.getPorts().add(B);
@@ -451,12 +451,12 @@ public class ScenarioTools {
 
 		if (useDryDock) {
 			// Set up dry dock.
-			final DryDockEvent dryDock = FleetFactory.eINSTANCE.createDryDockEvent();
+			final DryDockEvent dryDock = CargoFactory.eINSTANCE.createDryDockEvent();
 			dryDock.setName("Dry-dock");
 			dryDock.setDurationInDays(0);
 			dryDock.setPort(A);
 			// add to scenario's fleet model
-			scenarioFleetModel.getVesselEvents().add(dryDock);
+			cargoModel.getVesselEvents().add(dryDock);
 			// set the date to be after the discharge date
 			final Date thenNext = new Date(dischargeDate.getTime() + (Timer.ONE_HOUR * travelTime));
 			dryDock.setStartAfter(thenNext);
@@ -467,7 +467,6 @@ public class ScenarioTools {
 
 		cargo.setName("CARGO");
 
-		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		cargoModel.getCargoes().add(cargo);
 		cargoModel.getLoadSlots().add(load);
 		cargoModel.getDischargeSlots().add(dis);
@@ -494,7 +493,7 @@ public class ScenarioTools {
 		final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
 
 		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-		final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
+		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -578,14 +577,14 @@ public class ScenarioTools {
 		vessel.setVesselClass(vc);
 		vessel.setName("Vessel");
 
-		final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
+		final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
 
 		availability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
 
 		availability.setVessel(vessel);
 
 		fleetModel.getVessels().add(vessel);
-		scenarioFleetModel.getVesselAvailabilities().add(availability);
+		cargoModel.getVesselAvailabilities().add(availability);
 
 		portModel.getPorts().add(A);
 		portModel.getPorts().add(B);
@@ -648,7 +647,7 @@ public class ScenarioTools {
 		final Date endCharterOut = new Date(startCharterOut.getTime() + TimeUnit.DAYS.toMillis(charterOutTimeDays));
 		final Date dryDockJourneyStartDate = new Date(endCharterOut.getTime() + TimeUnit.HOURS.toMillis(travelTime));
 
-		final CharterOutEvent charterOut = FleetFactory.eINSTANCE.createCharterOutEvent();
+		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
 		charterOut.setStartAfter(startCharterOut);
 		charterOut.setStartBy(startCharterOut);
 		// same start and end port.
@@ -666,17 +665,17 @@ public class ScenarioTools {
 		// charterOut.setDailyCharterOutPrice(0);
 		charterOut.setRepositioningFee(0);
 		// add to the scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(charterOut);
+		cargoModel.getVesselEvents().add(charterOut);
 
 		// Set up dry dock to cause journey
-		final DryDockEvent dryDockJourney = FleetFactory.eINSTANCE.createDryDockEvent();
+		final DryDockEvent dryDockJourney = CargoFactory.eINSTANCE.createDryDockEvent();
 		dryDockJourney.setDurationInDays(0);
 		dryDockJourney.setPort(B);
 		// set the date to be after the charter out date
 		dryDockJourney.setStartAfter(dryDockJourneyStartDate);
 		dryDockJourney.setStartBy(dryDockJourneyStartDate);
 		// add to scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(dryDockJourney);
+		cargoModel.getVesselEvents().add(dryDockJourney);
 
 		return scenario;
 	}

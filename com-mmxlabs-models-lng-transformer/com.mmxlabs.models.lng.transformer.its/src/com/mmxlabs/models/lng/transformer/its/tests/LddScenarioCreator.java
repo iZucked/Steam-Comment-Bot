@@ -109,7 +109,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		final Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessel, originPort, startDate, originPort, endDate);
+		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate, originPort, endDate);
 
 		cargo.setAssignment(vessel);
 	}

@@ -11,9 +11,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
@@ -132,7 +131,7 @@ public class TradingExporterExtension implements IExporterExtension {
 						}
 
 					} else if (slot instanceof IVesselEventPortSlot) {
-						final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
+						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 						VesselEventVisit visit = null;
 						//
 						for (final Sequence sequence : outputSchedule.getSequences()) {
@@ -229,7 +228,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					} else if (slot instanceof EndPortSlot) {
 						// ? Unexpected state!
 					} else if (slot instanceof IVesselEventPortSlot) {
-						final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
+						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 						VesselEventVisit visit = null;
 						//
 						for (final Sequence sequence : outputSchedule.getSequences()) {

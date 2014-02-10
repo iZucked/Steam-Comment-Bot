@@ -18,18 +18,18 @@ import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -215,12 +215,12 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		final FleetModel fleetModel = rootObject.getFleetModel();
 		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
-		for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+		for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 			vesselAvailabilityMap.put(va.getVessel(), va);
 		}
 
 		// Process initial vessel assignments list
-		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, scenarioFleetModel);
+		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
 		for (final CollectedAssignment seq : assignments) {
 			IVessel vessel = null;
 			log.debug("Processing assignment " + seq.getVesselOrClass().getName());

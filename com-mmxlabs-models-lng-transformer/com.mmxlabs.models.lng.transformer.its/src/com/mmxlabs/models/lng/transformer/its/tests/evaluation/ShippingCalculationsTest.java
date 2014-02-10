@@ -21,13 +21,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
@@ -1561,8 +1561,8 @@ public class ShippingCalculationsTest {
 		final FleetModel fleetModel = scenario.getFleetModel();
 		fleetModel.getVessels().clear();
 
-		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
-		scenarioFleetModel.getVesselAvailabilities().clear();
+		final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
+		cargoModel.getVesselAvailabilities().clear();
 		// Cannot null as final
 		// msc.vessel = null;
 		// msc.vesselAvailability = null;

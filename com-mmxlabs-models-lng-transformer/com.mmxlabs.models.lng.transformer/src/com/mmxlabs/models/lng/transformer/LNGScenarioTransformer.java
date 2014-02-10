@@ -41,31 +41,31 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Location;
@@ -604,7 +604,7 @@ public class LNGScenarioTransformer {
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getDischargeSlots());
-		assignableElements.addAll(rootObject.getPortfolioModel().getScenarioFleetModel().getVesselEvents());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getVesselEvents());
 
 		for (final AssignableElement assignableElement : assignableElements) {
 			if (assignableElement.getAssignment() == null) {
@@ -740,15 +740,15 @@ public class LNGScenarioTransformer {
 		earliestTime = null;
 		latestTime = null;
 		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
-		final CargoModel cargo = rootObject.getPortfolioModel().getCargoModel();
+		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
 		final HashSet<Date> allDates = new HashSet<Date>();
 
-		for (final VesselEvent event : scenarioFleetModel.getVesselEvents()) {
+		for (final VesselEvent event : cargoModel.getVesselEvents()) {
 			allDates.add(event.getStartBy());
 			allDates.add(event.getStartAfter());
 		}
-		for (final VesselAvailability vesselAvailability : scenarioFleetModel.getVesselAvailabilities()) {
+		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			if (vesselAvailability.isSetStartBy())
 				allDates.add(vesselAvailability.getStartBy());
 			if (vesselAvailability.isSetStartAfter())
@@ -759,11 +759,11 @@ public class LNGScenarioTransformer {
 			if (vesselAvailability.isSetEndAfter())
 				allDates.add(vesselAvailability.getEndAfter());
 		}
-		for (final Slot s : cargo.getLoadSlots()) {
+		for (final Slot s : cargoModel.getLoadSlots()) {
 			allDates.add(s.getWindowStartWithSlotOrPortTime());
 			allDates.add(s.getWindowEndWithSlotOrPortTime());
 		}
-		for (final Slot s : cargo.getDischargeSlots()) {
+		for (final Slot s : cargoModel.getDischargeSlots()) {
 			allDates.add(s.getWindowStartWithSlotOrPortTime());
 			allDates.add(s.getWindowEndWithSlotOrPortTime());
 		}
@@ -777,9 +777,9 @@ public class LNGScenarioTransformer {
 
 		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
 
-		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
+		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
-		for (final VesselEvent event : scenarioFleetModel.getVesselEvents()) {
+		for (final VesselEvent event : cargoModel.getVesselEvents()) {
 
 			if (event.getStartAfter().after(latestDate)) {
 				continue;
@@ -2016,10 +2016,10 @@ public class LNGScenarioTransformer {
 
 		final List<VesselAvailability> sortedAvailabilities = new ArrayList<VesselAvailability>();
 		{
-			final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
+			final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 			for (final Vessel vessel : fleetModel.getVessels()) {
 
-				for (final VesselAvailability vesselAvailability : scenarioFleetModel.getVesselAvailabilities()) {
+				for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == vessel) {
 						sortedAvailabilities.add(vesselAvailability);
 						break;
