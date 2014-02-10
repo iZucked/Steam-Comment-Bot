@@ -70,13 +70,46 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotDischargeSlotComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot" />
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoGroupComponentHelper"
-        id="com.mmxlabs.models.lng.cargo.helpers.CargoGroup"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.cargo.CargoGroup">
-  </componentHelper>
+		<componentHelper
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoGroupComponentHelper"
+			id="com.mmxlabs.models.lng.cargo.helpers.CargoGroup"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.CargoGroup"/>
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.VesselAvailiability"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselAvailabilityComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.VesselAvailability" />			
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.VesselEvent"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselEventComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.VesselEvent" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.DryDockEvent"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.DryDockEventComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.DryDockEvent" />
 		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.CharterOutEvent"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.CharterOutEvent" />
+			
+		<componentHelper
+		    helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.MaintenanceEventComponentHelper"
+	        id="com.mmxlabs.models.lng.cargo.helpers.MaintenanceEvent"
+        	inheritable="false"
+        	modelClass="com.mmxlabs.models.lng.cargo.MaintenanceEvent"/>
+  
+	    <componentHelper
+	        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.AssignableElementComponentHelper"
+	        id="com.mmxlabs.models.lng.cargo.presentation.composites.AssignableElementComponentHelper"
+	        inheritable="true"
+	        modelClass="com.mmxlabs.models.lng.cargo.AssignableElement"/>
+        
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -174,6 +207,12 @@
           subModelImporterClass="com.mmxlabs.models.lng.cargo.importer.CargoModelImporter">
     </submodelImporter>
  </extension>
+    <extension
+         point="com.mmxlabs.models.util.import.extramodelimporters">
+      <extramodelimporter
+            class="com.mmxlabs.models.lng.cargo.importer.AssignmentModelImporter">
+      </extramodelimporter>
+   </extension>
  <extension
        id="com.mmxlabs.models.lng.cargo.import.classes"
        point="com.mmxlabs.models.util.import.classes">
@@ -247,6 +286,34 @@
           factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.SpotDischargeSlotFactory"
           label="Spot Discharge Slot"
           targetEClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot">
+    </factory>
+  
+      <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.vesselAvailabilityFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="VesselAvailability"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselAvailability">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.charterOutFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Out"
+          outputEClass="com.mmxlabs.models.lng.cargo.CharterOutEvent"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.dryDockFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Dry Dock"
+          outputEClass="com.mmxlabs.models.lng.cargo.DryDockEvent"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.maintenanceFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Maintenance"
+          outputEClass="com.mmxlabs.models.lng.cargo.MaintenanceEvent"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
     </factory>
  </extension>
  <extension

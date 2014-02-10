@@ -34,11 +34,6 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.VesselClass" />
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.VesselEvent"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselEventComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.VesselEvent" />
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.FleetModel"
@@ -52,17 +47,7 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.BaseFuel" />
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.DryDockEvent"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.DryDockEventComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.DryDockEvent" />
-		
-		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.CharterOutEvent"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.CharterOutEventComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.CharterOutEvent" />
+	
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.HeelOptions"
@@ -77,22 +62,11 @@
 			modelClass="com.mmxlabs.models.lng.fleet.VesselStateAttributes" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.fleet.helpers.VesselAvailiability"
-			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselAvailabilityComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.fleet.VesselAvailability" />
-		
-		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.FuelConsumption"
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FuelConsumptionComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.FuelConsumption" />
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.MaintenanceEventComponentHelper"
-        id="com.mmxlabs.models.lng.fleet.helpers.MaintenanceEvent"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.fleet.MaintenanceEvent">
-  </componentHelper>
+ 
   <componentHelper
         helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselGroupComponentHelper"
         id="com.mmxlabs.models.lng.fleet.helpers.VesselGroup"
@@ -104,12 +78,6 @@
         id="com.mmxlabs.models.lng.fleet.presentation.composites.VesselTypeGroupComponentHelper"
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.fleet.VesselTypeGroup">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.AssignableElementComponentHelper"
-        id="com.mmxlabs.models.lng.fleet.presentation.composites.AssignableElementComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.fleet.AssignableElement">
   </componentHelper>
 		
 	</extension>
@@ -166,33 +134,7 @@
           label="Vessel"
           targetEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.fleet.editor.vesselAvailabilityFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="VesselAvailability"
-          targetEClass="com.mmxlabs.models.lng.fleet.VesselAvailability">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.fleet.editor.charterOutFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Charter Out"
-          outputEClass="com.mmxlabs.models.lng.fleet.CharterOutEvent"
-          targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.fleet.editor.dryDockFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Dry Dock"
-          outputEClass="com.mmxlabs.models.lng.fleet.DryDockEvent"
-          targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.fleet.editor.maintenanceFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Maintenance"
-          outputEClass="com.mmxlabs.models.lng.fleet.MaintenanceEvent"
-          targetEClass="com.mmxlabs.models.lng.fleet.VesselEvent">
-    </factory>
+  
     <factory
           ID="com.mmxlabs.models.lng.fleet.editor.baseFuelModelFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
@@ -248,31 +190,12 @@
           name="Vessels"
           restorable="true">
     </view>
-    <view
-          category="com.mmxlabs.models.lng.views.logical"
-          class="com.mmxlabs.models.lng.fleet.editor.views.VesselEventView"
-          id="com.mmxlabs.models.lng.fleet.editor.views.VesselEventView"
-          name="Vessel Events"
-          restorable="true">
-    </view>
  </extension>
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.VesselAvailabilityCommandProvider"
-          id="com.mmxlabs.models.lng.fleet.editor.commands.VesselAvailabilityCommandProvider">
-    </ModelCommandProvider>
-    <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.EventDateUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider">
-    </ModelCommandProvider>
-    <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider"
           id="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider">
-    </ModelCommandProvider>
-    <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.AssignableElementCommandProvider"
-          id="com.mmxlabs.models.lng.fleet.editor.commands.AssignableElementCommandProvider">
     </ModelCommandProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
@@ -286,11 +209,6 @@
             contributorClass="com.mmxlabs.models.lng.fleet.presentation.FleetActionBarContributor">
       </editor>
    </extension>
-   <extension
-         point="com.mmxlabs.models.util.import.extramodelimporters">
-      <extramodelimporter
-            class="com.mmxlabs.models.lng.fleet.importer.AssignmentModelImporter">
-      </extramodelimporter>
-   </extension>
+
 
 </plugin>
