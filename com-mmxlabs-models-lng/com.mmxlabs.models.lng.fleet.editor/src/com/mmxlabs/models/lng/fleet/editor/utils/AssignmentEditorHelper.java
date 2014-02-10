@@ -79,7 +79,7 @@ public class AssignmentEditorHelper {
 		}
 	}
 
-	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel, final ScenarioFleetModel scenarioFleetModel) {
+	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
 		// Enforce consistent order
 		final Map<Triple<AVesselSet<? extends Vessel>, Integer, Integer>, List<AssignableElement>> grouping = new TreeMap<Triple<AVesselSet<? extends Vessel>, Integer, Integer>, List<AssignableElement>>(

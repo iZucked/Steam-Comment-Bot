@@ -50,9 +50,8 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
 			final FleetModel fleetModel = scenarioModel.getFleetModel();
 			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
-			final ScenarioFleetModel scenarioFleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, scenarioFleetModel);
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
 
 			final List<Pair<AssignableElement, AssignableElement>> problems = new LinkedList<>();
 
