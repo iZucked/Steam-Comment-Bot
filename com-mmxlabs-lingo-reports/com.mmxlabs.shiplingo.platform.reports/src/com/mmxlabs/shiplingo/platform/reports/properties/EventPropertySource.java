@@ -18,8 +18,8 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -131,7 +131,7 @@ public class EventPropertySource implements IPropertySource {
 			if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
 				{
 					final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
-							FleetPackage.eINSTANCE.getCharterOutEvent_HireRate()), "Daily Hire Rate");
+							CargoPackage.eINSTANCE.getCharterOutEvent_HireRate()), "Daily Hire Rate");
 					descriptor.setCategory(eClass.getName());
 					descriptor.setLabelProvider(lp);
 
@@ -139,7 +139,7 @@ public class EventPropertySource implements IPropertySource {
 				}
 				{
 					final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
-							FleetPackage.eINSTANCE.getCharterOutEvent_RepositioningFee()), "Repositioning Fee");
+							CargoPackage.eINSTANCE.getCharterOutEvent_RepositioningFee()), "Repositioning Fee");
 					descriptor.setCategory(eClass.getName());
 					descriptor.setLabelProvider(lp);
 
