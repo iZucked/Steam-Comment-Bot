@@ -62,7 +62,6 @@ public class ManifestJointModel {
 	static {
 		modelClassKeys.put(PortPackage.eINSTANCE.getPortModel(), PORT_MODEL_KEY);
 		modelClassKeys.put(FleetPackage.eINSTANCE.getFleetModel(), FLEET_MODEL_KEY);
-		modelClassKeys.put(FleetPackage.eINSTANCE.getScenarioFleetModel(), SCENARIO_FLEET_MODEL_KEY);
 		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
 		modelClassKeys.put(CommercialPackage.eINSTANCE.getCommercialModel(), COMMERCIAL_MODEL_KEY);
 		modelClassKeys.put(PricingPackage.eINSTANCE.getPricingModel(), PRICING_MODEL_KEY);
@@ -96,9 +95,7 @@ public class ManifestJointModel {
 		rootObject.setPortfolioModel(portfolioModel);
 
 		portfolioModel.setCargoModel(CargoFactory.eINSTANCE.createCargoModel());
-//		portfolioModel.setAssignmentModel(AssignmentFactory.eINSTANCE.createAssignmentModel());
 		portfolioModel.setScheduleModel(ScheduleFactory.eINSTANCE.createScheduleModel());
-		portfolioModel.setScenarioFleetModel(FleetFactory.eINSTANCE.createScenarioFleetModel());
 
 		return rootObject;
 	}

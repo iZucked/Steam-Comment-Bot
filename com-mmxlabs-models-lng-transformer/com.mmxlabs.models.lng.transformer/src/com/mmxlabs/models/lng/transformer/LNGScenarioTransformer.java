@@ -62,7 +62,6 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -739,7 +738,6 @@ public class LNGScenarioTransformer {
 	private void findEarliestAndLatestTimes() {
 		earliestTime = null;
 		latestTime = null;
-		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
 		final HashSet<Date> allDates = new HashSet<Date>();

@@ -27,11 +27,10 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.fleet.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -213,7 +212,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 		final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
 		final FleetModel fleetModel = rootObject.getFleetModel();
-		final ScenarioFleetModel scenarioFleetModel = rootObject.getPortfolioModel().getScenarioFleetModel();
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 		for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 			vesselAvailabilityMap.put(va.getVessel(), va);
