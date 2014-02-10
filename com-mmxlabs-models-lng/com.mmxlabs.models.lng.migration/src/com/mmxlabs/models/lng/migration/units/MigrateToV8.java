@@ -191,7 +191,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 		{
 			EObject shippingEntity = (EObject) commercialModel.eGet(reference_commercialModel_shippingEntity);
-		//	commercialModel.eUnset(reference_commercialModel_shippingEntity);
+			commercialModel.eUnset(reference_commercialModel_shippingEntity);
 
 			// Phase 1 - Move vessel availabilities and set default shipping entity
 			List<EObject> fleetModelAvailabilities = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselAvailabilies);
