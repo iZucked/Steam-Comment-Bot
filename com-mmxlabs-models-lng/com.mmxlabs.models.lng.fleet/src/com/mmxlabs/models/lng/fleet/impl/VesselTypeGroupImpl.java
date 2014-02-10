@@ -194,12 +194,12 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 				final SELECT select = new SELECT(new FROM(this.eResource().getContents()), new WHERE(new EObjectReferencerCondition(v)));
 				final IQueryResult execute = select.execute();
 				for (final EObject eObj : execute) {
-					if (eObj instanceof VesselAvailability) {
-						final VesselAvailability va = (VesselAvailability) eObj;
-						if (va.isSetTimeCharterRate() ^ getVesselType() == VesselType.OWNED) {
-							result.addAll(va.getVessel().collect(marked));
-						}
-					}
+//					if (eObj instanceof VesselAvailability) {
+//						final VesselAvailability va = (VesselAvailability) eObj;
+//						if (va.isSetTimeCharterRate() ^ getVesselType() == VesselType.OWNED) {
+//							result.addAll(va.getVessel().collect(marked));
+//						}
+//					}
 				}
 
 			}

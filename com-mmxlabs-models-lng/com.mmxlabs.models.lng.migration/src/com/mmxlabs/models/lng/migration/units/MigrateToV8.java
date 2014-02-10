@@ -18,8 +18,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
-import org.eclipse.emf.validation.internal.modeled.model.validation.Feature;
-
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
@@ -47,13 +45,13 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -8;
+		return 8;
 	}
 
 	@Override
 	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV6Loader(extraPackages);
+			sourceLoader = MetamodelVersionsUtil.createV7Loader(extraPackages);
 		}
 		return sourceLoader;
 	}
@@ -61,7 +59,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV7Loader(extraPackages);
+			destiniationLoader = MetamodelVersionsUtil.createV8Loader(extraPackages);
 		}
 		return destiniationLoader;
 	}
@@ -193,7 +191,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 		{
 			EObject shippingEntity = (EObject) commercialModel.eGet(reference_commercialModel_shippingEntity);
-			commercialModel.eUnset(reference_commercialModel_shippingEntity);
+		//	commercialModel.eUnset(reference_commercialModel_shippingEntity);
 
 			// Phase 1 - Move vessel availabilities and set default shipping entity
 			List<EObject> fleetModelAvailabilities = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselAvailabilies);
@@ -254,6 +252,16 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 		Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);
 
+		final EReference reference_LNGPortfolioModel_scheduleModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "scheduleModel");
+		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		final EClass class_VesselEventVisit = MetamodelUtils.getEClass(package_ScheduleModel, "VesselEventVisit");
+		final EClass class_Sequence = MetamodelUtils.getEClass(package_ScheduleModel, "Sequence");
+
+		final EReference reference_VesselEventVisit_vesselEvent = MetamodelUtils.getReference(class_VesselEventVisit, "vesselEvent");
+		final EReference reference_VesselEventVisit_vesselEvent2 = MetamodelUtils.getReference(class_VesselEventVisit, "vesselEvent2");
+		final EReference reference_Sequence_vesselAvailability = MetamodelUtils.getReference(class_Sequence, "vesselAvailability");
+		final EReference reference_Sequence_vesselAvailability2 = MetamodelUtils.getReference(class_Sequence, "vesselAvailability2");
+
 		for (final Map.Entry<EObject, EObject> entry : originalToNew.entrySet()) {
 			final EObject originalEntity = entry.getKey();
 			final EObject newEntity = entry.getValue();
@@ -261,7 +269,15 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 			final Collection<EStructuralFeature.Setting> usages = usagesByOriginal.get(originalEntity);
 			if (usages != null) {
 				for (final EStructuralFeature.Setting setting : usages) {
-					EcoreUtil.replace(setting, originalEntity, newEntity);
+					if (setting.getEStructuralFeature() == reference_VesselEventVisit_vesselEvent) {
+						setting.getEObject().eUnset(reference_VesselEventVisit_vesselEvent);
+						setting.getEObject().eSet(reference_VesselEventVisit_vesselEvent2, newEntity);
+					} else if (setting.getEStructuralFeature() == reference_Sequence_vesselAvailability) {
+						setting.getEObject().eUnset(reference_Sequence_vesselAvailability);
+						setting.getEObject().eSet(reference_Sequence_vesselAvailability2, newEntity);
+					} else {
+						EcoreUtil.replace(setting, originalEntity, newEntity);
+					}
 				}
 			}
 			EcoreUtil.replace(originalEntity, newEntity);

@@ -7,6 +7,8 @@
         eType="#//BaseLegalEntity" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="salesContracts" upperBound="-1"
         eType="#//SalesContract" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shippingEntity" lowerBound="1"
+        eType="#//BaseLegalEntity"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="purchaseContracts" upperBound="-1"
         eType="#//PurchaseContract" containment="true"/>
   </eClassifiers>
