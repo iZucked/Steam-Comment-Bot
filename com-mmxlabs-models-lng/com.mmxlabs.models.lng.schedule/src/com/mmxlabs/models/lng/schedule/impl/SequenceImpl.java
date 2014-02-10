@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
@@ -63,7 +63,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselAvailability vesselAvailability;
+	protected com.mmxlabs.models.lng.cargo.VesselAvailability vesselAvailability;
 
 	/**
 	 * This is true if the Vessel Availability reference has been set.
@@ -192,10 +192,10 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailability getVesselAvailability() {
+	public com.mmxlabs.models.lng.cargo.VesselAvailability getVesselAvailability() {
 		if (vesselAvailability != null && vesselAvailability.eIsProxy()) {
 			InternalEObject oldVesselAvailability = (InternalEObject)vesselAvailability;
-			vesselAvailability = (VesselAvailability)eResolveProxy(oldVesselAvailability);
+			vesselAvailability = (com.mmxlabs.models.lng.cargo.VesselAvailability)eResolveProxy(oldVesselAvailability);
 			if (vesselAvailability != oldVesselAvailability) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY, oldVesselAvailability, vesselAvailability));
@@ -210,18 +210,17 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailability basicGetVesselAvailability() {
+	public com.mmxlabs.models.lng.cargo.VesselAvailability basicGetVesselAvailability() {
 		return vesselAvailability;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setVesselAvailability(VesselAvailability newVesselAvailability) {
-		VesselAvailability oldVesselAvailability = vesselAvailability;
+	public void setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability newVesselAvailability) {
+		com.mmxlabs.models.lng.cargo.VesselAvailability oldVesselAvailability = vesselAvailability;
 		vesselAvailability = newVesselAvailability;
 		boolean oldVesselAvailabilityESet = vesselAvailabilityESet;
 		vesselAvailabilityESet = true;
@@ -236,7 +235,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated
 	 */
 	public void unsetVesselAvailability() {
-		VesselAvailability oldVesselAvailability = vesselAvailability;
+		com.mmxlabs.models.lng.cargo.VesselAvailability oldVesselAvailability = vesselAvailability;
 		boolean oldVesselAvailabilityESet = vesselAvailabilityESet;
 		vesselAvailability = null;
 		vesselAvailabilityESet = false;
@@ -518,7 +517,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				getEvents().addAll((Collection<? extends Event>)newValue);
 				return;
 			case SchedulePackage.SEQUENCE__VESSEL_AVAILABILITY:
-				setVesselAvailability((VesselAvailability)newValue);
+				setVesselAvailability((com.mmxlabs.models.lng.cargo.VesselAvailability)newValue);
 				return;
 			case SchedulePackage.SEQUENCE__VESSEL_CLASS:
 				setVesselClass((VesselClass)newValue);

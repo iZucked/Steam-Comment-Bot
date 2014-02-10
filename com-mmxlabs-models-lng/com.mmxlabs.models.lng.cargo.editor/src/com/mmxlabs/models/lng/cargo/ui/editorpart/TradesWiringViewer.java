@@ -110,7 +110,7 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuE
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -1365,7 +1365,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			final EMFPath purchaseContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
 			final EMFPath salesContractPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.DISCHARGE, CargoPackage.Literals.SLOT__CONTRACT);
-			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+			final EMFPath vesselPath = new RowDataEMFPath(false, CargoModelRowTransformer.Type.SLOT_OR_CARGO, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
 			final Action clearAction = new Action("Clear Filter") {
 				@Override

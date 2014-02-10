@@ -11,19 +11,14 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
@@ -135,30 +130,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createScenarioFleetModelAdapter();
 			}
 			@Override
-			public Adapter caseVesselAvailability(VesselAvailability object) {
-				return createVesselAvailabilityAdapter();
-			}
-			@Override
-			public Adapter caseVesselEvent(VesselEvent object) {
-				return createVesselEventAdapter();
-			}
-			@Override
-			public Adapter caseMaintenanceEvent(MaintenanceEvent object) {
-				return createMaintenanceEventAdapter();
-			}
-			@Override
-			public Adapter caseDryDockEvent(DryDockEvent object) {
-				return createDryDockEventAdapter();
-			}
-			@Override
-			public Adapter caseCharterOutEvent(CharterOutEvent object) {
-				return createCharterOutEventAdapter();
-			}
-			@Override
-			public Adapter caseAssignableElement(AssignableElement object) {
-				return createAssignableElementAdapter();
-			}
-			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -177,10 +148,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public <U> Adapter caseAVesselSet(AVesselSet<U> object) {
 				return createAVesselSetAdapter();
-			}
-			@Override
-			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
-				return createITimezoneProviderAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -231,20 +198,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselEvent <em>Vessel Event</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.VesselEvent
-	 * @generated
-	 */
-	public Adapter createVesselEventAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -269,48 +222,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createBaseFuelAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.DryDockEvent <em>Dry Dock Event</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.DryDockEvent
-	 * @generated
-	 */
-	public Adapter createDryDockEventAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.CharterOutEvent <em>Charter Out Event</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.CharterOutEvent
-	 * @generated
-	 */
-	public Adapter createCharterOutEventAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.AssignableElement <em>Assignable Element</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.AssignableElement
-	 * @generated
-	 */
-	public Adapter createAssignableElementAdapter() {
 		return null;
 	}
 
@@ -343,20 +254,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselAvailability <em>Vessel Availability</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.VesselAvailability
-	 * @generated
-	 */
-	public Adapter createVesselAvailabilityAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.FuelConsumption <em>Fuel Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -367,20 +264,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFuelConsumptionAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.MaintenanceEvent <em>Maintenance Event</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.MaintenanceEvent
-	 * @generated
-	 */
-	public Adapter createMaintenanceEventAdapter() {
 		return null;
 	}
 
@@ -510,20 +393,6 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAVesselSetAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ITimezoneProvider
-	 * @generated
-	 */
-	public Adapter createITimezoneProviderAdapter() {
 		return null;
 	}
 

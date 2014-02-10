@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -36,7 +36,7 @@ public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstrai
 								+ " is locked to a vessel, but permits re-wiring."));
 
 						failure.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring());
-						failure.addEObjectAndFeature(elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Locked());
+						failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Locked());
 
 						failures.add(failure);
 					}
@@ -45,8 +45,8 @@ public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstrai
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()
 							+ " is locked to a vessel, but no vessel is assigned."));
 
-					failure.addEObjectAndFeature(elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Locked());
-					failure.addEObjectAndFeature(elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+					failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Locked());
+					failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 
 					failures.add(failure);
 				}

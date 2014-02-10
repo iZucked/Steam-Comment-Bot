@@ -60,24 +60,6 @@ public interface FleetFactory extends EFactory {
 	BaseFuel createBaseFuel();
 
 	/**
-	 * Returns a new object of class '<em>Dry Dock Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Dry Dock Event</em>'.
-	 * @generated
-	 */
-	DryDockEvent createDryDockEvent();
-
-	/**
-	 * Returns a new object of class '<em>Charter Out Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Charter Out Event</em>'.
-	 * @generated
-	 */
-	CharterOutEvent createCharterOutEvent();
-
-	/**
 	 * Returns a new object of class '<em>Heel Options</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -96,15 +78,6 @@ public interface FleetFactory extends EFactory {
 	VesselStateAttributes createVesselStateAttributes();
 
 	/**
-	 * Returns a new object of class '<em>Vessel Availability</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Vessel Availability</em>'.
-	 * @generated
-	 */
-	VesselAvailability createVesselAvailability();
-
-	/**
 	 * Returns a new object of class '<em>Fuel Consumption</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -112,15 +85,6 @@ public interface FleetFactory extends EFactory {
 	 * @generated
 	 */
 	FuelConsumption createFuelConsumption();
-
-	/**
-	 * Returns a new object of class '<em>Maintenance Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Maintenance Event</em>'.
-	 * @generated
-	 */
-	MaintenanceEvent createMaintenanceEvent();
 
 	/**
 	 * Returns a new object of class '<em>Vessel Class Route Parameters</em>'.

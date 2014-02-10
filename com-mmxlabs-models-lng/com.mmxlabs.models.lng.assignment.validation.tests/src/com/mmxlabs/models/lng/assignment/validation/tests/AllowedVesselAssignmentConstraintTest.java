@@ -18,7 +18,7 @@ import org.mockito.Mockito;
 import com.mmxlabs.models.lng.assignment.validation.AllowedVesselAssignmentConstraint;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;

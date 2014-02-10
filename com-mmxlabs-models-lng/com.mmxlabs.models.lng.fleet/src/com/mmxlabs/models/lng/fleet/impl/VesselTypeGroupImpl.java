@@ -20,7 +20,6 @@ import org.eclipse.emf.query.statements.WHERE;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselType;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.lng.types.AVesselSet;

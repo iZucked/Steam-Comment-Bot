@@ -85,8 +85,8 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					if (!isAssigned) {
 						final String failureMessage = String.format("Cargo '%s' must be assigned a vessel", cargo.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-						dsd.addEObjectAndFeature(transferTo.getCargo(), FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
-						dsd.addEObjectAndFeature(transferFrom.getCargo(), FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+						dsd.addEObjectAndFeature(transferTo.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+						dsd.addEObjectAndFeature(transferFrom.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 						failures.add(dsd);
 					}
 				}
@@ -196,8 +196,8 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 					dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo());
 					dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo());
-					dsd.addEObjectAndFeature(loadCargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
-					dsd.addEObjectAndFeature(dischargeCargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+					dsd.addEObjectAndFeature(loadCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+					dsd.addEObjectAndFeature(dischargeCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
 					failures.add(dsd);
 

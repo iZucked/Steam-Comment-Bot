@@ -13,10 +13,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
@@ -99,7 +99,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @generated
 	 * @ordered
 	 */
-	protected VesselEvent vesselEvent;
+	protected com.mmxlabs.models.lng.cargo.VesselEvent vesselEvent;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -251,10 +251,10 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselEvent getVesselEvent() {
+	public com.mmxlabs.models.lng.cargo.VesselEvent getVesselEvent() {
 		if (vesselEvent != null && vesselEvent.eIsProxy()) {
 			InternalEObject oldVesselEvent = (InternalEObject)vesselEvent;
-			vesselEvent = (VesselEvent)eResolveProxy(oldVesselEvent);
+			vesselEvent = (com.mmxlabs.models.lng.cargo.VesselEvent)eResolveProxy(oldVesselEvent);
 			if (vesselEvent != oldVesselEvent) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT, oldVesselEvent, vesselEvent));
@@ -268,7 +268,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselEvent basicGetVesselEvent() {
+	public com.mmxlabs.models.lng.cargo.VesselEvent basicGetVesselEvent() {
 		return vesselEvent;
 	}
 
@@ -277,8 +277,8 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setVesselEvent(VesselEvent newVesselEvent) {
-		VesselEvent oldVesselEvent = vesselEvent;
+	public void setVesselEvent(com.mmxlabs.models.lng.cargo.VesselEvent newVesselEvent) {
+		com.mmxlabs.models.lng.cargo.VesselEvent oldVesselEvent = vesselEvent;
 		vesselEvent = newVesselEvent;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT, oldVesselEvent, vesselEvent));
@@ -348,7 +348,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
-				setVesselEvent((VesselEvent)newValue);
+				setVesselEvent((com.mmxlabs.models.lng.cargo.VesselEvent)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -375,7 +375,7 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
-				setVesselEvent((VesselEvent)null);
+				setVesselEvent((com.mmxlabs.models.lng.cargo.VesselEvent)null);
 				return;
 		}
 		super.eUnset(featureID);

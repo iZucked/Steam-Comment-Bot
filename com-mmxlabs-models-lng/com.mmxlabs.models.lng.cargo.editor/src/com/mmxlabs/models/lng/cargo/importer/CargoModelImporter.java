@@ -20,6 +20,9 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -43,9 +46,15 @@ public class CargoModelImporter implements ISubmodelImporter {
 	private IClassImporter cargoGroupImporter;
 
 	private final HashMap<String, String> inputs = new HashMap<String, String>();
+	private IClassImporter vesselAvailabilityImporter;
+	private IClassImporter vesselEventImporter;
+	public static final String EVENTS_KEY = "EVENTS";
+	public static final String VESSEL_AVAILABILITY_KEY = "VESSELSAVAILABILITIES";
 	{
 		inputs.put(CARGO_KEY, "Cargoes");
 		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
+		inputs.put(VESSEL_AVAILABILITY_KEY, "Vessel Availability");
+		inputs.put(EVENTS_KEY, "Events");
 	}
 
 	/**
@@ -66,6 +75,8 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoGroupImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
 			cargoImporter = new CargoImporter();
 			cargoImporter.setImporterRegistry(importerRegistry);
+			vesselAvailabilityImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselAvailability());
+			vesselEventImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getVesselEvent());
 		}
 	}
 
@@ -99,6 +110,13 @@ public class CargoModelImporter implements ISubmodelImporter {
 			cargoModel.getCargoGroups().addAll((Collection<? extends CargoGroup>) values);
 		}
 
+		if (inputs.containsKey(VESSEL_AVAILABILITY_KEY))
+			cargoModel.getVesselAvailabilities().addAll(
+					(Collection<? extends VesselAvailability>) vesselAvailabilityImporter.importObjects(CargoPackage.eINSTANCE.getVesselAvailability(), inputs.get(VESSEL_AVAILABILITY_KEY), context));
+
+		if (inputs.containsKey(EVENTS_KEY))
+			cargoModel.getVesselEvents().addAll((Collection<? extends VesselEvent>) vesselEventImporter.importObjects(CargoPackage.eINSTANCE.getVesselEvent(), inputs.get(EVENTS_KEY), context));
+
 		return cargoModel;
 	}
 
@@ -107,6 +125,8 @@ public class CargoModelImporter implements ISubmodelImporter {
 		final CargoModel cargoModel = (CargoModel) model;
 		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), context));
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), context));
+		output.put(VESSEL_AVAILABILITY_KEY, vesselAvailabilityImporter.exportObjects(cargoModel.getVesselAvailabilities(), context));
+		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(cargoModel.getVesselEvents(), context));
 	}
 
 	@Override

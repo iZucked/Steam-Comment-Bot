@@ -18,12 +18,12 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -41,7 +41,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
-		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(FleetPackage.eINSTANCE.getAssignableElement(), FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 	}
 
 	private List<Pair<String, EObject>> getAllowedValues(final EObject target, List<Pair<String, EObject>> storage) {
@@ -50,7 +50,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		} else {
 			storage.clear();
 		}
-		storage.addAll(valueProvider.getAllowedValues(target, FleetPackage.eINSTANCE.getAssignableElement_Assignment()));
+		storage.addAll(valueProvider.getAllowedValues(target, CargoPackage.eINSTANCE.getAssignableElement_Assignment()));
 
 		return storage;
 	}
@@ -65,7 +65,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		final AVesselSet<Vessel> set = (AVesselSet<Vessel>) (allowedValues.get((Integer) value).getSecond());
 		final EditingDomain ed = location.getEditingDomain();
 
-		ed.getCommandStack().execute(SetCommand.create(ed, target, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, set));
+		ed.getCommandStack().execute(SetCommand.create(ed, target, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, set));
 	}
 
 	@Override

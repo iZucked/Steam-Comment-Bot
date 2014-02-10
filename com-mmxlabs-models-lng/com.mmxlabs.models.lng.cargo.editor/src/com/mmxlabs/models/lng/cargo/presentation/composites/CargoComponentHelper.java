@@ -12,6 +12,8 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -31,10 +33,15 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -63,7 +70,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(FleetPackage.Literals.ASSIGNABLE_ELEMENT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(CargoPackage.Literals.ASSIGNABLE_ELEMENT));
 	}
 
 	/**
@@ -145,7 +152,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 
 			@Override
 			public void notifyChanged(final Notification notification) {
-				if (notification.getFeature() == FleetPackage.eINSTANCE.getAssignableElement_Locked()) {
+				if (notification.getFeature() == CargoPackage.eINSTANCE.getAssignableElement_Locked()) {
 					editor.setEditorEnabled(!notification.getNewBooleanValue());
 					if (notification.getNewBooleanValue()) {
 						final ICommandHandler handler = dialogContext.getScenarioEditingLocation().getDefaultCommandHandler();

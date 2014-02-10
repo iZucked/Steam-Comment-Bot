@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.impl;
 
+import com.mmxlabs.models.lng.fleet.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -12,17 +13,13 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
@@ -85,10 +82,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: return createVesselClassRouteParameters();
 			case FleetPackage.SCENARIO_FLEET_MODEL: return createScenarioFleetModel();
-			case FleetPackage.VESSEL_AVAILABILITY: return createVesselAvailability();
-			case FleetPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
-			case FleetPackage.DRY_DOCK_EVENT: return createDryDockEvent();
-			case FleetPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -169,26 +162,6 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public DryDockEvent createDryDockEvent() {
-		DryDockEventImpl dryDockEvent = new DryDockEventImpl();
-		return dryDockEvent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CharterOutEvent createCharterOutEvent() {
-		CharterOutEventImpl charterOutEvent = new CharterOutEventImpl();
-		return charterOutEvent;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public HeelOptions createHeelOptions() {
 		HeelOptionsImpl heelOptions = new HeelOptionsImpl();
 		return heelOptions;
@@ -209,29 +182,9 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselAvailability createVesselAvailability() {
-		VesselAvailabilityImpl vesselAvailability = new VesselAvailabilityImpl();
-		return vesselAvailability;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public FuelConsumption createFuelConsumption() {
 		FuelConsumptionImpl fuelConsumption = new FuelConsumptionImpl();
 		return fuelConsumption;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public MaintenanceEvent createMaintenanceEvent() {
-		MaintenanceEventImpl maintenanceEvent = new MaintenanceEventImpl();
-		return maintenanceEvent;
 	}
 
 	/**

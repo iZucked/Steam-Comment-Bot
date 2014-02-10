@@ -10,19 +10,14 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
@@ -186,67 +181,6 @@ public class FleetSwitch<T1> extends Switch<T1> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case FleetPackage.VESSEL_AVAILABILITY: {
-				VesselAvailability vesselAvailability = (VesselAvailability)theEObject;
-				T1 result = caseVesselAvailability(vesselAvailability);
-				if (result == null) result = caseUUIDObject(vesselAvailability);
-				if (result == null) result = caseMMXObject(vesselAvailability);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.VESSEL_EVENT: {
-				VesselEvent vesselEvent = (VesselEvent)theEObject;
-				T1 result = caseVesselEvent(vesselEvent);
-				if (result == null) result = caseUUIDObject(vesselEvent);
-				if (result == null) result = caseNamedObject(vesselEvent);
-				if (result == null) result = caseITimezoneProvider(vesselEvent);
-				if (result == null) result = caseAssignableElement(vesselEvent);
-				if (result == null) result = caseMMXObject(vesselEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.MAINTENANCE_EVENT: {
-				MaintenanceEvent maintenanceEvent = (MaintenanceEvent)theEObject;
-				T1 result = caseMaintenanceEvent(maintenanceEvent);
-				if (result == null) result = caseVesselEvent(maintenanceEvent);
-				if (result == null) result = caseUUIDObject(maintenanceEvent);
-				if (result == null) result = caseNamedObject(maintenanceEvent);
-				if (result == null) result = caseITimezoneProvider(maintenanceEvent);
-				if (result == null) result = caseAssignableElement(maintenanceEvent);
-				if (result == null) result = caseMMXObject(maintenanceEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.DRY_DOCK_EVENT: {
-				DryDockEvent dryDockEvent = (DryDockEvent)theEObject;
-				T1 result = caseDryDockEvent(dryDockEvent);
-				if (result == null) result = caseVesselEvent(dryDockEvent);
-				if (result == null) result = caseUUIDObject(dryDockEvent);
-				if (result == null) result = caseNamedObject(dryDockEvent);
-				if (result == null) result = caseITimezoneProvider(dryDockEvent);
-				if (result == null) result = caseAssignableElement(dryDockEvent);
-				if (result == null) result = caseMMXObject(dryDockEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.CHARTER_OUT_EVENT: {
-				CharterOutEvent charterOutEvent = (CharterOutEvent)theEObject;
-				T1 result = caseCharterOutEvent(charterOutEvent);
-				if (result == null) result = caseVesselEvent(charterOutEvent);
-				if (result == null) result = caseUUIDObject(charterOutEvent);
-				if (result == null) result = caseNamedObject(charterOutEvent);
-				if (result == null) result = caseITimezoneProvider(charterOutEvent);
-				if (result == null) result = caseAssignableElement(charterOutEvent);
-				if (result == null) result = caseMMXObject(charterOutEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case FleetPackage.ASSIGNABLE_ELEMENT: {
-				AssignableElement assignableElement = (AssignableElement)theEObject;
-				T1 result = caseAssignableElement(assignableElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -282,21 +216,6 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseVesselEvent(VesselEvent object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -323,51 +242,6 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseBaseFuel(BaseFuel object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Dry Dock Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Dry Dock Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseDryDockEvent(DryDockEvent object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Out Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseCharterOutEvent(CharterOutEvent object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Assignable Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Assignable Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseAssignableElement(AssignableElement object) {
 		return null;
 	}
 
@@ -402,21 +276,6 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Vessel Availability</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Vessel Availability</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseVesselAvailability(VesselAvailability object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Fuel Consumption</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -428,21 +287,6 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseFuelConsumption(FuelConsumption object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Maintenance Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Maintenance Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseMaintenanceEvent(MaintenanceEvent object) {
 		return null;
 	}
 
@@ -581,21 +425,6 @@ public class FleetSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public <U> T1 caseAVesselSet(AVesselSet<U> object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ITimezone Provider</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T1 caseITimezoneProvider(ITimezoneProvider object) {
 		return null;
 	}
 

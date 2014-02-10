@@ -5,7 +5,7 @@
 package com.mmxlabs.models.lng.schedule;
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
@@ -61,7 +61,7 @@ public interface Sequence extends MMXObject {
 	 * @return the value of the '<em>Vessel Availability</em>' reference.
 	 * @see #isSetVesselAvailability()
 	 * @see #unsetVesselAvailability()
-	 * @see #setVesselAvailability(VesselAvailability)
+	 * @see #setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_VesselAvailability()
 	 * @model unsettable="true" required="true"
 	 * @generated
@@ -71,7 +71,6 @@ public interface Sequence extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Vessel Availability</em>' reference.
 	 * @see #isSetVesselAvailability()
@@ -79,7 +78,7 @@ public interface Sequence extends MMXObject {
 	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	void setVesselAvailability(VesselAvailability value);
+	void setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
@@ -88,7 +87,7 @@ public interface Sequence extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetVesselAvailability()
 	 * @see #getVesselAvailability()
-	 * @see #setVesselAvailability(VesselAvailability)
+	 * @see #setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability)
 	 * @generated
 	 */
 	void unsetVesselAvailability();
@@ -101,7 +100,7 @@ public interface Sequence extends MMXObject {
 	 * @return whether the value of the '<em>Vessel Availability</em>' reference is set.
 	 * @see #unsetVesselAvailability()
 	 * @see #getVesselAvailability()
-	 * @see #setVesselAvailability(VesselAvailability)
+	 * @see #setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability)
 	 * @generated
 	 */
 	boolean isSetVesselAvailability();

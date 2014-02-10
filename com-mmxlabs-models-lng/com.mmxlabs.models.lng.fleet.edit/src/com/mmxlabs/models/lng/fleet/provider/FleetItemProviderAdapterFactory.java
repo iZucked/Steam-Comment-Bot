@@ -180,52 +180,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.DryDockEvent} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected DryDockEventItemProvider dryDockEventItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.DryDockEvent}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createDryDockEventAdapter() {
-		if (dryDockEventItemProvider == null) {
-			dryDockEventItemProvider = new DryDockEventItemProvider(this);
-		}
-
-		return dryDockEventItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.CharterOutEvent} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CharterOutEventItemProvider charterOutEventItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.CharterOutEvent}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCharterOutEventAdapter() {
-		if (charterOutEventItemProvider == null) {
-			charterOutEventItemProvider = new CharterOutEventItemProvider(this);
-		}
-
-		return charterOutEventItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.HeelOptions} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -272,29 +226,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselAvailability} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VesselAvailabilityItemProvider vesselAvailabilityItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.VesselAvailability}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVesselAvailabilityAdapter() {
-		if (vesselAvailabilityItemProvider == null) {
-			vesselAvailabilityItemProvider = new VesselAvailabilityItemProvider(this);
-		}
-
-		return vesselAvailabilityItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.FuelConsumption} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -315,29 +246,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		}
 
 		return fuelConsumptionItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.MaintenanceEvent} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected MaintenanceEventItemProvider maintenanceEventItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.MaintenanceEvent}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createMaintenanceEventAdapter() {
-		if (maintenanceEventItemProvider == null) {
-			maintenanceEventItemProvider = new MaintenanceEventItemProvider(this);
-		}
-
-		return maintenanceEventItemProvider;
 	}
 
 	/**
@@ -574,10 +482,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
 		if (vesselClassRouteParametersItemProvider != null) vesselClassRouteParametersItemProvider.dispose();
 		if (scenarioFleetModelItemProvider != null) scenarioFleetModelItemProvider.dispose();
-		if (vesselAvailabilityItemProvider != null) vesselAvailabilityItemProvider.dispose();
-		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
-		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
-		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
 	}
 
 }

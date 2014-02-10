@@ -23,11 +23,11 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -53,7 +53,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				if (assignableElement instanceof VesselEvent) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
-					status.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+					status.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 					failures.add(status);
 					return Activator.PLUGIN_ID;
 				} else
@@ -118,11 +118,11 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				}
 				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-				failure.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+				failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 				if (assignableElement instanceof Cargo) {
 					failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getCargo_AllowedVessels());
 				} else if (assignableElement instanceof VesselEvent) {
-					failure.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
+					failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels());
 				}
 
 				failures.add(failure);

@@ -38,12 +38,12 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -206,8 +206,8 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 
 			final Collection<EObject> objects = s.getObjects();
 			if (objects.contains(elementAssignment)) {
-				if (s.getFeaturesForEObject(elementAssignment).contains(FleetPackage.eINSTANCE.getAssignableElement_Locked())
-						|| s.getFeaturesForEObject(elementAssignment).contains(FleetPackage.eINSTANCE.getAssignableElement_Assignment())) {
+				if (s.getFeaturesForEObject(elementAssignment).contains(CargoPackage.eINSTANCE.getAssignableElement_Locked())
+						|| s.getFeaturesForEObject(elementAssignment).contains(CargoPackage.eINSTANCE.getAssignableElement_Assignment())) {
 					return true;
 				}
 			}
@@ -239,7 +239,7 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 
 	@Override
 	public EStructuralFeature getFeature() {
-		return FleetPackage.eINSTANCE.getAssignableElement_Assignment();
+		return CargoPackage.eINSTANCE.getAssignableElement_Assignment();
 	}
 
 	public EObject getEditorTarget() {
@@ -291,7 +291,7 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 			}
 		}
 
-		valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(FleetPackage.eINSTANCE.getAssignableElement(), FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+		valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 
 		updateDisplay(object);
 
@@ -344,7 +344,7 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 
 		final EObject target = (assignment == null ? object : assignment);
 
-		final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(target, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+		final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(target, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 
 		combo.removeAll();
 		nameList.clear();
@@ -387,8 +387,8 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 		lock.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Locked(), lock.getSelection()), elementAssignment,
-						FleetPackage.eINSTANCE.getAssignableElement_Locked());
+				handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Locked(), lock.getSelection()), elementAssignment,
+						CargoPackage.eINSTANCE.getAssignableElement_Locked());
 			}
 		});
 
@@ -402,8 +402,8 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 					// Uh oh.....
 					if (elementAssignment != null) {
 						if (vessel == null) {
-							handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE),
-									elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+							handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE),
+									elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 						} else if (vessel instanceof VesselClass) {
 							// assign to a new spot
 							if (rootObject instanceof LNGScenarioModel) {
@@ -413,12 +413,12 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 								int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel, scenarioFleetModel);
 								;
 								handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet<Vessel>) vessel, elementAssignment, maxSpot), elementAssignment,
-										FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+										CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 								return;
 							}
 						} else if (vessel instanceof Vessel) {
-							handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Assignment(), vessel),
-									elementAssignment, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+							handler.handleCommand(SetCommand.create(handler.getEditingDomain(), elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment(), vessel),
+									elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 						} else {
 							throw new RuntimeException("Unexpected vessel assignment type");
 						}

@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +31,7 @@ public interface VesselEventVisit extends Event, PortVisit, ProfitAndLossContain
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Event</em>' reference.
-	 * @see #setVesselEvent(VesselEvent)
+	 * @see #setVesselEvent(com.mmxlabs.models.lng.cargo.VesselEvent)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getVesselEventVisit_VesselEvent()
 	 * @model required="true"
 	 * @generated
@@ -46,7 +46,7 @@ public interface VesselEventVisit extends Event, PortVisit, ProfitAndLossContain
 	 * @see #getVesselEvent()
 	 * @generated
 	 */
-	void setVesselEvent(VesselEvent value);
+	void setVesselEvent(com.mmxlabs.models.lng.cargo.VesselEvent value);
 
 } // end of  VesselEventVisit
 

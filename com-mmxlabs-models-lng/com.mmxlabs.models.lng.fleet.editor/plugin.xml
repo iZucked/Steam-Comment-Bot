@@ -116,12 +116,6 @@
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
-          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
-          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.fleet.VesselAvailability"
-          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
-    </valueProvider>
-    <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.AsssignedElementVesselValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider"
           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
@@ -130,12 +124,6 @@
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.BaseFuelValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
           referenceEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
-    </valueProvider>
-    <valueProvider
-          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.BasicVesselValueProviderFactory"
-          id="com.mmxlabs.models.lng.fleet.ui.valueproviders.BasicVesselValueProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.fleet.AssignableElement"
-          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
     </valueProvider>
  </extension>
  <extension
@@ -153,11 +141,6 @@
           ID="com.mmxlabs.models.lng.fleet.editor.fleetModelImporter"
           subModelClassName="com.mmxlabs.models.lng.fleet.FleetModel"
           subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.FleetModelImporter">
-    </submodelImporter>
-     <submodelImporter
-          ID="com.mmxlabs.models.lng.fleet.editor.ScenarioFleetModelImporter"
-          subModelClassName="com.mmxlabs.models.lng.fleet.ScenarioFleetModel"
-          subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.ScenarioFleetModelImporter">
     </submodelImporter>
  </extension>
  <extension
@@ -237,12 +220,6 @@
           eClassName="com.mmxlabs.models.lng.fleet.BaseFuel"
           inheritable="true">
     </classImporter>
-    <classImporter
-          ID="com.mmxlabs.models.lng.fleet.importer.VesselEventImporter"
-          classImporterClass="com.mmxlabs.models.lng.fleet.importer.VesselEventImporter"
-          eClassName="com.mmxlabs.models.lng.fleet.VesselEvent"
-          inheritable="true">
-    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
@@ -286,7 +263,7 @@
           id="com.mmxlabs.models.lng.fleet.editor.commands.VesselAvailabilityCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider"
+          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.EventDateUpdatingCommandProvider"
           id="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider

@@ -8,7 +8,6 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -32,7 +31,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface Cargo extends UUIDObject, NamedObject, AssignableElement {
+public interface Cargo extends UUIDObject, NamedObject, com.mmxlabs.models.lng.cargo.AssignableElement {
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * The default value is <code>"false"</code>.

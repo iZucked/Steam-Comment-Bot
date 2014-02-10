@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -617,12 +616,12 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				default: return -1;
 			}
 		}
-		if (baseClass == AssignableElement.class) {
+		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
 			switch (derivedFeatureID) {
-				case CargoPackage.CARGO__ASSIGNMENT: return FleetPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
-				case CargoPackage.CARGO__SPOT_INDEX: return FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
-				case CargoPackage.CARGO__SEQUENCE_HINT: return FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
-				case CargoPackage.CARGO__LOCKED: return FleetPackage.ASSIGNABLE_ELEMENT__LOCKED;
+				case CargoPackage.CARGO__ASSIGNMENT: return CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
+				case CargoPackage.CARGO__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
+				case CargoPackage.CARGO__SEQUENCE_HINT: return CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
+				case CargoPackage.CARGO__LOCKED: return CargoPackage.ASSIGNABLE_ELEMENT__LOCKED;
 				default: return -1;
 			}
 		}
@@ -642,12 +641,12 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				default: return -1;
 			}
 		}
-		if (baseClass == AssignableElement.class) {
+		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
 			switch (baseFeatureID) {
-				case FleetPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.CARGO__ASSIGNMENT;
-				case FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.CARGO__SPOT_INDEX;
-				case FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.CARGO__SEQUENCE_HINT;
-				case FleetPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.CARGO__LOCKED;
+				case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.CARGO__ASSIGNMENT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.CARGO__SPOT_INDEX;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.CARGO__SEQUENCE_HINT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.CARGO__LOCKED;
 				default: return -1;
 			}
 		}

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -73,6 +74,10 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.SPOT_LOAD_SLOT: return createSpotLoadSlot();
 			case CargoPackage.SPOT_DISCHARGE_SLOT: return createSpotDischargeSlot();
 			case CargoPackage.CARGO_GROUP: return createCargoGroup();
+			case CargoPackage.VESSEL_AVAILABILITY: return createVesselAvailability();
+			case CargoPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
+			case CargoPackage.DRY_DOCK_EVENT: return createDryDockEvent();
+			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -176,6 +181,46 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public CargoGroup createCargoGroup() {
 		CargoGroupImpl cargoGroup = new CargoGroupImpl();
 		return cargoGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselAvailability createVesselAvailability() {
+		VesselAvailabilityImpl vesselAvailability = new VesselAvailabilityImpl();
+		return vesselAvailability;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public MaintenanceEvent createMaintenanceEvent() {
+		MaintenanceEventImpl maintenanceEvent = new MaintenanceEventImpl();
+		return maintenanceEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DryDockEvent createDryDockEvent() {
+		DryDockEventImpl dryDockEvent = new DryDockEventImpl();
+		return dryDockEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterOutEvent createCharterOutEvent() {
+		CharterOutEventImpl charterOutEvent = new CharterOutEventImpl();
+		return charterOutEvent;
 	}
 
 	/**

@@ -76,7 +76,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
         eType="#//Event" containment="true" eOpposite="#//Event/sequence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailability" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselAvailability"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"
@@ -137,7 +137,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit #//ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselEvent"/>
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselEvent"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GeneratedCharterOut" eSuperTypes="#//Event #//ProfitAndLossContainer">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="revenue" lowerBound="1"

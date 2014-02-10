@@ -11,10 +11,17 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -66,23 +73,5 @@ public class ScenarioFleetModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselAvailabilitiesEditor(detailComposite, topClass);
-		add_vesselEventsEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the vesselAvailabilities feature on ScenarioFleetModel
-	 *
-	 * @generated
-	 */
-	protected void add_vesselAvailabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.SCENARIO_FLEET_MODEL__VESSEL_AVAILABILITIES));
-	}
-	/**
-	 * Create the editor for the vesselEvents feature on ScenarioFleetModel
-	 *
-	 * @generated
-	 */
-	protected void add_vesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.SCENARIO_FLEET_MODEL__VESSEL_EVENTS));
 	}
 }

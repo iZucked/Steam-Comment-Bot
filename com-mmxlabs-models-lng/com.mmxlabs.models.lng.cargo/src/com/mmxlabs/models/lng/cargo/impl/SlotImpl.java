@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
@@ -1940,12 +1939,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				default: return -1;
 			}
 		}
-		if (baseClass == AssignableElement.class) {
+		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
 			switch (derivedFeatureID) {
-				case CargoPackage.SLOT__ASSIGNMENT: return FleetPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
-				case CargoPackage.SLOT__SPOT_INDEX: return FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
-				case CargoPackage.SLOT__SEQUENCE_HINT: return FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
-				case CargoPackage.SLOT__LOCKED: return FleetPackage.ASSIGNABLE_ELEMENT__LOCKED;
+				case CargoPackage.SLOT__ASSIGNMENT: return CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
+				case CargoPackage.SLOT__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
+				case CargoPackage.SLOT__SEQUENCE_HINT: return CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
+				case CargoPackage.SLOT__LOCKED: return CargoPackage.ASSIGNABLE_ELEMENT__LOCKED;
 				default: return -1;
 			}
 		}
@@ -1970,12 +1969,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				default: return -1;
 			}
 		}
-		if (baseClass == AssignableElement.class) {
+		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
 			switch (baseFeatureID) {
-				case FleetPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.SLOT__ASSIGNMENT;
-				case FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.SLOT__SPOT_INDEX;
-				case FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.SLOT__SEQUENCE_HINT;
-				case FleetPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.SLOT__LOCKED;
+				case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.SLOT__ASSIGNMENT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.SLOT__SPOT_INDEX;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.SLOT__SEQUENCE_HINT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.SLOT__LOCKED;
 				default: return -1;
 			}
 		}
@@ -2000,7 +1999,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				default: return -1;
 			}
 		}
-		if (baseClass == AssignableElement.class) {
+		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
 			switch (baseOperationID) {
 				default: return -1;
 			}

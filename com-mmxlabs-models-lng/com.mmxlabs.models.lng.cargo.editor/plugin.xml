@@ -132,6 +132,18 @@
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.Slot"
           referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.AssignableElement"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -183,6 +195,13 @@
           eClassName="com.mmxlabs.models.lng.cargo.DischargeSlot"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.cargo.importer.VesselEventImporter"
+          classImporterClass="com.mmxlabs.models.lng.cargo.importer.VesselEventImporter"
+          eClassName="com.mmxlabs.models.lng.cargo.VesselEvent"
+          inheritable="true">
+    </classImporter>
+    
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
@@ -256,8 +275,8 @@
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider">
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotDateUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.SlotDateUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider"
@@ -270,6 +289,18 @@
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.EventDateUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.EventDateUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VesselAvailabilityCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.VesselAvailabilityCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider">
     </ModelCommandProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">

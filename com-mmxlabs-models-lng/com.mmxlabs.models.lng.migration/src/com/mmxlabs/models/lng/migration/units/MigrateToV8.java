@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.migration.units;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.UsageCrossReferencer;
+import org.eclipse.emf.validation.internal.modeled.model.validation.Feature;
 
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
@@ -70,6 +72,8 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
 
 		migrateEntities(loader, model);
+
+		migrateScenarioFleetModel(loader, model);
 	}
 
 	protected void migrateEntities(MetamodelLoader loader, EObject model) {
@@ -115,6 +119,137 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 					originalToNew.put(entity, newEntity);
 				}
 			}
+		}
+
+		Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);
+
+		for (final Map.Entry<EObject, EObject> entry : originalToNew.entrySet()) {
+			final EObject originalEntity = entry.getKey();
+			final EObject newEntity = entry.getValue();
+
+			final Collection<EStructuralFeature.Setting> usages = usagesByOriginal.get(originalEntity);
+			if (usages != null) {
+				for (final EStructuralFeature.Setting setting : usages) {
+					EcoreUtil.replace(setting, originalEntity, newEntity);
+				}
+			}
+			EcoreUtil.replace(originalEntity, newEntity);
+		}
+	}
+
+	protected void migrateScenarioFleetModel(MetamodelLoader loader, EObject model) {
+
+		final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
+		final EClass namedObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "NamedObject");
+		final EStructuralFeature attribute_NamedObject_name = MetamodelUtils.getAttribute(namedObject_Class, "name");
+		final EStructuralFeature attribute_UUIDObject_uuid = MetamodelUtils.getAttribute(uuidObject_Class, "uuid");
+
+		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EClass class_LNGPortfolioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
+		final EReference reference_LNGScenarioModel_portfolioModel = MetamodelUtils.getReference(class_LNGScenarioModel, "portfolioModel");
+
+		final EReference reference_LNGPortfolioModel_scenarioFleetModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "scenarioFleetModel");
+		final EPackage package_FleetModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_FleetModel);
+		final EClass class_FleetModel = MetamodelUtils.getEClass(package_FleetModel, "FleetModel");
+		final EClass class_ScenarioFleetModel = MetamodelUtils.getEClass(package_FleetModel, "ScenarioFleetModel");
+		final EClass class_fleet_VesselAvailability = MetamodelUtils.getEClass(package_FleetModel, "VesselAvailability");
+		final EClass class_fleet_AssignableElement = MetamodelUtils.getEClass(package_FleetModel, "AssignableElement");
+		final EClass class_fleet_VesselEvent = MetamodelUtils.getEClass(package_FleetModel, "VesselEvent");
+		final EClass class_fleet_DryDockEvent = MetamodelUtils.getEClass(package_FleetModel, "DryDockEvent");
+		final EClass class_fleet_MaintenanceEvent = MetamodelUtils.getEClass(package_FleetModel, "MaintenanceEvent");
+		final EClass class_fleet_CharterOutEvent = MetamodelUtils.getEClass(package_FleetModel, "CharterOutEvent");
+
+		final EReference reference_ScenarioFleetModel_vesselAvailabilies = MetamodelUtils.getReference(class_ScenarioFleetModel, "vesselAvailabilities");
+		final EReference reference_ScenarioFleetModel_vesselEvents = MetamodelUtils.getReference(class_ScenarioFleetModel, "vesselEvents");
+
+		final EReference reference_LNGPortfolioModel_cargoModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "cargoModel");
+		final EPackage package_CargoModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
+		final EClass class_CargoModel = MetamodelUtils.getEClass(package_CargoModel, "CargoModel");
+		final EClass class_cargo_VesselAvailability = MetamodelUtils.getEClass(package_CargoModel, "VesselAvailability");
+		final EClass class_cargo_AssignableElement = MetamodelUtils.getEClass(package_CargoModel, "AssignableElement");
+		final EClass class_cargo_VesselEvent = MetamodelUtils.getEClass(package_CargoModel, "VesselEvent");
+		final EClass class_cargo_DryDockEvent = MetamodelUtils.getEClass(package_CargoModel, "DryDockEvent");
+		final EClass class_cargo_MaintenanceEvent = MetamodelUtils.getEClass(package_CargoModel, "MaintenanceEvent");
+		final EClass class_cargo_CharterOutEvent = MetamodelUtils.getEClass(package_CargoModel, "CharterOutEvent");
+
+		final EReference reference_CargoModel_vesselAvailabilies = MetamodelUtils.getReference(class_CargoModel, "vesselAvailabilities");
+		final EReference reference_CargoModel_vesselEvents = MetamodelUtils.getReference(class_CargoModel, "vesselEvents");
+		final EReference reference_cargo_VesselAvailability_entity = MetamodelUtils.getReference(class_cargo_VesselAvailability, "entity");
+
+		final EReference reference_LNGScenarioModel_commercialModel = MetamodelUtils.getReference(class_LNGScenarioModel, "commercialModel");
+		final EPackage package_CommercialModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
+		final EClass class_CommercialModel = MetamodelUtils.getEClass(package_CommercialModel, "CommercialModel");
+		final EReference reference_commercialModel_shippingEntity = MetamodelUtils.getReference(class_CommercialModel, "shippingEntity");
+
+		EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
+		EObject scenarioFleetModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_scenarioFleetModel);
+		EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
+		EObject commercialModel = (EObject) model.eGet(reference_LNGScenarioModel_commercialModel);
+
+		// map for cross reference update
+		Map<EObject, EObject> originalToNew = new HashMap<>();
+
+		{
+			EObject shippingEntity = (EObject) commercialModel.eGet(reference_commercialModel_shippingEntity);
+			commercialModel.eUnset(reference_commercialModel_shippingEntity);
+
+			// Phase 1 - Move vessel availabilities and set default shipping entity
+			List<EObject> fleetModelAvailabilities = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselAvailabilies);
+			List<EObject> cargo_VA = new ArrayList<>(fleetModelAvailabilities.size());
+			for (EObject fleet_VA : fleetModelAvailabilities) {
+
+				// Construct new VA - copy data over
+				EObject newVA = package_CargoModel.getEFactoryInstance().create(class_cargo_VesselAvailability);
+				for (EStructuralFeature f : fleet_VA.eClass().getEAllStructuralFeatures()) {
+					if (fleet_VA.eIsSet(f)) {
+						newVA.eSet(newVA.eClass().getEStructuralFeature(f.getName()), fleet_VA.eGet(f));
+					}
+				}
+				// set shipping entity
+				newVA.eSet(reference_cargo_VesselAvailability_entity, shippingEntity);
+
+				// Add to list
+				cargo_VA.add(newVA);
+
+				// Replace cross references
+				originalToNew.put(fleet_VA, newVA);
+			}
+			scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselAvailabilies);
+			cargoModel.eSet(reference_CargoModel_vesselAvailabilies, cargo_VA);
+		}
+
+		// Phase 2 - Move vessel events
+		{
+			List<EObject> fleetModelEvents = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselEvents);
+			List<EObject> cargo_Events = new ArrayList<>(fleetModelEvents.size());
+			for (EObject fleet_Event : fleetModelEvents) {
+				EObject newEvent = null;
+				if (class_fleet_MaintenanceEvent.isInstance(fleet_Event)) {
+					newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_MaintenanceEvent);
+				} else if (class_fleet_CharterOutEvent.isInstance(fleet_Event)) {
+					newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_CharterOutEvent);
+				} else if (class_fleet_DryDockEvent.isInstance(fleet_Event)) {
+					newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_DryDockEvent);
+				}
+				if (newEvent != null) {
+					for (EStructuralFeature f : fleet_Event.eClass().getEAllStructuralFeatures()) {
+						if (fleet_Event.eIsSet(f)) {
+							newEvent.eSet(newEvent.eClass().getEStructuralFeature(f.getName()), fleet_Event.eGet(f));
+						}
+					}
+				}
+
+				// Add to list
+				cargo_Events.add(newEvent);
+
+				// Replace cross references
+				originalToNew.put(fleet_Event, newEvent);
+
+			}
+			scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselEvents);
+			cargoModel.eSet(reference_CargoModel_vesselEvents, cargo_Events);
 		}
 
 		Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);

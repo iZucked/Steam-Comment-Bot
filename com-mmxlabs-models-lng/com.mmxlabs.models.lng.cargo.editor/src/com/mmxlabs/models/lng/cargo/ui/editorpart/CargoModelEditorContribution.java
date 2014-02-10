@@ -10,13 +10,22 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -26,6 +35,10 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class CargoModelEditorContribution extends BaseJointModelEditorContribution<CargoModel> {
 	private int tradesViewerPageNumber = -1;
 	private TradesWiringViewer tradesViewer;
+	private VesselViewerPane_Editor vesselViewerPane;
+	// private VesselClassViewerPane vesselClassViewerPane;
+	private VesselEventViewerPane eventViewerPane;
+	private int eventPage;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -35,6 +48,22 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		tradesViewer.getViewer().setInput(modelObject);
 		tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
 		editorPart.setPageText(tradesViewerPageNumber, "Trades");
+
+		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
+
+		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		vesselViewerPane.createControl(sash);
+		vesselViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+
+		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		eventViewerPane.createControl(sash);
+		eventViewerPane.init(Lists.newArrayList(CargoPackage.eINSTANCE.getCargoModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+
+		vesselViewerPane.getViewer().setInput(modelObject);
+		eventViewerPane.getViewer().setInput(modelObject);
+
+		eventPage = editorPart.addPage(sash);
+		editorPart.setPageText(eventPage, "Fleet");
 	}
 
 	@Override
@@ -42,6 +71,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		if (tradesViewer != null) {
 			tradesViewer.setLocked(locked);
 		}
+		if (vesselViewerPane != null)
+			vesselViewerPane.setLocked(locked);
+		if (eventViewerPane != null)
+			eventViewerPane.setLocked(locked);
 	}
 
 	@Override
@@ -49,6 +82,15 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+			
+			if (dcsd.getTarget() instanceof Vessel) {
+				return true;
+			} else if (dcsd.getTarget() instanceof VesselEvent) {
+				return true;
+			} else if (dcsd.getTarget() instanceof HeelOptions) {
+				return true;
+			}
+			
 			if (dcsd.getTarget() instanceof Cargo) {
 				return true;
 			} else if (dcsd.getTarget() instanceof LoadSlot) {
@@ -99,6 +141,27 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(dischargeSlot), true);
 				}
 			}
+			
+			editorPart.setActivePage(eventPage);
+
+			// extract viewable target from a faulty HeelOptions object
+			if (target instanceof HeelOptions) {
+				EObject container = target.eContainer();
+				if (container instanceof VesselAvailability) {
+					target = ((VesselAvailability) container).getVessel();
+				} else if (container instanceof CharterOutEvent) {
+					target = container;
+				}
+			}
+
+			if (target instanceof Vessel) {
+				final Vessel vessel = (Vessel) target;
+				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vessel), true);
+			} else if (target instanceof VesselEvent) {
+				final VesselEvent vesselEvent = (VesselEvent) target;
+				eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselEvent), true);
+			}
+
 		}
 	}
 }

@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;

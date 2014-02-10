@@ -13,8 +13,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.MultiReferenceInlineEditor;
@@ -52,10 +52,10 @@ public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 		if (elementAssignment != null) {
 			if (list.size() == 1) {
 				final Object newAssignment = list.get(0);
-				cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, newAssignment));
+				cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, newAssignment));
 			} else {
 				if (!list.contains(elementAssignment.getAssignment())) {
-					cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 				}
 			}
 		}

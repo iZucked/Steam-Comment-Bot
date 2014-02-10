@@ -28,7 +28,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -78,7 +78,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 	@Override
 	protected boolean shouldImportReference(final EReference reference) {
-		return reference != FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT;
+		return reference != CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT;
 	}
 
 	@Override
@@ -90,8 +90,8 @@ public class CargoImporter extends DefaultClassImporter {
 			if (object instanceof AssignableElement) {
 				final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
-				if (attribute == FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX || attribute == FleetPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT
-						|| attribute == FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
+				if (attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX || attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT
+						|| attribute == CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
 					if (assignableElement.getAssignment() == null) {
 						continue;
 					}
@@ -108,7 +108,7 @@ public class CargoImporter extends DefaultClassImporter {
 			if (object instanceof AssignableElement) {
 				final AssignableElement assignableElement = (AssignableElement) object;
 				// yes yes both attribute and reference here, but easier to copy paste....
-				if (reference == FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
+				if (reference == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
 					if (assignableElement.getAssignment() == null) {
 						continue;
 					}
@@ -459,7 +459,7 @@ public class CargoImporter extends DefaultClassImporter {
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
 
-			final String vesselName = fields.get(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
+			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
 
 			if (vesselName != null && !vesselName.isEmpty()) {
 				context.doLater(new IDeferment() {
