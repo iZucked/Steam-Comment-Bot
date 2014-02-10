@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.ui.impl.AbstractValueListInlineEditor;
 
 /**
  * @since 8.0

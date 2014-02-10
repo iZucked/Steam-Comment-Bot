@@ -8,6 +8,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.ContractType;
+import com.mmxlabs.models.ui.impl.AbstractValueListInlineEditor;
 
 /**
  * @since 8.0
