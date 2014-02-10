@@ -110,7 +110,6 @@ public class CustomScenarioCreator {
 		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		commercialModel.getEntities().add(contractEntity);
 		commercialModel.getEntities().add(shippingEntity);
-		commercialModel.setShippingEntity(shippingEntity);
 
 		contractEntity.setName("Third-parties");
 		shippingEntity.setName("Shipping");
@@ -259,6 +258,7 @@ public class CustomScenarioCreator {
 			}
 			availability.setVessel(vessel);
 			availability.setStartHeel(heelOptions);
+			availability.setEntity(shippingEntity);
 			cargoModel.getVesselAvailabilities().add(availability);
 			created[i] = vessel;
 		}

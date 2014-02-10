@@ -54,7 +54,6 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		contractEntity = addEntity("Third-parties");
 		// need to create a legal entity for shipping
 		shippingEntity = addEntity("Shipping");
-		commercialModel.setShippingEntity(shippingEntity);
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
@@ -63,7 +62,7 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1)[0];
+		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0];
 
 		// need to create a default route
 		addRoute(ScenarioTools.defaultRouteName);

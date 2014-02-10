@@ -9,7 +9,9 @@ import java.util.Collection;
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
@@ -21,6 +23,7 @@ import com.mmxlabs.models.lng.transformer.util.EntityTransformerUtils;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.impl.SimpleEntity;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
@@ -66,10 +69,18 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	@Override
 	public void finishTransforming() {
 
-		final CommercialModel commercialModel = rootObject.getCommercialModel();
-		final BaseLegalEntity shipping = commercialModel.getShippingEntity();
+		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		for (VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
+			final IVessel vessel  = entities.getOptimiserObject(vesselAvailability.getVessel(), IVessel.class);
+			final IVessel vessel2  = entities.getOptimiserObject(vesselAvailability, IVessel.class);
+			final IEntity entity = entities.getOptimiserObject( vesselAvailability.getEntity(), IEntity.class);
+			setEntityForVessel(entity, vessel2);
+		}
 
-		setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
+		final CommercialModel commercialModel = rootObject.getCommercialModel();
+		// final BaseLegalEntity shipping = commercialModel.getShippingEntity();
+		//
+		// setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
 
 		// set up contract association or slot association or whatever
 		final Collection<Slot> slots = entities.getAllModelObjects(Slot.class);
@@ -77,14 +88,14 @@ public class EntityTransformerExtension implements ITransformerExtension {
 			final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
 				BaseLegalEntity slotEntity = null;
-//				if (slot.isSetPriceInfo()) {
-//					slotEntity = slot.getPriceInfo().getEntity();
-//				} else 
+				// if (slot.isSetPriceInfo()) {
+				// slotEntity = slot.getPriceInfo().getEntity();
+				// } else
 				slotEntity = slot.getSlotOrDelegatedEntity();
-				
-				if (slotEntity == null) {
-					slotEntity = shipping;
-				}
+
+				// if (slotEntity == null) {
+				// slotEntity = shipping;
+				// }
 
 				final IEntity entity = entities.getOptimiserObject(slotEntity, IEntity.class);
 				setEntityForSlot(entity, portSlot);
@@ -106,11 +117,14 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	public void setEntityForSlot(final IEntity entity, final IPortSlot slot) {
 		entityProvider.setEntityForSlot(entity, slot);
 	}
-
-	/**
-	 * @since 2.0
-	 */
-	public void setShippingEntity(final IEntity shipping) {
-		entityProvider.setShippingEntity(shipping);
+	public void setEntityForVessel(final IEntity entity, final IVessel vessel) {
+		entityProvider.setEntityForVessel(entity, vessel);
 	}
+
+	// /**
+	// * @since 2.0
+	// */
+	// public void setShippingEntity(final IEntity shipping) {
+	// entityProvider.setShippingEntity(shipping);
+	// }
 }

@@ -357,7 +357,7 @@ public class ScenarioTools {
 		commercialModel.getEntities().add(e);
 		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
 		commercialModel.getEntities().add(s);
-		commercialModel.setShippingEntity(s);
+		availablility.setEntity(s);
 
 		e.setName("Other");
 		s.setName("Shipping");
@@ -612,8 +612,8 @@ public class ScenarioTools {
 		commercialModel.getEntities().add(e);
 		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
 		commercialModel.getEntities().add(s);
-		commercialModel.setShippingEntity(s);
-
+		availability.setEntity(s);
+		
 		e.setName("Other");
 		s.setName("Shipping");
 
