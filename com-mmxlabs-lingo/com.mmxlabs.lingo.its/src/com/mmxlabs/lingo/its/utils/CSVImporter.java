@@ -36,7 +36,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter;
 import com.mmxlabs.models.lng.fleet.importer.FleetModelImporter;
 import com.mmxlabs.models.lng.fleet.importer.VesselClassImporter;
@@ -141,7 +140,6 @@ public class CSVImporter {
 		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
 		scenarioModel.setPortfolioModel(portfolioModel);
 
-		portfolioModel.setScenarioFleetModel((ScenarioFleetModel) importSubModel(importerRegistry, context, baseFileName, dataMap, FleetPackage.eINSTANCE.getScenarioFleetModel()));
 		portfolioModel.setCargoModel((CargoModel) importSubModel(importerRegistry, context, baseFileName, dataMap, CargoPackage.eINSTANCE.getCargoModel()));
 //		portfolioModel.setAssignmentModel((AssignmentModel) importSubModel(importerRegistry, context, baseFileName, dataMap, AssignmentPackage.eINSTANCE.getAssignmentModel()));
 		portfolioModel.setScheduleModel((ScheduleModel) importSubModel(importerRegistry, context, baseFileName, dataMap, SchedulePackage.eINSTANCE.getScheduleModel()));
