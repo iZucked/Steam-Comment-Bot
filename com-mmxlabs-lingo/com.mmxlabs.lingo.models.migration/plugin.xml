@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="-7"
+            latestVersion="-9"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -63,7 +63,21 @@
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV7"
             context="com.mmxlabs.lingo"
             from="6"
-            to="-7">
+            to="7">
+              </MigrationUnit>
+       <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV8"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV8"
+            context="com.mmxlabs.lingo"
+            from="7"
+            to="8">
+              </MigrationUnit>
+       <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV9"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV9"
+            context="com.mmxlabs.lingo"
+            from="8"
+            to="-9">
       </MigrationUnit>            
    </extension>
    <extension

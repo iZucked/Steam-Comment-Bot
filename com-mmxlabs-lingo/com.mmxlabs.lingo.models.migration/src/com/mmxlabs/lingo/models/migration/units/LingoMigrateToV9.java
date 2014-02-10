@@ -26,7 +26,7 @@ import com.mmxlabs.models.migration.PackageData;
  * @author Simon Goodall
  * 
  */
-public class LingoMigrateToV7 implements IMigrationUnit {
+public class LingoMigrateToV9 implements IMigrationUnit {
 
 	/**
 	 * See {@link MigratorInjectionModule}. Ensure class name is prefixed with "org.ops4j.peaberry.eclipse.GuiceExtensionFactory:" to enable dependency injection via plugin.xml
@@ -41,22 +41,22 @@ public class LingoMigrateToV7 implements IMigrationUnit {
 
 	@Override
 	public int getSourceVersion() {
-		return 6;
+		return 8;
 	}
 
 	@Override
 	public int getDestinationVersion() {
-		return 7;
+		return -9;
 	}
 
 	@Override
 	public void migrate(@NonNull final URI baseURI, @Nullable final Map<URI, PackageData> extraPackagesOrig) throws Exception {
 
-//		@SuppressWarnings("null")
-//		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 7, -8);//getDestinationVersion());
-//		for (final IMigrationUnit unit : chain) {
-//			unit.migrate(baseURI, extraPackagesOrig);
-//		}
+		@SuppressWarnings("null")
+		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 8, -9);//getDestinationVersion());
+		for (final IMigrationUnit unit : chain) {
+			unit.migrate(baseURI, extraPackagesOrig);
+		}
 	}
 
 }
