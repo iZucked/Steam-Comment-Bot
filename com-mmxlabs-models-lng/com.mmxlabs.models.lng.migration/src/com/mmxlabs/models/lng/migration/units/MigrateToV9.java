@@ -54,7 +54,7 @@ public class MigrateToV9 extends AbstractMigrationUnit {
 	@Override
 	protected MetamodelLoader getDestinationMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.createV8Loader(extraPackages);
+			destiniationLoader = MetamodelVersionsUtil.createV9Loader(extraPackages);
 		}
 		return destiniationLoader;
 	}
@@ -113,16 +113,19 @@ public class MigrateToV9 extends AbstractMigrationUnit {
 			for (EObject sequence : sequences) {
 				EObject vesselAvailability = (EObject) sequence.eGet(reference_Sequence_vesselAvailability2);
 				sequence.eUnset(reference_Sequence_vesselAvailability2);
-				sequence.eSet(reference_Sequence_vesselAvailability, vesselAvailability);
+				if (vesselAvailability != null) {
+					sequence.eSet(reference_Sequence_vesselAvailability, vesselAvailability);
+				}
 
 				List<EObject> events = MetamodelUtils.getValueAsTypedList(sequence, reference_Sequence_events);
 				if (events != null) {
 					for (EObject event : events) {
 						if (class_VesselEventVisit.isInstance(event)) {
 							EObject vesselEvent = (EObject) event.eGet(reference_VesselEventVisit_vesselEvent2);
-							event.eUnset(reference_VesselEventVisit_vesselEvent);
-							event.eSet(reference_Sequence_vesselAvailability, vesselEvent);
-
+							event.eUnset(reference_VesselEventVisit_vesselEvent2);
+							if (vesselEvent != null) {
+								event.eSet(reference_VesselEventVisit_vesselEvent, vesselEvent);
+							}
 						}
 					}
 				}

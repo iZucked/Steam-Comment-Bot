@@ -11,11 +11,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroups" upperBound="-1"
         eType="#//VesselGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="specialVesselGroups" upperBound="-1"
-        containment="true">
-      <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
-        <eTypeArguments eClassifier="#//Vessel"/>
-      </eGenericType>
-    </eStructuralFeatures>
+        eType="#//VesselTypeGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"

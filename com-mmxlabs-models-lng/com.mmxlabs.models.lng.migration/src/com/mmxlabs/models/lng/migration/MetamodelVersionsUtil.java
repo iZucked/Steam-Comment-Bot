@@ -393,7 +393,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v9.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CommercialModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v9.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_SpotMarketsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v9.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CargoModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v9.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v9-inter.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScheduleModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v9.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v9.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v9.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);

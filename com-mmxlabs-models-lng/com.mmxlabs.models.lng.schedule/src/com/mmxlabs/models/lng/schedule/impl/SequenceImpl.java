@@ -409,7 +409,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			return "FOB Sale";
 		} else if (getSequenceType() == SequenceType.CARGO_SHORTS) {
 			return "Short Cargoes";
-		} else if (isSetVesselAvailability()) {
+		} else if (isSetVesselAvailability() && getVesselAvailability() != null) {
 			return getVesselAvailability().getVessel().getName();
 		} else if (isSetVesselClass()) {
 			return getVesselClass().getName();

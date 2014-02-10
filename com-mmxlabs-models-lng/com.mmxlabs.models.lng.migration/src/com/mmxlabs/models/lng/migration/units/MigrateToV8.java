@@ -202,76 +202,75 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		EObject fleetModel = (EObject) model.eGet(reference_LNGScenarioModel_fleetModel);
 		EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
 		EObject scenarioFleetModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_scenarioFleetModel);
-		if (scenarioFleetModel == null) {
-			return;
-		}
 		EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
 		EObject commercialModel = (EObject) model.eGet(reference_LNGScenarioModel_commercialModel);
-
+		
 		// map for cross reference update
 		Map<EObject, EObject> originalToNew = new HashMap<>();
+		EObject shippingEntity = (EObject) commercialModel.eGet(reference_commercialModel_shippingEntity);
+		commercialModel.eUnset(reference_commercialModel_shippingEntity);
+		
+		if (scenarioFleetModel != null) {
 
-		// Phase 1 - Move vessel availabilities and set default shipping entity
-		{
-			EObject shippingEntity = (EObject) commercialModel.eGet(reference_commercialModel_shippingEntity);
-			commercialModel.eUnset(reference_commercialModel_shippingEntity);
+			// Phase 1 - Move vessel availabilities and set default shipping entity
+			{
 
-			List<EObject> fleetModelAvailabilities = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselAvailabilies);
-			List<EObject> cargo_VA = new ArrayList<>(fleetModelAvailabilities.size());
-			for (EObject fleet_VA : fleetModelAvailabilities) {
+				List<EObject> fleetModelAvailabilities = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselAvailabilies);
+				List<EObject> cargo_VA = new ArrayList<>(fleetModelAvailabilities.size());
+				for (EObject fleet_VA : fleetModelAvailabilities) {
 
-				// Construct new VA - copy data over
-				EObject newVA = package_CargoModel.getEFactoryInstance().create(class_cargo_VesselAvailability);
-				for (EStructuralFeature f : fleet_VA.eClass().getEAllStructuralFeatures()) {
-					if (fleet_VA.eIsSet(f)) {
-						newVA.eSet(newVA.eClass().getEStructuralFeature(f.getName()), fleet_VA.eGet(f));
-					}
-				}
-				// set shipping entity
-				newVA.eSet(reference_cargo_VesselAvailability_entity, shippingEntity);
-
-				// Add to list
-				cargo_VA.add(newVA);
-
-				// Replace cross references
-				originalToNew.put(fleet_VA, newVA);
-			}
-			scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselAvailabilies);
-			cargoModel.eSet(reference_CargoModel_vesselAvailabilies, cargo_VA);
-		}
-
-		// Phase 2 - Move vessel events
-		{
-			List<EObject> fleetModelEvents = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselEvents);
-			List<EObject> cargo_Events = new ArrayList<>(fleetModelEvents.size());
-			for (EObject fleet_Event : fleetModelEvents) {
-				EObject newEvent = null;
-				if (class_fleet_MaintenanceEvent.isInstance(fleet_Event)) {
-					newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_MaintenanceEvent);
-				} else if (class_fleet_CharterOutEvent.isInstance(fleet_Event)) {
-					newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_CharterOutEvent);
-				} else if (class_fleet_DryDockEvent.isInstance(fleet_Event)) {
-					newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_DryDockEvent);
-				}
-				if (newEvent != null) {
-					for (EStructuralFeature f : fleet_Event.eClass().getEAllStructuralFeatures()) {
-						if (fleet_Event.eIsSet(f)) {
-							newEvent.eSet(newEvent.eClass().getEStructuralFeature(f.getName()), fleet_Event.eGet(f));
+					// Construct new VA - copy data over
+					EObject newVA = package_CargoModel.getEFactoryInstance().create(class_cargo_VesselAvailability);
+					for (EStructuralFeature f : fleet_VA.eClass().getEAllStructuralFeatures()) {
+						if (fleet_VA.eIsSet(f)) {
+							newVA.eSet(newVA.eClass().getEStructuralFeature(f.getName()), fleet_VA.eGet(f));
 						}
 					}
+					// set shipping entity
+					newVA.eSet(reference_cargo_VesselAvailability_entity, shippingEntity);
+
+					// Add to list
+					cargo_VA.add(newVA);
+
+					// Replace cross references
+					originalToNew.put(fleet_VA, newVA);
 				}
-
-				// Add to list
-				cargo_Events.add(newEvent);
-
-				// Replace cross references
-				originalToNew.put(fleet_Event, newEvent);
-
+				scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselAvailabilies);
+				cargoModel.eSet(reference_CargoModel_vesselAvailabilies, cargo_VA);
 			}
-			scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselEvents);
-			cargoModel.eSet(reference_CargoModel_vesselEvents, cargo_Events);
-		}
 
+			// Phase 2 - Move vessel events
+			{
+				List<EObject> fleetModelEvents = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselEvents);
+				List<EObject> cargo_Events = new ArrayList<>(fleetModelEvents.size());
+				for (EObject fleet_Event : fleetModelEvents) {
+					EObject newEvent = null;
+					if (class_fleet_MaintenanceEvent.isInstance(fleet_Event)) {
+						newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_MaintenanceEvent);
+					} else if (class_fleet_CharterOutEvent.isInstance(fleet_Event)) {
+						newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_CharterOutEvent);
+					} else if (class_fleet_DryDockEvent.isInstance(fleet_Event)) {
+						newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_DryDockEvent);
+					}
+					if (newEvent != null) {
+						for (EStructuralFeature f : fleet_Event.eClass().getEAllStructuralFeatures()) {
+							if (fleet_Event.eIsSet(f)) {
+								newEvent.eSet(newEvent.eClass().getEStructuralFeature(f.getName()), fleet_Event.eGet(f));
+							}
+						}
+					}
+
+					// Add to list
+					cargo_Events.add(newEvent);
+
+					// Replace cross references
+					originalToNew.put(fleet_Event, newEvent);
+
+				}
+				scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselEvents);
+				cargoModel.eSet(reference_CargoModel_vesselEvents, cargo_Events);
+			}
+		}
 		// Phase 3 - move vessel type groups
 		{
 
