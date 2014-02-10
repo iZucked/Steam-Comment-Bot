@@ -167,13 +167,31 @@ public interface CargoPackage extends EPackage {
 	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__VESSEL_AVAILABILITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3811,6 +3829,28 @@ public interface CargoPackage extends EPackage {
 	EReference getCargo_Slots();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getVesselAvailabilities <em>Vessel Availabilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Availabilities</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getVesselAvailabilities()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EReference getCargo_VesselAvailabilities();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getVesselEvents <em>Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Cargo#getVesselEvents()
+	 * @see #getCargo()
+	 * @generated
+	 */
+	EReference getCargo_VesselEvents();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType() <em>Get Cargo Type</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4879,6 +4919,22 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO__SLOTS = eINSTANCE.getCargo_Slots();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Availabilities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO__VESSEL_AVAILABILITIES = eINSTANCE.getCargo_VesselAvailabilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO__VESSEL_EVENTS = eINSTANCE.getCargo_VesselEvents();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Cargo Type</b></em>' operation.

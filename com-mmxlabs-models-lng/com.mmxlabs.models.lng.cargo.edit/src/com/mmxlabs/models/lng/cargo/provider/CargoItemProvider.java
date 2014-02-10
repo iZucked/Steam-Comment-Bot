@@ -22,8 +22,8 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
@@ -269,6 +269,8 @@ public class CargoItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CargoPackage.Literals.CARGO__SLOTS);
+			childrenFeatures.add(CargoPackage.Literals.CARGO__VESSEL_AVAILABILITIES);
+			childrenFeatures.add(CargoPackage.Literals.CARGO__VESSEL_EVENTS);
 		}
 		return childrenFeatures;
 	}
@@ -331,6 +333,8 @@ public class CargoItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.CARGO__SLOTS:
+			case CargoPackage.CARGO__VESSEL_AVAILABILITIES:
+			case CargoPackage.CARGO__VESSEL_EVENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -347,6 +351,26 @@ public class CargoItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO__VESSEL_AVAILABILITIES,
+				 CargoFactory.eINSTANCE.createVesselAvailability()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO__VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createMaintenanceEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO__VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createDryDockEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO__VESSEL_EVENTS,
+				 CargoFactory.eINSTANCE.createCharterOutEvent()));
 	}
 
 }

@@ -7,8 +7,6 @@
 /**
  */
 package com.mmxlabs.models.lng.fleet;
-import org.eclipse.emf.common.util.EList;
-
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**

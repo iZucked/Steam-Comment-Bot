@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.util;
 
-import com.mmxlabs.models.lng.fleet.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -22,7 +21,6 @@ import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;

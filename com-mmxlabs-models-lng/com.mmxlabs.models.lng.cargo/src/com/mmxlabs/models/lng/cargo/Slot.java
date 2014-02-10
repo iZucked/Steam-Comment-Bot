@@ -46,7 +46,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, com.mmxlabs.models.lng.cargo.AssignableElement {
+public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, AssignableElement {
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->

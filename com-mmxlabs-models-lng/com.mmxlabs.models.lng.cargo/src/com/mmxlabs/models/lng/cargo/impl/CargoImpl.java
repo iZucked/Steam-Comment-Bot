@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -23,8 +25,9 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -46,6 +49,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSlots <em>Slots</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getVesselEvents <em>Vessel Events</em>}</li>
  * </ul>
  * </p>
  *
@@ -193,6 +198,26 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * @ordered
 	 */
 	protected EList<Slot> slots;
+
+	/**
+	 * The cached value of the '{@link #getVesselAvailabilities() <em>Vessel Availabilities</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselAvailabilities()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselAvailability> vesselAvailabilities;
+
+	/**
+	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselEvent> vesselEvents;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -412,6 +437,30 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<VesselAvailability> getVesselAvailabilities() {
+		if (vesselAvailabilities == null) {
+			vesselAvailabilities = new EObjectContainmentEList.Resolving<VesselAvailability>(VesselAvailability.class, this, CargoPackage.CARGO__VESSEL_AVAILABILITIES);
+		}
+		return vesselAvailabilities;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<VesselEvent> getVesselEvents() {
+		if (vesselEvents == null) {
+			vesselEvents = new EObjectContainmentEList.Resolving<VesselEvent>(VesselEvent.class, this, CargoPackage.CARGO__VESSEL_EVENTS);
+		}
+		return vesselEvents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public CargoType getCargoType() {
@@ -467,6 +516,10 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__SLOTS:
 				return ((InternalEList<?>)getSlots()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO__VESSEL_AVAILABILITIES:
+				return ((InternalEList<?>)getVesselAvailabilities()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO__VESSEL_EVENTS:
+				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -496,6 +549,10 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				return getAllowedVessels();
 			case CargoPackage.CARGO__SLOTS:
 				return getSlots();
+			case CargoPackage.CARGO__VESSEL_AVAILABILITIES:
+				return getVesselAvailabilities();
+			case CargoPackage.CARGO__VESSEL_EVENTS:
+				return getVesselEvents();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -535,6 +592,14 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				getSlots().clear();
 				getSlots().addAll((Collection<? extends Slot>)newValue);
 				return;
+			case CargoPackage.CARGO__VESSEL_AVAILABILITIES:
+				getVesselAvailabilities().clear();
+				getVesselAvailabilities().addAll((Collection<? extends VesselAvailability>)newValue);
+				return;
+			case CargoPackage.CARGO__VESSEL_EVENTS:
+				getVesselEvents().clear();
+				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -571,6 +636,12 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 			case CargoPackage.CARGO__SLOTS:
 				getSlots().clear();
 				return;
+			case CargoPackage.CARGO__VESSEL_AVAILABILITIES:
+				getVesselAvailabilities().clear();
+				return;
+			case CargoPackage.CARGO__VESSEL_EVENTS:
+				getVesselEvents().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -599,6 +670,10 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				return allowedVessels != null && !allowedVessels.isEmpty();
 			case CargoPackage.CARGO__SLOTS:
 				return slots != null && !slots.isEmpty();
+			case CargoPackage.CARGO__VESSEL_AVAILABILITIES:
+				return vesselAvailabilities != null && !vesselAvailabilities.isEmpty();
+			case CargoPackage.CARGO__VESSEL_EVENTS:
+				return vesselEvents != null && !vesselEvents.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -616,7 +691,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				default: return -1;
 			}
 		}
-		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
+		if (baseClass == AssignableElement.class) {
 			switch (derivedFeatureID) {
 				case CargoPackage.CARGO__ASSIGNMENT: return CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
 				case CargoPackage.CARGO__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
@@ -641,7 +716,7 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				default: return -1;
 			}
 		}
-		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
+		if (baseClass == AssignableElement.class) {
 			switch (baseFeatureID) {
 				case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.CARGO__ASSIGNMENT;
 				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.CARGO__SPOT_INDEX;

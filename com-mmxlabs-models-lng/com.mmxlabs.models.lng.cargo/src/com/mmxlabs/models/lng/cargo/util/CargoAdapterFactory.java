@@ -138,7 +138,7 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCharterOutEventAdapter();
 			}
 			@Override
-			public Adapter caseAssignableElement(com.mmxlabs.models.lng.cargo.AssignableElement object) {
+			public Adapter caseAssignableElement(AssignableElement object) {
 				return createAssignableElementAdapter();
 			}
 			@Override

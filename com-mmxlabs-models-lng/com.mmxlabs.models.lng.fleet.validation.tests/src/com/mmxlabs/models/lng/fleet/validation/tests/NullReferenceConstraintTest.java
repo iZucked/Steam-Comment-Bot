@@ -16,11 +16,9 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
 import org.mockito.Matchers;
 
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint;
 
 /**

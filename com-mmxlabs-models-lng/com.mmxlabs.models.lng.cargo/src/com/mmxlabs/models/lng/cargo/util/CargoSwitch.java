@@ -233,7 +233,7 @@ public class CargoSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CargoPackage.ASSIGNABLE_ELEMENT: {
-				com.mmxlabs.models.lng.cargo.AssignableElement assignableElement = (com.mmxlabs.models.lng.cargo.AssignableElement)theEObject;
+				AssignableElement assignableElement = (AssignableElement)theEObject;
 				T result = caseAssignableElement(assignableElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -463,7 +463,7 @@ public class CargoSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAssignableElement(com.mmxlabs.models.lng.cargo.AssignableElement object) {
+	public T caseAssignableElement(AssignableElement object) {
 		return null;
 	}
 

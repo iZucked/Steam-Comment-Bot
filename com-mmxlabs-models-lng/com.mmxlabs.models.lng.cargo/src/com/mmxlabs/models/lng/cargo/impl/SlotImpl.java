@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Collection;
@@ -29,7 +30,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -1939,7 +1939,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				default: return -1;
 			}
 		}
-		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
+		if (baseClass == AssignableElement.class) {
 			switch (derivedFeatureID) {
 				case CargoPackage.SLOT__ASSIGNMENT: return CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
 				case CargoPackage.SLOT__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
@@ -1969,7 +1969,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				default: return -1;
 			}
 		}
-		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
+		if (baseClass == AssignableElement.class) {
 			switch (baseFeatureID) {
 				case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.SLOT__ASSIGNMENT;
 				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.SLOT__SPOT_INDEX;
@@ -1999,7 +1999,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				default: return -1;
 			}
 		}
-		if (baseClass == com.mmxlabs.models.lng.cargo.AssignableElement.class) {
+		if (baseClass == AssignableElement.class) {
 			switch (baseOperationID) {
 				default: return -1;
 			}

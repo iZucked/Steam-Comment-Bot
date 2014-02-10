@@ -106,23 +106,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//ScenarioFleetModel/vesselAvailabilities"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//ScenarioFleetModel/vesselEvents"/>
     </genClasses>
-    <genClasses ecoreClass="fleet.ecore#//VesselAvailability">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselAvailability/vessel"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute fleet.ecore#//VesselAvailability/timeCharterRate"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="The vessel must start at one of these ports"
-          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselAvailability/startAt"/>
-      <genFeatures createChild="false" propertyDescription="The vessel is not available before this date"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselAvailability/startAfter"/>
-      <genFeatures createChild="false" propertyDescription="The vessel must be in use from this date"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselAvailability/startBy"/>
-      <genFeatures notify="false" createChild="false" propertyDescription="The vessel must be returned to one of these ports"
-          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselAvailability/endAt"/>
-      <genFeatures createChild="false" propertyDescription="The vessel must not end before this date"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselAvailability/endAfter"/>
-      <genFeatures createChild="false" propertyDescription="The vessel must have finished use by this date"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//VesselAvailability/endBy"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//VesselAvailability/startHeel"/>
-    </genClasses>
+    
     <genClasses image="false" ecoreClass="fleet.ecore#//VesselEvent">
       <genFeatures createChild="false" propertyDescription="How long the {0} will occupy its vessel for"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselEvent/durationInDays"/>
@@ -134,18 +118,6 @@
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselEvent/startAfter"/>
       <genFeatures createChild="false" propertyDescription="The date by which the {0} must start"
           ecoreFeature="ecore:EAttribute fleet.ecore#//VesselEvent/startBy"/>
-    </genClasses>
-    <genClasses ecoreClass="fleet.ecore#//MaintenanceEvent"/>
-    <genClasses ecoreClass="fleet.ecore#//DryDockEvent"/>
-    <genClasses ecoreClass="fleet.ecore#//CharterOutEvent">
-      <genFeatures notify="false" createChild="false" propertyDescription="If set, the vessel will be relocated to this port after the charter out is finished"
-          propertySortChoices="true" ecoreFeature="ecore:EReference fleet.ecore#//CharterOutEvent/relocateTo"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference fleet.ecore#//CharterOutEvent/heelOptions"/>
-      <genFeatures createChild="false" propertyDescription="A fixed cost paid for repositioning this charter out"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//CharterOutEvent/repositioningFee"/>
-      <genFeatures createChild="false" propertyDescription="The daily hire rate returned by this charter out"
-          ecoreFeature="ecore:EAttribute fleet.ecore#//CharterOutEvent/hireRate"/>
-      <genOperations ecoreOperation="fleet.ecore#//CharterOutEvent/getEndPort"/>
-    </genClasses>
+    </genClasses>   
   </genPackages>
 </genmodel:GenModel>

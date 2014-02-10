@@ -24,6 +24,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getVesselEvents <em>Vessel Events</em>}</li>
  * </ul>
  * </p>
  *
@@ -31,7 +33,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface Cargo extends UUIDObject, NamedObject, com.mmxlabs.models.lng.cargo.AssignableElement {
+public interface Cargo extends UUIDObject, NamedObject, AssignableElement {
 	/**
 	 * Returns the value of the '<em><b>Allow Rewiring</b></em>' attribute.
 	 * The default value is <code>"false"</code>.
@@ -94,6 +96,38 @@ public interface Cargo extends UUIDObject, NamedObject, com.mmxlabs.models.lng.c
 	 * @generated
 	 */
 	EList<Slot> getSlots();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Availabilities</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselAvailability}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Availabilities</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Availabilities</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_VesselAvailabilities()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselAvailability> getVesselAvailabilities();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselEvent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Events</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Events</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_VesselEvents()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselEvent> getVesselEvents();
 
 	/**
 	 * <!-- begin-user-doc -->
