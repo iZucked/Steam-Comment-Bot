@@ -202,6 +202,9 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		EObject fleetModel = (EObject) model.eGet(reference_LNGScenarioModel_fleetModel);
 		EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
 		EObject scenarioFleetModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_scenarioFleetModel);
+		if (scenarioFleetModel == null) {
+			return;
+		}
 		EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
 		EObject commercialModel = (EObject) model.eGet(reference_LNGScenarioModel_commercialModel);
 

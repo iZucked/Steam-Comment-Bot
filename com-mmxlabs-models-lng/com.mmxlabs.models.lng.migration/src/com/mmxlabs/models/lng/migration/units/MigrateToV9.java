@@ -40,7 +40,7 @@ public class MigrateToV9 extends AbstractMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -9;
+		return 9;
 	}
 
 	@Override
