@@ -1,35 +1,37 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
-/**
- */
-package com.mmxlabs.models.lng.fleet.provider;
+package com.mmxlabs.models.lng.cargo.provider;
 
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
+
+import com.mmxlabs.models.lng.types.provider.AVesselSetItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.VesselTypeGroup} object.
  * <!-- begin-user-doc -->
- * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioFleetModelItemProvider
-	extends UUIDObjectItemProvider
+public class VesselTypeGroupItemProvider
+	extends AVesselSetItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -42,7 +44,7 @@ public class ScenarioFleetModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScenarioFleetModelItemProvider(AdapterFactory adapterFactory) {
+	public VesselTypeGroupItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,19 +59,42 @@ public class ScenarioFleetModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addVesselTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This returns ScenarioFleetModel.gif.
+	 * This adds a property descriptor for the Vessel Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselTypeGroup_vesselType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselTypeGroup_vesselType_feature", "_UI_VesselTypeGroup_type"),
+				 CargoPackage.Literals.VESSEL_TYPE_GROUP__VESSEL_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns VesselTypeGroup.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioFleetModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselTypeGroup"));
 	}
 
 	/**
@@ -80,10 +105,10 @@ public class ScenarioFleetModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ScenarioFleetModel)object).getUuid();
+		String label = ((VesselTypeGroup)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_ScenarioFleetModel_type") :
-			getString("_UI_ScenarioFleetModel_type") + " " + label;
+			getString("_UI_VesselTypeGroup_type") :
+			getString("_UI_VesselTypeGroup_type") + " " + label;
 	}
 
 	/**
@@ -96,6 +121,12 @@ public class ScenarioFleetModelItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(VesselTypeGroup.class)) {
+			case CargoPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

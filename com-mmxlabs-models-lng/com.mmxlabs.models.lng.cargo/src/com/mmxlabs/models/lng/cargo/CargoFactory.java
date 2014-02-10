@@ -123,6 +123,15 @@ public interface CargoFactory extends EFactory {
 	CharterOutEvent createCharterOutEvent();
 
 	/**
+	 * Returns a new object of class '<em>Vessel Type Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Type Group</em>'.
+	 * @generated
+	 */
+	VesselTypeGroup createVesselTypeGroup();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

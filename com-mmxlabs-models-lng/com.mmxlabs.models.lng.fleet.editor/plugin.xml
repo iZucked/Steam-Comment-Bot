@@ -34,7 +34,6 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.VesselClass" />
 		
-		
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.FleetModel"
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FleetModelComponentHelper"
@@ -46,9 +45,7 @@
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.BaseFuelComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.BaseFuel" />
-		
-	
-		
+
 		<componentHelper
 			id="com.mmxlabs.models.lng.fleet.helpers.HeelOptions"
 			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.HeelOptionsComponentHelper"
@@ -67,31 +64,34 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.fleet.FuelConsumption" />
  
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselGroupComponentHelper"
-        id="com.mmxlabs.models.lng.fleet.helpers.VesselGroup"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.fleet.VesselGroup">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselTypeGroupComponentHelper"
-        id="com.mmxlabs.models.lng.fleet.presentation.composites.VesselTypeGroupComponentHelper"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.fleet.VesselTypeGroup">
-  </componentHelper>
+  		<componentHelper
+	        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselGroupComponentHelper"
+	        id="com.mmxlabs.models.lng.fleet.helpers.VesselGroup"
+	        inheritable="false"
+	        modelClass="com.mmxlabs.models.lng.fleet.VesselGroup"/>
 		
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
-          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.AsssignedElementVesselValueProviderFactory"
-          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
-    </valueProvider>
-    <valueProvider
           factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.BaseFuelValueProviderFactory"
           id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
           referenceEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.VesselClass"
+          referenceEClass="com.mmxlabs.models.lng.fleet.VesselClass">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.VesselGroup"
+          referenceEClass="com.mmxlabs.models.lng.fleet.VesselGroup">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.Vessel"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
     </valueProvider>
  </extension>
  <extension

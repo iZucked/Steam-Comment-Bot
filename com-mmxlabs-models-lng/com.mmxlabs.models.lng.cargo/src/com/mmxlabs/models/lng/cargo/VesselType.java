@@ -1,8 +1,6 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
-package com.mmxlabs.models.lng.fleet;
+package com.mmxlabs.models.lng.cargo;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,9 +12,8 @@ import org.eclipse.emf.common.util.Enumerator;
  * <!-- begin-user-doc -->
  * A representation of the literals of the enumeration '<em><b>Vessel Type</b></em>',
  * and utility methods for working with them.
- * @since 2.0
  * <!-- end-user-doc -->
- * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselType()
+ * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselType()
  * @model
  * @generated
  */
@@ -45,7 +42,7 @@ public enum VesselType implements Enumerator {
 	 * The '<em><b>Owned</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>OWNED</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>Owned</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
@@ -60,7 +57,7 @@ public enum VesselType implements Enumerator {
 	 * The '<em><b>Time Chartered</b></em>' literal value.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of '<em><b>TIME CHARTERED</b></em>' literal object isn't clear,
+	 * If the meaning of '<em><b>Time Chartered</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->

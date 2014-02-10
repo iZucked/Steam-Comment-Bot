@@ -272,30 +272,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ScenarioFleetModelItemProvider scenarioFleetModelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.ScenarioFleetModel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createScenarioFleetModelAdapter() {
-		if (scenarioFleetModelItemProvider == null) {
-			scenarioFleetModelItemProvider = new ScenarioFleetModelItemProvider(this);
-		}
-
-		return scenarioFleetModelItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselGroup} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -316,30 +292,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		}
 
 		return vesselGroupItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselTypeGroup} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected VesselTypeGroupItemProvider vesselTypeGroupItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.VesselTypeGroup}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createVesselTypeGroupAdapter() {
-		if (vesselTypeGroupItemProvider == null) {
-			vesselTypeGroupItemProvider = new VesselTypeGroupItemProvider(this);
-		}
-
-		return vesselTypeGroupItemProvider;
 	}
 
 	/**
@@ -476,12 +428,10 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (vesselItemProvider != null) vesselItemProvider.dispose();
 		if (vesselClassItemProvider != null) vesselClassItemProvider.dispose();
 		if (vesselGroupItemProvider != null) vesselGroupItemProvider.dispose();
-		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
 		if (heelOptionsItemProvider != null) heelOptionsItemProvider.dispose();
 		if (vesselStateAttributesItemProvider != null) vesselStateAttributesItemProvider.dispose();
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
 		if (vesselClassRouteParametersItemProvider != null) vesselClassRouteParametersItemProvider.dispose();
-		if (scenarioFleetModelItemProvider != null) scenarioFleetModelItemProvider.dispose();
 	}
 
 }

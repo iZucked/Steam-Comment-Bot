@@ -110,6 +110,12 @@
 	        inheritable="true"
 	        modelClass="com.mmxlabs.models.lng.cargo.AssignableElement"/>
         
+         <componentHelper
+        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselTypeGroupComponentHelper"
+        id="com.mmxlabs.models.lng.cargo.presentation.composites.VesselTypeGroupComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.cargo.VesselTypeGroup"/>
+        
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -176,6 +182,11 @@
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
           referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.AVesselSetValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.fleetValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
     </valueProvider>
  </extension>
  <extension

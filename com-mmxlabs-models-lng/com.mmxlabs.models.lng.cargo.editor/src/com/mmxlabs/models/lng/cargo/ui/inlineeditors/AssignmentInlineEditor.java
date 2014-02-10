@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.fleet.ui.inlineeditors;
+package com.mmxlabs.models.lng.cargo.ui.inlineeditors;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,11 +39,10 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -320,7 +319,7 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 		final Object layoutData = control.getLayoutData();
 		if (layoutData instanceof GridData) {
 			final GridData gridData = (GridData) layoutData;
-//			gridData.exclude = !editorAppliesToObject;
+			// gridData.exclude = !editorAppliesToObject;
 		}
 	}
 
@@ -408,9 +407,8 @@ public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInl
 							if (rootObject instanceof LNGScenarioModel) {
 
 								final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getCargoModel();
-								final ScenarioFleetModel scenarioFleetModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getScenarioFleetModel();
-								int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel, scenarioFleetModel);
-								;
+								int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel);
+
 								handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet<Vessel>) vessel, elementAssignment, maxSpot), elementAssignment,
 										CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 								return;

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.fleet.editor.utils;
+package com.mmxlabs.models.lng.cargo.editor.utils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,7 +33,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -105,7 +104,7 @@ public class AssignmentEditorHelper {
 							// Hmm, this could be bad, will we loose elements in the TreeMap?
 							int ii = 0; // Set a breakpoint!
 						}
-						
+
 						return c;
 					}
 				});
@@ -178,7 +177,7 @@ public class AssignmentEditorHelper {
 		return cc;
 	}
 
-	public static int getMaxSpot(final CargoModel cargoModel, final ScenarioFleetModel scenarioFleetModel) {
+	public static int getMaxSpot(final CargoModel cargoModel) {
 		int maxSpot = 0;
 		for (Cargo cargo : cargoModel.getCargoes()) {
 			if (cargo.getAssignment() != null) {

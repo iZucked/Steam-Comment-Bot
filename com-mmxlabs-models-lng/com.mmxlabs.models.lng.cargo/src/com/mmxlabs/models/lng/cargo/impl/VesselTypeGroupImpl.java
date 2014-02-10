@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.fleet.impl;
+package com.mmxlabs.models.lng.cargo.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ECollections;
@@ -17,11 +17,12 @@ import org.eclipse.emf.query.statements.IQueryResult;
 import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselType;
+import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselType;
-import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
@@ -33,7 +34,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl#getVesselType <em>Vessel Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl#getVesselType <em>Vessel Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -76,7 +77,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return FleetPackage.Literals.VESSEL_TYPE_GROUP;
+		return CargoPackage.Literals.VESSEL_TYPE_GROUP;
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 		VesselType oldVesselType = vesselType;
 		vesselType = newVesselType == null ? VESSEL_TYPE_EDEFAULT : newVesselType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE, oldVesselType, vesselType));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE, oldVesselType, vesselType));
 	}
 
 	/**
@@ -108,7 +109,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
+			case CargoPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
 				return getVesselType();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -122,7 +123,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
+			case CargoPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
 				setVesselType((VesselType)newValue);
 				return;
 		}
@@ -137,7 +138,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
+			case CargoPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
 				setVesselType(VESSEL_TYPE_EDEFAULT);
 				return;
 		}
@@ -152,7 +153,7 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
+			case CargoPackage.VESSEL_TYPE_GROUP__VESSEL_TYPE:
 				return vesselType != VESSEL_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -194,12 +195,12 @@ public class VesselTypeGroupImpl extends AVesselSetImpl<Vessel> implements Vesse
 				final SELECT select = new SELECT(new FROM(this.eResource().getContents()), new WHERE(new EObjectReferencerCondition(v)));
 				final IQueryResult execute = select.execute();
 				for (final EObject eObj : execute) {
-//					if (eObj instanceof VesselAvailability) {
-//						final VesselAvailability va = (VesselAvailability) eObj;
-//						if (va.isSetTimeCharterRate() ^ getVesselType() == VesselType.OWNED) {
-//							result.addAll(va.getVessel().collect(marked));
-//						}
-//					}
+					if (eObj instanceof VesselAvailability) {
+						final VesselAvailability va = (VesselAvailability) eObj;
+						if (va.isSetTimeCharterRate() ^ getVesselType() == VesselType.OWNED) {
+							result.addAll(va.getVessel().collect(marked));
+						}
+					}
 				}
 
 			}

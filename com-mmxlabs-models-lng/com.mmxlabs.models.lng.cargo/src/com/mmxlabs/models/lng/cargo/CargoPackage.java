@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -1661,13 +1662,22 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Type Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__VESSEL_TYPE_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3774,6 +3784,106 @@ public interface CargoPackage extends EPackage {
 	int ASSIGNABLE_ELEMENT_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselTypeGroup()
+	 * @generated
+	 */
+	int VESSEL_TYPE_GROUP = 15;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__VESSEL_TYPE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Type Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___ECONTAINER_OP = TypesPackage.AVESSEL_SET___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Collect</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___COLLECT__ELIST = TypesPackage.AVESSEL_SET___COLLECT__ELIST;
+
+	/**
+	 * The number of operations of the '<em>Vessel Type Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP_OPERATION_COUNT = TypesPackage.AVESSEL_SET_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3781,7 +3891,18 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 15;
+	int CARGO_TYPE = 16;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.VesselType
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
+	 * @generated
+	 */
+	int VESSEL_TYPE = 17;
 
 
 	/**
@@ -4469,6 +4590,17 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_VesselEvents();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Type Groups</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_VesselTypeGroups();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4854,6 +4986,27 @@ public interface CargoPackage extends EPackage {
 	EAttribute getAssignableElement_Locked();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselTypeGroup <em>Vessel Type Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Type Group</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselTypeGroup
+	 * @generated
+	 */
+	EClass getVesselTypeGroup();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselTypeGroup#getVesselType <em>Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselTypeGroup#getVesselType()
+	 * @see #getVesselTypeGroup()
+	 * @generated
+	 */
+	EAttribute getVesselTypeGroup_VesselType();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4862,6 +5015,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getCargoType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Vessel Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselType
+	 * @generated
+	 */
+	EEnum getVesselType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -5408,6 +5571,14 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__VESSEL_EVENTS = eINSTANCE.getCargoModel_VesselEvents();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel Type Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__VESSEL_TYPE_GROUPS = eINSTANCE.getCargoModel_VesselTypeGroups();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5716,6 +5887,24 @@ public interface CargoPackage extends EPackage {
 		EAttribute ASSIGNABLE_ELEMENT__LOCKED = eINSTANCE.getAssignableElement_Locked();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselTypeGroup()
+		 * @generated
+		 */
+		EClass VESSEL_TYPE_GROUP = eINSTANCE.getVesselTypeGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_TYPE_GROUP__VESSEL_TYPE = eINSTANCE.getVesselTypeGroup_VesselType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5724,6 +5913,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CARGO_TYPE = eINSTANCE.getCargoType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.VesselType
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
+		 * @generated
+		 */
+		EEnum VESSEL_TYPE = eINSTANCE.getVesselType();
 
 	}
 

@@ -19,8 +19,6 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LNGPortfolioModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioFleetModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//ScenarioFleetModel"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//CargoModel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="scheduleModel" eType="ecore:EClass ../../com.mmxlabs.models.lng.schedule/model/schedule.ecore#//ScheduleModel"

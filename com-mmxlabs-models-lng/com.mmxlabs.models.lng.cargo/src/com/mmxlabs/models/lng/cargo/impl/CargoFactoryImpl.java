@@ -78,6 +78,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
 			case CargoPackage.DRY_DOCK_EVENT: return createDryDockEvent();
 			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
+			case CargoPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -93,6 +94,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 		switch (eDataType.getClassifierID()) {
 			case CargoPackage.CARGO_TYPE:
 				return createCargoTypeFromString(eDataType, initialValue);
+			case CargoPackage.VESSEL_TYPE:
+				return createVesselTypeFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -108,6 +111,8 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 		switch (eDataType.getClassifierID()) {
 			case CargoPackage.CARGO_TYPE:
 				return convertCargoTypeToString(eDataType, instanceValue);
+			case CargoPackage.VESSEL_TYPE:
+				return convertVesselTypeToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -228,6 +233,16 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VesselTypeGroup createVesselTypeGroup() {
+		VesselTypeGroupImpl vesselTypeGroup = new VesselTypeGroupImpl();
+		return vesselTypeGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public CargoType createCargoTypeFromString(EDataType eDataType, String initialValue) {
 		CargoType result = CargoType.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
@@ -240,6 +255,26 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	 * @generated
 	 */
 	public String convertCargoTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselType createVesselTypeFromString(EDataType eDataType, String initialValue) {
+		VesselType result = VesselType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertVesselTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

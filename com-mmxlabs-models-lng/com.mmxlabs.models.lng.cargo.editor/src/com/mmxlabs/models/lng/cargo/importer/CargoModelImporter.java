@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselType;
+import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -88,6 +90,27 @@ public class CargoModelImporter implements ISubmodelImporter {
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 
+
+		// Create Special groups
+		if (cargoModel != null) {
+			for (final VesselType type : VesselType.values()) {
+				boolean found = false;
+				for (final VesselTypeGroup g : cargoModel.getVesselTypeGroups()) {
+					if (g.getVesselType().equals(type)) {
+						found = true;
+						break;
+					}
+				}
+				if (found == false) {
+					final VesselTypeGroup g = CargoFactory.eINSTANCE.createVesselTypeGroup();
+					g.setName("All " + type.getName().replaceAll("_", " ") + " Vessels");
+					g.setVesselType(type);
+					cargoModel.getVesselTypeGroups().add(g);
+					context.registerNamedObject(g);
+				}
+			}
+		}
+		
 		if (inputs.containsKey(CARGO_KEY)) {
 			@SuppressWarnings("resource")
 			final CSVReader reader = inputs.get(CARGO_KEY);

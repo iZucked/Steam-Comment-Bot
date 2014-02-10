@@ -326,11 +326,6 @@ public class ProvisionalCargoItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 FleetFactory.eINSTANCE.createVesselTypeGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 FleetFactory.eINSTANCE.createHeelOptions()));
 
 		newChildDescriptors.add
@@ -347,11 +342,6 @@ public class ProvisionalCargoItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
 				 FleetFactory.eINSTANCE.createVesselClassRouteParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.PROVISIONAL_CARGO__PORTFOLIO_MODEL,
-				 FleetFactory.eINSTANCE.createScenarioFleetModel()));
 
 		newChildDescriptors.add
 			(createChildParameter

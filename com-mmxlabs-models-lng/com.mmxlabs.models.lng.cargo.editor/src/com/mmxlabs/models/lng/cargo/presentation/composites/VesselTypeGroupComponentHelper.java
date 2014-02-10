@@ -1,23 +1,23 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
-package com.mmxlabs.models.lng.fleet.presentation.composites;
+package com.mmxlabs.models.lng.cargo.presentation.composites;
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * A component helper for VesselTypeGroup instances
@@ -53,7 +53,7 @@ public class VesselTypeGroupComponentHelper extends BaseComponentHelper {
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, FleetPackage.Literals.VESSEL_TYPE_GROUP);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.VESSEL_TYPE_GROUP);	
 	}
 	
 	/**
@@ -72,6 +72,6 @@ public class VesselTypeGroupComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_vesselTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_TYPE_GROUP__VESSEL_TYPE));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_TYPE_GROUP__VESSEL_TYPE));
 	}
 }

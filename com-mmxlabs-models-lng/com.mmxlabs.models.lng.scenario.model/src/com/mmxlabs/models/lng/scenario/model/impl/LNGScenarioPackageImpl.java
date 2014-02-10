@@ -199,7 +199,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGPortfolioModel_ScenarioFleetModel() {
+	public EReference getLNGPortfolioModel_CargoModel() {
 		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -208,17 +208,8 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getLNGPortfolioModel_CargoModel() {
-		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getLNGPortfolioModel_ScheduleModel() {
-		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(2);
+		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -228,7 +219,7 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 	 * @generated
 	 */
 	public EReference getLNGPortfolioModel_Parameters() {
-		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(3);
+		return (EReference)lngPortfolioModelEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -269,7 +260,6 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		createEReference(lngScenarioModelEClass, LNG_SCENARIO_MODEL__PORTFOLIO_MODEL);
 
 		lngPortfolioModelEClass = createEClass(LNG_PORTFOLIO_MODEL);
-		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__CARGO_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL);
 		createEReference(lngPortfolioModelEClass, LNG_PORTFOLIO_MODEL__PARAMETERS);
@@ -329,7 +319,6 @@ public class LNGScenarioPackageImpl extends EPackageImpl implements LNGScenarioP
 		initEReference(getLNGScenarioModel_PortfolioModel(), this.getLNGPortfolioModel(), null, "portfolioModel", null, 0, 1, LNGScenarioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(lngPortfolioModelEClass, LNGPortfolioModel.class, "LNGPortfolioModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getLNGPortfolioModel_ScenarioFleetModel(), theFleetPackage.getScenarioFleetModel(), null, "scenarioFleetModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGPortfolioModel_CargoModel(), theCargoPackage.getCargoModel(), null, "cargoModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGPortfolioModel_ScheduleModel(), theSchedulePackage.getScheduleModel(), null, "scheduleModel", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getLNGPortfolioModel_Parameters(), theParametersPackage.getOptimiserSettings(), null, "parameters", null, 0, 1, LNGPortfolioModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

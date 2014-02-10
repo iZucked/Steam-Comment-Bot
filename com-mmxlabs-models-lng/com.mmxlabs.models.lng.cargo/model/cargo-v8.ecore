@@ -114,6 +114,8 @@
         eType="#//VesselAvailability" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
         eType="#//VesselEvent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselTypeGroups" upperBound="-1"
+        eType="#//VesselTypeGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotSlot" abstract="true" interface="true"
       eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
@@ -199,5 +201,16 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceHint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VesselType">
+    <eLiterals name="Owned"/>
+    <eLiterals name="Time_Chartered" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselTypeGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselType" lowerBound="1"
+        eType="#//VesselType"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+      <eTypeArguments eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//Vessel"/>
+    </eGenericSuperTypes>
   </eClassifiers>
 </ecore:EPackage>

@@ -10,16 +10,10 @@
         eType="#//BaseFuel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroups" upperBound="-1"
         eType="#//VesselGroup" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="specialVesselGroups" upperBound="-1"
-        eType="#//VesselTypeGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EEnum" name="VesselType">
-    <eLiterals name="Owned"/>
-    <eLiterals name="Time_Chartered" value="1"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Vessel">
     <eOperations name="getVesselOrVesselClassCapacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -125,13 +119,6 @@
       <eTypeArguments eClassifier="#//Vessel"/>
     </eGenericSuperTypes>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselTypeGroup">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselType" lowerBound="1"
-        eType="#//VesselType"/>
-    <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
-      <eTypeArguments eClassifier="#//Vessel"/>
-    </eGenericSuperTypes>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="HeelOptions" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeAvailable" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true">
@@ -196,5 +183,4 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastNBORate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ScenarioFleetModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"/>
 </ecore:EPackage>
