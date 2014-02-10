@@ -129,16 +129,19 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				if (tradesViewer != null) {
 					editorPart.setActivePage(tradesViewerPageNumber);
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
+					return;
 				}
 			} else if (loadSlot != null) {
 				if (tradesViewer != null) {
 					editorPart.setActivePage(tradesViewerPageNumber);
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(loadSlot), true);
+					return;
 				}
 			} else if (dischargeSlot != null) {
 				if (tradesViewer != null) {
 					editorPart.setActivePage(tradesViewerPageNumber);
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(dischargeSlot), true);
+					return;
 				}
 			}
 			
