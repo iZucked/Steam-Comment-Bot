@@ -508,27 +508,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint.port_access"
-                  lang="Java"
-                  mode="Batch"
-                  name="Start / End Port Accessibility"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <description>
-                  The start or end port of a vessel must be compatible with that vessel's class
-               </description>
-               <target
-                     class="VesselAvailability">
-               </target>
-               <target
-                     class="VesselClass">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityVesselConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityVesselConstraint"
                   lang="Java"
@@ -718,6 +697,39 @@
                      class="Cargo">
                </target>
             </constraint></constraints>
+      </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
+         </package>
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
+         </package>
+         <constraints
+               categories=" com.mmxlabs.models.lng.cargo.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint.port_access"
+                  lang="Java"
+                  mode="Batch"
+                  name="Start / End Port Accessibility"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  The start or end port of a vessel must be compatible with that vessel's class
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+         </constraints>
       </constraintProvider>
    </extension>
 

@@ -43,12 +43,6 @@
                      class="VesselClass">
                </target>
                <target
-                     class="CharterOutEvent">
-               </target>
-               <target
-                     class="VesselEvent">
-               </target>
-               <target
                      class="VesselClassRouteParameters">
                </target>
             </constraint>

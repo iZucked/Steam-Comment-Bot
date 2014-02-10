@@ -17,7 +17,7 @@
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
          </package>
          <constraints
                categories=" com.mmxlabs.models.lng.assignment.validation.base">
@@ -149,7 +149,7 @@
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
          </package>
          <constraints
                categories="com.mmxlabs.models.lng.assignment.validation.optimisation">
