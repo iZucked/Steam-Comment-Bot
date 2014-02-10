@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.fleet.ui.valueproviders;
+package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +17,8 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -46,8 +46,8 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 		if (delegate == null)
 			return null;
 		final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
-		if (reference == FleetPackage.eINSTANCE.getVesselAvailability_StartAt() ||
-			reference == FleetPackage.eINSTANCE.getVesselAvailability_EndAt()) {
+		if (reference == CargoPackage.eINSTANCE.getVesselAvailability_StartAt() ||
+			reference == CargoPackage.eINSTANCE.getVesselAvailability_EndAt()) {
 			return new IReferenceValueProvider() {
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {

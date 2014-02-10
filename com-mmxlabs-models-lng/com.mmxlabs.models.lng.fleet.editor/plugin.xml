@@ -95,15 +95,6 @@
     </valueProvider>
  </extension>
  <extension
-       point="com.mmxlabs.models.ui.jointmodeleditors">
-    <jointModelEditor
-          id="com.mmxlabs.models.lng.fleet.editor.jointModelEditorContribution"
-          implementation="com.mmxlabs.models.lng.fleet.ui.editorpart.FleetModelEditorContribution"
-          priority="30"
-          subModelClass="com.mmxlabs.models.lng.fleet.ScenarioFleetModel">
-    </jointModelEditor>
- </extension>
- <extension
        point="com.mmxlabs.models.util.import.submodels">
     <submodelImporter
           ID="com.mmxlabs.models.lng.fleet.editor.fleetModelImporter"
