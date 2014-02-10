@@ -521,12 +521,11 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public String getTimeZone(EAttribute attribute) {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		if (getPort() != null) return getPort().getTimeZone();
+		return "UTC";
 	}
 
 	/**
