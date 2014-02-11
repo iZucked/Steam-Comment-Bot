@@ -4,11 +4,17 @@
  */
 package com.mmxlabs.models.lng.schedule.properties;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -41,26 +47,56 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 
 		// Create standard details
 		createPnLDetailProperty(groupPnL, dp, "Group P&L", "Taxed Group profit and loss", false);
-		
+
 		final DetailProperty preTaxDP = PropertiesFactory.eINSTANCE.createDetailProperty();
 		createPnLDetailProperty(groupPnL, preTaxDP, "Group Pre-Tax P&L", "Group profit and loss", true);
 		dp.getChildren().add(preTaxDP);
 
+		Map<BaseLegalEntity, DetailProperty> entityDetailsPropertiesMap = new HashMap<>();
 		// Per Entity Details
 		for (final EntityProfitAndLoss entityPnL : groupPnL.getEntityProfitAndLosses()) {
-			final DetailProperty entityDP = PropertiesFactory.eINSTANCE.createDetailProperty();
-			createPnLDetailProperty(entityPnL, entityDP, entityPnL.getEntity().getName() + " P&L", "Taxed profit and loss for " + entityPnL.getEntity().getName(), false);
-			dp.getChildren().add(entityDP);
+			final DetailProperty entityDP;
+			BaseLegalEntity entity = entityPnL.getEntity();
+			String name = entity.getName();
+			if (entityDetailsPropertiesMap.containsKey(entity)) {
+				entityDP = entityDetailsPropertiesMap.get(entity);
+			} else {
+				entityDP = PropertiesFactory.eINSTANCE.createDetailProperty();
+				entityDP.setName(name);
+				entityDetailsPropertiesMap.put(entity, entityDP);
+				dp.getChildren().add(entityDP);
+			}
+
+			DetailProperty dpNode = null;
+			BaseEntityBook entityBook = entityPnL.getEntityBook();
+			if (entityBook != null) {
+				final DetailProperty entityBookDP = PropertiesFactory.eINSTANCE.createDetailProperty();
+				entityDP.getChildren().add(entityBookDP);
+
+				if (entityBook.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK) {
+					entityBookDP.setName("Shipping Book");
+				} else if (entityBook.eContainmentFeature() == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+					entityBookDP.setName("Trading Book");
+				}
+				dpNode = entityBookDP;
+			} else {
+				dpNode = entityDP;
+			}
+
+			final DetailProperty entityDPPostTax = PropertiesFactory.eINSTANCE.createDetailProperty();
+
+			createPnLDetailProperty(entityPnL, entityDPPostTax, name + " P&L", "Taxed profit and loss for " + name, false);
+			dpNode.getChildren().add(entityDPPostTax);
 
 			final DetailProperty entityDPPretax = PropertiesFactory.eINSTANCE.createDetailProperty();
-			createPnLDetailProperty(entityPnL, entityDPPretax, entityPnL.getEntity().getName() + " Pre-Tax P&L", "Pre-tax profit and loss for " + entityPnL.getEntity().getName(), true);
-			dp.getChildren().add(entityDPPretax);
+			createPnLDetailProperty(entityPnL, entityDPPretax, name + " Pre-Tax P&L", "Pre-tax profit and loss for " + name, true);
+			dpNode.getChildren().add(entityDPPretax);
 
-//			entityDP.setName(entityPnL.getEntity().getName() + " Profit and Loss");
-//			entityDP.setDescription("Taxed Profit and Loss for " + entityPnL.getEntity().getName());
-//			entityDP.setUnitsPrefix("$");
-//			entityDP.setObject(entityPnL.getProfitAndLoss());
-//			entityDP.setLabelProvider(new StringFormatLabelProvider("%,d"));
+			// entityDP.setName(entityPnL.getEntity().getName() + " Profit and Loss");
+			// entityDP.setDescription("Taxed Profit and Loss for " + entityPnL.getEntity().getName());
+			// entityDP.setUnitsPrefix("$");
+			// entityDP.setObject(entityPnL.getProfitAndLoss());
+			// entityDP.setLabelProvider(new StringFormatLabelProvider("%,d"));
 
 		}
 
@@ -81,9 +117,7 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 
 	}
 
-	private void createPnLDetailProperty(
-			final GroupProfitAndLoss groupPnL,
-			final DetailProperty dp, String name, String description, boolean pretax) {
+	private void createPnLDetailProperty(final GroupProfitAndLoss groupPnL, final DetailProperty dp, String name, String description, boolean pretax) {
 		dp.setName(name);
 		dp.setDescription(description);
 		dp.setUnitsPrefix("$");
@@ -91,9 +125,7 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 		dp.setLabelProvider(new StringFormatLabelProvider("%,d"));
 	}
 
-	private void createPnLDetailProperty(
-			final EntityProfitAndLoss entityPnL,
-			final DetailProperty dp, String name, String description, boolean pretax) {
+	private void createPnLDetailProperty(final EntityProfitAndLoss entityPnL, final DetailProperty dp, String name, String description, boolean pretax) {
 		dp.setName(name);
 		dp.setDescription(description);
 		dp.setUnitsPrefix("$");

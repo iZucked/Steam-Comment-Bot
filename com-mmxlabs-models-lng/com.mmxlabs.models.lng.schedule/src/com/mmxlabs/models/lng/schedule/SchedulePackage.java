@@ -3846,6 +3846,15 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS__ENTITY = 0;
 
 	/**
+	 * The feature id for the '<em><b>Entity Book</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK = 1;
+
+	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3853,7 +3862,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 1;
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
@@ -3863,7 +3872,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 2;
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 3;
 
 	/**
 	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
@@ -3873,7 +3882,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 3;
+	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
@@ -5188,6 +5197,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getEntityProfitAndLoss_Entity();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntityBook <em>Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity Book</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntityBook()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EReference getEntityProfitAndLoss_EntityBook();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -6285,6 +6305,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ENTITY_PROFIT_AND_LOSS__ENTITY = eINSTANCE.getEntityProfitAndLoss_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity Book</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK = eINSTANCE.getEntityProfitAndLoss_EntityBook();
 
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.

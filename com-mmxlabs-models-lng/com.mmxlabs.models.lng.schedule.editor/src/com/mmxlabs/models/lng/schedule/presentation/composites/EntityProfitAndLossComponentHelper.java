@@ -65,6 +65,7 @@ public class EntityProfitAndLossComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
+		add_entityBookEditor(detailComposite, topClass);
 		add_profitAndLossEditor(detailComposite, topClass);
 		add_profitAndLossPreTaxEditor(detailComposite, topClass);
 	}
@@ -76,6 +77,15 @@ public class EntityProfitAndLossComponentHelper extends BaseComponentHelper {
 	protected void add_entityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY));
 	}
+	/**
+	 * Create the editor for the entityBook feature on EntityProfitAndLoss
+	 *
+	 * @generated
+	 */
+	protected void add_entityBookEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK));
+	}
+
 	/**
 	 * Create the editor for the profitAndLoss feature on EntityProfitAndLoss
 	 *

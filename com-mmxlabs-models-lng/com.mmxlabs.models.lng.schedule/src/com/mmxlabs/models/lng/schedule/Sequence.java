@@ -61,7 +61,7 @@ public interface Sequence extends MMXObject {
 	 * @return the value of the '<em>Vessel Availability</em>' reference.
 	 * @see #isSetVesselAvailability()
 	 * @see #unsetVesselAvailability()
-	 * @see #setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability)
+	 * @see #setVesselAvailability(VesselAvailability)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_VesselAvailability()
 	 * @model unsettable="true" required="true"
 	 * @generated
@@ -78,7 +78,7 @@ public interface Sequence extends MMXObject {
 	 * @see #getVesselAvailability()
 	 * @generated
 	 */
-	void setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability value);
+	void setVesselAvailability(VesselAvailability value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
@@ -87,7 +87,7 @@ public interface Sequence extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @see #isSetVesselAvailability()
 	 * @see #getVesselAvailability()
-	 * @see #setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability)
+	 * @see #setVesselAvailability(VesselAvailability)
 	 * @generated
 	 */
 	void unsetVesselAvailability();
@@ -100,7 +100,7 @@ public interface Sequence extends MMXObject {
 	 * @return whether the value of the '<em>Vessel Availability</em>' reference is set.
 	 * @see #unsetVesselAvailability()
 	 * @see #getVesselAvailability()
-	 * @see #setVesselAvailability(com.mmxlabs.models.lng.cargo.VesselAvailability)
+	 * @see #setVesselAvailability(VesselAvailability)
 	 * @generated
 	 */
 	boolean isSetVesselAvailability();

@@ -65,6 +65,7 @@ public class EntityProfitAndLossItemProvider
 			super.getPropertyDescriptors(object);
 
 			addEntityPropertyDescriptor(object);
+			addEntityBookPropertyDescriptor(object);
 			addProfitAndLossPropertyDescriptor(object);
 			addProfitAndLossPreTaxPropertyDescriptor(object);
 		}
@@ -85,6 +86,28 @@ public class EntityProfitAndLossItemProvider
 				 getString("_UI_EntityProfitAndLoss_entity_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_EntityProfitAndLoss_entity_feature", "_UI_EntityProfitAndLoss_type"),
 				 SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Entity Book feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEntityBookPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EntityProfitAndLoss_entityBook_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EntityProfitAndLoss_entityBook_feature", "_UI_EntityProfitAndLoss_type"),
+				 SchedulePackage.Literals.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK,
 				 true,
 				 false,
 				 true,

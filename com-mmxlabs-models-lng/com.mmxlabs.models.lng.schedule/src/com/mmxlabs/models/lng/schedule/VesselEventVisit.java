@@ -31,7 +31,7 @@ public interface VesselEventVisit extends Event, PortVisit, ProfitAndLossContain
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Event</em>' reference.
-	 * @see #setVesselEvent(com.mmxlabs.models.lng.cargo.VesselEvent)
+	 * @see #setVesselEvent(VesselEvent)
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getVesselEventVisit_VesselEvent()
 	 * @model required="true"
 	 * @generated
@@ -46,7 +46,7 @@ public interface VesselEventVisit extends Event, PortVisit, ProfitAndLossContain
 	 * @see #getVesselEvent()
 	 * @generated
 	 */
-	void setVesselEvent(com.mmxlabs.models.lng.cargo.VesselEvent value);
+	void setVesselEvent(VesselEvent value);
 
 } // end of  VesselEventVisit
 

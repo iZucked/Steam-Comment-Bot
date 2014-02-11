@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.schedule;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.ecore.EObject;
 
@@ -19,6 +20,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntityBook <em>Entity Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}</li>
  * </ul>
@@ -54,6 +56,32 @@ public interface EntityProfitAndLoss extends EObject {
 	 * @generated
 	 */
 	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Entity Book</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Entity Book</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Entity Book</em>' reference.
+	 * @see #setEntityBook(BaseEntityBook)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEntityProfitAndLoss_EntityBook()
+	 * @model
+	 * @generated
+	 */
+	BaseEntityBook getEntityBook();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntityBook <em>Entity Book</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Entity Book</em>' reference.
+	 * @see #getEntityBook()
+	 * @generated
+	 */
+	void setEntityBook(BaseEntityBook value);
 
 	/**
 	 * Returns the value of the '<em><b>Profit And Loss</b></em>' attribute.
