@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -348,26 +349,28 @@ public class TradingExporterExtension implements IExporterExtension {
 
 		final Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
 
-		final Map<BaseLegalEntity, int[]> groupProfitMap = new HashMap<BaseLegalEntity, int[]>();
+		final Map<BaseEntityBook, int[]> groupProfitMap = new HashMap<BaseEntityBook, int[]>();
 
 		// We may see the same entity multiple times - so aggregate results
 		for (final IProfitAndLossEntry entry : entries) {
 
-			final BaseLegalEntity entity = entities.getModelObject(entry.getEntity(), BaseLegalEntity.class);
+//			final BaseLegalEntity entity = entities.getModelObject(entry.getEntityBook().getEntity(), BaseLegalEntity.class);
+			final BaseEntityBook entityBook = entities.getModelObject(entry.getEntityBook(), BaseEntityBook.class);
 			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
 			int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
 
-			if (!groupProfitMap.containsKey(entity)) {
-				groupProfitMap.put(entity, new int[2]);
+			if (!groupProfitMap.containsKey(entityBook)) {
+				groupProfitMap.put(entityBook, new int[2]);
 			}
-			groupProfitMap.get(entity)[0] += groupProfit;
-			groupProfitMap.get(entity)[1] += groupProfitPreTax;
+			groupProfitMap.get(entityBook)[0] += groupProfit;
+			groupProfitMap.get(entityBook)[1] += groupProfitPreTax;
 		}
 		// Now create output data on the unique set.
-		for (final Map.Entry<BaseLegalEntity, int[]> e : groupProfitMap.entrySet()) {
+		for (final Map.Entry<BaseEntityBook, int[]> e : groupProfitMap.entrySet()) {
 
 			final EntityProfitAndLoss streamData = ScheduleFactory.eINSTANCE.createEntityProfitAndLoss();
-			streamData.setEntity(e.getKey());
+			streamData.setEntity((BaseLegalEntity) e.getKey().eContainer());
+			streamData.setEntityBook(e.getKey());
 			final int groupValue = e.getValue()[0];
 			final int groupValuePreTax = e.getValue()[1];
 

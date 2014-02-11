@@ -74,21 +74,22 @@ public class EntityTransformerExtension implements ITransformerExtension {
 
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
+			IEntity entity = modelEntityMap.getOptimiserObject(e, IEntity.class);
 			if (e.getShippingBook() instanceof SimpleEntityBook) {
 				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getShippingBook();
 				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateAndCurveHelper, modelEntityMap.getEarliestDate());
-				final IEntityBook book = new DefaultEntityBook(EntityBookType.Shipping, taxCurve);
+				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Shipping, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);
-				entityProvider.setEntityBook(modelEntityMap.getOptimiserObject(e, IEntity.class), EntityBookType.Shipping, book);
+				entityProvider.setEntityBook(entity, EntityBookType.Shipping, book);
 			}
 			if (e.getTradingBook() instanceof SimpleEntityBook) {
 				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getTradingBook();
 				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateAndCurveHelper, modelEntityMap.getEarliestDate());
-				final IEntityBook book = new DefaultEntityBook(EntityBookType.Shipping, taxCurve);
+				final IEntityBook book = new DefaultEntityBook(entity, EntityBookType.Shipping, taxCurve);
 				injector.injectMembers(book);
 				modelEntityMap.addModelObject(simpleBook, book);
-				entityProvider.setEntityBook(modelEntityMap.getOptimiserObject(e, IEntity.class), EntityBookType.Trading, book);
+				entityProvider.setEntityBook(entity, EntityBookType.Trading, book);
 			}
 		}
 
