@@ -241,6 +241,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		if (shippingEntity == null) {
 			shippingEntity = baseEntity;
 		}
+		seenEntities.add(shippingEntity);
 
 		// Calculate the value for the fitness function
 		assert baseEntity != null;
