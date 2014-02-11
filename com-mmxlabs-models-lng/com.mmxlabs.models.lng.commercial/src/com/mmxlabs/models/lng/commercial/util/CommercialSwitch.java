@@ -178,6 +178,23 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.BASE_ENTITY_BOOK: {
+				BaseEntityBook baseEntityBook = (BaseEntityBook)theEObject;
+				T result = caseBaseEntityBook(baseEntityBook);
+				if (result == null) result = caseUUIDObject(baseEntityBook);
+				if (result == null) result = caseMMXObject(baseEntityBook);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.SIMPLE_ENTITY_BOOK: {
+				SimpleEntityBook simpleEntityBook = (SimpleEntityBook)theEObject;
+				T result = caseSimpleEntityBook(simpleEntityBook);
+				if (result == null) result = caseBaseEntityBook(simpleEntityBook);
+				if (result == null) result = caseUUIDObject(simpleEntityBook);
+				if (result == null) result = caseMMXObject(simpleEntityBook);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -362,6 +379,36 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseVolumeParams(VolumeParams object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Base Entity Book</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Base Entity Book</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBaseEntityBook(BaseEntityBook object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple Entity Book</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple Entity Book</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleEntityBook(SimpleEntityBook object) {
 		return null;
 	}
 

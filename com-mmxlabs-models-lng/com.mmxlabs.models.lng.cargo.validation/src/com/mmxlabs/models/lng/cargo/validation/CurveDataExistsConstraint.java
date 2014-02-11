@@ -164,13 +164,14 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 			}
 
 			// check entity tax rates
-			if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
+			if (entity != null && !curveCovers(date, taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
 				String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
 				final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
-				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
+				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+				dsd.addEObjectAndFeature(entity.getTradingBook(), CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES);
 				failures.add(dsd);
 			}
 		}

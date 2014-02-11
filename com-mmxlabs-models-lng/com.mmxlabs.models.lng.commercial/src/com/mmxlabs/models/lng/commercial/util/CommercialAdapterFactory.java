@@ -128,6 +128,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createVolumeParamsAdapter();
 			}
 			@Override
+			public Adapter caseBaseEntityBook(BaseEntityBook object) {
+				return createBaseEntityBookAdapter();
+			}
+			@Override
+			public Adapter caseSimpleEntityBook(SimpleEntityBook object) {
+				return createSimpleEntityBookAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -327,6 +335,34 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVolumeParamsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BaseEntityBook <em>Base Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.BaseEntityBook
+	 * @generated
+	 */
+	public Adapter createBaseEntityBookAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SimpleEntityBook <em>Simple Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleEntityBook
+	 * @generated
+	 */
+	public Adapter createSimpleEntityBookAdapter() {
 		return null;
 	}
 

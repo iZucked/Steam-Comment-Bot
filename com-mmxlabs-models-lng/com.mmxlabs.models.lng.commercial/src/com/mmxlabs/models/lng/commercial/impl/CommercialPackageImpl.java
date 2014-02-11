@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.VolumeParams;
@@ -121,6 +123,20 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass volumeParamsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass baseEntityBookEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass simpleEntityBookEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -243,8 +259,17 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getBaseLegalEntity_TaxRates() {
+	public EReference getBaseLegalEntity_ShippingBook() {
 		return (EReference)baseLegalEntityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBaseLegalEntity_TradingBook() {
+		return (EReference)baseLegalEntityEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -554,6 +579,33 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBaseEntityBook() {
+		return baseEntityBookEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBaseEntityBook_TaxRates() {
+		return (EReference)baseEntityBookEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSimpleEntityBook() {
+		return simpleEntityBookEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -597,7 +649,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(commercialModelEClass, COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
 
 		baseLegalEntityEClass = createEClass(BASE_LEGAL_ENTITY);
-		createEReference(baseLegalEntityEClass, BASE_LEGAL_ENTITY__TAX_RATES);
+		createEReference(baseLegalEntityEClass, BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+		createEReference(baseLegalEntityEClass, BASE_LEGAL_ENTITY__TRADING_BOOK);
 
 		legalEntityEClass = createEClass(LEGAL_ENTITY);
 
@@ -640,6 +693,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractExpressionMapEntryEClass, CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION);
 
 		volumeParamsEClass = createEClass(VOLUME_PARAMS);
+
+		baseEntityBookEClass = createEClass(BASE_ENTITY_BOOK);
+		createEReference(baseEntityBookEClass, BASE_ENTITY_BOOK__TAX_RATES);
+
+		simpleEntityBookEClass = createEClass(SIMPLE_ENTITY_BOOK);
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
@@ -689,6 +747,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		lngPriceCalculatorParametersEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		expressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 		slotContractParamsEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		baseEntityBookEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		simpleEntityBookEClass.getESuperTypes().add(this.getBaseEntityBook());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -697,7 +757,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getCommercialModel_PurchaseContracts(), this.getPurchaseContract(), null, "purchaseContracts", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseLegalEntityEClass, BaseLegalEntity.class, "BaseLegalEntity", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getBaseLegalEntity_TaxRates(), this.getTaxRate(), null, "taxRates", null, 0, -1, BaseLegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseLegalEntity_ShippingBook(), this.getBaseEntityBook(), null, "shippingBook", null, 0, 1, BaseLegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBaseLegalEntity_TradingBook(), this.getBaseEntityBook(), null, "tradingBook", null, 0, 1, BaseLegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(legalEntityEClass, LegalEntity.class, "LegalEntity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -746,6 +807,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContractExpressionMapEntry_Expression(), ecorePackage.getEString(), "expression", null, 0, 1, ContractExpressionMapEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(volumeParamsEClass, VolumeParams.class, "VolumeParams", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(baseEntityBookEClass, BaseEntityBook.class, "BaseEntityBook", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBaseEntityBook_TaxRates(), this.getTaxRate(), null, "taxRates", null, 0, -1, BaseEntityBook.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(simpleEntityBookEClass, SimpleEntityBook.class, "SimpleEntityBook", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(contractTypeEEnum, ContractType.class, "ContractType");

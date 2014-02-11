@@ -75,7 +75,7 @@
             </constraint>
 
             <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.EntityTaxRateRangeConstraint"
+                  class="com.mmxlabs.models.lng.commercial.validation.EntityBookTaxRateRangeConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.EntityTaxRateRangeConstraint"
                   isEnabledByDefault="true"
                   lang="Java"
@@ -87,7 +87,7 @@
                   {0}
                </message>
                <target
-                     class="LegalEntity">
+                     class="BaseEntityBook">
                </target>
             </constraint>
 

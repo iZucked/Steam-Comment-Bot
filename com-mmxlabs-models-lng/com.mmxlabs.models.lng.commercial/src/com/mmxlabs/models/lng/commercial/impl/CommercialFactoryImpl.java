@@ -74,6 +74,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.TAX_RATE: return createTaxRate();
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
 			case CommercialPackage.CONTRACT_EXPRESSION_MAP_ENTRY: return createContractExpressionMapEntry();
+			case CommercialPackage.BASE_ENTITY_BOOK: return createBaseEntityBook();
+			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -191,6 +193,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public ContractExpressionMapEntry createContractExpressionMapEntry() {
 		ContractExpressionMapEntryImpl contractExpressionMapEntry = new ContractExpressionMapEntryImpl();
 		return contractExpressionMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseEntityBook createBaseEntityBook() {
+		BaseEntityBookImpl baseEntityBook = new BaseEntityBookImpl();
+		return baseEntityBook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SimpleEntityBook createSimpleEntityBook() {
+		SimpleEntityBookImpl simpleEntityBook = new SimpleEntityBookImpl();
+		return simpleEntityBook;
 	}
 
 	/**

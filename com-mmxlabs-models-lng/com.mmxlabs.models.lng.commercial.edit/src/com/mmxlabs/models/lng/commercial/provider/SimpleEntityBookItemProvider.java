@@ -1,32 +1,31 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.provider;
 
 
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
+
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.LegalEntity} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleEntityBook} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class LegalEntityItemProvider
-	extends BaseLegalEntityItemProvider
+public class SimpleEntityBookItemProvider
+	extends BaseEntityBookItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -39,7 +38,7 @@ public class LegalEntityItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntityItemProvider(AdapterFactory adapterFactory) {
+	public SimpleEntityBookItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -59,28 +58,28 @@ public class LegalEntityItemProvider
 	}
 
 	/**
-	 * This returns LegalEntity.gif.
+	 * This returns SimpleEntityBook.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LegalEntity"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleEntityBook"));
 	}
 
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LegalEntity)object).getName();
+		String label = ((SimpleEntityBook)object).getUuid();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LegalEntity_type") :
-			label;
+			getString("_UI_SimpleEntityBook_type") :
+			getString("_UI_SimpleEntityBook_type") + " " + label;
 	}
 
 	/**
@@ -106,29 +105,6 @@ public class LegalEntityItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ||
-			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

@@ -4,7 +4,6 @@ package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -14,7 +13,8 @@ import org.eclipse.emf.common.util.EList;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTaxRates <em>Tax Rates</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook <em>Shipping Book</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}</li>
  * </ul>
  * </p>
  *
@@ -25,18 +25,54 @@ import org.eclipse.emf.common.util.EList;
 public interface BaseLegalEntity extends UUIDObject, NamedObject {
 
 	/**
-	 * Returns the value of the '<em><b>Tax Rates</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.TaxRate}.
+	 * Returns the value of the '<em><b>Shipping Book</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Tax Rates</em>' containment reference list isn't clear,
+	 * If the meaning of the '<em>Shipping Book</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Tax Rates</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity_TaxRates()
+	 * @return the value of the '<em>Shipping Book</em>' containment reference.
+	 * @see #setShippingBook(BaseEntityBook)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity_ShippingBook()
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<TaxRate> getTaxRates();
+	BaseEntityBook getShippingBook();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook <em>Shipping Book</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Shipping Book</em>' containment reference.
+	 * @see #getShippingBook()
+	 * @generated
+	 */
+	void setShippingBook(BaseEntityBook value);
+
+	/**
+	 * Returns the value of the '<em><b>Trading Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Trading Book</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Trading Book</em>' containment reference.
+	 * @see #setTradingBook(BaseEntityBook)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getBaseLegalEntity_TradingBook()
+	 * @model containment="true"
+	 * @generated
+	 */
+	BaseEntityBook getTradingBook();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Trading Book</em>' containment reference.
+	 * @see #getTradingBook()
+	 * @generated
+	 */
+	void setTradingBook(BaseEntityBook value);
 } // BaseLegalEntity

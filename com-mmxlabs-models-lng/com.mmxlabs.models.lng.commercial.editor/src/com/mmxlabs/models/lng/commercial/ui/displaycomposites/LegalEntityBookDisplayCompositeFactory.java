@@ -19,17 +19,17 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
-public class LegalEntityDisplayCompositeFactory implements IDisplayCompositeFactory {
+public class LegalEntityBookDisplayCompositeFactory implements IDisplayCompositeFactory {
 	final IDisplayCompositeFactory defaultFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(EcorePackage.eINSTANCE.getEObject());
 
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
-		return new BaseLegalEntityTopLevelComposite(composite, SWT.NONE, dialogContext, toolkit);
+		return defaultFactory.createToplevelComposite(composite, eClass, dialogContext, toolkit);
 	}
 
 	@Override
 	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, IDialogEditingContext dialogContext, final FormToolkit toolkit) {
-		return defaultFactory.createSublevelComposite(composite, eClass, dialogContext, toolkit);
+		return new LegalEntityBookDetailComposite(composite, SWT.NONE, toolkit);
 	}
 
 	@Override

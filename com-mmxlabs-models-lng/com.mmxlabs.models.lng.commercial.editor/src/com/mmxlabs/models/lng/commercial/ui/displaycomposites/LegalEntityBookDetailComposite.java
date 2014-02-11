@@ -51,9 +51,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
@@ -69,13 +69,13 @@ import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
  * @author hinton
  * 
  */
-public class LegalEntityDetailComposite extends Composite implements IDisplayComposite {
+public class LegalEntityBookDetailComposite extends Composite implements IDisplayComposite {
 	private DefaultDetailComposite delegate;
 	private ICommandHandler commandHandler;
 	private TableViewer tableViewer;
 	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	private static EStructuralFeature editedAttribute = CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES;
+	private static EStructuralFeature editedAttribute = CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES;
 	private static EAttribute[] columnFeatures = { CommercialPackage.Literals.TAX_RATE__DATE, CommercialPackage.Literals.TAX_RATE__VALUE };
 	private static EAttribute column1Feature = columnFeatures[0];
 	private static EAttribute column2Feature = columnFeatures[1];
@@ -84,7 +84,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 
 	private EObject target;
 
-	public LegalEntityDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
+	public LegalEntityBookDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
 		toolkit.adapt(this);
 		setLayout(new GridLayout(1, false));
@@ -218,7 +218,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 			}
 		});
 
-		LegalEntityDetailComposite.this.tableViewer = tableViewer;
+		LegalEntityBookDetailComposite.this.tableViewer = tableViewer;
 		tableViewer.setContentProvider(new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -232,7 +232,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
-				final TaxRate[] things = ((LegalEntity) inputElement).getTaxRates().toArray(new TaxRate[0]);
+				final TaxRate[] things = ((BaseEntityBook) inputElement).getTaxRates().toArray(new TaxRate[0]);
 				Arrays.sort(things, new Comparator<TaxRate>() {
 
 					@Override
@@ -316,7 +316,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 		return this;
 	}
 
-	LegalEntity oldValue = null;
+	BaseEntityBook oldValue = null;
 	final Adapter adapter = new MMXContentAdapter() {
 
 		@Override
@@ -325,7 +325,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 				if (tableViewer != null && tableViewer.getTable().isDisposed() == false)
 					tableViewer.refresh();
 			} else {
-				LegalEntityDetailComposite.this.removeAdapter();
+				LegalEntityBookDetailComposite.this.removeAdapter();
 			}
 		}
 
@@ -344,7 +344,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 		delegate.display(dialogContext, root, value, range, dbc);
 		tableViewer.setInput(value);
 		removeAdapter();
-		oldValue = (LegalEntity) value;
+		oldValue = (BaseEntityBook) value;
 		value.eAdapters().add(adapter);
 	}
 

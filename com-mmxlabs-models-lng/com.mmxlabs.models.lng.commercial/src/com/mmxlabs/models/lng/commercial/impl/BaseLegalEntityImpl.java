@@ -2,26 +2,22 @@
  */
 package com.mmxlabs.models.lng.commercial.impl;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 
-import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
-import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,7 +27,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getTaxRates <em>Tax Rates</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getShippingBook <em>Shipping Book</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl#getTradingBook <em>Trading Book</em>}</li>
  * </ul>
  * </p>
  *
@@ -59,14 +56,24 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getTaxRates() <em>Tax Rates</em>}' containment reference list.
+	 * The cached value of the '{@link #getShippingBook() <em>Shipping Book</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTaxRates()
+	 * @see #getShippingBook()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<TaxRate> taxRates;
+	protected BaseEntityBook shippingBook;
+
+	/**
+	 * The cached value of the '{@link #getTradingBook() <em>Trading Book</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTradingBook()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseEntityBook tradingBook;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -113,11 +120,85 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<TaxRate> getTaxRates() {
-		if (taxRates == null) {
-			taxRates = new EObjectContainmentEList<TaxRate>(TaxRate.class, this, CommercialPackage.BASE_LEGAL_ENTITY__TAX_RATES);
+	public BaseEntityBook getShippingBook() {
+		return shippingBook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetShippingBook(BaseEntityBook newShippingBook, NotificationChain msgs) {
+		BaseEntityBook oldShippingBook = shippingBook;
+		shippingBook = newShippingBook;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK, oldShippingBook, newShippingBook);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
-		return taxRates;
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setShippingBook(BaseEntityBook newShippingBook) {
+		if (newShippingBook != shippingBook) {
+			NotificationChain msgs = null;
+			if (shippingBook != null)
+				msgs = ((InternalEObject)shippingBook).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK, null, msgs);
+			if (newShippingBook != null)
+				msgs = ((InternalEObject)newShippingBook).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK, null, msgs);
+			msgs = basicSetShippingBook(newShippingBook, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK, newShippingBook, newShippingBook));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseEntityBook getTradingBook() {
+		return tradingBook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetTradingBook(BaseEntityBook newTradingBook, NotificationChain msgs) {
+		BaseEntityBook oldTradingBook = tradingBook;
+		tradingBook = newTradingBook;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK, oldTradingBook, newTradingBook);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setTradingBook(BaseEntityBook newTradingBook) {
+		if (newTradingBook != tradingBook) {
+			NotificationChain msgs = null;
+			if (tradingBook != null)
+				msgs = ((InternalEObject)tradingBook).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK, null, msgs);
+			if (newTradingBook != null)
+				msgs = ((InternalEObject)newTradingBook).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK, null, msgs);
+			msgs = basicSetTradingBook(newTradingBook, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK, newTradingBook, newTradingBook));
 	}
 
 	/**
@@ -128,8 +209,10 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case CommercialPackage.BASE_LEGAL_ENTITY__TAX_RATES:
-				return ((InternalEList<?>)getTaxRates()).basicRemove(otherEnd, msgs);
+			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
+				return basicSetShippingBook(null, msgs);
+			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
+				return basicSetTradingBook(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -144,8 +227,10 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 		switch (featureID) {
 			case CommercialPackage.BASE_LEGAL_ENTITY__NAME:
 				return getName();
-			case CommercialPackage.BASE_LEGAL_ENTITY__TAX_RATES:
-				return getTaxRates();
+			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
+				return getShippingBook();
+			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
+				return getTradingBook();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -162,9 +247,11 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 			case CommercialPackage.BASE_LEGAL_ENTITY__NAME:
 				setName((String)newValue);
 				return;
-			case CommercialPackage.BASE_LEGAL_ENTITY__TAX_RATES:
-				getTaxRates().clear();
-				getTaxRates().addAll((Collection<? extends TaxRate>)newValue);
+			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
+				setShippingBook((BaseEntityBook)newValue);
+				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
+				setTradingBook((BaseEntityBook)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -181,8 +268,11 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 			case CommercialPackage.BASE_LEGAL_ENTITY__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case CommercialPackage.BASE_LEGAL_ENTITY__TAX_RATES:
-				getTaxRates().clear();
+			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
+				setShippingBook((BaseEntityBook)null);
+				return;
+			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
+				setTradingBook((BaseEntityBook)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -198,8 +288,10 @@ public abstract class BaseLegalEntityImpl extends UUIDObjectImpl implements Base
 		switch (featureID) {
 			case CommercialPackage.BASE_LEGAL_ENTITY__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CommercialPackage.BASE_LEGAL_ENTITY__TAX_RATES:
-				return taxRates != null && !taxRates.isEmpty();
+			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
+				return shippingBook != null;
+			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
+				return tradingBook != null;
 		}
 		return super.eIsSet(featureID);
 	}

@@ -20,13 +20,14 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class EntityTaxRateRangeConstraint extends AbstractModelConstraint  {
+public class EntityBookTaxRateRangeConstraint extends AbstractModelConstraint  {
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Override
@@ -34,15 +35,16 @@ public class EntityTaxRateRangeConstraint extends AbstractModelConstraint  {
 		final EObject target = ctx.getTarget();
 		final List<IStatus> failures = new LinkedList<IStatus>();
 
-		if (target instanceof LegalEntity) {
-			final LegalEntity entity = (LegalEntity) target;
-			final EList<TaxRate> rates = entity.getTaxRates();
+		if (target instanceof BaseEntityBook) {
+			final BaseEntityBook entityBook = (BaseEntityBook) target;
+			final EList<TaxRate> rates = entityBook.getTaxRates();
 			
+			String entityName = ((BaseLegalEntity) entityBook.eContainer()).getName();
 			// if there are no tax rates, raise a validation error and do not check any more problems 
 			if (rates.isEmpty()) {
-				String failureMessage = String.format("Entity '%s' has no tax data", entity.getName());
+				String failureMessage = String.format("Entity '%s' has no tax data", entityName);
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-				dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
+				dsd.addEObjectAndFeature(entityBook, CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES);
 				return dsd;				
 			}
 
@@ -60,9 +62,9 @@ public class EntityTaxRateRangeConstraint extends AbstractModelConstraint  {
 				Integer count = entry.getValue();
 				String date = entry.getKey();
 				if (entry.getValue() > 1) {
-					String failureMessage = String.format("Entity '%s' has %d tax rate entries for the date '%s'.", entity.getName(), count, date);
+					String failureMessage = String.format("Entity '%s' has %d tax rate entries for the date '%s'.", entityName, count, date);
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-					dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
+					dsd.addEObjectAndFeature(entityBook, CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES);
 					failures.add(dsd);									
 				}
 			}					

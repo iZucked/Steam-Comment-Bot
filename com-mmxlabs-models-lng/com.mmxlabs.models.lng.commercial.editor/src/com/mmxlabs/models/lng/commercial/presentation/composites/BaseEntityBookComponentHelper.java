@@ -19,11 +19,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 /**
- * A component helper for BaseLegalEntity instances
+ * A component helper for BaseEntityBook instances
  *
  * @generated
  */
-public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
+public class BaseEntityBookComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -31,7 +31,7 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public BaseLegalEntityComponentHelper() {
+	public BaseEntityBookComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -40,20 +40,19 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public BaseLegalEntityComponentHelper(IAdapterManager adapterManager) {
+	public BaseEntityBookComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using BaseLegalEntity as the supertype
+	 * add editors to a composite, using BaseEntityBook as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.BASE_LEGAL_ENTITY);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.BASE_ENTITY_BOOK);	
 	}
 	
 	/**
@@ -64,25 +63,14 @@ public class BaseLegalEntityComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_shippingBookEditor(detailComposite, topClass);
-		add_tradingBookEditor(detailComposite, topClass);
+		add_taxRatesEditor(detailComposite, topClass);
 	}
-
 	/**
-	 * Create the editor for the shippingBook feature on BaseLegalEntity
+	 * Create the editor for the taxRates feature on BaseEntityBook
 	 *
 	 * @generated
 	 */
-	protected void add_shippingBookEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK));
-	}
-
-	/**
-	 * Create the editor for the tradingBook feature on BaseLegalEntity
-	 *
-	 * @generated
-	 */
-	protected void add_tradingBookEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK));
+	protected void add_taxRatesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES));
 	}
 }

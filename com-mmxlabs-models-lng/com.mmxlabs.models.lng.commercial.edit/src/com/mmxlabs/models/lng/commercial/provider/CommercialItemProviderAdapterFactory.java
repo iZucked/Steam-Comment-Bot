@@ -276,6 +276,52 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.BaseEntityBook} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BaseEntityBookItemProvider baseEntityBookItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.BaseEntityBook}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBaseEntityBookAdapter() {
+		if (baseEntityBookItemProvider == null) {
+			baseEntityBookItemProvider = new BaseEntityBookItemProvider(this);
+		}
+
+		return baseEntityBookItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleEntityBook} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimpleEntityBookItemProvider simpleEntityBookItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleEntityBook}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimpleEntityBookAdapter() {
+		if (simpleEntityBookItemProvider == null) {
+			simpleEntityBookItemProvider = new SimpleEntityBookItemProvider(this);
+		}
+
+		return simpleEntityBookItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -412,6 +458,8 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (taxRateItemProvider != null) taxRateItemProvider.dispose();
 		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
 		if (contractExpressionMapEntryItemProvider != null) contractExpressionMapEntryItemProvider.dispose();
+		if (baseEntityBookItemProvider != null) baseEntityBookItemProvider.dispose();
+		if (simpleEntityBookItemProvider != null) simpleEntityBookItemProvider.dispose();
 	}
 
 }

@@ -11,6 +11,8 @@
         eType="#//PurchaseContract" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseLegalEntity" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taxRates" upperBound="-1"
+        eType="#//TaxRate" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="shippingBook" eType="#//BaseEntityBook"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tradingBook" eType="#//BaseEntityBook"

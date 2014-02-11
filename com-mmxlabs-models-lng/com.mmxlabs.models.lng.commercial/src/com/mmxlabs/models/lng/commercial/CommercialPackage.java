@@ -162,13 +162,22 @@ public interface CommercialPackage extends EPackage {
 	int BASE_LEGAL_ENTITY__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Shipping Book</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_LEGAL_ENTITY__TAX_RATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int BASE_LEGAL_ENTITY__SHIPPING_BOOK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Trading Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__TRADING_BOOK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Base Legal Entity</em>' class.
@@ -177,7 +186,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -217,14 +226,22 @@ public interface CommercialPackage extends EPackage {
 	int LEGAL_ENTITY__NAME = BASE_LEGAL_ENTITY__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Shipping Book</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY__TAX_RATES = BASE_LEGAL_ENTITY__TAX_RATES;
+	int LEGAL_ENTITY__SHIPPING_BOOK = BASE_LEGAL_ENTITY__SHIPPING_BOOK;
+
+	/**
+	 * The feature id for the '<em><b>Trading Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__TRADING_BOOK = BASE_LEGAL_ENTITY__TRADING_BOOK;
 
 	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
@@ -995,6 +1012,98 @@ public interface CommercialPackage extends EPackage {
 	int VOLUME_PARAMS_FEATURE_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl <em>Base Entity Book</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBaseEntityBook()
+	 * @generated
+	 */
+	int BASE_ENTITY_BOOK = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK__TAX_RATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Base Entity Book</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl <em>Simple Entity Book</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleEntityBook()
+	 * @generated
+	 */
+	int SIMPLE_ENTITY_BOOK = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK__EXTENSIONS = BASE_ENTITY_BOOK__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK__UUID = BASE_ENTITY_BOOK__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK__TAX_RATES = BASE_ENTITY_BOOK__TAX_RATES;
+
+	/**
+	 * The number of structural features of the '<em>Simple Entity Book</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK_FEATURE_COUNT = BASE_ENTITY_BOOK_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1003,7 +1112,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 12;
+	int CONTRACT_TYPE = 14;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1059,15 +1168,26 @@ public interface CommercialPackage extends EPackage {
 	EClass getBaseLegalEntity();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTaxRates <em>Tax Rates</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook <em>Shipping Book</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Tax Rates</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTaxRates()
+	 * @return the meta object for the containment reference '<em>Shipping Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook()
 	 * @see #getBaseLegalEntity()
 	 * @generated
 	 */
-	EReference getBaseLegalEntity_TaxRates();
+	EReference getBaseLegalEntity_ShippingBook();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Trading Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook()
+	 * @see #getBaseLegalEntity()
+	 * @generated
+	 */
+	EReference getBaseLegalEntity_TradingBook();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
@@ -1430,6 +1550,37 @@ public interface CommercialPackage extends EPackage {
 	EClass getVolumeParams();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BaseEntityBook <em>Base Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base Entity Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseEntityBook
+	 * @generated
+	 */
+	EClass getBaseEntityBook();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.BaseEntityBook#getTaxRates <em>Tax Rates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Tax Rates</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseEntityBook#getTaxRates()
+	 * @see #getBaseEntityBook()
+	 * @generated
+	 */
+	EReference getBaseEntityBook_TaxRates();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleEntityBook <em>Simple Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Simple Entity Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleEntityBook
+	 * @generated
+	 */
+	EClass getSimpleEntityBook();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1507,12 +1658,20 @@ public interface CommercialPackage extends EPackage {
 		EClass BASE_LEGAL_ENTITY = eINSTANCE.getBaseLegalEntity();
 
 		/**
-		 * The meta object literal for the '<em><b>Tax Rates</b></em>' containment reference list feature.
+		 * The meta object literal for the '<em><b>Shipping Book</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference BASE_LEGAL_ENTITY__TAX_RATES = eINSTANCE.getBaseLegalEntity_TaxRates();
+		EReference BASE_LEGAL_ENTITY__SHIPPING_BOOK = eINSTANCE.getBaseLegalEntity_ShippingBook();
+
+		/**
+		 * The meta object literal for the '<em><b>Trading Book</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_LEGAL_ENTITY__TRADING_BOOK = eINSTANCE.getBaseLegalEntity_TradingBook();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -1806,6 +1965,34 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass VOLUME_PARAMS = eINSTANCE.getVolumeParams();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl <em>Base Entity Book</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBaseEntityBook()
+		 * @generated
+		 */
+		EClass BASE_ENTITY_BOOK = eINSTANCE.getBaseEntityBook();
+
+		/**
+		 * The meta object literal for the '<em><b>Tax Rates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_ENTITY_BOOK__TAX_RATES = eINSTANCE.getBaseEntityBook_TaxRates();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl <em>Simple Entity Book</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleEntityBook()
+		 * @generated
+		 */
+		EClass SIMPLE_ENTITY_BOOK = eINSTANCE.getSimpleEntityBook();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

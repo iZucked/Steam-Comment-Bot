@@ -3,11 +3,9 @@
 package com.mmxlabs.models.lng.commercial.provider;
 
 
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
@@ -18,23 +16,22 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.BaseLegalEntity} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.BaseEntityBook} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class BaseLegalEntityItemProvider
+public class BaseEntityBookItemProvider
 	extends UUIDObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -48,7 +45,7 @@ public class BaseLegalEntityItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public BaseLegalEntityItemProvider(AdapterFactory adapterFactory) {
+	public BaseEntityBookItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,31 +60,8 @@ public class BaseLegalEntityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NamedObject_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
-				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -102,8 +76,7 @@ public class BaseLegalEntityItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
-			childrenFeatures.add(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+			childrenFeatures.add(CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES);
 		}
 		return childrenFeatures;
 	}
@@ -122,6 +95,17 @@ public class BaseLegalEntityItemProvider
 	}
 
 	/**
+	 * This returns BaseEntityBook.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BaseEntityBook"));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -129,10 +113,10 @@ public class BaseLegalEntityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((BaseLegalEntity)object).getName();
+		String label = ((BaseEntityBook)object).getUuid();
 		return label == null || label.length() == 0 ?
-			getString("_UI_BaseLegalEntity_type") :
-			getString("_UI_BaseLegalEntity_type") + " " + label;
+			getString("_UI_BaseEntityBook_type") :
+			getString("_UI_BaseEntityBook_type") + " " + label;
 	}
 
 	/**
@@ -146,12 +130,8 @@ public class BaseLegalEntityItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(BaseLegalEntity.class)) {
-			case CommercialPackage.BASE_LEGAL_ENTITY__NAME:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case CommercialPackage.BASE_LEGAL_ENTITY__SHIPPING_BOOK:
-			case CommercialPackage.BASE_LEGAL_ENTITY__TRADING_BOOK:
+		switch (notification.getFeatureID(BaseEntityBook.class)) {
+			case CommercialPackage.BASE_ENTITY_BOOK__TAX_RATES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -171,46 +151,8 @@ public class BaseLegalEntityItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
-				 CommercialFactory.eINSTANCE.createBaseEntityBook()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
-				 CommercialFactory.eINSTANCE.createSimpleEntityBook()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
-				 CommercialFactory.eINSTANCE.createBaseEntityBook()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
-				 CommercialFactory.eINSTANCE.createSimpleEntityBook()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ||
-			childFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
+				(CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES,
+				 CommercialFactory.eINSTANCE.createTaxRate()));
 	}
 
 }
