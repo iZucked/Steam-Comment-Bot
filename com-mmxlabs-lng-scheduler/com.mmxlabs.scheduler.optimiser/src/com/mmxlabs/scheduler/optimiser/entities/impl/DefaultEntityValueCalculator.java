@@ -277,55 +277,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
 		// Hook for client specific post tax stuff
 
-		if (false) {
-
-			if (currentAllocation.getSlots().size() > 2)
-				throw new IllegalStateException("Only L-D cargoes are supported for calculation of working capital");
-
-			long totalCostOfWorkingCapital = 0;
-			long workingCapital = 0;
-			final Object[] sequence = plan.getSequence();
-			final int k = sequence.length;
-			final int rate = OptimiserUnitConvertor.convertToInternalConversionFactor(0.15);
-			for (int i = 0; i < k; i++) {
-				final Object o = sequence[i];
-				if (o instanceof PortDetails) {
-					final PortOptions po = ((PortDetails) o).getOptions();
-					final IPortSlot ps = po.getPortSlot();
-					if (ps.getPortType() == PortType.Load) {
-
-						final int price = currentAllocation.getSlotPricePerMMBTu(ps);
-						final long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
-						workingCapital += price * vol;
-						// Calculator.convert...; ??
-					} else if (ps.getPortType() == PortType.Discharge) {
-
-						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) po.getVisitDuration(), rate) / (365l * 24l);
-						// reset WC contribution - decrement for LDD or LLD cargoes!!
-						workingCapital = 0;
-						// int price = currentAllocation.getSlotPricePerMMBTu(ps);
-						// long vol = currentAllocation.getSlotVolumeInMMBTu(ps);
-						// workingCapital -= (price * vol);
-						// workingCapital = (workingCapital<0) ? 0 : workingCapital;
-					}
-				} else {
-					final VoyageDetails voyageDetails = (VoyageDetails) o;
-					if (voyageDetails.getOptions().getVesselState() == VesselState.Laden) {
-						totalCostOfWorkingCapital += Calculator.costFromConsumption(workingCapital * (long) (voyageDetails.getTravelTime() + voyageDetails.getIdleTime()), rate) / (365l * 24l);
-					}
-				}
-			}
-			// TODO: Post tax!
-			// addEntityProfit(entityProfit, shippingEntity, -generatedCharterOutCosts);
-
-			if (annotatedSolution != null && exportElement != null) {
-				// Calculate P&L with TC rates
-				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, workingCapital, firstSlot, true);
-			}
-
-			result += workingCapital;
-		}
-
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null && exportElement != null && entityDetailsMap != null) {
 			{
