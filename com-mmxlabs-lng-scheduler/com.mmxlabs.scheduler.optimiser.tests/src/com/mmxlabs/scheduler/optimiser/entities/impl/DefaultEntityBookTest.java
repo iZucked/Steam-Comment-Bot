@@ -13,19 +13,21 @@ import org.junit.Test;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 public class DefaultEntityBookTest {
 
 	@Test
 	public void testGetTaxedProfit() {
 		final ICurve curve = mock(ICurve.class);
+		final IEntity entity = mock(IEntity.class);
 
-		final DefaultEntityBook entity = new DefaultEntityBook(EntityBookType.Trading, curve);
+		final DefaultEntityBook entityBook = new DefaultEntityBook(entity, EntityBookType.Trading, curve);
 
 		final int time = 12345;
 
 		// 50% * 10000
-		Assert.assertEquals(5000, entity.getTaxedProfit(10000, time));
+		Assert.assertEquals(5000, entityBook.getTaxedProfit(10000, time));
 
 		verify(curve).getValueAtPoint(time);
 

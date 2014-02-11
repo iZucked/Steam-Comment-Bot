@@ -2,7 +2,6 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 
 import javax.inject.Inject;
 
-import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;

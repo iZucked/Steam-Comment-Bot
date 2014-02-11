@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.entities.impl;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 
 /**
@@ -17,12 +18,19 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
  */
 public class DefaultEntityBook implements IEntityBook {
 
+	private final IEntity entity;
 	private final ICurve taxCurve;
 	private final EntityBookType entityBookType;
 
-	public DefaultEntityBook(final EntityBookType entityBookType, final ICurve taxCurve) {
+	public DefaultEntityBook(IEntity entity, final EntityBookType entityBookType, final ICurve taxCurve) {
+		this.entity = entity;
 		this.entityBookType = entityBookType;
 		this.taxCurve = taxCurve;
+	}
+
+	@Override
+	public IEntity getEntity() {
+		return entity;
 	}
 
 	@Override
