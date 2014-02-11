@@ -334,14 +334,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					// Skip cast check as we created the object in the first
 					// place
 					final VoyageOptions options = details.getOptions();
-
-					try {
-						details.setOptions(options.clone());
-					} catch (final CloneNotSupportedException e) {
-						// Record error, wrap up and rethrow
-						log.error(e.getMessage(), e);
-						throw new RuntimeException(e);
-					}
+					details.setOptions(options.clone());
 				}
 			}
 		}
@@ -395,7 +388,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		final VoyagePlan currentPlan = new VoyagePlan();
 		currentPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
-		
+
 		// Calculate voyage plan
 		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray(new IDetailsSequenceElement[0]));
 

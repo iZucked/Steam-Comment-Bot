@@ -247,15 +247,19 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		assert baseEntity != null;
 		assert shippingEntity != null;
 		{
-			calculateShippingEntityCosts(entityPreTaxProfit, vessel, plan, baseEntity.getTradingBook(), shippingEntity.getShippingBook(), false);
+			calculateShippingEntityCosts(entityPreTaxProfit, vessel, plan, currentAllocation, baseEntity.getTradingBook(), shippingEntity.getShippingBook(), false);
 		}
 		long result = 0l;
 		{
+			// TODO Is this right?
+			// TODO: Compare with old version and check that it is properly taxed!
 			final long generatedCharterOutRevenue = shippingCostHelper.getGeneratedCharterOutRevenue(plan, vessel);
-			addEntityPreTaxProfit(entityPreTaxProfit, shippingEntity.getShippingBook(), generatedCharterOutRevenue);
+			// addEntityPreTaxProfit(entityPreTaxProfit, shippingEntity.getShippingBook(), generatedCharterOutRevenue);
 
 			final long generatedCharterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
-			addEntityPreTaxProfit(entityPreTaxProfit, shippingEntity.getShippingBook(), -generatedCharterOutCosts);
+			// addEntityPreTaxProfit(entityPreTaxProfit, shippingEntity.getShippingBook(), -generatedCharterOutCosts);
+
+			result += shippingEntity.getShippingBook().getTaxedProfit(generatedCharterOutRevenue - generatedCharterOutCosts, taxTime);
 
 			if (annotatedSolution != null && exportElement != null) {
 				// Calculate P&L with TC rates
@@ -492,7 +496,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	private void addEntityPreTaxProfit(@NonNull final Map<IEntityBook, Long> entityProfit, @NonNull final IEntityBook entity, final long profit) {
+	protected void addEntityPreTaxProfit(@NonNull final Map<IEntityBook, Long> entityProfit, @NonNull final IEntityBook entity, final long profit) {
 		long totalProfit = profit;
 		if (entityProfit.containsKey(entity)) {
 			final Long existingProfit = entityProfit.get(entity);
@@ -503,7 +507,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		entityProfit.put(entity, totalProfit);
 	}
 
-	private IDetailTree getEntityBookDetails(final Map<IEntityBook, IDetailTree> entityDetailsMap, final IEntityBook entityBook) {
+	protected IDetailTree getEntityBookDetails(final Map<IEntityBook, IDetailTree> entityDetailsMap, final IEntityBook entityBook) {
 		if (entityDetailsMap.containsKey(entityBook)) {
 			return entityDetailsMap.get(entityBook);
 		} else {
@@ -513,8 +517,18 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	protected void calculateShippingEntityCosts(@NonNull final Map<IEntityBook, Long> entityPreTaxProfit, final IVessel vessel, final VoyagePlan plan, final IEntityBook costBook,
-			final IEntityBook shippingBook, final boolean includeLNG) {
+	/**
+	 * Calculate shipping costs for the purposes of P&L. This should be overridden in subclasses to implement shipping book transfer pricing
+	 * 
+	 * @param entityPreTaxProfit
+	 * @param vessel
+	 * @param plan
+	 * @param costBook
+	 * @param shippingBook
+	 * @param includeLNG
+	 */
+	protected void calculateShippingEntityCosts(@NonNull final Map<IEntityBook, Long> entityPreTaxProfit, final IVessel vessel, final VoyagePlan plan,
+			final IAllocationAnnotation allocationAnnotation, final IEntityBook costBook, final IEntityBook shippingBook, final boolean includeLNG) {
 
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return;
@@ -524,20 +538,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long portCosts = shippingCostHelper.getPortCosts(vessel, plan);
 		final long hireCosts = shippingCostHelper.getHireCosts(plan);
 
-		long transferPrice = 0;
-		if (costBook != shippingBook) {
-			// TODO:
-			// transferPrice = hireCosts / 2;
-		}
-
-		final long totalShippingCosts = shippingCosts + portCosts;
-		// addEntityPreTaxProfit(entityPreTaxProfit, costBook, -totalShippingCosts);
-		// addEntityPreTaxProfit(entityPreTaxProfit, costBook, -transferPrice);
-		// addEntityPreTaxProfit(entityPreTaxProfit, shippingBook, +transferPrice);
-		// addEntityPreTaxProfit(entityPreTaxProfit, shippingBook, -hireCosts);
-
+		final long totalShippingCosts = shippingCosts + portCosts + hireCosts;
 		addEntityPreTaxProfit(entityPreTaxProfit, costBook, -totalShippingCosts);
-		addEntityPreTaxProfit(entityPreTaxProfit, costBook, -hireCosts);
-
 	}
 }

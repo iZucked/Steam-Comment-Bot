@@ -49,7 +49,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	private String route;
 
 	private VesselState vesselState;
-	
+
 	private int charterOutDailyRate;
 
 	public VoyageOptions() {
@@ -162,7 +162,6 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		this.vesselState = vesselState;
 	}
 
-
 	public final boolean getAllowCooldown() {
 		return cooldown;
 	}
@@ -222,9 +221,8 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	}
 
 	@Override
-	public final VoyageOptions clone() throws CloneNotSupportedException {
-
-		return (VoyageOptions) super.clone();
+	public final VoyageOptions clone() {
+		return new VoyageOptions(this);
 	}
 
 	@Override

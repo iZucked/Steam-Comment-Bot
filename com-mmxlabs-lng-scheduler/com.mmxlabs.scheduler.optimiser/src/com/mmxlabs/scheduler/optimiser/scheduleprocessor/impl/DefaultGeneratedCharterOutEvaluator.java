@@ -61,13 +61,13 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private ICharterRateCalculator charterRateCalculator;
 
 	@Override
-	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
 
 		if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null; // continue;
 		}
 
-		long startingHeelInM3 = vp.getStartingHeelInM3();
+		final long startingHeelInM3 = vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
 		boolean isCargoPlan = false;
 		// Grab the current list of arrival times and update the rolling currentTime
@@ -153,13 +153,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// Duplicate all the relevant objects and replay calcs
 
 		// We replace the ballastDetails as the VPO will manipulate this, and we want to turn on the charter flag.
-		VoyageOptions options;
-		try {
-			options = ballastDetails.getOptions().clone();
-		} catch (final CloneNotSupportedException e) {
-			// Do not expect this, VoyageOptions implements Cloneable
-			throw new RuntimeException(e);
-		}
+		final VoyageOptions options = ballastDetails.getOptions().clone();
 		newRawSequence.set(ballastIdx, options);
 		// Turn on chartering
 		options.setCharterOutIdleTime(true);
