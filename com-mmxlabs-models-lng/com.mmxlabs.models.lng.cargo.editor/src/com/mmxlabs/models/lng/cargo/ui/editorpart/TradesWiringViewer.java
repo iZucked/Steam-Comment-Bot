@@ -89,6 +89,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -107,15 +108,16 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.Type;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CreateStripDialog.StripType;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.TradesTableContextMenuExtensionUtil;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
@@ -439,10 +441,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
 
 			@Override
-			public String getToolTipText(Object element) {
-				RowData rd = ((RowData) element);
-				LoadSlot ls = rd.getLoadSlot();
-				DischargeSlot ds = rd.getDischargeSlot();
+			public String getToolTipText(final Object element) {
+				final RowData rd = ((RowData) element);
+				final LoadSlot ls = rd.getLoadSlot();
+				final DischargeSlot ds = rd.getDischargeSlot();
 
 				String lString = ls != null ? (ls.getNotes() != null ? ls.getNotes() : "") : "";
 				String dString = ds != null ? (ds.getNotes() != null ? ds.getNotes() : "") : "";
@@ -458,7 +460,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			public Point getToolTipShift(Object object) {
+			public Point getToolTipShift(final Object object) {
 				return new Point(10, 10);
 			}
 		});
@@ -796,7 +798,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		addTradesColumn(dischargeColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		// addTradesColumn(dischargeColumns, "D-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 		{
-			BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
+			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
 			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.DISCHARGE);
 			final GridViewerColumn idColumn = addTradesColumn(dischargeColumns, "D-ID", manipulator, assignmentPath);
 			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
@@ -805,9 +807,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					if (element instanceof RowData) {
 						final RowData rowDataItem = (RowData) element;
-						Object object = assignmentPath.get(rowDataItem);
+						final Object object = assignmentPath.get(rowDataItem);
 						if (object instanceof DischargeSlot) {
-							DischargeSlot ds = (DischargeSlot) object;
+							final DischargeSlot ds = (DischargeSlot) object;
 
 							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
 								return notesImage;
@@ -829,9 +831,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					if (element instanceof RowData) {
 						final RowData rowDataItem = (RowData) element;
-						Object object = assignmentPath.get(rowDataItem);
+						final Object object = assignmentPath.get(rowDataItem);
 						if (object instanceof AssignableElement) {
-							AssignableElement assignableElement = (AssignableElement) object;
+							final AssignableElement assignableElement = (AssignableElement) object;
 
 							if (assignableElement.isLocked()) {
 								return lockedImage;
@@ -856,8 +858,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
-		addPNLColumn("P&L", new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true,
-				Type.CARGO_OR_MARKET_ALLOCATION));
+		addPNLColumn("P&L (Trade)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK, new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(),
+				editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_ALLOCATION));
+
+		addPNLColumn("P&L (Shipping)", CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
+				new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss(), editingDomain), new RowDataEMFPath(true, Type.CARGO_OR_MARKET_ALLOCATION));
 		wiringDiagram = new TradesWiringDiagram(getScenarioViewer().getGrid()) {
 
 			@Override
@@ -959,7 +964,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		getScenarioViewer().getGrid().addMouseListener(listener);
 	}
 
-	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final T manipulator, final EMFPath path) {
+	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addPNLColumn(final String columnName, final EStructuralFeature bookContainmentFeature, final T manipulator, final EMFPath path) {
 
 		final ReadOnlyManipulatorWrapper<T> wrapper = new ReadOnlyManipulatorWrapper<T>(manipulator) {
 			@Override
@@ -967,9 +972,26 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Object object = path.get((EObject) element);
 				if (object instanceof ProfitAndLossContainer) {
 					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
-					final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
-					if (data != null) {
-						return data.getProfitAndLoss();
+					final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+					if (groupProfitAndLoss != null) {
+
+						long totalPNL = 0;
+						for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+							final BaseEntityBook entityBook = entityPNL.getEntityBook();
+							if (entityBook == null) {
+								// Fall back code path for old models.
+								if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+									return groupProfitAndLoss.getProfitAndLoss();
+								} else {
+									return 0;
+								}
+							} else {
+								if (entityBook.eContainmentFeature() == bookContainmentFeature) {
+									totalPNL += entityPNL.getProfitAndLoss();
+								}
+							}
+						}
+						return totalPNL;
 					}
 				}
 				return super.getComparable(element);
@@ -983,13 +1005,31 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			public String getText(final Object element) {
 
 				final Object object = path.get((EObject) element);
+
 				if (object instanceof ProfitAndLossContainer) {
 					final ProfitAndLossContainer container = (ProfitAndLossContainer) object;
-					final GroupProfitAndLoss data = container.getGroupProfitAndLoss();
-					if (data != null) {
-						return String.format("%.2fm", ((float) data.getProfitAndLoss()) / 1000000);
+					final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+					if (groupProfitAndLoss != null) {
+
+						long totalPNL = 0;
+						for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+							final BaseEntityBook entityBook = entityPNL.getEntityBook();
+							if (entityBook == null) {
+								// Fall back code path for old models.
+								if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+									totalPNL = groupProfitAndLoss.getProfitAndLoss();
+								}
+								break;
+							} else {
+								if (entityBook.eContainmentFeature() == bookContainmentFeature) {
+									totalPNL += entityPNL.getProfitAndLoss();
+								}
+							}
+						}
+						return String.format("%.2fm", ((float) totalPNL) / 1000000);
 					}
 				}
+
 				return super.getText(element);
 			}
 
