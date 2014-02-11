@@ -28,6 +28,11 @@ public abstract class AbstractEntity implements IEntity {
 	}
 
 	@Override
+	public String toString() {
+		return getName();
+	}
+	
+	@Override
 	public String getName() {
 		return name;
 	}
