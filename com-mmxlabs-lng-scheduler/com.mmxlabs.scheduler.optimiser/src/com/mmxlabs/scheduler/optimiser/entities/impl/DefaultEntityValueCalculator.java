@@ -39,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
@@ -207,12 +208,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							vesselStartTime, plan, entityDetails);
 				}
 
-				// } else {
-				// pricePerMMBTu
-				// additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, arrivalTimes, slotVolumesInM3, dischargePricesPerMMBTu, vessel,
-				// vesselStartTime, plan, null);
-				// }
-
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
 
 				final long value = Calculator.costFromConsumption(volumeInMMBtu, pricePerMMBTu);
@@ -228,7 +223,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				final long value = Calculator.costFromConsumption(volumeInMMBtu, dischargePricesPerMMBTu[idx]);
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, dischargePricesPerMMBTu[idx]);
-				// final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				// Buy/Sell at same quantity.
 				// TODO: Transfer price
 				addEntityProfit(entityProfit, entity, -value);
@@ -237,19 +231,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// Base entity gets the profit
 				assert baseEntity != null;
 				addEntityProfit(entityProfit, baseEntity, value);
-
-				// if (annotatedSolution != null && exportElement != null) {
-				// // TODO: API for this!
-				// // dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, time, list);
-				// }
-
 			}
 
 			idx++;
 
 		}
 		// Shipping Entity for non-cargo costings
-		 IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
+		IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
 		if (shippingEntity == null) {
 			shippingEntity = baseEntity;
 		}
@@ -329,7 +317,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Cargo (not charter out) revenue
 		for (final Map.Entry<IEntity, Long> e : entityProfit.entrySet()) {
-			result += e.getKey().getTaxedProfit(e.getValue(), taxTime);
+			result += e.getKey().getTradingBook().getTaxedProfit(e.getValue(), taxTime);
 		}
 
 		// Solution Export branch - should called infrequently
@@ -342,7 +330,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 						final IDetailTree entityDetails = entityDetailsMap.get(entity);
 
-						final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity, entity.getTaxedProfit(profit, taxTime), profit, entityDetails);
+						final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity, entity.getTradingBook().getTaxedProfit(profit, taxTime), profit, entityDetails);
 						entries.add(entry);
 
 					}
@@ -374,10 +362,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 */
 	@Override
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
-		 IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
-//			if (shippingEntity == null) {
-//				shippingEntity = baseEntity;
-//			}
+		IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
+		// if (shippingEntity == null) {
+		// shippingEntity = baseEntity;
+		// }
 
 		final long value;
 		final long revenue;
@@ -397,7 +385,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			generatedCharterOutCost = shippingCostHelper.getGeneratedCharterOutCosts(plan);
 
 			// Calculate the value for the fitness function
-			value = shippingEntity.getTaxedProfit(revenue + generatedCharterOutRevenue - generatedCharterOutCost - shippingCost, planStartTime);
+			IEntityBook shippingBook = shippingEntity.getShippingBook();
+			value = shippingBook.getTaxedProfit(revenue + generatedCharterOutRevenue - generatedCharterOutCost - shippingCost, planStartTime);
 		}
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null) {
@@ -426,7 +415,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		{
 			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates);
 			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */- cost - shippingCosts;
-			final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
+			final long shippingProfit = shippingEntity.getShippingBook().getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 
 			final DetailTree shippingDetails = new DetailTree();
 
@@ -443,7 +432,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			final long charterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
 			final long charterOutPretaxProfit = generatedCharterOutRevenue - charterOutCosts;
-			final long charterOutProfit = shippingEntity.getTaxedProfit(charterOutPretaxProfit, taxTime);
+			final long charterOutProfit = shippingEntity.getShippingBook().getTaxedProfit(charterOutPretaxProfit, taxTime);
 
 			final DetailTree details = new DetailTree();
 
@@ -496,11 +485,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		final long totalShippingCosts = shippingCosts + portCosts;
-//		addEntityProfit(entityProfit, costBook, -totalShippingCosts);
-//		addEntityProfit(entityProfit, costBook, -transferPrice);
-//		addEntityProfit(entityProfit, shippingBook, +transferPrice);
-//		addEntityProfit(entityProfit, shippingBook, -hireCosts);
-		
+		// addEntityProfit(entityProfit, costBook, -totalShippingCosts);
+		// addEntityProfit(entityProfit, costBook, -transferPrice);
+		// addEntityProfit(entityProfit, shippingBook, +transferPrice);
+		// addEntityProfit(entityProfit, shippingBook, -hireCosts);
+
 		addEntityProfit(entityProfit, costBook, -totalShippingCosts);
 		addEntityProfit(entityProfit, costBook, -hireCosts);
 
