@@ -274,6 +274,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			result += e.getKey().getTaxedProfit(e.getValue(), taxTime);
 		}
 
+		final Map<IEntityBook, Long> entityPostTaxProfit = new HashMap<>();
+		// Hook for client specific post tax stuff
+
 		if (false) {
 
 			if (currentAllocation.getSlots().size() > 2)
@@ -330,18 +333,24 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					final List<IProfitAndLossEntry> entries = new LinkedList<>();
 					for (final IEntity entity : seenEntities) {
 						{
-							final Long profit = entityPreTaxProfit.get(entity.getShippingBook());
-							if (profit != null) {
+							// TODO: Include
+							final Long postTaxProfit = entityPostTaxProfit.get(entity.getShippingBook());
+							final Long preTaxProfit = entityPreTaxProfit.get(entity.getShippingBook());
+							if (preTaxProfit != null) {
 								final IDetailTree entityDetails = entityDetailsMap.get(entity.getShippingBook());
-								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), entity.getShippingBook().getTaxedProfit(profit, taxTime), profit, entityDetails);
+								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), entity.getShippingBook().getTaxedProfit(preTaxProfit, taxTime), preTaxProfit,
+										entityDetails);
 								entries.add(entry);
 							}
 						}
 						{
-							final Long profit = entityPreTaxProfit.get(entity.getTradingBook());
-							if (profit != null) {
+							// TODO: Include
+							final Long postTaxProfit = entityPostTaxProfit.get(entity.getTradingBook());
+							final Long preTaxProfit = entityPreTaxProfit.get(entity.getTradingBook());
+							if (preTaxProfit != null) {
 								final IDetailTree entityDetails = entityDetailsMap.get(entity.getTradingBook());
-								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), entity.getTradingBook().getTaxedProfit(profit, taxTime), profit, entityDetails);
+								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), entity.getTradingBook().getTaxedProfit(preTaxProfit, taxTime), preTaxProfit,
+										entityDetails);
 								entries.add(entry);
 							}
 						}
@@ -383,19 +392,19 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (slot instanceof ILoadOption) {
 
 				// Sum up entity p&L
-				addEntityPreTaxProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
-				addEntityPreTaxProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.slotAdditionalPNL[idx]);
+				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
+				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.slotAdditionalPNL[idx]);
 
 			} else if (slot instanceof IDischargeOption) {
 
 				// Buy/Sell at same quantity.
 				// TODO: Transfer price
-				addEntityPreTaxProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
-				addEntityPreTaxProfit(entityPreTaxProfit, entity.getTradingBook(), value);
+				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
+				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), value);
 
 				// Base entity gets the profit
 				assert baseEntity != null;
-				addEntityPreTaxProfit(entityPreTaxProfit, baseEntity.getTradingBook(), value);
+				addEntityProfit(entityPreTaxProfit, baseEntity.getTradingBook(), value);
 			}
 
 			idx++;
@@ -413,9 +422,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	@Override
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
-		// if (shippingEntity == null) {
-		// shippingEntity = baseEntity;
-		// }
+		if (shippingEntity == null) {
+			return 0l;
+		}
 
 		final long value;
 		final long revenue;
@@ -496,7 +505,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	protected void addEntityPreTaxProfit(@NonNull final Map<IEntityBook, Long> entityProfit, @NonNull final IEntityBook entity, final long profit) {
+	protected void addEntityProfit(@NonNull final Map<IEntityBook, Long> entityProfit, @NonNull final IEntityBook entity, final long profit) {
 		long totalProfit = profit;
 		if (entityProfit.containsKey(entity)) {
 			final Long existingProfit = entityProfit.get(entity);
@@ -539,6 +548,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long hireCosts = shippingCostHelper.getHireCosts(plan);
 
 		final long totalShippingCosts = shippingCosts + portCosts + hireCosts;
-		addEntityPreTaxProfit(entityPreTaxProfit, costBook, -totalShippingCosts);
+		addEntityProfit(entityPreTaxProfit, costBook, -totalShippingCosts);
 	}
 }
