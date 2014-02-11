@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.core;
 import java.util.Map;
 
 /**
+ * Maps the annotations attached to a particular SequenceElement.
+ * 
  * @author hinton
  * 
  */
