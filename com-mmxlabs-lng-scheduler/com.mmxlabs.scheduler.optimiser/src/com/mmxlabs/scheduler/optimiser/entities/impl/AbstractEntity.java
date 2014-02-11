@@ -17,10 +17,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
  * 
  */
 public abstract class AbstractEntity implements IEntity {
-	private final String name;
-
 	@Inject
 	private IEntityProvider enityProvider;
+
+	private final String name;
 
 	public AbstractEntity(final String name) {
 		super();
@@ -31,7 +31,7 @@ public abstract class AbstractEntity implements IEntity {
 	public String toString() {
 		return getName();
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
