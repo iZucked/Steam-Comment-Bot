@@ -87,6 +87,7 @@ public class CSVImporter {
 		dataMap.put(CargoModelImporter.CARGO_GROUP_KEY, baseFileName + "/" + "Cargo Groups.csv");
 
 		dataMap.put(CommercialModelImporter.ENTITIES_KEY, baseFileName + "/" + "Entities.csv");
+		dataMap.put(CommercialModelImporter.ENTITY_BOOKS_KEY, baseFileName + "/" + "Entity Books.csv");
 		dataMap.put(CommercialModelImporter.PURCHASE_CON_KEY, baseFileName + "/" + "Purchase Contracts.csv");
 		dataMap.put(CommercialModelImporter.SALES_CON_KEY, baseFileName + "/" + "Sales Contracts.csv");
 
