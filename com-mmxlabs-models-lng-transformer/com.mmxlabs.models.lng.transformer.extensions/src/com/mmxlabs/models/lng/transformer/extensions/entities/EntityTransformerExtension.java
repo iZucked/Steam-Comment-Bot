@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer.extensions.entities;
 import java.util.Collection;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.curves.ICurve;
+import com.google.inject.Injector;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -15,17 +15,20 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.EntityTransformerUtils;
-import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
-import com.mmxlabs.scheduler.optimiser.entities.impl.SimpleEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntity;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityBook;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 
 /**
@@ -33,13 +36,12 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEdito
  * 
  * @author hinton
  * 
- * @since 3.0
  */
 public class EntityTransformerExtension implements ITransformerExtension {
 
 	private LNGScenarioModel rootObject;
 
-	private ModelEntityMap entities;
+	private ModelEntityMap modelEntityMap;
 
 	@Inject
 	private HashMapEntityProviderEditor entityProvider;
@@ -47,84 +49,66 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
 
-	/**
-	 * @since 4.0
-	 */
-	@Override
-	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
-		this.rootObject = rootObject;
-		this.entities = map;
+	@Inject
+	private Injector injector;
 
+	@Override
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
+		this.rootObject = rootObject;
+		this.modelEntityMap = modelEntityMap;
+
+		// Register entities first, then in finish transforming create the books.
 		final CommercialModel commercialModel = rootObject.getCommercialModel();
 
 		for (final BaseLegalEntity e : commercialModel.getEntities()) {
-			final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(e, dateAndCurveHelper, map.getEarliestDate());
-
-			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve);
-
-			entities.addModelObject(e, e2);
+			if (e instanceof LegalEntity) {
+				final IEntity defaultEntity = new DefaultEntity(e.getName());
+				injector.injectMembers(defaultEntity);
+				modelEntityMap.addModelObject(e, defaultEntity);
+			}
 		}
 	}
 
 	@Override
 	public void finishTransforming() {
 
-		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
-		for (VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-			final IVessel vessel  = entities.getOptimiserObject(vesselAvailability.getVessel(), IVessel.class);
-			final IVessel vessel2  = entities.getOptimiserObject(vesselAvailability, IVessel.class);
-			final IEntity entity = entities.getOptimiserObject( vesselAvailability.getEntity(), IEntity.class);
-			setEntityForVessel(entity, vessel2);
+		final CommercialModel commercialModel = rootObject.getCommercialModel();
+		for (final BaseLegalEntity e : commercialModel.getEntities()) {
+			if (e.getShippingBook() instanceof SimpleEntityBook) {
+				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getShippingBook();
+				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateAndCurveHelper, modelEntityMap.getEarliestDate());
+				final IEntityBook book = new DefaultEntityBook(EntityBookType.Shipping, taxCurve);
+				injector.injectMembers(book);
+				modelEntityMap.addModelObject(simpleBook, book);
+				entityProvider.setEntityBook(modelEntityMap.getOptimiserObject(e, IEntity.class), EntityBookType.Shipping, book);
+			}
+			if (e.getTradingBook() instanceof SimpleEntityBook) {
+				final SimpleEntityBook simpleBook = (SimpleEntityBook) e.getTradingBook();
+				final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(simpleBook.getTaxRates(), dateAndCurveHelper, modelEntityMap.getEarliestDate());
+				final IEntityBook book = new DefaultEntityBook(EntityBookType.Shipping, taxCurve);
+				injector.injectMembers(book);
+				modelEntityMap.addModelObject(simpleBook, book);
+				entityProvider.setEntityBook(modelEntityMap.getOptimiserObject(e, IEntity.class), EntityBookType.Trading, book);
+			}
 		}
 
-		final CommercialModel commercialModel = rootObject.getCommercialModel();
-		// final BaseLegalEntity shipping = commercialModel.getShippingEntity();
-		//
-		// setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
+		// Generic stuff -> split into separate extension
+		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
+		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
+			final IVessel vessel = modelEntityMap.getOptimiserObject(vesselAvailability, IVessel.class);
+			final IEntity entity = modelEntityMap.getOptimiserObject(vesselAvailability.getEntity(), IEntity.class);
+			entityProvider.setEntityForVessel(entity, vessel);
+		}
 
 		// set up contract association or slot association or whatever
-		final Collection<Slot> slots = entities.getAllModelObjects(Slot.class);
+		final Collection<Slot> slots = modelEntityMap.getAllModelObjects(Slot.class);
 		for (final Slot slot : slots) {
-			final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+			final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
-				BaseLegalEntity slotEntity = null;
-				// if (slot.isSetPriceInfo()) {
-				// slotEntity = slot.getPriceInfo().getEntity();
-				// } else
-				slotEntity = slot.getSlotOrDelegatedEntity();
-
-				// if (slotEntity == null) {
-				// slotEntity = shipping;
-				// }
-
-				final IEntity entity = entities.getOptimiserObject(slotEntity, IEntity.class);
-				setEntityForSlot(entity, portSlot);
-
+				final BaseLegalEntity slotEntity = slot.getSlotOrDelegatedEntity();
+				final IEntity entity = modelEntityMap.getOptimiserObject(slotEntity, IEntity.class);
+				entityProvider.setEntityForSlot(entity, portSlot);
 			}
 		}
 	}
-
-	/**
-	 * @since 3.0
-	 */
-	public IEntity createGroupEntity(final String name, final int ownership, final ICurve taxCurve) {
-		return new SimpleEntity(name, ownership, taxCurve);
-	}
-
-	/**
-	 * @since 2.0
-	 */
-	public void setEntityForSlot(final IEntity entity, final IPortSlot slot) {
-		entityProvider.setEntityForSlot(entity, slot);
-	}
-	public void setEntityForVessel(final IEntity entity, final IVessel vessel) {
-		entityProvider.setEntityForVessel(entity, vessel);
-	}
-
-	// /**
-	// * @since 2.0
-	// */
-	// public void setShippingEntity(final IEntity shipping) {
-	// entityProvider.setShippingEntity(shipping);
-	// }
 }

@@ -29,4 +29,3 @@ Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator
-Bundle-Module: com.mmxlabs.models.lng.transformer.inject.modules.TransformerActivatorModule
