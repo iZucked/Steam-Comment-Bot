@@ -303,6 +303,11 @@ public class RedirectionContract implements ILoadPriceCalculator {
 
 	}
 
+	@Override
+	public void prepareRealPNL() {
+
+	}
+
 	public int getNotionalSpeed() {
 		return notionalSpeed;
 	}
