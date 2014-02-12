@@ -291,8 +291,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							if (preTaxProfit != null || postTaxProfit != null) {
 								long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
 								long postTaxValue = postTaxProfit == null ? 0 : postTaxProfit.longValue() + entity.getShippingBook().getTaxedProfit(preTaxValue, taxTime);
-								final IDetailTree entityDetails = entityDetailTreeMap.get(entity.getShippingBook());
-								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), postTaxValue, preTaxValue, entityDetails);
+								final IDetailTree entityDetails = entityDetailTreeMap.get(entity.getTradingBook());
+								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
 								entries.add(entry);
 							}
 						}
