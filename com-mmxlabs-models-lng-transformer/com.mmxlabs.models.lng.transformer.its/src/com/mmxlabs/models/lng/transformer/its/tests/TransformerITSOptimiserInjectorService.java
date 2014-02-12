@@ -9,8 +9,6 @@ import java.util.Map;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
-import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultGeneratedCharterOutEvaluator;
@@ -29,9 +27,6 @@ public class TransformerITSOptimiserInjectorService implements IOptimiserInjecto
 			@Override
 			protected void configure() {
 
-			
-
-				bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 				bind(IGeneratedCharterOutEvaluator.class).to(DefaultGeneratedCharterOutEvaluator.class);
 			}
 		};
