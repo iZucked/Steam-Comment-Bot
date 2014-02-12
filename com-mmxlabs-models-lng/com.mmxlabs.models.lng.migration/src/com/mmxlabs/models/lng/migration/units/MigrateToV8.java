@@ -287,6 +287,9 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 					EEnumLiteral vesselType = (EEnumLiteral) specialGroup.eGet(attribute_fleet_VesselTypeGroup_vesselType);
 					EEnumLiteral newVesselType = MetamodelUtils.getEEnum_Literal(enum_cargo_VesselType, vesselType.toString());
 					typeGroup.eSet(attribute_cargo_VesselTypeGroup_vesselType, newVesselType);
+					
+					typeGroup.eSet(attribute_UUIDObject_uuid, specialGroup.eGet(attribute_UUIDObject_uuid));
+					typeGroup.eSet(attribute_NamedObject_name, specialGroup.eGet(attribute_NamedObject_name));
 
 					// Add to list
 					vesselTypeGroups.add(typeGroup);
