@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
-import org.xml.sax.XMLReader;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.migration.IMigrationRegistry;
