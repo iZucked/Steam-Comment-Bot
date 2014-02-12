@@ -17,8 +17,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -135,9 +134,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 		} else if (a instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) a;
 			final EObject eContainer = vesselEvent.eContainer();
-			if (eContainer instanceof ScenarioFleetModel) {
-				final ScenarioFleetModel scenarioFleetModel = (ScenarioFleetModel) eContainer;
-				final EObject eContainer2 = scenarioFleetModel.eContainer();
+			if (eContainer instanceof CargoModel) {
+				final CargoModel cargoModel = (CargoModel) eContainer;
+				final EObject eContainer2 = cargoModel.eContainer();
 				if (eContainer2 instanceof LNGPortfolioModel) {
 					final LNGPortfolioModel lngPortfolioModel = (LNGPortfolioModel) eContainer2;
 					final ScheduleModel scheduleModel = lngPortfolioModel.getScheduleModel();

@@ -29,7 +29,6 @@ import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -375,7 +374,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return c;
 		} else if (object instanceof VesselEventVisit) {
 			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 			if (timeZone == null)
 				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));

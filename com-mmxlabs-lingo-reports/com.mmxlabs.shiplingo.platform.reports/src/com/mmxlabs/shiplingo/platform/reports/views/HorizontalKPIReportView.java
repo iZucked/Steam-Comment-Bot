@@ -84,23 +84,28 @@ public class HorizontalKPIReportView extends ViewPart {
 				Long rtn = null;
 				switch (index) {
 				case 0:
-					return "P&L";
+					return "Trading P&L";
 				case 1:
-					rtn = (d.pnl != null ? d.pnl - (pinD != null ? pinD.pnl : 0) : null);
+					rtn = (d.tradingPNL != null ? d.tradingPNL - (pinD != null ? pinD.tradingPNL : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 2:
-					return "MtM P&L";
+					return "Shipping P&L";
 				case 3:
-					rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
+					rtn = (d.shippingPNL != null ? d.shippingPNL - (pinD != null ? pinD.shippingPNL : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 4:
-					return "Shipping Cost";
+					return "MtM P&L";
 				case 5:
-					rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
+					rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
 				case 6:
-					return "Idle Time";
+					return "Shipping Cost";
 				case 7:
+					rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
+					return format(rtn, KPIContentProvider.TYPE_COST);
+				case 8:
+					return "Idle Time";
+				case 9:
 					rtn = (d.idleTime != null ? d.idleTime - (pinD != null ? pinD.idleTime : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_TIME);
 				}
@@ -141,18 +146,29 @@ public class HorizontalKPIReportView extends ViewPart {
 		public Color getForeground(final Object element, final int columnIndex) {
 
 			if (element instanceof RowData) {
+				final RowData pinD = contentProvider.getPinnedData();
 				int color = SWT.COLOR_DARK_GRAY;
 				switch (columnIndex) {
 				case 0:
 					color = SWT.COLOR_BLACK;
 					break;
 				case 1:
-					final RowData pinD = contentProvider.getPinnedData();
 					if (pinD == null) {
 						color = SWT.COLOR_BLACK;
 					} else {
 						final RowData d = (RowData) element;
-						color = (d.pnl - pinD.pnl) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+						color = (d.tradingPNL - pinD.tradingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
+					}
+					break;
+				case 2:
+					color = SWT.COLOR_BLACK;
+					break;
+				case 3:
+					if (pinD == null) {
+						color = SWT.COLOR_BLACK;
+					} else {
+						final RowData d = (RowData) element;
+						color = (d.shippingPNL - pinD.shippingPNL) >= 0 ? SWT.COLOR_DARK_GREEN : SWT.COLOR_RED;
 					}
 					break;
 				}
@@ -189,20 +205,23 @@ public class HorizontalKPIReportView extends ViewPart {
 		// SG: 2013-04-17
 		viewer.setAutoPreferredHeight(true);
 		// KPI columns - two per KPI - name, value
-		for (int i = 0; i < 2 * 4; ++i) {
+		for (int i = 0; i < 2 * 5; ++i) {
 			final GridViewerColumn tvc = new GridViewerColumn(viewer, SWT.NONE);
 			int width = 100;
 			switch (i) {
 			case 0:
-				width = 33; // "P&L"
+				width = 80; // "P&L Trading"
 				break;
 			case 2:
-				width = 70; // "P&L (MtM)"
+				width = 85; // "P&L Shipping"
 				break;
 			case 4:
-				width = 85; // "Shipping Cost"
+				width = 70; // "P&L (MtM)"
 				break;
 			case 6:
+				width = 85; // "Shipping Cost"
+				break;
+			case 8:
 				width = 61; // "Idle time"
 				break;
 			}

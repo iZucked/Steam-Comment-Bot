@@ -14,8 +14,8 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -112,7 +112,7 @@ public class LatenessReportView extends EMFReportView {
 			return c;
 		} else if (object instanceof VesselEventVisit) {
 			final Date date = ((VesselEventVisit) object).getVesselEvent().getStartAfter();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 			if (timeZone == null)
 				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
@@ -134,7 +134,7 @@ public class LatenessReportView extends EMFReportView {
 			return c;
 		} else if (object instanceof VesselEventVisit) {
 			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 			if (timeZone == null)
 				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
