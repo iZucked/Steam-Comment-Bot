@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class BaseEntityBookImpl extends UUIDObjectImpl implements BaseEntityBook {
+public abstract class BaseEntityBookImpl extends UUIDObjectImpl implements BaseEntityBook {
 	/**
 	 * The cached value of the '{@link #getTaxRates() <em>Tax Rates</em>}' containment reference list.
 	 * <!-- begin-user-doc -->

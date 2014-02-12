@@ -172,17 +172,7 @@ public class BaseLegalEntityItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
-				 CommercialFactory.eINSTANCE.createBaseEntityBook()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK,
 				 CommercialFactory.eINSTANCE.createSimpleEntityBook()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK,
-				 CommercialFactory.eINSTANCE.createBaseEntityBook()));
 
 		newChildDescriptors.add
 			(createChildParameter

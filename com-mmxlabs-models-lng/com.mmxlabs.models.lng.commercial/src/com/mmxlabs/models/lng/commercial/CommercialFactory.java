@@ -100,15 +100,6 @@ public interface CommercialFactory extends EFactory {
 	ContractExpressionMapEntry createContractExpressionMapEntry();
 
 	/**
-	 * Returns a new object of class '<em>Base Entity Book</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Base Entity Book</em>'.
-	 * @generated
-	 */
-	BaseEntityBook createBaseEntityBook();
-
-	/**
 	 * Returns a new object of class '<em>Simple Entity Book</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
