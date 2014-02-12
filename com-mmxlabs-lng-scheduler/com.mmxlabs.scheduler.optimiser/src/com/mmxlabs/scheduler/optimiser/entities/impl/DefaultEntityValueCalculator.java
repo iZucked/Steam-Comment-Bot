@@ -343,14 +343,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (slot instanceof ILoadOption) {
 
 				// Sum up entity p&L
-				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
-				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.slotAdditionalPNL[idx]);
+				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
+				addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.slotAdditionalPNL[idx]);
 
 			} else if (slot instanceof IDischargeOption) {
 
 				// Base entity gets the profit
 				assert baseEntity != null;
-				addEntityProfit(entityPreTaxProfit, baseEntity.getTradingBook(), value);
+				addEntityBookProfit(entityPreTaxProfit, baseEntity.getTradingBook(), value);
 			}
 
 			idx++;
@@ -451,15 +451,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 	}
 
-	protected void addEntityProfit(@NonNull final Map<IEntityBook, Long> entityProfit, @NonNull final IEntityBook entity, final long profit) {
+	protected void addEntityBookProfit(@NonNull final Map<IEntityBook, Long> entityBookProfit, @NonNull final IEntityBook entityBook, final long profit) {
+		assert entityBook != null;
 		long totalProfit = profit;
-		if (entityProfit.containsKey(entity)) {
-			final Long existingProfit = entityProfit.get(entity);
+		if (entityBookProfit.containsKey(entityBook)) {
+			final Long existingProfit = entityBookProfit.get(entityBook);
 			if (existingProfit != null) {
 				totalProfit += existingProfit.longValue();
 			}
 		}
-		entityProfit.put(entity, totalProfit);
+		entityBookProfit.put(entityBook, totalProfit);
 	}
 
 	protected IDetailTree getEntityBookDetails(final Map<IEntityBook, IDetailTree> entityDetailsMap, final IEntityBook entityBook) {
@@ -495,7 +496,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long hireCosts = shippingCostHelper.getHireCosts(plan);
 
 		final long totalShippingCosts = shippingCosts + portCosts + hireCosts;
-		addEntityProfit(entityPreTaxProfit, costBook, -totalShippingCosts);
+		addEntityBookProfit(entityPreTaxProfit, costBook, -totalShippingCosts);
 	}
 
 	/**
