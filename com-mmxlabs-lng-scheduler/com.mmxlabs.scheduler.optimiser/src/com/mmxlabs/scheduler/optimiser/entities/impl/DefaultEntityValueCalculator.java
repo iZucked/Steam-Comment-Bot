@@ -281,7 +281,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							if (preTaxProfit != null || postTaxProfit != null) {
 
 								final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-								final long postTaxValue = postTaxProfit == null ? 0 : postTaxProfit.longValue() + entity.getShippingBook().getTaxedProfit(preTaxValue, taxTime);
+								final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getShippingBook().getTaxedProfit(preTaxValue, taxTime);
 								final IDetailTree entityDetails = entityDetailTreeMap.get(entity.getShippingBook());
 								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), postTaxValue, preTaxValue, entityDetails);
 								entries.add(entry);
@@ -292,7 +292,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 							final Long preTaxProfit = entityPreTaxProfit.get(entity.getTradingBook());
 							if (preTaxProfit != null || postTaxProfit != null) {
 								final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-								final long postTaxValue = postTaxProfit == null ? 0 : postTaxProfit.longValue() + entity.getShippingBook().getTaxedProfit(preTaxValue, taxTime);
+								final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getTradingBook().getTaxedProfit(preTaxValue, taxTime);
 								final IDetailTree entityDetails = entityDetailTreeMap.get(entity.getTradingBook());
 								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
 								entries.add(entry);
@@ -347,11 +347,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), cargoPNLData.slotAdditionalPNL[idx]);
 
 			} else if (slot instanceof IDischargeOption) {
-
-				// Buy/Sell at same quantity.
-				// TODO: Transfer price
-				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), -value);
-				addEntityProfit(entityPreTaxProfit, entity.getTradingBook(), value);
 
 				// Base entity gets the profit
 				assert baseEntity != null;
