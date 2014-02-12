@@ -49,4 +49,10 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * @param slot
 	 */
 	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, int loadTime, int dischargeTime, long dischargeVolumeInMMBTu, IDetailTree annotations);
+
+	/**
+	 * Invoked before final P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to
+	 * clean any cached data prior to the real calculations.
+	 */
+	public void prepareRealPNL();
 }

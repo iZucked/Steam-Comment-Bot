@@ -40,4 +40,9 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, int loadTime, int dischargeTime, long dischargeVolumeInMMBTu, IDetailTree annotations) {
 		return price;
 	}
+
+	@Override
+	public void prepareRealPNL() {
+
+	}
 }

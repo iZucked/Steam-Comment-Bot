@@ -100,4 +100,9 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			final long transferVolumeInM3, final IDetailTree annotations) {
 		return calculateSimpleUnitPrice(transferTime);
 	}
+
+	@Override
+	public void prepareRealPNL() {
+
+	}
 }

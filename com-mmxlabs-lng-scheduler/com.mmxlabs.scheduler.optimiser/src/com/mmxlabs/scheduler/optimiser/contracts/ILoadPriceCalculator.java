@@ -95,4 +95,10 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 */
 	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumesInM3, int[] dischargePricesPerMMBTu, IVessel vessel,
 			int vesselStartTime, VoyagePlan plan, IDetailTree annotations);
+
+	/**
+	 * Invoked before final P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to
+	 * clean any cached data prior to the real calculations.
+	 */
+	public void prepareRealPNL();
 }

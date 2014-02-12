@@ -213,6 +213,7 @@ public class ScheduleCalculator {
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
+
 		// Prime the load price calculators with the scheduled result
 		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
 			calculator.prepareEvaluation(sequences);
@@ -329,6 +330,17 @@ public class ScheduleCalculator {
 			return;
 		}
 
+		// 2014-02-12 - SG
+		// Back hack to allow a custom contract to reset cached data AFTER any charter out generation / break -even code has run.
+		// TODO: Need a better phase system to notify components where we are in the process.
+		{
+			for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
+				shippingCalculator.prepareRealPNL();
+			}
+			for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
+				calculator.prepareRealPNL();
+			}
+		}
 		for (final ScheduledSequence sequence : scheduledSequences) {
 			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
 

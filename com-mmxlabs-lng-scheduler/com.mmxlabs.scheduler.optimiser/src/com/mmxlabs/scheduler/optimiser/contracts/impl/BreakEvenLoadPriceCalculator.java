@@ -72,4 +72,8 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 		this.price = newPrice;
 	}
 
+	@Override
+	public void prepareRealPNL() {
+
+	}
 }
