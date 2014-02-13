@@ -6,6 +6,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -768,6 +769,16 @@ public interface ActualsPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.actuals.PenaltyType
+	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getPenaltyType()
+	 * @generated
+	 */
+	int PENALTY_TYPE = 5;
+
+	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -775,7 +786,7 @@ public interface ActualsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 5;
+	int CALENDAR = 6;
 
 
 	/**
@@ -1157,6 +1168,16 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getDischargeActuals_DeliveryType();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Penalty Type</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.PenaltyType
+	 * @generated
+	 */
+	EEnum getPenaltyType();
+
+	/**
 	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1479,6 +1500,16 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISCHARGE_ACTUALS__DELIVERY_TYPE = eINSTANCE.getDischargeActuals_DeliveryType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.actuals.PenaltyType
+		 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getPenaltyType()
+		 * @generated
+		 */
+		EEnum PENALTY_TYPE = eINSTANCE.getPenaltyType();
 
 		/**
 		 * The meta object literal for the '<em>Calendar</em>' data type.
