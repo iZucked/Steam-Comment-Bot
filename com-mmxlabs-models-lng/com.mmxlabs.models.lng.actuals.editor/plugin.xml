@@ -99,5 +99,18 @@
             referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
       </valueProvider>
    </extension>
+   <extension
+         point="com.mmxlabs.models.ui.editorfactories">
+      <editorFactory
+            factoryClass="com.mmxlabs.models.lng.actuals.editorFactories.PenaltyTypeValueListInlineEditorFactory"
+            id="com.mmxlabs.models.lng.actuals.editorFactories.PenaltyTypeValueListInlineEditorFactory">
+         <FeatureAnyOf>
+            <EDataTypeIs
+                  EDataTypeName="PenaltyType"
+                  EDataTypeURI="http://www.mmxlabs.com/models/lng/actuals/1/">
+            </EDataTypeIs>
+         </FeatureAnyOf>
+      </editorFactory>
+   </extension>
 
 </plugin>

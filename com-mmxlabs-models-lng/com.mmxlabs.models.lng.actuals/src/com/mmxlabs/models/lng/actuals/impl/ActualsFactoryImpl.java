@@ -29,7 +29,7 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	 */
 	public static ActualsFactory init() {
 		try {
-			ActualsFactory theActualsFactory = (ActualsFactory)EPackage.Registry.INSTANCE.getEFactory(ActualsPackage.eNS_URI);
+			ActualsFactory theActualsFactory = (ActualsFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/actuals/1/"); 
 			if (theActualsFactory != null) {
 				return theActualsFactory;
 			}
@@ -75,6 +75,8 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
+			case ActualsPackage.PENALTY_TYPE:
+				return createPenaltyTypeFromString(eDataType, initialValue);
 			case ActualsPackage.CALENDAR:
 				return createCalendarFromString(eDataType, initialValue);
 			default:
@@ -90,6 +92,8 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
+			case ActualsPackage.PENALTY_TYPE:
+				return convertPenaltyTypeToString(eDataType, instanceValue);
 			case ActualsPackage.CALENDAR:
 				return convertCalendarToString(eDataType, instanceValue);
 			default:
@@ -139,6 +143,26 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	public DischargeActuals createDischargeActuals() {
 		DischargeActualsImpl dischargeActuals = new DischargeActualsImpl();
 		return dischargeActuals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PenaltyType createPenaltyTypeFromString(EDataType eDataType, String initialValue) {
+		PenaltyType result = PenaltyType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertPenaltyTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

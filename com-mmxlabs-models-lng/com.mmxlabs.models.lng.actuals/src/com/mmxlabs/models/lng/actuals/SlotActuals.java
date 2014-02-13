@@ -341,6 +341,7 @@ public interface SlotActuals extends ITimezoneProvider {
 
 	/**
 	 * Returns the value of the '<em><b>Penalty</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.actuals.PenaltyType}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Penalty</em>' attribute isn't clear,
@@ -348,22 +349,24 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Penalty</em>' attribute.
-	 * @see #setPenalty(String)
+	 * @see com.mmxlabs.models.lng.actuals.PenaltyType
+	 * @see #setPenalty(PenaltyType)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Penalty()
 	 * @model
 	 * @generated
 	 */
-	String getPenalty();
+	PenaltyType getPenalty();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPenalty <em>Penalty</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Penalty</em>' attribute.
+	 * @see com.mmxlabs.models.lng.actuals.PenaltyType
 	 * @see #getPenalty()
 	 * @generated
 	 */
-	void setPenalty(String value);
+	void setPenalty(PenaltyType value);
 
 	/**
 	 * Returns the value of the '<em><b>Notes</b></em>' attribute.
