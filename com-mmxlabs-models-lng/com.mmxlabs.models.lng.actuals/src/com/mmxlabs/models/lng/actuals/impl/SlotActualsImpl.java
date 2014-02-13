@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.actuals.impl;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
+import com.mmxlabs.models.lng.actuals.PenaltyType;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
@@ -194,7 +195,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String PENALTY_EDEFAULT = null;
+	protected static final PenaltyType PENALTY_EDEFAULT = PenaltyType.TOP;
 
 	/**
 	 * The cached value of the '{@link #getPenalty() <em>Penalty</em>}' attribute.
@@ -204,7 +205,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected String penalty = PENALTY_EDEFAULT;
+	protected PenaltyType penalty = PENALTY_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
@@ -636,7 +637,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public String getPenalty() {
+	public PenaltyType getPenalty() {
 		return penalty;
 	}
 
@@ -645,10 +646,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setPenalty(String newPenalty) {
-		String oldPenalty = penalty;
-		penalty = newPenalty;
+	public void setPenalty(PenaltyType newPenalty) {
+		PenaltyType oldPenalty = penalty;
+		penalty = newPenalty == null ? PENALTY_EDEFAULT : newPenalty;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__PENALTY, oldPenalty, penalty));
 	}
@@ -749,7 +749,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				setPriceDOL((Double)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__PENALTY:
-				setPenalty((String)newValue);
+				setPenalty((PenaltyType)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__NOTES:
 				setNotes((String)newValue);
@@ -843,7 +843,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__PRICE_DOL:
 				return priceDOL != PRICE_DOL_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__PENALTY:
-				return PENALTY_EDEFAULT == null ? penalty != null : !PENALTY_EDEFAULT.equals(penalty);
+				return penalty != PENALTY_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case ActualsPackage.SLOT_ACTUALS__CV:

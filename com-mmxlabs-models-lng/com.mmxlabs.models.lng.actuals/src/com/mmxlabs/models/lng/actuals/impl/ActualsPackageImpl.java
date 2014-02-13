@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.PenaltyType;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -18,6 +19,7 @@ import java.util.Calendar;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -65,6 +67,13 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	private EClass dischargeActualsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum penaltyTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -492,6 +501,15 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getPenaltyType() {
+		return penaltyTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public EDataType getCalendar() {
 		return calendarEDataType;
@@ -566,6 +584,9 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		dischargeActualsEClass = createEClass(DISCHARGE_ACTUALS);
 		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__DELIVERY_TYPE);
 
+		// Create enums
+		penaltyTypeEEnum = createEEnum(PENALTY_TYPE);
+
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
 	}
@@ -621,7 +642,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getSlotActuals_VolumeInM3(), ecorePackage.getEFloat(), "volumeInM3", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_VolumeInMMBtu(), ecorePackage.getEInt(), "volumeInMMBtu", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_PriceDOL(), ecorePackage.getEDouble(), "priceDOL", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotActuals_Penalty(), ecorePackage.getEString(), "penalty", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_Penalty(), this.getPenaltyType(), "penalty", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_CV(), ecorePackage.getEDouble(), "CV", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_PortCharges(), ecorePackage.getEInt(), "portCharges", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -650,6 +671,11 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		initEClass(dischargeActualsEClass, DischargeActuals.class, "DischargeActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDischargeActuals_DeliveryType(), ecorePackage.getEString(), "deliveryType", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(penaltyTypeEEnum, PenaltyType.class, "PenaltyType");
+		addEEnumLiteral(penaltyTypeEEnum, PenaltyType.TOP);
+		addEEnumLiteral(penaltyTypeEEnum, PenaltyType.NOT_TOP);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
