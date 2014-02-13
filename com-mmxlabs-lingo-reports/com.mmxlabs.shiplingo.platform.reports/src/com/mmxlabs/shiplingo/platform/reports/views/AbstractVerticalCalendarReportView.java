@@ -33,12 +33,12 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 
 /**
- * Class for providing "vertical" schedule reports. Each row is a calendar day in the schedule; each column typically represents
- * a sequence (series of events) in the schedule.<p/> 
+ * Class for providing "vertical" schedule reports. Each row is a calendar day in the schedule; each column typically 
+ * represents a sequence (series of events) in the schedule.<p/> 
  * 
  * Override {@link#getCols(ScheduleSequenceData data)} to modify the columns, and
- * override {@link#getEventText(Date date, Event event)} and / or {@link#getEventText(Date date, Event [] events)} to modify the
- * sequence cell contents.   
+ * Override {@link#getEventText(Date date, Event event)} and / or {@link#getEventText(Date date, Event [] events)} 
+ * to modify the sequence cell contents.   
  *  
  * @author Simon McGregor
  *
