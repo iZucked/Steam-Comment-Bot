@@ -152,6 +152,14 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 					}
 					objectList.add(shippingBook);
 				}
+				
+				BaseEntityBook tradingBook = baseLegalEntity.getTradingBook();
+				if (tradingBook != null) {
+					for (final TaxRate taxRate : tradingBook.getTaxRates()) {
+						dates.add(shortDate.format(taxRate.getDate()));
+					}
+					objectList.add(tradingBook);
+				}
 			}
 		}
 
@@ -191,7 +199,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 
 		// now export the tax curve date fields per object
 		// this guarantees they will appear after the non-date columns
-		for (int i = 0; i < objects.size(); i++) {
+		for (int i = 0; i < objectList.size(); i++) {
 			EObject eObject = objectList.get(i);
 			if (eObject instanceof BaseEntityBook) {
 				BaseEntityBook baseEntityBook = (BaseEntityBook) eObject;
