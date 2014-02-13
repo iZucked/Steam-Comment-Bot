@@ -740,6 +740,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (firstSlot instanceof IHeelOptionsPortSlot) {
 				final IHeelOptions options = ((IHeelOptionsPortSlot) firstSlot).getHeelOptions();
 				cargoCVValue = options.getHeelCVValue();
+
+				// If we have not been able to use NBO, assume there was no LNG
+				if (lngCommitmentInM3 == 0 && options.getHeelLimit() > 0) {
+					voyagePlan.setStartingHeelInM3(0);
+					voyagePlan.setRemainingHeelInM3(0, VoyagePlan.HeelType.NONE);
+				}
 			}
 
 		}
