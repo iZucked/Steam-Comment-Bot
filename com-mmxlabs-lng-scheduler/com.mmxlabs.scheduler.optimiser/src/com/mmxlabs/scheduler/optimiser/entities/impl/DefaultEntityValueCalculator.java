@@ -238,7 +238,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
-		evaluateCargoPNL(cargoPNLData, baseEntity, entityPreTaxProfit);
+		evaluateCargoPNL(cargoPNLData, baseEntity, entityPreTaxProfit, entityBookDetailTreeMap);
 
 		// Shipping Entity for non-cargo costings - handle any transfer pricing etc required
 		IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
@@ -331,7 +331,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param baseEntity
 	 * @param entityProfit
 	 */
-	protected void evaluateCargoPNL(final CargoPNLData cargoPNLData, final IEntity baseEntity, final Map<IEntityBook, Long> entityPreTaxProfit) {
+	protected void evaluateCargoPNL(final CargoPNLData cargoPNLData, final IEntity baseEntity, final Map<IEntityBook, Long> entityPreTaxProfit,
+			@Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		int idx = 0;
 		for (final IPortSlot slot : cargoPNLData.slots) {
