@@ -12,7 +12,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -86,7 +88,22 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final CommercialModel commercial = CommercialFactory.eINSTANCE.createCommercialModel();
 		if (inputs.containsKey(ENTITIES_KEY)) {
-			commercial.getEntities().addAll((Collection<? extends LegalEntity>) entityImporter.importObjects(CommercialPackage.eINSTANCE.getBaseLegalEntity(), inputs.get(ENTITIES_KEY), context));
+			final Collection<EObject> entities = entityImporter.importObjects(CommercialPackage.eINSTANCE.getBaseLegalEntity(), inputs.get(ENTITIES_KEY), context);
+			for (final EObject entity : entities) {
+				if (entity instanceof BaseLegalEntity) {
+					final BaseLegalEntity baseLegalEntity = (BaseLegalEntity) entity;
+					commercial.getEntities().add(baseLegalEntity);
+					// Ensure a book exists. Note the LegalEntityBookImporter will overwrite this data if needed.
+					// A post model importer may be a more robust way of ensuring books exist should implementations change.
+					if (baseLegalEntity.getShippingBook() == null) {
+						baseLegalEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+					}
+					if (baseLegalEntity.getTradingBook() == null) {
+						baseLegalEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+					}
+				}
+
+			}
 		}
 		if (inputs.containsKey(ENTITY_BOOKS_KEY)) {
 			entityBookImporter.importObjects(CommercialPackage.eINSTANCE.getBaseEntityBook(), inputs.get(ENTITY_BOOKS_KEY), context);
