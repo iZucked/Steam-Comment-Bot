@@ -141,19 +141,19 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 		 * semantics.
 		 */
 
-		for (EObject obj : objects) {
+		for (final EObject obj : objects) {
 			if (obj instanceof BaseLegalEntity) {
-				BaseLegalEntity baseLegalEntity = (BaseLegalEntity) obj;
+				final BaseLegalEntity baseLegalEntity = (BaseLegalEntity) obj;
 
-				BaseEntityBook shippingBook = baseLegalEntity.getShippingBook();
+				final BaseEntityBook shippingBook = baseLegalEntity.getShippingBook();
 				if (shippingBook != null) {
 					for (final TaxRate taxRate : shippingBook.getTaxRates()) {
 						dates.add(shortDate.format(taxRate.getDate()));
 					}
 					objectList.add(shippingBook);
 				}
-				
-				BaseEntityBook tradingBook = baseLegalEntity.getTradingBook();
+
+				final BaseEntityBook tradingBook = baseLegalEntity.getTradingBook();
 				if (tradingBook != null) {
 					for (final TaxRate taxRate : tradingBook.getTaxRates()) {
 						dates.add(shortDate.format(taxRate.getDate()));
@@ -200,9 +200,9 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 		// now export the tax curve date fields per object
 		// this guarantees they will appear after the non-date columns
 		for (int i = 0; i < objectList.size(); i++) {
-			EObject eObject = objectList.get(i);
+			final EObject eObject = objectList.get(i);
 			if (eObject instanceof BaseEntityBook) {
-				BaseEntityBook baseEntityBook = (BaseEntityBook) eObject;
+				final BaseEntityBook baseEntityBook = (BaseEntityBook) eObject;
 				result.get(i).putAll(exportTaxCurve(baseEntityBook, dates, context));
 			}
 		}
@@ -215,7 +215,7 @@ public class LegalEntityBookImporter extends DefaultClassImporter {
 	}
 
 	@Override
-	protected boolean shouldExportFeature(EStructuralFeature feature) {
+	protected boolean shouldExportFeature(final EStructuralFeature feature) {
 		return super.shouldExportFeature(feature) && feature != CommercialPackage.Literals.BASE_ENTITY_BOOK__TAX_RATES;
 	}
 }

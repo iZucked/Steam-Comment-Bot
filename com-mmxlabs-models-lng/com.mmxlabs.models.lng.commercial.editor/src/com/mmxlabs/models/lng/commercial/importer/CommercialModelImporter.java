@@ -74,7 +74,6 @@ public class CommercialModelImporter implements ISubmodelImporter {
 			entityImporter = new DefaultClassImporter();// (LegalEntityImporter) importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
-
 		}
 	}
 
@@ -108,7 +107,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		final CommercialModel cm = (CommercialModel) model;
 		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities(), context));
 		output.put(ENTITY_BOOKS_KEY, entityBookImporter.exportObjects(cm.getEntities(), context));
-		
+
 		final LinkedList<PurchaseContract> purchase = new LinkedList<PurchaseContract>();
 		final LinkedList<SalesContract> sales = new LinkedList<SalesContract>();
 		for (final SalesContract c : cm.getSalesContracts()) {
