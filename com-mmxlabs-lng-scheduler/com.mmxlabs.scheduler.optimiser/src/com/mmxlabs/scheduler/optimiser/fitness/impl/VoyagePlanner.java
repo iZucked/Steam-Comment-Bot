@@ -441,9 +441,12 @@ public class VoyagePlanner {
 			final IDetailsSequenceElement[] sequence = plan.getSequence();
 			long currentHeelInM3 = startHeelVolumeInM3;
 			long totalVoyageBOG = 0;
+
+			IPortSlot optionalHeelUsePortSlot = null;
 			for (int i = 0; i < sequence.length - 1; ++i) {
 				final IDetailsSequenceElement e = sequence[i];
 				if (e instanceof PortDetails) {
+					optionalHeelUsePortSlot = null;
 					final PortDetails portDetails = (PortDetails) e;
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					final long start = currentHeelInM3;
@@ -455,6 +458,8 @@ public class VoyagePlanner {
 						}
 					} else {
 						if (portSlot instanceof IHeelOptionsPortSlot) {
+							optionalHeelUsePortSlot = portSlot;
+							// FIXME: This volume is optional use
 							final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
 							currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
 						} else {
@@ -476,6 +481,16 @@ public class VoyagePlanner {
 					currentHeelInM3 -= voyageBOGInM3;
 				}
 			}
+			// The optional heel use port slot has heel on board which may or may not have been used.
+			// The default code path assumes it has been used. However, if there is no NBO at all, we assume it did not exist,
+			// thus we need to update the data to accommodate.
+			if (optionalHeelUsePortSlot != null && totalVoyageBOG == 0) {
+				// Replace heel level annotation
+				heelLevelAnnotations.put(optionalHeelUsePortSlot, new HeelLevelAnnotation(0, 0));
+				// Update current heel - this will still be the start heel value as there was no boil-off
+				currentHeelInM3 = 0;
+			}
+
 			// Sanity check these calculations match expected values
 			assert totalVoyageBOG == plan.getLNGFuelVolume();
 			assert endHeelVolumeInM3 == currentHeelInM3;
