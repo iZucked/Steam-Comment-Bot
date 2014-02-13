@@ -370,19 +370,19 @@ public class LNGScenarioTransformer {
 
 				final int[] changePoints = parsed.getChangePoints();
 				if (changePoints.length == 0) {
-					final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(0).intValue()) / 24l ;
+					final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(0).intValue());
 					if (dailyCost != (int) dailyCost) {
 						throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
 					}
-					curve.setValueAfter(0, (int) dailyCost*24);
+					curve.setValueAfter(0, (int) dailyCost);
 				} else {
 
 					for (final int i : parsed.getChangePoints()) {
-						final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(i).intValue()) / 24l ;
+						final long dailyCost = OptimiserUnitConvertor.convertToInternalDailyCost(parsed.evaluate(i).intValue());
 						if (dailyCost != (int) dailyCost) {
 							throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
 						}
-						curve.setValueAfter(i - 1, (int) dailyCost*24);
+						curve.setValueAfter(i - 1, (int) dailyCost);
 					}
 				}
 				entities.addModelObject(index, curve);
@@ -2050,10 +2050,10 @@ public class LNGScenarioTransformer {
 			final long heelLimit = vesselAvailability.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(vesselAvailability.getStartHeel().getVolumeAvailable())
 					: 0;
 
-			final int dailyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(dailyCharterInPrice) / 24 * 24;
+			final int dailyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(dailyCharterInPrice);
 			final ICurve dailyCharterInCurve = new ConstantValueCurve(dailyCharterInRate);
 
-			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), dailyCharterInCurve ,
+			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), dailyCharterInCurve,
 					vesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(vesselAvailability.getStartHeel().getCvValue()),
 					OptimiserUnitConvertor.convertToInternalPrice(vesselAvailability.getStartHeel().getPricePerMMBTU()),
