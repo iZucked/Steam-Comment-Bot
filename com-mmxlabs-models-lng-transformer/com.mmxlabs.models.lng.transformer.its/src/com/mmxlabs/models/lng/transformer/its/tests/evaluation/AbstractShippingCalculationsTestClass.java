@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -301,7 +302,11 @@ public class AbstractShippingCalculationsTestClass {
 						Event event = events.get(j);
 						Long pnl = getEventPnl(event);
 						if (pnl != null && pnls[i] != null) {
-							if ((int) pnls[i] != pnl.intValue()) {
+							// if ((int) pnls[i] != pnl.intValue()) {
+							// failures.add(String.format("PnL expected %d was %d for [%d] %s", pnls[i], pnl.intValue(), j, event.toString()));
+							// }
+							//allow small rounding error due to floating point arithmetic
+							if (Math.abs((int) pnls[i] - pnl.intValue()) > 1) {
 								failures.add(String.format("PnL expected %d was %d for [%d] %s", pnls[i], pnl.intValue(), j, event.toString()));
 							}
 							continue;
@@ -417,8 +422,6 @@ public class AbstractShippingCalculationsTestClass {
 		return checker;
 	}
 
-	
-
 	public class SequenceTester {
 		/** The expected values for each event in the sequence, keyed by expected field */
 		private final Map<Expectations, Integer[]> expectedArrays = new HashMap<Expectations, Integer[]>();
@@ -429,7 +432,7 @@ public class AbstractShippingCalculationsTestClass {
 		/** Information on where each PnL group starts & ends, and whether it is a cargo or not */
 		private PnlChunkIndexData[] cargoIndices;
 
-		public float baseFuelPricePerM3 = 10;
+		public float baseFuelPricePerMT = 10;
 		public float purchasePricePerM3 = 21 * 0.5f;
 		public float salesPricePerM3 = 21;
 
@@ -555,7 +558,7 @@ public class AbstractShippingCalculationsTestClass {
 
 			}
 
-			setupExpectedPnl(purchasePricePerM3, salesPricePerM3, baseFuelPricePerM3);
+			setupExpectedPnl(purchasePricePerM3, salesPricePerM3, baseFuelPricePerMT);
 
 			failures.addAll(checkPnlValues(events, cargoIndices, expectedPnlValues));
 
@@ -592,7 +595,7 @@ public class AbstractShippingCalculationsTestClass {
 			final Integer[] fuelCosts = getStorageArray(Expectations.FUEL_COSTS);
 
 			for (int i = 0; i < fuelCosts.length; i++) {
-				fuelCosts[i] = (int) (bfUsage[i] * baseFuelPricePerM3 + (fboUsage[i] + nboUsage[i]) * salesPricePerM3);
+				fuelCosts[i] = (int) (bfUsage[i] * baseFuelPricePerMT + (fboUsage[i] + nboUsage[i]) * salesPricePerM3);
 			}
 		}
 
@@ -721,18 +724,52 @@ public class AbstractShippingCalculationsTestClass {
 		return checker;
 	}
 
-	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
-		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final Date charterStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
-		final Date charterStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
-		int charterOutRate = 24;
-		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
-		event.getHeelOptions().setVolumeAvailable(0);
-		event.getHeelOptions().setCvValue(21);
-		event.getHeelOptions().setPricePerMMBTU(1);
+	public SequenceTester getTesterForVesselEventPostDischarge() {
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class,
+				Journey.class, Idle.class, EndEvent.class };
+		final SequenceTester checker = getDefaultTester(classes);
 
-		return event;
+		// expected durations of journeys
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 1 });
+
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 2 { duration in hours } * 10 { NBO rate }
+		// 0 (vessel empty)
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0, 0 });
+
+		// expected base consumptions
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
+		// 30 = 2 { journey duration } * 15 { base fuel consumption } - 0 { LNG consumption }
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 30, 15 });
+
+		// expected costs of journeys
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
+		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption }
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300, 150 });
+
+		// expected durations of idles
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0 });
+
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0 });
+
+		// idle costs
+		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0 });
+
+		return checker;
+
 	}
-
 }

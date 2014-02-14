@@ -14,6 +14,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
@@ -28,6 +29,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class MinimalScenarioCreator extends DefaultScenarioCreator {
 	public final VesselClass vc;
@@ -256,4 +258,18 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		pricingModel.getCooldownPrices().add(price);
 	}
 
+	
+	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
+		// change to default: add a charter out event 2-3 hrs after discharge window ends
+		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final Date charterStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
+		final Date charterStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		int charterOutRate = 24;
+		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
+		event.getHeelOptions().setVolumeAvailable(0);
+		event.getHeelOptions().setCvValue(21);
+		event.getHeelOptions().setPricePerMMBTU(1);
+
+		return event;
+	}
 }

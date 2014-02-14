@@ -233,80 +233,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 	}
 
 	@Test
-	public void testPlentyStartHeel() {
-		System.err.println("\n\nGenerous Start Heel Means NBO on First Voyage and LNG Rollover");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// change from default scenario
-
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setVolumeAvailable(5000);
-		vesselAvailability.getStartHeel().setCvValue(21);
-		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
-
-		final SequenceTester checker = getDefaultTester();
-
-		// change from default scenario
-		// first journey should use NBO and base fuel (not just base fuel)
-		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(0, Expectations.FBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
-
-		// change from default scenario
-		// first load should be only 5010
-		// 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
-		checker.setExpectedValue(5010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-
-		// cost of first journey should be changed accordingly
-		// 10m3 * 21 (CV) * 1 (price) = 210
-		// 5mt * 10 (price) = 50
-		checker.setExpectedValue(260, Expectations.FUEL_COSTS, Journey.class, 0);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	/*
-	 * Note: NBO from partial start heel is ignored by the voyage calculator because the calculator is based on fuel choices, and partial NBO is not a fuel choice. This unit test has been disabled,
-	 * although the calculation it tracks is not handled correctly by the current voyage calculator. In future it may need to be re-enabled.
-	 */
-	@Ignore("Disabled since partial NBO is not supported.")
-	@Test
-	public void testLimitedStartHeel() {
-		System.err.println("\n\nLimited Start Heel");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// change from default scenario
-
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setVolumeAvailable(5);
-		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
-
-		final SequenceTester checker = getDefaultTester();
-
-		// change from default scenario
-		// first journey should use NBO and base fuel
-		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
-
-		// cost of first journey should be changed accordingly
-		checker.setExpectedValue(205, Expectations.FUEL_COSTS, Journey.class, 0);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	@Test
 	public void testFBOLimitedByMinHeel() {
 		System.err.println("\n\nUse FBO for one trip after loading");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
@@ -344,83 +270,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 			}
 		}
 		Assert.assertEquals("Exactly one leg uses FBO", 1, fboUsages);
-	}
-
-	@Ignore("Edge case: min heel is perilously close to vessel capacity")
-	@Test
-	public void testMinHeelForcesBfSupplementAndHeelout() {
-		System.err.println("\n\nMinimum Heel Forces BF supplement and heel out");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// change from default scenario: make the minimum heel unattainable - thus causing a capacity violation
-		// Cause a heel out and BF supplement to be used
-		msc.vc.setMinHeel(10000);
-
-		final SequenceTester checker = getDefaultTester();
-
-		// change from default: no NBO consumption (min heel forces BF travel except on laden leg where it is required)
-		final Integer[] expectedNboJourneyConsumptions = { 0, 20, 0 };
-		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, expectedNboJourneyConsumptions);
-
-		// change from default: mostly BF consumption (min heel forces BF travel)
-		final Integer[] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
-		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, expectedBaseFuelJourneyConsumptions);
-
-		// expected costs of journeys
-		final Integer[] expectedJourneyCosts = { 150, 520, 150 };
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
-		checker.setExpectedValue(20, Expectations.MIN_HEEL_VIOLATIONS, SlotVisit.class, 0);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-
-	}
-
-	@Test
-	public void testHeelMeansNoCooldownRequired() {
-		System.err.println("\n\nStart heel is sufficient to avoid cooldown at load port.");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// change from default scenario: cooldown times and volumes specified
-		msc.vc.setWarmingTime(0);
-		// msc.vc.setCoolingTime(1);
-		msc.vc.setCoolingVolume(100);
-
-		msc.setupCooldown(1.0);
-		msc.loadPort.setAllowCooldown(true);
-
-		// but a big start heel should mean no cooldown is required
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setVolumeAvailable(1000);
-		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
-		vesselAvailability.getStartHeel().setCvValue(21);
-
-		final SequenceTester checker = getDefaultTester();
-
-		// change from default scenario
-		// first journey should use NBO and base fuel
-		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
-
-		// cost of first journey should be changed accordingly
-		checker.setExpectedValue(260, Expectations.FUEL_COSTS, Journey.class, 0);
-
-		// first load amount is reduced because of leftover fuel from the start heel
-		// 9010 = 10000 [ vessel capacity ] - (1000 [ start heel ] - 10 [boiloff] )
-		checker.setExpectedValue(9010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
 	}
 
 	/*
@@ -471,7 +320,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
 
 		final SequenceTester checker = getDefaultTester();
-		checker.baseFuelPricePerM3 = 100;
+		checker.baseFuelPricePerMT = 100;
 
 		// change from default scenario
 		// second and third journeys now use LNG only (no start heel means that first journey has to be on base fuel only)
@@ -493,9 +342,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// idle LNG consumption is 10, plus 30 + 15 for journeys and 500 min heel
 		final Integer[] expectedloadDischargeVolumes = { 10000, -9445 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
-
-		// NBO on ballast Min heel in m3
-		checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -579,7 +425,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		msc.vc.setMinHeel(0);
 
 		final SequenceTester checker = getDefaultTester();
-		checker.baseFuelPricePerM3 = 100;
+		checker.baseFuelPricePerMT = 100;
 
 		final Integer[] expectedloadDischargeVolumes = { 10000, -9970 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
@@ -734,39 +580,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// should have no effect on the generated schedule
 		final SequenceTester checker = getDefaultTester();
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	@Ignore("Cooldown now takes zero time")
-	@Test
-	public void testExtraTimeScheduledForCooldown() {
-		System.err.println("\n\nExtra time should be scheduled after leaving start port for cooldown at load port.");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// change from default scenario: cooldown times and volumes specified
-		msc.vc.setWarmingTime(0);
-		// msc.vc.setCoolingTime(1);
-		msc.vc.setCoolingVolume(100);
-
-		msc.setupCooldown(1.0);
-		msc.loadPort.setAllowCooldown(true);
-
-		// change from default scenario: should insert a cooldown event
-		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
-				EndEvent.class };
-
-		final SequenceTester checker = getDefaultTester(expectedClasses);
-
-		// change from default: cooldown time
-		final Integer[] expectedCooldownTimes = { 1 };
-		checker.setExpectedValues(Expectations.DURATIONS, Cooldown.class, expectedCooldownTimes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -1088,99 +901,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
-
-	}
-
-	// @Ignore("Test description is inconsistent with coded expectations")
-	@Test
-	public void testLimitedStartHeelIsCapacityViolation() {
-		System.err.println("\n\nLimited Start Heel, should still NBO travel and idle - Capacity Violation");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// change from default scenario
-
-		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-		vesselAvailability.getStartHeel().setVolumeAvailable(10);
-		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
-		// change from default scenario: set a "return after" date
-		// somewhat later than the end of the discharge window
-		final Date startLoad = msc.cargo.getSlots().get(0).getWindowStartWithSlotOrPortTime();
-
-		// start 3 hrs before load window begins
-		final Date startDate = msc.addHours(startLoad, -3);
-		vesselAvailability.setStartBy(startDate);
-		vesselAvailability.setStartAfter(msc.addHours(startLoad, -5));
-		System.err.println("Vessel to start before: " + startDate);
-
-		final SequenceTester checker = getDefaultTester();
-
-		// change from default scenario
-		// first journey should use NBO and base fuel
-		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
-		checker.setExpectedValue(260, Expectations.FUEL_COSTS, Journey.class, 0);
-
-		// change from default: BF idle consumption at load port after arrival
-		// (idle at discharge port is NBO)
-		checker.setExpectedValue(10, Expectations.NBO_USAGE, Idle.class, 0);
-		checker.setExpectedValue(2, Expectations.DURATIONS, Idle.class, 0);
-		checker.setExpectedValue(210, Expectations.FUEL_COSTS, Idle.class, 0);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	private SequenceTester getTesterForVesselEventPostDischarge() {
-		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class,
-				Journey.class, Idle.class, EndEvent.class };
-		final SequenceTester checker = getDefaultTester(classes);
-
-		// expected durations of journeys
-		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 1 });
-
-		// expected NBO consumptions of journeys
-		// 0 (no start heel)
-		// 20 = 2 { duration in hours } * 10 { NBO rate }
-		// 0 (vessel empty)
-		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0, 0 });
-
-		// expected base consumptions
-		// 15 = 1 { journey duration } * 15 { base fuel consumption }
-		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
-		// 30 = 2 { journey duration } * 15 { base fuel consumption } - 0 { LNG consumption }
-		// 15 = 1 { journey duration } * 15 { base fuel consumption }
-		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 30, 15 });
-
-		// expected costs of journeys
-		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
-		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
-		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption }
-		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300, 150 });
-
-		// expected durations of idles
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0 });
-
-		// expected base idle consumptions
-		// 0 = no idle (start)
-		// 0 = no idle (idle on NBO)
-		// 0 = no idle (end)
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0 });
-
-		// expected NBO idle consumptions
-		// 10 = 2 { idle duration } * 5 { idle NBO rate }
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0 });
-
-		// idle costs
-		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0 });
-
-		return checker;
 
 	}
 
@@ -1515,20 +1235,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 	}
 
-	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
-		// change to default: add a charter out event 2-3 hrs after discharge window ends
-		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
-		final Date charterStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
-		final Date charterStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
-		int charterOutRate = 24;
-		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", startPort, endPort, charterStartByDate, charterStartAfterDate, charterOutRate);
-		event.getHeelOptions().setVolumeAvailable(0);
-		event.getHeelOptions().setCvValue(21);
-		event.getHeelOptions().setPricePerMMBTU(1);
-
-		return event;
-	}
-
 	@Test
 	public void testRegularCharterOutLoadToOrigin() {
 		System.err.println("\n\nTest regular charter out from load port to origin port.");
@@ -1536,7 +1242,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
-		CharterOutEvent event = makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
+		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
 
 		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
 		// works.
@@ -1599,128 +1305,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		checker.check(sequence);
 	}
 
-	@Test
-	public void testRegularCharterOutLoadToLoadNoHeel() {
-		System.err.println("\n\nTest regular charter out from load port to load port.");
-
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		CharterOutEvent event = makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
-
-		SequenceTester checker = getTesterForVesselEventPostDischarge();
-		// SequenceTester checker = getDefaultTester();
-
-		// expected charter out duration
-		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
-
-		// expected charter out revenue
-		// 24 { revenue per day } * 1 { days }
-		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	@Test
-	public void testRegularCharterOutLoadToLoadWithHeel() {
-		System.err.println("\n\nTest regular charter out from load port to load port. LNG heel should be used for return journey");
-
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		CharterOutEvent event = makeCharterOut(msc, scenario, msc.loadPort, msc.loadPort);
-
-		event.getHeelOptions().setVolumeAvailable(20);
-
-		SequenceTester checker = getTesterForVesselEventPostDischarge();
-
-		// expected charter out duration
-		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
-
-		// expected charter out revenue
-		// 24 { revenue per day } * 1 { days }
-		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
-
-		// final journey should use NBO
-		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 3);
-
-		// final journey should use less base fuel
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 3);
-
-		checker.setupOrdinaryFuelCosts();
-		// NBO on ballast - Charter out volume - ballast NBO
-		checker.setExpectedValue(10, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	@Test
-	public void testCharterOutRollover() {
-		System.err.println("\n\nTest LNG heel from early charter out event is rolled over.");
-
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// add a charter out event prior to the first cargo.
-		final Date startLoad = msc.getFirstAppointment().getSecond();
-		final Date charterStartByDate = msc.addHours(startLoad, -25);
-		final Date charterStartAfterDate = msc.addHours(startLoad, -25);
-		int charterOutRate = 24;
-		CharterOutEvent event = msc.vesselEventCreator.createCharterOutEvent("CharterOut", msc.originPort, msc.originPort, charterStartByDate, charterStartAfterDate, charterOutRate);
-
-		// set the charter out required end heel to 5000 (and set some other things)
-		event.getHeelOptions().setVolumeAvailable(5000);
-		event.getHeelOptions().setCvValue(21);
-		event.getHeelOptions().setPricePerMMBTU(1);
-
-		// recalculate the vessel availability based on the new timetable
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
-
-		// we now expect an idle and a vessel event visit before the first journey
-		Class<?>[] expectedClasses = { StartEvent.class, Idle.class, VesselEventVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class,
-				Idle.class, EndEvent.class };
-
-		SequenceTester checker = getDefaultTester(expectedClasses);
-
-		// expected charter out duration
-		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
-
-		// expected charter out revenue
-		// 24 { revenue per day } * 1 { days }
-		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
-
-		// new idle event at the start of the itinerary
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 0, 2, 0 });
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 0, 10, 0 });
-
-		// first journey runs on NBO and BF
-		checker.setExpectedValue(10, Expectations.NBO_USAGE, Journey.class, 0);
-		checker.setExpectedValue(5, Expectations.BF_USAGE, Journey.class, 0);
-
-		// expected load volume reduced due to roll over from LNG left at end of charter out
-		// 5010 = 10000 [vessel capacity] - (5000 [leftover heel] - 10 [journey boiloff])
-		checker.setExpectedValue(5010, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-
-		checker.setupOrdinaryFuelCosts();
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
 	// test doesn't work yet
 	public void testStsVoyage() {
 		System.err.println("\n\nSTS journey");
@@ -1750,120 +1334,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final Sequence sequence = schedule.getSequences().get(0);
 
-	}
-
-	@Test
-	public void testHeelRollover() {
-		System.err.println("\n\nTest min heel rollover: LNG travel due to expensive BF");
-
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// create an additional cargo
-		msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
-		// and send the vessel back to the origin port at end of itinerary
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
-
-		msc.vc.setMinHeel(500);
-
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
-
-		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, // start to load
-				SlotVisit.class, Journey.class, Idle.class, // load to discharge
-				SlotVisit.class, Journey.class, Idle.class, // discharge to load
-				SlotVisit.class, Journey.class, Idle.class, // load to discharge
-				SlotVisit.class, Journey.class, Idle.class, // discharge to end
-				EndEvent.class };
-
-		SequenceTester checker = getDefaultTester(classes);
-
-		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 2, 1 });
-		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 0, 0, 0, 0 });
-		checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 10, 10, 10, 5 });
-		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 20, 20, 10 });
-
-		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 2, 2, 0 });
-		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
-		checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 });
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 10, 10, 0 });
-
-		// volume allocations: load 10000 at first load port (loading from empty)
-		// at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here
-		// at next load, load back up to full (500 min heel minus 10m3 idle fuel was on board)
-		// at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
-		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
-
-		// Min heel in m3
-		// checker.setExpectedValue(500, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
-
-		checker.baseFuelPricePerM3 = 100;
-		checker.setupOrdinaryFuelCosts();
-
-		final Sequence sequence = schedule.getSequences().get(0);
-		checker.check(sequence);
-	}
-
-	@Test
-	@Ignore("This doesn't actually test anything yet - and involves a known issue.")
-	public void testEventHeelRollover() {
-		System.err.println("\n\nTest min heel rollover for maintenance event: LNG travel due to expensive BF");
-
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// create a maintenance event after the cargo
-		Port eventPort = msc.loadPort;
-
-		msc.createDefaultMaintenanceEvent("Maintenance", eventPort, null);
-
-		// and recalculate the vessel availability
-		msc.setDefaultAvailability(msc.originPort, msc.originPort);
-
-		// force a heel rollover at the maintenance port
-		msc.vc.setMinHeel(500);
-
-		final PricingModel pricingModel = scenario.getPricingModel();
-		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
-
-		final BaseFuelCost fuelPrice = fleetCostModel.getBaseFuelPrices().get(0);
-
-		// base fuel is now 10x more expensive, so FBO is economical
-		msc.fleetCreator.setBaseFuelPrice(fuelPrice, 100);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		/*
-		 * final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, // start to load SlotVisit.class, Journey.class, Idle.class, // load to discharge SlotVisit.class, Journey.class,
-		 * Idle.class, // discharge to load SlotVisit.class, Journey.class, Idle.class, // load to discharge SlotVisit.class, Journey.class, Idle.class, // discharge to end EndEvent.class };
-		 * 
-		 * SequenceTester checker = getDefaultTester(classes);
-		 * 
-		 * checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 2, 1 }); checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 0, 0,
-		 * 0, 0 }); checker.setExpectedValues(Expectations.FBO_USAGE, Journey.class, new Integer[] { 0, 10, 10, 10, 5 }); checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[]
-		 * { 0, 20, 20, 20, 10 });
-		 * 
-		 * checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 2, 2, 0 }); checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0
-		 * }); checker.setExpectedValues(Expectations.FBO_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0 }); checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 10,
-		 * 10, 0 });
-		 * 
-		 * // volume allocations: load 10000 at first load port (loading from empty) // at first discharge, retain 530m3 (500 min heel plus 30m3 travel fuel) and 40m3 was used to get here // at next
-		 * load, load back up to full (500 min heel minus 10m3 idle fuel was on board) // at next discharge, retain 515m3 (500 min heel plus 15m3 travel fuel) and 40m3 was used to get here
-		 * checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 10000, -9430, 9510, -9445 });
-		 * 
-		 * checker.baseFuelPricePerM3 = 100; checker.setupOrdinaryFuelCosts();
-		 * 
-		 * final Sequence sequence = schedule.getSequences().get(0); checker.check(sequence);
-		 */
 	}
 
 	private SequenceTester getStsTesterLoad() {

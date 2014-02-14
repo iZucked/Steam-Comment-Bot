@@ -217,7 +217,7 @@ public class DefaultScenarioCreator {
 		final int speed = 10;
 		final int defaultCapacity = 10000;
 		final int defaultPilotLightRate = 0;
-		final int defaultMinHeelVolume = 500;
+		final int defaultMinHeelVolume = 0;
 
 		final int defaultWarmupTime = Integer.MAX_VALUE;
 		final double defaultEquivalenceFactor = 1.0;

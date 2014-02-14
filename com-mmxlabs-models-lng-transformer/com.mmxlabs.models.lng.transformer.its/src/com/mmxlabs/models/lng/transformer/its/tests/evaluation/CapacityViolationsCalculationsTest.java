@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
-// TODO: Extends causes tests to be re-applied
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
 
 	@Test
@@ -53,6 +52,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final Sequence sequence = schedule.getSequences().get(0);
 		checker.check(sequence);
 	}
+
 	@Test
 	public void testVoyageRequirementsGreaterThanVesselCapacity() {
 
@@ -99,32 +99,6 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// Min heel in m3
 		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	@Test
-	public void testVoyageRequirementsIncMinHeelViolateMaxLoad() {
-		System.err.println("\n\nMaximum Load Volume Violated To Accommodate Min Heel");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		msc.vc.setMinHeel(50);
-
-		msc.cargo.getSlots().get(0).setMaxQuantity(20);
-
-		SequenceTester checker = getDefaultTester();
-
-		// heel (50) + travel (20) -- idle 10 comes out of heel.
-		// Remaining heel can be discharged
-		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 70, -40 });
-
-		checker.setExpectedValue(50, Expectations.MAX_LOAD_VIOLATIONS, SlotVisit.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -332,14 +306,14 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		int expectedInitialVoyageBoilOffInM3 = 10;
 		int expectedCargoBoilOffInM3 = 30;
-		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 1000, -(1500  - expectedCargoBoilOffInM3 - expectedInitialVoyageBoilOffInM3)});
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 1000, -(1500 - expectedCargoBoilOffInM3 - expectedInitialVoyageBoilOffInM3) });
 
 		// load will be short by 500m3 + boil-off
-		checker.setExpectedValue(2000 - (1500-expectedCargoBoilOffInM3 - expectedInitialVoyageBoilOffInM3), Expectations.MIN_DISCHARGE_VIOLATIONS, SlotVisit.class, 1);
+		checker.setExpectedValue(2000 - (1500 - expectedCargoBoilOffInM3 - expectedInitialVoyageBoilOffInM3), Expectations.MIN_DISCHARGE_VIOLATIONS, SlotVisit.class, 1);
 
 		// Min heel in m3
 		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
-		
+
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
@@ -434,7 +408,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// Min heel in m3
 		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
-		
+
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
 
@@ -493,7 +467,6 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// load will be short by 520m3
 		checker.setExpectedValue(1060 - expectedLoadVolumeInM3, Expectations.MIN_LOAD_VIOLATIONS, SlotVisit.class, 0);
-		checker.setExpectedValue(expectedCargoStartingHeelInM3 - maxDischargeVolumeInM3 - expectedCargoBoilOffInM3, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
