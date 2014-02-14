@@ -46,7 +46,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
