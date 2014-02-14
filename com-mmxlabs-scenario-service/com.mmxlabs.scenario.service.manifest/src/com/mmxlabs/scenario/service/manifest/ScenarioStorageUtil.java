@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -45,25 +42,43 @@ public class ScenarioStorageUtil {
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioStorageUtil.class);
 
+	static final ScenarioStorageUtil INSTANCE = new ScenarioStorageUtil();
+	protected File storageDirectory;
 	protected File lastTemporaryFile;
 
-	// protected File getTemporaryFile(final ScenarioInstance instance) {
-	// final String name = instance.getName();
-	// final String uuid = instance.getUuid();
-	//
-	// final File uuidDir = new File(storageDirectory.toFile(), escape(uuid) + ".d");
-	// if (uuidDir.exists() == false) {
-	// uuidDir.mkdirs();
-	// }
-	// return new File(uuidDir, escape(name) + ".lingo");
-	// }
+	protected ScenarioStorageUtil() {
+		try {
+			storageDirectory = File.createTempFile("ScenarioStorage", "dir");
+			// there is a race here; the only way to really avoid it is to use
+			// something like java.nio in java 7, which has a createTempDir method.
+			if (storageDirectory.delete()) {
+				storageDirectory.mkdir();
+			}
+			// TODO should we delete this on finalize? if the user has copied something she would expect
+			// it to remain copied so perhaps we should delete all but the most recent copied thing?
+			// Is that a job for the copy handler anyway?
+		} catch (final IOException e) {
+			storageDirectory = null;
+		}
+	}
 
-	private static String escape(final String name) {
+	protected File getTemporaryFile(final ScenarioInstance instance) {
+		final String name = instance.getName();
+		final String uuid = instance.getUuid();
+
+		final File uuidDir = new File(storageDirectory, escape(uuid) + ".d");
+		if (uuidDir.exists() == false) {
+			uuidDir.mkdirs();
+		}
+		return new File(uuidDir, escape(name) + ".lingo");
+	}
+
+	private String escape(final String name) {
 		return name.replaceAll("[\\W&&[^ ]]+", "-");
 	}
 
 	public static File storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
-		final File tempFile = File.createTempFile(escape(instance.getUuid()), ".lingo");
+		final File tempFile = INSTANCE.getTemporaryFile(instance);
 
 		tempFile.deleteOnExit();
 		storeToFile(instance, tempFile);
@@ -85,12 +100,7 @@ public class ScenarioStorageUtil {
 			final EObject rootObject = EcoreUtil.copy(model);
 			final XMIResourceImpl r = new XMIResourceImpl(rootObjectURI);
 			r.getContents().add(rootObject);
-			final Map<Object, Object> saveOptions = new HashMap<>();
-			// Force default values and types to be saved
-			saveOptions.put(XMLResource.OPTION_KEEP_DEFAULT_CONTENT, Boolean.TRUE);
-			saveOptions.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, Boolean.TRUE);
-			// Save the model.
-			r.save(saveOptions);
+			r.save(null);
 		} else {
 			// Store data into scenario archive
 			final URIConverter conv = resourceSet.getURIConverter();
