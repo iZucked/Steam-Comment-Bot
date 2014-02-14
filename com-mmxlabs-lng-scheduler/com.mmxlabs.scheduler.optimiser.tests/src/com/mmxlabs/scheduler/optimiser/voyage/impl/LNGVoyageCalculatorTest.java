@@ -202,7 +202,7 @@ public class LNGVoyageCalculatorTest {
 	public void testCalculateVoyageFuelRequirements5() {
 
 		// In this test, we check that we use travel NBO and idle base
-		// This implies min heel run down
+		// This implies we do not need a safety heel
 
 		final VoyageOptions options = createSampleVoyageOptions();
 
@@ -212,7 +212,11 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(120);
-		options.setDistance(15 * 48);
+		int expectedTravelTime = 48;
+		int expectedIdleTime = 72;
+
+		assert expectedTravelTime + expectedTravelTime == options.getAvailableTime();
+		options.setDistance(15 * expectedTravelTime);
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -228,17 +232,17 @@ public class LNGVoyageCalculatorTest {
 		// Check results
 		Assert.assertSame(options, details.getOptions());
 		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalSpeed(15), details.getSpeed());
-		Assert.assertEquals(48, details.getTravelTime());
-		Assert.assertEquals(72, details.getIdleTime());
+		Assert.assertEquals(expectedTravelTime, details.getTravelTime());
+		Assert.assertEquals(expectedIdleTime, details.getIdleTime());
 
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(150 * 48), details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
+		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(150 * expectedTravelTime), details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(10 * 24), details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(10 * expectedIdleTime), details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(150 * 48), details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
+		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 	}
 
 	@Test

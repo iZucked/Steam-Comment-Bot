@@ -91,6 +91,24 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		// Calculate fuel requirements for an idle time
 		calculateIdleFuelRequirements(options, output, vesselClass, vesselState, idleTimeInHours);
+
+		// Check cooldown
+		if (options.shouldBeCold()) {
+
+			// Work out how long we have been warming up
+			long warmingHours = 0;
+			if (!options.useNBOForIdle()) {
+				warmingHours += idleTimeInHours;
+			}
+			if (!options.useNBOForTravel()) {
+				warmingHours += travelTimeInHours;
+			}
+			if (options.isWarm() || (warmingHours > vesselClass.getWarmupTime())) {
+				final long cooldownVolume = vesselClass.getCooldownVolume();
+				output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
+			}
+		}
+
 		// Route Additional Consumption
 		/**
 		 * Base fuel requirement for canal traversal
@@ -203,94 +221,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final long idlePilotLightConsumptionInMT = Calculator.quantityFromRateTime(idlePilotLightRateINMTPerHour, idleTimeInHours);
 				output.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, idlePilotLightConsumptionInMT);
 			} else {
+				// ...Base fuel idle
 				final long idleRateInMTPerHour = vesselClass.getIdleConsumptionRate(vesselState);
-
-				int remainingIdleTimeInHours = idleTimeInHours;
-
-				// long idleConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, idleTimeInHours);
-
-				final long cooldownVolume = vesselClass.getCooldownVolume();
-				if (options.useNBOForTravel()) {
-					// Run down boil off after travel. On ballast voyages running on
-					// NBO, It is necessary to keep a minimum heel of LNG whilst
-					// travelling. Once in port, the heel can boil-off as there is
-					// no need to keep it around. Base fuel requirements for idling
-					// are much less than that provided by boil-off.
-
-					// There is more boil-off than required consumption. We need to
-					// work out how long we could provide energy for based on
-					// boil-off time rather than use the raw quantity directly.
-					long heelInM3 = vesselClass.getMinHeel();
-
-					// How long will the boil-off last
-					int deltaTimeInHours = Calculator.getTimeFromRateQuantity(idleNBORateInM3PerHour, heelInM3);
-					// If delta idle time is greater than the current idle time, only count current idle time use.
-					if (deltaTimeInHours > idleTimeInHours) {
-						deltaTimeInHours = idleTimeInHours;
-						heelInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerHour, deltaTimeInHours);
-					}
-
-					// TODO: Review this code block regarding cooldown logic
-					if (options.shouldBeCold()) {
-						/**
-						 * How many hours the vessel has been empty and warming up.
-						 */
-						final int warmingTimeInHours = idleTimeInHours - deltaTimeInHours;
-
-						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
-							// If we are permitted to cooldown, then cooldown
-							if (options.getAllowCooldown()) { // && (idleTimeInHours > (vesselClass.getWarmupTime() /* + vesselClass.getCooldownTime() */))) {
-								// Set this on the voyage rather than the port details as the final port details is usually ignored in further processing
-								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
-								// don't use any idle base during the cooldown
-								// remainingIdleTimeInHours -= vesselClass.getCooldownTime();
-							} else {
-
-								// Else, increase required heel quantity to avoid a cooldown.
-								// TODO: This may force a load/discharge violation rather than pricing the cooldown.
-
-								// warming time = idle - delta
-								// therefore we need
-								// idle - delta = vesselClass.getWarmupTime();
-								// delta = idle - warmup
-								deltaTimeInHours = idleTimeInHours - vesselClass.getWarmupTime();
-								heelInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerHour, deltaTimeInHours);
-							}
-						}
-					}
-
-					remainingIdleTimeInHours -= deltaTimeInHours;
-
-					final long heelInMT = Calculator.convertM3ToMT(heelInM3, equivalenceFactorM3ToMT);
-					output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, heelInM3);
-					output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, heelInMT);
-
-					final long idlePilotLightRateINMTPerHour = vesselClass.getIdlePilotLightRate();
-					final long idlePilotLightConsumptionInMT = Calculator.quantityFromRateTime(idlePilotLightRateINMTPerHour, deltaTimeInHours);
-					output.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, idlePilotLightConsumptionInMT);
-				} else {
-					output.setFuelConsumption(FuelComponent.IdlePilotLight, FuelUnit.MT, 0);
-					output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, 0);
-					output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, 0);
-
-					if (options.shouldBeCold()) {
-						// we can only do a cooldown here, because there is no LNG.
-						// this situation shouldn't get presented to us by the
-						// sequence scheduler unless it's unavoidable.
-						if (options.isWarm() || (options.getAvailableTime() > vesselClass.getWarmupTime())) {
-							output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
-							// remainingIdleTimeInHours -= vesselClass.getCooldownTime();
-						}
-					}
-				}
-
-				if (remainingIdleTimeInHours > 0) {
-					// Use base for remaining quantity
-					final long idleConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, remainingIdleTimeInHours);
-					output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, idleConsumptionInMT);
-				}
+				final long idleConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, idleTimeInHours);
+				output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, idleConsumptionInMT);
 			}
 		}
+
 	}
 
 	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
@@ -608,7 +545,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @since 8.0
 	 */
 	@Override
-	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, long startHeelInM3, final int baseFuelPricePerMT, final List<Integer> arrivalTimes,
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final long startHeelInM3, final int baseFuelPricePerMT, final List<Integer> arrivalTimes,
 			final IDetailsSequenceElement... sequence) {
 		/*
 		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
@@ -633,25 +570,22 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		int routeCostAccumulator = 0;
 
-		// The last sequence element that used some kind of boil-off
-		VoyageDetails lastBoiloffElement = null;
+		// The last voyage details in sequence.
+		VoyageDetails lastVoyageDetailsElement = null;
 
-		// add up route cost and find the last boiloff element
+		// add up route cost and find the last voyage details element
 		for (int i = 0; i < sequence.length; ++i) {
-			if ((i % 2) == 1) {
-				// Voyage
-				final VoyageDetails details = (VoyageDetails) sequence[i];
+			final IDetailsSequenceElement element = sequence[i];
+			if (element instanceof VoyageDetails) {
+				final VoyageDetails details = (VoyageDetails) element;
 				// add route cost
 				routeCostAccumulator += details.getRouteCost();
-				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
-					final long fuelConsumption = details.getFuelConsumption(fc, fc.getDefaultFuelUnit());
-					// If this is some sort of boil-off, then record the use
-					if (fuelConsumption > 0) {
-						lastBoiloffElement = details;
-					}
-				}
+
+				lastVoyageDetailsElement = details;
 			}
 		}
+
+		final boolean boiloffWasUsed = (lastVoyageDetailsElement != null);
 
 		int violationsCount = 0;
 
@@ -684,35 +618,18 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			final long minDischargeVolumeInM3 = dischargeSlot.getMinDischargeVolume();
 
-			final boolean boiloffWasUsed = (lastBoiloffElement != null);
-			long remainingHeelInM3 = 0;
-
-			// Min Heel adjustments. The VoyageDetails tells us how much gas we consumed on the voyage. This may include some of the vessel min heel during the idle time.
-			// If a minimum heel is specified, this is the amount which has to remain in the tanks after
-			// travel on NBO.
-			if (boiloffWasUsed && vesselClass.getMinHeel() > 0) {
-				// Assert added for null analysis friendliness
-				assert lastBoiloffElement != null;
-				remainingHeelInM3 = calculateRemainingMinHeel(vesselClass, lastBoiloffElement);
-
-				// If we will have some LNG left after travel, allocate it depending on laden or ballast legs
-				if (remainingHeelInM3 > 0) {
-					if (lastBoiloffElement.getOptions().getVesselState() == VesselState.Laden) {
-						// Discharge the heel, make money!
-						// TODO: change magical use of minDischargeVolume to signal heel usage to volume allocator?
-						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.DISCHARGE);
-					} else {
-						// Add heel to the voyage consumed quantity for capacity constraint purposes. However it is not tracked otherwise
-
-						// following line was in default branch but not in heel_tracking - why?
-						// lngCommitmentInM3 += remainingHeelInM3;
-						voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
-					}
-				}
-
-			}
-
 			final long cargoCapacityInM3 = vessel.getCargoCapacity();
+
+			// Apply safety heel if required
+			final long remainingHeelInM3;
+			if (lastVoyageDetailsElement != null && lastVoyageDetailsElement.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
+				remainingHeelInM3 = 0;
+			} else if (lastVoyageDetailsElement != null && lastVoyageDetailsElement.getOptions().shouldBeCold()) {
+				remainingHeelInM3 = vesselClass.getMinHeel();
+				voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
+			} else {
+				remainingHeelInM3 = 0;
+			}
 
 			violationsCount += checkCargoCapacityViolations(startHeelInM3, lngCommitmentInM3, loadDetails, loadSlot, dischargeDetails, dischargeSlot, minDischargeVolumeInM3, cargoCapacityInM3,
 					remainingHeelInM3);
@@ -723,7 +640,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		} else {
 			// was not a Cargo sequence
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
-			long remainingHeelInM3 = startHeelInM3 - lngCommitmentInM3;
+			final long remainingHeelInM3 = startHeelInM3 - lngCommitmentInM3;
 
 			// Store this value now as we may change it below during the heel calculations
 			voyagePlan.setLNGFuelVolume(lngCommitmentInM3);
@@ -732,7 +649,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (remainingHeelInM3 < 0) {
 				++violationsCount;
 			} else if (remainingHeelInM3 > 0) {
-				voyagePlan.setRemainingHeelInM3(remainingHeelInM3, VoyagePlan.HeelType.END);
+				voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 			}
 
 			// Look up the heel options CV value if present
@@ -744,7 +661,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				// If we have not been able to use NBO, assume there was no LNG
 				if (lngCommitmentInM3 == 0 && options.getHeelLimit() > 0) {
 					voyagePlan.setStartingHeelInM3(0);
-					voyagePlan.setRemainingHeelInM3(0, VoyagePlan.HeelType.NONE);
+					voyagePlan.setRemainingHeelInM3(0);
 				}
 			}
 
@@ -763,7 +680,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// set the LNG values for the voyages
 		// final int numVoyages = sequence.length / 2;
 		for (int i = 0; i < sequence.length - 1; ++i) {
-			Object element = sequence[i];
+			final Object element = sequence[i];
 			if (element instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) element;
 				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
@@ -791,7 +708,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				}
 			} else {
 				assert element instanceof PortDetails;
-				PortDetails details = (PortDetails) element;
+				final PortDetails details = (PortDetails) element;
 				// NO LNG Consumption in Port
 				for (final FuelComponent fc : FuelComponent.getBaseFuelComponents()) {
 
@@ -829,39 +746,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		violationsCount *= 2;
 		// Check for cooldown violations and add to the violations count
 		violationsCount += checkCooldownViolations(loadIdx, dischargeIdx, sequence);
+
 		voyagePlan.setViolationsCount(violationsCount);
-
 		return violationsCount;
-	}
-
-	protected long calculateRemainingMinHeel(final IVesselClass vesselClass, final VoyageDetails lastBoiloffElement) {
-
-		//
-		final long minHeelInM3 = vesselClass.getMinHeel();
-		// There are two states;
-		// * Full Travel NBO + Full Idle NBO
-		// * Full Travel NBO + Idle NBO boil-off then Base Fuel
-		// plus different rules if laden or ballast.
-		// If this is a laden leg, then we have chosen not to boil-off on the ballast leg. In this case we can discharge our min heel.
-		// If this is a ballast leg, then the min heel continues until we get to our final destination - then whatever is left is lost.
-
-		// First of all, determine how much heel will be left over after travel and idle
-		long remainingHeelInM3;
-
-		final long idleNBOInM3 = lastBoiloffElement.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3);
-		if (idleNBOInM3 == 0) {
-			// As we have detected some NBO use, but it is not idle, then it must be travel NBO, therefore full heel is available.
-			// current lngConsumedInM3 value will not include min heel
-			assert lastBoiloffElement.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3) > 0;
-			remainingHeelInM3 = minHeelInM3;
-		} else if (idleNBOInM3 < minHeelInM3) {
-			// Partial use during voyage idle time - current lngConsumedInM3 value will include some of min heel
-			remainingHeelInM3 = minHeelInM3 - idleNBOInM3;
-		} else {
-			// Assume heel fully consumed - current lngConsumedInM3 value will include min heel
-			remainingHeelInM3 = 0;
-		}
-		return remainingHeelInM3;
 	}
 
 	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final PortDetails loadDetails, final ILoadSlot loadSlot, final PortDetails dischargeDetails,

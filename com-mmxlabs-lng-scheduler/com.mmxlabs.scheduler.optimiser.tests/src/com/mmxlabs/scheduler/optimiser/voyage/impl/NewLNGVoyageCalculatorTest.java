@@ -472,49 +472,6 @@ public class NewLNGVoyageCalculatorTest {
 	}
 
 	@Test
-	public void testCalculateIdleFuelRequirements_HotelLoad_MinHeel() {
-
-		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.
-
-		final VoyageOptions options = createSampleVoyageOptions();
-
-		// Populate options
-		options.setUseNBOForTravel(true);
-		options.setUseNBOForIdle(false);
-
-		final VesselState vesselState = VesselState.Laden;
-
-		// Expect 2 days of heel
-		final int heelDuration = HEEL_DURATION;
-		final int idleTime = 96;
-
-		// Sanity check input
-		Assert.assertTrue(heelDuration < idleTime);
-
-		final VoyageDetails details = new VoyageDetails();
-
-		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
-
-		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
-		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
-		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
-		calc.setPortCVProvider(mockPortCVProvider);
-
-		calc.calculateIdleFuelRequirements(options, details, options.getVessel().getVesselClass(), vesselState, idleTime);
-
-		// Check results
-		final long nboIdleRate = options.getVessel().getVesselClass().getIdleNBORate(vesselState);
-		final long pilotLightRate = options.getVessel().getVesselClass().getIdlePilotLightRate();
-		final long baseRate = options.getVessel().getVesselClass().getIdleConsumptionRate(vesselState);
-
-		Assert.assertEquals(nboIdleRate * heelDuration, details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
-		Assert.assertEquals(pilotLightRate * heelDuration, details.getFuelConsumption(FuelComponent.IdlePilotLight, FuelComponent.IdlePilotLight.getDefaultFuelUnit()));
-
-		Assert.assertEquals(baseRate * (idleTime - heelDuration), details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
-
-	}
-
-	@Test
 	public void testCalculateIdleFuelRequirements_Cooldown_Required() {
 
 		// In this test, we check that we only use travel NBO - speed is lower than NBO speed.

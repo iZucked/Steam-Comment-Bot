@@ -51,7 +51,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * @since 7.1
@@ -264,12 +263,6 @@ public class VoyagePlanner {
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
 
-			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
-			// TODO: Move (back?)into VPO code
-			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
-				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
-			}
-
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
 			int shortCargoReturnArrivalTime = 0;
@@ -344,6 +337,12 @@ public class VoyagePlanner {
 				currentTimes.add(arrivalTimes[idx]);
 			}
 
+			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
+			// TODO: Move (back?)into VPO code
+			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
+				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
+			}
+
 			// Setup for next iteration
 			prev2Port = prevPort;
 
@@ -385,11 +384,7 @@ public class VoyagePlanner {
 				if (allocationAnnotation != null) {
 					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 				} else {
-					if (plan.getRemainingHeelType() == HeelType.END) {
-						endHeelVolumeInM3 = plan.getRemainingHeelInM3();
-					} else {
-						endHeelVolumeInM3 = 0;
-					}
+					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
 				}
 				planSet = true;
 			}
@@ -408,11 +403,7 @@ public class VoyagePlanner {
 				if (allocationAnnotation != null) {
 					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 				} else {
-					if (plan.getRemainingHeelType() == HeelType.END) {
-						endHeelVolumeInM3 = plan.getRemainingHeelInM3();
-					} else {
-						endHeelVolumeInM3 = 0;
-					}
+					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
 				}
 				planSet = true;
 			}
@@ -424,11 +415,7 @@ public class VoyagePlanner {
 			allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
 			if (allocationAnnotation == null) {
 				// not a cargo plan?
-				if (plan.getRemainingHeelType() == HeelType.END) {
-					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
-				} else {
-					endHeelVolumeInM3 = 0;
-				}
+				endHeelVolumeInM3 = plan.getRemainingHeelInM3();
 			} else {
 				endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 			}

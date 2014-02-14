@@ -41,7 +41,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * This class performs capacity violation checks on the scenario as a whole after the volume allocator has run so we can use actual load and discharge volumes. This class calls
@@ -159,7 +158,7 @@ public class CapacityViolationChecker {
 								}
 
 								if (remainingHeelInM3 > 0) {
-//									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
+									// addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
 									// Reset as we do not handle pushing remaining heel into a vessel event voyage
 									remainingHeelInM3 = 0;
 								}
@@ -211,17 +210,13 @@ public class CapacityViolationChecker {
 				if (allocationAnnotation != null) {
 					remainingHeelInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
 				} else {
-					if (voyagePlan.getRemainingHeelType() == HeelType.END) {
-						remainingHeelInM3 = voyagePlan.getRemainingHeelInM3();
-					} else {
-						remainingHeelInM3 = 0;
-					}
+					remainingHeelInM3 = voyagePlan.getRemainingHeelInM3();
 				}
 			}
 
 			// Handle anything left over at the end of the schedule
 			if (remainingHeelInM3 > 0) {
-//				addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
+				// addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
 			}
 		}
 	}

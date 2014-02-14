@@ -26,7 +26,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * Base class for allocating load/discharge volumes; doesn't implement the solve() method, but does do various book-keeping tasks.
@@ -66,7 +65,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 	@Nullable
 	public AllocationRecord createAllocationRecord(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final List<Integer> arrivalTimes) {
 
-		final long minEndVolumeInM3 = plan.getRemainingHeelType() == HeelType.END ? plan.getRemainingHeelInM3() : 0;
+		final long minEndVolumeInM3 = plan.getRemainingHeelInM3();
 
 		// Rough estimate of required array size
 		final IDetailsSequenceElement[] sequence = plan.getSequence();
@@ -147,7 +146,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			slotTimes = new ArrayList<Integer>(arrivalTimes);
 		}
 
-		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes, minVolumes, maxVolumes);
+		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes,
+				minVolumes, maxVolumes);
 
 		allocationRecord.nominatedVessel = nominatedVessel;
 
