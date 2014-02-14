@@ -144,6 +144,9 @@
                <target
                      class="Slot">
                </target>
+               <target
+                     class="VesselAvailability">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.SlotPortCapabilityConstraint"

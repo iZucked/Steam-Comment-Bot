@@ -85,6 +85,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			
 			if (dcsd.getTarget() instanceof Vessel) {
 				return true;
+			} else if (dcsd.getTarget() instanceof VesselAvailability) {
+				return true;
 			} else if (dcsd.getTarget() instanceof VesselEvent) {
 				return true;
 			} else if (dcsd.getTarget() instanceof HeelOptions) {
@@ -151,7 +153,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			if (target instanceof HeelOptions) {
 				EObject container = target.eContainer();
 				if (container instanceof VesselAvailability) {
-					target = ((VesselAvailability) container).getVessel();
+					target = (VesselAvailability) container;
 				} else if (container instanceof CharterOutEvent) {
 					target = container;
 				}
@@ -160,6 +162,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			if (target instanceof Vessel) {
 				final Vessel vessel = (Vessel) target;
 				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vessel), true);
+			} else if (target instanceof VesselAvailability) {
+				final VesselAvailability vesselAvailability = (VesselAvailability) target;
+				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselAvailability), true);
 			} else if (target instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) target;
 				eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselEvent), true);
