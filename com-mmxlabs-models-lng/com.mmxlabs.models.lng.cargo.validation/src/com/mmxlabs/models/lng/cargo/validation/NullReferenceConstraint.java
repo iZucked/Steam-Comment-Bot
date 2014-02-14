@@ -22,6 +22,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -82,7 +83,8 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 				name = ((Cargo) target).getName();
 			} else if (target instanceof VesselAvailability){
 				targetType = "Vessel";
-				name = ((VesselAvailability) target).getVessel().getName();
+				Vessel v = ((VesselAvailability) target).getVessel();
+				name = v == null ? "<unspecified>" : v.getName();
 			}
 			String msg = "" + targetType + " \"" + name + "\" - " + sb.toString() + " must be set.";	
 			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
