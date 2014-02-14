@@ -19,7 +19,9 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -64,14 +66,26 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 		} else {
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
-			for (final EReference ref : errors) {
+			for (final EReference ref : errors) {				
 				if (!first) {
 					sb.append(", ");
 				}
 				sb.append(ref.getName());
 				first = false;
 			}
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(sb.toString()));
+			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+						
+			String targetType = "";
+			String name = "";
+			if(target instanceof Cargo){
+				targetType = "Cargo";
+				name = ((Cargo) target).getName();
+			} else if (target instanceof VesselAvailability){
+				targetType = "Vessel";
+				name = ((VesselAvailability) target).getVessel().getName();
+			}
+			String msg = "" + targetType + " \"" + name + "\" - " + sb.toString() + " must be set.";	
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			for (final EReference ref : errors) {
 				dcsd.addEObjectAndFeature(target, ref);
 			}
