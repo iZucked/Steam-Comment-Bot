@@ -736,7 +736,31 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 
-		addTradesColumn(loadColumns, "L-ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(false, Type.LOAD));
+		{
+			final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain);
+			final RowDataEMFPath assignmentPath = new RowDataEMFPath(false, Type.LOAD);
+			final GridViewerColumn idColumn = addTradesColumn(loadColumns, "L-ID", manipulator, assignmentPath);
+			idColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), manipulator, assignmentPath) {
+				@Override
+				public Image getImage(final Object element) {
+
+					if (element instanceof RowData) {
+						final RowData rowDataItem = (RowData) element;
+						final Object object = assignmentPath.get(rowDataItem);
+						if (object instanceof LoadSlot) {
+							final LoadSlot ds = (LoadSlot) object;
+
+							if (ds.getNotes() != null && !ds.getNotes().isEmpty()) {
+								return notesImage;
+							}
+						}
+					}
+
+					return super.getImage(element);
+				}
+			});
+		}
+
 		addTradesColumn(loadColumns, "Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addTradesColumn(loadColumns, "Buy At", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(false, Type.LOAD));
 		addTradesColumn(loadColumns, "Price", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(SchedulePackage.eINSTANCE.getSlotAllocation_Price(),
