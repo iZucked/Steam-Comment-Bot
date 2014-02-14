@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
 // TODO: Extends causes tests to be re-applied
-public class CapacityViolationsCalculationsTest extends ShippingCalculationsTest {
+public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
 
 	@Test
 	public void testMinLoadGreaterThanVesselCapacity() {
