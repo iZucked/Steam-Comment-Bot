@@ -46,14 +46,14 @@ public class LingoMigrateToV11 implements IMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -11;
+		return 11;
 	}
 
 	@Override
 	public void migrate(@NonNull final URI baseURI, @Nullable final Map<URI, PackageData> extraPackagesOrig) throws Exception {
 
 		@SuppressWarnings("null")
-		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 10, -11);//getDestinationVersion());
+		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 10, 11);// getDestinationVersion());
 		for (final IMigrationUnit unit : chain) {
 			unit.migrate(baseURI, extraPackagesOrig);
 		}
