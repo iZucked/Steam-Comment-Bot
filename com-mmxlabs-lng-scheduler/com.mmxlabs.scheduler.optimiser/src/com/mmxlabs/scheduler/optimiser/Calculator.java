@@ -43,6 +43,10 @@ public final class Calculator {
 		return (consumption * notionalFuelCost) / HighScaleFactor;
 	}
 
+	public static long costFromVolume(final long volume, final long price) {
+		return (volume * price) / HighScaleFactor;
+	}
+
 	public static long convertM3ToMMBTu(final long m3, final int factor) {
 
 		return (m3 * (long) factor) / HighScaleFactor;
