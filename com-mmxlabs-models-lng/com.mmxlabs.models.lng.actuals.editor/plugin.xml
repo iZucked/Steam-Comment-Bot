@@ -79,12 +79,6 @@
       </factory>
    </extension>
    <extension
-         point="com.mmxlabs.models.lng.cargo.editor.TradesTableContextMenuExtension">
-      <TradesTableContextMenuExtension
-            class="com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsTradesContextMenu">
-      </TradesTableContextMenuExtension>
-   </extension>
-   <extension
          point="com.mmxlabs.models.ui.valueproviders">
       <valueProvider
             factory="com.mmxlabs.models.lng.actuals.presentation.valueproviders.ActualsSlotValueProviderFactory"
