@@ -136,7 +136,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  The attribute(s) {0} must be set.
+                  {0}
                   
                </message>
                <target

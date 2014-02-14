@@ -27,7 +27,7 @@ public class SlotEntityConstraint extends AbstractModelMultiConstraint {
 			final Slot slot = (Slot) object;
 			final String name = slot.getName();
 			if (slot.getSlotOrDelegatedEntity() == null) {
-				final String message = String.format("Slot %s| Has no entity.", name);
+				final String message = String.format("Slot \"%s\" - Entity must be set.", name);
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Entity());
