@@ -66,7 +66,7 @@ class ExpandableSet implements DisposeListener {
 		};	
 	}	
 	
-	void create(Composite contentComposite, MMXRootObject root, EObject object,  Map<EStructuralFeature, IInlineEditor> feature2Editor, EMFDataBindingContext dbc, IDisplayCompositeLayoutProvider lp, FormToolkit toolkit, int hSpan){
+	void create(Composite contentComposite, MMXRootObject root, EObject object,  Map<EStructuralFeature, IInlineEditor> feature2Editor, EMFDataBindingContext dbc, IDisplayCompositeLayoutProvider lp, FormToolkit toolkit){
 //		ec = toolkit.createSection(contentComposite, Section.TITLE_BAR | ExpandableComposite.TWISTIE);
 		ec = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 		Composite c = createExpandable(ec, toolkit);
@@ -74,7 +74,7 @@ class ExpandableSet implements DisposeListener {
 		// feature editors
 		boolean visible = false;
 		for (EStructuralFeature[] fs : featureLines) {		
-			EditorControlFactory.makeControls(root, object, c, fs, feature2Editor, dbc, lp, toolkit, hSpan, 1, false);
+			EditorControlFactory.makeControls(root, object, c, fs, feature2Editor, dbc, lp, toolkit);
 			visible = true;
 		}
 		ec.setExpanded(true);
