@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.annotations;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 
 /**
