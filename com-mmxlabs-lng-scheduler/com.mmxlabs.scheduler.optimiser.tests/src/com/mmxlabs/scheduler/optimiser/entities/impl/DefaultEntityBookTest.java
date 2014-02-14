@@ -27,7 +27,7 @@ public class DefaultEntityBookTest {
 		final int time = 12345;
 
 		// 50% * 10000
-		Assert.assertEquals(5000, entityBook.getTaxedProfit(10000, time));
+		Assert.assertEquals(10000, entityBook.getTaxedProfit(10000, time));
 
 		verify(curve).getValueAtPoint(time);
 
