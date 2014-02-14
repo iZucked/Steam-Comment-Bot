@@ -645,9 +645,18 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// Store this value now as we may change it below during the heel calculations
 			voyagePlan.setLNGFuelVolume(lngCommitmentInM3);
 
+			
+			// Three cases;
+			// A)  we have lng, but need more than is available (worst)
+			// B) We have lng, but decided not to use it
+			// C) We have lng and used some or all of it (best)
+
+			// I.e. we want to force heel use if it is physically possible,
+			
 			// if our fuel requirements exceed our onboard fuel
 			if (remainingHeelInM3 < 0) {
-				++violationsCount;
+				// This is worse than not using it at all -- case A
+				violationsCount += 2;
 			} else if (remainingHeelInM3 > 0) {
 				voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 			}
@@ -662,6 +671,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (lngCommitmentInM3 == 0 && options.getHeelLimit() > 0) {
 					voyagePlan.setStartingHeelInM3(0);
 					voyagePlan.setRemainingHeelInM3(0);
+					// Mark as a violation to prefer other options -- case B
+					++violationsCount;
 				}
 			}
 
