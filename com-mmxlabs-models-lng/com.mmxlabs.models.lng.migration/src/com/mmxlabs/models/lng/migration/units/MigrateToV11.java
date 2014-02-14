@@ -31,7 +31,7 @@ public class MigrateToV11 extends AbstractMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -11;
+		return 11;
 	}
 
 	@Override
