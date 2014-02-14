@@ -104,7 +104,11 @@ public class CustomScenarioCreator {
 		cargoModel = portfolioModel.getCargoModel();
 
 		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
+		contractEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		contractEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
+		shippingEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		shippingEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(contractEntity);
 		commercialModel.getEntities().add(shippingEntity);
 

@@ -133,6 +133,8 @@ public class DefaultScenarioCreator {
 	public LegalEntity addEntity(final String name) {
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final LegalEntity entity = CommercialFactory.eINSTANCE.createLegalEntity();
+		entity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(entity);
 		return entity;
 	}
