@@ -221,5 +221,14 @@
          </dataType>
       </attributeImporter>
    </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.classes">
+      <classImporter
+            ID="com.mmxlabs.models.lng.commercial.importer.BaseLegalEntityImporter"
+            classImporterClass="com.mmxlabs.models.lng.commercial.importer.BaseLegalEntityImporter"
+            eClassName="com.mmxlabs.models.lng.commercial.BaseLegalEntity"
+            inheritable="true">
+      </classImporter>
+   </extension>
 
 </plugin>

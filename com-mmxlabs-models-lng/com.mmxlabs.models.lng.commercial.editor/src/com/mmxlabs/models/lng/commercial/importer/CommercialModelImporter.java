@@ -72,7 +72,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		if (importerRegistry != null) {
 
 			entityBookImporter = new LegalEntityBookImporter();// (LegalEntityBookImporter) importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
-			entityImporter = new DefaultClassImporter();// (LegalEntityImporter) importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
+			entityImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
 		}
