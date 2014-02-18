@@ -338,7 +338,6 @@ public class ContractItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CommercialPackage.Literals.CONTRACT__PRICE_INFO);
-			childrenFeatures.add(CommercialPackage.Literals.CONTRACT__VOLUME_PARAMS);
 		}
 		return childrenFeatures;
 	}
@@ -402,7 +401,6 @@ public class ContractItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:
-			case CommercialPackage.CONTRACT__VOLUME_PARAMS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}

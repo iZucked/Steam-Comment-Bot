@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.VolumeParams;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -44,7 +43,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getVolumeParams <em>Volume Params</em>}</li>
  * </ul>
  * </p>
  *
@@ -240,16 +238,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected ContractType contractType = CONTRACT_TYPE_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getVolumeParams() <em>Volume Params</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVolumeParams()
-	 * @generated
-	 * @ordered
-	 */
-	protected VolumeParams volumeParams;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -569,56 +557,11 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VolumeParams getVolumeParams() {
-		return volumeParams;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetVolumeParams(VolumeParams newVolumeParams, NotificationChain msgs) {
-		VolumeParams oldVolumeParams = volumeParams;
-		volumeParams = newVolumeParams;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VOLUME_PARAMS, oldVolumeParams, newVolumeParams);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setVolumeParams(VolumeParams newVolumeParams) {
-		if (newVolumeParams != volumeParams) {
-			NotificationChain msgs = null;
-			if (volumeParams != null)
-				msgs = ((InternalEObject)volumeParams).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.CONTRACT__VOLUME_PARAMS, null, msgs);
-			if (newVolumeParams != null)
-				msgs = ((InternalEObject)newVolumeParams).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.CONTRACT__VOLUME_PARAMS, null, msgs);
-			msgs = basicSetVolumeParams(newVolumeParams, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__VOLUME_PARAMS, newVolumeParams, newVolumeParams));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.CONTRACT__PRICE_INFO:
 				return basicSetPriceInfo(null, msgs);
-			case CommercialPackage.CONTRACT__VOLUME_PARAMS:
-				return basicSetVolumeParams(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -657,8 +600,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getNotes();
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				return getContractType();
-			case CommercialPackage.CONTRACT__VOLUME_PARAMS:
-				return getVolumeParams();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -711,9 +652,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				setContractType((ContractType)newValue);
 				return;
-			case CommercialPackage.CONTRACT__VOLUME_PARAMS:
-				setVolumeParams((VolumeParams)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -762,9 +700,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				setContractType(CONTRACT_TYPE_EDEFAULT);
 				return;
-			case CommercialPackage.CONTRACT__VOLUME_PARAMS:
-				setVolumeParams((VolumeParams)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -801,8 +736,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				return contractType != CONTRACT_TYPE_EDEFAULT;
-			case CommercialPackage.CONTRACT__VOLUME_PARAMS:
-				return volumeParams != null;
 		}
 		return super.eIsSet(featureID);
 	}

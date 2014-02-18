@@ -77,7 +77,6 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_priceInfoEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 		add_contractTypeEditor(detailComposite, topClass);
-		add_volumeParamsEditor(detailComposite, topClass);
 	}
 	
 	/**
