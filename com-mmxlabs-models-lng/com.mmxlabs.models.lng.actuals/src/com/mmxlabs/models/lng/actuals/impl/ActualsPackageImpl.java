@@ -501,6 +501,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EEnum getPenaltyType() {
 		return penaltyTypeEEnum;
 	}

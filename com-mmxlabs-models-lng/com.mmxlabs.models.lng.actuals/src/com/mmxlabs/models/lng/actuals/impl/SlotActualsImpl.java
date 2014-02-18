@@ -646,6 +646,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPenalty(PenaltyType newPenalty) {
 		PenaltyType oldPenalty = penalty;
 		penalty = newPenalty == null ? PENALTY_EDEFAULT : newPenalty;
