@@ -179,24 +179,6 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__SLOTS));
 	}
 
-	/**
-	 * Create the editor for the vesselAvailabilities feature on Cargo
-	 *
-	 * @generated
-	 */
-	protected void add_vesselAvailabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__VESSEL_AVAILABILITIES));
-	}
-
-	/**
-	 * Create the editor for the vesselEvents feature on Cargo
-	 *
-	 * @generated
-	 */
-	protected void add_vesselEventsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__VESSEL_EVENTS));
-	}
-
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
 		final Set<EObject> external = new LinkedHashSet<EObject>(super.getExternalEditingRange(root, value));

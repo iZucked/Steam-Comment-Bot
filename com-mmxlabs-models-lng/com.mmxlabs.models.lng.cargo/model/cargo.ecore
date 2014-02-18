@@ -13,10 +13,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
         eType="#//Slot" eOpposite="#//Slot/cargo"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailabilities" upperBound="-1"
-        eType="#//VesselAvailability" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvents" upperBound="-1"
-        eType="#//VesselEvent" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider #//AssignableElement">
     <eOperations name="getSlotOrPortDuration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
