@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
@@ -182,7 +183,12 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 							if (desPurchase.getAssignment() instanceof Vessel) {
 								final Vessel vessel = (Vessel) desPurchase.getAssignment();
-								final double maxSpeedKnots = vessel.getVesselClass().getMaxSpeed();
+
+								final VesselClass vesselClass = vessel.getVesselClass();
+								if (vesselClass == null) {
+									return Activator.PLUGIN_ID;
+								}
+								final double maxSpeedKnots = vesselClass.getMaxSpeed();
 
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
