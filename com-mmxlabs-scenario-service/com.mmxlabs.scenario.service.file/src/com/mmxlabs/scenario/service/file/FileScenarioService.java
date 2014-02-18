@@ -30,7 +30,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
@@ -61,9 +60,6 @@ public class FileScenarioService extends AbstractScenarioService {
 	public FileScenarioService() {
 		super("My Scenarios");
 		options = new HashMap<Object, Object>();
-		// Force default values and types to be saved
-		options.put(XMLResource.OPTION_KEEP_DEFAULT_CONTENT, Boolean.TRUE);
-		options.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, Boolean.TRUE);
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 	}
 
@@ -188,6 +184,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			final Resource resource = resourceSet.createResource(resolveURI("instances/" + scenarioInstance.getUuid() + ".xmi"));
 			final ScenarioInstance copy = EcoreUtil.copy(scenarioInstance);
 			resource.getContents().add(copy);
+			resource.save(null);
 			resourceSet.getResources().remove(resource);
 		} catch (final Throwable th) {
 		}
@@ -218,12 +215,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				final Resource instanceResource = instanceResourceSet.createResource(resolved);
 				instanceResource.getContents().add(rootObject);
 				// "Store" - map URI to model instance
-				final Map<Object, Object> saveOptions = new HashMap<>();
-				// Force default values and types to be saved
-				saveOptions.put(XMLResource.OPTION_KEEP_DEFAULT_CONTENT, Boolean.TRUE);
-				saveOptions.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, Boolean.TRUE);
-				// Save the model.
-				instanceResource.save(saveOptions);	
+				instanceResource.save(null);
 				// Unload instance from memory as no longer needed
 				instanceResource.unload();
 			} catch (final IOException e) {

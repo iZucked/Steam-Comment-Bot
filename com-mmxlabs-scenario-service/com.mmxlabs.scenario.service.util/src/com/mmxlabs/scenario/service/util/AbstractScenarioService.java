@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
@@ -232,12 +231,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 				final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
 				final Resource eResource = rootObject.eResource();
-				final Map<Object, Object> saveOptions = new HashMap<>();
-				// Force default values and types to be saved
-				saveOptions.put(XMLResource.OPTION_KEEP_DEFAULT_CONTENT, Boolean.TRUE);
-				saveOptions.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, Boolean.TRUE);
-				// Save the model.
-				eResource.save(saveOptions);
+				eResource.save(null);
 
 				// Update last modified date
 				final Metadata metadata = scenarioInstance.getMetadata();

@@ -41,7 +41,6 @@ import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
@@ -598,13 +597,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				final EObject rootObject = EcoreUtil.copy(original.getInstance());
 				final Resource instanceResource = instanceResourceSet.createResource(destURI);
 				instanceResource.getContents().add(rootObject);
-				final Map<Object, Object> saveOptions = new HashMap<>();
-				// Force default values and types to be saved
-				saveOptions.put(XMLResource.OPTION_KEEP_DEFAULT_CONTENT, Boolean.TRUE);
-				saveOptions.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, Boolean.TRUE);
-				// Save the model.
-				instanceResource.save(saveOptions);
-		}
+				instanceResource.save(null);
+			}
 
 			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
 			manifest.setScenarioType(original.getMetadata().getContentType());

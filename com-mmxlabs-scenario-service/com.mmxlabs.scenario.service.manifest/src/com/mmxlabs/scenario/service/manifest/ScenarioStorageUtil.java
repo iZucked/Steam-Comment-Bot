@@ -77,13 +77,13 @@ public class ScenarioStorageUtil {
 		return name.replaceAll("[\\W&&[^ ]]+", "-");
 	}
 
-	public static File storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
+	public static String storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
 		final File tempFile = INSTANCE.getTemporaryFile(instance);
 
 		tempFile.deleteOnExit();
 		storeToFile(instance, tempFile);
 
-		return tempFile;
+		return tempFile.getAbsolutePath();
 	}
 
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
