@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -89,14 +88,11 @@ public class ScenarioInstanceMigrator {
 				// Construct a normal resource set. This will use the global package registry etc
 				final ResourceSetImpl resourceSet = new ResourceSetImpl();
 				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-				resourceSet.getLoadOptions().put(XMLResource.OPTION_KEEP_DEFAULT_CONTENT, Boolean.TRUE);
-				resourceSet.getLoadOptions().put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, Boolean.TRUE);
-				
+
 				Map<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 				try {
 					// Create a sample instance object
 					final Resource r = resourceSet.createResource(tmpURI);
-					
 					if (r instanceof ResourceImpl) {
 						((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
 					}

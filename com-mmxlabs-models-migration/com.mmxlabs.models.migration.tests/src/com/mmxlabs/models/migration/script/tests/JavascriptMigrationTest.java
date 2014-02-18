@@ -94,12 +94,8 @@ public class JavascriptMigrationTest {
 		final URI fileURI = URI.createFileURI(f.getCanonicalPath());
 		final Resource r1 = v1Loader.getResourceSet().createResource(fileURI);
 		r1.getContents().add(v1Object);
-		final Map<Object, Object> saveOptions = new HashMap<>();
-		// Force default values and types to be saved
-		saveOptions.put(XMLResource.OPTION_KEEP_DEFAULT_CONTENT, Boolean.TRUE);
-		saveOptions.put(XMLResource.OPTION_SAVE_TYPE_INFORMATION, Boolean.TRUE);
-		// Save the model.
-		r1.save(saveOptions);
+		r1.save(Collections.emptyMap());
+
 		// Reload model under V2 metamodels
 		final Resource r2 = v2Loader.getResourceSet().createResource(fileURI);
 		final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
