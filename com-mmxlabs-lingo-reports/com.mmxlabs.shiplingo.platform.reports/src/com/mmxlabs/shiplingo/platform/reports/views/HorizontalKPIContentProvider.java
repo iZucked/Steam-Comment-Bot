@@ -55,9 +55,10 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 	private Viewer currentViewer;
 
 	public static class RowData {
-		public RowData(final String scheduleName, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime) {
+		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime) {
 			super();
 			this.scheduleName = scheduleName;
+			this.totalPNL = totalPNL;
 			this.tradingPNL = tradingPNL;
 			this.shippingPNL = shippingPNL;
 			this.mtmPnl = mtmPnl;
@@ -66,6 +67,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		}
 
 		public final String scheduleName;
+		public Long totalPNL;
 		public final Long tradingPNL;
 		public final Long shippingPNL;
 		public final Long mtmPnl;
@@ -137,7 +139,7 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			object = object.eContainer();
 		}
 
-		return new RowData(scenarioInstance.getName(), totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours);
+		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL, totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours);
 	}
 
 	private long getElementShippingPNL(final ProfitAndLossContainer container) {
@@ -206,12 +208,12 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		}
 
 		if (rowData.length == 0) {
-			rowData = new RowData[] { new RowData("", null, null, null, null, null) };
+			rowData = new RowData[] { new RowData("", null, null, null, null, null, null) };
 		}
 
 	}
 
-	private RowData pinnedData = new RowData("", null, null, null, null, null);
+	private RowData pinnedData = new RowData("", null, null, null, null, null, null);
 
 	public RowData getPinnedData() {
 		return pinnedData;
