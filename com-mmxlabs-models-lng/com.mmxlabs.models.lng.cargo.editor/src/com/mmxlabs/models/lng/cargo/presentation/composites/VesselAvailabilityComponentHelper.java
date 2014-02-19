@@ -64,6 +64,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
+		add_charterRateEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
 		add_startAtEditor(detailComposite, topClass);
 		add_startAfterEditor(detailComposite, topClass);
@@ -82,6 +83,15 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL));
 	}
+	/**
+	 * Create the editor for the charterRate feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_charterRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_RATE));
+	}
+
 	/**
 	 * Create the editor for the timeCharterRate feature on VesselAvailability
 	 *

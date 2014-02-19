@@ -64,6 +64,7 @@ public class VesselAvailabilityItemProvider
 			super.getPropertyDescriptors(object);
 
 			addVesselPropertyDescriptor(object);
+			addCharterRatePropertyDescriptor(object);
 			addTimeCharterRatePropertyDescriptor(object);
 			addStartAtPropertyDescriptor(object);
 			addStartAfterPropertyDescriptor(object);
@@ -94,6 +95,28 @@ public class VesselAvailabilityItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Charter Rate feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterRatePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselAvailability_charterRate_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselAvailability_charterRate_feature", "_UI_VesselAvailability_type"),
+				 CargoPackage.Literals.VESSEL_AVAILABILITY__CHARTER_RATE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -341,6 +364,7 @@ public class VesselAvailabilityItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(VesselAvailability.class)) {
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_RATE:
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 			case CargoPackage.VESSEL_AVAILABILITY__START_AFTER:
 			case CargoPackage.VESSEL_AVAILABILITY__START_BY:

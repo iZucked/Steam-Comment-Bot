@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getCharterRate <em>Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartAfter <em>Start After</em>}</li>
@@ -63,6 +64,35 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected Vessel vessel;
+
+	/**
+	 * The default value of the '{@link #getCharterRate() <em>Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CHARTER_RATE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getCharterRate() <em>Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterRate()
+	 * @generated
+	 * @ordered
+	 */
+	protected String charterRate = CHARTER_RATE_EDEFAULT;
+
+	/**
+	 * This is true if the Charter Rate attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean charterRateESet;
 
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
@@ -304,6 +334,52 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		vessel = newVessel;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__VESSEL, oldVessel, vessel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getCharterRate() {
+		return charterRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterRate(String newCharterRate) {
+		String oldCharterRate = charterRate;
+		charterRate = newCharterRate;
+		boolean oldCharterRateESet = charterRateESet;
+		charterRateESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_RATE, oldCharterRate, charterRate, !oldCharterRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCharterRate() {
+		String oldCharterRate = charterRate;
+		boolean oldCharterRateESet = charterRateESet;
+		charterRate = CHARTER_RATE_EDEFAULT;
+		charterRateESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_AVAILABILITY__CHARTER_RATE, oldCharterRate, CHARTER_RATE_EDEFAULT, oldCharterRateESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCharterRate() {
+		return charterRateESet;
 	}
 
 	/**
@@ -689,6 +765,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_RATE:
+				return getCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
@@ -724,6 +802,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)newValue);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_RATE:
+				setCharterRate((String)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);
@@ -769,6 +850,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)null);
 				return;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_RATE:
+				unsetCharterRate();
+				return;
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				unsetTimeCharterRate();
 				return;
@@ -810,6 +894,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				return vessel != null;
+			case CargoPackage.VESSEL_AVAILABILITY__CHARTER_RATE:
+				return isSetCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				return isSetTimeCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
@@ -842,7 +928,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (timeCharterRate: ");
+		result.append(" (charterRate: ");
+		if (charterRateESet) result.append(charterRate); else result.append("<unset>");
+		result.append(", timeCharterRate: ");
 		if (timeCharterRateESet) result.append(timeCharterRate); else result.append("<unset>");
 		result.append(", startAfter: ");
 		if (startAfterESet) result.append(startAfter); else result.append("<unset>");

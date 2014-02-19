@@ -24,7 +24,7 @@ public class PriceExpressionParametersConstraint extends AbstractModelMultiConst
 		EObject target = ctx.getTarget();
 
 		if (target instanceof ExpressionPriceParameters) {
-			final SeriesParser parser = PriceExpressionUtils.getParser(null);
+			final SeriesParser parser = PriceExpressionUtils.getCommodityParser(null);
 			final ExpressionPriceParameters contract = (ExpressionPriceParameters) target;
 			PriceExpressionUtils.validatePriceExpression(ctx, contract, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION, contract.getPriceExpression(), parser, failures);
 		}

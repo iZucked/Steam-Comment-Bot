@@ -26,6 +26,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterRate <em>Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfter <em>Start After</em>}</li>
@@ -68,6 +69,59 @@ public interface VesselAvailability extends UUIDObject {
 	 * @generated
 	 */
 	void setVessel(Vessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Rate</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Rate</em>' attribute.
+	 * @see #isSetCharterRate()
+	 * @see #unsetCharterRate()
+	 * @see #setCharterRate(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_CharterRate()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	String getCharterRate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterRate <em>Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Rate</em>' attribute.
+	 * @see #isSetCharterRate()
+	 * @see #unsetCharterRate()
+	 * @see #getCharterRate()
+	 * @generated
+	 */
+	void setCharterRate(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterRate <em>Charter Rate</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCharterRate()
+	 * @see #getCharterRate()
+	 * @see #setCharterRate(String)
+	 * @generated
+	 */
+	void unsetCharterRate();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getCharterRate <em>Charter Rate</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Charter Rate</em>' attribute is set.
+	 * @see #unsetCharterRate()
+	 * @see #getCharterRate()
+	 * @see #setCharterRate(String)
+	 * @generated
+	 */
+	boolean isSetCharterRate();
 
 	/**
 	 * Returns the value of the '<em><b>Time Charter Rate</b></em>' attribute.

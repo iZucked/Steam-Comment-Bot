@@ -19,6 +19,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.pricing.CharterIndex;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -43,7 +44,7 @@ public class PriceExpressionUtils {
 	static Pattern pattern = Pattern.compile("([^0-9 a-zA-Z_+-/*%()])");
 
 	public static void validatePriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final List<IStatus> failures) {
-		validatePriceExpression(ctx, object, feature, priceExpression, getParser(null), failures);
+		validatePriceExpression(ctx, object, feature, priceExpression, getCommodityParser(null), failures);
 	}
 
 	/**
@@ -118,17 +119,17 @@ public class PriceExpressionUtils {
 	 */
 	public static void constrainPriceExpression(final IValidationContext ctx, final EObject object, final EStructuralFeature feature, final String priceExpression, final Double minValue,
 			final Double maxValue, final Date date, final List<IStatus> failures) {
-		
+
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return;
 		}
-		
+
 		// Break even symbol
 		if (priceExpression.equals("?")) {
 			return;
 		}
-		
-		SeriesParser parser = getParser(date);
+
+		SeriesParser parser = getCommodityParser(date);
 		try {
 			final IExpression<ISeries> expression = parser.parse(priceExpression);
 			final ISeries parsed = expression.evaluate();
@@ -164,7 +165,7 @@ public class PriceExpressionUtils {
 	 * @since 5.0
 	 */
 	@SuppressWarnings("rawtypes")
-	public static SeriesParser getParser(Date dateZero) {
+	public static SeriesParser getCommodityParser(Date dateZero) {
 		final Activator activator = Activator.getDefault();
 		if (activator == null) {
 			return null;
@@ -184,6 +185,41 @@ public class PriceExpressionUtils {
 						PriceIndexUtils.addSeriesDataFromDataIndex(indices, commodityIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
 					} else if (index instanceof DerivedIndex) {
 						indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
+					}
+				}
+				return indices;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
+	 * 
+	 * @return A {@link SeriesParser} object for use in validating price expressions.
+	 * @since 5.0
+	 */
+	@SuppressWarnings("rawtypes")
+	public static SeriesParser getCharterParser(Date dateZero) {
+		final Activator activator = Activator.getDefault();
+		if (activator == null) {
+			return null;
+		}
+		final IExtraValidationContext extraValidationContext = activator.getExtraValidationContext();
+		if (extraValidationContext != null) {
+			final MMXRootObject rootObject = extraValidationContext.getRootObject();
+
+			if (rootObject instanceof LNGScenarioModel) {
+				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+				final SeriesParser indices = new SeriesParser();
+
+				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+				for (final CharterIndex charterIndex : pricingModel.getCharterIndices()) {
+					final Index<Integer> index = charterIndex.getData();
+					if (index instanceof DataIndex) {
+						PriceIndexUtils.addSeriesDataFromDataIndex(indices, charterIndex.getName(), dateZero, (DataIndex<? extends Number>) index);
+					} else if (index instanceof DerivedIndex) {
+						indices.addSeriesExpression(charterIndex.getName(), ((DerivedIndex) index).getExpression());
 					}
 				}
 				return indices;
