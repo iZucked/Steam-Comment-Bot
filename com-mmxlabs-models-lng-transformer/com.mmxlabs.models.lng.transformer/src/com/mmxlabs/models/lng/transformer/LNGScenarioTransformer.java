@@ -2044,14 +2044,25 @@ public class LNGScenarioTransformer {
 			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, vesselAvailability.isSetEndAfter() ? vesselAvailability.getEndAfter() : null,
 					vesselAvailability.isSetEndBy() ? vesselAvailability.getEndBy() : null, SetUtils.getObjects(vesselAvailability.getEndAt()));
 
-			// TODO: Hook up once charter out opt implemented
-			final int dailyCharterInPrice = vesselAvailability.isSetTimeCharterRate() ? vesselAvailability.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
-
 			final long heelLimit = vesselAvailability.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(vesselAvailability.getStartHeel().getVolumeAvailable())
 					: 0;
 
-			final int dailyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(dailyCharterInPrice);
-			final ICurve dailyCharterInCurve = new ConstantValueCurve(dailyCharterInRate);
+	
+			final ICurve dailyCharterInCurve;
+			if (true) {
+				final int dailyCharterInPrice = vesselAvailability.isSetTimeCharterRate() ? vesselAvailability.getTimeCharterRate() : 0;
+
+				final int dailyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(dailyCharterInPrice);
+				dailyCharterInCurve = new ConstantValueCurve(dailyCharterInRate);
+
+			} else {
+				// Prep for charter rate expressions
+				if (vesselAvailability.isSetCharterRate()) {
+					dailyCharterInCurve = dateHelper.generateExpressionCurve(vesselAvailability.getCharterRate(), charterIndices);
+				} else {
+					dailyCharterInCurve = new ConstantValueCurve(0);
+				}
+			}
 
 			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), dailyCharterInCurve,
 					vesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
