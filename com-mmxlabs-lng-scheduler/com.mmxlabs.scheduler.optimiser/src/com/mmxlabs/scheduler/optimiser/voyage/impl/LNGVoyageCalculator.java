@@ -573,6 +573,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// The last voyage details in sequence.
 		VoyageDetails lastVoyageDetailsElement = null;
 
+		int voyageTime = 0;
 		// add up route cost and find the last voyage details element
 		for (int i = 0; i < sequence.length; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
@@ -580,6 +581,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final VoyageDetails details = (VoyageDetails) element;
 				// add route cost
 				routeCostAccumulator += details.getRouteCost();
+
+				voyageTime += details.getTravelTime();
+				voyageTime += details.getIdleTime();
 
 				lastVoyageDetailsElement = details;
 			}
@@ -645,14 +649,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// Store this value now as we may change it below during the heel calculations
 			voyagePlan.setLNGFuelVolume(lngCommitmentInM3);
 
-			
 			// Three cases;
-			// A)  we have lng, but need more than is available (worst)
+			// A) we have lng, but need more than is available (worst)
 			// B) We have lng, but decided not to use it
 			// C) We have lng and used some or all of it (best)
 
 			// I.e. we want to force heel use if it is physically possible,
-			
+
 			// if our fuel requirements exceed our onboard fuel
 			if (remainingHeelInM3 < 0) {
 				// This is worse than not using it at all -- case A
@@ -667,8 +670,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final IHeelOptions options = ((IHeelOptionsPortSlot) firstSlot).getHeelOptions();
 				cargoCVValue = options.getHeelCVValue();
 
-				// If we have not been able to use NBO, assume there was no LNG
-				if (lngCommitmentInM3 == 0 && options.getHeelLimit() > 0) {
+				// If we have not been able to use NBO, assume there was no LNG..
+				// .. unless we have a zero length voyage in which case we would not have used any BOG.
+				if (voyageTime > 0 && lngCommitmentInM3 == 0 && options.getHeelLimit() > 0) {
 					voyagePlan.setStartingHeelInM3(0);
 					voyagePlan.setRemainingHeelInM3(0);
 					// Mark as a violation to prefer other options -- case B
