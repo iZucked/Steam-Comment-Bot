@@ -255,7 +255,7 @@ public class CustomScenarioCreator {
 			fleetModel.getVessels().add(vessel);
 			final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
 			if (isTimeChartered) {
-				availability.setTimeCharterRate(10);
+				availability.setTimeCharterRate("10");
 			}
 			availability.setVessel(vessel);
 			availability.setStartHeel(heelOptions);

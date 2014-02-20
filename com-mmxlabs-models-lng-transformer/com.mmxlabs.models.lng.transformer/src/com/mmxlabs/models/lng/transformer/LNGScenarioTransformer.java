@@ -2047,21 +2047,11 @@ public class LNGScenarioTransformer {
 			final long heelLimit = vesselAvailability.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(vesselAvailability.getStartHeel().getVolumeAvailable())
 					: 0;
 
-	
 			final ICurve dailyCharterInCurve;
-			if (true) {
-				final int dailyCharterInPrice = vesselAvailability.isSetTimeCharterRate() ? vesselAvailability.getTimeCharterRate() : 0;
-
-				final int dailyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalDailyCost(dailyCharterInPrice);
-				dailyCharterInCurve = new ConstantValueCurve(dailyCharterInRate);
-
+			if (vesselAvailability.isSetTimeCharterRate()) {
+				dailyCharterInCurve = dateHelper.generateCharterExpressionCurve(vesselAvailability.getTimeCharterRate(), charterIndices);
 			} else {
-				// Prep for charter rate expressions
-				if (vesselAvailability.isSetCharterRate()) {
-					dailyCharterInCurve = dateHelper.generateExpressionCurve(vesselAvailability.getCharterRate(), charterIndices);
-				} else {
-					dailyCharterInCurve = new ConstantValueCurve(0);
-				}
+				dailyCharterInCurve = new ConstantValueCurve(0);
 			}
 
 			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), dailyCharterInCurve,

@@ -125,7 +125,29 @@ public class DateAndCurveHelper {
 		}
 		return curve;
 	}
-	
+
+	public StepwiseIntegerCurve generateCharterExpressionCurve(final String priceExpression, SeriesParser indices) {
+
+		if (priceExpression == null || priceExpression.isEmpty()) {
+			return null;
+		}
+
+		final IExpression<ISeries> expression = indices.parse(priceExpression);
+		final ISeries parsed = expression.evaluate();
+
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		if (parsed.getChangePoints().length == 0) {
+			curve.setDefaultValue((int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(0).intValue()));
+		} else {
+
+			curve.setDefaultValue(0);
+			for (final int i : parsed.getChangePoints()) {
+				curve.setValueAfter(i - 1, (int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(i).intValue()));
+			}
+		}
+		return curve;
+	}
+
 	public int convertTime(final Date startTime) {
 		assert earliestTime != null;
 		return convertTime(earliestTime, startTime);

@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CharterIndex;
@@ -49,7 +48,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 
 public class ShippingCalculationsTest extends AbstractShippingCalculationsTestClass {
@@ -658,7 +656,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final int charterRatePerDay = 240000;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		msc.vesselAvailability.setTimeCharterRate(charterRatePerDay);
+		msc.vesselAvailability.setTimeCharterRate("" + charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 		checker.hireCostPerHour = charterRatePerDay / 24;
@@ -738,6 +736,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 	 * @param expectedClasses
 	 * @return
 	 */
+	@Override
 	public SequenceTester getTestCharterCost_SpotCharterInTester(final Class<?>[] expectedClasses) {
 
 		final SequenceTester checker = new SequenceTester(expectedClasses);
@@ -811,7 +810,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final int charterRatePerDay = 0;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		msc.vesselAvailability.setTimeCharterRate(charterRatePerDay);
+		msc.vesselAvailability.setTimeCharterRate("" + charterRatePerDay);
 
 		final SequenceTester checker = getDefaultTester();
 
@@ -1165,7 +1164,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final int charterRatePerDay = 240000;
 		// change from default scenario: vessel has time charter rate 240 per day (10 per hour)
-		msc.vesselAvailability.setTimeCharterRate(charterRatePerDay);
+		msc.vesselAvailability.setTimeCharterRate("" + charterRatePerDay);
 
 		// return 37 hrs after discharge window ends
 		final Date returnDate = new Date(endDischarge.getTime() + 37l * 3600l * 1000l);

@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,11 +17,9 @@ import junit.framework.AssertionFailedError;
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
 
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -43,8 +40,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 public class AbstractShippingCalculationsTestClass {
 
