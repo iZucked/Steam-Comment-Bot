@@ -283,6 +283,89 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	}
 
+	public interface EventFilter {
+		boolean isEventFiltered(Date date, Event event);
+	}
+	
+	public abstract static class BaseEventFilter implements EventFilter {
+		protected final EventFilter filter; // allow filters to be chained if necessary
+		
+		public BaseEventFilter(EventFilter filter) {
+			this.filter = filter;
+		}
+
+		protected abstract boolean isEventDirectlyFiltered(Date date, Event event);
+		
+		@Override
+		public boolean isEventFiltered(Date date, Event event) {
+			if (filter != null) {
+				// if the previous filter filtered stuff out
+				if (filter.isEventFiltered(date, event) == true) {
+					return true;
+				}
+			}
+
+			return isEventDirectlyFiltered(date, event);
+		}		
+	}
+	
+	static abstract protected class FieldEventFilter<T> extends BaseEventFilter {
+		final private List<T> permittedValues;
+
+		public FieldEventFilter(final EventFilter filter, final List<T> values) {
+			super(filter);
+			permittedValues = values;
+		}
+
+		public FieldEventFilter(final List<T> values) {
+			this(null, values);
+		}
+		
+		@Override
+		public boolean isEventDirectlyFiltered(final Date date, final Event event) {
+			return (permittedValues.contains(getEventField(event)) == false);
+		}
+
+		abstract T getEventField(Event event);		
+		
+	}
+	
+	static protected class PortEventFilter extends FieldEventFilter<Port> {
+
+		public PortEventFilter(final EventFilter filter, List<Port> values) {
+			super(filter, values);
+		}
+
+		public PortEventFilter(List<Port> values) {
+			this(null, values);
+		}
+
+		@Override
+		Port getEventField(Event event) {
+			return event.getPort();
+		}
+		
+	}
+
+	static protected class ContractEventFilter extends FieldEventFilter<Contract> {		
+		public ContractEventFilter(final EventFilter filter, List<Contract> values) {
+			super(filter, values);
+		}
+
+		public ContractEventFilter(List<Contract> values) {
+			this(null, values);
+		}
+
+		@Override
+		Contract getEventField(Event event) {
+			if (event instanceof SlotVisit) {
+				return ((SlotVisit) event).getSlotAllocation().getContract();
+			}
+			return null;
+		}
+	}
+
+	
 	/**
 	 * Class which provides cell labels (and formatting if desired) for columns in a calendar-style vertical report, based on a list of events per cell.
 	 * <p/>
@@ -372,6 +455,12 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 *            The data type to initialise the event provider with.
 	 */
 	abstract static protected class EventProvider {
+		final protected EventFilter filter;
+		
+		public EventProvider(EventFilter filter) {
+			this.filter = filter;
+		}
+		
 		protected Event[] getEvents(final Date date) {
 			final ArrayList<Event> result = new ArrayList<>();
 
@@ -389,6 +478,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		/** Returns {@code true} if an event should not be returned by this event provider for a particular date. */
 		protected boolean filterEventOut(final Date date, final Event event) {
+			if (filter != null) {
+				return filter.isEventFiltered(date, event);
+			}
 			return false;
 		}
 	}
@@ -409,12 +501,13 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	public static class SequenceEventProvider extends EventProvider {
 		final protected Sequence[] data;
 
-		public SequenceEventProvider(final Sequence[] data) {
+		public SequenceEventProvider(final Sequence[] data, final EventFilter filter) {
+			super(filter);
 			this.data = data;
 		}
 
-		public SequenceEventProvider(final Sequence seq) {
-			this(new Sequence[] { seq });
+		public SequenceEventProvider(final Sequence seq, final EventFilter filter) {
+			this(new Sequence[] { seq }, filter);
 		}
 
 		@Override
@@ -435,61 +528,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	}
 
 	
-	static abstract protected class FilteredFieldEventProvider<T> extends SequenceEventProvider {
-		final private List<T> permittedValues;
 
-		public FilteredFieldEventProvider(final Sequence [] seq, final List<T> values) {
-			super(seq);
-			permittedValues = values;
-		}
-		
-		@Override
-		protected boolean filterEventOut(final Date date, final Event event) {
-			return (permittedValues.contains(getEventField(event)) == false);
-		}
-
-		abstract T getEventField(Event event);		
-	}
-
-	/**
-	 * Class to provide the events on a given date from one or more Sequence objects, filtered by occurring at one or more specified ports.
-	 * 
-	 * @author mmxlabs
-	 * 
-	 */
-	static protected class PortSequenceEventProvider extends FilteredFieldEventProvider<Port> {
-		public PortSequenceEventProvider(Sequence[] seq, List<Port> values) {
-			super(seq, values);
-		}
-
-		@Override
-		Port getEventField(Event event) {
-			return event.getPort();
-		}
-	}
-
-	/**
-	 * Class to provide the SlotVisit events on a given date from one or more Sequence objects, filtered by being based on one or more specified ontracts.
-	 * 
-	 * @author mmxlabs
-	 * 
-	 */
-	static protected class ContractSequenceEventProvider extends FilteredFieldEventProvider<Contract> {
-
-
-		public ContractSequenceEventProvider(Sequence[] seq,
-				List<Contract> values) {
-			super(seq, values);
-		}
-
-		@Override
-		Contract getEventField(Event event) {
-			if (event instanceof SlotVisit) {
-				return ((SlotVisit) event).getSlotAllocation().getContract();
-			}
-			return null;
-		}
-	}
 
 	/**
 	 * Record class for holding information on the sequences in a Schedule. Provides the following fields:
