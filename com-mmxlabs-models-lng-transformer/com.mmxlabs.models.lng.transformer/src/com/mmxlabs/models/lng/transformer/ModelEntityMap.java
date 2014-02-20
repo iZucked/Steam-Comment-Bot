@@ -90,14 +90,4 @@ public class ModelEntityMap {
 	public Date getDateFromHours(final long hours) {
 		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR);
 	}
-
-	/**
-	 * @since 2.0
-	 */
-	public int getHoursFromDate(final Date date) {
-		long diff = date.getTime() - earliestDate.getTime();
-		long hours = diff / Timer.ONE_HOUR;
-		return (int) Math.max(hours, 0);
-	}
-
 }
