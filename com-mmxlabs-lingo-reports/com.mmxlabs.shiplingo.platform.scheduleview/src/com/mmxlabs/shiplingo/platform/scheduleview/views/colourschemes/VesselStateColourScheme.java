@@ -6,15 +6,15 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Alert_Crimson;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.FOBDES_Grey;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Gas_Blue;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Green;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Light_Gas_Blue;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Light_Green;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Vessel_Ballast_Journey;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Vessel_Laden_Journey;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Vessel_Ballast_Idle;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Vessel_Laden_Idle;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Locked_White;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Slot_White;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_Brown;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_LightPurple;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_Purple;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Vessel_Dry_Dock;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Vessel_Generated_Charter_Out;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Vessel_Charter_Out;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 
@@ -47,27 +47,27 @@ public class VesselStateColourScheme extends ColourScheme {
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
 			if (journey.isLaden()) {
-				return ColorCache.getColor(Green);
+				return ColorCache.getColor(Vessel_Laden_Journey);
 			} else {
-				return ColorCache.getColor(Gas_Blue);
+				return ColorCache.getColor(Vessel_Ballast_Journey);
 			}
 		} else if (element instanceof Idle) {
 			final Idle idle = (Idle) element;
 			if (idle.isLaden()) {
-				return ColorCache.getColor(Light_Green);
+				return ColorCache.getColor(Vessel_Laden_Idle);
 			} else {
-				return ColorCache.getColor(Light_Gas_Blue);
+				return ColorCache.getColor(Vessel_Ballast_Idle);
 			}
 		} else if (element instanceof VesselEventVisit) {
 			VesselEventVisit vev = (VesselEventVisit) element;
 			if(vev.getVesselEvent() instanceof DryDockEvent){
-				return ColorCache.getColor(VesselEvent_Brown);
+				return ColorCache.getColor(Vessel_Dry_Dock);
 			}
 			else if(vev.getVesselEvent() instanceof CharterOutEvent){
-				return ColorCache.getColor(VesselEvent_Purple);
+				return ColorCache.getColor(Vessel_Charter_Out);
 			}			
 		} else if (element instanceof GeneratedCharterOut) {
-			return ColorCache.getColor(VesselEvent_LightPurple);
+			return ColorCache.getColor(Vessel_Generated_Charter_Out);
 		}
 
 		// else if (mode == Mode.Lateness) {

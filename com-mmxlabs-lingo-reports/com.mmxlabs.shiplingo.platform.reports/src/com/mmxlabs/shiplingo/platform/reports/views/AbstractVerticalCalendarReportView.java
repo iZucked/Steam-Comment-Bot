@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -21,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -28,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -35,6 +38,7 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.shiplingo.platform.reports.views.AbstractVerticalCalendarReportView.ScheduleSequenceData;
 
 /**
  * Class for providing "vertical" schedule reports. Each row is a calendar day in the schedule; each column typically 
@@ -297,18 +301,30 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * @author Simon McGregor
 	 * 
 	 */
-	protected class EventColumnLabelProvider extends CalendarColumnLabelProvider<EventProvider> {
+	public class EventColumnLabelProvider extends CalendarColumnLabelProvider<EventProvider> {
 		public EventColumnLabelProvider(final EventProvider provider) {
 			super(provider);
 		}
 
 		/**
-		 * By default, returns a concatenated list of strings for each event on that day.
+		 * Returns the text for a column cell. 
+		 * Defers to {@link #getEventText(Date, Event[])}; override that method if you want to change the behaviour. 
 		 */
 		@Override
-		protected String getText(final Date element, final EventProvider provider) {
+		protected final String getText(final Date element, final EventProvider provider) {
 			// find the event text for the date given
-			return getEventText(element, provider.getEvents(element), EventColumnLabelProvider.this);
+			return getEventText(element, provider.getEvents(element));
+		}
+		
+		/**
+		 * Returns 
+		 * By default, defers to {@link AbstractVerticalCalendarReportView#getEventText(Date, Event[], EventColumnLabelProvider)}
+		 * @param element
+		 * @param events
+		 * @return
+		 */
+		protected String getEventText(final Date element, final Event [] events) {
+			return AbstractVerticalCalendarReportView.this.getEventText(element, events, EventColumnLabelProvider.this);			
 		}
 
 		/** Returns the desired font of the cell. */
@@ -389,7 +405,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * @author Simon McGregor
 	 * 
 	 */
-	static protected class SequenceEventProvider extends EventProvider {
+	public static class SequenceEventProvider extends EventProvider {
 		final protected Sequence[] data;
 
 		public SequenceEventProvider(final Sequence[] data) {
@@ -417,23 +433,60 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 	}
 
+	
+	static abstract protected class FilteredFieldEventProvider<T> extends SequenceEventProvider {
+		final private List<T> permittedValues;
+
+		public FilteredFieldEventProvider(final Sequence [] seq, final List<T> values) {
+			super(seq);
+			permittedValues = values;
+		}
+		
+		@Override
+		protected boolean filterEventOut(final Date date, final Event event) {
+			return (permittedValues.contains(getEventField(event)) == false);
+		}
+
+		abstract T getEventField(Event event);		
+	}
+
 	/**
 	 * Class to provide the events on a given date from one or more Sequence objects, filtered by occurring at one or more specified ports.
 	 * 
 	 * @author mmxlabs
 	 * 
 	 */
-	static protected class PortSequenceEventProvider extends SequenceEventProvider {
-		final private List<Port> ports;
-
-		public PortSequenceEventProvider(final Sequence[] seq, final Port[] ports) {
-			super(seq);
-			this.ports = Arrays.asList(ports);
+	static protected class PortSequenceEventProvider extends FilteredFieldEventProvider<Port> {
+		public PortSequenceEventProvider(Sequence[] seq, List<Port> values) {
+			super(seq, values);
 		}
 
 		@Override
-		protected boolean filterEventOut(final Date date, final Event event) {
-			return (ports.contains(event.getPort()) == false);
+		Port getEventField(Event event) {
+			return event.getPort();
+		}
+	}
+
+	/**
+	 * Class to provide the SlotVisit events on a given date from one or more Sequence objects, filtered by being based on one or more specified ontracts.
+	 * 
+	 * @author mmxlabs
+	 * 
+	 */
+	static protected class ContractSequenceEventProvider extends FilteredFieldEventProvider<Contract> {
+
+
+		public ContractSequenceEventProvider(Sequence[] seq,
+				List<Contract> values) {
+			super(seq, values);
+		}
+
+		@Override
+		Contract getEventField(Event event) {
+			if (event instanceof SlotVisit) {
+				return ((SlotVisit) event).getSlotAllocation().getContract();
+			}
+			return null;
 		}
 	}
 
@@ -533,5 +586,13 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	abstract protected Color getEventBackgroundColor(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
 
 	abstract protected Color getEventForegroundColor(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
+	
+	protected GridViewerColumn createEventColumn(SequenceEventProvider eventProvider, String title) {
+		final GridViewerColumn result = new GridViewerColumn(gridViewer, SWT.NONE);
+		result.setLabelProvider(new EventColumnLabelProvider(eventProvider));
+		result.getColumn().setText(title);
+		result.getColumn().pack();				
+		return result;		
+	}
 
 }
