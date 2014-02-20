@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
@@ -595,4 +596,16 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		return result;		
 	}
 
+	protected GridViewerColumn createEventColumn(EventProvider eventProvider, String name, GridColumnGroup columnGroup) {
+		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
+		final GridViewerColumn result = new GridViewerColumn(gridViewer, column);
+		result.setLabelProvider(new EventColumnLabelProvider(eventProvider));
+		result.getColumn().setText(name);
+		result.getColumn().pack();
+
+		return result;
+		
+	}
+
+	
 }
