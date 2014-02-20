@@ -878,7 +878,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselAvailability_CharterRate() {
+	public EAttribute getVesselAvailability_TimeCharterRate() {
 		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -887,17 +887,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getVesselAvailability_TimeCharterRate() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getVesselAvailability_StartAt() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(3);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -906,7 +897,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getVesselAvailability_StartAfter() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -915,7 +906,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getVesselAvailability_StartBy() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -924,7 +915,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getVesselAvailability_EndAt() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(6);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -933,7 +924,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getVesselAvailability_EndAfter() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -942,7 +933,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getVesselAvailability_EndBy() {
-		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)vesselAvailabilityEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -951,7 +942,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getVesselAvailability_StartHeel() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(9);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -960,7 +951,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getVesselAvailability_Entity() {
-		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(10);
+		return (EReference)vesselAvailabilityEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -1275,7 +1266,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		vesselAvailabilityEClass = createEClass(VESSEL_AVAILABILITY);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__VESSEL);
-		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__CHARTER_RATE);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__TIME_CHARTER_RATE);
 		createEReference(vesselAvailabilityEClass, VESSEL_AVAILABILITY__START_AT);
 		createEAttribute(vesselAvailabilityEClass, VESSEL_AVAILABILITY__START_AFTER);
@@ -1481,8 +1471,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(vesselAvailabilityEClass, VesselAvailability.class, "VesselAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselAvailability_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailability_CharterRate(), ecorePackage.getEString(), "charterRate", null, 0, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getVesselAvailability_TimeCharterRate(), ecorePackage.getEInt(), "timeCharterRate", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselAvailability_TimeCharterRate(), ecorePackage.getEString(), "timeCharterRate", null, 1, 1, VesselAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		g1 = createEGenericType(theTypesPackage.getAPortSet());
 		g2 = createEGenericType(thePortPackage.getPort());
 		g1.getETypeArguments().add(g2);

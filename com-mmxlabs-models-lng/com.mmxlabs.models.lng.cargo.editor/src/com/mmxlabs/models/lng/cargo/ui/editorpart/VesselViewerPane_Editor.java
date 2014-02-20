@@ -56,7 +56,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 		addTypicalColumn("Class", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVessel_VesselClass(), jointModelEditor.getReferenceValueProviderCache(), editingDomain),
 				CargoPackage.eINSTANCE.getVesselAvailability_Vessel());
 
-		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_CharterRate(), jointModelEditor.getEditingDomain()));
+		addTypicalColumn("Charter", new BasicAttributeManipulator(CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), jointModelEditor.getEditingDomain()));
 
 		addTypicalColumn("Start Port",
 				new MultipleReferenceManipulator(CargoPackage.eINSTANCE.getVesselAvailability_StartAt(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),

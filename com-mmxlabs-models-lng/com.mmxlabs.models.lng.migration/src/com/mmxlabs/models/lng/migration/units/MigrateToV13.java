@@ -21,7 +21,7 @@ import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
-public class MigrateToV12 extends AbstractMigrationUnit {
+public class MigrateToV13 extends AbstractMigrationUnit {
 
 	private MetamodelLoader destiniationLoader;
 	private MetamodelLoader sourceLoader;
@@ -33,12 +33,12 @@ public class MigrateToV12 extends AbstractMigrationUnit {
 
 	@Override
 	public int getSourceVersion() {
-		return 11;
+		return 12;
 	}
 
 	@Override
 	public int getDestinationVersion() {
-		return 12;
+		return 13;
 	}
 
 	@Override
@@ -99,15 +99,10 @@ public class MigrateToV12 extends AbstractMigrationUnit {
 		}
 
 		for (final EObject vesselAvailability : vesselAvailabilities) {
-			if (vesselAvailability.eIsSet(attribute_VesselAvailability_timeCharterRate)) {
-				final Object value = vesselAvailability.eGet(attribute_VesselAvailability_timeCharterRate);
-				if (value instanceof Number) {
-					final int rate = ((Number) value).intValue();
-					vesselAvailability.eSet(attribute_VesselAvailability_charterRate, Integer.toString(rate));
-				} else if (value instanceof String) {
-					vesselAvailability.eSet(attribute_VesselAvailability_charterRate, value);
-				}
-				vesselAvailability.eUnset(attribute_VesselAvailability_timeCharterRate);
+			if (vesselAvailability.eIsSet(attribute_VesselAvailability_charterRate)) {
+				final Object value = vesselAvailability.eGet(attribute_VesselAvailability_charterRate);
+				vesselAvailability.eUnset(attribute_VesselAvailability_charterRate);
+				vesselAvailability.eSet(attribute_VesselAvailability_timeCharterRate, value);
 			}
 		}
 	}

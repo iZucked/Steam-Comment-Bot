@@ -35,15 +35,15 @@ public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
 
 			final Vessel vessel = vesselAvailability.getVessel();
 			final String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
-			if (vesselAvailability.isSetCharterRate()) {
+			if (vesselAvailability.isSetTimeCharterRate()) {
 
-				if (vesselAvailability.getCharterRate() == null) {
+				if (vesselAvailability.getTimeCharterRate() == null) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 							"Missing charter expression for vessel %s", vesselName)));
-					dsd.addEObjectAndFeature(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_CharterRate());
+					dsd.addEObjectAndFeature(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate());
 					statuses.add(dsd);
 				} else {
-					PriceExpressionUtils.validatePriceExpression(ctx, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_CharterRate(), vesselAvailability.getCharterRate(),
+					PriceExpressionUtils.validatePriceExpression(ctx, vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate(), vesselAvailability.getTimeCharterRate(),
 							PriceExpressionUtils.getCharterParser(null), statuses);
 				}
 			}
