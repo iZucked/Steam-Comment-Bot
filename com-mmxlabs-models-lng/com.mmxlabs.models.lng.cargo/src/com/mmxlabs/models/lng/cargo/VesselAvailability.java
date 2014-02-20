@@ -139,6 +139,7 @@ public interface VesselAvailability extends UUIDObject {
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
+	@Deprecated
 	int getTimeCharterRate();
 
 	/**

@@ -28,20 +28,13 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(IValidationContext ctx, List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
 
-			Vessel vessel = vesselAvailability.getVessel();
-			String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
-			if (vesselAvailability.isSetTimeCharterRate()) {
-				if (vesselAvailability.getTimeCharterRate() == 0) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vesselName));
-					status.addEObjectAndFeature(vesselAvailability, CargoPackage.eINSTANCE.getVesselAvailability_TimeCharterRate());
-					statuses.add(status);
-				}
-			}
+			final Vessel vessel = vesselAvailability.getVessel();
+			final String vesselName = vessel == null ? "<Unknown>" : vessel.getName();
 			if (vesselAvailability.isSetCharterRate()) {
 
 				if (vesselAvailability.getCharterRate() == null) {
