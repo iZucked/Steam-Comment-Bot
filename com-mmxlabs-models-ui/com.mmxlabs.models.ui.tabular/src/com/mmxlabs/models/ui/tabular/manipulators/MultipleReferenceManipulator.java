@@ -36,6 +36,7 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
  */
 public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 
+	/** @see PortMultiReferenceInlineEditor */
 	private final static int MAX_DISPLAY_LENGTH = 32;
 	private static final int MIN_DISPLAY_NAMES = 2;
 	
