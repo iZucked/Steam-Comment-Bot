@@ -48,6 +48,11 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
  * 
  */
 public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
+
+	/** @see MultipleReferenceManipulator */
+	private final static int MAX_DISPLAY_LENGTH = 32;
+	private static final int MIN_DISPLAY_NAMES = 2;
+	
 	private IReferenceValueProvider valueProvider;
 	private Label theLabel;
 	private Button button;
@@ -112,10 +117,19 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		if (selectedValues != null) {
 			final StringBuilder sb = new StringBuilder();
+			int numNamesAdded = 0;
 			for (final EObject obj : selectedValues) {
-				if (sb.length() > 0)
+				String name = valueProvider.getName(input, (EReference) feature, obj);
+				if (sb.length() > 0) {
 					sb.append(", ");
-				sb.append(valueProvider.getName(input, (EReference) feature, obj));
+				}
+				if (sb.length() + name.length() <= MAX_DISPLAY_LENGTH || numNamesAdded <= MIN_DISPLAY_NAMES-1){
+					sb.append(name);
+					++numNamesAdded;
+				} else {
+					sb.append("...");				
+					break;
+				}
 			}
 			theLabel.setText(sb.toString());
 		}
