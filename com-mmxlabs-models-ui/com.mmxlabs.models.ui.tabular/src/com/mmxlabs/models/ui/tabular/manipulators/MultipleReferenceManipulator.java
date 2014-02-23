@@ -35,6 +35,10 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
  * 
  */
 public class MultipleReferenceManipulator extends DialogFeatureManipulator {
+
+	private final static int MAX_DISPLAY_LENGTH = 32;
+	private static final int MIN_DISPLAY_NAMES = 2;
+	
 	private final com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider valueProvider;
 	private final EAttribute nameAttribute;
 
@@ -55,11 +59,19 @@ public class MultipleReferenceManipulator extends DialogFeatureManipulator {
 		}
 		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		final StringBuilder sb = new StringBuilder();
+		int numNamesAdded = 0;
 		for (final EObject obj : selectedValues) {
+			String name = obj.eGet(nameAttribute).toString();
 			if (sb.length() > 0) {
 				sb.append(", ");
 			}
-			sb.append(obj.eGet(nameAttribute));
+			if (sb.length() + name.length() <= MAX_DISPLAY_LENGTH || numNamesAdded <= MIN_DISPLAY_NAMES-1){
+				sb.append(name);
+				++numNamesAdded;
+			} else {
+				sb.append("...");				
+				break;
+			}
 		}
 		return sb.toString();
 	}
