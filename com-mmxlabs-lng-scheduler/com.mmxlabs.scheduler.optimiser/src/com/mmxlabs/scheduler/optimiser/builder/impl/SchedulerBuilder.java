@@ -951,27 +951,64 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				}
 			}
 		}
-		/**
-		 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
-		 */
-		final int maxFastReturnTime;
-		if ((dischargePort != null) && (loadPort != null)) {
-			final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
-			// what's the slowest vessel class
-			int slowestMaxSpeed = Integer.MAX_VALUE;
-			for (final IVesselClass vesselClass : vesselClasses) {
-				if (vesselClass == virtualClass) {
-					continue;
-				}
-				slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
-			}
 
-			maxFastReturnTime = Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance);
+		// 0 == return to current load,
+		// 1 == return to farthest in time load
+		// 2== end window
+		final int rule = 1;
+		final int latestTime;
+		if (rule == 0) {
+			/**
+			 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+			 */
+			int maxFastReturnTime = 0;
+			if ((dischargePort != null) && (loadPort != null)) {
+				final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
+				// what's the slowest vessel class
+				int slowestMaxSpeed = Integer.MAX_VALUE;
+				for (final IVesselClass vesselClass : vesselClasses) {
+					if (vesselClass == virtualClass) {
+						continue;
+					}
+					slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+				}
+				maxFastReturnTime = Math.max(maxFastReturnTime, Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance));
+			} else {
+				latestDischarge = 0;
+				maxFastReturnTime = 0;
+			}
+			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
+		} else if (rule == 1) {
+			/**
+			 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+			 */
+			int maxFastReturnTime = 0;
+			if ((dischargePort != null)) { // && (loadPort != null)) {
+				for (final ILoadOption loadSlot : loadSlots) {
+					final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadSlot.getPort());
+					if (returnDistance == Integer.MAX_VALUE) {
+						continue;
+					}
+					// what's the slowest vessel class
+					int slowestMaxSpeed = Integer.MAX_VALUE;
+					for (final IVesselClass vesselClass : vesselClasses) {
+						if (vesselClass == virtualClass) {
+							continue;
+						}
+						slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+					}
+					maxFastReturnTime = Math.max(maxFastReturnTime, Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance));
+				}
+			} else {
+				latestDischarge = 0;
+				maxFastReturnTime = 0;
+			}
+			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
 		} else {
-			maxFastReturnTime = 0;
-			latestDischarge = 0;
+			latestTime = Math.max(endOfLatestWindow, latestDischarge);
+
 		}
-		final int latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
+		
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
 			elementAndSlot.getSecond().setTimeWindow(endWindow);

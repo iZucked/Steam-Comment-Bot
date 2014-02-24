@@ -314,10 +314,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			result += shippingEntity.getShippingBook().getTaxedProfit(generatedCharterOutRevenue - generatedCharterOutCosts, taxTime);
 
 			if (annotatedSolution != null && exportElement != null) {
-				// Calculate P&L with TC rates
-				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, true);
-				// Calculate P&L without TC rates
-				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, false);
+				if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
+					// Calculate P&L with TC rates
+					generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, true);
+					// Calculate P&L without TC rates
+					generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, false);
+				}
 			}
 		}
 
@@ -405,11 +407,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			// Calculate P&L with TC rates
 			generateShippingAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true, true);
-			generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, true);
+			if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
+				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, true);
+			}
 
 			// Calculate P&L without TC rates
 			generateShippingAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true, false);
-			generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, false);
+			if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
+				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, false);
+			}
 
 		}
 
@@ -434,22 +440,20 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	private void generateCharterOutAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
 			final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot, final boolean includeTimeCharterRates) {
-		if (generatedCharterOutRevenue != 0) {
 
-			final long charterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
-			final long charterOutPretaxProfit = generatedCharterOutRevenue - charterOutCosts;
-			final long charterOutProfit = shippingEntity.getShippingBook().getTaxedProfit(charterOutPretaxProfit, taxTime);
+		final long charterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
+		final long charterOutPretaxProfit = generatedCharterOutRevenue - charterOutCosts;
+		final long charterOutProfit = shippingEntity.getShippingBook().getTaxedProfit(charterOutPretaxProfit, taxTime);
 
-			final DetailTree details = new DetailTree();
+		final DetailTree details = new DetailTree();
 
-			details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(generatedCharterOutRevenue)));
+		details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(generatedCharterOutRevenue)));
 
-			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity.getShippingBook(), charterOutProfit, charterOutCosts, details);
-			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
-			final ISequenceElement element = slotProvider.getElement(firstSlot);
-			final String label = includeTimeCharterRates ? SchedulerConstants.AI_charterOutProfitAndLoss : SchedulerConstants.AI_charterOutProfitAndLossNoTimeCharterRate;
-			annotatedSolution.getElementAnnotations().setAnnotation(element, label, annotation);
-		}
+		final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity.getShippingBook(), charterOutProfit, charterOutCosts, details);
+		final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
+		final ISequenceElement element = slotProvider.getElement(firstSlot);
+		final String label = includeTimeCharterRates ? SchedulerConstants.AI_charterOutProfitAndLoss : SchedulerConstants.AI_charterOutProfitAndLossNoTimeCharterRate;
+		annotatedSolution.getElementAnnotations().setAnnotation(element, label, annotation);
 	}
 
 	protected void addEntityBookProfit(@NonNull final Map<IEntityBook, Long> entityBookProfit, @NonNull final IEntityBook entityBook, final long profit) {
