@@ -955,7 +955,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// 0 == return to current load,
 		// 1 == return to farthest in time load
 		// 2== end window
-		final int rule = 1;
+		final int rule = 0;
 		final int latestTime;
 		if (rule == 0) {
 			/**
