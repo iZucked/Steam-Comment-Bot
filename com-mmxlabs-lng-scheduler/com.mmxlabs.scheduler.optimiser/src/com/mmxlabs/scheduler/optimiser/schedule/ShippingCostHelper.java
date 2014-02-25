@@ -107,6 +107,19 @@ public class ShippingCostHelper {
 		return charterRevenue;
 	}
 
+	public boolean hasGeneratedCharterOut(final VoyagePlan plan) {
+		for (final Object obj : plan.getSequence()) {
+
+			if (obj instanceof VoyageDetails) {
+				final VoyageDetails voyageDetails = (VoyageDetails) obj;
+				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public long getGeneratedCharterOutCosts(final VoyagePlan plan) {
 
 		int planDuration = 0;

@@ -427,7 +427,7 @@ public class VoyagePlanner {
 			final IDetailsSequenceElement[] sequence = plan.getSequence();
 			long currentHeelInM3 = startHeelVolumeInM3;
 			long totalVoyageBOG = 0;
-
+			int voyageTime = 0;
 			IPortSlot optionalHeelUsePortSlot = null;
 			for (int i = 0; i < sequence.length - 1; ++i) {
 				final IDetailsSequenceElement e = sequence[i];
@@ -465,12 +465,16 @@ public class VoyagePlanner {
 					}
 					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;
+					
+					voyageTime += voyageDetails.getTravelTime();
+					voyageTime += voyageDetails.getIdleTime();
+
 				}
 			}
 			// The optional heel use port slot has heel on board which may or may not have been used.
 			// The default code path assumes it has been used. However, if there is no NBO at all, we assume it did not exist,
 			// thus we need to update the data to accommodate.
-			if (optionalHeelUsePortSlot != null && totalVoyageBOG == 0) {
+			if (optionalHeelUsePortSlot != null && voyageTime > 0 && totalVoyageBOG == 0) {
 				// Replace heel level annotation
 				heelLevelAnnotations.put(optionalHeelUsePortSlot, new HeelLevelAnnotation(0, 0));
 				// Update current heel - this will still be the start heel value as there was no boil-off

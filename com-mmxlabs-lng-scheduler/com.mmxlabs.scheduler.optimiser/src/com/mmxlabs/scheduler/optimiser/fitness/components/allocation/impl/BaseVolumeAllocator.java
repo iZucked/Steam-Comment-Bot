@@ -80,7 +80,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		Integer transferTime = null;
 		Long transferVolume = null;
 		IVessel nominatedVessel = null;
-		for (int i = 0; i < sequence.length - 1; ++i) {
+		final int adjust = plan.isIgnoreEnd() ? 1 : 0;
+		for (int i = 0; i < sequence.length - adjust; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 
 			if (element instanceof PortDetails) {
@@ -139,7 +140,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final List<Integer> slotTimes;
 		if (transferTime != null) {
 			slotTimes = new ArrayList<Integer>(sequence.length - 1);
-			for (int i = 0; i < sequence.length - 1; ++i) {
+			for (int i = 0; i < sequence.length - adjust; ++i) {
 				slotTimes.add(transferTime);
 			}
 		} else {
