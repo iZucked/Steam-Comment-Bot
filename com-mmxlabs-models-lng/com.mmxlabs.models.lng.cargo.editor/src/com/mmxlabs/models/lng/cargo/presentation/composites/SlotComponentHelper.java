@@ -9,11 +9,18 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -21,6 +28,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.dates.DateInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.MultiTextInlineEditor;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -96,6 +104,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_restrictedContractsEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
 		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
+		add_hedgesEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -170,6 +179,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the hedges feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_hedgesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__HEDGES));
 	}
 
 	/**

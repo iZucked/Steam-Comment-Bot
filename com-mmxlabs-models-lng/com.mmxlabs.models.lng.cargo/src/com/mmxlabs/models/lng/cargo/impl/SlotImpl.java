@@ -68,6 +68,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
  * </ul>
  * </p>
  *
@@ -571,6 +572,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean restrictedListsArePermissiveESet;
+
+	/**
+	 * The default value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedges()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEDGES_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedges()
+	 * @generated
+	 * @ordered
+	 */
+	protected int hedges = HEDGES_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1489,6 +1510,27 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHedges() {
+		return hedges;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHedges(int newHedges) {
+		int oldHedges = hedges;
+		hedges = newHedges;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__HEDGES, oldHedges, hedges));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -1697,6 +1739,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getRestrictedPorts();
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isRestrictedListsArePermissive();
+			case CargoPackage.SLOT__HEDGES:
+				return getHedges();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1780,6 +1824,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__HEDGES:
+				setHedges((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1860,6 +1907,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				unsetRestrictedListsArePermissive();
 				return;
+			case CargoPackage.SLOT__HEDGES:
+				setHedges(HEDGES_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1917,6 +1967,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetRestrictedPorts();
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isSetRestrictedListsArePermissive();
+			case CargoPackage.SLOT__HEDGES:
+				return hedges != HEDGES_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2082,6 +2134,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(shippingDaysRestriction);
 		result.append(", restrictedListsArePermissive: ");
 		if (restrictedListsArePermissiveESet) result.append(restrictedListsArePermissive); else result.append("<unset>");
+		result.append(", hedges: ");
+		result.append(hedges);
 		result.append(')');
 		return result.toString();
 	}
