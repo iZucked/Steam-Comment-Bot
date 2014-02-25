@@ -127,6 +127,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculat
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -173,7 +174,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
-
+	
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
@@ -215,6 +216,9 @@ public class LNGScenarioTransformer {
 	@Inject
 	private IPortVisitDurationProviderEditor portVisitDurationProviderEditor;
 
+	@Inject
+	private IHedgesProviderEditor hedgesProviderEditor;
+	
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -1153,6 +1157,11 @@ public class LNGScenarioTransformer {
 		for (final IContractTransformer contractTransformer : contractTransformers) {
 			contractTransformer.slotTransformed(dischargeSlot, discharge);
 		}
+		
+		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getHedges());
+		if (hedgeCost != 0)
+			hedgesProviderEditor.setHedgeCost(discharge, hedgeCost);
+		
 		return discharge;
 	}
 
@@ -1251,6 +1260,11 @@ public class LNGScenarioTransformer {
 			marketSlotsByID.put(loadSlot.getName(), loadSlot);
 			addSpotSlotToCount((SpotSlot) loadSlot);
 		}
+		
+		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getHedges());
+		if (hedgeCost != 0)
+			hedgesProviderEditor.setHedgeCost(load, hedgeCost);
+				
 		return load;
 	}
 
