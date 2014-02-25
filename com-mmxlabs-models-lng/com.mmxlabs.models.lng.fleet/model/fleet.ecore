@@ -108,6 +108,8 @@
         <details key="unit" value="MT/d"/>
       </eAnnotations>
     </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minBaseFuelConsumption"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
       <eTypeArguments eClassifier="#//Vessel"/>
     </eGenericSuperTypes>

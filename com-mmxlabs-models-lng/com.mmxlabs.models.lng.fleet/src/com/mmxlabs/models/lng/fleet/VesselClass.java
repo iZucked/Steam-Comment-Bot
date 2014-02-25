@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getPilotLightRate <em>Pilot Light Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  * </ul>
  * </p>
  *
@@ -370,6 +371,32 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @generated
 	 */
 	void setPilotLightRate(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Base Fuel Consumption</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Base Fuel Consumption</em>' attribute.
+	 * @see #setMinBaseFuelConsumption(double)
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinBaseFuelConsumption()
+	 * @model
+	 * @generated
+	 */
+	double getMinBaseFuelConsumption();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Base Fuel Consumption</em>' attribute.
+	 * @see #getMinBaseFuelConsumption()
+	 * @generated
+	 */
+	void setMinBaseFuelConsumption(double value);
 
 } // end of  VesselClass
 
