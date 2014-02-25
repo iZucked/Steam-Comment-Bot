@@ -153,4 +153,9 @@ public interface IVesselClass {
 	 */
 	long getCooldownVolume();
 
+	/**
+	 * MT/day of base fuel required as a *minimum* consumption for all events (port, travel & idle).
+	 * @return
+	 */
+	int getMinBaseFuelConsumptionInMTPerDay();
 }

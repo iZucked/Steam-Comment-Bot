@@ -39,6 +39,8 @@ public final class VesselClass implements IVesselClass {
 
 	private long minHeel;
 
+	private int minBaseFuelConsumptionInMTPerDay;
+
 	private final EnumMap<VesselState, Long> nboRate = new EnumMap<VesselState, Long>(VesselState.class);
 
 	private final EnumMap<VesselState, Long> idleConsumptionRate = new EnumMap<VesselState, Long>(VesselState.class);
@@ -233,5 +235,14 @@ public final class VesselClass implements IVesselClass {
 
 	public void setWarmupTime(final int warmupTime) {
 		this.warmupTime = warmupTime;
+	}
+
+	@Override
+	public int getMinBaseFuelConsumptionInMTPerDay() {
+		return this.minBaseFuelConsumptionInMTPerDay;
+	}
+
+	public void setMinBaseFuelConsumptionInMTPerDay(final int minBaseFuelConsumptionInMTPerDay) {
+		this.minBaseFuelConsumptionInMTPerDay = minBaseFuelConsumptionInMTPerDay;
 	}
 }

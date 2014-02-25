@@ -91,7 +91,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
-			int warmupTimeInHours, long cooldownVolumeInM3);
+			int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
