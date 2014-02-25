@@ -28,8 +28,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+
 import com.google.common.io.ByteStreams;
-import com.google.common.util.concurrent.AbstractScheduledService;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
 import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
 import com.mmxlabs.lingo.app.headless.internal.Activator;
