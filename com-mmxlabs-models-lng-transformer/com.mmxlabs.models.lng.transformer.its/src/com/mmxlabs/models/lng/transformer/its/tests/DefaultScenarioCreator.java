@@ -1025,8 +1025,9 @@ public class DefaultScenarioCreator {
 
 			for (final Cargo c : cargoModel.getCargoes()) {
 				if (c.equals(cargo)) {
-					c.getAllowedVessels().addAll(allowedVessels);
-
+					for (final Slot s : c.getSlots()) {
+						s.getAllowedVessels().addAll(allowedVessels);
+					}
 					return true;
 				}
 			}

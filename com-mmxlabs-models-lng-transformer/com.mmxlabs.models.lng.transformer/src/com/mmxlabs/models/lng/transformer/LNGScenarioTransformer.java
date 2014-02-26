@@ -45,7 +45,6 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -174,7 +173,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
-	
+
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
@@ -218,7 +217,7 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IHedgesProviderEditor hedgesProviderEditor;
-	
+
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -870,7 +869,7 @@ public class LNGScenarioTransformer {
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					{
-						final ILoadOption load = createLoadOption(builder, portAssociation, contractTransformers, entities, loadSlot);
+						final ILoadOption load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, entities, loadSlot);
 						usedLoadSlots.add(loadSlot);
 						loadOptions.add(load);
 						slotMap.put(loadSlot, load);
@@ -880,7 +879,7 @@ public class LNGScenarioTransformer {
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					{
-						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, contractTransformers, entities, dischargeSlot);
+						final IDischargeOption discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, entities, dischargeSlot);
 						usedDischargeSlots.add(dischargeSlot);
 						dischargeOptions.add(discharge);
 						slotMap.put(dischargeSlot, discharge);
@@ -917,17 +916,6 @@ public class LNGScenarioTransformer {
 			final ICargo cargo = builder.createCargo(slots, shippingOnly ? false : eCargo.isAllowRewiring());
 
 			entities.addModelObject(eCargo, cargo);
-			if (eCargo.getCargoType() == CargoType.FLEET) {
-
-				final Set<Vessel> allowedVessels = SetUtils.getObjects(eCargo.getAllowedVessels());
-				if (!allowedVessels.isEmpty()) {
-					final Set<IVessel> vesselsForCargo = new HashSet<IVessel>();
-					for (final Vessel v : allowedVessels) {
-						vesselsForCargo.add(vesselAssociation.lookup((Vessel) v));
-					}
-					builder.setCargoVesselRestriction(slots, vesselsForCargo);
-				}
-			}
 		}
 
 		// register ship-to-ship transfers with the relevant data component provider
@@ -959,7 +947,7 @@ public class LNGScenarioTransformer {
 			{
 
 				// Make optional
-				load = createLoadOption(builder, portAssociation, contractTransformers, entities, loadSlot);
+				load = createLoadOption(builder, portAssociation, vesselAssociation, contractTransformers, entities, loadSlot);
 				if (!loadSlot.isOptional()) {
 					builder.setSoftRequired(load);
 				}
@@ -980,7 +968,7 @@ public class LNGScenarioTransformer {
 
 			final IDischargeOption discharge;
 			{
-				discharge = createDischargeOption(builder, portAssociation, contractTransformers, entities, dischargeSlot);
+				discharge = createDischargeOption(builder, portAssociation, vesselAssociation, contractTransformers, entities, dischargeSlot);
 				if (!dischargeSlot.isOptional()) {
 					builder.setSoftRequired(discharge);
 				}
@@ -1040,8 +1028,8 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private IDischargeOption createDischargeOption(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap entities, final DischargeSlot dischargeSlot) {
+	private IDischargeOption createDischargeOption(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
+			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
 		usedIDStrings.add(dischargeSlot.getName());
 
@@ -1157,16 +1145,25 @@ public class LNGScenarioTransformer {
 		for (final IContractTransformer contractTransformer : contractTransformers) {
 			contractTransformer.slotTransformed(dischargeSlot, discharge);
 		}
-		
+
 		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getHedges());
-		if (hedgeCost != 0)
+		if (hedgeCost != 0) {
 			hedgesProviderEditor.setHedgeCost(discharge, hedgeCost);
-		
+		}
+
+		final Set<Vessel> allowedVessels = SetUtils.getObjects(dischargeSlot.getAllowedVessels());
+		if (!allowedVessels.isEmpty()) {
+			final Set<IVessel> vesselsForSlot = new HashSet<IVessel>();
+			for (final Vessel v : allowedVessels) {
+				vesselsForSlot.add(vesselAssociation.lookup((Vessel) v));
+			}
+			builder.setSlotVesselRestriction(discharge, vesselsForSlot);
+		}
 		return discharge;
 	}
 
-	private ILoadOption createLoadOption(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap entities, final LoadSlot loadSlot) {
+	private ILoadOption createLoadOption(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
+			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final LoadSlot loadSlot) {
 		final ILoadOption load;
 		usedIDStrings.add(loadSlot.getName());
 
@@ -1260,11 +1257,20 @@ public class LNGScenarioTransformer {
 			marketSlotsByID.put(loadSlot.getName(), loadSlot);
 			addSpotSlotToCount((SpotSlot) loadSlot);
 		}
-		
+
 		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getHedges());
-		if (hedgeCost != 0)
+		if (hedgeCost != 0) {
 			hedgesProviderEditor.setHedgeCost(load, hedgeCost);
-				
+		}
+
+		final Set<Vessel> allowedVessels = SetUtils.getObjects(loadSlot.getAllowedVessels());
+		if (!allowedVessels.isEmpty()) {
+			final Set<IVessel> vesselsForSlot = new HashSet<IVessel>();
+			for (final Vessel v : allowedVessels) {
+				vesselsForSlot.add(vesselAssociation.lookup((Vessel) v));
+			}
+			builder.setSlotVesselRestriction(load, vesselsForSlot);
+		}
 		return load;
 	}
 
