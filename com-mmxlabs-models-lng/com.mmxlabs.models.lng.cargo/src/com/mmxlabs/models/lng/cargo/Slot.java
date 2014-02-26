@@ -8,7 +8,6 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.AVesselSet;
