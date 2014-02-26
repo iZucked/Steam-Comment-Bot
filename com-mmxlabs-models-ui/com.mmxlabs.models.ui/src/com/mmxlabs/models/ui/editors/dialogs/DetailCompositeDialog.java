@@ -351,7 +351,10 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final EObject selection = inputs.get(selectedObjectIndex);
 		final IScenarioEditingLocation sel = location;
 
-		getShell().setText("Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " + (1 + selectedObjectIndex) + " of " + inputs.size());
+		int nInputs= inputs.size();
+		String text = "";
+	
+		getShell().setText(returnDuplicates ?  "Duplicating" : "Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " +  "" + (nInputs > 1 ? (1 + selectedObjectIndex) + " of " + inputs.size() : ""));
 
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
@@ -412,8 +415,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		validate();
 
 		if (lockedForEditing) {
-			final String text = getShell().getText();
-			getShell().setText(text + " (Editor Locked - reopen to edit)");
+			final String text2 = getShell().getText();
+			getShell().setText(text2 + " (Editor Locked - reopen to edit)");
 			disableControls(displayComposite.getComposite());
 		}
 	}
