@@ -1230,9 +1230,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public void setVesselClassPortTypeParameters(@NonNull final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerHour) {
+	public void setVesselClassPortTypeParameters(@NonNull final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerDay) {
 
-		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);
+		((VesselClass) vc).setInPortConsumptionRateInMTPerDay(portType, inPortConsumptionRateInMTPerDay);
 	}
 
 	@Override

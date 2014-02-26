@@ -812,12 +812,12 @@ public class NewLNGVoyageCalculatorTest {
 
 	@Test
 	public void testCalculatePortFuelRequirements1() {
-		testCalculatePortFuelRequirements(PortType.Load, 13, 11, 143);
+		testCalculatePortFuelRequirements(PortType.Load, 13, 11 * 24, 143);
 	}
 
 	@Test
 	public void testCalculatePortFuelRequirements2() {
-		testCalculatePortFuelRequirements(PortType.Discharge, 22, 101, 2222);
+		testCalculatePortFuelRequirements(PortType.Discharge, 22, 101 * 24, 2222);
 	}
 
 	public void testCalculatePortFuelRequirements(final PortType portType, final int visitDuration, final int consumptionRate, final long target) {
@@ -839,7 +839,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final VesselClass vesselClass = (VesselClass) options.getVessel().getVesselClass();
 
-		vesselClass.setInPortConsumptionRate(portType, consumptionRate);
+		vesselClass.setInPortConsumptionRateInMTPerDay(portType, consumptionRate);
 
 		Mockito.when(options.getPortSlot().getPortType()).thenReturn(portType);
 
@@ -1114,8 +1114,8 @@ public class NewLNGVoyageCalculatorTest {
 		// 2 days of boil off
 		vesselClass.setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(150 * HEEL_DURATION));
 
-		vesselClass.setInPortConsumptionRate(PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(35));
-		vesselClass.setInPortConsumptionRate(PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(45));
+		vesselClass.setInPortConsumptionRateInMTPerDay(PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(35));
+		vesselClass.setInPortConsumptionRateInMTPerDay(PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(45));
 
 		// vesselClass.setMinNBOSpeed(VesselState.Laden,OptimiserUnitConvertor.convertToInternalSpeed(15));
 		// vesselClass.setMinNBOSpeed(VesselState.Ballast,OptimiserUnitConvertor.convertToInternalSpeed(15));

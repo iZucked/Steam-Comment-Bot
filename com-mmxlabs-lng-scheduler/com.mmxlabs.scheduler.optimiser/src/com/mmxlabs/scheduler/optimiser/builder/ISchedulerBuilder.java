@@ -147,7 +147,7 @@ public interface ISchedulerBuilder {
 	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @since 2.0
 	 */
-	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerHour);
+	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerDay);
 
 	/**
 	 * Create a charter out event

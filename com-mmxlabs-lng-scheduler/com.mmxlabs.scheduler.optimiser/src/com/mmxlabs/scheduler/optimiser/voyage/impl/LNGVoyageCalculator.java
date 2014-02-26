@@ -919,22 +919,23 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		/**
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this port visit
 		 */
-		final long consumptionRateInMTPerHour;
+		final long consumptionRateInMTPerDay;
 
 		final PortType portType = options.getPortSlot().getPortType();
 
 		// temporary kludge: ignore non-load non-discharge ports for port consumption
-		if (portType == PortType.Load || portType == PortType.Discharge)
-			consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(portType);
-		else
-			consumptionRateInMTPerHour = 0;
+		if (portType == PortType.Load || portType == PortType.Discharge) {
+			consumptionRateInMTPerDay = vesselClass.getInPortConsumptionRateInMTPerDay(portType);
+		} else {
+			consumptionRateInMTPerDay = 0;
+		}
 
 		final int visitDuration = options.getVisitDuration();
 
 		/**
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
 		 */
-		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, visitDuration);
+		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, visitDuration) / 24l;
 
 		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vesselClass.getMinBaseFuelConsumptionInMTPerDay(), visitDuration) / 24l;
 		if (minBaseFuelConsumptionInMT > requiredConsumptionInMT) {
