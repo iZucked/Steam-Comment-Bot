@@ -83,7 +83,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
 
-	//private IScenarioEditingLocation scenarioEditingLocation;
+	// private IScenarioEditingLocation scenarioEditingLocation;
 
 	private IDisplayComposite displayComposite;
 	/**
@@ -147,18 +147,18 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private DialogValidationSupport dialogValidationSupport;
 
-	
-	private IDialogController dialogController = new IDialogController() {
-		
+	private final IDialogController dialogController = new IDialogController() {
+
 		@Override
 		public void validate() {
 			DetailCompositeDialog.this.validate();
-			
+
 			if (DetailCompositeDialog.this.selectionViewer != null) {
 				DetailCompositeDialog.this.selectionViewer.refresh();
 			}
 		}
 	};
+
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
 	 * 
@@ -190,6 +190,16 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 					iterator.remove();
 					alreadyDuplicated.add(new Pair<Integer, EObject>(index, o));
 				}
+				// Check to see if we have a containment ref to another root - thus will be automatically copied
+				EObject container = o.eContainer();
+				while (container != null) {
+					if (range.contains(container)) {
+						iterator.remove();
+						alreadyDuplicated.add(new Pair<Integer, EObject>(index, o));
+					}
+					container = container.eContainer();
+				}
+
 				index++;
 			}
 
@@ -197,7 +207,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 			// re-insert the duplicates back into the range
 			for (final Pair<Integer, EObject> duplicated : alreadyDuplicated) {
-				final EObject duplicate = originalToDuplicate.get(duplicated.getSecond());
+				final EObject duplicate = dialogEcoreCopier.getOriginal(duplicated.getSecond());
 				duplicateRange.add(duplicated.getFirst(), duplicate);
 			}
 
@@ -705,7 +715,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private EObject sidebarContainer;
 
-	//private IDialogEditingContext dialogContext;
+	// private IDialogEditingContext dialogContext;
 	private IScenarioEditingLocation location;
 
 	/**
@@ -825,7 +835,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 							((UUIDObject) duplicate).eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						}
 
-						EObject eContainer = original.eContainer();
+						final EObject eContainer = original.eContainer();
 						if (originalToDuplicate.containsKey(eContainer)) {
 							// Already part of another duplicated object - skip as container will be parented
 							continue;
@@ -928,16 +938,16 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			sb.append("\n");
 		}
 	}
-	
+
 	@Override
 	public boolean close() {
-		
+
 		if (displayComposite != null) {
-//			displayComposite.display(new DefaultDialogEditingContext(dialogController, location), null, null, null, dbc);
+			// displayComposite.display(new DefaultDialogEditingContext(dialogController, location), null, null, null, dbc);
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
-		
+
 		return super.close();
 	}
 }

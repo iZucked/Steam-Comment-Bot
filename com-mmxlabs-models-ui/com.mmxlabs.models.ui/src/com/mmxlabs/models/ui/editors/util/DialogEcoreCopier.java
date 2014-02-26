@@ -49,7 +49,7 @@ public class DialogEcoreCopier {
 			if (notification.getFeature() instanceof EReference) {
 				final EReference eReference = (EReference) notification.getFeature();
 
-				// What baout multiple add/remove
+				// What about multiple add/remove
 
 				if (eReference.isContainment() && notification.getEventType() == Notification.ADD) {
 					final Object newValue = notification.getNewValue();
@@ -100,6 +100,16 @@ public class DialogEcoreCopier {
 		}
 
 		return newCopies;
+	}
+
+	/**
+	 * Lookup an original object after a copy has been made.
+	 * 
+	 * @param copy
+	 * @return
+	 */
+	public EObject getOriginal(final EObject copy) {
+		return copier.get(copy);
 	}
 
 	public void record() {
@@ -168,7 +178,8 @@ public class DialogEcoreCopier {
 	}
 
 	private void rewriteReferences(final EObject object) {
-		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(copier.values(), object);
+		final Collection<EObject> values = new ArrayList<>(copier.values());
+		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByCopy = EcoreUtil.UsageCrossReferencer.findAll(values, object);
 
 		for (final Map.Entry<EObject, EObject> entry : copier.entrySet()) {
 			final EObject original = entry.getKey();
