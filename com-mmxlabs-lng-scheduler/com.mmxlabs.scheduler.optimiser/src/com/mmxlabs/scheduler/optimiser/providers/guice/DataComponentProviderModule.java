@@ -51,6 +51,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProvider;
@@ -96,6 +98,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementP
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
@@ -306,6 +309,10 @@ public class DataComponentProviderModule extends AbstractModule {
 
 		bind(DefaultVesselCharterCurveProvider.class).in(Singleton.class);
 		bind(IVesselCharterInRateProvider.class).to(DefaultVesselCharterCurveProvider.class);
+
+		final HashMapHedgesProviderEditor hedgesProviderEditor = new HashMapHedgesProviderEditor();
+		bind(IHedgesProvider.class).toInstance(hedgesProviderEditor);
+		bind(IHedgesProviderEditor.class).toInstance(hedgesProviderEditor);
 	}
 
 	/**
