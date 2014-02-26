@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -39,6 +40,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
  * </ul>
  * </p>
  *
@@ -870,6 +872,32 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	boolean isSetRestrictedListsArePermissive();
+
+	/**
+	 * Returns the value of the '<em><b>Hedges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Hedges</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hedges</em>' attribute.
+	 * @see #setHedges(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Hedges()
+	 * @model
+	 * @generated
+	 */
+	int getHedges();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hedges</em>' attribute.
+	 * @see #getHedges()
+	 * @generated
+	 */
+	void setHedges(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

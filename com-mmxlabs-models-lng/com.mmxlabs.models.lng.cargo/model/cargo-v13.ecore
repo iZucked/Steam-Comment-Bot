@@ -67,7 +67,6 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//Slot">
     <eOperations name="getSlotOrDelegatedCV" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

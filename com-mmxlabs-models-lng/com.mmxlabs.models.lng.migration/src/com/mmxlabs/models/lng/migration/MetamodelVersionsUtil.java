@@ -487,6 +487,33 @@ public class MetamodelVersionsUtil {
 	
 	
 	public static MetamodelLoader createV13Loader(final Map<URI, PackageData> extraPackages) {
+		final MetamodelLoader loader = new MetamodelLoader();
+		
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v2.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_LNGTypes);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PortModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_PricingModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_FleetModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CommercialModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.spotmarkets/model/spotmarkets-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_SpotMarketsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_CargoModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario-v13.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		if (extraPackages != null) {
+			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {
+				loader.loadEPackage(e.getKey(), e.getValue());
+			}
+		}
+		EcoreUtil.resolveAll(loader.getResourceSet());
+		
+		return loader;
+	}
+	
+	
+	
+	public static MetamodelLoader createV14Loader(final Map<URI, PackageData> extraPackages) {
 
 		return createCurrentLoader(extraPackages);
 	}

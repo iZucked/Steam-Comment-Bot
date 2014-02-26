@@ -338,6 +338,15 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getVesselClass_MinBaseFuelConsumption() {
+		return (EAttribute)vesselClassEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFleetModel() {
 		return fleetModelEClass;
 	}
@@ -660,6 +669,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__COOLING_VOLUME);
 		createEReference(vesselClassEClass, VESSEL_CLASS__ROUTE_PARAMETERS);
 		createEAttribute(vesselClassEClass, VESSEL_CLASS__PILOT_LIGHT_RATE);
+		createEAttribute(vesselClassEClass, VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION);
 
 		vesselGroupEClass = createEClass(VESSEL_GROUP);
 		createEReference(vesselGroupEClass, VESSEL_GROUP__VESSELS);
@@ -782,6 +792,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEAttribute(getVesselClass_CoolingVolume(), ecorePackage.getEInt(), "coolingVolume", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVesselClass_RouteParameters(), this.getVesselClassRouteParameters(), null, "routeParameters", null, 0, -1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVesselClass_PilotLightRate(), ecorePackage.getEDouble(), "pilotLightRate", null, 1, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getVesselClass_MinBaseFuelConsumption(), ecorePackage.getEDouble(), "minBaseFuelConsumption", null, 0, 1, VesselClass.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(vesselGroupEClass, VesselGroup.class, "VesselGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVesselGroup_Vessels(), this.getVessel(), null, "vessels", null, 0, -1, VesselGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -887,6 +898,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   });		
 		addAnnotation
 		  (getVesselClass_PilotLightRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/d"
+		   });		
+		addAnnotation
+		  (getVesselClass_MinBaseFuelConsumption(), 
 		   source, 
 		   new String[] {
 			 "unit", "MT/d"
