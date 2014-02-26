@@ -383,7 +383,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @return the value of the '<em>Min Base Fuel Consumption</em>' attribute.
 	 * @see #setMinBaseFuelConsumption(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinBaseFuelConsumption()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
 	 * @generated
 	 */
 	double getMinBaseFuelConsumption();

@@ -903,6 +903,12 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 			 "unit", "MT/d"
 		   });		
 		addAnnotation
+		  (getVesselClass_MinBaseFuelConsumption(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/d"
+		   });		
+		addAnnotation
 		  (getHeelOptions_VolumeAvailable(), 
 		   source, 
 		   new String[] {
