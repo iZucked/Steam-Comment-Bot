@@ -49,7 +49,7 @@ public class DialogEcoreCopier {
 			if (notification.getFeature() instanceof EReference) {
 				final EReference eReference = (EReference) notification.getFeature();
 
-				// What baout multiple add/remove
+				// What about multiple add/remove
 
 				if (eReference.isContainment() && notification.getEventType() == Notification.ADD) {
 					final Object newValue = notification.getNewValue();
