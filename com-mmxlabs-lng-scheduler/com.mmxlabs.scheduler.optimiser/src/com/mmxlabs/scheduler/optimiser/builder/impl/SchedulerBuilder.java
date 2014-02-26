@@ -1008,7 +1008,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge);
 
 		}
-		
+
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
@@ -1458,17 +1458,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
-	/**
-	 * @since 5.0
-	 */
 	@Override
-	public void setCargoVesselRestriction(final Collection<IPortSlot> cargoSlots, final Set<IVessel> vessels) {
+	public void setSlotVesselRestriction(final IPortSlot slot, final Set<IVessel> vessels) {
 
-		for (final IPortSlot slot : cargoSlots) {
-			assert slot != null;
-			constrainSlotToVessels(slot, vessels);
-
-		}
+		assert slot != null;
+		constrainSlotToVessels(slot, vessels);
 	}
 
 	@Override
