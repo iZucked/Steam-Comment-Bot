@@ -39,8 +39,8 @@ public class TransformerHelper {
 		// so we kludge them by pulling VesselState-dependent out of the vessel class
 		//
 
-		builder.setVesselClassPortTypeParameters(vc, PortType.Load, OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getLadenAttributes().getInPortBaseRate()));
-		builder.setVesselClassPortTypeParameters(vc, PortType.Discharge, OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getBallastAttributes().getInPortBaseRate()));
+		builder.setVesselClassPortTypeParameters(vc, PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getLadenAttributes().getInPortBaseRate()));
+		builder.setVesselClassPortTypeParameters(vc, PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getBallastAttributes().getInPortBaseRate()));
 
 		return vc;
 	}
