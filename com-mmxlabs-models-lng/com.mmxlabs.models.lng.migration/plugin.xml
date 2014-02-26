@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="-14"
+            latestVersion="-15"
             name="com.mmxlabs.models.lng">
       </MigrationContext>
    </extension>
@@ -107,12 +107,19 @@
              id="com.mmxlabs.models.lng.migration.units.MigrateToV13"
              to="13">
        </MigrationUnit>
-              <MigrationUnit
+       <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV14"
              context="com.mmxlabs.models.lng"
              from="13"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV14"
-             to="-14">
+             to="14">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV15"
+             context="com.mmxlabs.models.lng"
+             from="14"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV15"
+             to="-15">
        </MigrationUnit>
    </extension>
 </plugin>
