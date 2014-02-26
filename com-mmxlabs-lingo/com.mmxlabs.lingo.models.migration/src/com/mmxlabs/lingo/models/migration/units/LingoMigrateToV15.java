@@ -26,7 +26,7 @@ import com.mmxlabs.models.migration.PackageData;
  * @author Simon Goodall
  * 
  */
-public class LingoMigrateToV14 implements IMigrationUnit {
+public class LingoMigrateToV15 implements IMigrationUnit {
 
 	/**
 	 * See {@link MigratorInjectionModule}. Ensure class name is prefixed with "org.ops4j.peaberry.eclipse.GuiceExtensionFactory:" to enable dependency injection via plugin.xml
@@ -41,12 +41,12 @@ public class LingoMigrateToV14 implements IMigrationUnit {
 
 	@Override
 	public int getSourceVersion() {
-		return 13;
+		return 14;
 	}
 
 	@Override
 	public int getDestinationVersion() {
-		return 14;
+		return -15;
 	}
 
 	@Override
