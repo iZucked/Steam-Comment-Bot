@@ -39,6 +39,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
+import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.*;
+
 /**
  * A constraint to problem EMF level support for the TimeSortConstraintChecker to avoid getting scenarios which do not optimise when there is certain kinds of lateness.
  * 
@@ -163,7 +165,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 	private void reportError(final IValidationContext ctx, final EObject fromObject, final EStructuralFeature fromFeature, final Port fromPort, final EObject toObject,
 			final EStructuralFeature toFeature, final Port toPort, final List<IStatus> statuses) {
 
-		final String msg = String.format("No distance between %s (%s) and %s (%s).", fromPort.getName(), getID(fromObject), toPort.getName(), getID(toObject));
+		final String msg = String.format("Missing distance: %s to %s (%s to %s).", fromPort.getName(),toPort.getName(), getID(fromObject, fromFeature), getID(toObject, toFeature));
 		final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 		failure.addEObjectAndFeature(fromObject, fromFeature);
 		failure.addEObjectAndFeature(toObject, toFeature);
@@ -171,18 +173,24 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 		statuses.add(failure);
 	}
 
-	private String getID(final EObject target) {
+	private String getID(final EObject target, final EStructuralFeature feature) {
 		if (target instanceof Slot) {
 			final Slot slot = (Slot) target;
-			return "Slot " + slot.getName();
+			return "slot \"" + slot.getName() + "\"";
 		} else if (target instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) target;
-			return "Event " + vesselEvent.getName();
+			return "event \"" + vesselEvent.getName() + "\"";
 		} else if (target instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) target;
 			final Vessel vessel = vesselAvailability.getVessel();
-			final String vesselName = vessel == null ? "<unknown>" : vessel.getName();
-			return "Vessel " + vesselName;
+			final String vesselName = vessel == null ? "Vessel <unnamed>" : "\"" + vessel.getName() + "\"";
+			String featureString = "";
+			if(feature == VESSEL_AVAILABILITY__START_AT){ 
+				featureString = " start ";
+			} else if(feature == VESSEL_AVAILABILITY__END_AT){ 
+				featureString = " end ";
+			}
+			return (featureString == "" ? "Vessel " + vesselName : vesselName + featureString);
 		}
 		return "(unknown)";
 	}
