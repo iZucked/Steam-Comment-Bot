@@ -84,6 +84,7 @@ public class SlotItemProvider
 			addRestrictedPortsPropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addHedgesPropertyDescriptor(object);
+			addAllowedVesselsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -626,6 +627,28 @@ public class SlotItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allowed Vessels feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowedVesselsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_allowedVessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_allowedVessels_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__ALLOWED_VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

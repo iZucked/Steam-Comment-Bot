@@ -69,6 +69,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
  * </p>
  *
@@ -592,6 +593,16 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int hedges = HEDGES_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllowedVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet<Vessel>> allowedVessels;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1531,6 +1542,18 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AVesselSet<Vessel>> getAllowedVessels() {
+		if (allowedVessels == null) {
+			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);
+		}
+		return allowedVessels;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -1741,6 +1764,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return getHedges();
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				return getAllowedVessels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1827,6 +1852,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__HEDGES:
 				setHedges((Integer)newValue);
 				return;
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
+				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1910,6 +1939,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__HEDGES:
 				setHedges(HEDGES_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1969,6 +2001,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return hedges != HEDGES_EDEFAULT;
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				return allowedVessels != null && !allowedVessels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
