@@ -5165,7 +5165,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             temp.setTime(_mainCalendar.getTime());
 
             final long viewPortStart = temp.getTimeInMillis();
-            if (_daysVisible == 0) {
+            if (_daysVisible == 0 && _endCalendar != null) {
                 temp.setTime(_endCalendar.getTime());
             } else {
                 temp.add(Calendar.DATE, _daysVisible);
