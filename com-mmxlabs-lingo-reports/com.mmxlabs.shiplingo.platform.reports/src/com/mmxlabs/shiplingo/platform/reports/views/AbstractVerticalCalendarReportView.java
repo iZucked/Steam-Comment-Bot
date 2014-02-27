@@ -2,6 +2,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -10,8 +11,10 @@ import java.util.List;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.DataVisualizer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
@@ -22,6 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -38,6 +42,7 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.shiplingo.platform.reports.views.AbstractVerticalCalendarReportView.ScheduleSequenceData;
 
 /**
  * Class for providing "vertical" schedule reports. Each row is a calendar day in the schedule; each column typically 
@@ -57,6 +62,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yy");
 	/** format for the "date" column */
 	protected LNGScenarioModel root = null;
+	protected Date[] dates = null;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -64,10 +70,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		final FillLayout layout = new FillLayout();
 		layout.marginHeight = layout.marginWidth = 0;
 		container.setLayout(layout);
-
+		
 		gridViewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		gridViewer.setContentProvider(createContentProvider());
 
+		gridViewer.getGrid().getDataVisualizer().setRowSpan(3, 3, 1);
 		gridViewer.getGrid().setHeaderVisible(true);
 		gridViewer.getGrid().setLinesVisible(true);
 
@@ -102,10 +109,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 		};
 	}
-
+	
 	protected IStructuredContentProvider createContentProvider() {
 		return new IStructuredContentProvider() {
-			Date[] dates = null;
 
 			@Override
 			public void dispose() {
@@ -205,7 +211,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					//break;
 				}
 				// otherwise, as long as the event is in the search window, add it to the results
-				else if (!event.getEnd().before(start)) {
+				// if the event ends at midnight, we do *not* count it towards this day
+				else if (start.before(event.getEnd())) {					
 					result.add(event);
 				}
 			}
@@ -397,6 +404,28 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			super(provider);
 		}
 
+		public void update(ViewerCell cell) {
+			super.update(cell);
+			DataVisualizer dv = gridViewer.getGrid().getDataVisualizer();
+			
+			int col = cell.getColumnIndex();
+
+			Object element = cell.getElement();
+			int row = Arrays.asList(dates).indexOf(element);
+			int rowSpan = getRowSpan((Date) element, data);
+			dv.setRowSpan(row, col, rowSpan);
+			int colSpan = getColSpan((Date) element, data);
+
+		}		
+		
+		protected int getRowSpan(final Date date, final EventProvider provider) {
+			return 0;
+		}
+
+		protected int getColSpan(final Date date, final EventProvider provider) {
+			return 0;
+		}
+
 		/**
 		 * Returns the text for a column cell. 
 		 * Defers to {@link #getEventText(Date, Event[])}; override that method if you want to change the behaviour. 
@@ -474,7 +503,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			this.filter = filter;
 		}
 		
-		protected Event[] getEvents(final Date date) {
+		public Event[] getEvents(final Date date) {
 			final ArrayList<Event> result = new ArrayList<>();
 
 			for (final Event event : getUnfilteredEvents(date)) {
@@ -656,6 +685,28 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
 		final GridViewerColumn result = new GridViewerColumn(gridViewer, column);
 		result.setLabelProvider(new EventColumnLabelProvider(eventProvider));
+		// result.getColumn().getCellRenderer().setWordWrap(true);
+		result.getColumn().setText(name);
+		result.getColumn().pack();
+
+		return result;
+		
+	}
+
+	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String name, GridColumnGroup columnGroup) {
+		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
+		final GridViewerColumn result = new GridViewerColumn(gridViewer, column);
+		result.setLabelProvider(labeller);
+		result.getColumn().setText(name);
+		result.getColumn().pack();
+
+		return result;
+		
+	}
+
+	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String name) {
+		final GridViewerColumn result = new GridViewerColumn(gridViewer, SWT.NONE);
+		result.setLabelProvider(labeller);
 		result.getColumn().setText(name);
 		result.getColumn().pack();
 
