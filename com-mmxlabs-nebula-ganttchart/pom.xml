@@ -3,32 +3,74 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>org.eclipse.nebula.widgets</groupId>
-	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart</artifactId>
+	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.parent</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
-	<packaging>eclipse-plugin</packaging>
+	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>18</version>
+		<version>23</version>
 	</parent>
 
+	<modules>
+		<module>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart</module>
+		<module>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature</module>
+		<module>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.p2</module>
+	</modules>
+
 	<build>
-
-		<sourceDirectory>src</sourceDirectory>
-
 		<plugins>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
+				<!-- Enable tycho packaging types -->
 				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+					<resolver>p2</resolver>
+
+					<environments>
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -38,6 +80,7 @@
 			</plugin>
 
 		</plugins>
+
 	</build>
 
 	<repositories>
@@ -48,5 +91,4 @@
 		</repository>
 
 	</repositories>
-
 </project>

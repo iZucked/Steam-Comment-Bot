@@ -1,6 +1,10 @@
-
+~$
+.swp$
 syntax: regexp
 ^target$
 
 syntax: regexp
 ^bin$
+
+syntax: regexp
+^.*/target$
