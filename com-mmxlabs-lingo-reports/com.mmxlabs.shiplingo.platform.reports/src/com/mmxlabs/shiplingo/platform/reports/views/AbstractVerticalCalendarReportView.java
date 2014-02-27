@@ -2,7 +2,6 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -39,7 +38,6 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.shiplingo.platform.reports.views.AbstractVerticalCalendarReportView.ScheduleSequenceData;
 
 /**
  * Class for providing "vertical" schedule reports. Each row is a calendar day in the schedule; each column typically 
@@ -147,24 +145,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 
 			private void setRows(final ScheduleSequenceData data) {
-				if (data.start != null && data.end != null) {
-					final ArrayList<Date> allDates = new ArrayList<Date>();
-					final Calendar c = Calendar.getInstance();
-					c.setTime(data.start);
-					c.set(Calendar.HOUR_OF_DAY, 0);
-					c.set(Calendar.MINUTE, 0);
-					c.set(Calendar.SECOND, 0);
-					allDates.add(c.getTime());
-					while (!c.getTime().after(data.end)) {
-						c.add(Calendar.DAY_OF_MONTH, 1);
-						allDates.add(c.getTime());
-					}
-
-					dates = allDates.toArray(new Date[0]);
-				} else {
-					dates = new Date[0];
-					return;
-				}
+				dates = getGMTDaysBetween(data.start, data.end).toArray(new Date[0]);
 			}
 
 			@Override
@@ -176,6 +157,31 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 
 		};
+	}
+	
+	/**
+	 * Returns a list of all the Date objects corresponding to the start of a GMT day which contains 
+	 * any days in the specified range
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static List<Date> getGMTDaysBetween(Date start, Date end) {
+		final ArrayList<Date> result = new ArrayList<Date>();
+		if (start != null && end != null) {
+			final Calendar c = Calendar.getInstance();
+			c.setTime(start);
+			c.set(Calendar.HOUR_OF_DAY, 0);
+			c.set(Calendar.MINUTE, 0);
+			c.set(Calendar.SECOND, 0);
+			while (!c.getTime().after(end)) {
+				result.add(c.getTime());
+				c.add(Calendar.DAY_OF_MONTH, 1);
+			}
+
+		}
+		
+		return result;		
 	}
 
 	/**
@@ -194,11 +200,12 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		if (seq != null && start != null && end != null) {
 			for (final Event event : seq.getEvents()) {
 				// when we get to an event after the search window, break the loop
+				// NO: events are not guaranteed to be sorted by date :(
 				if (event.getStart().after(end)) {
-					break;
+					//break;
 				}
 				// otherwise, as long as the event is in the search window, add it to the results
-				if (!event.getEnd().before(start)) {
+				else if (!event.getEnd().before(start)) {
 					result.add(event);
 				}
 			}
@@ -411,16 +418,22 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			return AbstractVerticalCalendarReportView.this.getEventText(element, events, EventColumnLabelProvider.this);			
 		}
 
-		/** Returns the desired font of the cell. */
+		/** Returns the desired background colour of the cell. */
 		@Override
 		protected Color getBackground(final Date element, final EventProvider provider) {
 			return getEventBackgroundColor(element, provider.getEvents(element), EventColumnLabelProvider.this);
 		}
 
-		/** Returns the desired font of the cell. */
+		/** Returns the desired foreground colour of the cell. */
 		@Override
 		protected Color getForeground(final Date element, final EventProvider provider) {
 			return getEventForegroundColor(element, provider.getEvents(element), EventColumnLabelProvider.this);
+		}
+
+		/** Returns the desired foreground colour of the cell. */
+		@Override
+		protected Font getFont(final Date element, final EventProvider provider) {
+			return getEventFont(element, provider.getEvents(element), EventColumnLabelProvider.this);
 		}
 	}
 
@@ -627,7 +640,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	abstract protected Color getEventForegroundColor(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
 	
-	protected GridViewerColumn createEventColumn(SequenceEventProvider eventProvider, String title) {
+	protected Font getEventFont(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider) {
+		return null;
+	}
+
+	protected GridViewerColumn createEventColumn(EventProvider eventProvider, String title) {
 		final GridViewerColumn result = new GridViewerColumn(gridViewer, SWT.NONE);
 		result.setLabelProvider(new EventColumnLabelProvider(eventProvider));
 		result.getColumn().setText(title);
