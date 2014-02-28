@@ -165,7 +165,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 							destRoot = destScenario.getInstance();
 							// Unload after processing
 							unloadDestScenario = true;
-						} catch (final IOException e) {
+						} catch (final Exception e) {
 							log.error("Unable to load scenario " + destScenario.getName() + ". skipping.", e);
 							monitor.worked(1);
 							continue;
