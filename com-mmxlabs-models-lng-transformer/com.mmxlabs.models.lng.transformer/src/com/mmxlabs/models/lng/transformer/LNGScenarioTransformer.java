@@ -1146,9 +1146,9 @@ public class LNGScenarioTransformer {
 			contractTransformer.slotTransformed(dischargeSlot, discharge);
 		}
 
-		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getHedges());
-		if (hedgeCost != 0) {
-			hedgesProviderEditor.setHedgeCost(discharge, hedgeCost);
+		final long hedgeValue = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getHedges());
+		if (hedgeValue != 0) {
+			hedgesProviderEditor.setHedgeValue(discharge, hedgeValue);
 		}
 
 		final Set<Vessel> allowedVessels = SetUtils.getObjects(dischargeSlot.getAllowedVessels());
@@ -1260,7 +1260,7 @@ public class LNGScenarioTransformer {
 
 		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getHedges());
 		if (hedgeCost != 0) {
-			hedgesProviderEditor.setHedgeCost(load, hedgeCost);
+			hedgesProviderEditor.setHedgeValue(load, hedgeCost);
 		}
 
 		final Set<Vessel> allowedVessels = SetUtils.getObjects(loadSlot.getAllowedVessels());
