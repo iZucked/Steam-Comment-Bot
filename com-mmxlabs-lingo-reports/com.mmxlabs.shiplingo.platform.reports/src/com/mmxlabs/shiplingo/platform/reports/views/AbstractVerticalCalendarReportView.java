@@ -2,7 +2,6 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -11,10 +10,8 @@ import java.util.List;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.DataVisualizer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
@@ -25,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -74,7 +70,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		gridViewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		gridViewer.setContentProvider(createContentProvider());
 
-		gridViewer.getGrid().getDataVisualizer().setRowSpan(3, 3, 1);
+//		gridViewer.getGrid().getDataVisualizer().setRowSpan(3, 3, 1);
 		gridViewer.getGrid().setHeaderVisible(true);
 		gridViewer.getGrid().setLinesVisible(true);
 
@@ -403,21 +399,21 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		public EventColumnLabelProvider(final EventProvider provider) {
 			super(provider);
 		}
-
-		public void update(ViewerCell cell) {
-			super.update(cell);
-			DataVisualizer dv = gridViewer.getGrid().getDataVisualizer();
-			
-			int col = cell.getColumnIndex();
-
-			Object element = cell.getElement();
-			int row = Arrays.asList(dates).indexOf(element);
-			int rowSpan = getRowSpan((Date) element, data);
-			dv.setRowSpan(row, col, rowSpan);
-			int colSpan = getColSpan((Date) element, data);
-
-		}		
-		
+//
+//		public void update(ViewerCell cell) {
+//			super.update(cell);
+//			DataVisualizer dv = gridViewer.getGrid().getDataVisualizer();
+//			
+//			int col = cell.getColumnIndex();
+//
+//			Object element = cell.getElement();
+//			int row = Arrays.asList(dates).indexOf(element);
+//			int rowSpan = getRowSpan((Date) element, data);
+//			dv.setRowSpan(row, col, rowSpan);
+//			int colSpan = getColSpan((Date) element, data);
+//
+//		}		
+//		
 		protected int getRowSpan(final Date date, final EventProvider provider) {
 			return 0;
 		}
