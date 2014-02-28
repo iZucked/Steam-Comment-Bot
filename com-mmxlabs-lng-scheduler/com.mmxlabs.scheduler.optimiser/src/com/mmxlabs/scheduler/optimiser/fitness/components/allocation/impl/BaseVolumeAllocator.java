@@ -92,8 +92,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				if (slot instanceof StartPortSlot) {
 					continue;
 				}
-				slots.add(slot);
 				if (slot instanceof ILoadOption) {
+					slots.add(slot);
 					final ILoadOption loadOption = (ILoadOption) slot;
 					minVolumes.add(loadOption.getMinLoadVolume());
 					maxVolumes.add(loadOption.getMaxLoadVolume());
@@ -108,6 +108,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(loadOption));
 					}
 				} else if (slot instanceof IDischargeOption) {
+					slots.add(slot);
 					final IDischargeOption dischargeOption = (IDischargeOption) slot;
 					minVolumes.add(dischargeOption.getMinDischargeVolume());
 					maxVolumes.add(dischargeOption.getMaxDischargeVolume());
@@ -121,6 +122,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));
 					}
 				} else if (slot instanceof IHeelOptionsPortSlot) {
+					slots.add(slot);
 					final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) slot;
 					final IHeelOptions heelOptions = heelOptionsPortSlot.getHeelOptions();
 					minVolumes.add(heelOptions.getHeelLimit());
