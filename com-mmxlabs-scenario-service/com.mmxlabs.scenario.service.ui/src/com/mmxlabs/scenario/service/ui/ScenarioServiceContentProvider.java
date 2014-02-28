@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.Saveable;
 import org.eclipse.ui.navigator.SaveablesProvider;
 
@@ -95,7 +96,6 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		}
 	};
 
-
 	private final class InternalSaveablesProvider extends SaveablesProvider {
 		@Override
 		public Saveable[] getSaveables() {
@@ -121,18 +121,36 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 		}
 
 		public void fireOpened(final Saveable... models) {
-			fireSaveablesOpened(models);
+			Display.getDefault().asyncExec(new Runnable() {
 
-			fireSaveablesClosed(models);
+				@Override
+				public void run() {
+					fireSaveablesOpened(models);
+					fireSaveablesClosed(models);
+				}
+			});
+
 		}
 
 		public void fireClosed(final Saveable... models) {
-			fireSaveablesDirtyChanged(models);
-			fireSaveablesClosed(models);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					fireSaveablesDirtyChanged(models);
+					fireSaveablesClosed(models);
+				}
+			});
 		}
 
 		public void fireDirtyChange(final Saveable... models) {
-			fireSaveablesDirtyChanged(models);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					fireSaveablesDirtyChanged(models);
+				}
+			});
 		}
 	}
 
