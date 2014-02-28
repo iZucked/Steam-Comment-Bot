@@ -20,7 +20,7 @@ public final class AllocationRecord {
 	}
 
 	/** The LNG volume which the vessel starts with (the start heel) */
-	public final long startVolumeInM3;
+	public long startVolumeInM3;
 
 	public final IVessel resourceVessel;
 	public final VoyagePlan resourceVoyagePlan;
