@@ -955,7 +955,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// 0 == return to current load,
 		// 1 == return to farthest in time load
 		// 2== end window
-		final int rule = 0;
+		// 3 == discharge + 60
+		final int rule = 3;
 		final int latestTime;
 		if (rule == 0) {
 			/**
@@ -1004,9 +1005,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				maxFastReturnTime = 0;
 			}
 			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
-		} else {
+		} else if (rule == 2) {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge);
-
+		} else {
+			latestTime = latestDischarge + 60 * 24;
 		}
 
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
