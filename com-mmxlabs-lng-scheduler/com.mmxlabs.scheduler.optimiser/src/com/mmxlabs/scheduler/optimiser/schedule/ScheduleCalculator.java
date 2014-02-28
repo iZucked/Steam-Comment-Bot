@@ -53,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -96,6 +97,9 @@ public class ScheduleCalculator {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
 	private VoyagePlanner voyagePlanner;
@@ -162,6 +166,10 @@ public class ScheduleCalculator {
 		final List<IDetailsSequenceElement> currentSequence = new ArrayList<IDetailsSequenceElement>(5);
 		final VoyagePlan currentPlan = new VoyagePlan();
 
+		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
+		if (nominatedVessel != null) {
+			currentPlan.setStartingHeelInM3(nominatedVessel.getVesselClass().getMinHeel());
+		}
 		boolean startSet = false;
 		int startTime = 0;
 		for (final ISequenceElement element : sequence) {
@@ -305,7 +313,7 @@ public class ScheduleCalculator {
 				}
 			}
 
-			for (Map.Entry<IPortSlot, IHeelLevelAnnotation> e : heelLevels.entrySet()) {
+			for (final Map.Entry<IPortSlot, IHeelLevelAnnotation> e : heelLevels.entrySet()) {
 				final ISequenceElement portElement = portSlotProvider.getElement(e.getKey());
 				elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_heelLevelInfo, e.getValue());
 			}

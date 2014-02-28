@@ -369,8 +369,8 @@ public class VoyagePlanner {
 			if (plan == null) {
 				return null;
 			}
-			heelVolumeInM3 = generateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
 			plan.setIgnoreEnd(false);
+			heelVolumeInM3 = generateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
 		}
 
 		return voyagePlansMap;
@@ -443,24 +443,26 @@ public class VoyagePlanner {
 			for (int i = 0; i < sequence.length - adjust; ++i) {
 				final IDetailsSequenceElement e = sequence[i];
 				if (e instanceof PortDetails) {
-					optionalHeelUsePortSlot = null;
 					final PortDetails portDetails = (PortDetails) e;
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					final long start = currentHeelInM3;
-					if (allocationAnnotation != null) {
-						if (portSlot.getPortType() == PortType.Load) {
-							currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(portSlot);
-						} else if (portSlot.getPortType() == PortType.Discharge) {
-							currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(portSlot);
-						}
-					} else {
-						if (portSlot instanceof IHeelOptionsPortSlot) {
-							optionalHeelUsePortSlot = portSlot;
-							// FIXME: This volume is optional use
-							final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
-							currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
+					if (portSlot.getPortType() != PortType.End) {
+						optionalHeelUsePortSlot = null;
+						if (allocationAnnotation != null) {
+							if (portSlot.getPortType() == PortType.Load) {
+								currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(portSlot);
+							} else if (portSlot.getPortType() == PortType.Discharge) {
+								currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(portSlot);
+							}
 						} else {
-							currentHeelInM3 = 0;
+							if (portSlot instanceof IHeelOptionsPortSlot) {
+								optionalHeelUsePortSlot = portSlot;
+								// FIXME: This volume is optional use
+								final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
+								currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
+							} else if (portSlot.getPortType() != PortType.End) {
+								currentHeelInM3 = 0;
+							}
 						}
 					}
 					final long end = currentHeelInM3;
