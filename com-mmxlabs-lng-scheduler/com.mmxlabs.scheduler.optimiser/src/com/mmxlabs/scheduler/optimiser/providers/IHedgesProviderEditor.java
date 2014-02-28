@@ -16,6 +16,6 @@ public interface IHedgesProviderEditor extends IHedgesProvider {
 	 * @param portSlot
 	 * @param cost
 	 */
-	void setHedgeCost(IPortSlot portSlot, long cost);
+	void setHedgeValue(IPortSlot portSlot, long cost);
 	
 }
