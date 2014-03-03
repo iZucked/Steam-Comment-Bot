@@ -29,6 +29,7 @@ public class HashMapHedgesProviderEditor implements IHedgesProviderEditor {
 		return 0;
 	}
 
+	@Override
 	public void setHedgeValue(final IPortSlot portSlot, final long cost) {
 		map.put(portSlot, cost);
 	}
