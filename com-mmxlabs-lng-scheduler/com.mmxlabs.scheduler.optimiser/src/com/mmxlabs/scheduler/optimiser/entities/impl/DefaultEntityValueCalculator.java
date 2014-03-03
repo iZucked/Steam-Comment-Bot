@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
@@ -72,6 +73,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private ShippingCostHelper shippingCostHelper;
+
+	@Inject
+	private IHedgesProvider hedgesProvider;
 
 	/**
 	 * Internal data structure to store handy data needed for Cargo P&L calculations. Note similarity to {@link IAllocationAnnotation} - and even {@link AllocationRecord} (which is not visible here).
@@ -108,7 +112,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final List<IPortSlot> slots = currentAllocation.getSlots();
 
@@ -369,7 +373,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
 		if (shippingEntity == null) {
 			return 0l;
@@ -519,4 +523,36 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return 0;
 	}
 
+	@Override
+	public long evaluateUnusedSlot(@NonNull final IPortSlot portSlot, @Nullable final IAnnotatedSolution annotatedSolution) {
+
+		final IEntity entity = entityProvider.getEntityForSlot(portSlot);
+
+		long result = 0;
+		{
+			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
+			final long cancellationCost = 0;// canellationProvider.getCancellationCost(portSlot);
+
+			// Taxed P&L - use time window start as tax date
+			long preTaxValue = hedgeValue - cancellationCost;
+			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, portSlot.getTimeWindow().getStart());
+			result = postTaxValue;
+
+			if (annotatedSolution != null) {
+				final ISequenceElement exportElement = slotProvider.getElement(portSlot);
+				assert exportElement != null;
+
+				final DetailTree entityDetails = new DetailTree();
+				// TODO: Populate
+
+				final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
+
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
+				final String label = SchedulerConstants.AI_profitAndLoss;
+				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
+			}
+		}
+
+		return result;
+	}
 }

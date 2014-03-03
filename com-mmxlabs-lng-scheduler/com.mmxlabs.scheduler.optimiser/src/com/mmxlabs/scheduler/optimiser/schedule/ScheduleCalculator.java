@@ -403,15 +403,27 @@ public class ScheduleCalculator {
 
 		}
 
+		calculateUnusedSlotPNL(sequences, annotatedSolution);
+
 		if (annotatedSolution != null && markToMarketProvider != null) {
 			calculateMarkToMarketPNL(sequences, annotatedSolution);
-
 		}
 	}
 
-	/**
-	 * @since 6.0
-	 */
+	protected void calculateUnusedSlotPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
+
+		for (final ISequenceElement element : sequences.getUnusedElements()) {
+			if (element == null) {
+				continue;
+			}
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
+				// Calculate P&L
+				entityValueCalculator.evaluateUnusedSlot(portSlot, annotatedSolution);
+			}
+		}
+	}
+
 	protected void calculateMarkToMarketPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
 		// Mark-to-Market Calculations
 
