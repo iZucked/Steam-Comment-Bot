@@ -17,13 +17,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.mmxlabs.rcp.common.internal.Activator;
 
@@ -84,17 +80,18 @@ public class DelayedOpenFileProcessor implements Listener {
 				final IFileInfo fetchInfo = fileStore.fetchInfo();
 				if (!fetchInfo.isDirectory() && fetchInfo.exists()) {
 
-					final FileStoreEditorInput editorInput = new FileStoreEditorInput(fileStore);
-
-					final IEditorRegistry editorReg = PlatformUI.getWorkbench().getEditorRegistry();
-					final IEditorDescriptor defaultEditor = editorReg.getDefaultEditor(fileStore.getName());
-					if (defaultEditor != null) {
-						try {
-							page.openEditor(editorInput, defaultEditor.getId());
-						} catch (final PartInitException e) {
-							Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
-						}
-					}
+					// From eclipse IDE - should be a better match to app
+//					final FileStoreEditorInput editorInput = new FileStoreEditorInput(fileStore);
+//
+//					final IEditorRegistry editorReg = PlatformUI.getWorkbench().getEditorRegistry();
+//					final IEditorDescriptor defaultEditor = editorReg.getDefaultEditor(fileStore.getName());
+//					if (defaultEditor != null) {
+//						try {
+//							page.openEditor(editorInput, defaultEditor.getId());
+//						} catch (final PartInitException e) {
+//							Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e));
+//						}
+//					}
 				} else {
 					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "File not found: " + path));
 				}
