@@ -45,7 +45,7 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	 * @since 4.0
 	 */
 	@Override
-	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
 	}
 
 	/**

@@ -188,14 +188,14 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule(), createShippingCostModule());
 		final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
-		final ModelEntityMap entities = injector.getInstance(ModelEntityMap.class);
+		final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
 
 		final SeriesParser indices = injector.getInstance(SeriesParser.class);
 		final DateAndCurveHelper dateHelper = injector.getInstance(DateAndCurveHelper.class);
 
 		// Earliest date, record!
 		builder.setEarliestDate(buy.getDate());
-		entities.setEarliestDate(buy.getDate());
+		modelEntityMap.setEarliestDate(buy.getDate());
 
 		/*
 		 * Create ports and distances
@@ -205,7 +205,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		for (final Port port : portModel.getPorts()) {
 			final IPort optPort = builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator);
 			ports.add(port, optPort);
-			entities.addModelObject(port, optPort);
+			modelEntityMap.addModelObject(port, optPort);
 		}
 		for (final Route route : portModel.getRoutes()) {
 			for (final RouteLine line : route.getLines()) {
@@ -252,7 +252,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				for (final int i : parsed.getChangePoints()) {
 					curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 				}
-				entities.addModelObject(index, curve);
+				modelEntityMap.addModelObject(index, curve);
 				indexAssociation.add(index, curve);
 			} catch (final Exception exception) {
 				log.warn("Error evaluating series " + index.getName(), exception);
@@ -269,7 +269,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			}
 		}
 		final IVesselClass vesselClass = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPrice);
-		entities.addModelObject(eVc, vesselClass);
+		modelEntityMap.addModelObject(eVc, vesselClass);
 
 		/**
 		 * Set up vessel class route parameters
@@ -348,8 +348,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		final IPort buyPort = ports.lookup(buy.getPort());
 		final IPort sellPort = ports.lookup(sell.getPort());
 		// Start Event
-		final int buyTime = entities.getHoursFromDate(buy.getDate());
-		final int sellTime = entities.getHoursFromDate(sell.getDate());
+		final int buyTime = modelEntityMap.getHoursFromDate(buy.getDate());
+		final int sellTime = modelEntityMap.getHoursFromDate(sell.getDate());
 		{
 			final ITimeWindow timeWindow = builder.createTimeWindow(buyTime, buyTime);
 			startConstraint = builder.createStartEndRequirement(buyPort, timeWindow);
@@ -398,7 +398,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			entityProvider.setEntityForSlot(entity, slot);
 
 			elements.add(slot);
-			entities.addModelObject(loadSlot, slot);
+			modelEntityMap.addModelObject(loadSlot, slot);
 
 		}
 		// Sell Opportunity
@@ -446,7 +446,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			elements.add(slot);
 			entityProvider.setEntityForSlot(entity, slot);
 
-			entities.addModelObject(dischargeSlot, slot);
+			modelEntityMap.addModelObject(dischargeSlot, slot);
 		}
 
 		{
@@ -458,7 +458,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		// Create the vessel now we have the start/end requirements
 		final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(notionalDayRate / 24), startConstraint, endConstraint, startHeelVolume, startHeelCV,
 				startHeelPrice);
-		entities.addModelObject(modelVessel, vessel);
+		modelEntityMap.addModelObject(modelVessel, vessel);
 
 		/*
 		 * Create a sequences assigning each cargo to the right vessel
@@ -563,7 +563,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 		childInjector.injectMembers(exporter);
 
-		Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
+		Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
 		{
 			CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 			AssignmentModel assignmentModel = AssignmentFactory.eINSTANCE.createAssignmentModel();

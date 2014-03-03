@@ -33,7 +33,7 @@ public interface IAnnotationExporter {
 	/**
 	 * @param entities
 	 */
-	void setModelEntityMap(ModelEntityMap entities);
+	void setModelEntityMap(ModelEntityMap modelEntityMap);
 
 	void init();
 

@@ -31,7 +31,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	protected IAnnotatedSolution annotatedSolution;
 	protected Schedule output;
-	protected ModelEntityMap entities;
+	protected ModelEntityMap modelEntityMap;
 	protected final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
 	protected final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
@@ -70,8 +70,8 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	}
 
 	@Override
-	public void setModelEntityMap(final ModelEntityMap entities) {
-		this.entities = entities;
+	public void setModelEntityMap(final ModelEntityMap modelEntityMap) {
+		this.modelEntityMap = modelEntityMap;
 	}
 
 	protected List<FuelQuantity> createFuelQuantities(final IFuelUsingEvent event) {

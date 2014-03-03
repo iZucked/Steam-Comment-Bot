@@ -65,7 +65,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			return null;
 		}
 
-		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
+		final Port ePort = modelEntityMap.getModelObject(slot.getPort(), Port.class);
 		if (ePort == null) {
 			// Port maybe null for e.g. DES Purchases.
 			// return null;
@@ -79,7 +79,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			}
 
 			// TODO this will have to look at market-generated slots.
-			final Slot optSlot = entities.getModelObject(slot, Slot.class);
+			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
 				// Skip spot slots
 				return null;
@@ -98,7 +98,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			final MarketAllocation eAllocation = scheduleFactory.createMarketAllocation();
 			eAllocation.setSlot(optSlot);
 			eAllocation.setSlotVisit(sv);
-			eAllocation.setMarket(entities.getModelObject(market, SpotMarket.class));
+			eAllocation.setMarket(modelEntityMap.getModelObject(market, SpotMarket.class));
 			allocations.put(slot, eAllocation);
 			output.getMarketAllocations().add(eAllocation);
 			eAllocation.setSlotAllocation(slotAllocation);
@@ -146,8 +146,8 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 				}
 
 			}
-			sv.setStart(entities.getDateFromHours(allocation.getSlotTime(slot)));
-			sv.setEnd(entities.getDateFromHours(allocation.getSlotTime(slot)));
+			sv.setStart(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot)));
+			sv.setEnd(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot)));
 
 			sv.setSlotAllocation(slotAllocation);
 
