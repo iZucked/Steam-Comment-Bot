@@ -57,7 +57,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * @since 3.0
  */
 public class TradingExporterExtension implements IExporterExtension {
-	private ModelEntityMap entities;
+	private ModelEntityMap modelEntityMap;
 	private IAnnotatedSolution annotatedSolution;
 	private Schedule outputSchedule;
 	@Inject
@@ -66,8 +66,8 @@ public class TradingExporterExtension implements IExporterExtension {
 	private IVesselProvider vesselProvider;
 
 	@Override
-	public void startExporting(final Schedule outputSchedule, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
-		this.entities = entities;
+	public void startExporting(final Schedule outputSchedule, final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
+		this.modelEntityMap = modelEntityMap;
 		this.annotatedSolution = annotatedSolution;
 		this.outputSchedule = outputSchedule;
 	}
@@ -90,7 +90,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					final IPortSlot slot = slotProvider.getPortSlot(element);
 
 					if (slot instanceof ILoadOption) {
-						final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+						final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 						CargoAllocation cargoAllocation = null;
 						for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
 							for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
@@ -118,7 +118,7 @@ public class TradingExporterExtension implements IExporterExtension {
 							}
 						}
 					} else if (slot instanceof IDischargeOption) {
-						final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+						final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 
 						MarketAllocation marketAllocation = null;
 						for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
@@ -132,7 +132,7 @@ public class TradingExporterExtension implements IExporterExtension {
 						}
 
 					} else if (slot instanceof IVesselEventPortSlot) {
-						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
+						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 						VesselEventVisit visit = null;
 						//
 						for (final Sequence sequence : outputSchedule.getSequences()) {
@@ -189,7 +189,7 @@ public class TradingExporterExtension implements IExporterExtension {
 				final IPortSlot slot = slotProvider.getPortSlot(element);
 
 				if (slot instanceof ILoadOption) {
-					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+					final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 					// CargoAllocation cargoAllocation = null;
 					SlotVisit slotVisit = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
@@ -229,7 +229,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					} else if (slot instanceof EndPortSlot) {
 						// ? Unexpected state!
 					} else if (slot instanceof IVesselEventPortSlot) {
-						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
+						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 						VesselEventVisit visit = null;
 						//
 						for (final Sequence sequence : outputSchedule.getSequences()) {
@@ -258,7 +258,7 @@ public class TradingExporterExtension implements IExporterExtension {
 		}
 
 		// clear refs, just in case.
-		entities = null;
+		modelEntityMap = null;
 		outputSchedule = null;
 		annotatedSolution = null;
 	}
@@ -276,7 +276,7 @@ public class TradingExporterExtension implements IExporterExtension {
 						continue;
 					}
 
-					final IVessel iVessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
+					final IVessel iVessel = modelEntityMap.getOptimiserObject(vesselAvailability, IVessel.class);
 					if (iVessel == res) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
@@ -309,7 +309,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					}
 					// Find the matching
 					final IResource res = annotatedSolution.getSequences().getResources().get(i);
-					final IVessel iVessel = entities.getOptimiserObject(vesselAvailability, IVessel.class);
+					final IVessel iVessel = modelEntityMap.getOptimiserObject(vesselAvailability, IVessel.class);
 
 					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
 					if (iVessel == vesselProvider.getVessel(res)) {
@@ -357,7 +357,7 @@ public class TradingExporterExtension implements IExporterExtension {
 		for (final IProfitAndLossEntry entry : entries) {
 
 			// final BaseLegalEntity entity = entities.getModelObject(entry.getEntityBook().getEntity(), BaseLegalEntity.class);
-			final BaseEntityBook entityBook = entities.getModelObject(entry.getEntityBook(), BaseEntityBook.class);
+			final BaseEntityBook entityBook = modelEntityMap.getModelObject(entry.getEntityBook(), BaseEntityBook.class);
 			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
 			int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
 
