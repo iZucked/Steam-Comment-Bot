@@ -86,6 +86,7 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.editing.IDiffEditHandler;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceDiffingEditorInput;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
+import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 /**
  * An editor part for editing MMX Root Objects.
@@ -274,7 +275,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					}
 				}
 
-			}, monitor);
+			}, new ScenarioInstanceSchedulingRule(scenarioInstance), 0, monitor);
 		} catch (final CoreException e) {
 			log.error("Error during save", e);
 		}
