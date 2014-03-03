@@ -676,6 +676,7 @@ public class VoyagePlanner {
 				break;
 			case CharterOut:
 			case DryDock:
+			case Other:
 			case Maintenance:
 			case Short_Cargo_End:
 				result[idx] = true;
