@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -17,24 +19,36 @@ import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.shiplingo.platform.reports.ColourPalette;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
@@ -53,12 +67,17 @@ import com.mmxlabs.shiplingo.platform.reports.views.AbstractVerticalCalendarRepo
  */
 public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
+	protected static RGB Orange = new RGB(255, 168, 64);
+	protected static RGB Light_Orange = new RGB(255, 197, 168);
+	protected static RGB Grey = new RGB(168, 168, 168);
+	protected static RGB Light_Grey = new RGB(200, 200, 200);
 	protected GridTableViewer gridViewer;
 	private ScenarioViewerSynchronizer jobManagerListener;
 	protected SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yy");
 	/** format for the "date" column */
 	protected LNGScenarioModel root = null;
 	protected Date[] dates = null;
+	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -225,6 +244,25 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 */
 	protected static Event[] getEvents(final Sequence seq, final Date date) {
 		return getEvents(seq, date, new Date(date.getTime() + 1000 * 24 * 3600));
+	}
+
+	/**
+	 * Is the specified day outside of the actual slot visit itself? (A SlotVisit event can be
+	 * associated with a particular day if its slot window includes that day.) 
+	 * 
+	 * @param day
+	 * @param visit
+	 * @return
+	 */
+	protected static boolean isDayOutsideActualVisit(final Date day, final SlotVisit visit) {
+		Date nextDay = new Date(day.getTime() + 1000 * 24 * 3600);
+		
+		Slot slot = ((SlotVisit) visit).getSlotAllocation().getSlot(); 
+		if (slot.getName().equals("P16")) {
+			slot.getName();
+		}
+	
+		return (nextDay.before(visit.getStart()) || (visit.getEnd().after(day) == false));
 	}
 
 	@Override
@@ -568,6 +606,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	
 
 
+	protected enum PrecedenceType { COLOUR, TEXT }
+
 	/**
 	 * Record class for holding information on the sequences in a Schedule. Provides the following fields:
 	 * 
@@ -661,8 +701,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 */
 	abstract protected String getEventText(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
 
-	abstract protected Color getEventBackgroundColor(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
-
 	abstract protected Color getEventForegroundColor(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
 	
 	protected Font getEventFont(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider) {
@@ -710,5 +748,153 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		
 	}
 
+	protected int getEventPrecedence(final Date date, final Event event, final PrecedenceType type) {		
+		if (type == PrecedenceType.COLOUR) {
+			if (event instanceof SlotVisit) {
+				return 5;
+			}
+			if (event instanceof Journey) {
+				return -5;
+			}
+		}
+		else if (type == PrecedenceType.TEXT) {
+			if (event instanceof SlotVisit) {
+				return isDayOutsideActualVisit(date, (SlotVisit) event) ? -10 : 5;
+			}
+			if (event instanceof Journey) {
+				return -5;
+			}
+			
+		}
+		return 0;
+	}
+
+	protected Event getRelevantEvent(final Date date, final Event[] events, final PrecedenceType type) {
+		Integer best = null;
+		Event result = null;
 	
+		for (final Event event : events) {
+			final int precedence = getEventPrecedence(date, event, type);
+			if (result == null || best == null || precedence > best) {
+				result = event;
+				best = precedence;
+			}
+		}
+	
+		return result;
+	}
+
+	protected Color getColour(final RGB rgb) {
+		if (colourMap.containsKey(rgb)) {
+			return colourMap.get(rgb);
+		} else {
+			final Color result = new Color(Display.getCurrent(), rgb);
+			colourMap.put(rgb, result);
+			return result;
+		}
+	}
+
+	protected Color getEventBackgroundColor(final Date date, final Event[] events,
+			final EventColumnLabelProvider provider) {
+			
+				final Event event = getRelevantEvent(date, events, PrecedenceType.COLOUR);
+			
+				if (event instanceof SlotVisit) {
+					return getColorFor(date, (SlotVisit) event);
+				}
+				if (event instanceof Journey) {
+					if (((Journey) event).isLaden()) {
+						return getColour(ColourPalette.Vessel_Laden_Journey);
+					} else
+						return getColour(ColourPalette.Vessel_Ballast_Journey);
+				}
+				if (event instanceof CharterOutEvent) {
+					return getColour(ColourPalette.Vessel_Charter_Out);
+				}
+				if (event instanceof GeneratedCharterOut) {
+					return getColour(ColourPalette.Vessel_Generated_Charter_Out);
+				}
+			
+				if (event instanceof Idle) {
+					if (((Idle) event).isLaden()) {
+						return getColour(ColourPalette.Vessel_Laden_Idle);
+					} else
+						return getColour(ColourPalette.Vessel_Ballast_Idle);
+				}
+			
+				return null;
+			}
+
+	protected Color getColorFor(final Date date, final SlotVisit visit) {
+		final SlotAllocation allocation = visit.getSlotAllocation();
+		final boolean isWindow = isDayOutsideActualVisit(date, visit);
+		
+		if (allocation != null) {
+			final Slot slot = allocation.getSlot();
+			if (slot != null) {
+				final Cargo cargo = slot.getCargo();
+				if (cargo != null && cargo.isAllowRewiring() == false) {
+					return isWindow ? getColour(Light_Grey) : getColour(Grey);
+				}
+			}
+		}
+		return isWindow ? getColour(Light_Orange) : getSlotColour(visit);
+	}
+
+	protected Color getSlotColour(SlotVisit visit) {
+		return getColour(Orange);
+	}
+
+	protected String getEventText(final Date element, final Event event) {
+		// how many days since the start of the event?
+		Long days = (element.getTime() - event.getStart().getTime()) / (24 * 1000 * 3600);
+	
+		// Journey events just show the day number
+		if (event instanceof Journey) {
+			days += 1;
+			return days.toString() + (days==1 ? String.format(" (%.02f)", ((Journey) event).getSpeed()): "");
+		}
+	
+		else if (event instanceof SlotVisit) {
+			final SlotVisit visit = (SlotVisit) event;
+			if (isDayOutsideActualVisit(element, visit)) {
+				return "";
+			}
+			String result = getShortPortName(visit.getPort());
+	
+			final SlotAllocation allocation = visit.getSlotAllocation();
+			if (allocation != null) {
+				final Slot slot = allocation.getSlot();
+				if (slot != null) {
+					result += " " + slot.getName();
+				}
+			}
+	
+			return result;
+		} else if (event instanceof Idle) {
+			return "";
+		} else if (event instanceof GeneratedCharterOut) {
+			return "GCO";
+		} else if (event instanceof CharterOutEvent) {
+			return "CO";
+		} else if (event instanceof StartEvent) {
+			return "Start";
+		} else if (event instanceof EndEvent) {
+			return "End";
+		}
+	
+		final EClass eventClass = event.eClass();
+		return eventClass.getName() + " '" + event.name() + "' " + days.toString();
+	}
+
+	/**
+	 * Default to port name
+	 * 
+	 * @param port
+	 * @return
+	 */
+	public String getShortPortName(Port port) {
+		return port.getName();		
+	}
+
 }

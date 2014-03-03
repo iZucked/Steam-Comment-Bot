@@ -6,8 +6,6 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
 import java.util.Date;
 
-import org.eclipse.swt.graphics.RGB;
-
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -26,40 +24,6 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class ColourSchemeUtil {
 
-	static final RGB Gas_Blue = new RGB(50, 60, 225); 
-	// static final RGB Light_Gas_Blue = new RGB(150,255,255);
-	static final RGB Light_Gas_Blue = new RGB(150, 200, 255); 
-	static final RGB Green = new RGB(0, 180, 50); 
-	static final RGB Light_Green = new RGB(100, 255, 100);  
-	static final RGB Teal = new RGB(0, 120, 120); 
-
-	static final RGB Slot_White = new RGB(255, 255, 255);
-	static final RGB FOBDES_Grey = new RGB(96, 96, 96);
-	static final RGB Locked_White = new RGB(255, 255, 255);
-	static final RGB VesselEvent_Purple = new RGB(120, 0, 120); 
-	static final RGB VesselEvent_LightPurple = new RGB(150, 0, 200);
-	static final RGB VesselEvent_Green = new RGB(0, 225, 150);
-	static final RGB VesselEvent_Green2 = new RGB(80, 180, 50);
-	static final RGB VesselEvent_Green3 = new RGB(50, 200, 80);
-	// static final RGB VesselEvent_Brown = new RGB(120, 125, 60);
-	// static final RGB VesselEvent_Brown = new RGB(77, 88, 50);
-	static final RGB VesselEvent_Brown = new RGB(150, 150, 80);
-
-	static final RGB Warning_Yellow = new RGB(255, 255, 25);
-	static final RGB Warning_Orange = new RGB(255, 120, 25);
-	static final RGB Alert_Crimson = new RGB(255, 0, 0);
-	
-	static final int Faded_Alpha = 200;
-
-	static public final RGB Vessel_Laden_Journey = Green;
-	static public final RGB Vessel_Laden_Idle = Light_Green;
-	static public final RGB Vessel_Ballast_Journey = Gas_Blue;
-	static public final RGB Vessel_Ballast_Idle = Light_Gas_Blue;
-	public static final RGB Vessel_Charter_Out = VesselEvent_Purple;
-	public static final RGB Vessel_Generated_Charter_Out = VesselEvent_LightPurple;
-	public static final RGB Vessel_Dry_Dock = VesselEvent_Brown;
-
-	
 	public static boolean isOutsideTimeWindow(Event ev) {
 		Date start = ev.getStart();
 		if ((ev instanceof VesselEventVisit) && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())) {
