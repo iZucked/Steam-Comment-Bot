@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
@@ -67,6 +68,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}
 
 	@Override
