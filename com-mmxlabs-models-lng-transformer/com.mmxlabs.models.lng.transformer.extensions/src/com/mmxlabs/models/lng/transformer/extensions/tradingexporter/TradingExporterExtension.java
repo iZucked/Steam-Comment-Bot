@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
@@ -107,6 +108,41 @@ public class TradingExporterExtension implements IExporterExtension {
 							// setShippingCosts(shippingCostWithBoilOff, cargoAllocation, true);
 						} else {
 
+							OpenSlotAllocation openSlotAllocation = null;
+							for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
+								if (allocation.getSlotAllocation().getSlot() == modelSlot) {
+									openSlotAllocation = allocation;
+									break;
+								}
+							}
+							if (openSlotAllocation != null) {
+								setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
+							} else {
+								MarketAllocation marketAllocation = null;
+								for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
+									if (allocation.getSlot() == modelSlot) {
+										marketAllocation = allocation;
+										break;
+									}
+								}
+								if (marketAllocation != null) {
+									setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
+								}
+							}
+						}
+					} else if (slot instanceof IDischargeOption) {
+						final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
+
+						OpenSlotAllocation openSlotAllocation = null;
+						for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
+							if (allocation.getSlotAllocation().getSlot() == modelSlot) {
+								openSlotAllocation = allocation;
+								break;
+							}
+						}
+						if (openSlotAllocation != null) {
+							setPandLentries(profitAndLossWithTimeCharter, openSlotAllocation);
+						} else {
 							MarketAllocation marketAllocation = null;
 							for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
 								if (allocation.getSlot() == modelSlot) {
@@ -118,20 +154,6 @@ public class TradingExporterExtension implements IExporterExtension {
 								setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
 							}
 						}
-					} else if (slot instanceof IDischargeOption) {
-						final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
-
-						MarketAllocation marketAllocation = null;
-						for (final MarketAllocation allocation : outputSchedule.getMarketAllocations()) {
-							if (allocation.getSlot() == modelSlot) {
-								marketAllocation = allocation;
-								break;
-							}
-						}
-						if (marketAllocation != null) {
-							setPandLentries(profitAndLossWithTimeCharter, marketAllocation);
-						}
-
 					} else if (slot instanceof IVesselEventPortSlot) {
 						final com.mmxlabs.models.lng.cargo.VesselEvent modelEvent = modelEntityMap.getModelObject(slot, com.mmxlabs.models.lng.cargo.VesselEvent.class);
 						VesselEventVisit visit = null;
@@ -358,8 +380,8 @@ public class TradingExporterExtension implements IExporterExtension {
 
 			// final BaseLegalEntity entity = entities.getModelObject(entry.getEntityBook().getEntity(), BaseLegalEntity.class);
 			final BaseEntityBook entityBook = modelEntityMap.getModelObject(entry.getEntityBook(), BaseEntityBook.class);
-			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
-			int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
+			final int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
+			final int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
 
 			if (!groupProfitMap.containsKey(entityBook)) {
 				groupProfitMap.put(entityBook, new int[2]);
