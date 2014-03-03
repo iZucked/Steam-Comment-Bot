@@ -328,8 +328,10 @@ public class TradingExporterExtension implements IExporterExtension {
 	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLossWithTCRate, final IProfitAndLossAnnotation profitAndLossWithoutTCRate, final ProfitAndLossContainer container) {
-		setPandLentries(profitAndLossWithTCRate, container, true);
-		setPandLentries(profitAndLossWithoutTCRate, container, false);
+		if (container != null) {
+			setPandLentries(profitAndLossWithTCRate, container, true);
+			setPandLentries(profitAndLossWithoutTCRate, container, false);
+		}
 	}
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ProfitAndLossContainer container, final boolean includeTimeCharterRate) {
@@ -354,7 +356,7 @@ public class TradingExporterExtension implements IExporterExtension {
 		// We may see the same entity multiple times - so aggregate results
 		for (final IProfitAndLossEntry entry : entries) {
 
-//			final BaseLegalEntity entity = entities.getModelObject(entry.getEntityBook().getEntity(), BaseLegalEntity.class);
+			// final BaseLegalEntity entity = entities.getModelObject(entry.getEntityBook().getEntity(), BaseLegalEntity.class);
 			final BaseEntityBook entityBook = entities.getModelObject(entry.getEntityBook(), BaseEntityBook.class);
 			int groupProfit = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
 			int groupProfitPreTax = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValuePreTax());
