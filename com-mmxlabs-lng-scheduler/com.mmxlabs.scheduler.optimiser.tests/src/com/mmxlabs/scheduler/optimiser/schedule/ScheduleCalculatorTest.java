@@ -28,7 +28,8 @@ import com.google.inject.TypeLiteral;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -110,7 +111,7 @@ public class ScheduleCalculatorTest {
 		final ISequences sequences = mock(ISequences.class);
 
 		final IAnnotatedSolution annotatedSolution = mock(IAnnotatedSolution.class);
-		final IAnnotations annotations = mock(IAnnotations.class);
+		final IElementAnnotationsMap annotations = mock(IElementAnnotationsMap.class);
 		when(annotatedSolution.getElementAnnotations()).thenReturn(annotations);
 
 		final ISequenceElement element1 = mock(ISequenceElement.class, "element1");
@@ -186,11 +187,11 @@ public class ScheduleCalculatorTest {
 		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), eq(expectedList));
 		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), eq(expectedList));
 
-		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element3), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element4), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, never()).setAnnotation(eq(element5), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element3), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element4), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, never()).setAnnotation(eq(element5), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
 	}
 
 	/**

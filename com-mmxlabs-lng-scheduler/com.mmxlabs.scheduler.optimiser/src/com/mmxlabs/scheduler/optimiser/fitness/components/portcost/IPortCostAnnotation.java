@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.portcost;
 
-public interface IPortCostAnnotation {
+import com.mmxlabs.optimiser.core.IElementAnnotation;
+
+public interface IPortCostAnnotation extends IElementAnnotation{
 	public long getPortCost();
 }

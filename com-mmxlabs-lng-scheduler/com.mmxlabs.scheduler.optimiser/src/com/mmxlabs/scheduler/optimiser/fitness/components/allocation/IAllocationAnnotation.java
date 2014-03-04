@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -16,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * @author hinton
  * 
  */
-public interface IAllocationAnnotation {
+public interface IAllocationAnnotation extends IElementAnnotation {
 	/**
 	 * @since 5.0
 	 */

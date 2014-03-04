@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -294,7 +294,7 @@ public class ScheduleCalculator {
 			// annotatedSolution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, allocations);
 
 			// now add some more data for each load slot
-			final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
+			final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
 			for (final IAllocationAnnotation annotation : allocations.values()) {
 				if (annotation != null) {
 					final List<IPortSlot> slots = annotation.getSlots();
