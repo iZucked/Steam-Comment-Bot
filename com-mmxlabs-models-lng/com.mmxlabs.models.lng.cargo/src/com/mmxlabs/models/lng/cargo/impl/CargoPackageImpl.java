@@ -487,6 +487,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlot_CancellationFee() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlot__GetSlotOrPortDuration() {
 		return slotEClass.getEOperations().get(0);
 	}
@@ -574,6 +583,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive() {
 		return slotEClass.getEOperations().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getSlot__GetSlotOrContractCancellationFee() {
+		return slotEClass.getEOperations().get(10);
 	}
 
 	/**
@@ -1225,6 +1243,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(slotEClass, SLOT__RESTRICTED_PORTS);
 		createEAttribute(slotEClass, SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEAttribute(slotEClass, SLOT__HEDGES);
+		createEAttribute(slotEClass, SLOT__CANCELLATION_FEE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_PORT_DURATION);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY);
@@ -1235,6 +1254,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_CONTRACTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -1416,6 +1436,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getSlot_RestrictedPorts(), thePortPackage.getPort(), null, "restrictedPorts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Hedges(), ecorePackage.getEInt(), "hedges", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_CancellationFee(), ecorePackage.getEInt(), "cancellationFee", "0", 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrPortDuration(), ecorePackage.getEInt(), "getSlotOrPortDuration", 0, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1436,6 +1457,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getSlot__GetSlotOrContractRestrictedPorts(), thePortPackage.getPort(), "getSlotOrContractRestrictedPorts", 0, -1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrContractRestrictedListsArePermissive(), ecorePackage.getEBoolean(), "getSlotOrContractRestrictedListsArePermissive", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrContractCancellationFee(), ecorePackage.getEInt(), "getSlotOrContractCancellationFee", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

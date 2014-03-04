@@ -25,6 +25,7 @@
     <eOperations name="getSlotOrContractRestrictedContracts" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
     <eOperations name="getSlotOrContractRestrictedPorts" upperBound="-1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eOperations name="getSlotOrContractRestrictedListsArePermissive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getSlotOrContractCancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"
         unsettable="true"/>
@@ -68,6 +69,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="" unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadSlot" eSuperTypes="#//Slot">
     <eOperations name="getSlotOrDelegatedCV" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

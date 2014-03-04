@@ -44,6 +44,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="#//ContractType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"

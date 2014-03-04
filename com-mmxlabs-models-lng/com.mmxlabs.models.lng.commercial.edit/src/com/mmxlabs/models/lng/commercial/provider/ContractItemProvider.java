@@ -73,6 +73,7 @@ public class ContractItemProvider
 			addRestrictedPortsPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addContractTypePropertyDescriptor(object);
+			addCancellationFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -326,6 +327,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cancellation Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCancellationFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_cancellationFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_cancellationFee_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__CANCELLATION_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -398,6 +421,7 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
+			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.CONTRACT__PRICE_INFO:

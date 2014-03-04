@@ -41,6 +41,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -900,6 +901,60 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	void setHedges(int value);
 
 	/**
+	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cancellation Fee</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cancellation Fee</em>' attribute.
+	 * @see #isSetCancellationFee()
+	 * @see #unsetCancellationFee()
+	 * @see #setCancellationFee(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationFee()
+	 * @model default="0" unsettable="true"
+	 * @generated
+	 */
+	int getCancellationFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cancellation Fee</em>' attribute.
+	 * @see #isSetCancellationFee()
+	 * @see #unsetCancellationFee()
+	 * @see #getCancellationFee()
+	 * @generated
+	 */
+	void setCancellationFee(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCancellationFee()
+	 * @see #getCancellationFee()
+	 * @see #setCancellationFee(int)
+	 * @generated
+	 */
+	void unsetCancellationFee();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Cancellation Fee</em>' attribute is set.
+	 * @see #unsetCancellationFee()
+	 * @see #getCancellationFee()
+	 * @see #setCancellationFee(int)
+	 * @generated
+	 */
+	boolean isSetCancellationFee();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -982,6 +1037,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	boolean getSlotOrContractRestrictedListsArePermissive();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSlotOrContractCancellationFee();
 
 } // end of  Slot
 

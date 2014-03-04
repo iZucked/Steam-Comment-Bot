@@ -84,6 +84,7 @@ public class SlotItemProvider
 			addRestrictedPortsPropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addHedgesPropertyDescriptor(object);
+			addCancellationFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -631,6 +632,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Cancellation Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCancellationFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_cancellationFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_cancellationFee_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__CANCELLATION_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -684,6 +707,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__HEDGES:
+			case CargoPackage.SLOT__CANCELLATION_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

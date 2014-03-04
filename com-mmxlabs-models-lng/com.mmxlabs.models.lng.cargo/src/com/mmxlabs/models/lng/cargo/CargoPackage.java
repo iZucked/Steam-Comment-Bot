@@ -489,13 +489,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -628,13 +637,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -893,6 +911,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__HEDGES = SLOT__HEDGES;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1076,6 +1103,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
@@ -1362,6 +1398,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__HEDGES = SLOT__HEDGES;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1548,6 +1593,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
@@ -2054,6 +2108,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__HEDGES = LOAD_SLOT__HEDGES;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__CANCELLATION_FEE = LOAD_SLOT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2246,6 +2309,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
@@ -2532,6 +2604,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__HEDGES = DISCHARGE_SLOT__HEDGES;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__CANCELLATION_FEE = DISCHARGE_SLOT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2728,6 +2809,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
@@ -4237,6 +4327,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Hedges();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancellation Fee</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCancellationFee()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_CancellationFee();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4339,6 +4440,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee() <em>Get Slot Or Contract Cancellation Fee</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrContractCancellationFee();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
@@ -5288,6 +5399,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__HEDGES = eINSTANCE.getSlot_Hedges();
 
 		/**
+		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5370,6 +5489,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrContractRestrictedListsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Cancellation Fee</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = eINSTANCE.getSlot__GetSlotOrContractCancellationFee();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

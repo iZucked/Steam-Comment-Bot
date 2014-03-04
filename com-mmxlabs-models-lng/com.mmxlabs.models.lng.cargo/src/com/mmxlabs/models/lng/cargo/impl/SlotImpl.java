@@ -69,6 +69,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -592,6 +593,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected int hedges = HEDGES_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CANCELLATION_FEE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected int cancellationFee = CANCELLATION_FEE_EDEFAULT;
+
+	/**
+	 * This is true if the Cancellation Fee attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cancellationFeeESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1531,6 +1561,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCancellationFee() {
+		return cancellationFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCancellationFee(int newCancellationFee) {
+		int oldCancellationFee = cancellationFee;
+		cancellationFee = newCancellationFee;
+		boolean oldCancellationFeeESet = cancellationFeeESet;
+		cancellationFeeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, cancellationFee, !oldCancellationFeeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCancellationFee() {
+		int oldCancellationFee = cancellationFee;
+		boolean oldCancellationFeeESet = cancellationFeeESet;
+		cancellationFee = CANCELLATION_FEE_EDEFAULT;
+		cancellationFeeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, CANCELLATION_FEE_EDEFAULT, oldCancellationFeeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCancellationFee() {
+		return cancellationFeeESet;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -1640,6 +1716,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getSlotOrContractCancellationFee() {
+		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__CANCELLATION_FEE);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -1741,6 +1826,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return getHedges();
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				return getCancellationFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1827,6 +1914,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__HEDGES:
 				setHedges((Integer)newValue);
 				return;
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				setCancellationFee((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1910,6 +2000,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__HEDGES:
 				setHedges(HEDGES_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				unsetCancellationFee();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1969,6 +2062,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return hedges != HEDGES_EDEFAULT;
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				return isSetCancellationFee();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -2087,6 +2182,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrContractRestrictedPorts();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return getSlotOrContractRestrictedListsArePermissive();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE:
+				return getSlotOrContractCancellationFee();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -2136,6 +2233,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (restrictedListsArePermissiveESet) result.append(restrictedListsArePermissive); else result.append("<unset>");
 		result.append(", hedges: ");
 		result.append(hedges);
+		result.append(", cancellationFee: ");
+		if (cancellationFeeESet) result.append(cancellationFee); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -2161,7 +2260,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedPorts(), null);
 		} else if (CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedListsArePermissive(), (Boolean) false);
-		} 
+		} else if (CargoPackage.Literals.SLOT__CANCELLATION_FEE == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationFee(), (Integer)0);
+		}
 		
 		return super.getUnsetValueOrDelegate(feature);
 	}	
