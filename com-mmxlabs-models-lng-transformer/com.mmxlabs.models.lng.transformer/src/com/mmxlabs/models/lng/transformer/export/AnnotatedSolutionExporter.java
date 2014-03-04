@@ -39,7 +39,8 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -110,7 +111,7 @@ public class AnnotatedSolutionExporter {
 	 * @since 3.0
 	 */
 	public Schedule exportAnnotatedSolution(final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
-		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
+		final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
 		final Schedule output = factory.createSchedule();
 
 		// go through the annotated solution and build stuff for the EMF;
@@ -318,7 +319,7 @@ public class AnnotatedSolutionExporter {
 					continue;
 				}
 				// get annotations for this element
-				final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
+				final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 
 				// filter virtual ports out here?
 
@@ -417,7 +418,7 @@ public class AnnotatedSolutionExporter {
 			if (slot != null) {
 				output.getUnusedElements().add(modelSlot);
 			}
-			final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
+			final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 			mtmExporter.export(element, annotations);
 		}
 

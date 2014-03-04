@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -52,7 +53,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
+	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 
 		if (element == null) {
 			return null;
