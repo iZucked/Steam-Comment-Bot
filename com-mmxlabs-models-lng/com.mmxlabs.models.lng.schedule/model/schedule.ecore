@@ -12,6 +12,8 @@
         eType="#//Sequence" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocations" upperBound="-1"
         eType="#//CargoAllocation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openSlotAllocations" upperBound="-1"
+        eType="#//OpenSlotAllocation" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="marketAllocations" upperBound="-1"
         eType="#//MarketAllocation" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" upperBound="-1"
@@ -46,6 +48,10 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotVisit" eType="#//SlotVisit"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenSlotAllocation" eSuperTypes="#//ProfitAndLossContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotAllocation" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getPort" lowerBound="1" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
