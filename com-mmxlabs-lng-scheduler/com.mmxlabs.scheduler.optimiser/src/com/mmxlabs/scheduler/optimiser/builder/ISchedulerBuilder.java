@@ -91,7 +91,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
-			int warmupTimeInHours, long cooldownVolumeInM3);
+			int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -147,7 +147,7 @@ public interface ISchedulerBuilder {
 	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @since 2.0
 	 */
-	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerHour);
+	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerDay);
 
 	/**
 	 * Create a charter out event
@@ -341,17 +341,16 @@ public interface ISchedulerBuilder {
 	ICargo createCargo(final boolean allowRewiring, final IPortSlot... slots);
 
 	/**
-	 * Restrict the set of vessels which can carry this cargo to those in the second argument.
+	 * Restrict the set of vessels which can carry this slot to those in the second argument.
 	 * 
-	 * If this method is never called, the cargo can be carried by any vessel.
+	 * If this method is never called, the slot can be carried by any vessel.
 	 * 
-	 * @param cargo
-	 *            a cargo created by {@link #createCargo()}
+	 * @param slot
+	 *            a {@link ILoadOption} or {@link IDischargeOption}
 	 * @param vessels
 	 *            a set of vessels on which this cargo may be carried
-	 * @since 5.0
 	 */
-	void setCargoVesselRestriction(Collection<IPortSlot> cargoSlots, Set<IVessel> vessels);
+	void setSlotVesselRestriction(IPortSlot slot, Set<IVessel> vessels);
 
 	/**
 	 * Create a time window with the specified start and end time.

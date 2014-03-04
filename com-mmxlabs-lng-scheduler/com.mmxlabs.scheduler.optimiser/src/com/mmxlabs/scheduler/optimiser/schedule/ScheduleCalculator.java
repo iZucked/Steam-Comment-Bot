@@ -53,6 +53,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -96,6 +97,9 @@ public class ScheduleCalculator {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private INominatedVesselProvider nominatedVesselProvider;
 
 	@Inject
 	private VoyagePlanner voyagePlanner;
@@ -162,6 +166,10 @@ public class ScheduleCalculator {
 		final List<IDetailsSequenceElement> currentSequence = new ArrayList<IDetailsSequenceElement>(5);
 		final VoyagePlan currentPlan = new VoyagePlan();
 
+		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
+		if (nominatedVessel != null) {
+			currentPlan.setStartingHeelInM3(nominatedVessel.getVesselClass().getMinHeel());
+		}
 		boolean startSet = false;
 		int startTime = 0;
 		for (final ISequenceElement element : sequence) {
@@ -305,7 +313,7 @@ public class ScheduleCalculator {
 				}
 			}
 
-			for (Map.Entry<IPortSlot, IHeelLevelAnnotation> e : heelLevels.entrySet()) {
+			for (final Map.Entry<IPortSlot, IHeelLevelAnnotation> e : heelLevels.entrySet()) {
 				final ISequenceElement portElement = portSlotProvider.getElement(e.getKey());
 				elementAnnotations.setAnnotation(portElement, SchedulerConstants.AI_heelLevelInfo, e.getValue());
 			}
@@ -395,15 +403,27 @@ public class ScheduleCalculator {
 
 		}
 
+		calculateUnusedSlotPNL(sequences, annotatedSolution);
+
 		if (annotatedSolution != null && markToMarketProvider != null) {
 			calculateMarkToMarketPNL(sequences, annotatedSolution);
-
 		}
 	}
 
-	/**
-	 * @since 6.0
-	 */
+	protected void calculateUnusedSlotPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
+
+		for (final ISequenceElement element : sequences.getUnusedElements()) {
+			if (element == null) {
+				continue;
+			}
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
+				// Calculate P&L
+				entityValueCalculator.evaluateUnusedSlot(portSlot, annotatedSolution);
+			}
+		}
+	}
+
 	protected void calculateMarkToMarketPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
 		// Mark-to-Market Calculations
 

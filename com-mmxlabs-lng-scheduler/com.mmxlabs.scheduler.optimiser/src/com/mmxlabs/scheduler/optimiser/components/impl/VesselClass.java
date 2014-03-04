@@ -39,11 +39,13 @@ public final class VesselClass implements IVesselClass {
 
 	private long minHeel;
 
+	private int minBaseFuelConsumptionInMTPerDay;
+
 	private final EnumMap<VesselState, Long> nboRate = new EnumMap<VesselState, Long>(VesselState.class);
 
 	private final EnumMap<VesselState, Long> idleConsumptionRate = new EnumMap<VesselState, Long>(VesselState.class);
 
-	private final EnumMap<PortType, Long> inPortConsumptionRate = new EnumMap<PortType, Long>(PortType.class);
+	private final EnumMap<PortType, Long> inPortConsumptionRateInMTPerDay = new EnumMap<PortType, Long>(PortType.class);
 
 	private final EnumMap<VesselState, Long> idleNBORate = new EnumMap<VesselState, Long>(VesselState.class);
 
@@ -120,8 +122,8 @@ public final class VesselClass implements IVesselClass {
 	 * @since 2.0
 	 */
 	@Override
-	public long getInPortConsumptionRate(final PortType portType) {
-		return CollectionsUtil.getValue(inPortConsumptionRate, portType, 0l);
+	public long getInPortConsumptionRateInMTPerDay(final PortType portType) {
+		return CollectionsUtil.getValue(inPortConsumptionRateInMTPerDay, portType, 0l);
 	}
 
 	@Override
@@ -167,8 +169,8 @@ public final class VesselClass implements IVesselClass {
 	/**
 	 * @since 2.0
 	 */
-	public void setInPortConsumptionRate(final PortType portType, final long rate) {
-		this.inPortConsumptionRate.put(portType, rate);
+	public void setInPortConsumptionRateInMTPerDay(final PortType portType, final long rate) {
+		this.inPortConsumptionRateInMTPerDay.put(portType, rate);
 	}
 
 	@Override
@@ -233,5 +235,14 @@ public final class VesselClass implements IVesselClass {
 
 	public void setWarmupTime(final int warmupTime) {
 		this.warmupTime = warmupTime;
+	}
+
+	@Override
+	public int getMinBaseFuelConsumptionInMTPerDay() {
+		return this.minBaseFuelConsumptionInMTPerDay;
+	}
+
+	public void setMinBaseFuelConsumptionInMTPerDay(final int minBaseFuelConsumptionInMTPerDay) {
+		this.minBaseFuelConsumptionInMTPerDay = minBaseFuelConsumptionInMTPerDay;
 	}
 }

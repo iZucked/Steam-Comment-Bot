@@ -210,6 +210,11 @@ public class VoyagePlanner {
 			optimiser.addChoice(new RouteVoyagePlanChoice(options, distances));
 		}
 
+		if (vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End) {
+			options.setAllowCooldown(false);
+			options.setShouldBeCold(true);
+		}
+
 		return options;
 	}
 
@@ -255,6 +260,10 @@ public class VoyagePlanner {
 		final Iterator<ISequenceElement> itr = sequence.iterator();
 
 		long heelVolumeInM3 = 0;
+		// For spot charters, start with the safety heel.
+		if (vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
+			heelVolumeInM3 = vessel.getVesselClass().getMinHeel();
+		}
 
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final ISequenceElement element = itr.next();
@@ -360,6 +369,7 @@ public class VoyagePlanner {
 			if (plan == null) {
 				return null;
 			}
+			plan.setIgnoreEnd(false);
 			heelVolumeInM3 = generateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
 		}
 
@@ -429,27 +439,30 @@ public class VoyagePlanner {
 			long totalVoyageBOG = 0;
 			int voyageTime = 0;
 			IPortSlot optionalHeelUsePortSlot = null;
-			for (int i = 0; i < sequence.length - 1; ++i) {
+			int adjust = plan.isIgnoreEnd() ? 1 : 0;
+			for (int i = 0; i < sequence.length - adjust; ++i) {
 				final IDetailsSequenceElement e = sequence[i];
 				if (e instanceof PortDetails) {
-					optionalHeelUsePortSlot = null;
 					final PortDetails portDetails = (PortDetails) e;
 					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
 					final long start = currentHeelInM3;
-					if (allocationAnnotation != null) {
-						if (portSlot.getPortType() == PortType.Load) {
-							currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(portSlot);
-						} else if (portSlot.getPortType() == PortType.Discharge) {
-							currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(portSlot);
-						}
-					} else {
-						if (portSlot instanceof IHeelOptionsPortSlot) {
-							optionalHeelUsePortSlot = portSlot;
-							// FIXME: This volume is optional use
-							final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
-							currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
+					if (portSlot.getPortType() != PortType.End) {
+						optionalHeelUsePortSlot = null;
+						if (allocationAnnotation != null) {
+							if (portSlot.getPortType() == PortType.Load) {
+								currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(portSlot);
+							} else if (portSlot.getPortType() == PortType.Discharge) {
+								currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(portSlot);
+							}
 						} else {
-							currentHeelInM3 = 0;
+							if (portSlot instanceof IHeelOptionsPortSlot) {
+								optionalHeelUsePortSlot = portSlot;
+								// FIXME: This volume is optional use
+								final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
+								currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
+							} else if (portSlot.getPortType() != PortType.End) {
+								currentHeelInM3 = 0;
+							}
 						}
 					}
 					final long end = currentHeelInM3;
@@ -465,7 +478,7 @@ public class VoyagePlanner {
 					}
 					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;
-					
+
 					voyageTime += voyageDetails.getTravelTime();
 					voyageTime += voyageDetails.getIdleTime();
 
@@ -663,6 +676,7 @@ public class VoyagePlanner {
 				break;
 			case CharterOut:
 			case DryDock:
+			case Other:
 			case Maintenance:
 			case Short_Cargo_End:
 				result[idx] = true;

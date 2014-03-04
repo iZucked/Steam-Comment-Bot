@@ -17,6 +17,6 @@ public interface IHedgesProvider extends IDataComponentProvider {
 	 * @param portSlot
 	 * @return
 	 */
-	long getHedgeCost(IPortSlot portSlot);
+	long getHedgeValue(IPortSlot portSlot);
 	
 }

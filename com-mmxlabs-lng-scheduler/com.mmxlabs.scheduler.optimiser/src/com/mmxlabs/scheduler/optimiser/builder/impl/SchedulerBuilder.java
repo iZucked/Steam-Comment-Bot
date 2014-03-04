@@ -341,7 +341,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		});
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	/**
@@ -955,7 +955,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// 0 == return to current load,
 		// 1 == return to farthest in time load
 		// 2== end window
-		final int rule = 0;
+		// 3 == discharge + 60
+		final int rule = 3;
 		final int latestTime;
 		if (rule == 0) {
 			/**
@@ -1004,11 +1005,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				maxFastReturnTime = 0;
 			}
 			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
-		} else {
+		} else if (rule == 2) {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge);
-
+		} else {
+			latestTime = latestDischarge + 60 * 24;
 		}
-		
+
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
@@ -1150,7 +1152,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long minHeelInM3, final int baseFuelUnitPricePerMT,
-			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3) {
+			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -1168,6 +1170,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setCooldownVolume(cooldownVolumeM3);
 
 		vesselClass.setPilotLightRate(pilotLightRate);
+		vesselClass.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
 
 		vesselClasses.add(vesselClass);
 
@@ -1229,9 +1232,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public void setVesselClassPortTypeParameters(@NonNull final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerHour) {
+	public void setVesselClassPortTypeParameters(@NonNull final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerDay) {
 
-		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);
+		((VesselClass) vc).setInPortConsumptionRateInMTPerDay(portType, inPortConsumptionRateInMTPerDay);
 	}
 
 	@Override
@@ -1457,17 +1460,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
-	/**
-	 * @since 5.0
-	 */
 	@Override
-	public void setCargoVesselRestriction(final Collection<IPortSlot> cargoSlots, final Set<IVessel> vessels) {
+	public void setSlotVesselRestriction(final IPortSlot slot, final Set<IVessel> vessels) {
 
-		for (final IPortSlot slot : cargoSlots) {
-			assert slot != null;
-			constrainSlotToVessels(slot, vessels);
-
-		}
+		assert slot != null;
+		constrainSlotToVessels(slot, vessels);
 	}
 
 	@Override

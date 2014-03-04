@@ -118,19 +118,6 @@ public class ScheduleTestModule extends AbstractModule {
 		return factory;
 	}
 
-	//
-	// @Provides
-	// @Singleton
-	// IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ResourcelessModelEntityMap entities) throws IncompleteScenarioException {
-	// final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(entities);
-	//
-	// return optimisationData;
-	// }
-
-	// final IFitnessFunctionRegistry fitnessRegistry = createFitnessRegistry();
-	// final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
-	// final IEvaluationProcessRegistry evaluationProcessRegistry = createEvaluationProcessRegistry();
-
 	@Provides
 	@Singleton
 	private IConstraintCheckerRegistry createConstraintRegistry(Injector injector) {

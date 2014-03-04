@@ -200,6 +200,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 		output.setRouteCost(routeCostProvider.getRouteCost(options.getRoute(), vesselClass, vesselState));
 
+		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vesselClass.getMinBaseFuelConsumptionInMTPerDay(), additionalRouteTimeInHours) / 24l;
+		if (options.useNBOForTravel()) {
+			if (output.getRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
+				output.setRouteAdditionalConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, minBaseFuelConsumptionInMT);
+			}
+		} else {
+			if (output.getRouteAdditionalConsumption(FuelComponent.Base, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
+				output.setRouteAdditionalConsumption(FuelComponent.Base, FuelUnit.MT, minBaseFuelConsumptionInMT);
+			}
+		}
+
 	}
 
 	protected final void calculateIdleFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState, final int idleTimeInHours) {
@@ -228,6 +239,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 
+		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vesselClass.getMinBaseFuelConsumptionInMTPerDay(), idleTimeInHours) / 24l;
+		if (output.getFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
+			output.setFuelConsumption(FuelComponent.IdleBase, FuelUnit.MT, minBaseFuelConsumptionInMT);
+		}
 	}
 
 	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
@@ -291,6 +306,17 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, 0);
 			output.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, requiredConsumptionInMT);
 			output.setFuelConsumption(FuelComponent.PilotLight, FuelUnit.MT, 0);
+		}
+
+		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vesselClass.getMinBaseFuelConsumptionInMTPerDay(), travelTimeInHours) / 24l;
+		if (options.useNBOForTravel()) {
+			if (output.getFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
+				output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, minBaseFuelConsumptionInMT);
+			}
+		} else {
+			if (output.getFuelConsumption(FuelComponent.Base, FuelUnit.MT) < minBaseFuelConsumptionInMT) {
+				output.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, minBaseFuelConsumptionInMT);
+			}
 		}
 	}
 
@@ -407,7 +433,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * Calculates the price per M3 of cooldown and update the voyage details with the MMBTu cooldown quanity
+	 * Calculates the price per M3 of cooldown and update the voyage details with the MMBTu cooldown quantity
 	 * 
 	 * @param vesselClass
 	 * @param arrivalTimes
@@ -893,24 +919,30 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		/**
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this port visit
 		 */
-		final long consumptionRateInMTPerHour;
+		final long consumptionRateInMTPerDay;
 
 		final PortType portType = options.getPortSlot().getPortType();
 
 		// temporary kludge: ignore non-load non-discharge ports for port consumption
-		if (portType == PortType.Load || portType == PortType.Discharge)
-			consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(portType);
-		else
-			consumptionRateInMTPerHour = 0;
+		if (portType == PortType.Load || portType == PortType.Discharge) {
+			consumptionRateInMTPerDay = vesselClass.getInPortConsumptionRateInMTPerDay(portType);
+		} else {
+			consumptionRateInMTPerDay = 0;
+		}
 
 		final int visitDuration = options.getVisitDuration();
 
 		/**
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
 		 */
-		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, visitDuration);
+		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, visitDuration) / 24l;
 
-		details.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
+		final long minBaseFuelConsumptionInMT = Calculator.quantityFromRateTime(vesselClass.getMinBaseFuelConsumptionInMTPerDay(), visitDuration) / 24l;
+		if (minBaseFuelConsumptionInMT > requiredConsumptionInMT) {
+			details.setFuelConsumption(FuelComponent.Base, minBaseFuelConsumptionInMT);
+		} else {
+			details.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
+		}
 	}
 
 	public void setRouteCostDataComponentProvider(final IRouteCostProvider provider) {

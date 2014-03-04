@@ -45,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.schedule.ShippingCostHelper;
@@ -72,6 +73,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private ShippingCostHelper shippingCostHelper;
+
+	@Inject
+	private IHedgesProvider hedgesProvider;
 
 	/**
 	 * Internal data structure to store handy data needed for Cargo P&L calculations. Note similarity to {@link IAllocationAnnotation} - and even {@link AllocationRecord} (which is not visible here).
@@ -108,7 +112,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final List<IPortSlot> slots = currentAllocation.getSlots();
 
@@ -272,37 +276,34 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// Solution Export branch - should called infrequently
 		if (annotatedSolution != null && exportElement != null && entityBookDetailTreeMap != null) {
 			{
-				for (final boolean includeTimeCharterRates : new boolean[] { true, false }) {
-					final List<IProfitAndLossEntry> entries = new LinkedList<>();
-					for (final IEntity entity : seenEntities) {
-						{
-							final Long postTaxProfit = entityPostTaxProfit.get(entity.getShippingBook());
-							final Long preTaxProfit = entityPreTaxProfit.get(entity.getShippingBook());
-							if (preTaxProfit != null || postTaxProfit != null) {
+				final List<IProfitAndLossEntry> entries = new LinkedList<>();
+				for (final IEntity entity : seenEntities) {
+					{
+						final Long postTaxProfit = entityPostTaxProfit.get(entity.getShippingBook());
+						final Long preTaxProfit = entityPreTaxProfit.get(entity.getShippingBook());
+						if (preTaxProfit != null || postTaxProfit != null) {
 
-								final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-								final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getShippingBook().getTaxedProfit(preTaxValue, taxTime);
-								final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getShippingBook());
-								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), postTaxValue, preTaxValue, entityDetails);
-								entries.add(entry);
-							}
-						}
-						{
-							final Long postTaxProfit = entityPostTaxProfit.get(entity.getTradingBook());
-							final Long preTaxProfit = entityPreTaxProfit.get(entity.getTradingBook());
-							if (preTaxProfit != null || postTaxProfit != null) {
-								final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
-								final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getTradingBook().getTaxedProfit(preTaxValue, taxTime);
-								final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getTradingBook());
-								final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
-								entries.add(entry);
-							}
+							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
+							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getShippingBook().getTaxedProfit(preTaxValue, taxTime);
+							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getShippingBook());
+							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getShippingBook(), postTaxValue, preTaxValue, entityDetails);
+							entries.add(entry);
 						}
 					}
-					final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(entries);
-					final String label = includeTimeCharterRates ? SchedulerConstants.AI_profitAndLoss : SchedulerConstants.AI_profitAndLossNoTimeCharterRate;
-					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
+					{
+						final Long postTaxProfit = entityPostTaxProfit.get(entity.getTradingBook());
+						final Long preTaxProfit = entityPreTaxProfit.get(entity.getTradingBook());
+						if (preTaxProfit != null || postTaxProfit != null) {
+							final long preTaxValue = preTaxProfit == null ? 0 : preTaxProfit.longValue();
+							final long postTaxValue = (postTaxProfit == null ? 0 : postTaxProfit.longValue()) + entity.getTradingBook().getTaxedProfit(preTaxValue, taxTime);
+							final IDetailTree entityDetails = entityBookDetailTreeMap.get(entity.getTradingBook());
+							final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
+							entries.add(entry);
+						}
+					}
 				}
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(entries);
+				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLoss, annotation);
 			}
 		}
 
@@ -315,10 +316,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			if (annotatedSolution != null && exportElement != null) {
 				if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
-					// Calculate P&L with TC rates
-					generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, true);
-					// Calculate P&L without TC rates
-					generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot, false);
+					// Calculate P&L
+					generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, taxTime, generatedCharterOutRevenue, firstSlot);
 				}
 			}
 		}
@@ -341,6 +340,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			final IEntity entity = cargoPNLData.slotEntity[idx];
 			assert entity != null;
+
+			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), hedgesProvider.getHedgeValue(slot));
 
 			final long value = Calculator.costFromConsumption(cargoPNLData.slotVolumeInMMBTu[idx], cargoPNLData.slotPricePerMMBTu[idx]);
 			if (slot instanceof ILoadOption) {
@@ -369,7 +370,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
+	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
 		if (shippingEntity == null) {
 			return 0l;
@@ -405,16 +406,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// We include LNG costs here, but this may not be desirable - this depends on whether or not we consider the LNG a sunk cost...
 			// Cost is zero as shipping cost is recalculated to obtain annotation
 
-			// Calculate P&L with TC rates
-			generateShippingAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true, true);
+			generateShippingAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true);
 			if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
-				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, true);
-			}
-
-			// Calculate P&L without TC rates
-			generateShippingAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, revenue, 0, planStartTime, exportElement, true, false);
-			if (shippingCostHelper.hasGeneratedCharterOut(plan)) {
-				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot, false);
+				generateCharterOutAnnotations(plan, vessel, vesselStartTime, annotatedSolution, shippingEntity, planStartTime, generatedCharterOutRevenue, firstSlot);
 			}
 
 		}
@@ -423,9 +417,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	}
 
 	private void generateShippingAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
-			final long revenue, final long cost, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG, final boolean includeTimeCharterRates) {
+			final long revenue, final long cost, final int taxTime, final ISequenceElement exportElement, final boolean includeLNG) {
 		{
-			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vessel, includeLNG, includeTimeCharterRates);
+			final long shippingCosts = shippingCostHelper.getShippingCosts(plan, vessel, includeLNG, true);
 			final long shippingTotalPretaxProfit = revenue /* +additionProfitAndLoss */- cost - shippingCosts;
 			final long shippingProfit = shippingEntity.getShippingBook().getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 
@@ -433,13 +427,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity.getShippingBook(), shippingProfit, shippingTotalPretaxProfit, shippingDetails);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
-			final String label = includeTimeCharterRates ? SchedulerConstants.AI_profitAndLoss : SchedulerConstants.AI_profitAndLossNoTimeCharterRate;
-			annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
+			annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLoss, annotation);
 		}
 	}
 
 	private void generateCharterOutAnnotations(final VoyagePlan plan, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution, final IEntity shippingEntity,
-			final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot, final boolean includeTimeCharterRates) {
+			final int taxTime, final long generatedCharterOutRevenue, final IPortSlot firstSlot) {
 
 		final long charterOutCosts = shippingCostHelper.getGeneratedCharterOutCosts(plan);
 		final long charterOutPretaxProfit = generatedCharterOutRevenue - charterOutCosts;
@@ -452,8 +445,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity.getShippingBook(), charterOutProfit, charterOutCosts, details);
 		final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
 		final ISequenceElement element = slotProvider.getElement(firstSlot);
-		final String label = includeTimeCharterRates ? SchedulerConstants.AI_charterOutProfitAndLoss : SchedulerConstants.AI_charterOutProfitAndLossNoTimeCharterRate;
-		annotatedSolution.getElementAnnotations().setAnnotation(element, label, annotation);
+		annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss, annotation);
 	}
 
 	protected void addEntityBookProfit(@NonNull final Map<IEntityBook, Long> entityBookProfit, @NonNull final IEntityBook entityBook, final long profit) {
@@ -519,4 +511,36 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return 0;
 	}
 
+	@Override
+	public long evaluateUnusedSlot(@NonNull final IPortSlot portSlot, @Nullable final IAnnotatedSolution annotatedSolution) {
+
+		final IEntity entity = entityProvider.getEntityForSlot(portSlot);
+
+		long result = 0;
+		{
+			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
+			final long cancellationCost = 0;// canellationProvider.getCancellationCost(portSlot);
+
+			// Taxed P&L - use time window start as tax date
+			long preTaxValue = hedgeValue - cancellationCost;
+			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, portSlot.getTimeWindow().getStart());
+			result = postTaxValue;
+
+			if (annotatedSolution != null) {
+				final ISequenceElement exportElement = slotProvider.getElement(portSlot);
+				assert exportElement != null;
+
+				final DetailTree entityDetails = new DetailTree();
+				// TODO: Populate
+
+				final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
+
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
+				final String label = SchedulerConstants.AI_profitAndLoss;
+				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
+			}
+		}
+
+		return result;
+	}
 }

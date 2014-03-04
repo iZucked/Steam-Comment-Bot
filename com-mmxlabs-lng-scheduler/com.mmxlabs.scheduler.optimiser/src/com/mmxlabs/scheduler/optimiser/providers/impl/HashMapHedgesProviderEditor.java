@@ -21,7 +21,7 @@ public class HashMapHedgesProviderEditor implements IHedgesProviderEditor {
 	private final Map<IPortSlot, Long> map = new HashMap<IPortSlot, Long>();
 	
 	@Override
-	public long getHedgeCost(final IPortSlot portSlot) {
+	public long getHedgeValue(final IPortSlot portSlot) {
 		if (map.containsKey(portSlot)) {
 			return map.get(portSlot);
 		}
@@ -29,8 +29,9 @@ public class HashMapHedgesProviderEditor implements IHedgesProviderEditor {
 		return 0;
 	}
 
-	public void setHedgeCost(final IPortSlot portSlot, final long cost) {
-		map.put(portSlot, cost);
+	@Override
+	public void setHedgeValue(final IPortSlot portSlot, final long value) {
+		map.put(portSlot, value);
 	}
 	
 	@Override
