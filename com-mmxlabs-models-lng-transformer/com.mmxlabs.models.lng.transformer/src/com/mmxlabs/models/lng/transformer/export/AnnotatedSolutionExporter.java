@@ -130,6 +130,13 @@ public class AnnotatedSolutionExporter {
 		}
 
 		// TODO: Generate an unused element exporter inteface etc.
+		final OpenSlotExporter openSlotExporter = new OpenSlotExporter();
+		{
+			injector.injectMembers(openSlotExporter);
+			openSlotExporter.setOutput(output);
+			openSlotExporter.setModelEntityMap(modelEntityMap);
+			openSlotExporter.setAnnotatedSolution(annotatedSolution);
+		}
 		final MarkToMarketExporter mtmExporter = new MarkToMarketExporter();
 		{
 			injector.injectMembers(mtmExporter);
@@ -418,6 +425,7 @@ public class AnnotatedSolutionExporter {
 				output.getUnusedElements().add(modelSlot);
 			}
 			final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
+			openSlotExporter.export(element, annotations);
 			mtmExporter.export(element, annotations);
 		}
 

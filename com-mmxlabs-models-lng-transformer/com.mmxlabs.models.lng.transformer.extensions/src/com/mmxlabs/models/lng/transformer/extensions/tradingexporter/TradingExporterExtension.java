@@ -110,7 +110,7 @@ public class TradingExporterExtension implements IExporterExtension {
 
 							OpenSlotAllocation openSlotAllocation = null;
 							for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
-								if (allocation.getSlotAllocation().getSlot() == modelSlot) {
+								if (allocation.getSlot() == modelSlot) {
 									openSlotAllocation = allocation;
 									break;
 								}
@@ -135,7 +135,7 @@ public class TradingExporterExtension implements IExporterExtension {
 
 						OpenSlotAllocation openSlotAllocation = null;
 						for (final OpenSlotAllocation allocation : outputSchedule.getOpenSlotAllocations()) {
-							if (allocation.getSlotAllocation().getSlot() == modelSlot) {
+							if (allocation.getSlot() == modelSlot) {
 								openSlotAllocation = allocation;
 								break;
 							}
