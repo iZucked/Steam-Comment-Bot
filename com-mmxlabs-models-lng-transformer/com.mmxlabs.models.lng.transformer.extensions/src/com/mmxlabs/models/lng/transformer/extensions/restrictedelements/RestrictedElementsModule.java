@@ -26,8 +26,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  */
 public class RestrictedElementsModule extends PeaberryActivationModule {
 
-	public static final String DCP_restrictedElementProvider = "provider-restricted-elements";
-
 	@Override
 	protected void configure() {
 
@@ -45,7 +43,7 @@ public class RestrictedElementsModule extends PeaberryActivationModule {
 		@Override
 		protected void configure() {
 
-			final HashMapRestrictedElementsProviderEditor restrictedElementsProviderEditor = new HashMapRestrictedElementsProviderEditor(DCP_restrictedElementProvider);
+			final HashMapRestrictedElementsProviderEditor restrictedElementsProviderEditor = new HashMapRestrictedElementsProviderEditor();
 			bind(IRestrictedElementsProvider.class).toInstance(restrictedElementsProviderEditor);
 			bind(IRestrictedElementsProviderEditor.class).toInstance(restrictedElementsProviderEditor);
 		}

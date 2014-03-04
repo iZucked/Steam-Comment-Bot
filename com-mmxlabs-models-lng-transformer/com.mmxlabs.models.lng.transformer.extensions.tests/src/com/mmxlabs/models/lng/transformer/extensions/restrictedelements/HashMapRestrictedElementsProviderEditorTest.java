@@ -18,9 +18,7 @@ public class HashMapRestrictedElementsProviderEditorTest {
 	public void testSimplePrecede() {
 		final String name = "name";
 
-		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor(name);
-
-		Assert.assertEquals(name, provider.getName());
+		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor();
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
@@ -40,9 +38,7 @@ public class HashMapRestrictedElementsProviderEditorTest {
 	public void testMergePrecede() {
 		final String name = "name";
 
-		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor(name);
-
-		Assert.assertEquals(name, provider.getName());
+		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor();
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
@@ -67,9 +63,7 @@ public class HashMapRestrictedElementsProviderEditorTest {
 	public void testSimpleFollower() {
 		final String name = "name";
 
-		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor(name);
-
-		Assert.assertEquals(name, provider.getName());
+		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor();
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
@@ -87,11 +81,8 @@ public class HashMapRestrictedElementsProviderEditorTest {
 
 	@Test
 	public void testMergeFollower() {
-		final String name = "name";
 
-		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor(name);
-
-		Assert.assertEquals(name, provider.getName());
+		final HashMapRestrictedElementsProviderEditor provider = new HashMapRestrictedElementsProviderEditor();
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);

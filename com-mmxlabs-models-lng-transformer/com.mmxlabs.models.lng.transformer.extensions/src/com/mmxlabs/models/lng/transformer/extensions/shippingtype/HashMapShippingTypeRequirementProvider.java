@@ -13,29 +13,11 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * @since 2.0
  */
 public class HashMapShippingTypeRequirementProvider implements IShippingTypeRequirementProviderEditor {
-	final String name;
 
 	final HashMap<ISequenceElement, CargoDeliveryType> salesSlotsShippingRequirements = new HashMap<ISequenceElement, CargoDeliveryType>();
 	final HashMap<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingTypes = new HashMap<ISequenceElement, CargoDeliveryType>();
 	final HashMap<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingRequirements = new HashMap<ISequenceElement, CargoDeliveryType>();
 	final HashMap<ISequenceElement, CargoDeliveryType> salesSlotsShippingTypes = new HashMap<ISequenceElement, CargoDeliveryType>();
-
-	public HashMapShippingTypeRequirementProvider(final String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		salesSlotsShippingRequirements.clear();
-		salesSlotsShippingTypes.clear();
-		purchaseSlotsShippingRequirements.clear();
-		purchaseSlotsShippingTypes.clear();
-	}
 
 	public void setPurchaseSlotDeliveryType(final ISequenceElement element, final CargoDeliveryType cargoType) {
 		purchaseSlotsShippingTypes.put(element, cargoType);

@@ -115,11 +115,11 @@ public class TransformerExtensionTestModule extends AbstractModule {
 	public IConstraintCheckerRegistry createConstraintCheckerRegistry() {
 		final ConstraintCheckerRegistry constraintCheckerRegistry = new ConstraintCheckerRegistry();
 		{
-			final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
+			final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();
 			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
 		}
 		{
-			final ResourceAllocationConstraintCheckerFactory constraintFactory = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
+			final ResourceAllocationConstraintCheckerFactory constraintFactory = new ResourceAllocationConstraintCheckerFactory();
 			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
 		}
 

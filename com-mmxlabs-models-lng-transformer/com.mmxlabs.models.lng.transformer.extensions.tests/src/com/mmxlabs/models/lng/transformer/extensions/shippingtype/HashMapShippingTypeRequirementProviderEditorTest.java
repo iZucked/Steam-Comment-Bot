@@ -11,19 +11,15 @@ import org.mockito.Mockito;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
-
 public class HashMapShippingTypeRequirementProviderEditorTest {
 	@Test
 	public void test() {
-		final String name = "name";
 
-		final HashMapShippingTypeRequirementProvider provider = new HashMapShippingTypeRequirementProvider(name);
-
-		Assert.assertEquals(name, provider.getName());
+		final HashMapShippingTypeRequirementProvider provider = new HashMapShippingTypeRequirementProvider();
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
-		
+
 		final CargoDeliveryType cargoType1 = CargoDeliveryType.NOT_SHIPPED;
 		final CargoDeliveryType cargoType2 = CargoDeliveryType.SHIPPED;
 
