@@ -341,6 +341,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IEntity entity = cargoPNLData.slotEntity[idx];
 			assert entity != null;
 
+			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), hedgesProvider.getHedgeValue(slot));
+
 			final long value = Calculator.costFromConsumption(cargoPNLData.slotVolumeInMMBTu[idx], cargoPNLData.slotPricePerMMBTu[idx]);
 			if (slot instanceof ILoadOption) {
 
