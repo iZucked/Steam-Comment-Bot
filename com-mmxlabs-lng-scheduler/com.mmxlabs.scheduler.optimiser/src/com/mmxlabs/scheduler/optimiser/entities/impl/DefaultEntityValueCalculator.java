@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
+import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -76,6 +77,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private IHedgesProvider hedgesProvider;
+
+	@Inject
+	private ICancellationFeeProvider cancellationFeeProvider;
 
 	/**
 	 * Internal data structure to store handy data needed for Cargo P&L calculations. Note similarity to {@link IAllocationAnnotation} - and even {@link AllocationRecord} (which is not visible here).
@@ -519,7 +523,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		long result = 0;
 		{
 			final long hedgeValue = hedgesProvider.getHedgeValue(portSlot);
-			final long cancellationCost = 0;// canellationProvider.getCancellationCost(portSlot);
+			final long cancellationCost = cancellationFeeProvider.getCancellationFee(portSlot);
 
 			// Taxed P&L - use time window start as tax date
 			long preTaxValue = hedgeValue - cancellationCost;
