@@ -9,9 +9,11 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
@@ -22,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -34,9 +37,9 @@ import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -64,22 +67,25 @@ public class SchedulePnLReport extends EMFReportView {
 	private final EStructuralFeature cargoAllocationRef;
 	private final EStructuralFeature loadAllocationRef;
 	private final EStructuralFeature dischargeAllocationRef;
+	private final EStructuralFeature openSlotAllocationRef;
 
 	public SchedulePnLReport() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
 
-		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "name", "cargo", "load", "discharge");
-		nameObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
+		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge", "openslot");
+		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
+		nameObjectRef = 		GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
+//		GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
 		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
 		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "discharge");
+		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
 
-		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, nameObjectRef, s.getEvent__Name());
+		addColumn("ID", objectFormatter, nameObjectRef);
 
 		// add the total (aggregate) P&L column
 		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
@@ -175,7 +181,17 @@ public class SchedulePnLReport extends EMFReportView {
 		addColumn("Type", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
-				if (object instanceof SlotVisit || object instanceof CargoAllocation) {
+				if (object instanceof OpenSlotAllocation ) {
+					OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
+					String type = "Open Slot";
+					final Slot slot = openSlotAllocation.getSlot();
+					if (slot instanceof LoadSlot) {
+						type = "Long";
+					} else if (slot instanceof DischargeSlot) {
+						type = "Short";
+					}
+					return type;
+				} else if (object instanceof SlotVisit || object instanceof CargoAllocation) {
 					return "Cargo";
 				} else if (object instanceof StartEvent) {
 					return "Start";
@@ -197,7 +213,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 	}
 
-	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, EStructuralFeature bookContainmentFeature) {
+	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
 		if (container == null) {
 			return null;
 		}
@@ -232,16 +248,16 @@ public class SchedulePnLReport extends EMFReportView {
 		return null;
 	}
 
-	private void addPNLColumn(EStructuralFeature bookContainmentFeature) {
+	private void addPNLColumn(final EStructuralFeature bookContainmentFeature) {
 		addPNLColumn("Group Total", null, bookContainmentFeature);
 	}
 
-	private void addPNLColumn(final String entityName, EStructuralFeature bookContainmentFeature) {
+	private void addPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
 		addPNLColumn(entityName, entityName, bookContainmentFeature);
 	}
 
 	private void addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
-		String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
+		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
 		// HACK: don't the label to the entity column names if the column is for total group P&L
@@ -254,7 +270,7 @@ public class SchedulePnLReport extends EMFReportView {
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
 
-				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut) {
+				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut || object instanceof OpenSlotAllocation) {
 					container = (ProfitAndLossContainer) object;
 				}
 				if (object instanceof SlotVisit) {
@@ -321,17 +337,17 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				return superProvider.getChildren(parentElement);
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return superProvider.getParent(element);
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return superProvider.hasChildren(element);
 			}
 		};
@@ -379,6 +395,9 @@ public class SchedulePnLReport extends EMFReportView {
 					} else if (a instanceof StartEvent) {
 						final StartEvent startEvent = (StartEvent) a;
 						setInputEquivalents(row, Lists.<Object> newArrayList(startEvent, startEvent.getSequence().getVesselAvailability().getVessel()));
+					} else if (a instanceof OpenSlotAllocation) {
+						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
+						setInputEquivalents(row, Lists.<Object> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
 					}
 				}
 			}
@@ -402,7 +421,7 @@ public class SchedulePnLReport extends EMFReportView {
 			@Override
 			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
 
-				final List<Event> interestingEvents = new LinkedList<Event>();
+				final List<EObject> interestingEvents = new LinkedList<EObject>();
 				for (final Sequence sequence : schedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
 						if (event instanceof StartEvent) {
@@ -418,7 +437,8 @@ public class SchedulePnLReport extends EMFReportView {
 							}
 						}
 					}
-				}
+				} 
+				interestingEvents.addAll(schedule.getOpenSlotAllocations());
 
 				final List<EObject> nodes = generateNodes(dataModelInstance, interestingEvents);
 
@@ -470,13 +490,13 @@ public class SchedulePnLReport extends EMFReportView {
 		return adaptedSelection;
 	}
 
-	private List<EObject> generateNodes(final EObject dataModelInstance, final List<Event> interestingElements) {
+	private List<EObject> generateNodes(final EObject dataModelInstance, final List<EObject> interestingElements) {
 		final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
 
-		for (Object element : interestingElements) {
+		for (final Object element : interestingElements) {
 
 			if (element instanceof SlotVisit) {
-				SlotVisit slotVisit = (SlotVisit) element;
+				final SlotVisit slotVisit = (SlotVisit) element;
 				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
@@ -507,15 +527,32 @@ public class SchedulePnLReport extends EMFReportView {
 						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "discharge", dischargeSlots.get(i));
 					}
 					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", cargoAllocation);
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", element);
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slotVisit.name());
 					nodes.add(node);
 				}
-			} else {
+			} else if (element instanceof OpenSlotAllocation) {
+
+				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
+				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", openSlotAllocation);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "openslot", openSlotAllocation);
+				final Slot slot = openSlotAllocation.getSlot();
+				if (slot == null) {
+					
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", "??");
+				} else {
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slot.getName());
+				}
+				nodes.add(node);
+				
+			} else if (element instanceof Event) {
+				final Event event = (Event) element;
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
 
 				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", element);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", element);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", event);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", event.name());
 				nodes.add(node);
 			}
 		}

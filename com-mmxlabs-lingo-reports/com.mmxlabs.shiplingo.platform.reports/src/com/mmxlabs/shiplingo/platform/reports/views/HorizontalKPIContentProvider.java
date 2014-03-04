@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -133,6 +134,10 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			totalMtMPNL += getElementTradingPNL(marketAllocation);
 			totalMtMPNL += getElementShippingPNL(marketAllocation);
 		}
+		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			totalTradingPNL += getElementTradingPNL(openSlotAllocation);
+			totalShippingPNL += getElementShippingPNL(openSlotAllocation);
+		}
 
 		EObject object = schedule.eContainer();
 		while ((object != null) && !(object instanceof MMXRootObject)) {
@@ -155,8 +160,8 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
 		if (groupProfitAndLoss != null) {
 			long totalPNL = 0;
-			for (EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
-				BaseEntityBook entityBook = entityPNL.getEntityBook();
+			for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+				final BaseEntityBook entityBook = entityPNL.getEntityBook();
 				if (entityBook == null) {
 					// Fall back code path for old models.
 					if (containmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {

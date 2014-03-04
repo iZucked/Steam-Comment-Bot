@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -54,6 +55,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 				// map to events
 				if (a instanceof CargoAllocation) {
 					adaptedObjects.add(a);
+				} else if (a instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) a;
+					adaptedObjects.add(slotAllocation.getCargoAllocation());
 				} else if (a instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) a;
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
@@ -62,6 +66,8 @@ public class PNLDetailsReport extends DetailPropertiesView {
 					} else if (slotAllocation.getMarketAllocation() != null) {
 						adaptedObjects.add(slotAllocation.getMarketAllocation());
 					}
+				} else if (a instanceof OpenSlotAllocation) {
+					adaptedObjects.add(a);
 				} else if (a instanceof VesselEventVisit) {
 					adaptedObjects.add(a);
 				} else if (a instanceof StartEvent) {
@@ -125,6 +131,12 @@ public class PNLDetailsReport extends DetailPropertiesView {
 									}
 								}
 							} else {
+								for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+									if (slot.equals(openSlotAllocation.getSlot())) {
+										adaptedObject.add(openSlotAllocation);
+										return;
+									}
+								}
 								for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
 									if (slot.equals(marketAllocation.getSlot())) {
 										adaptedObject.add(marketAllocation);
