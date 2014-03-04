@@ -122,8 +122,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ModelEntityMap entities) throws IncompleteScenarioException {
-		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(entities);
+	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
+		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
 
 		return optimisationData;
 	}
@@ -156,9 +156,9 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Named("Initial")
-	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ModelEntityMap mem) {
+	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ModelEntityMap modelEntityMap) {
 
-		final ISequences sequences = optimisationTransformer.createInitialSequences(data, mem);
+		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
 
 		return sequences;
 	}

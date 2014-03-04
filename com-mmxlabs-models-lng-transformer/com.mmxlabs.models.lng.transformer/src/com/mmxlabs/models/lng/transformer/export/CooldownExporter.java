@@ -39,7 +39,7 @@ public class CooldownExporter extends BaseAnnotationExporter {
 
 		final long cooldownVolume = event.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 		if (cooldownVolume > 0) {
-			Port ePort = entities.getModelObject(event.getPort(), Port.class);
+			Port ePort = modelEntityMap.getModelObject(event.getPort(), Port.class);
 			if (ePort == null)
 				ePort = visitExporter.getLastPortVisited();
 
@@ -47,8 +47,8 @@ public class CooldownExporter extends BaseAnnotationExporter {
 			cooldown.setPort(ePort);
 			cooldown.setVolume(OptimiserUnitConvertor.convertToExternalVolume(cooldownVolume));
 			cooldown.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getFuelCost(FuelComponent.Cooldown)));
-			cooldown.setStart(entities.getDateFromHours(event.getEndTime()));
-			cooldown.setEnd(entities.getDateFromHours(event.getEndTime()));
+			cooldown.setStart(modelEntityMap.getDateFromHours(event.getEndTime()));
+			cooldown.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
 
 			// Cooldown duration is zero - this will need to be changed if cooldown duration becomes non-zero again. This will likely need API support
 			// cooldown.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));

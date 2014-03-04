@@ -52,7 +52,7 @@ public class SlotOverridesTest {
 
 	static class SlotTester {
 		final LNGTransformer transformer;
-		final ModelEntityMap modelOptimiserMap;
+		final ModelEntityMap modelEntityMap;
 
 		public SlotTester(LNGScenarioModel scenario) {
 			this(scenario, false);
@@ -66,15 +66,15 @@ public class SlotOverridesTest {
 				if (failSilently == false)
 					e.printStackTrace(System.err);
 			}
-			modelOptimiserMap = transformer.getEntities();
+			modelEntityMap = transformer.getModelEntityMap();
 		}
 
 		public <T> T getOptimiserObject(final EObject modelObject, final Class<? extends T> clz) {
-			return modelOptimiserMap.getOptimiserObject(modelObject, clz);
+			return modelEntityMap.getOptimiserObject(modelObject, clz);
 		}
 
 		public <T> T getModelObject(final Object internalObject, final Class<? extends T> clz) {
-			return modelOptimiserMap.getModelObject(internalObject, clz);
+			return modelEntityMap.getModelObject(internalObject, clz);
 		}
 
 		public <T> T getProvider(final Class<? extends T> clz) {

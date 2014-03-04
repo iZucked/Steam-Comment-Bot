@@ -37,7 +37,7 @@ public class ScenarioRunner {
 	private final LNGScenarioModel scenario;
 
 	private IOptimisationContext context;
-	private ModelEntityMap entities;
+	private ModelEntityMap modelEntityMap;
 	private LocalSearchOptimiser optimiser;
 
 	private Schedule intialSchedule;
@@ -81,7 +81,7 @@ public class ScenarioRunner {
 
 		injector = transformer.getInjector();
 
-		entities = transformer.getEntities();
+		modelEntityMap = transformer.getModelEntityMap();
 
 		context = transformer.getOptimisationContext();
 		optimiser = transformer.getOptimiser();
@@ -112,7 +112,7 @@ public class ScenarioRunner {
 		final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 		childInjector.injectMembers(exporter);
 
-		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
 
 		return schedule;
 	}
@@ -128,7 +128,7 @@ public class ScenarioRunner {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, entities, optimiser.getBestSolution(true), 0);
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, optimiser.getBestSolution(true), 0);
 	}
 
 }

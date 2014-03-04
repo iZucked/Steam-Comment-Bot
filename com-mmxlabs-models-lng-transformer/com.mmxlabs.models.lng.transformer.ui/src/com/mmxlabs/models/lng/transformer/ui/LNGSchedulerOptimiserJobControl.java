@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
@@ -43,7 +44,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private final LNGScenarioModel scenario;
 
-	private ModelEntityMap entities;
+	private ModelEntityMap modelEntityMap;
 
 	private LocalSearchOptimiser optimiser;
 
@@ -67,6 +68,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 	}
 
 	@Override
@@ -80,7 +82,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		injector = transformer.getInjector();
 
 		// final IOptimisationData data = transformer.getOptimisationData();
-		entities = transformer.getEntities();
+		modelEntityMap = transformer.getModelEntityMap();
 
 		final IOptimisationContext context = transformer.getOptimisationContext();
 		optimiser = transformer.getOptimiser();
@@ -92,7 +94,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		optimiser.init();
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
-		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, entities, startSolution, 0);
+		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, modelEntityMap, startSolution, 0);
 	}
 
 	/*
@@ -116,7 +118,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			// export final state
 
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, lockKey, 100);
-			LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, entities, optimiser.getBestSolution(true), 100);
+			LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, modelEntityMap, optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			super.setProgress(100);
@@ -148,9 +150,9 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	public void dispose() {
 
 		kill();
-		if (this.entities != null) {
-			this.entities.dispose();
-			this.entities = null;
+		if (this.modelEntityMap != null) {
+			this.modelEntityMap.dispose();
+			this.modelEntityMap = null;
 		}
 
 		// TODO: this.scenario = null;

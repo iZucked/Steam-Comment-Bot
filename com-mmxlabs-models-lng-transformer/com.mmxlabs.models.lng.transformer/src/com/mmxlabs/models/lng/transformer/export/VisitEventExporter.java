@@ -74,7 +74,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			return null;
 		}
 
-		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
+		final Port ePort = modelEntityMap.getModelObject(slot.getPort(), Port.class);
 		if (ePort == null) {
 			// Port maybe null for e.g. DES Purchases.
 			// return null;
@@ -92,7 +92,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			output.getSlotAllocations().add(slotAllocation);
 			// TODO this will have to look at market-generated slots.
-			final Slot optSlot = entities.getModelObject(slot, Slot.class);
+			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
 				slotAllocation.setSpotMarket(((SpotSlot) optSlot).getMarket());
 			}
@@ -156,7 +156,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
-			final VesselEvent event = entities.getModelObject(slot, VesselEvent.class);
+			final VesselEvent event = modelEntityMap.getModelObject(slot, VesselEvent.class);
 			if (event == null)
 				return null;
 			final VesselEventVisit vev;
@@ -208,8 +208,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
-		portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
-		portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
+		portVisit.setStart(modelEntityMap.getDateFromHours(visitEvent.getStartTime()));
+		portVisit.setEnd(modelEntityMap.getDateFromHours(visitEvent.getEndTime()));
 
 		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
 		if (capacityViolationAnnotation != null) {

@@ -90,7 +90,7 @@ public class LNGSchedulerJobUtils {
 	 * @param injector
 	 * @param scenario
 	 * @param editingDomain
-	 * @param entities
+	 * @param modelEntityMap
 	 * @param solution
 	 * @param lockKey
 	 * @param solutionCurrentProgress
@@ -99,7 +99,7 @@ public class LNGSchedulerJobUtils {
 	 * @since 5.0
 	 */
 	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
-			final ModelEntityMap entities, final IAnnotatedSolution solution, final int solutionCurrentProgress) {
+			final ModelEntityMap modelEntityMap, final IAnnotatedSolution solution, final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
@@ -108,7 +108,7 @@ public class LNGSchedulerJobUtils {
 		}
 		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
 
-		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
 		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
@@ -443,7 +443,7 @@ public class LNGSchedulerJobUtils {
 	}
 
 	public static IAnnotatedSolution evaluateCurrentState(final LNGTransformer transformer) {
-		final ModelEntityMap entities = transformer.getEntities();
+		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 		final IOptimisationData data = transformer.getOptimisationData();
 		final Injector injector = transformer.getInjector();
 		/**
@@ -451,7 +451,7 @@ public class LNGSchedulerJobUtils {
 		 */
 
 		// Step 1. Get or derive the initial sequences from the input scenario data
-		final IModifiableSequences sequences = new ModifiableSequences(transformer.getOptimisationTransformer().createInitialSequences(data, entities));
+		final IModifiableSequences sequences = new ModifiableSequences(transformer.getOptimisationTransformer().createInitialSequences(data, modelEntityMap));
 
 		// Run through the sequences manipulator of things such as start/end port replacement
 

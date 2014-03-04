@@ -46,7 +46,7 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 			return null;
 		}
 
-		Port ePort = entities.getModelObject(event.getPort(), Port.class);
+		Port ePort = modelEntityMap.getModelObject(event.getPort(), Port.class);
 
 		// TODO this is a bit of a kludge; the ANYWHERE port does not
 		// have an EMF representation, but we do want idle time for it
@@ -60,8 +60,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		final Idle idle = factory.createIdle();
 
 		idle.setPort(ePort);
-		idle.setStart(entities.getDateFromHours(event.getStartTime()));
-		idle.setEnd(entities.getDateFromHours(event.getEndTime()));
+		idle.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
+		idle.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
 
 		idle.setLaden(VesselState.Laden.equals(event.getVesselState()));
 

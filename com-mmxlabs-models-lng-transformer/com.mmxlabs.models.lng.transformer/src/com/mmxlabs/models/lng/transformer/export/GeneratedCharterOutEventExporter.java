@@ -46,7 +46,7 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 			return null;
 		}
 
-		Port ePort = entities.getModelObject(event.getPort(), Port.class);
+		Port ePort = modelEntityMap.getModelObject(event.getPort(), Port.class);
 
 		// TODO this is a bit of a kludge; the ANYWHERE port does not
 		// have an EMF representation, but we do want idle time for it
@@ -60,8 +60,8 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 
 		final GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
 		generatedCharterOutEvent.setPort(ePort);
-		generatedCharterOutEvent.setStart(entities.getDateFromHours(event.getStartTime()));
-		generatedCharterOutEvent.setEnd(entities.getDateFromHours(event.getEndTime()));
+		generatedCharterOutEvent.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
+		generatedCharterOutEvent.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
 		generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterOutRevenue()));
 		
 		generatedCharterOutEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));
