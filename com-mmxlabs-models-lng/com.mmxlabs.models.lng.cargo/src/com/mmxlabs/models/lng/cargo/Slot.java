@@ -42,8 +42,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -920,7 +920,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 
 	/**
 	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Cancellation Fee</em>' attribute isn't clear,
@@ -932,7 +931,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #unsetCancellationFee()
 	 * @see #setCancellationFee(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationFee()
-	 * @model default="0" unsettable="true"
+	 * @model unsettable="true"
 	 * @generated
 	 */
 	int getCancellationFee();

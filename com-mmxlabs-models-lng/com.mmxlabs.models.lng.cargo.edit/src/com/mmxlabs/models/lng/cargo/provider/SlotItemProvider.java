@@ -84,8 +84,8 @@ public class SlotItemProvider
 			addRestrictedPortsPropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
 			addHedgesPropertyDescriptor(object);
-			addCancellationFeePropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
+			addCancellationFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}

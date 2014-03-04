@@ -69,8 +69,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -596,16 +596,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	protected int hedges = HEDGES_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCancellationFee()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AVesselSet<Vessel>> allowedVessels;
-
-	/**
 	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -615,7 +605,16 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	protected EList<AVesselSet<Vessel>> allowedVessels;
 
-	
+	/**
+	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CANCELLATION_FEE_EDEFAULT = 0;
+
 	/**
 	 * The cached value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -1852,10 +1851,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return getHedges();
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				return getCancellationFee();
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				return getAllowedVessels();
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				return getCancellationFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1942,12 +1941,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__HEDGES:
 				setHedges((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				setCancellationFee((Integer)newValue);
-				return;
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
 				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				setCancellationFee((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -2032,10 +2031,11 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__HEDGES:
 				setHedges(HEDGES_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				unsetCancellationFee();
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
+				return;
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				unsetCancellationFee();
 				return;
 		}
 		super.eUnset(featureID);
@@ -2096,10 +2096,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetRestrictedListsArePermissive();
 			case CargoPackage.SLOT__HEDGES:
 				return hedges != HEDGES_EDEFAULT;
-			case CargoPackage.SLOT__CANCELLATION_FEE:
-				return isSetCancellationFee();
 			case CargoPackage.SLOT__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				return isSetCancellationFee();
 		}
 		return super.eIsSet(featureID);
 	}
