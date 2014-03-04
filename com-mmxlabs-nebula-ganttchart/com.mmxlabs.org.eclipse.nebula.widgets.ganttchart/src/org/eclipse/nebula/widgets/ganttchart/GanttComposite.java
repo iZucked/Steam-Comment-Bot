@@ -5438,6 +5438,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             }
         }
 
+        if (_mainBounds == null) {
+        	return;
+        }
+        
         // header clicks, if it's visible
         if (_settings.drawHeader() && _settings.allowHeaderSelection() && me.button == 1) {
             final Rectangle headerBounds = new Rectangle(_mainBounds.x, _settings.getHeaderMonthHeight(), _mainBounds.width, _settings.getHeaderDayHeight());
