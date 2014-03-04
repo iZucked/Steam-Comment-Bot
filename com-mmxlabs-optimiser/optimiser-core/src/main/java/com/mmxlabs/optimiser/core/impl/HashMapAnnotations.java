@@ -9,31 +9,32 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * An {@link IAnnotations} implementation backed by two levels of hashmap.
+ * An {@link IElementAnnotationsMap} implementation backed by two levels of {@link HashMap}.
  * 
  * @author hinton
  * 
  */
-public class HashMapAnnotations implements IAnnotations {
-	private final Map<ISequenceElement, Map<String, Object>> contents = new HashMap<ISequenceElement, Map<String, Object>>();
+public class HashMapAnnotations implements IElementAnnotationsMap {
+	private final Map<ISequenceElement, Map<String, IElementAnnotation>> contents = new HashMap<ISequenceElement, Map<String, IElementAnnotation>>();
 
 	@Override
-	public void setAnnotation(final ISequenceElement element, final String key, final Object value) {
-		Map<String, Object> inner = contents.get(element);
+	public void setAnnotation(final ISequenceElement element, final String key, final IElementAnnotation value) {
+		Map<String, IElementAnnotation> inner = contents.get(element);
 		if (inner == null) {
-			inner = new HashMap<String, Object>();
+			inner = new HashMap<String, IElementAnnotation>();
 		}
 		inner.put(key, value);
 		contents.put(element, inner);
 	}
 
 	@Override
-	public <U> U getAnnotation(final ISequenceElement element, final String key, final Class<U> clz) {
-		final Map<String, Object> inner = contents.get(element);
+	public <U extends IElementAnnotation> U getAnnotation(final ISequenceElement element, final String key, final Class<U> clz) {
+		final Map<String, IElementAnnotation> inner = contents.get(element);
 		return clz.cast(inner == null ? null : inner.get(key));
 	}
 
@@ -44,7 +45,7 @@ public class HashMapAnnotations implements IAnnotations {
 
 	@Override
 	public Iterable<String> getAnnotationNames(final ISequenceElement element) {
-		final Map<String, Object> inner = contents.get(element);
+		final Map<String, IElementAnnotation> inner = contents.get(element);
 		final LinkedList<String> results = new LinkedList<String>();
 
 		if (inner != null) {
@@ -60,8 +61,8 @@ public class HashMapAnnotations implements IAnnotations {
 	 * @see com.mmxlabs.optimiser.core.IAnnotations#getAnnotations(java.lang.Object)
 	 */
 	@Override
-	public Map<String, Object> getAnnotations(final ISequenceElement element) {
-		final Map<String, Object> inner = contents.get(element);
+	public Map<String, IElementAnnotation> getAnnotations(final ISequenceElement element) {
+		final Map<String, IElementAnnotation> inner = contents.get(element);
 		if (inner != null) {
 			return Collections.unmodifiableMap(inner);
 		} else {

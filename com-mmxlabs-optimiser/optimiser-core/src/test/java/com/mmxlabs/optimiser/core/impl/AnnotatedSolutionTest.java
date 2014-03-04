@@ -11,7 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 
@@ -54,7 +54,7 @@ public class AnnotatedSolutionTest {
 	public void getElementAnnotations() {
 		final AnnotatedSolution solution = new AnnotatedSolution();
 
-		final IAnnotations elementAnnotations = solution.getElementAnnotations();
+		final IElementAnnotationsMap elementAnnotations = solution.getElementAnnotations();
 
 		Assert.assertNotNull(elementAnnotations);
 	}

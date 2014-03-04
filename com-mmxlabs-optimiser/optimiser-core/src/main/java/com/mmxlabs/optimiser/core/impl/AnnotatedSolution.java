@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 
@@ -24,7 +24,7 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 
 	private IOptimisationContext context;
 
-	private IAnnotations elementAnnotations = new HashMapAnnotations();
+	private IElementAnnotationsMap elementAnnotations = new HashMapAnnotations();
 
 	private Map<String, Object> generalAnnotations = new HashMap<String, Object>();
 
@@ -55,7 +55,7 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 	}
 
 	@Override
-	public IAnnotations getElementAnnotations() {
+	public IElementAnnotationsMap getElementAnnotations() {
 		return elementAnnotations;
 	}
 

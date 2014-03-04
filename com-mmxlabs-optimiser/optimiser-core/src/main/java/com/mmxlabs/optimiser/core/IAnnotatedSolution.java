@@ -14,11 +14,11 @@ public interface IAnnotatedSolution {
 	ISequences getSequences();
 
 	/**
-	 * Returns the {@link IAnnotations} associated with the sequence elements in this solution
+	 * Returns the {@link IElementAnnotationsMap} associated with the sequence elements in this solution
 	 * 
 	 * @return
 	 */
-	IAnnotations getElementAnnotations();
+	IElementAnnotationsMap getElementAnnotations();
 
 	// annotations for other components?
 	// IAnnotations<IResource> getResourceAnnotations();

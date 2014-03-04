@@ -12,15 +12,15 @@ import java.util.Map;
  * @author hinton
  * 
  */
-public interface IAnnotations {
+public interface IElementAnnotationsMap {
 	/**
 	 * Store an annotation object for the specified element under the given key.
 	 * 
 	 * @param element
 	 * @param key
-	 * @param value
+	 * @param annotation
 	 */
-	void setAnnotation(ISequenceElement element, String key, Object value);
+	void setAnnotation(ISequenceElement element, String key, IElementAnnotation annotation);
 
 	/**
 	 * Return an additional data object tied to the given sequence element.
@@ -30,7 +30,7 @@ public interface IAnnotations {
 	 * @param clz
 	 * @return
 	 */
-	<U> U getAnnotation(ISequenceElement element, String key, Class<U> clz);
+	<U extends IElementAnnotation> U getAnnotation(ISequenceElement element, String key, Class<U> clz);
 
 	/**
 	 * Returns true if the given element has an annotation under the given key.
@@ -49,5 +49,5 @@ public interface IAnnotations {
 	 */
 	Iterable<String> getAnnotationNames(ISequenceElement element);
 
-	Map<String, Object> getAnnotations(ISequenceElement element);
+	Map<String, IElementAnnotation> getAnnotations(ISequenceElement element);
 }
