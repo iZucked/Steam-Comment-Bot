@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -195,6 +196,19 @@ public class PNLDetailsReport extends DetailPropertiesView {
 				});
 			}
 		}
+
+		@Override
+		protected void missedNotifications(final List<Notification> missed) {
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					PNLDetailsReport.this.refresh();
+				}
+			});
+
+		}
+
 	};
 
 	@Override
