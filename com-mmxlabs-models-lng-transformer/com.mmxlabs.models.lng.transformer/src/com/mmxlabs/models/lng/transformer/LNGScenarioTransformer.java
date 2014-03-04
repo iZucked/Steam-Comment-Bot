@@ -127,6 +127,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculat
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
@@ -218,6 +219,9 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private IHedgesProviderEditor hedgesProviderEditor;
+	
+	@Inject 
+	private ICancellationFeeProviderEditor cancellationFeeProviderEditor;
 	
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -1162,6 +1166,9 @@ public class LNGScenarioTransformer {
 		if (hedgeCost != 0)
 			hedgesProviderEditor.setHedgeCost(discharge, hedgeCost);
 		
+		final long cancellationFee = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getSlotOrContractCancellationFee());
+		cancellationFeeProviderEditor.setCancellationFee(discharge, cancellationFee);
+		
 		return discharge;
 	}
 
@@ -1264,7 +1271,10 @@ public class LNGScenarioTransformer {
 		final long hedgeCost = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getHedges());
 		if (hedgeCost != 0)
 			hedgesProviderEditor.setHedgeCost(load, hedgeCost);
-				
+
+		final long cancellationFee = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getSlotOrContractCancellationFee());
+		cancellationFeeProviderEditor.setCancellationFee(load, cancellationFee);
+		
 		return load;
 	}
 
