@@ -44,6 +44,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
@@ -95,6 +97,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEdito
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
@@ -313,6 +316,11 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapHedgesProviderEditor hedgesProviderEditor = new HashMapHedgesProviderEditor();
 		bind(IHedgesProvider.class).toInstance(hedgesProviderEditor);
 		bind(IHedgesProviderEditor.class).toInstance(hedgesProviderEditor);
+		
+		final HashMapCancellationFeeProviderEditor cancellationFeeProviderEditor = new HashMapCancellationFeeProviderEditor();
+		bind(ICancellationFeeProvider.class).toInstance(cancellationFeeProviderEditor);
+		bind(ICancellationFeeProviderEditor.class).toInstance(cancellationFeeProviderEditor);
+
 	}
 
 	/**

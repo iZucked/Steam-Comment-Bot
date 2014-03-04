@@ -8,31 +8,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 
 /**
- * Implementation of {@link IHedgesProviderEditor} using a {@link HashMap} as the backing implementation.
- * 
  * @author berkan
  *
  */
-public class HashMapHedgesProviderEditor implements IHedgesProviderEditor {
+public class HashMapCancellationFeeProviderEditor implements ICancellationFeeProviderEditor {
 
-	private final Map<IPortSlot, Long> map = new HashMap<IPortSlot, Long>();
+	private final Map<IPortSlot, Long> map = new HashMap<IPortSlot, Long>();	
 	
 	@Override
-	public long getHedgeValue(final IPortSlot portSlot) {
+	public long getCancellationFee(IPortSlot portSlot) {
 		if (map.containsKey(portSlot)) {
 			return map.get(portSlot);
 		}
 
 		return 0;
 	}
-
+	
 	@Override
-	public void setHedgeValue(final IPortSlot portSlot, final long value) {
-		map.put(portSlot, value);
+	public void setCancellationFee(IPortSlot portSlot, long fee) {
+		map.put(portSlot, fee);
 	}
+	
 	
 	@Override
 	public String getName() {
