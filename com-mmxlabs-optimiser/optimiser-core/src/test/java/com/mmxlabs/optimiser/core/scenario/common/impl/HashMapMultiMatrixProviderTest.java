@@ -21,14 +21,6 @@ public class HashMapMultiMatrixProviderTest {
 	private final Mockery context = new JUnit4Mockery();
 
 	@Test
-	public void testHashMapMatrixProviderString() {
-
-		final String name = "Name";
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>(name);
-		Assert.assertSame(name, provider.getName());
-	}
-
-	@Test
 	public void testHashMapMatrixGetSet() {
 
 		final String key = "key";
@@ -36,7 +28,7 @@ public class HashMapMultiMatrixProviderTest {
 		@SuppressWarnings("unchecked")
 		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>();
 
 		Assert.assertNull(provider.get(null));
 		Assert.assertNull(provider.get(key));
@@ -56,7 +48,7 @@ public class HashMapMultiMatrixProviderTest {
 		@SuppressWarnings("unchecked")
 		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>();
 
 		Assert.assertFalse(provider.containsKey(null));
 		Assert.assertFalse(provider.containsKey(key));
@@ -78,7 +70,7 @@ public class HashMapMultiMatrixProviderTest {
 		@SuppressWarnings("unchecked")
 		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>();
 
 		Set<String> keySet = provider.getKeySet();
 		Assert.assertTrue(keySet.isEmpty());
@@ -101,7 +93,7 @@ public class HashMapMultiMatrixProviderTest {
 		@SuppressWarnings("unchecked")
 		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
 
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
+		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>();
 
 		String[] keys = provider.getKeys();
 		Assert.assertNotNull(keys);
@@ -126,55 +118,4 @@ public class HashMapMultiMatrixProviderTest {
 		Assert.assertTrue((key2 == keys[0]) || (key2 == keys[1]));
 		Assert.assertTrue(keys[0] != keys[1]);
 	}
-
-	@Test
-	public void testHashMapMatrixDispose() {
-
-		final String key = "key";
-
-		@SuppressWarnings("unchecked")
-		final IMatrixProvider<Integer, Integer> p = context.mock(IMatrixProvider.class);
-
-		final HashMapMultiMatrixProvider<Integer, Integer> provider = new HashMapMultiMatrixProvider<Integer, Integer>("Name");
-
-		String[] keys = provider.getKeys();
-		Assert.assertNotNull(keys);
-		Assert.assertEquals(0, keys.length);
-
-		Set<String> keySet = provider.getKeySet();
-		Assert.assertTrue(keySet.isEmpty());
-
-		Assert.assertNull(provider.get(key));
-
-		Assert.assertFalse(provider.containsKey(key));
-
-		provider.set(key, p);
-
-		keys = provider.getKeys();
-		Assert.assertNotNull(keys);
-		Assert.assertEquals(1, keys.length);
-		Assert.assertSame(key, keys[0]);
-
-		keySet = provider.getKeySet();
-		Assert.assertTrue(keySet.contains(key));
-
-		Assert.assertTrue(provider.containsKey(key));
-
-		Assert.assertSame(p, provider.get(key));
-
-		provider.dispose();
-
-		keys = provider.getKeys();
-		Assert.assertNotNull(keys);
-		Assert.assertEquals(0, keys.length);
-
-		keySet = provider.getKeySet();
-		Assert.assertTrue(keySet.isEmpty());
-
-		Assert.assertNull(provider.get(key));
-
-		Assert.assertFalse(provider.containsKey(key));
-
-	}
-
 }

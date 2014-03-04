@@ -23,12 +23,9 @@ public final class MatrixProviderFitnessCoreFactory implements IFitnessCoreFacto
 
 	private final String fitnessComponentName;
 
-	private final String dataProviderKey;
-
-	public MatrixProviderFitnessCoreFactory(final String fitnessCoreName, final String fitnessComponentName, final String dataProviderKey) {
+	public MatrixProviderFitnessCoreFactory(final String fitnessCoreName, final String fitnessComponentName) {
 		this.fitnessCoreName = fitnessCoreName;
 		this.fitnessComponentName = fitnessComponentName;
-		this.dataProviderKey = dataProviderKey;
 	}
 
 	@Override
@@ -43,6 +40,6 @@ public final class MatrixProviderFitnessCoreFactory implements IFitnessCoreFacto
 
 	@Override
 	public IFitnessCore instantiate() {
-		return new MatrixProviderFitnessCore(fitnessComponentName, dataProviderKey);
+		return new MatrixProviderFitnessCore(fitnessComponentName);
 	}
 }

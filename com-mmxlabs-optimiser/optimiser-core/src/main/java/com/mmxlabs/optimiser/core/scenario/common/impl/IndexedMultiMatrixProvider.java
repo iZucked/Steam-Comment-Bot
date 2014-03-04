@@ -10,13 +10,13 @@ import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
 public final class IndexedMultiMatrixProvider<T extends IIndexedObject, U extends Comparable<U>> extends HashMapMultiMatrixProvider<T, U> {
 
-	public IndexedMultiMatrixProvider(final String name) {
-		super(name);
+	private final IndexedMatrixEditor<T, U> minima = new IndexedMatrixEditor<T, U>(null);
+
+	private final IndexedMatrixEditor<T, U> maxima = new IndexedMatrixEditor<T, U>(null);
+
+	public IndexedMultiMatrixProvider() {
+
 	}
-
-	private final IndexedMatrixEditor<T, U> minima = new IndexedMatrixEditor<T, U>("minimum-values", null);
-
-	private final IndexedMatrixEditor<T, U> maxima = new IndexedMatrixEditor<T, U>("maximum-values", null);
 
 	public final void cacheExtremalValues(final Collection<T> elements) {
 		for (final T x : elements) {

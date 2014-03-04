@@ -17,13 +17,6 @@ public class IndexedTimeWindowEditor implements ITimeWindowDataComponentProvider
 
 	private final IIndexMap<ISequenceElement, List<ITimeWindow>> timeWindowsByElement = new ArrayIndexMap<ISequenceElement, List<ITimeWindow>>();
 
-	private final String name;
-
-	public IndexedTimeWindowEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
 	@Override
 	public List<ITimeWindow> getTimeWindows(final ISequenceElement element) {
 		final List<ITimeWindow> windows = timeWindowsByElement.maybeGet(element);
@@ -35,18 +28,7 @@ public class IndexedTimeWindowEditor implements ITimeWindowDataComponentProvider
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		timeWindowsByElement.clear();
-	}
-
-	@Override
 	public void setTimeWindows(final ISequenceElement element, final List<ITimeWindow> timeWindows) {
 		timeWindowsByElement.set(element, timeWindows);
 	}
-
 }

@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -30,6 +32,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	/**
 	 * The source matrix data (x/from, y/to)
 	 */
+	@Inject
 	private IMatrixProvider<ISequenceElement, Number> matrix;
 
 	/**
@@ -59,14 +62,8 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 
 	private final IFitnessComponent component;
 
-	/**
-	 * The key used to obtain the matrix from an {@link IOptimisationData} instance.
-	 */
-	private final String matrixProviderKey;
-
-	public MatrixProviderFitnessCore(final String componentName, final String matrixProviderKey) {
+	public MatrixProviderFitnessCore(final String componentName) {
 		component = new MatrixProviderFitnessComponent(componentName, this);
-		this.matrixProviderKey = matrixProviderKey;
 	}
 
 	@Override
@@ -134,7 +131,6 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	public void init(final IOptimisationData data) {
 		oldFitnessByResource = new HashMap<IResource, Long>();
 		newFitnessByResource = new HashMap<IResource, Long>();
-		setMatrix(data.getDataComponentProvider(matrixProviderKey, IMatrixProvider.class));
 	}
 
 	private long evaluateSequence(final ISequence sequence) {
@@ -170,11 +166,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	public IMatrixProvider<ISequenceElement, Number> getMatrix() {
 		return matrix;
 	}
-
-	public void setMatrix(final IMatrixProvider<ISequenceElement, Number> matrix) {
-		this.matrix = matrix;
-	}
-
+	
 	public long getNewFitness() {
 		return newFitness;
 	}

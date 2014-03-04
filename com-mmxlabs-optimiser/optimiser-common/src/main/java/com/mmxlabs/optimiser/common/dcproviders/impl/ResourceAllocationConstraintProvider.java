@@ -21,18 +21,10 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  */
 public final class ResourceAllocationConstraintProvider implements IResourceAllocationConstraintDataComponentProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, Collection<IResource>> allowedResourceMap;
 
-	public ResourceAllocationConstraintProvider(final String name) {
-		this.name = name;
+	public ResourceAllocationConstraintProvider() {
 		this.allowedResourceMap = new HashMap<ISequenceElement, Collection<IResource>>();
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override
@@ -48,10 +40,5 @@ public final class ResourceAllocationConstraintProvider implements IResourceAllo
 	@Override
 	public void setAllowedResources(final ISequenceElement element, final Collection<IResource> resources) {
 		allowedResourceMap.put(element, resources);
-	}
-
-	@Override
-	public void dispose() {
-		allowedResourceMap.clear();
 	}
 }

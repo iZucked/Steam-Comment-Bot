@@ -15,8 +15,7 @@ public class HashMapMatrixProviderTest {
 		final Integer x = Integer.valueOf(1);
 		final Integer y = Integer.valueOf(2);
 
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name");
-		Assert.assertEquals("Name", provider.getName());
+		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>();
 
 		Assert.assertSame(provider.getDefaultValue(), provider.get(x, y));
 	}
@@ -27,8 +26,7 @@ public class HashMapMatrixProviderTest {
 		final Integer x = Integer.valueOf(1);
 		final Integer y = Integer.valueOf(2);
 
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name", d);
-		Assert.assertEquals("Name", provider.getName());
+		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>(d);
 		Assert.assertSame(d, provider.getDefaultValue());
 
 		Assert.assertSame(d, provider.get(x, y));
@@ -41,7 +39,7 @@ public class HashMapMatrixProviderTest {
 		final Integer y = Integer.valueOf(2);
 		final Integer v = Integer.valueOf(333);
 
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name", d);
+		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>(d);
 
 		Assert.assertSame(d, provider.getDefaultValue());
 		Assert.assertSame(d, provider.get(x, y));
@@ -66,7 +64,7 @@ public class HashMapMatrixProviderTest {
 
 		final Integer v2 = Integer.valueOf(334);
 
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name", d);
+		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>(d);
 
 		Assert.assertSame(d, provider.getDefaultValue());
 		Assert.assertSame(d, provider.get(x, y));
@@ -96,7 +94,7 @@ public class HashMapMatrixProviderTest {
 		final Integer y2 = Integer.valueOf(3);
 		final Integer v = Integer.valueOf(333);
 
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name", d);
+		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>(d);
 
 		Assert.assertSame(d, provider.getDefaultValue());
 		Assert.assertSame(d, provider.get(x, y));
@@ -108,31 +106,6 @@ public class HashMapMatrixProviderTest {
 
 		Assert.assertSame(d, provider.get(y, x));
 		Assert.assertSame(d, provider.get(y2, x));
-
-	}
-
-	@Test
-	public void testDispose() {
-		final Integer d = Integer.valueOf(123);
-		final Integer x = Integer.valueOf(1);
-		final Integer y = Integer.valueOf(2);
-		final Integer v = Integer.valueOf(333);
-
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name", d);
-
-		Assert.assertSame(d, provider.getDefaultValue());
-		Assert.assertSame(d, provider.get(x, y));
-
-		provider.set(x, y, v);
-
-		Assert.assertEquals(v, provider.get(x, y));
-		Assert.assertEquals(d, provider.get(y, x));
-
-		provider.dispose();
-
-		Assert.assertSame(d, provider.get(x, y));
-		Assert.assertSame(d, provider.get(x, y));
-
 	}
 
 	@Test
@@ -143,7 +116,7 @@ public class HashMapMatrixProviderTest {
 		final Integer y = Integer.valueOf(2);
 		final Integer v = Integer.valueOf(321);
 
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name", d);
+		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>(d);
 
 		Assert.assertSame(d, provider.getDefaultValue());
 		Assert.assertSame(d, provider.get(x, y));
@@ -162,7 +135,7 @@ public class HashMapMatrixProviderTest {
 		final Integer y = Integer.valueOf(2);
 		final Integer v = Integer.valueOf(321);
 
-		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>("Name", d);
+		final HashMapMatrixProvider<Integer, Integer> provider = new HashMapMatrixProvider<Integer, Integer>(d);
 
 		Assert.assertFalse(provider.has(x, y));
 		Assert.assertFalse(provider.has(y, x));

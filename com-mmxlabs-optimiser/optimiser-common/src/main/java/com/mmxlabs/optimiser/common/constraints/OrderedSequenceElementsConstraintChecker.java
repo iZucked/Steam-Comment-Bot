@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.common.constraints;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -23,16 +25,23 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  */
 public final class OrderedSequenceElementsConstraintChecker implements IPairwiseConstraintChecker {
+	@Inject
+	private IOrderedSequenceElementsDataComponentProvider provider;
 
 	private final String name;
 
-	private final String dataProviderKey;
-
-	private IOrderedSequenceElementsDataComponentProvider provider;
-
-	public OrderedSequenceElementsConstraintChecker(final String name, final String dataProviderKey) {
+	public OrderedSequenceElementsConstraintChecker(final String name) {
 		this.name = name;
-		this.dataProviderKey = dataProviderKey;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public void setOptimisationData(final IOptimisationData optimisationData) {
+
 	}
 
 	@Override
@@ -94,25 +103,6 @@ public final class OrderedSequenceElementsConstraintChecker implements IPairwise
 		}
 
 		return true;
-	}
-
-	public void setProvider(final IOrderedSequenceElementsDataComponentProvider provider) {
-		this.provider = provider;
-	}
-
-	public IOrderedSequenceElementsDataComponentProvider getProvider() {
-		return provider;
-	}
-
-	@Override
-	public void setOptimisationData(final IOptimisationData optimisationData) {
-		final IOrderedSequenceElementsDataComponentProvider dataProvider = optimisationData.getDataComponentProvider(dataProviderKey, IOrderedSequenceElementsDataComponentProvider.class);
-		setProvider(dataProvider);
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override

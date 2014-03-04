@@ -27,6 +27,7 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 	 * Initialise method checking the object has all the correct pieces of data to be able to perform the {@link #optimise(IOptimisationContext, Collection, Object)} method. Throws an
 	 * {@link IllegalStateException} on error.
 	 */
+	@Override
 	public void init() {
 
 		super.init();

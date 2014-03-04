@@ -31,15 +31,12 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 
 	private final HashMap<String, IMatrixProvider<T, U>> matricies;
 
-	private final String name;
-
 	/**
 	 * Cached array of keys. This will be reset whenever a new matrix is set and recalculated when {@link #getKeys()} is called.
 	 */
 	private transient String[] keys;
 
-	public HashMapMultiMatrixProvider(final String name) {
-		this.name = name;
+	public HashMapMultiMatrixProvider() {
 		this.matricies = new HashMap<String, IMatrixProvider<T, U>>();
 	}
 
@@ -64,17 +61,6 @@ public class HashMapMultiMatrixProvider<T, U extends Comparable<U>> implements I
 		// Reset keys list
 		keys = null;
 		matricies.put(key, row);
-	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
-
-	@Override
-	public final void dispose() {
-		matricies.clear();
-		keys = null;
 	}
 
 	@Override

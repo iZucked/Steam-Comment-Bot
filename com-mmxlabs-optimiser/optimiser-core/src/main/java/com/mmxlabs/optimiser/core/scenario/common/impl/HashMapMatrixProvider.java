@@ -23,16 +23,13 @@ public final class HashMapMatrixProvider<T, U> implements IMatrixProvider<T, U>,
 
 	private final HashMap<T, HashMap<T, U>> matrix;
 
-	private final String name;
-
 	private U defaultValue;
 
-	public HashMapMatrixProvider(final String name) {
-		this(name, null);
+	public HashMapMatrixProvider() {
+		this(null);
 	}
 
-	public HashMapMatrixProvider(final String name, final U defaultValue) {
-		this.name = name;
+	public HashMapMatrixProvider(final U defaultValue) {
 		this.matrix = new HashMap<T, HashMap<T, U>>();
 		this.defaultValue = defaultValue;
 	}
@@ -60,16 +57,6 @@ public final class HashMapMatrixProvider<T, U> implements IMatrixProvider<T, U>,
 			matrix.put(x, row);
 		}
 		row.put(y, v);
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		matrix.clear();
 	}
 
 	public void setDefaultValue(final U defaultValue) {

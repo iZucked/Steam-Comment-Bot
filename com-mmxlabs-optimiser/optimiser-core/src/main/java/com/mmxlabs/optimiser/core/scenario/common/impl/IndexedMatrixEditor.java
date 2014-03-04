@@ -8,17 +8,15 @@ import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixEditor;
 
 public final class IndexedMatrixEditor<T extends IIndexedObject, U> implements IMatrixEditor<T, U> {
-	private final String name;
 	private final U defaultValue;
 	private U[][] matrix;
 
 	private int maxIndex = -1;
 
 	@SuppressWarnings("unchecked")
-	public IndexedMatrixEditor(final String name, final U defaultValue) {
+	public IndexedMatrixEditor(final U defaultValue) {
 		super();
 		this.defaultValue = defaultValue;
-		this.name = name;
 		matrix = (U[][]) new Object[0][0];
 	}
 
@@ -35,16 +33,6 @@ public final class IndexedMatrixEditor<T extends IIndexedObject, U> implements I
 			return defaultValue;
 		}
 		return subMatrix[yi];
-	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
-
-	@Override
-	public final void dispose() {
-		matrix = null;
 	}
 
 	@Override

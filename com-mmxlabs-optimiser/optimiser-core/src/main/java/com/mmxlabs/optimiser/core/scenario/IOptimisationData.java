@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.optimiser.core.scenario;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * An interface to the optimisation data, comprising accessors for core attributes and a generic component provider mechanism for the specialised requirements of particular optimisations.
+ * An interface to the optimisation data, comprising accessors for core attributes.
  * 
  * @author proshun, Simon Goodall
  * 
@@ -31,32 +30,7 @@ public interface IOptimisationData {
 	List<IResource> getResources();
 
 	/**
-	 * Accessor for specialised data objects. Each object should have a unique key and an expected class type.
-	 * 
-	 * @param <U>
-	 * @param key
-	 * @param clazz
-	 * @return
-	 */
-	<U extends IDataComponentProvider> U getDataComponentProvider(String key, Class<U> clazz);
-
-	/**
-	 * Returns true if the named {@link IDataComponentProvider} exists.
-	 * 
-	 * @param key
-	 * @return
-	 */
-	boolean hasDataComponentProvider(String key);
-
-	/**
-	 * Returns the list of registered {@link IDataComponentProvider}s.
-	 * 
-	 * @return
-	 */
-	Collection<String> getDataComponentProviders();
-
-	/**
-	 * Notify {@link IOptimisationData} that it is no longer required and clean up internal references. This should also invoke dispose on any contained {@link IDataComponentProvider} implementations.
+	 * Notify {@link IOptimisationData} that it is no longer required and clean up internal references.s
 	 */
 	void dispose();
 

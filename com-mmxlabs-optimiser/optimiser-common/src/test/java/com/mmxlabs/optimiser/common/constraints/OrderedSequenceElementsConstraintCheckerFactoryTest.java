@@ -12,13 +12,13 @@ public class OrderedSequenceElementsConstraintCheckerFactoryTest {
 	@Test
 	public void testGetName() {
 
-		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory("key");
+		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory();
 		Assert.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, factory.getName());
 	}
 
 	@Test
 	public void testInstantiate() {
-		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory("key");
+		final OrderedSequenceElementsConstraintCheckerFactory factory = new OrderedSequenceElementsConstraintCheckerFactory();
 		final OrderedSequenceElementsConstraintChecker checker = factory.instantiate();
 		Assert.assertNotNull(checker);
 		Assert.assertEquals(OrderedSequenceElementsConstraintCheckerFactory.NAME, checker.getName());

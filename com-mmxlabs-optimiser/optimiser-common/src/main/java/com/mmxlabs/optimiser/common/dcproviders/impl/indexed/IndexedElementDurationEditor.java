@@ -18,13 +18,6 @@ public final class IndexedElementDurationEditor implements IElementDurationProvi
 
 	private int defaultDuration;
 
-	private final String name;
-
-	public IndexedElementDurationEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
 	@Override
 	public int getElementDuration(final ISequenceElement element, final IResource resource) {
 		final IIndexMap<ISequenceElement, Integer> byElementForResource = durationByElementByResource.maybeGet(resource);
@@ -47,17 +40,6 @@ public final class IndexedElementDurationEditor implements IElementDurationProvi
 	@Override
 	public int getDefaultValue() {
 		return defaultDuration;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		durationByElement.clear();
-		durationByElementByResource.clear();
 	}
 
 	@Override

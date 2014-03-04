@@ -19,16 +19,13 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public final class HashMapElementDurationEditor implements IElementDurationProviderEditor {
 
-	private final String name;
-
 	private final Map<IResource, Map<ISequenceElement, Integer>> durations;
 
 	private final Map<ISequenceElement, Integer> nonResourceDurations;
 
 	private int defaultValue;
 
-	public HashMapElementDurationEditor(final String name) {
-		this.name = name;
+	public HashMapElementDurationEditor() {
 		this.durations = new HashMap<IResource, Map<ISequenceElement, Integer>>();
 		this.nonResourceDurations = new HashMap<ISequenceElement, Integer>();
 		this.defaultValue = 0;
@@ -56,16 +53,6 @@ public final class HashMapElementDurationEditor implements IElementDurationProvi
 		}
 		final Integer x = nonResourceDurations.get(element);
 		return x == null ? defaultValue : x;
-	}
-
-	@Override
-	public void dispose() {
-		durations.clear();
-	}
-
-	@Override
-	public String getName() {
-		return name;
 	}
 
 	@Override

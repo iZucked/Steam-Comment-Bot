@@ -24,15 +24,8 @@ public class TimeWindowDataComponentProviderTest {
 	Mockery context = new JUnit4Mockery();
 
 	@Test
-	public void testTimeWindowDataComponentProvider() {
-		final String name = "name";
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider(name);
-		Assert.assertSame(name, provider.getName());
-	}
-
-	@Test
 	public void testGetTimeWindows() {
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider("name");
+		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider();
 		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
 		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
@@ -45,30 +38,6 @@ public class TimeWindowDataComponentProviderTest {
 		final List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
 		Assert.assertNotNull(timeWindows2);
 		Assert.assertSame(windows, timeWindows2);
-	}
-
-	@Test
-	public void testDispose() {
-		final TimeWindowDataComponentProvider provider = new TimeWindowDataComponentProvider("name");
-		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
-
-		final List<ITimeWindow> timeWindows = provider.getTimeWindows(obj1);
-		Assert.assertNotNull(timeWindows);
-		Assert.assertTrue(timeWindows.isEmpty());
-
-		final List<ITimeWindow> windows = new LinkedList<ITimeWindow>();
-		provider.setTimeWindows(obj1, windows);
-
-		final List<ITimeWindow> timeWindows2 = provider.getTimeWindows(obj1);
-		Assert.assertNotNull(timeWindows2);
-		Assert.assertSame(windows, timeWindows2);
-
-		provider.dispose();
-
-		final List<ITimeWindow> timeWindows3 = provider.getTimeWindows(obj1);
-		Assert.assertNotNull(timeWindows3);
-		Assert.assertTrue(timeWindows3.isEmpty());
-
 	}
 
 }

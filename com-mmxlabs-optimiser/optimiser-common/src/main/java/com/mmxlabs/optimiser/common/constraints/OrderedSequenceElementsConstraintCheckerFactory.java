@@ -4,9 +4,7 @@
  */
 package com.mmxlabs.optimiser.common.constraints;
 
-import com.mmxlabs.optimiser.common.dcproviders.IOrderedSequenceElementsDataComponentProvider;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * {@link IConstraintCheckerFactory} implementation to create {@link OrderedSequenceElementsConstraintChecker} instances.
@@ -18,17 +16,6 @@ public final class OrderedSequenceElementsConstraintCheckerFactory implements IC
 
 	public static final String NAME = "OrderedSequenceElementsConstraintChecker";
 
-	private final String key;
-
-	/**
-	 * Constructor taking the key to use in {@link IOptimisationData} to find the {@link IOrderedSequenceElementsDataComponentProvider}.
-	 * 
-	 * @param key
-	 */
-	public OrderedSequenceElementsConstraintCheckerFactory(final String key) {
-		this.key = key;
-	}
-
 	@Override
 	public String getName() {
 		return NAME;
@@ -36,7 +23,6 @@ public final class OrderedSequenceElementsConstraintCheckerFactory implements IC
 
 	@Override
 	public OrderedSequenceElementsConstraintChecker instantiate() {
-		return new OrderedSequenceElementsConstraintChecker(NAME, key);
+		return new OrderedSequenceElementsConstraintChecker(NAME);
 	}
-
 }

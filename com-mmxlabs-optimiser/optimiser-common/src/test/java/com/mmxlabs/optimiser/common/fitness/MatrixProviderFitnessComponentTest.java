@@ -14,7 +14,7 @@ public class MatrixProviderFitnessComponentTest {
 
 		final String name = "name";
 		final String key = "key";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(name, key);
+		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(key);
 		final MatrixProviderFitnessComponent component = new MatrixProviderFitnessComponent(name, core);
 
 		Assert.assertSame(name, component.getName());

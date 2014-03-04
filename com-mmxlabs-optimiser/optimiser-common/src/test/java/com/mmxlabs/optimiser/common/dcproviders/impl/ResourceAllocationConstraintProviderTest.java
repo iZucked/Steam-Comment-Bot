@@ -23,16 +23,8 @@ public class ResourceAllocationConstraintProviderTest {
 	Mockery context = new JUnit4Mockery();
 
 	@Test
-	public void testResourceAllocationConstraintProvider() {
-
-		final String name = "name";
-		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider(name);
-		Assert.assertSame(name, provider.getName());
-	}
-
-	@Test
 	public void testGetAllowedResources() {
-		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider("name");
+		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider();
 
 		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 
@@ -43,28 +35,5 @@ public class ResourceAllocationConstraintProviderTest {
 		provider.setAllowedResources(obj1, resources);
 
 		Assert.assertSame(resources, provider.getAllowedResources(obj1));
-
 	}
-
-	@Test
-	public void testDispose() {
-
-		final ResourceAllocationConstraintProvider provider = new ResourceAllocationConstraintProvider("name");
-
-		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
-
-		Assert.assertNull(provider.getAllowedResources(obj1));
-
-		final Collection<IResource> resources = Collections.emptyList();
-
-		provider.setAllowedResources(obj1, resources);
-
-		Assert.assertSame(resources, provider.getAllowedResources(obj1));
-
-		provider.dispose();
-
-		Assert.assertNull(provider.getAllowedResources(obj1));
-
-	}
-
 }

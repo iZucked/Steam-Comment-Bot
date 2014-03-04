@@ -2,8 +2,6 @@ package com.mmxlabs.optimiser.lso.modules;
 
 import javax.inject.Singleton;
 
-import org.w3c.dom.ls.LSOutput;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;

@@ -16,12 +16,6 @@ public final class ResourceAllocationConstraintCheckerFactory implements IConstr
 
 	public static final String NAME = "ResourceAllocationConstraintChecker";
 
-	private final String key;
-
-	public ResourceAllocationConstraintCheckerFactory(final String key) {
-		this.key = key;
-	}
-
 	@Override
 	public String getName() {
 		return NAME;
@@ -29,7 +23,7 @@ public final class ResourceAllocationConstraintCheckerFactory implements IConstr
 
 	@Override
 	public ResourceAllocationConstraintChecker instantiate() {
-		return new ResourceAllocationConstraintChecker(NAME, key);
+		return new ResourceAllocationConstraintChecker(NAME);
 	}
 
 }

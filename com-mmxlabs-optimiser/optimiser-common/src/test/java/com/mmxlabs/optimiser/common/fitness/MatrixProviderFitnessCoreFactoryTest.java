@@ -16,9 +16,8 @@ public class MatrixProviderFitnessCoreFactoryTest {
 
 		final String coreName = "coreName";
 		final String componentName = "componentName";
-		final String keyName = "keyName";
 
-		final MatrixProviderFitnessCoreFactory factory = new MatrixProviderFitnessCoreFactory(coreName, componentName, keyName);
+		final MatrixProviderFitnessCoreFactory factory = new MatrixProviderFitnessCoreFactory(coreName, componentName);
 
 		Assert.assertSame(coreName, factory.getFitnessCoreName());
 		Assert.assertSame(componentName, factory.getFitnessComponentNames().iterator().next());
@@ -28,9 +27,8 @@ public class MatrixProviderFitnessCoreFactoryTest {
 	public void testInstantiate() {
 		final String coreName = "coreName";
 		final String componentName = "componentName";
-		final String keyName = "keyName";
 
-		final MatrixProviderFitnessCoreFactory factory = new MatrixProviderFitnessCoreFactory(coreName, componentName, keyName);
+		final MatrixProviderFitnessCoreFactory factory = new MatrixProviderFitnessCoreFactory(coreName, componentName);
 
 		final IFitnessCore core = factory.instantiate();
 		Assert.assertNotNull(core);

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
+import com.google.inject.Injector;
+
 /**
  * Interface defining a factory for creating {@link IConstraintChecker} instances.
  * 
@@ -20,7 +22,8 @@ public interface IConstraintCheckerFactory {
 	String getName();
 
 	/**
-	 * Instantiate an instance of the {@link IConstraintChecker} this factory creates.
+	 * Instantiate an instance of the {@link IConstraintChecker} this factory creates. A call to {@link Injector#injectMembers(Object)} using the optimiser {@link Injector} should be performed on the
+	 * returned object.
 	 * 
 	 * @return
 	 */

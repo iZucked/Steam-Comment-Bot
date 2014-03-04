@@ -24,18 +24,8 @@ public class HashMapElementDurationEditorTest {
 	IIndexingContext index = new SimpleIndexingContext();
 
 	@Test
-	public void testHashMapElementDurationEditor() {
-
-		final String name = "name";
-
-		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor(name);
-
-		Assert.assertSame(name, provider.getName());
-	}
-
-	@Test
 	public void testGetSetElementDuration() {
-		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor("name");
+		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
 		final Resource r1 = new Resource(index);
 		final Resource r2 = new Resource(index);
@@ -52,7 +42,7 @@ public class HashMapElementDurationEditorTest {
 
 	@Test
 	public void testGetSetElementDuration2() {
-		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor("name");
+		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
 		final Resource r1 = new Resource(index);
 		final Resource r2 = new Resource(index);
@@ -76,7 +66,7 @@ public class HashMapElementDurationEditorTest {
 
 	@Test
 	public void testGetSetElementDuration3() {
-		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor("name");
+		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
 		final Resource r1 = new Resource(index);
 		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
@@ -90,35 +80,12 @@ public class HashMapElementDurationEditorTest {
 		Assert.assertEquals(10, provider.getElementDuration(obj1, r1));
 
 		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj2, r1));
-
-	}
-
-	@Test
-	public void testDispose() {
-		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor("name");
-
-		final Resource r1 = new Resource(index);
-		final Resource r2 = new Resource(index);
-		final ISequenceElement obj = context.mock(ISequenceElement.class, "1");
-
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
-		provider.setElementDuration(obj, r1, 10);
-
-		Assert.assertEquals(10, provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
-
-		provider.dispose();
-
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r1));
-		Assert.assertEquals(provider.getDefaultValue(), provider.getElementDuration(obj, r2));
-
 	}
 
 	@Test
 	public void testGetSetDefaultValue() {
 
-		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor("name");
+		final HashMapElementDurationEditor provider = new HashMapElementDurationEditor();
 
 		Assert.assertEquals(0, provider.getDefaultValue());
 

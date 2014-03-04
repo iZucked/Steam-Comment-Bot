@@ -19,20 +19,12 @@ public class OrderedSequenceElementsDataComponentProviderTest {
 	Mockery context = new JUnit4Mockery();
 
 	@Test
-	public void testOrderedSequenceElementsDataComponentProvider() {
-
-		final String name = "name";
-		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider(name);
-		Assert.assertSame(name, provider.getName());
-	}
-
-	@Test
 	public void testElementOrder() {
 
 		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
 
-		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("name");
+		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider();
 
 		Assert.assertNull(provider.getNextElement(obj1));
 		Assert.assertNull(provider.getPreviousElement(obj1));
@@ -47,37 +39,5 @@ public class OrderedSequenceElementsDataComponentProviderTest {
 
 		Assert.assertNull(provider.getNextElement(obj2));
 		Assert.assertSame(obj1, provider.getPreviousElement(obj2));
-	}
-
-	@Test
-	public void testDispose() {
-
-		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
-		final ISequenceElement obj2 = context.mock(ISequenceElement.class, "2");
-
-		final OrderedSequenceElementsDataComponentProvider provider = new OrderedSequenceElementsDataComponentProvider("name");
-
-		Assert.assertNull(provider.getNextElement(obj1));
-		Assert.assertNull(provider.getPreviousElement(obj1));
-
-		Assert.assertNull(provider.getNextElement(obj2));
-		Assert.assertNull(provider.getPreviousElement(obj2));
-
-		provider.setElementOrder(obj1, obj2);
-
-		Assert.assertSame(obj2, provider.getNextElement(obj1));
-		Assert.assertNull(provider.getPreviousElement(obj1));
-
-		Assert.assertNull(provider.getNextElement(obj2));
-		Assert.assertSame(obj1, provider.getPreviousElement(obj2));
-
-		provider.dispose();
-
-		Assert.assertNull(provider.getNextElement(obj1));
-		Assert.assertNull(provider.getPreviousElement(obj1));
-
-		Assert.assertNull(provider.getNextElement(obj2));
-		Assert.assertNull(provider.getPreviousElement(obj2));
-
 	}
 }

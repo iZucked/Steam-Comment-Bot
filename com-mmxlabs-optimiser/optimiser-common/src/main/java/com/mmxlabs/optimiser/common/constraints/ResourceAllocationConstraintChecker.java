@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.common.constraints;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -27,13 +29,11 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 
 	private final String name;
 
-	private final String dataProviderKey;
-
+	@Inject
 	private IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider;
 
-	public ResourceAllocationConstraintChecker(final String name, final String dataProviderKey) {
+	public ResourceAllocationConstraintChecker(final String name) {
 		this.name = name;
-		this.dataProviderKey = dataProviderKey;
 	}
 
 	@Override
@@ -79,18 +79,8 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 		return true;
 	}
 
-	public void setProvider(final IResourceAllocationConstraintDataComponentProvider resourceAllocationConstraintDataComponentProvider) {
-		this.resourceAllocationConstraintDataComponentProvider = resourceAllocationConstraintDataComponentProvider;
-	}
-
-	public IResourceAllocationConstraintDataComponentProvider getProvider() {
-		return resourceAllocationConstraintDataComponentProvider;
-	}
-	
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
-		final IResourceAllocationConstraintDataComponentProvider provider = optimisationData.getDataComponentProvider(dataProviderKey, IResourceAllocationConstraintDataComponentProvider.class);
-		setProvider(provider);
 	}
 
 	@Override
@@ -101,15 +91,15 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 		// FIX bugzID:576 - this prevented the move generator considering moves which appeared to sequence an end element onto the wrong vessel
-		// 					because end elements are handled as a special case in the moves, they don't actually get put on the wrong vessel
-		//					disabling the pairwise version of this constraint shouldn't cause any overly bad problems, but it might be worth checking
-		//					in the constrained initial sequence builder to make sure that it's not having a knock-on there.
+		// because end elements are handled as a special case in the moves, they don't actually get put on the wrong vessel
+		// disabling the pairwise version of this constraint shouldn't cause any overly bad problems, but it might be worth checking
+		// in the constrained initial sequence builder to make sure that it's not having a knock-on there.
 
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
 	private final boolean checkElement(final ISequenceElement element, final IResource resource) {
-		
+
 		final Collection<IResource> resources = resourceAllocationConstraintDataComponentProvider.getAllowedResources(element);
 		return ((resources == null) || resources.contains(resource));
 	}

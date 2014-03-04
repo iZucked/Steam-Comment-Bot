@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.common.constraints;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,12 +24,14 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  * 
  */
 public class OptionalSequenceElementsConstraintChecker implements IConstraintChecker {
-	private final String key, name;
+
+	@Inject
 	private IOptionalElementsProvider optionalElementsProvider;
 
-	public OptionalSequenceElementsConstraintChecker(final String key, final String name) {
+	private final String name;
+
+	public OptionalSequenceElementsConstraintChecker(final String name) {
 		super();
-		this.key = key;
 		this.name = name;
 	}
 
@@ -70,7 +74,6 @@ public class OptionalSequenceElementsConstraintChecker implements IConstraintChe
 
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
-		optionalElementsProvider = optimisationData.getDataComponentProvider(key, IOptionalElementsProvider.class);
 	}
 
 }

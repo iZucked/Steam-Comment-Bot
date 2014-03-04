@@ -14,13 +14,6 @@ public final class IndexedOrderedSequenceElementsEditor implements IOrderedSeque
 	private final IIndexMap<ISequenceElement, ISequenceElement> successors = new ArrayIndexMap<ISequenceElement, ISequenceElement>();
 	private final IIndexMap<ISequenceElement, ISequenceElement> predecessors = new ArrayIndexMap<ISequenceElement, ISequenceElement>();
 
-	private final String name;
-
-	public IndexedOrderedSequenceElementsEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
 	@Override
 	public final ISequenceElement getNextElement(final ISequenceElement previousElement) {
 		return successors.maybeGet(previousElement);
@@ -29,17 +22,6 @@ public final class IndexedOrderedSequenceElementsEditor implements IOrderedSeque
 	@Override
 	public final ISequenceElement getPreviousElement(final ISequenceElement nextElement) {
 		return predecessors.maybeGet(nextElement);
-	}
-
-	@Override
-	public final String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		successors.clear();
-		predecessors.clear();
 	}
 
 	@Override

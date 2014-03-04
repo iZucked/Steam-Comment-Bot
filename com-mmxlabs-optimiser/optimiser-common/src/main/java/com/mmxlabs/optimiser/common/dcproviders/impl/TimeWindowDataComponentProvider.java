@@ -20,13 +20,9 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * 
  */
 public final class TimeWindowDataComponentProvider implements ITimeWindowDataComponentProviderEditor {
-
-	private final String name;
-
 	private final Map<ISequenceElement, List<ITimeWindow>> timeWindowsMap;
 
-	public TimeWindowDataComponentProvider(final String name) {
-		this.name = name;
+	public TimeWindowDataComponentProvider() {
 		this.timeWindowsMap = new HashMap<ISequenceElement, List<ITimeWindow>>();
 	}
 
@@ -41,15 +37,5 @@ public final class TimeWindowDataComponentProvider implements ITimeWindowDataCom
 	@Override
 	public void setTimeWindows(final ISequenceElement element, final List<ITimeWindow> timeWindows) {
 		this.timeWindowsMap.put(element, timeWindows);
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		timeWindowsMap.clear();
 	}
 }

@@ -18,12 +18,10 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public final class OrderedSequenceElementsDataComponentProvider implements IOrderedSequenceElementsDataComponentProviderEditor {
 
-	private final String name;
 	private final Map<ISequenceElement, ISequenceElement> nextElements;
 	private final Map<ISequenceElement, ISequenceElement> previousElements;
 
-	public OrderedSequenceElementsDataComponentProvider(final String name) {
-		this.name = name;
+	public OrderedSequenceElementsDataComponentProvider() {
 		this.nextElements = new HashMap<ISequenceElement, ISequenceElement>();
 		this.previousElements = new HashMap<ISequenceElement, ISequenceElement>();
 	}
@@ -48,16 +46,5 @@ public final class OrderedSequenceElementsDataComponentProvider implements IOrde
 			return previousElements.get(nextElement);
 		}
 		return null;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		nextElements.clear();
-		previousElements.clear();
 	}
 }

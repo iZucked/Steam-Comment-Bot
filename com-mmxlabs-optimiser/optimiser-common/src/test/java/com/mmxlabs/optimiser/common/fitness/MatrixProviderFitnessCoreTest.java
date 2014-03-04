@@ -15,6 +15,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
@@ -39,12 +43,12 @@ public class MatrixProviderFitnessCoreTest {
 	@Test
 	public void testMatrixProviderFitnessCore() {
 		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
+		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName);
 
 		final Collection<IFitnessComponent> fitnessComponents = core.getFitnessComponents();
 		Assert.assertNotNull(fitnessComponents);
 		Assert.assertEquals(1, fitnessComponents.size());
+
 		final IFitnessComponent component = fitnessComponents.iterator().next();
 		Assert.assertNotNull(component);
 		Assert.assertSame(componentName, component.getName());
@@ -53,14 +57,11 @@ public class MatrixProviderFitnessCoreTest {
 
 	@Test
 	public void testAccepted() {
-		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
-
-		final HashMapMatrixProvider<Object, Number> matrix = new HashMapMatrixProvider<Object, Number>(matrixProviderKey);
+		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
+		
+		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
 
 		final OptimisationData data = new OptimisationData();
-		data.addDataComponentProvider(matrixProviderKey, matrix);
 
 		core.init(data);
 		final ISequenceElement obj1 = context.mock(ISequenceElement.class, "1");
@@ -124,14 +125,11 @@ public class MatrixProviderFitnessCoreTest {
 
 	@Test
 	public void testEvaluateISequencesOfT() {
-		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
-
-		final HashMapMatrixProvider<Object, Number> matrix = new HashMapMatrixProvider<Object, Number>(matrixProviderKey);
+		
+		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
+		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
 
 		final OptimisationData data = new OptimisationData();
-		data.addDataComponentProvider(matrixProviderKey, matrix);
 
 		core.init(data);
 
@@ -168,14 +166,11 @@ public class MatrixProviderFitnessCoreTest {
 
 	@Test
 	public void testEvaluateISequencesOfTCollectionOfIResource() {
-		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
-
-		final HashMapMatrixProvider<Object, Number> matrix = new HashMapMatrixProvider<Object, Number>(matrixProviderKey);
+		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
+		
+		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
 
 		final OptimisationData data = new OptimisationData();
-		data.addDataComponentProvider(matrixProviderKey, matrix);
 
 		core.init(data);
 
@@ -238,8 +233,7 @@ public class MatrixProviderFitnessCoreTest {
 	@Test
 	public void testGetFitnessComponents() {
 		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
+		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName);
 
 		final Collection<IFitnessComponent> fitnessComponents = core.getFitnessComponents();
 		Assert.assertNotNull(fitnessComponents);
@@ -254,14 +248,12 @@ public class MatrixProviderFitnessCoreTest {
 
 	@Test
 	public void testInit() {
-		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
 
-		final HashMapMatrixProvider<Object, Number> matrix = new HashMapMatrixProvider<Object, Number>(matrixProviderKey);
+		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
 
+		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
+		
 		final OptimisationData data = new OptimisationData();
-		data.addDataComponentProvider(matrixProviderKey, matrix);
 
 		core.init(data);
 
@@ -272,8 +264,7 @@ public class MatrixProviderFitnessCoreTest {
 	public void testScaleFactor() {
 
 		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
+		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName);
 
 		Assert.assertEquals(1.0, core.getScaleFactor(), 0.0);
 
@@ -282,41 +273,23 @@ public class MatrixProviderFitnessCoreTest {
 		Assert.assertEquals(scale, core.getScaleFactor(), 0.0);
 	}
 
-	@Test
-	public void testGetSetMatrix() {
+	private MatrixProviderFitnessCore createFitnessCore(final IMatrixProvider<ISequenceElement, Number> matrix) {
 
-		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
+		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore("componentName");
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 
-		Assert.assertNull(core.getMatrix());
+			@Override
+			protected void configure() {
+				bind(new TypeLiteral<IMatrixProvider<ISequenceElement, Number>>() {
+				}).toInstance(matrix);
+			}
+		});
 
-		final IMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>(matrixProviderKey);
-
-		core.setMatrix(matrix);
-
-		Assert.assertSame(matrix, core.getMatrix());
-
-	}
-
-	@Test
-	public void testDispose() {
-		final String componentName = "componentName";
-		final String matrixProviderKey = "matrixProviderKey";
-		final MatrixProviderFitnessCore core = new MatrixProviderFitnessCore(componentName, matrixProviderKey);
-
-		final HashMapMatrixProvider<Object, Number> matrix = new HashMapMatrixProvider<Object, Number>(matrixProviderKey);
-
-		final OptimisationData data = new OptimisationData();
-		data.addDataComponentProvider(matrixProviderKey, matrix);
-
-		core.init(data);
-
-		Assert.assertSame(matrix, core.getMatrix());
-
-		core.dispose();
-
-		Assert.assertNull(core.getMatrix());
+		injector.injectMembers(core);
+		for (final IFitnessComponent c : core.getFitnessComponents()) {
+			injector.injectMembers(c);
+		}
+		return core;
 	}
 
 }

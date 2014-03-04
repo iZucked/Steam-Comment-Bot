@@ -20,28 +20,11 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * 
  */
 public class IndexedOptionalElementsEditor implements IOptionalElementsProviderEditor {
-	private final String name;
+
 	private final ArrayList<ISequenceElement> optionalList = new ArrayList<ISequenceElement>();
 	private final ArrayList<ISequenceElement> requiredList = new ArrayList<ISequenceElement>();
 	private final ArrayList<ISequenceElement> softRequiredList = new ArrayList<ISequenceElement>();
-	IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<ISequenceElement>();
-
-	public IndexedOptionalElementsEditor(final String name) {
-		super();
-		this.name = name;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		optionalElements = null;
-		optionalList.clear();
-		requiredList.clear();
-	}
+	private final IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<ISequenceElement>();
 
 	@Override
 	public boolean isElementOptional(final ISequenceElement element) {
@@ -91,7 +74,7 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		if (isOptional) {
 			optionalList.add(element);
 		} else {
-//			requiredList.add(element);
+			// requiredList.add(element);
 		}
 	}
 
