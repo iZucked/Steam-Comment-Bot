@@ -23,18 +23,6 @@ public class HashMapNominatedVesselProviderEditor implements INominatedVesselPro
 	private final Map<ISequenceElement, IVessel> elementToVesselMap = new HashMap<>();
 	private final Map<IResource, IVessel> resourceToVesselMap = new HashMap<>();
 
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		elementToVesselMap.clear();
-		resourceToVesselMap.clear();
-	}
-
 	@Override
 	@Nullable
 	public IVessel getNominatedVessel(@NonNull final ISequenceElement element) {

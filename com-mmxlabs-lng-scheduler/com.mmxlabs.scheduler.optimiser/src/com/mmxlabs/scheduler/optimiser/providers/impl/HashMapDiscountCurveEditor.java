@@ -32,27 +32,6 @@ public class HashMapDiscountCurveEditor implements IDiscountCurveProviderEditor 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.optimiser.core.scenario.IDataComponentProvider#getName()
-	 */
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.optimiser.core.scenario.IDataComponentProvider#dispose()
-	 */
-	@Override
-	public void dispose() {
-		map.clear();
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor#setDiscountCurve(java.lang.String, com.mmxlabs.common.curves.ICurve)
 	 */
 	@Override

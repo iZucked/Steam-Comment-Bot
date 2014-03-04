@@ -84,17 +84,6 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		addOptions(charterOutOptions, vesselClass, curve, minDuration);
 	}
 
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		charterInOptions.clear();
-		charterOutOptions.clear();
-	}
-
 	private Collection<CharterMarketOptions> getOptions(final Map<IVesselClass, List<Pair<ICurve, Integer>>> options, final IVesselClass vesselClass, final int dateKey) {
 
 		if (options.containsKey(vesselClass)) {

@@ -23,16 +23,6 @@ public class HashMapReturnElementProviderEditor implements IReturnElementProvide
 	final private HashMap<IPort, Map<IResource, ISequenceElement>> returnElements = new HashMap<IPort, Map<IResource, ISequenceElement>>();
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		returnElements.clear();
-	}
-
-	@Override
 	public ISequenceElement getReturnElement(final IResource resource, final IPort port) {
 		final Map<IResource, ISequenceElement> byResource = returnElements.get(port);
 		return byResource == null ? null : byResource.get(resource);

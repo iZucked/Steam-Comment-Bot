@@ -7,16 +7,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 public class DefaultVesselCharterCurveProvider implements IVesselCharterInRateProvider {
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
-	@Override
 	public ICurve getCharterInRatePerDay(final IVessel vessel) {
 		return vessel.getDailyCharterInPrice();
 	}

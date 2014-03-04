@@ -31,21 +31,6 @@ public class ArrayListVolumeAllocationEditor implements ITotalVolumeLimitEditor 
 	}
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		totalVolumeLimits = null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider#isEmpty()
-	 */
-	@Override
 	public boolean isEmpty() {
 		return totalVolumeLimits.isEmpty();
 	}

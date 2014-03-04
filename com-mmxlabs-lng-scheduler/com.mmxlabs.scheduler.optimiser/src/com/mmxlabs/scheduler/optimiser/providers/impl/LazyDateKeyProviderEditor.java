@@ -41,11 +41,6 @@ public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 	private final TreeSet<Integer> dateKeySet = new TreeSet<Integer>();
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
 	public int getDateKeyFromHours(final int hours) {
 
 		// Check to see whether we have enough information and calculate it if not.
@@ -59,15 +54,11 @@ public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 	@Override
 	public void setTimeZero(final long timeZeroInMillis) {
 		// Reset
-		dispose();
-		this.timeZeroInMillis = timeZeroInMillis;
-	}
 
-	@Override
-	public void dispose() {
 		// Clear date
 		dateKeySet.clear();
 		lastExtent = Integer.MAX_VALUE;
+		this.timeZeroInMillis = timeZeroInMillis;
 	}
 
 	private void buildTimeToDateKeyMap(final int targetExtent) {

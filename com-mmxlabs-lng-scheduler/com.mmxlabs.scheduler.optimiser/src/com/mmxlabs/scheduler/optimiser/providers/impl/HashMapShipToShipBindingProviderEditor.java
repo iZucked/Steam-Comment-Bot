@@ -18,16 +18,6 @@ public class HashMapShipToShipBindingProviderEditor implements IShipToShipBindin
 	private final Map<IPortSlot, IPortSlot> transferElementMap = new HashMap<IPortSlot, IPortSlot>();
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		transferElementMap.clear();
-	}
-
-	@Override
 	public IPortSlot getConverseTransferElement(final IPortSlot slot) {
 		return transferElementMap.get(slot);
 	}

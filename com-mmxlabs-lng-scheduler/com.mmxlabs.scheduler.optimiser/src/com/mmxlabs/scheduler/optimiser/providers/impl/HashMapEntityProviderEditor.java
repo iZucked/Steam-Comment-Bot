@@ -32,18 +32,6 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 	private final Map<IEntity, Map<EntityBookType, IEntityBook>> entitiesBooksMap = new HashMap<>();
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		entities.clear();
-		entitiesBySlot.clear();
-		entitiesByVessel.clear();
-	}
-
-	@Override
 	public IEntity getEntityForSlot(final IPortSlot slot) {
 		return entitiesBySlot.get(slot);
 	}

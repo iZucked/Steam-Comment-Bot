@@ -31,16 +31,6 @@ public class HashMapMarkToMarketProviderEditor implements IMarkToMarketProviderE
 	}
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		marketMap.clear();
-	}
-
-	@Override
 	public void setMarkToMarketForElement(@NonNull final ISequenceElement element, @NonNull final IMarkToMarket markToMarket) {
 		marketMap.put(element, markToMarket);
 	}

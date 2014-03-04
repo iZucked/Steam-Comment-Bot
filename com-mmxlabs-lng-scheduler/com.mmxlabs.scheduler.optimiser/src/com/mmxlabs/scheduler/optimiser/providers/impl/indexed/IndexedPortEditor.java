@@ -14,16 +14,6 @@ public class IndexedPortEditor implements IPortProviderEditor {
 	final IIndexMap<ISequenceElement, IPort> ports = new ArrayIndexMap<ISequenceElement, IPort>();
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		ports.clear();
-	}
-
-	@Override
 	public IPort getPortForElement(final ISequenceElement element) {
 		return ports.maybeGet(element);
 	}

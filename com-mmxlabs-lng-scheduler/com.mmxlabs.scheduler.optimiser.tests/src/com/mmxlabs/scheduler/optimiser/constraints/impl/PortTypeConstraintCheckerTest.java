@@ -50,7 +50,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -88,7 +88,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -126,7 +126,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -164,7 +164,7 @@ public class PortTypeConstraintCheckerTest {
 	public void testCheckConstraintsISequencesOfTListOfString2() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -205,7 +205,7 @@ public class PortTypeConstraintCheckerTest {
 	public void testCheckSequence1() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -237,7 +237,7 @@ public class PortTypeConstraintCheckerTest {
 	public void testCheckSequence2() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -260,7 +260,7 @@ public class PortTypeConstraintCheckerTest {
 	public void testCheckSequence3() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -283,7 +283,7 @@ public class PortTypeConstraintCheckerTest {
 	public void testCheckSequence4() {
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -312,7 +312,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -347,7 +347,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -380,7 +380,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -413,7 +413,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -444,7 +444,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -475,7 +475,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -508,7 +508,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -541,7 +541,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -574,7 +574,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -607,7 +607,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -638,7 +638,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider("okey");
+		final IOrderedSequenceElementsDataComponentProvider orderedSequenceElementsProvider = new OrderedSequenceElementsDataComponentProvider();
 		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider, orderedSequenceElementsProvider);
 
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");

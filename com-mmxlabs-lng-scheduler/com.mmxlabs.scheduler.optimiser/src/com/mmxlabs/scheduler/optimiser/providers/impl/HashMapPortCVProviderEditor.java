@@ -33,14 +33,4 @@ public final class HashMapPortCVProviderEditor implements IPortCVProviderEditor 
 	public void setPortCV(final IPort port, final int cv) {
 		map.put(port, cv);
 	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		map.clear();
-	}
 }

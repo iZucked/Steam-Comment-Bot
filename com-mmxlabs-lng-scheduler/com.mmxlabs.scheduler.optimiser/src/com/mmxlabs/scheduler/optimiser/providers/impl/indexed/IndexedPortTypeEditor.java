@@ -19,16 +19,6 @@ public class IndexedPortTypeEditor implements IPortTypeProviderEditor {
 	}
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		portTypes.clear();
-	}
-
-	@Override
 	public void setPortType(final ISequenceElement sequenceElement, final PortType portType) {
 		portTypes.set(sequenceElement, portType);
 	}

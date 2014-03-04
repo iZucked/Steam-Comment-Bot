@@ -56,18 +56,6 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 		set(pricesByRouteClassAndState, route, vesselClass, vesselState, price);
 	}
 
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		pricesByRouteClassAndState.clear();
-		baseFuelByRouteAndClass.clear();
-		travelTimesByRouteAndClass.clear();
-	}
-
 	/**
 	 * @since 2.0
 	 */

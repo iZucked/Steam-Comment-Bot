@@ -13,11 +13,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class IndexedPortCostEditor implements IPortCostProviderEditor {
-	
+
 	class PortCosts {
-		private final IIndexMap<IVessel, LongFastEnumMap<PortType>> contents = 
-				new ArrayIndexMap<IVessel, LongFastEnumMap<PortType>>();
-		
+		private final IIndexMap<IVessel, LongFastEnumMap<PortType>> contents = new ArrayIndexMap<IVessel, LongFastEnumMap<PortType>>();
+
 		public void setPortCost(final IVessel vessel, final PortType type, final long cost) {
 			LongFastEnumMap<PortType> x = contents.maybeGet(vessel);
 			if (x == null) {
@@ -26,32 +25,23 @@ public class IndexedPortCostEditor implements IPortCostProviderEditor {
 			}
 			x.put(type, cost);
 		}
-		
+
 		public long getPortCost(final IVessel vessel, final PortType type) {
 			LongFastEnumMap<PortType> maybeGet = contents.maybeGet(vessel);
-			if (maybeGet == null) return 0;
+			if (maybeGet == null)
+				return 0;
 			return maybeGet.get(type);
 		}
 	}
-	
+
 	final IIndexMap<IPort, PortCosts> content = new ArrayIndexMap<IPort, PortCosts>();
-	
 
 	@Override
 	public long getPortCost(final IPort port, final IVessel vessel, final PortType portType) {
 		final PortCosts pc = content.maybeGet(port);
-		if (pc == null) return 0;
+		if (pc == null)
+			return 0;
 		return pc.getPortCost(vessel, portType);
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		content.clear();
 	}
 
 	@Override

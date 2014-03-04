@@ -123,11 +123,11 @@ public class ScheduleTestModule extends AbstractModule {
 	private IConstraintCheckerRegistry createConstraintRegistry(Injector injector) {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
 
-		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
+		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
 		injector.injectMembers(constraintFactory);
 
-		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
+		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
 		injector.injectMembers(constraintFactory2);
 

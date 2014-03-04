@@ -35,10 +35,10 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 	protected void configure() {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(ResourceAllocationConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider)).export());
+				Peaberry.service(new ResourceAllocationConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(OrderedSequenceElementsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider)).export());
+				Peaberry.service(new OrderedSequenceElementsConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortExclusionConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new PortExclusionConstraintCheckerFactory()).export());

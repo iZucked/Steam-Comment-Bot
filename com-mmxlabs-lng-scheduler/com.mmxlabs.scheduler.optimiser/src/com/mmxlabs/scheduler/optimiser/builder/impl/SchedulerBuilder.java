@@ -1055,12 +1055,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
 
-		data.addDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, timeWindowProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, elementDurationsProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, resourceAllocationProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, optionalElements);
-		data.addDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, orderedSequenceElementsEditor);
-
 		for (final IBuilderExtension extension : extensions) {
 			extension.finishBuilding(data);
 		}
