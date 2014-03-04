@@ -243,7 +243,7 @@ public class LNGTransformer {
 	/**
 	 * @since 3.0
 	 */
-	public ModelEntityMap getEntities() {
+	public ModelEntityMap getModelEntityMap() {
 		return injector.getInstance(ModelEntityMap.class);
 	}
 

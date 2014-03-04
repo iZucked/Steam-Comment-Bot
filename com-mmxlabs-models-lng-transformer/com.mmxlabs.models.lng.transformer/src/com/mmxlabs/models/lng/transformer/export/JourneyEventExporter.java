@@ -36,22 +36,22 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 		if (event.getDistance() == 0)
 			return null; // filter out zero-length journeys
 
-		final Port eFromPort = entities.getModelObject(event.getFromPort(), Port.class);
-		final Port eToPort = entities.getModelObject(event.getToPort(), Port.class);
+		final Port eFromPort = modelEntityMap.getModelObject(event.getFromPort(), Port.class);
+		final Port eToPort = modelEntityMap.getModelObject(event.getToPort(), Port.class);
 
 		if (eFromPort == null || eToPort == null)
 			return null;
 
 		final Journey journey = factory.createJourney();
 
-		journey.setStart(entities.getDateFromHours(event.getStartTime()));
-		journey.setEnd(entities.getDateFromHours(event.getEndTime()));
+		journey.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
+		journey.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
 
 		journey.setPort(eFromPort);
 		journey.setDestination(eToPort);
 
 		journey.setDistance(event.getDistance());
-		journey.setRoute(entities.getModelObject(event.getRoute(), Route.class));
+		journey.setRoute(modelEntityMap.getModelObject(event.getRoute(), Route.class));
 		journey.setToll(OptimiserUnitConvertor.convertToExternalFixedCost(event.getRouteCost()));
 
 		journey.setLaden(VesselState.Laden.equals(event.getVesselState()));

@@ -29,7 +29,7 @@ public class TransformerHelper {
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
 				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuelPriceInInternalUnits,
 				OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()),
-				eVc.getWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
+				eVc.getWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
 
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
@@ -39,8 +39,8 @@ public class TransformerHelper {
 		// so we kludge them by pulling VesselState-dependent out of the vessel class
 		//
 
-		builder.setVesselClassPortTypeParameters(vc, PortType.Load, OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getLadenAttributes().getInPortBaseRate()));
-		builder.setVesselClassPortTypeParameters(vc, PortType.Discharge, OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getBallastAttributes().getInPortBaseRate()));
+		builder.setVesselClassPortTypeParameters(vc, PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getLadenAttributes().getInPortBaseRate()));
+		builder.setVesselClassPortTypeParameters(vc, PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getBallastAttributes().getInPortBaseRate()));
 
 		return vc;
 	}

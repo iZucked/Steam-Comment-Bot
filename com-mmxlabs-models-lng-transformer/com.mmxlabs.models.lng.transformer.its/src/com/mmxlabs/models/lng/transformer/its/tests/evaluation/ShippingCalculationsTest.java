@@ -1076,7 +1076,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		SequenceTester checker = getDefaultTester();
 
-		final int lastIdleHours = SchedulerBuilder.minDaysFromLastEventToEnd * 24 - checker.getExpectedValues(Expectations.DURATIONS, Journey.class)[2];
+		final int lastIdleHours = /*SchedulerBuilder.minDaysFromLastEventToEnd*/ 60 * 24 - checker.getExpectedValues(Expectations.DURATIONS, Journey.class)[2];
 		;
 		checker.setExpectedValue(lastIdleHours, Expectations.DURATIONS, Idle.class, 2);
 		checker.setExpectedValue(lastIdleHours * 5, Expectations.BF_USAGE, Idle.class, 2);

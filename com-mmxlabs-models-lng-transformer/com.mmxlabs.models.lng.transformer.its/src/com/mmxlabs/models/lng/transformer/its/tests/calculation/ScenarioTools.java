@@ -714,7 +714,7 @@ public class ScenarioTools {
 			}
 		}
 
-		final ModelEntityMap entities = transformer.getEntities();
+		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 		final IAnnotatedSolution startSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 
 		// Construct internal command stack to generate correct output schedule
@@ -723,7 +723,7 @@ public class ScenarioTools {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, entities, startSolution, 0);// Solution(ed, scenario, schedule,
+		return LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, startSolution, 0);// Solution(ed, scenario, schedule,
 																																							// scenario.getSubModel(InputModel.class),
 	}
 

@@ -109,32 +109,39 @@ public class AnnotatedSolutionExporter {
 	/**
 	 * @since 3.0
 	 */
-	public Schedule exportAnnotatedSolution(final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
+	public Schedule exportAnnotatedSolution(final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 		final Schedule output = factory.createSchedule();
 
 		// go through the annotated solution and build stuff for the EMF;
 
 		for (final IExporterExtension extension : extensions) {
-			extension.startExporting(output, entities, annotatedSolution);
+			extension.startExporting(output, modelEntityMap, annotatedSolution);
 		}
 
 		// prepare exporters
 		for (final IAnnotationExporter exporter : exporters) {
 			// injector.injectMembers(exporter);
 			exporter.setOutput(output);
-			exporter.setModelEntityMap(entities);
+			exporter.setModelEntityMap(modelEntityMap);
 			exporter.setAnnotatedSolution(annotatedSolution);
 
 			exporter.init();
 		}
 
 		// TODO: Generate an unused element exporter inteface etc.
+		final OpenSlotExporter openSlotExporter = new OpenSlotExporter();
+		{
+			injector.injectMembers(openSlotExporter);
+			openSlotExporter.setOutput(output);
+			openSlotExporter.setModelEntityMap(modelEntityMap);
+			openSlotExporter.setAnnotatedSolution(annotatedSolution);
+		}
 		final MarkToMarketExporter mtmExporter = new MarkToMarketExporter();
 		{
 			injector.injectMembers(mtmExporter);
 			mtmExporter.setOutput(output);
-			mtmExporter.setModelEntityMap(entities);
+			mtmExporter.setModelEntityMap(modelEntityMap);
 			mtmExporter.setAnnotatedSolution(annotatedSolution);
 		}
 
@@ -162,7 +169,7 @@ public class AnnotatedSolutionExporter {
 			case TIME_CHARTER:
 			case FLEET:
 				eSequence.setSequenceType(SequenceType.VESSEL);
-				eSequence.setVesselAvailability(entities.getModelObject(vessel, VesselAvailability.class));
+				eSequence.setVesselAvailability(modelEntityMap.getModelObject(vessel, VesselAvailability.class));
 				eSequence.unsetVesselClass();
 				break;
 			case FOB_SALE:
@@ -190,7 +197,7 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 2)
 					continue;
 
-				eSequence.setVesselClass(entities.getModelObject(vessel.getVesselClass(), VesselClass.class));
+				eSequence.setVesselClass(modelEntityMap.getModelObject(vessel.getVesselClass(), VesselClass.class));
 				eSequence.unsetVesselAvailability();
 				final AtomicInteger ai = counter.get(vessel.getVesselClass());
 				int ix = 0;
@@ -413,11 +420,12 @@ public class AnnotatedSolutionExporter {
 
 		for (final ISequenceElement element : annotatedSolution.getSequences().getUnusedElements()) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
-			final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+			final Slot modelSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (slot != null) {
 				output.getUnusedElements().add(modelSlot);
 			}
 			final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
+			openSlotExporter.export(element, annotations);
 			mtmExporter.export(element, annotations);
 		}
 

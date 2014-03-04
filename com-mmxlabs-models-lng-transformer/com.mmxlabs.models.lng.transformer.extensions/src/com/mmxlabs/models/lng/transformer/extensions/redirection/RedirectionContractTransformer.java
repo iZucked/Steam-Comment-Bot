@@ -54,7 +54,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
  */
 public abstract class RedirectionContractTransformer implements IContractTransformer {
 
-	private ModelEntityMap map;
+	private ModelEntityMap modelEntityMap;
 
 	@Inject
 	private DateAndCurveHelper dateHelper;
@@ -90,14 +90,14 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 	}
 
 	@Override
-	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
-		this.map = map;
+	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
+		this.modelEntityMap = modelEntityMap;
 		this.builder = builder;
 	}
 
 	@Override
 	public void finishTransforming() {
-		this.map = null;
+		this.modelEntityMap = null;
 		this.builder = null;
 	}
 
@@ -163,7 +163,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 								fobPurchaseSlot.setCargoCV(loadSlot.getCargoCV());
 							}
 							fobPurchaseSlot.setPort(loadSlot.getPort());
-							fobPurchaseSlot.setWindowStart(map.getDateFromHours(baseTimeWindow.getStart()));
+							fobPurchaseSlot.setWindowStart(modelEntityMap.getDateFromHours(baseTimeWindow.getStart()));
 							fobPurchaseSlot.setContract(loadSlot.getContract());
 							fobPurchaseSlot.setOptional(loadSlot.isOptional());
 							fobPurchaseSlot.setWindowSize((int) 24);
@@ -174,7 +174,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 								fobPurchaseSlot.setMinQuantity(loadSlot.getMinQuantity());
 							}
 							// Key piece of information
-							map.addModelObject(fobPurchaseSlot, alternativeSlot);
+							modelEntityMap.addModelObject(fobPurchaseSlot, alternativeSlot);
 
 							redirectionGroup.add(fobPurchaseSlot);
 
@@ -198,7 +198,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							// Always set CV
 							desSlot.setCargoCV(loadSlot.getSlotOrDelegatedCV());
 							desSlot.setPort(loadSlot.getPort());
-							desSlot.setWindowStart(map.getDateFromHours(window.getStart()));
+							desSlot.setWindowStart(modelEntityMap.getDateFromHours(window.getStart()));
 							desSlot.setContract(loadSlot.getContract());
 							desSlot.setOptional(loadSlot.isOptional());
 							desSlot.setWindowSize((int) 24);
@@ -209,7 +209,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 								desSlot.setMinQuantity(loadSlot.getMinQuantity());
 							}
 							// Key piece of information
-							map.addModelObject(desSlot, alternativeSlot);
+							modelEntityMap.addModelObject(desSlot, alternativeSlot);
 
 							// TODO Reuse RedirectionDESPurchaseBindingsGenerator
 							// desPurchaseSlotBindingsGenerator.bindDischargeSlotsToDESPurchase(builder, desSlot, alternativeSlot);
