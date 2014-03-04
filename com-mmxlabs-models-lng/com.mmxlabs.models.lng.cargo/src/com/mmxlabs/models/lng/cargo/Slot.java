@@ -8,8 +8,9 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -42,6 +43,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}</li>
  * </ul>
  * </p>
  *
@@ -899,6 +901,22 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	void setHedges(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}&lt;com.mmxlabs.models.lng.fleet.Vessel>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_AllowedVessels()
+	 * @model
+	 * @generated
+	 */
+	EList<AVesselSet<Vessel>> getAllowedVessels();
 
 	/**
 	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.

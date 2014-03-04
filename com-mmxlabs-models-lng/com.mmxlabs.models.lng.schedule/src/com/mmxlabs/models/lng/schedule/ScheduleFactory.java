@@ -152,6 +152,15 @@ public interface ScheduleFactory extends EFactory {
 	MarketAllocation createMarketAllocation();
 
 	/**
+	 * Returns a new object of class '<em>Open Slot Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Open Slot Allocation</em>'.
+	 * @generated
+	 */
+	OpenSlotAllocation createOpenSlotAllocation();
+
+	/**
 	 * Returns a new object of class '<em>Slot Allocation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

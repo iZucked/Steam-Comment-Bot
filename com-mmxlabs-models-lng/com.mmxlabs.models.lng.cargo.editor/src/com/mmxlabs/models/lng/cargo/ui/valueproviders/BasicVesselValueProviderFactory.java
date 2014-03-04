@@ -7,10 +7,10 @@ package com.mmxlabs.models.lng.cargo.ui.valueproviders;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -105,12 +105,57 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						useScenarioVessel = !((DischargeSlot) target).isFOBSale();
 					}
 
-					final EList<AVesselSet<Vessel>> allowedVessels;
-
+					final List<AVesselSet<Vessel>> allowedVessels;
+					// The slot intersection may mean no vessels are permitted at all!
+					boolean noVesselsAllowed = false;
 					// populate the list of allowed vessels for the target object
 					if (target instanceof Cargo) {
 						final Cargo cargo = (Cargo) target;
-						allowedVessels = cargo.getAllowedVessels();
+						final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
+						boolean first = true;
+						for (final Slot s : cargo.getSlots()) {
+							final List<AVesselSet<Vessel>> slotVessels = s.getAllowedVessels();
+							if (slotVessels == null || slotVessels.isEmpty()) {
+								continue;
+							}
+							if (first) {
+								vessels.addAll(slotVessels);
+								first = false;
+							} else {
+								// TODO: hmm, should we check classes vs vessels here?
+								Set<AVesselSet<Vessel>> matchedByClass = new LinkedHashSet<>();
+								// 
+								for (AVesselSet<Vessel> v1 : vessels) {
+									if (v1 instanceof Vessel) {
+										for (AVesselSet<Vessel> v2 : slotVessels) {
+											if (SetUtils.getObjects(v2).contains(v1)) {
+												matchedByClass.add(v1);
+											}
+										}
+									}
+								}
+								// Reverse map
+								for (AVesselSet<Vessel> v1 : slotVessels) {
+									if (v1 instanceof Vessel) {
+										for (AVesselSet<Vessel> v2 : vessels) {
+											if (SetUtils.getObjects(v2).contains(v1)) {
+												matchedByClass.add(v1);
+											}
+										}
+									}
+								}
+
+								// Exact matches
+								vessels.retainAll(slotVessels);
+								// Add in VesselClass/Group hits
+								vessels.addAll(matchedByClass);
+							}
+						}
+						allowedVessels = new ArrayList<>(vessels);
+						if (vessels.isEmpty() && first == false) {
+							// Uh oh - set intersection resulted in nothing!
+							noVesselsAllowed = true;
+						}
 					} else if (target instanceof VesselEvent) {
 						final VesselEvent event = (VesselEvent) target;
 						allowedVessels = event.getAllowedVessels();
@@ -160,12 +205,12 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 
 						}
 
-						boolean display =
+						boolean display = !noVesselsAllowed && (
 						// show the option if the cargo allows this vessel-set
 						// (an empty list of allowed vessels means "all vessels")
-						expandedVessels.isEmpty() || expandedVessels.contains(vessel)
-						// show the option if the cargo allows vessels of this class
-								|| (vc != null && expandedVessels.contains(vc));
+								expandedVessels.isEmpty() || expandedVessels.contains(vessel)
+								// show the option if the cargo allows vessels of this class
+								|| (vc != null && expandedVessels.contains(vc)));
 
 						// Filter out non-scenario vessels
 						if (display) {
@@ -226,7 +271,7 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
-					if (changedFeature == CargoPackage.eINSTANCE.getCargo_AllowedVessels()) {
+					if (changedFeature == CargoPackage.eINSTANCE.getSlot_AllowedVessels()) {
 						return true;
 					}
 

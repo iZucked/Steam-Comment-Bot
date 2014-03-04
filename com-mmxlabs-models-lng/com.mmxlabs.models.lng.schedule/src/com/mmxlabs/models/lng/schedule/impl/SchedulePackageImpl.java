@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -159,6 +160,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass marketAllocationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass openSlotAllocationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -407,20 +415,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_MarketAllocations() {
+	public EReference getSchedule_OpenSlotAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_SlotAllocations() {
+	public EReference getSchedule_MarketAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -429,7 +437,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_Fitnesses() {
+	public EReference getSchedule_SlotAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -438,8 +446,17 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_UnusedElements() {
+	public EReference getSchedule_Fitnesses() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSchedule_UnusedElements() {
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -1028,6 +1045,24 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getOpenSlotAllocation() {
+		return openSlotAllocationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getOpenSlotAllocation_Slot() {
+		return (EReference)openSlotAllocationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSlotAllocation() {
 		return slotAllocationEClass;
 	}
@@ -1518,6 +1553,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		scheduleEClass = createEClass(SCHEDULE);
 		createEReference(scheduleEClass, SCHEDULE__SEQUENCES);
 		createEReference(scheduleEClass, SCHEDULE__CARGO_ALLOCATIONS);
+		createEReference(scheduleEClass, SCHEDULE__OPEN_SLOT_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__MARKET_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__SLOT_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__FITNESSES);
@@ -1539,6 +1575,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(marketAllocationEClass, MARKET_ALLOCATION__SLOT_ALLOCATION);
 		createEAttribute(marketAllocationEClass, MARKET_ALLOCATION__PRICE);
 		createEReference(marketAllocationEClass, MARKET_ALLOCATION__SLOT_VISIT);
+
+		openSlotAllocationEClass = createEClass(OPEN_SLOT_ALLOCATION);
+		createEReference(openSlotAllocationEClass, OPEN_SLOT_ALLOCATION__SLOT);
 
 		slotAllocationEClass = createEClass(SLOT_ALLOCATION);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT);
@@ -1707,6 +1746,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cargoAllocationEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		marketAllocationEClass.getESuperTypes().add(this.getProfitAndLossContainer());
+		openSlotAllocationEClass.getESuperTypes().add(this.getProfitAndLossContainer());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		sequenceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		eventEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -1746,6 +1786,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(scheduleEClass, Schedule.class, "Schedule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSchedule_Sequences(), this.getSequence(), null, "sequences", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_CargoAllocations(), this.getCargoAllocation(), null, "cargoAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSchedule_OpenSlotAllocations(), this.getOpenSlotAllocation(), null, "openSlotAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_MarketAllocations(), this.getMarketAllocation(), null, "marketAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_SlotAllocations(), this.getSlotAllocation(), null, "slotAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1768,6 +1809,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getMarketAllocation_SlotAllocation(), this.getSlotAllocation(), this.getSlotAllocation_MarketAllocation(), "slotAllocation", null, 0, 1, MarketAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMarketAllocation_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, MarketAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMarketAllocation_SlotVisit(), this.getSlotVisit(), null, "slotVisit", null, 0, 1, MarketAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(openSlotAllocationEClass, OpenSlotAllocation.class, "OpenSlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getOpenSlotAllocation_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, OpenSlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(slotAllocationEClass, SlotAllocation.class, "SlotAllocation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlotAllocation_Slot(), theCargoPackage.getSlot(), null, "slot", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

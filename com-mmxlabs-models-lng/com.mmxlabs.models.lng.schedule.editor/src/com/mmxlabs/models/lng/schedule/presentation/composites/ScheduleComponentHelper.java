@@ -66,6 +66,7 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_sequencesEditor(detailComposite, topClass);
 		add_cargoAllocationsEditor(detailComposite, topClass);
+		add_openSlotAllocationsEditor(detailComposite, topClass);
 		add_marketAllocationsEditor(detailComposite, topClass);
 		add_slotAllocationsEditor(detailComposite, topClass);
 		add_fitnessesEditor(detailComposite, topClass);
@@ -86,6 +87,15 @@ public class ScheduleComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cargoAllocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS));
+	}
+
+	/**
+	 * Create the editor for the openSlotAllocations feature on Schedule
+	 *
+	 * @generated
+	 */
+	protected void add_openSlotAllocationsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE__OPEN_SLOT_ALLOCATIONS));
 	}
 
 	/**

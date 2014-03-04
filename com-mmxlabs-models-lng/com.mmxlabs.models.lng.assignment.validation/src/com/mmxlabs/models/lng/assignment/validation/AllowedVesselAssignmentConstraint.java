@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 /**
-# * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ # * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.assignment.validation;
@@ -21,12 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -66,65 +67,76 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 				return Activator.PLUGIN_ID;
 			}
 
-			EList<AVesselSet<Vessel>> allowedVessels = null;
+			final Set<EObject> targets = new HashSet<>();
 			if (assignableElement instanceof Cargo) {
 				final Cargo cargo = (Cargo) assignableElement;
-				allowedVessels = cargo.getAllowedVessels();
-			} else if (assignableElement instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) assignableElement;
-				allowedVessels = vesselEvent.getAllowedVessels();
-			}
-			if (allowedVessels == null || allowedVessels.isEmpty()) {
-				return Activator.PLUGIN_ID;
-			}
+				targets.addAll(cargo.getSlots());
 
-			// Expand out VesselGroups
-			final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
-			for (final AVesselSet<Vessel> s : allowedVessels) {
-				if (s instanceof Vessel) {
-					expandedVessels.add(s);
-				} else if (s instanceof VesselClass) {
-					expandedVessels.add(s);
-				} else {
-					expandedVessels.addAll(SetUtils.getObjects(s));
+			} else {
+				targets.add(assignableElement);
+			}
+			for (final EObject target : targets) {
+				EList<AVesselSet<Vessel>> allowedVessels = null;
+				if (target instanceof Slot) {
+					final Slot slot = (Slot) target;
+					allowedVessels = slot.getAllowedVessels();
+				} else if (target instanceof VesselEvent) {
+					final VesselEvent vesselEvent = (VesselEvent) target;
+					allowedVessels = vesselEvent.getAllowedVessels();
 				}
-			}
 
-			boolean permitted = false;
-			if (expandedVessels.contains(vesselAssignment)) {
-				permitted = true;
-			} else if (vesselAssignment instanceof Vessel) {
-				final Vessel vessel = (Vessel) vesselAssignment;
-				for (final AVesselSet<Vessel> vs : expandedVessels) {
-					if (vs instanceof VesselClass) {
-						if (vs == vessel.getVesselClass()) {
-							permitted = true;
-							break;
+				if (allowedVessels == null || allowedVessels.isEmpty()) {
+					continue;
+				}
+
+				// Expand out VesselGroups
+				final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
+				for (final AVesselSet<Vessel> s : allowedVessels) {
+					if (s instanceof Vessel) {
+						expandedVessels.add(s);
+					} else if (s instanceof VesselClass) {
+						expandedVessels.add(s);
+					} else {
+						expandedVessels.addAll(SetUtils.getObjects(s));
+					}
+				}
+
+				boolean permitted = false;
+				if (expandedVessels.contains(vesselAssignment)) {
+					permitted = true;
+				} else if (vesselAssignment instanceof Vessel) {
+					final Vessel vessel = (Vessel) vesselAssignment;
+					for (final AVesselSet<Vessel> vs : expandedVessels) {
+						if (vs instanceof VesselClass) {
+							if (vs == vessel.getVesselClass()) {
+								permitted = true;
+								break;
+							}
 						}
 					}
 				}
-			}
 
-			if (!permitted) {
+				if (!permitted) {
 
-				final String message;
-				if (assignableElement instanceof Cargo) {
-					message = String.format("Cargo '%s': Assignment '%s' is not in the allowed vessels list.", ((Cargo) assignableElement).getName(), vesselAssignment.getName());
-				} else if (assignableElement instanceof VesselEvent) {
-					message = String.format("Vessel Event '%s': Assignment requires vessel(s) not in the allowed vessels list.", ((VesselEvent) assignableElement).getName());
-				} else {
-					throw new IllegalStateException("Unexpected code branch.");
+					final String message;
+					if (target instanceof Slot) {
+						message = String.format("Slot '%s': Assignment '%s' is not in the allowed vessels list.", ((Slot) target).getName(), vesselAssignment.getName());
+					} else if (target instanceof VesselEvent) {
+						message = String.format("Vessel Event '%s': Assignment requires vessel(s) not in the allowed vessels list.", ((VesselEvent) target).getName());
+					} else {
+						throw new IllegalStateException("Unexpected code branch.");
+					}
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+					failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+					if (target instanceof Cargo) {
+						failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getSlot_AllowedVessels());
+					} else if (target instanceof VesselEvent) {
+						failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels());
+					}
+
+					failures.add(failure);
 				}
-				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-
-				failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
-				if (assignableElement instanceof Cargo) {
-					failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getCargo_AllowedVessels());
-				} else if (assignableElement instanceof VesselEvent) {
-					failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getVesselEvent_AllowedVessels());
-				}
-
-				failures.add(failure);
 			}
 		}
 

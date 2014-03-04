@@ -77,6 +77,7 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 		add_coolingVolumeEditor(detailComposite, topClass);
 		add_routeParametersEditor(detailComposite, topClass);
 		add_pilotLightRateEditor(detailComposite, topClass);
+		add_minBaseFuelConsumptionEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the inaccessiblePorts feature on VesselClass
@@ -183,5 +184,14 @@ public class VesselClassComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_pilotLightRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__PILOT_LIGHT_RATE));
+	}
+
+	/**
+	 * Create the editor for the minBaseFuelConsumption feature on VesselClass
+	 *
+	 * @generated
+	 */
+	protected void add_minBaseFuelConsumptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION));
 	}
 }

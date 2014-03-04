@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -44,7 +43,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSequenceHint <em>Sequence Hint</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSlots <em>Slots</em>}</li>
  * </ul>
  * </p>
@@ -172,16 +170,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * @ordered
 	 */
 	protected boolean allowRewiring = ALLOW_REWIRING_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAllowedVessels()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AVesselSet<Vessel>> allowedVessels;
 
 	/**
 	 * The cached value of the '{@link #getSlots() <em>Slots</em>}' reference list.
@@ -386,18 +374,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<AVesselSet<Vessel>> getAllowedVessels() {
-		if (allowedVessels == null) {
-			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.CARGO__ALLOWED_VESSELS);
-		}
-		return allowedVessels;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -492,8 +468,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				return isLocked();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return isAllowRewiring();
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				return getAllowedVessels();
 			case CargoPackage.CARGO__SLOTS:
 				return getSlots();
 		}
@@ -526,10 +500,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				return;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				setAllowRewiring((Boolean)newValue);
-				return;
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
 				return;
 			case CargoPackage.CARGO__SLOTS:
 				getSlots().clear();
@@ -565,9 +535,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				setAllowRewiring(ALLOW_REWIRING_EDEFAULT);
 				return;
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				getAllowedVessels().clear();
-				return;
 			case CargoPackage.CARGO__SLOTS:
 				getSlots().clear();
 				return;
@@ -595,8 +562,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 				return locked != LOCKED_EDEFAULT;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				return allowRewiring != ALLOW_REWIRING_EDEFAULT;
-			case CargoPackage.CARGO__ALLOWED_VESSELS:
-				return allowedVessels != null && !allowedVessels.isEmpty();
 			case CargoPackage.CARGO__SLOTS:
 				return slots != null && !slots.isEmpty();
 		}

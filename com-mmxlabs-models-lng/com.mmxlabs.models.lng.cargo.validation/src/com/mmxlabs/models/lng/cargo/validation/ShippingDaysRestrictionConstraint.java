@@ -108,7 +108,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 							if (slot instanceof DischargeSlot) {
 								final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 								if (loadSlot.getPort() != dischargeSlot.getPort()) {
-									final String message = String.format("DES Purchase|%s is not divertable, but is linked to a DES Sale at a different discharge port", loadSlot.getName());
+									final String message = String.format("DES Purchase|%s is not divertible, but is linked to a DES Sale at a different discharge port", loadSlot.getName());
 									final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.ERROR);
 									dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Port());

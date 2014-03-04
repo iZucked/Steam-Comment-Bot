@@ -36,6 +36,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -43,12 +44,12 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -312,24 +313,28 @@ public class CargoEditorMenuHelper {
 					reassignMenuManager.add(new AssignAction(p.getFirst(), (AVesselSet<Vessel>) p.getSecond()));
 				}
 			}
-			if (assignableElement.isLocked()) {
-				final Action action = new Action("Unlock") {
-					@Override
-					public void run() {
-						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE);
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+			if (assignableElement instanceof Cargo || assignableElement instanceof VesselEvent) {
+				if (assignableElement.getAssignment() != null) {
+					if (assignableElement.isLocked()) {
+						final Action action = new Action("Unlock") {
+							@Override
+							public void run() {
+								final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE);
+								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+							}
+						};
+						menuManager.add(action);
+					} else {
+						final Action action = new Action("Lock") {
+							@Override
+							public void run() {
+								final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE);
+								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+							}
+						};
+						menuManager.add(action);
 					}
-				};
-				menuManager.add(action);
-			} else {
-				final Action action = new Action("Lock") {
-					@Override
-					public void run() {
-						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE);
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-					}
-				};
-				menuManager.add(action);
+				}
 			}
 			{
 				final Action action = new Action("Unassign") {

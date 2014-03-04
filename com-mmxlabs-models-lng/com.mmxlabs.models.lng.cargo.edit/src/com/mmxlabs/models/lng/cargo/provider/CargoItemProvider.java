@@ -67,7 +67,6 @@ public class CargoItemProvider
 			addSequenceHintPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addAllowRewiringPropertyDescriptor(object);
-			addAllowedVesselsPropertyDescriptor(object);
 			addSlotsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -206,28 +205,6 @@ public class CargoItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Allowed Vessels feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAllowedVesselsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Cargo_allowedVessels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_allowedVessels_feature", "_UI_Cargo_type"),
-				 CargoPackage.Literals.CARGO__ALLOWED_VESSELS,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

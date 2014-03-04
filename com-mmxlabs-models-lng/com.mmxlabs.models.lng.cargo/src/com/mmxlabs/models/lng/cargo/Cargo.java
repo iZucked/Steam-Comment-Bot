@@ -8,8 +8,6 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -22,7 +20,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}</li>
  * </ul>
  * </p>
@@ -58,22 +55,6 @@ public interface Cargo extends UUIDObject, NamedObject, AssignableElement {
 	 * @generated
 	 */
 	void setAllowRewiring(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}&lt;com.mmxlabs.models.lng.fleet.Vessel>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_AllowedVessels()
-	 * @model
-	 * @generated
-	 */
-	EList<AVesselSet<Vessel>> getAllowedVessels();
 
 	/**
 	 * Returns the value of the '<em><b>Slots</b></em>' reference list.

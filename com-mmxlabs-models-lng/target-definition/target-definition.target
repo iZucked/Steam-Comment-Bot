@@ -22,13 +22,10 @@
 <unit id="ch.qos.logback.slf4j.source" version="1.0.0.v20120123-1500"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.grid" version="0.0.0"/>
+<unit id="org.eclipse.nebula.widgets.formattedtext" version="0.0.0"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/com/mmxlabs/nebula/widgets/p2/repository/com.mmxlabs.nebula.widgets.p2/1.0.0/com.mmxlabs.nebula.widgets.p2-1.0.0-p2-repo.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.sdk" version="3.7.2.M20120208-0800"/>
@@ -87,9 +84,9 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/9.0.0-SNAPSHOT/com.mmxlabs.models.ui.p2-9.0.0-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.RELEASE"/>
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.1.RELEASE"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature.feature.group" version="0.0.0"/>
+<!--<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature.source.feature.group" version="0.0.0"/>-->
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-unzip/content/org/eclipse/nebula/widgets/com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.p2/1.0.2.RELEASE/com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.p2-1.0.2.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="1.1.0.201205150811"/>

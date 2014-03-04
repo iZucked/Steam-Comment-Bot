@@ -18,8 +18,6 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -32,13 +30,8 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -59,7 +52,6 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -119,7 +111,6 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_allowRewiringEditor(detailComposite, topClass);
-		add_allowedVesselsEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -185,17 +176,6 @@ public class CargoComponentHelper extends BaseComponentHelper {
 			}
 		});
 
-		detailComposite.addInlineEditor(editor);
-	}
-
-	/**
-	 * Create the editor for the allowedVessels feature on Cargo
-	 * 
-	 * @generated NOT
-	 */
-	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS);
-		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
 

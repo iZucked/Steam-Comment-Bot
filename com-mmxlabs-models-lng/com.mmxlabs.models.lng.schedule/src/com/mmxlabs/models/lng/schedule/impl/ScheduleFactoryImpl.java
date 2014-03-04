@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -104,6 +105,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.CARGO_ALLOCATION: return createCargoAllocation();
 			case SchedulePackage.MARKET_ALLOCATION: return createMarketAllocation();
+			case SchedulePackage.OPEN_SLOT_ALLOCATION: return createOpenSlotAllocation();
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
 			case SchedulePackage.SEQUENCE: return createSequence();
 			case SchedulePackage.EVENT: return createEvent();
@@ -323,6 +325,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public MarketAllocation createMarketAllocation() {
 		MarketAllocationImpl marketAllocation = new MarketAllocationImpl();
 		return marketAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public OpenSlotAllocation createOpenSlotAllocation() {
+		OpenSlotAllocationImpl openSlotAllocation = new OpenSlotAllocationImpl();
+		return openSlotAllocation;
 	}
 
 	/**

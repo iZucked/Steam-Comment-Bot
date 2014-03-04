@@ -427,13 +427,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_CLASS__PILOT_LIGHT_RATE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Min Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Vessel Class</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 13;
+	int VESSEL_CLASS_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.HeelOptionsImpl <em>Heel Options</em>}' class.
@@ -959,6 +968,17 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClass_PilotLightRate();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Base Fuel Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselClass#getMinBaseFuelConsumption()
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	EAttribute getVesselClass_MinBaseFuelConsumption();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.FleetModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1461,6 +1481,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS__PILOT_LIGHT_RATE = eINSTANCE.getVesselClass_PilotLightRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Base Fuel Consumption</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION = eINSTANCE.getVesselClass_MinBaseFuelConsumption();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl <em>Model</em>}' class.

@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getCoolingVolume <em>Cooling Volume</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getRouteParameters <em>Route Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getPilotLightRate <em>Pilot Light Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl#getMinBaseFuelConsumption <em>Min Base Fuel Consumption</em>}</li>
  * </ul>
  * </p>
  *
@@ -264,6 +265,26 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	 * @ordered
 	 */
 	protected double pilotLightRate = PILOT_LIGHT_RATE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMinBaseFuelConsumption() <em>Min Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinBaseFuelConsumption()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MIN_BASE_FUEL_CONSUMPTION_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMinBaseFuelConsumption() <em>Min Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinBaseFuelConsumption()
+	 * @generated
+	 * @ordered
+	 */
+	protected double minBaseFuelConsumption = MIN_BASE_FUEL_CONSUMPTION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -603,6 +624,27 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getMinBaseFuelConsumption() {
+		return minBaseFuelConsumption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinBaseFuelConsumption(double newMinBaseFuelConsumption) {
+		double oldMinBaseFuelConsumption = minBaseFuelConsumption;
+		minBaseFuelConsumption = newMinBaseFuelConsumption;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION, oldMinBaseFuelConsumption, minBaseFuelConsumption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public EList<Vessel> collect(EList<AVesselSet<Vessel>> marked) {
@@ -675,6 +717,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return getRouteParameters();
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 				return getPilotLightRate();
+			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
+				return getMinBaseFuelConsumption();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -729,6 +773,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 				setPilotLightRate((Double)newValue);
 				return;
+			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
+				setMinBaseFuelConsumption((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -780,6 +827,9 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 				setPilotLightRate(PILOT_LIGHT_RATE_EDEFAULT);
 				return;
+			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
+				setMinBaseFuelConsumption(MIN_BASE_FUEL_CONSUMPTION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -818,6 +868,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 				return routeParameters != null && !routeParameters.isEmpty();
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
 				return pilotLightRate != PILOT_LIGHT_RATE_EDEFAULT;
+			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
+				return minBaseFuelConsumption != MIN_BASE_FUEL_CONSUMPTION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -848,6 +900,8 @@ public class VesselClassImpl extends AVesselSetImpl<Vessel> implements VesselCla
 		result.append(coolingVolume);
 		result.append(", pilotLightRate: ");
 		result.append(pilotLightRate);
+		result.append(", minBaseFuelConsumption: ");
+		result.append(minBaseFuelConsumption);
 		result.append(')');
 		return result.toString();
 	}

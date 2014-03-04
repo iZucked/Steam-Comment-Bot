@@ -538,6 +538,7 @@ public class CreateStripDialog extends FormDialog {
 		col.getColumn().setText(EditorUtils.unmangle(feature.getName()));
 	}
 
+	@SuppressWarnings("deprecation")
 	private List<EObject> updateGeneratedObjects() {
 		// Sync dates
 		{
