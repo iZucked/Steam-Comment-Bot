@@ -12,6 +12,7 @@ import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
  * @noinstantiate This class is not intended to be instantiated by clients.
@@ -39,6 +40,19 @@ public final class SlotContractHelper {
 						if (cls.isInstance(child.getValue())) {
 							return cls.cast(child.getValue());
 						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	public static IEntity findDetailsAnnotationEntity(@NonNull final IProfitAndLossAnnotation annotation, String annotationKey) {
+		for (final IProfitAndLossEntry e : annotation.getEntries()) {
+			final IDetailTree detailTree = e.getDetails();
+			if (detailTree != null) {
+				for (final IDetailTree child : detailTree.getChildren()) {
+					if (child.getKey() == annotationKey) {
+						return e.getEntityBook().getEntity();
 					}
 				}
 			}
