@@ -24,26 +24,20 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListe
  * @author Simon Goodall
  * 
  */
-public class ShippingDaysRestrictionInlineEditorChangedListener implements IInlineEditorExternalNotificationListener {
+public class SlotDivertableInlineEditorChangedListener implements IInlineEditorExternalNotificationListener {
 
 	private IInlineEditor editor;
 	private EObject input;
 
 	@Override
 	public void notifyChanged(final Notification notification) {
-		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() || notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()
-				|| notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Divertable()) {
+		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() || notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
 
 			if (input instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) input;
 				if (loadSlot.isDESPurchase()) {
-					if (loadSlot.isDivertable()) {
-						editor.setEditorEnabled(true);
-						editor.setEditorVisible(true);
-					} else {
-						editor.setEditorEnabled(false);
-						editor.setEditorVisible(false);
-					}
+					editor.setEditorEnabled(true);
+					editor.setEditorVisible(true);
 				} else {
 					editor.setEditorEnabled(false);
 					editor.setEditorVisible(false);
@@ -51,13 +45,8 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 			} else if (input instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) input;
 				if (dischargeSlot.isFOBSale()) {
-					if (dischargeSlot.isDivertable()) {
-						editor.setEditorEnabled(true);
-						editor.setEditorVisible(true);
-					} else {
-						editor.setEditorEnabled(false);
-						editor.setEditorVisible(false);
-					}
+					editor.setEditorEnabled(true);
+					editor.setEditorVisible(true);
 				} else {
 					editor.setEditorEnabled(false);
 					editor.setEditorVisible(false);
@@ -73,13 +62,8 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		if (input instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) input;
 			if (loadSlot.isDESPurchase()) {
-				if (loadSlot.isDivertable()) {
-					editor.setEditorEnabled(true);
-					editor.setEditorVisible(true);
-				} else {
-					editor.setEditorEnabled(false);
-					editor.setEditorVisible(false);
-				}
+				editor.setEditorEnabled(true);
+				editor.setEditorVisible(true);
 			} else {
 				editor.setEditorEnabled(false);
 				editor.setEditorVisible(false);
@@ -87,13 +71,8 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		} else if (input instanceof DischargeSlot) {
 			final DischargeSlot dischargeSlot = (DischargeSlot) input;
 			if (dischargeSlot.isFOBSale()) {
-				if (dischargeSlot.isDivertable()) {
-					editor.setEditorEnabled(true);
-					editor.setEditorVisible(true);
-				} else {
-					editor.setEditorEnabled(false);
-					editor.setEditorVisible(false);
-				}
+				editor.setEditorEnabled(true);
+				editor.setEditorVisible(true);
 			} else {
 				editor.setEditorEnabled(false);
 				editor.setEditorVisible(false);

@@ -91,6 +91,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_cargoEditor(detailComposite, topClass);
 		add_pricingDateEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
+		add_divertableEditor(detailComposite, topClass);
 		add_shippingDaysRestrictionEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
@@ -191,6 +192,17 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cancellationFeeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CANCELLATION_FEE));
+	}
+
+	/**
+	 * Create the editor for the divertable feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_divertableEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__DIVERTABLE);
+		editor.addNotificationChangedListener(new SlotDivertableInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**

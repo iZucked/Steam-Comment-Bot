@@ -687,6 +687,22 @@
                   <target
                         class="Slot">
                   </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="DivertableSlotConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="Slot">
+                  </target>
                </constraint>       
         </constraints>
       </constraintProvider>

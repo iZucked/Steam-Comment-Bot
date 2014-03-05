@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
@@ -27,6 +28,7 @@ import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -43,12 +45,11 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 			final SpotSlot spotSlot = (SpotSlot) object;
 			final SpotMarket market = spotSlot.getMarket();
 			if (market == null) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + ((Slot)spotSlot).getName()
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + ((Slot) spotSlot).getName()
 						+ "] needs a market set."), IStatus.WARNING);
 				dsd.addEObjectAndFeature(spotSlot, CargoPackage.eINSTANCE.getSpotSlot_Market());
 				failures.add(dsd);
 			}
-			
 
 			if (spotSlot instanceof SpotLoadSlot) {
 				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
@@ -64,7 +65,9 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 						failures.add(dsd);
 
 					}
-					if (!desPurchaseMarket.getDestinationPorts().contains(spotLoadSlot.getPort())) {
+					final EList<APortSet<Port>> destinationPortSets = desPurchaseMarket.getDestinationPorts();
+					final Set<Port> destinationPorts = SetUtils.getObjects(destinationPortSets);
+					if (!destinationPorts.contains(spotLoadSlot.getPort())) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName()
 								+ "] DES purchase port is not a market port."), IStatus.WARNING);

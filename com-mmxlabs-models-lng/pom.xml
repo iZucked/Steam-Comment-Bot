@@ -27,7 +27,7 @@
 	</ciManagement>
 
 	<modules>
-		<module>target-definition</module>
+		<module>com.mmxlabs.models.lng.target-definition</module>
 		<module>com.mmxlabs.models.lng.types</module>
 		<module>com.mmxlabs.models.lng.types.edit</module>
 		<module>com.mmxlabs.models.lng.ui</module>
@@ -99,21 +99,6 @@
 
 	<build>
 
-		<pluginManagement>
-			<plugins>
-				<!-- Override default of Java 1.6 -->
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-compiler-plugin</artifactId>
-					<version>${tycho.version}</version>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
 		<plugins>
 
 			<plugin>
@@ -133,7 +118,7 @@
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.models.lng</groupId>
-							<artifactId>target-definition</artifactId>
+							<artifactId>com.mmxlabs.models.lng.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>

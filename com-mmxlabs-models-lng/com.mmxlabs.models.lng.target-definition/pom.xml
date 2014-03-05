@@ -6,7 +6,7 @@
 		<artifactId>com.mmxlabs.models.lng.parent</artifactId>
 		<version>8.0.3-SNAPSHOT</version>
 	</parent>
-	<artifactId>target-definition</artifactId>
+	<artifactId>com.mmxlabs.models.lng.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 	<version>8.0.3-SNAPSHOT</version>
 </project>

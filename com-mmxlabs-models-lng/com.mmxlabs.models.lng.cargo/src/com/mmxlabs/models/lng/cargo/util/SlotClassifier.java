@@ -4,15 +4,11 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.types.PortCapability;
 
 /**
  * 
@@ -29,12 +25,11 @@ public final class SlotClassifier {
 	public static @NonNull
 	SlotType classify(@NonNull final Slot slot) {
 
-		final Collection<PortCapability> caps = slot.getPort() == null ? Collections.<PortCapability>emptySet() : slot.getPort().getCapabilities();
 		if (slot instanceof LoadSlot) {
 			// "It's a buy!"
 			final LoadSlot load = (LoadSlot) slot;
 			if (load.isDESPurchase()) {
-				if (!caps.contains(PortCapability.DISCHARGE)) {
+				if (load.isDivertable()) {
 					// DES purchase at a load port, so will go to some discharge port.
 					return SlotType.DES_Buy_AnyDisPort;
 				} else {
@@ -48,12 +43,12 @@ public final class SlotClassifier {
 			// It's a sell...
 			final DischargeSlot dis = (DischargeSlot) slot;
 			if (dis.isFOBSale()) {
-				if (slot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
-					// FOB sale at a load port, so fixed.
-					return SlotType.FOB_Sale;
-				} else {
+				if (dis.isDivertable()) {
 					// This is speculative ATOW, Nov 2013
 					return SlotType.FOB_Sale_AnyLoadPort;
+				} else {
+					// FOB sale at a load port, so fixed.
+					return SlotType.FOB_Sale;
 				}
 			} else {
 				return SlotType.DES_Sale;

@@ -36,6 +36,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isDivertable <em>Divertable</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
@@ -970,6 +971,32 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	boolean isSetCancellationFee();
+
+	/**
+	 * Returns the value of the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Divertable</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Divertable</em>' attribute.
+	 * @see #setDivertable(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Divertable()
+	 * @model
+	 * @generated
+	 */
+	boolean isDivertable();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertable <em>Divertable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Divertable</em>' attribute.
+	 * @see #isDivertable()
+	 * @generated
+	 */
+	void setDivertable(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
