@@ -10,6 +10,6 @@
 		<relativePath>..</relativePath>
 	</parent>
 	<version>9.0.0-SNAPSHOT</version>
-	<artifactId>target-definition</artifactId>
+	<artifactId>com.mmxlabs.scheduler.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 </project>
