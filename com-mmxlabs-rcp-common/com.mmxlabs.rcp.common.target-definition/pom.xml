@@ -6,7 +6,7 @@
 		<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
 		<version>4.2.2-SNAPSHOT</version>
 	</parent>
-	<artifactId>target-definition</artifactId>
+	<artifactId>com.mmxlabs.rcp.common.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 	<version>4.2.2-SNAPSHOT</version>
 </project>
