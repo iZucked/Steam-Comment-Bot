@@ -406,7 +406,7 @@ public class ScheduleCalculator {
 		calculateUnusedSlotPNL(sequences, annotatedSolution);
 
 		if (annotatedSolution != null && markToMarketProvider != null) {
-			calculateMarkToMarketPNL(sequences, annotatedSolution);
+//			calculateMarkToMarketPNL(sequences, annotatedSolution);
 		}
 	}
 
