@@ -322,16 +322,31 @@ public class LNGSchedulerJobUtils {
 				if (allocation.getSlotAllocations().size() > 2) {
 					throw new IllegalStateException("Multiple Load/Discharges for a DES Purchase or FOB Sale is not permitted");
 				}
+
+				// Spot slots may not have a port set, so copy from other half
+				if (allocation.getSlotAllocations().size() == 2) {
+					if (desPurchaseSlot instanceof SpotSlot) {
+						if (desPurchaseSlot.getPort() == null) {
+							cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(1).getPort()));
+						}
+					}
+
+					if (fobSaleSlot instanceof SpotSlot) {
+						if (fobSaleSlot.getPort() == null) {
+							cmd.append(SetCommand.create(domain, fobSaleSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(0).getPort()));
+						}
+					}
+				}
 			}
 
-//			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
-//			if (fobSaleSlot != null) {
-//				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-//				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
-//				if (elementAssignment !=null) {
-//					cmd.append(DeleteCommand.create(domain, elementAssignment));
-//				}
-//			}
+			// // If the cargo is to become a FOB Sale - then we remove the vessel assignment.
+			// if (fobSaleSlot != null) {
+			// // Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
+			// final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
+			// if (elementAssignment !=null) {
+			// cmd.append(DeleteCommand.create(domain, elementAssignment));
+			// }
+			// }
 
 			// Remove references to slots no longer in the cargo
 			final Set<Slot> oldSlots = new HashSet<Slot>();
@@ -374,7 +389,7 @@ public class LNGSchedulerJobUtils {
 				if (loadSlot.getCargo() != null) {
 					final Cargo c = loadSlot.getCargo();
 					possibleUnusedCargoes.remove(c);
-					
+
 					// Sanity check
 					// Unused non-optional slots now handled by optimiser
 					// if (!loadSlot.isOptional()) {
@@ -462,7 +477,7 @@ public class LNGSchedulerJobUtils {
 
 		// run a scheduler on the sequences - there is no SchedulerFitnessEvaluator to guide it!
 		final ISequenceScheduler scheduler = injector.getInstance(DirectRandomSequenceScheduler.class);
-		
+
 		// The output data structured, a solution with all the output data as annotations
 		final AnnotatedSolution solution = new AnnotatedSolution();
 		solution.setSequences(sequences);
