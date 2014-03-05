@@ -984,7 +984,7 @@ public class LNGScenarioTransformer {
 
 	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allLoadPorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge) {
 		if (dischargeSlot.isFOBSale()) {
-			if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+			if (dischargeSlot.isDivertable()) {
 				// Bind to all loads
 				// TODO: Take into account shipping days restriction
 				builder.bindLoadSlotsToFOBSale(discharge, allLoadPorts);
@@ -1020,7 +1020,7 @@ public class LNGScenarioTransformer {
 				builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 			} else {
 				// Bind FOB/DES slots to resource
-				if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+				if (loadSlot.isDivertable()) {
 					// Bind to all discharges
 					// TODO: Take into account shipping days restriction
 					builder.bindDischargeSlotsToDESPurchase(load, allDischargePorts);
