@@ -49,19 +49,19 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 					editor.setEditorVisible(false);
 				}
 			} else if (input instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) input;
-				if (dischargeSlot.isFOBSale()) {
-					if (dischargeSlot.isDivertable()) {
-						editor.setEditorEnabled(true);
-						editor.setEditorVisible(true);
-					} else {
-						editor.setEditorEnabled(false);
-						editor.setEditorVisible(false);
-					}
-				} else {
+//				final DischargeSlot dischargeSlot = (DischargeSlot) input;
+//				if (dischargeSlot.isFOBSale()) {
+//					if (dischargeSlot.isDivertable()) {
+//						editor.setEditorEnabled(true);
+//						editor.setEditorVisible(true);
+//					} else {
+//						editor.setEditorEnabled(false);
+//						editor.setEditorVisible(false);
+//					}
+//				} else {
 					editor.setEditorEnabled(false);
 					editor.setEditorVisible(false);
-				}
+//				}
 			}
 		}
 	}
@@ -85,19 +85,19 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 				editor.setEditorVisible(false);
 			}
 		} else if (input instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) input;
-			if (dischargeSlot.isFOBSale()) {
-				if (dischargeSlot.isDivertable()) {
-					editor.setEditorEnabled(true);
-					editor.setEditorVisible(true);
-				} else {
-					editor.setEditorEnabled(false);
-					editor.setEditorVisible(false);
-				}
-			} else {
+//			final DischargeSlot dischargeSlot = (DischargeSlot) input;
+//			if (dischargeSlot.isFOBSale()) {
+//				if (dischargeSlot.isDivertable()) {
+//					editor.setEditorEnabled(true);
+//					editor.setEditorVisible(true);
+//				} else {
+//					editor.setEditorEnabled(false);
+//					editor.setEditorVisible(false);
+//				}
+//			} else {
 				editor.setEditorEnabled(false);
 				editor.setEditorVisible(false);
-			}
+//			}
 		}
 	}
 }
