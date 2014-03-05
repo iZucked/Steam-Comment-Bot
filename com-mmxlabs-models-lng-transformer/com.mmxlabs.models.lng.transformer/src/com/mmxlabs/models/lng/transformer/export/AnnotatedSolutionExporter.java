@@ -427,7 +427,7 @@ public class AnnotatedSolutionExporter {
 			}
 			final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 			openSlotExporter.export(element, annotations);
-			mtmExporter.export(element, annotations);
+//			mtmExporter.export(element, annotations);
 		}
 
 		@SuppressWarnings("unchecked")
