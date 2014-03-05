@@ -1122,17 +1122,17 @@ public class LNGScenarioTransformer {
 
 			if (dischargeSlot.isFOBSale()) {
 				final ITimeWindow localTimeWindow;
-				if (dischargeSlot.isDivertable()) {
-					// Extend window out to cover whole shipping days restriction
-					localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
-				} else {
+//				if (dischargeSlot.isDivertable()) {
+//					// Extend window out to cover whole shipping days restriction
+//					localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
+//				} else {
 					localTimeWindow = dischargeWindow;
-				}
+//				}
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
 						pricingDate, dischargeSlot.isOptional());
 
 				if (dischargeSlot.isDivertable()) {
-					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
+//					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(), pricingDate,
