@@ -421,6 +421,15 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__DIVERTABLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -428,7 +437,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -438,7 +447,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
@@ -448,7 +457,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
@@ -458,7 +467,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -468,7 +477,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
+	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
 
 	/**
 	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
@@ -477,7 +486,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
+	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
@@ -486,7 +495,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
@@ -495,8 +504,8 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
-	
+	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
@@ -504,7 +513,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -852,6 +861,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__NOTES = SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__DIVERTABLE = SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -927,7 +945,7 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
-		
+
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -1348,6 +1366,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__NOTES = SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__DIVERTABLE = SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1424,7 +1451,6 @@ public interface CargoPackage extends EPackage {
 	 */
 	int DISCHARGE_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
 
-	
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -2068,6 +2094,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NOTES = LOAD_SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__DIVERTABLE = LOAD_SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -2144,7 +2179,6 @@ public interface CargoPackage extends EPackage {
 	 */
 	int SPOT_LOAD_SLOT__CANCELLATION_FEE = LOAD_SLOT__CANCELLATION_FEE;
 
-	
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -2574,6 +2608,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NOTES = DISCHARGE_SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__DIVERTABLE = DISCHARGE_SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -2650,7 +2693,6 @@ public interface CargoPackage extends EPackage {
 	 */
 	int SPOT_DISCHARGE_SLOT__CANCELLATION_FEE = DISCHARGE_SLOT__CANCELLATION_FEE;
 
-	
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -4367,6 +4409,17 @@ public interface CargoPackage extends EPackage {
 
 	
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertable <em>Divertable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Divertable</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isDivertable()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Divertable();
+
+	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5446,6 +5499,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Divertable</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__DIVERTABLE = eINSTANCE.getSlot_Divertable();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
