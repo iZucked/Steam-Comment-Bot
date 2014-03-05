@@ -42,4 +42,9 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 		hoursMap.put(element, hours);
 		baseTimeMap.put(element, baseTime);
 	}
+	
+	@Override
+	public boolean isDivertable(@NonNull ISequenceElement element) {
+		return hoursMap.containsKey(element);
+	}
 }
