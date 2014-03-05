@@ -1122,7 +1122,7 @@ public class LNGScenarioTransformer {
 
 			if (dischargeSlot.isFOBSale()) {
 				final ITimeWindow localTimeWindow;
-				if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+				if (dischargeSlot.isDivertable()) {
 					// Extend window out to cover whole shipping days restriction
 					localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
 				} else {
@@ -1131,7 +1131,7 @@ public class LNGScenarioTransformer {
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
 						pricingDate, dischargeSlot.isOptional());
 
-				if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
+				if (dischargeSlot.isDivertable()) {
 					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
@@ -1233,7 +1233,7 @@ public class LNGScenarioTransformer {
 
 		if (loadSlot.isDESPurchase()) {
 			final ITimeWindow localTimeWindow;
-			if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+			if (loadSlot.isDivertable()) {
 				// Extend window out to cover whole shipping days restriction
 				localTimeWindow = builder.createTimeWindow(loadWindow.getStart(), loadWindow.getEnd() + loadSlot.getShippingDaysRestriction() * 24);
 			} else {
@@ -1245,7 +1245,7 @@ public class LNGScenarioTransformer {
 					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate,
 					loadSlot.isOptional());
 
-			if (loadSlot.getPort().getCapabilities().contains(PortCapability.LOAD)) {
+			if (loadSlot.isDivertable()) {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
 			}
 		} else {
