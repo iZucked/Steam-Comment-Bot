@@ -151,6 +151,7 @@ public class StartEventItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER);
+			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
 		}
 		return childrenFeatures;
 	}
@@ -213,6 +214,7 @@ public class StartEventItemProvider
 			case SchedulePackage.START_EVENT__VIOLATIONS:
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -249,6 +251,16 @@ public class StartEventItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER,
 				 ScheduleFactory.eINSTANCE.createGroupProfitAndLoss()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createEntityPNLDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createSlotPNLDetails()));
 	}
 
 	/**

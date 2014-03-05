@@ -150,6 +150,7 @@ public class VesselEventVisitItemProvider
 			childrenFeatures.add(SchedulePackage.Literals.CAPACITY_VIOLATIONS_HOLDER__VIOLATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER);
+			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
 			childrenFeatures.add(SchedulePackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT);
 		}
 		return childrenFeatures;
@@ -212,6 +213,7 @@ public class VesselEventVisitItemProvider
 			case SchedulePackage.VESSEL_EVENT_VISIT__VIOLATIONS:
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -243,6 +245,16 @@ public class VesselEventVisitItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER,
 				 ScheduleFactory.eINSTANCE.createGroupProfitAndLoss()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createEntityPNLDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createSlotPNLDetails()));
 	}
 
 	/**

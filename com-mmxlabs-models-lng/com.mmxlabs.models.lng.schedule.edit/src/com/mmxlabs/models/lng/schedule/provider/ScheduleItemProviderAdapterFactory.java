@@ -693,6 +693,52 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.EntityPNLDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EntityPNLDetailsItemProvider entityPNLDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.EntityPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEntityPNLDetailsAdapter() {
+		if (entityPNLDetailsItemProvider == null) {
+			entityPNLDetailsItemProvider = new EntityPNLDetailsItemProvider(this);
+		}
+
+		return entityPNLDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.SlotPNLDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SlotPNLDetailsItemProvider slotPNLDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.SlotPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSlotPNLDetailsAdapter() {
+		if (slotPNLDetailsItemProvider == null) {
+			slotPNLDetailsItemProvider = new SlotPNLDetailsItemProvider(this);
+		}
+
+		return slotPNLDetailsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -847,6 +893,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (profitAndLossContainerItemProvider != null) profitAndLossContainerItemProvider.dispose();
 		if (groupProfitAndLossItemProvider != null) groupProfitAndLossItemProvider.dispose();
 		if (entityProfitAndLossItemProvider != null) entityProfitAndLossItemProvider.dispose();
+		if (entityPNLDetailsItemProvider != null) entityPNLDetailsItemProvider.dispose();
+		if (slotPNLDetailsItemProvider != null) slotPNLDetailsItemProvider.dispose();
 	}
 
 }

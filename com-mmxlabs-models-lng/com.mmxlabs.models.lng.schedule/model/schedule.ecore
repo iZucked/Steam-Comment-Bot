@@ -188,6 +188,8 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLossNoTimeCharter"
         eType="#//GroupProfitAndLoss" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generalPNLDetails" upperBound="-1"
+        eType="#//GeneralPNLDetails" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GroupProfitAndLoss">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitAndLoss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
@@ -234,4 +236,15 @@
     <eTypeParameters name="T"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityPNLDetails" eSuperTypes="#//GeneralPNLDetails">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generalPNLDetails" upperBound="-1"
+        eType="#//GeneralPNLDetails" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotPNLDetails" eSuperTypes="#//GeneralPNLDetails">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Slot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generalPNLDetails" upperBound="-1"
+        eType="#//GeneralPNLDetails" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneralPNLDetails" abstract="true"/>
 </ecore:EPackage>

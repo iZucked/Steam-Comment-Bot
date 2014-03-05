@@ -255,6 +255,24 @@ public interface ScheduleFactory extends EFactory {
 	EntityProfitAndLoss createEntityProfitAndLoss();
 
 	/**
+	 * Returns a new object of class '<em>Entity PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Entity PNL Details</em>'.
+	 * @generated
+	 */
+	EntityPNLDetails createEntityPNLDetails();
+
+	/**
+	 * Returns a new object of class '<em>Slot PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Slot PNL Details</em>'.
+	 * @generated
+	 */
+	SlotPNLDetails createSlotPNLDetails();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

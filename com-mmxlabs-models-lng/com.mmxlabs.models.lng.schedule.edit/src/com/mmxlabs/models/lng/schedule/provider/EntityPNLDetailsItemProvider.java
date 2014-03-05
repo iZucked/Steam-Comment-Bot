@@ -1,17 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
- */
-/**
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -22,20 +22,14 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.EntityPNLDetails} object.
  * <!-- begin-user-doc -->
- * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class ProfitAndLossContainerItemProvider
-	extends MMXObjectItemProvider
+public class EntityPNLDetailsItemProvider
+	extends GeneralPNLDetailsItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -48,7 +42,7 @@ public class ProfitAndLossContainerItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ProfitAndLossContainerItemProvider(AdapterFactory adapterFactory) {
+	public EntityPNLDetailsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,28 +57,28 @@ public class ProfitAndLossContainerItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addGroupProfitAndLossPropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Group Profit And Loss feature.
+	 * This adds a property descriptor for the Entity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addGroupProfitAndLossPropertyDescriptor(Object object) {
+	protected void addEntityPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ProfitAndLossContainer_groupProfitAndLoss_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitAndLossContainer_groupProfitAndLoss_feature", "_UI_ProfitAndLossContainer_type"),
-				 SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS,
+				 getString("_UI_EntityPNLDetails_entity_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EntityPNLDetails_entity_feature", "_UI_EntityPNLDetails_type"),
+				 SchedulePackage.Literals.ENTITY_PNL_DETAILS__ENTITY,
+				 true,
 				 false,
-				 false,
-				 false,
+				 true,
 				 null,
 				 null,
 				 null));
@@ -102,9 +96,7 @@ public class ProfitAndLossContainerItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
-			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER);
-			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
+			childrenFeatures.add(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS);
 		}
 		return childrenFeatures;
 	}
@@ -123,14 +115,14 @@ public class ProfitAndLossContainerItemProvider
 	}
 
 	/**
-	 * This returns ProfitAndLossContainer.gif.
+	 * This returns EntityPNLDetails.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ProfitAndLossContainer"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/EntityPNLDetails"));
 	}
 
 	/**
@@ -141,7 +133,7 @@ public class ProfitAndLossContainerItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_ProfitAndLossContainer_type");
+		return getString("_UI_EntityPNLDetails_type");
 	}
 
 	/**
@@ -155,10 +147,8 @@ public class ProfitAndLossContainerItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ProfitAndLossContainer.class)) {
-			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS:
-			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS:
+		switch (notification.getFeatureID(EntityPNLDetails.class)) {
+			case SchedulePackage.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -178,46 +168,13 @@ public class ProfitAndLossContainerItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS,
-				 ScheduleFactory.eINSTANCE.createGroupProfitAndLoss()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER,
-				 ScheduleFactory.eINSTANCE.createGroupProfitAndLoss()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS,
 				 ScheduleFactory.eINSTANCE.createEntityPNLDetails()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS,
 				 ScheduleFactory.eINSTANCE.createSlotPNLDetails()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS ||
-			childFeature == SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

@@ -3,16 +3,21 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,6 +29,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl#getRevenue <em>Revenue</em>}</li>
  * </ul>
  * </p>
@@ -52,6 +58,16 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
+
+	/**
+	 * The cached value of the '{@link #getGeneralPNLDetails() <em>General PNL Details</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGeneralPNLDetails()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<GeneralPNLDetails> generalPNLDetails;
 
 	/**
 	 * The default value of the '{@link #getRevenue() <em>Revenue</em>}' attribute.
@@ -189,6 +205,18 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
+		if (generalPNLDetails == null) {
+			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS);
+		}
+		return generalPNLDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getRevenue() {
 		return revenue;
 	}
@@ -217,6 +245,8 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				return basicSetGroupProfitAndLoss(null, msgs);
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
+			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
+				return ((InternalEList<?>)getGeneralPNLDetails()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -233,6 +263,8 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				return getGroupProfitAndLoss();
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return getGroupProfitAndLossNoTimeCharter();
+			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
+				return getGeneralPNLDetails();
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				return getRevenue();
 		}
@@ -253,6 +285,10 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				return;
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
+				return;
+			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
+				getGeneralPNLDetails().clear();
+				getGeneralPNLDetails().addAll((Collection<? extends GeneralPNLDetails>)newValue);
 				return;
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				setRevenue((Integer)newValue);
@@ -275,6 +311,9 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
 				return;
+			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
+				getGeneralPNLDetails().clear();
+				return;
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				setRevenue(REVENUE_EDEFAULT);
 				return;
@@ -294,6 +333,8 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 				return groupProfitAndLoss != null;
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return groupProfitAndLossNoTimeCharter != null;
+			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
+				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
 			case SchedulePackage.GENERATED_CHARTER_OUT__REVENUE:
 				return revenue != REVENUE_EDEFAULT;
 		}
@@ -311,6 +352,7 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 			switch (derivedFeatureID) {
 				case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
 				case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+				case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
 		}
@@ -328,6 +370,7 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS;
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
 		}

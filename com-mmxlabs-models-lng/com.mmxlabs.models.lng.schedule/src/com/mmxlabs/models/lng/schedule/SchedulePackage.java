@@ -525,6 +525,15 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -532,7 +541,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -541,7 +550,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -551,7 +560,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -560,7 +569,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -569,7 +578,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -710,6 +719,15 @@ public interface SchedulePackage extends EPackage {
 	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -717,7 +735,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -799,6 +817,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION__GENERAL_PNL_DETAILS = PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -936,6 +963,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int OPEN_SLOT_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION__GENERAL_PNL_DETAILS = PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -1632,13 +1668,22 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -1647,7 +1692,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1888,13 +1933,22 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -1903,7 +1957,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3062,13 +3116,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -3077,7 +3140,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3288,6 +3351,15 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -3295,7 +3367,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 2;
+	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
@@ -3305,7 +3377,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3995,6 +4067,126 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl <em>Entity PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityPNLDetails()
+	 * @generated
+	 */
+	int ENTITY_PNL_DETAILS = 26;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl <em>General PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneralPNLDetails()
+	 * @generated
+	 */
+	int GENERAL_PNL_DETAILS = 28;
+
+	/**
+	 * The number of structural features of the '<em>General PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERAL_PNL_DETAILS_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>General PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERAL_PNL_DETAILS_OPERATION_COUNT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS__ENTITY = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Entity PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Entity PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl <em>Slot PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotPNLDetails()
+	 * @generated
+	 */
+	int SLOT_PNL_DETAILS = 27;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS__SLOT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4002,7 +4194,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 28;
+	int FUEL_UNIT = 31;
 
 
 	/**
@@ -4013,7 +4205,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 27;
+	int FUEL = 30;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4024,7 +4216,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 26;
+	int SEQUENCE_TYPE = 29;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -4035,7 +4227,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 29;
+	int CAPACITY_VIOLATION_TYPE = 32;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4045,7 +4237,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 30;
+	int CALENDAR = 33;
 
 
 	/**
@@ -4056,7 +4248,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 31;
+	int ITERABLE = 34;
 
 
 	/**
@@ -4067,7 +4259,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 32;
+	int OBJECT = 35;
 
 
 	/**
@@ -5259,6 +5451,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGeneralPNLDetails()
+	 * @see #getProfitAndLossContainer()
+	 * @generated
+	 */
+	EReference getProfitAndLossContainer_GeneralPNLDetails();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -5362,6 +5565,80 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EntityPNLDetails <em>Entity PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Entity PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityPNLDetails
+	 * @generated
+	 */
+	EClass getEntityPNLDetails();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityPNLDetails#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityPNLDetails#getEntity()
+	 * @see #getEntityPNLDetails()
+	 * @generated
+	 */
+	EReference getEntityPNLDetails_Entity();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.EntityPNLDetails#getGeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityPNLDetails#getGeneralPNLDetails()
+	 * @see #getEntityPNLDetails()
+	 * @generated
+	 */
+	EReference getEntityPNLDetails_GeneralPNLDetails();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotPNLDetails <em>Slot PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotPNLDetails
+	 * @generated
+	 */
+	EClass getSlotPNLDetails();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SlotPNLDetails#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotPNLDetails#getSlot()
+	 * @see #getSlotPNLDetails()
+	 * @generated
+	 */
+	EReference getSlotPNLDetails_Slot();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.SlotPNLDetails#getGeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotPNLDetails#getGeneralPNLDetails()
+	 * @see #getSlotPNLDetails()
+	 * @generated
+	 */
+	EReference getSlotPNLDetails_GeneralPNLDetails();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GeneralPNLDetails
+	 * @generated
+	 */
+	EClass getGeneralPNLDetails();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -6407,6 +6684,14 @@ public interface SchedulePackage extends EPackage {
 		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
 
 		/**
+		 * The meta object literal for the '<em><b>General PNL Details</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS = eINSTANCE.getProfitAndLossContainer_GeneralPNLDetails();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * @since 4.0
@@ -6489,6 +6774,68 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = eINSTANCE.getEntityProfitAndLoss_ProfitAndLossPreTax();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl <em>Entity PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityPNLDetails()
+		 * @generated
+		 */
+		EClass ENTITY_PNL_DETAILS = eINSTANCE.getEntityPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PNL_DETAILS__ENTITY = eINSTANCE.getEntityPNLDetails_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>General PNL Details</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS = eINSTANCE.getEntityPNLDetails_GeneralPNLDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl <em>Slot PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotPNLDetails()
+		 * @generated
+		 */
+		EClass SLOT_PNL_DETAILS = eINSTANCE.getSlotPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_PNL_DETAILS__SLOT = eINSTANCE.getSlotPNLDetails_Slot();
+
+		/**
+		 * The meta object literal for the '<em><b>General PNL Details</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS = eINSTANCE.getSlotPNLDetails_GeneralPNLDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl <em>General PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneralPNLDetails()
+		 * @generated
+		 */
+		EClass GENERAL_PNL_DETAILS = eINSTANCE.getGeneralPNLDetails();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

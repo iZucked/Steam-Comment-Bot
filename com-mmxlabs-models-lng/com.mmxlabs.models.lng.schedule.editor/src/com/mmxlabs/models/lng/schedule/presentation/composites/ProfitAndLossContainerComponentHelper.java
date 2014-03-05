@@ -68,6 +68,7 @@ public class ProfitAndLossContainerComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_groupProfitAndLossEditor(detailComposite, topClass);
 		add_groupProfitAndLossNoTimeCharterEditor(detailComposite, topClass);
+		add_generalPNLDetailsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the groupProfitAndLoss feature on ProfitAndLossContainer
@@ -85,5 +86,14 @@ public class ProfitAndLossContainerComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_groupProfitAndLossNoTimeCharterEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER));
+	}
+
+	/**
+	 * Create the editor for the generalPNLDetails feature on ProfitAndLossContainer
+	 *
+	 * @generated
+	 */
+	protected void add_generalPNLDetailsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS));
 	}
 }

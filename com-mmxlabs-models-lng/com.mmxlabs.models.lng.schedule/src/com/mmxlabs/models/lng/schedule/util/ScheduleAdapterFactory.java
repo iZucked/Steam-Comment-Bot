@@ -204,6 +204,18 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createEntityProfitAndLossAdapter();
 			}
 			@Override
+			public Adapter caseEntityPNLDetails(EntityPNLDetails object) {
+				return createEntityPNLDetailsAdapter();
+			}
+			@Override
+			public Adapter caseSlotPNLDetails(SlotPNLDetails object) {
+				return createSlotPNLDetailsAdapter();
+			}
+			@Override
+			public Adapter caseGeneralPNLDetails(GeneralPNLDetails object) {
+				return createGeneralPNLDetailsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -607,6 +619,48 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createEntityProfitAndLossAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.EntityPNLDetails <em>Entity PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.EntityPNLDetails
+	 * @generated
+	 */
+	public Adapter createEntityPNLDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.SlotPNLDetails <em>Slot PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.SlotPNLDetails
+	 * @generated
+	 */
+	public Adapter createSlotPNLDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.GeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.GeneralPNLDetails
+	 * @generated
+	 */
+	public Adapter createGeneralPNLDetailsAdapter() {
 		return null;
 	}
 

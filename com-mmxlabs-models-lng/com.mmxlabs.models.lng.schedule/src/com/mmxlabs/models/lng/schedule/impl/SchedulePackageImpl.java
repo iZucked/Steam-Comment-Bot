@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -48,6 +50,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -244,6 +247,27 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass entityProfitAndLossEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass entityPNLDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass slotPNLDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass generalPNLDetailsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1368,6 +1392,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProfitAndLossContainer_GeneralPNLDetails() {
+		return (EReference)profitAndLossContainerEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1451,6 +1484,69 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax() {
 		return (EAttribute)entityProfitAndLossEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getEntityPNLDetails() {
+		return entityPNLDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEntityPNLDetails_Entity() {
+		return (EReference)entityPNLDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEntityPNLDetails_GeneralPNLDetails() {
+		return (EReference)entityPNLDetailsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSlotPNLDetails() {
+		return slotPNLDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotPNLDetails_Slot() {
+		return (EReference)slotPNLDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSlotPNLDetails_GeneralPNLDetails() {
+		return (EReference)slotPNLDetailsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getGeneralPNLDetails() {
+		return generalPNLDetailsEClass;
 	}
 
 	/**
@@ -1678,6 +1774,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		profitAndLossContainerEClass = createEClass(PROFIT_AND_LOSS_CONTAINER);
 		createEReference(profitAndLossContainerEClass, PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 		createEReference(profitAndLossContainerEClass, PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER);
+		createEReference(profitAndLossContainerEClass, PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
 
 		groupProfitAndLossEClass = createEClass(GROUP_PROFIT_AND_LOSS);
 		createEAttribute(groupProfitAndLossEClass, GROUP_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
@@ -1689,6 +1786,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK);
 		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS);
 		createEAttribute(entityProfitAndLossEClass, ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX);
+
+		entityPNLDetailsEClass = createEClass(ENTITY_PNL_DETAILS);
+		createEReference(entityPNLDetailsEClass, ENTITY_PNL_DETAILS__ENTITY);
+		createEReference(entityPNLDetailsEClass, ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS);
+
+		slotPNLDetailsEClass = createEClass(SLOT_PNL_DETAILS);
+		createEReference(slotPNLDetailsEClass, SLOT_PNL_DETAILS__SLOT);
+		createEReference(slotPNLDetailsEClass, SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS);
+
+		generalPNLDetailsEClass = createEClass(GENERAL_PNL_DETAILS);
 
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
@@ -1777,6 +1884,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		capacityViolationsHolderEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		profitAndLossContainerEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		entityPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
+		slotPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1927,6 +2036,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(profitAndLossContainerEClass, ProfitAndLossContainer.class, "ProfitAndLossContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getProfitAndLossContainer_GroupProfitAndLoss(), this.getGroupProfitAndLoss(), null, "groupProfitAndLoss", null, 0, 1, ProfitAndLossContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter(), this.getGroupProfitAndLoss(), null, "groupProfitAndLossNoTimeCharter", null, 0, 1, ProfitAndLossContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProfitAndLossContainer_GeneralPNLDetails(), this.getGeneralPNLDetails(), null, "generalPNLDetails", null, 0, -1, ProfitAndLossContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupProfitAndLossEClass, GroupProfitAndLoss.class, "GroupProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGroupProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, GroupProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1938,6 +2048,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getEntityProfitAndLoss_EntityBook(), theCommercialPackage.getBaseEntityBook(), null, "entityBook", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getEntityProfitAndLoss_ProfitAndLoss(), ecorePackage.getELong(), "profitAndLoss", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getEntityProfitAndLoss_ProfitAndLossPreTax(), ecorePackage.getELong(), "profitAndLossPreTax", null, 0, 1, EntityProfitAndLoss.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(entityPNLDetailsEClass, EntityPNLDetails.class, "EntityPNLDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEntityPNLDetails_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, EntityPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEntityPNLDetails_GeneralPNLDetails(), this.getGeneralPNLDetails(), null, "generalPNLDetails", null, 0, -1, EntityPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(slotPNLDetailsEClass, SlotPNLDetails.class, "SlotPNLDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSlotPNLDetails_Slot(), theCargoPackage.getSlot(), null, "slot", null, 0, 1, SlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotPNLDetails_GeneralPNLDetails(), this.getGeneralPNLDetails(), null, "generalPNLDetails", null, 0, -1, SlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(generalPNLDetailsEClass, GeneralPNLDetails.class, "GeneralPNLDetails", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
