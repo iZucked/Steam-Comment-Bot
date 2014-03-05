@@ -906,7 +906,7 @@ public class LNGScenarioTransformer {
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
-					configureDischargeSlotRestrictions(builder, allDischargePorts, dischargeSlot, discharge);
+					configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
 
@@ -978,16 +978,16 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			configureDischargeSlotRestrictions(builder, allDischargePorts, dischargeSlot, discharge);
+			configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge);
 		}
 	}
 
-	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allDischargePorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge) {
+	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allLoadPorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge) {
 		if (dischargeSlot.isFOBSale()) {
 			if (dischargeSlot.getPort().getCapabilities().contains(PortCapability.DISCHARGE)) {
 				// Bind to all loads
 				// TODO: Take into account shipping days restriction
-				builder.bindLoadSlotsToFOBSale(discharge, allDischargePorts);
+				builder.bindLoadSlotsToFOBSale(discharge, allLoadPorts);
 			} else {
 				// Bind to current port only
 				builder.bindLoadSlotsToFOBSale(discharge, Collections.<IPort> singleton(discharge.getPort()));
