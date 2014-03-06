@@ -3,21 +3,12 @@
 package com.mmxlabs.models.lng.cargo.provider;
 
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
-
-import com.mmxlabs.models.lng.fleet.FleetFactory;
-
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -27,6 +18,12 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.VesselAvailability} object.
@@ -319,14 +316,18 @@ public class VesselAvailabilityItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((VesselAvailability)object).getUuid();
-		return label == null || label.length() == 0 ?
-			getString("_UI_VesselAvailability_type") :
-			getString("_UI_VesselAvailability_type") + " " + label;
+		String label = "";
+		Vessel v = ((VesselAvailability) object).getVessel();
+		if(v != null){
+			label = v.getName();		
+		} else{
+			label = "<unspecified>";			
+		}
+		return label;
 	}
 
 	/**
