@@ -15,6 +15,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -42,6 +43,13 @@ public class PNLDetailsReport extends DetailPropertiesView {
 
 	public PNLDetailsReport() {
 		super("pnl", "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", false);
+	}
+
+	@Override
+	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+		// Expand four levels by default
+		viewer.setAutoExpandLevel(4);
 	}
 
 	@Override
