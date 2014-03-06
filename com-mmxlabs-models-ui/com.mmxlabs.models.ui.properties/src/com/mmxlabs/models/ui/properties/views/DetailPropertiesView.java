@@ -39,6 +39,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 	private final String helpContextId;
 
 	private boolean showUnitsInColumn;
+	private Action packColumnsAction;
 
 	protected DetailPropertiesView(@NonNull final String category) {
 		this(category, null, true);
@@ -101,13 +102,17 @@ public abstract class DetailPropertiesView extends ViewPart {
 
 		// Initial selection
 		{
-			selectionListener.selectionChanged(null, getSite().getPage().getSelection());
+			updateFromSelection();
 		}
 
 	}
 
+	protected void updateFromSelection() {
+		selectionListener.selectionChanged(null, getSite().getPage().getSelection());
+	}
+
 	protected void makeActions() {
-		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
+		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		final Action copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
@@ -146,6 +151,10 @@ public abstract class DetailPropertiesView extends ViewPart {
 				final Collection<?> adaptSelection = adaptSelection(selection);
 				viewer.setInput(adaptSelection);
 				hookAdapters(adaptSelection);
+				if (packColumnsAction != null) {
+					packColumnsAction.run();
+				}
+
 			}
 
 		};
