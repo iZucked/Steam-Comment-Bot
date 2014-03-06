@@ -1584,6 +1584,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/lng/ui/datetime
 		createDatetimeAnnotations();
+		// http://www.mmxlabs.com/models/ui/numberFormat
+		createNumberFormatAnnotations();
 	}
 
 	/**
@@ -1599,6 +1601,29 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "showTime", "false"
+		   });		
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/numberFormat</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNumberFormatAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
+		addAnnotation
+		  (getSlot_Hedges(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
+			 "formatString", "-#"
+		   });		
+		addAnnotation
+		  (getSlot_CancellationFee(), 
+		   source, 
+		   new String[] {
+			 "unit", "$"
 		   });
 	}
 
