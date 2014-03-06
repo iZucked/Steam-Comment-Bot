@@ -27,6 +27,8 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.annotations.impl.CancellationAnnotation;
+import com.mmxlabs.scheduler.optimiser.annotations.impl.HedgingAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -246,7 +248,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		// Calculate transfer pricing etc between entities
 		final Map<IEntityBook, Long> entityPreTaxProfit = new HashMap<>();
-		evaluateCargoPNL(cargoPNLData, baseEntity, entityPreTaxProfit, entityBookDetailTreeMap);
+		evaluateCargoPNL(cargoPNLData, baseEntity, entityPreTaxProfit, annotatedSolution, entityBookDetailTreeMap);
 
 		// Shipping Entity for non-cargo costings - handle any transfer pricing etc required
 		IEntity shippingEntity = entityProvider.getEntityForVessel(vessel);
@@ -336,7 +338,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param baseEntity
 	 * @param entityProfit
 	 */
-	protected void evaluateCargoPNL(final CargoPNLData cargoPNLData, final IEntity baseEntity, final Map<IEntityBook, Long> entityPreTaxProfit,
+	protected void evaluateCargoPNL(final CargoPNLData cargoPNLData, final IEntity baseEntity, final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution,
 			@Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		int idx = 0;
@@ -345,7 +347,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IEntity entity = cargoPNLData.slotEntity[idx];
 			assert entity != null;
 
-			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), hedgesProvider.getHedgeValue(slot));
+			final long hedgeValue = hedgesProvider.getHedgeValue(slot);
+			addEntityBookProfit(entityPreTaxProfit, entity.getTradingBook(), hedgeValue);
+			if (hedgeValue != 0 && annotatedSolution != null) {
+				annotatedSolution.getElementAnnotations().setAnnotation(slotProvider.getElement(slot), SchedulerConstants.AI_hedgingValue, new HedgingAnnotation(hedgeValue));
+			}
 
 			final long value = Calculator.costFromConsumption(cargoPNLData.slotVolumeInMMBTu[idx], cargoPNLData.slotPricePerMMBTu[idx]);
 			if (slot instanceof ILoadOption) {
@@ -526,7 +532,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long cancellationCost = cancellationFeeProvider.getCancellationFee(portSlot);
 
 			// Taxed P&L - use time window start as tax date
-			long preTaxValue = hedgeValue - cancellationCost;
+			final long preTaxValue = hedgeValue - cancellationCost;
 			final long postTaxValue = entity.getTradingBook().getTaxedProfit(preTaxValue, portSlot.getTimeWindow().getStart());
 			result = postTaxValue;
 
@@ -540,8 +546,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IProfitAndLossEntry entry = new ProfitAndLossEntry(entity.getTradingBook(), postTaxValue, preTaxValue, entityDetails);
 
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(Collections.singleton(entry));
-				final String label = SchedulerConstants.AI_profitAndLoss;
-				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, label, annotation);
+				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLoss, annotation);
+
+				if (cancellationCost != 0) {
+					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_cancellationFees, new CancellationAnnotation(cancellationCost));
+				}
+				if (hedgeValue != 0) {
+					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_hedgingValue, new HedgingAnnotation(hedgeValue));
+				}
+
 			}
 		}
 

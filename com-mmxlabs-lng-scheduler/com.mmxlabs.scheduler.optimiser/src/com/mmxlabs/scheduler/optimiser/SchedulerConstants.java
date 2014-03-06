@@ -31,6 +31,10 @@ public final class SchedulerConstants {
 	 * @since 2.0
 	 */
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
+
+	public static final String AI_hedgingValue = "element-hedging-value";
+
+	public static final String AI_cancellationFees = "element-cancellation-fees";
 	// /**
 	// * @since 7.0
 	// */
