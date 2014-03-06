@@ -32,6 +32,6 @@ public class EditorUtils {
 				sb.append(c);
 			}
 		}
-		return sb.toString();
+		return sb.toString().trim();
 	}
 }
