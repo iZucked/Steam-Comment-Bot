@@ -27,10 +27,12 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossSlotDetailsAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.CancellationAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.HedgingAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossSlotDetailsAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -141,6 +143,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final Set<IEntity> seenEntities = new LinkedHashSet<>();
 		// A map of Entity to specific custom property trees.
 		final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap = (exportElement == null) ? null : new HashMap<IEntityBook, IDetailTree>();
+		final Map<IPortSlot, IDetailTree> portSlotDetailTreeMap = (exportElement == null) ? null : new HashMap<IPortSlot, IDetailTree>();
 
 		// Calculate sales/discharge prices
 		int idx = 0;
@@ -157,14 +160,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				cargoPNLData.slotEntity[idx] = entity;
 				seenEntities.add(entity);
 
-				final IDetailTree entityBookDetails = (exportElement == null) ? null : getEntityBookDetails(entityBookDetailTreeMap, entity.getTradingBook());
+				final IDetailTree portSlotDetails = (exportElement == null) ? null : getEntityBookDetails(entityBookDetailTreeMap, entity.getTradingBook());
 
 				// Special case! May not be correct for LLD case
 				final ILoadOption loadOption = (ILoadOption) slots.get(0);
 
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
 				cargoPNLData.slotPricePerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(loadOption, dischargeOption, currentAllocation.getSlotTime(loadOption),
-						currentAllocation.getSlotTime(dischargeOption), currentAllocation.getSlotVolumeInMMBTu(slot), entityBookDetails);
+						currentAllocation.getSlotTime(dischargeOption), currentAllocation.getSlotVolumeInMMBTu(slot), portSlotDetails);
 
 				// Tmp hack until we sort out the API around this - AllocationAnnotation is an input to this method!
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, cargoPNLData.slotPricePerMMBTu[idx]);
@@ -197,7 +200,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					baseEntity = entity;
 				}
 
-				final IDetailTree entityBookDetails = entityBookDetailTreeMap == null ? null : getEntityBookDetails(entityBookDetailTreeMap, entity.getTradingBook());
+				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 				final ILoadOption loadOption = (ILoadOption) slot;
 
 				final long additionProfitAndLoss;
@@ -220,23 +223,23 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						final ILoadSlot loadSlot = (ILoadSlot) loadOption;
 						final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeOption;
 						pricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3,
-								dischargeVolumeInM3, vessel, vesselStartTime, plan, entityBookDetails);
+								dischargeVolumeInM3, vessel, vesselStartTime, plan, portSlotDetails);
 					} else if (loadOption instanceof ILoadSlot) {
 						// FOB Sale
 						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculatePriceForFOBSalePerMMBTu((ILoadSlot) loadOption, dischargeOption, transferTime, dischargePricePerMMBTu,
-								transferVolumeInM3, entityBookDetails);
+								transferVolumeInM3, portSlotDetails);
 					} else {
 						// DES Purchase
 						assert dischargeOption instanceof IDischargeSlot;
 						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculateDESPurchasePricePerMMBTu(loadOption, (IDischargeSlot) dischargeOption, transferTime, dischargePricePerMMBTu,
-								transferVolumeInM3, entityBookDetails);
+								transferVolumeInM3, portSlotDetails);
 					}
 				}
 				cargoPNLData.slotPricePerMMBTu[idx] = pricePerMMBTu;
 				// TODO: Split into a third loop
 				{
 					additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, cargoPNLData.arrivalTimes, cargoPNLData.slotVolumeInM3,
-							cargoPNLData.slotPricePerMMBTu, vessel, vesselStartTime, plan, entityBookDetails);
+							cargoPNLData.slotPricePerMMBTu, vessel, vesselStartTime, plan, portSlotDetails);
 					cargoPNLData.slotAdditionalPNL[idx] = additionProfitAndLoss;
 				}
 				// Tmp hack until we sort out the API around this - AllocationAnnotation is an input to this method!
@@ -280,7 +283,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		// Solution Export branch - should called infrequently
-		if (annotatedSolution != null && exportElement != null && entityBookDetailTreeMap != null) {
+		if (annotatedSolution != null && exportElement != null && entityBookDetailTreeMap != null && portSlotDetailTreeMap != null) {
 			{
 				final List<IProfitAndLossEntry> entries = new LinkedList<>();
 				for (final IEntity entity : seenEntities) {
@@ -310,6 +313,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				}
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(entries);
 				annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLoss, annotation);
+			}
+			for (IPortSlot portSlot : slots) {
+
+				final IDetailTree slotDetails = portSlotDetailTreeMap.get(portSlot);
+				if (slotDetails != null) {
+					final IProfitAndLossSlotDetailsAnnotation annotation = new ProfitAndLossSlotDetailsAnnotation(portSlot, slotDetails);
+					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLossSlotDetails, annotation);
+
+				}
+
 			}
 		}
 
@@ -470,12 +483,22 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		entityBookProfit.put(entityBook, totalProfit);
 	}
 
-	protected IDetailTree getEntityBookDetails(final Map<IEntityBook, IDetailTree> entityDetailsMap, final IEntityBook entityBook) {
-		if (entityDetailsMap.containsKey(entityBook)) {
-			return entityDetailsMap.get(entityBook);
+	protected IDetailTree getEntityBookDetails(final Map<IEntityBook, IDetailTree> entityBookDetailsMap, final IEntityBook entityBook) {
+		if (entityBookDetailsMap.containsKey(entityBook)) {
+			return entityBookDetailsMap.get(entityBook);
 		} else {
 			final DetailTree tree = new DetailTree();
-			entityDetailsMap.put(entityBook, tree);
+			entityBookDetailsMap.put(entityBook, tree);
+			return tree;
+		}
+	}
+
+	protected IDetailTree getPortSlotDetails(final Map<IPortSlot, IDetailTree> portSlotSetailsMap, final IPortSlot portSlot) {
+		if (portSlotSetailsMap.containsKey(portSlot)) {
+			return portSlotSetailsMap.get(portSlot);
+		} else {
+			final DetailTree tree = new DetailTree();
+			portSlotSetailsMap.put(portSlot, tree);
 			return tree;
 		}
 	}
