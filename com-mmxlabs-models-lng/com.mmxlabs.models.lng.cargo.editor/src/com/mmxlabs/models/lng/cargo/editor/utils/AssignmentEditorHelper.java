@@ -19,6 +19,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -36,6 +37,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 
 /**
  * @since 8.0
@@ -210,4 +212,65 @@ public class AssignmentEditorHelper {
 		maxSpot++;
 		return maxSpot;
 	}
+	
+	public static boolean compileAllowedVessels(List allowedVessels, EObject target){
+		// The slot intersection may mean no vessels are permitted at all!
+		boolean noVesselsAllowed = false;
+		// populate the list of allowed vessels for the target object
+		if (target instanceof Cargo) {
+			final Cargo cargo = (Cargo) target;
+			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
+			boolean first = true;
+			for (final Slot s : cargo.getSlots()) {
+				final List<AVesselSet<Vessel>> slotVessels = s.getAllowedVessels();
+				if (slotVessels == null || slotVessels.isEmpty()) {
+					continue;
+				}
+				if (first) {
+					vessels.addAll(slotVessels);
+					first = false;
+				} else {
+					// TODO: hmm, should we check classes vs vessels here?
+					Set<AVesselSet<Vessel>> matchedByClass = new LinkedHashSet<>();
+					// 
+					for (AVesselSet<Vessel> v1 : vessels) {
+						if (v1 instanceof Vessel) {
+							for (AVesselSet<Vessel> v2 : slotVessels) {
+								if (SetUtils.getObjects(v2).contains(v1)) {
+									matchedByClass.add(v1);
+								}
+							}
+						}
+					}
+					// Reverse map
+					for (AVesselSet<Vessel> v1 : slotVessels) {
+						if (v1 instanceof Vessel) {
+							for (AVesselSet<Vessel> v2 : vessels) {
+								if (SetUtils.getObjects(v2).contains(v1)) {
+									matchedByClass.add(v1);
+								}
+							}
+						}
+					}
+
+					// Exact matches
+					vessels.retainAll(slotVessels);
+					// Add in VesselClass/Group hits
+					vessels.addAll(matchedByClass);
+				}
+			}
+			allowedVessels.addAll(vessels);
+			if (vessels.isEmpty() && first == false) {
+				// Uh oh - set intersection resulted in nothing!
+				noVesselsAllowed = true;
+			}
+		} else if (target instanceof VesselEvent) {
+			final VesselEvent event = (VesselEvent) target;
+			allowedVessels.addAll(event.getAllowedVessels());
+		} else {
+			allowedVessels = null;
+		}
+		return noVesselsAllowed;
+	}
+
 }

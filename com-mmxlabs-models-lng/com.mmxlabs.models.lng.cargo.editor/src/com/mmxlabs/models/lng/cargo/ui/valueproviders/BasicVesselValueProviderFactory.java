@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -105,64 +106,9 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						useScenarioVessel = !((DischargeSlot) target).isFOBSale();
 					}
 
-					final List<AVesselSet<Vessel>> allowedVessels;
-					// The slot intersection may mean no vessels are permitted at all!
-					boolean noVesselsAllowed = false;
-					// populate the list of allowed vessels for the target object
-					if (target instanceof Cargo) {
-						final Cargo cargo = (Cargo) target;
-						final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
-						boolean first = true;
-						for (final Slot s : cargo.getSlots()) {
-							final List<AVesselSet<Vessel>> slotVessels = s.getAllowedVessels();
-							if (slotVessels == null || slotVessels.isEmpty()) {
-								continue;
-							}
-							if (first) {
-								vessels.addAll(slotVessels);
-								first = false;
-							} else {
-								// TODO: hmm, should we check classes vs vessels here?
-								Set<AVesselSet<Vessel>> matchedByClass = new LinkedHashSet<>();
-								// 
-								for (AVesselSet<Vessel> v1 : vessels) {
-									if (v1 instanceof Vessel) {
-										for (AVesselSet<Vessel> v2 : slotVessels) {
-											if (SetUtils.getObjects(v2).contains(v1)) {
-												matchedByClass.add(v1);
-											}
-										}
-									}
-								}
-								// Reverse map
-								for (AVesselSet<Vessel> v1 : slotVessels) {
-									if (v1 instanceof Vessel) {
-										for (AVesselSet<Vessel> v2 : vessels) {
-											if (SetUtils.getObjects(v2).contains(v1)) {
-												matchedByClass.add(v1);
-											}
-										}
-									}
-								}
-
-								// Exact matches
-								vessels.retainAll(slotVessels);
-								// Add in VesselClass/Group hits
-								vessels.addAll(matchedByClass);
-							}
-						}
-						allowedVessels = new ArrayList<>(vessels);
-						if (vessels.isEmpty() && first == false) {
-							// Uh oh - set intersection resulted in nothing!
-							noVesselsAllowed = true;
-						}
-					} else if (target instanceof VesselEvent) {
-						final VesselEvent event = (VesselEvent) target;
-						allowedVessels = event.getAllowedVessels();
-					} else {
-						allowedVessels = null;
-					}
-
+					List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
+					boolean noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, target);
+					
 					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
 					// filter the global list by the object's allowed values
 					if (allowedVessels != null) {
@@ -233,8 +179,8 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 					}
 
 					return result;
-				}
-
+				}				
+				
 				@Override
 				protected Pair<String, EObject> getEmptyObject() {
 					return new Pair<String, EObject>("<Unassigned>", null);
