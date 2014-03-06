@@ -18,6 +18,7 @@ import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -26,6 +27,10 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.IItemLabelProvider;
+import org.eclipse.emf.edit.provider.IItemPropertySource;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -57,6 +62,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -82,6 +88,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  */
 public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	private static final Logger log = LoggerFactory.getLogger(DetailCompositeDialog.class);
+	private static final ComposedAdapterFactory FACTORY = createAdapterFactory();
 
 	// private IScenarioEditingLocation scenarioEditingLocation;
 
@@ -158,6 +165,13 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			}
 		}
 	};
+
+	private static ComposedAdapterFactory createAdapterFactory() {
+		final List<AdapterFactory> factories = new ArrayList<AdapterFactory>();
+		factories.add(new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE));
+		factories.add(new ReflectiveItemProviderAdapterFactory());
+		return new ComposedAdapterFactory(factories);
+	}
 
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
@@ -361,10 +375,16 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final EObject selection = inputs.get(selectedObjectIndex);
 		final IScenarioEditingLocation sel = location;
 
-		int nInputs= inputs.size();
-		String text = "";
-	
-		getShell().setText(returnDuplicates ?  "Duplicating" : "Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " +  "" + (nInputs > 1 ? (1 + selectedObjectIndex) + " of " + inputs.size() : ""));
+		String text = returnDuplicates ?  "Duplicating " : "Editing ";
+		text += EditorUtils.unmangle(selection.eClass().getName()).toLowerCase() + " ";
+		if(selection instanceof NamedObject) {
+			String name = ((NamedObject) selection).getName();
+			text+= name != null ? "\"" +  name + "\"" : "<unspecified>";	
+		} else {
+			final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
+			text += "\"" + itemLabelProvider.getText(selection) + "\"";			
+		}		
+		getShell().setText(text);
 
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
