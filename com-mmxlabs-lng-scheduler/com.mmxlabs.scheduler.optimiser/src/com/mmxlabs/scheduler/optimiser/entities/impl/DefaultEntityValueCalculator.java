@@ -160,7 +160,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				cargoPNLData.slotEntity[idx] = entity;
 				seenEntities.add(entity);
 
-				final IDetailTree portSlotDetails = (exportElement == null) ? null : getEntityBookDetails(entityBookDetailTreeMap, entity.getTradingBook());
+				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 
 				// Special case! May not be correct for LLD case
 				final ILoadOption loadOption = (ILoadOption) slots.get(0);
@@ -319,7 +319,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDetailTree slotDetails = portSlotDetailTreeMap.get(portSlot);
 				if (slotDetails != null) {
 					final IProfitAndLossSlotDetailsAnnotation annotation = new ProfitAndLossSlotDetailsAnnotation(portSlot, slotDetails);
-					annotatedSolution.getElementAnnotations().setAnnotation(exportElement, SchedulerConstants.AI_profitAndLossSlotDetails, annotation);
+					annotatedSolution.getElementAnnotations().setAnnotation(slotProvider.getElement(portSlot), SchedulerConstants.AI_profitAndLossSlotDetails, annotation);
 
 				}
 
