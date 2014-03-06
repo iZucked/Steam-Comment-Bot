@@ -146,6 +146,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 				// extract the relevant data from the root object
 				final ScheduleSequenceData data = new ScheduleSequenceData(root);
+				setData(data);
 				// setup table columns and rows
 				setCols(data);
 				setRows(data);
@@ -180,6 +181,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		};
 	}
 	
+	protected void setData(ScheduleSequenceData data) {
+	}
+
 	/**
 	 * Returns a list of all the Date objects corresponding to the start of a GMT day which contains 
 	 * any days in the specified range
