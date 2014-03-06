@@ -3,16 +3,15 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.EntityPNLDetails;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -20,15 +19,16 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.EntityPNLDetails} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class EntityPNLDetailsItemProvider
+public class BasicSlotPNLDetailsItemProvider
 	extends GeneralPNLDetailsItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -42,7 +42,7 @@ public class EntityPNLDetailsItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EntityPNLDetailsItemProvider(AdapterFactory adapterFactory) {
+	public BasicSlotPNLDetailsItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -57,72 +57,65 @@ public class EntityPNLDetailsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addEntityPropertyDescriptor(object);
+			addCancellationFeesPropertyDescriptor(object);
+			addHedgingValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Entity feature.
+	 * This adds a property descriptor for the Cancellation Fees feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addEntityPropertyDescriptor(Object object) {
+	protected void addCancellationFeesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_EntityPNLDetails_entity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_EntityPNLDetails_entity_feature", "_UI_EntityPNLDetails_type"),
-				 SchedulePackage.Literals.ENTITY_PNL_DETAILS__ENTITY,
+				 getString("_UI_BasicSlotPNLDetails_cancellationFees_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BasicSlotPNLDetails_cancellationFees_feature", "_UI_BasicSlotPNLDetails_type"),
+				 SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Hedging Value feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS);
-		}
-		return childrenFeatures;
+	protected void addHedgingValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BasicSlotPNLDetails_hedgingValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BasicSlotPNLDetails_hedgingValue_feature", "_UI_BasicSlotPNLDetails_type"),
+				 SchedulePackage.Literals.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns EntityPNLDetails.gif.
+	 * This returns BasicSlotPNLDetails.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/EntityPNLDetails"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BasicSlotPNLDetails"));
 	}
 
 	/**
@@ -133,7 +126,8 @@ public class EntityPNLDetailsItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_EntityPNLDetails_type");
+		BasicSlotPNLDetails basicSlotPNLDetails = (BasicSlotPNLDetails)object;
+		return getString("_UI_BasicSlotPNLDetails_type") + " " + basicSlotPNLDetails.getCancellationFees();
 	}
 
 	/**
@@ -147,9 +141,10 @@ public class EntityPNLDetailsItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(EntityPNLDetails.class)) {
-			case SchedulePackage.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+		switch (notification.getFeatureID(BasicSlotPNLDetails.class)) {
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES:
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -165,21 +160,6 @@ public class EntityPNLDetailsItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS,
-				 ScheduleFactory.eINSTANCE.createEntityPNLDetails()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS,
-				 ScheduleFactory.eINSTANCE.createSlotPNLDetails()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS,
-				 ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails()));
 	}
 
 }

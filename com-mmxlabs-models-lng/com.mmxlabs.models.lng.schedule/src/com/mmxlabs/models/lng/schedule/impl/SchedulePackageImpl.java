@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -268,6 +269,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass generalPNLDetailsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass basicSlotPNLDetailsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1554,6 +1562,33 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getBasicSlotPNLDetails() {
+		return basicSlotPNLDetailsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBasicSlotPNLDetails_CancellationFees() {
+		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBasicSlotPNLDetails_HedgingValue() {
+		return (EAttribute)basicSlotPNLDetailsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -1797,6 +1832,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		generalPNLDetailsEClass = createEClass(GENERAL_PNL_DETAILS);
 
+		basicSlotPNLDetailsEClass = createEClass(BASIC_SLOT_PNL_DETAILS);
+		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES);
+		createEAttribute(basicSlotPNLDetailsEClass, BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE);
+
 		// Create enums
 		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 		fuelEEnum = createEEnum(FUEL);
@@ -1886,6 +1925,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		profitAndLossContainerEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		entityPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
 		slotPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
+		basicSlotPNLDetailsEClass.getESuperTypes().add(this.getGeneralPNLDetails());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -2058,6 +2098,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSlotPNLDetails_GeneralPNLDetails(), this.getGeneralPNLDetails(), null, "generalPNLDetails", null, 0, -1, SlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(generalPNLDetailsEClass, GeneralPNLDetails.class, "GeneralPNLDetails", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(basicSlotPNLDetailsEClass, BasicSlotPNLDetails.class, "BasicSlotPNLDetails", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getBasicSlotPNLDetails_CancellationFees(), ecorePackage.getEInt(), "cancellationFees", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBasicSlotPNLDetails_HedgingValue(), ecorePackage.getEInt(), "hedgingValue", null, 0, 1, BasicSlotPNLDetails.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");

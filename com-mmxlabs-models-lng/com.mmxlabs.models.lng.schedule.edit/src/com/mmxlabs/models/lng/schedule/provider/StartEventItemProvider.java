@@ -261,6 +261,11 @@ public class StartEventItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
 				 ScheduleFactory.eINSTANCE.createSlotPNLDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails()));
 	}
 
 	/**

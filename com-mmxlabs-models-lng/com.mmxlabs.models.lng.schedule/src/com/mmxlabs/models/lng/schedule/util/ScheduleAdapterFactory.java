@@ -216,6 +216,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createGeneralPNLDetailsAdapter();
 			}
 			@Override
+			public Adapter caseBasicSlotPNLDetails(BasicSlotPNLDetails object) {
+				return createBasicSlotPNLDetailsAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -661,6 +665,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createGeneralPNLDetailsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails <em>Basic Slot PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails
+	 * @generated
+	 */
+	public Adapter createBasicSlotPNLDetailsAdapter() {
 		return null;
 	}
 

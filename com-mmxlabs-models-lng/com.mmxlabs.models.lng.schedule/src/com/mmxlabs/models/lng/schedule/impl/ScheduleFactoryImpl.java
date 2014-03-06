@@ -128,6 +128,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: return createEntityProfitAndLoss();
 			case SchedulePackage.ENTITY_PNL_DETAILS: return createEntityPNLDetails();
 			case SchedulePackage.SLOT_PNL_DETAILS: return createSlotPNLDetails();
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS: return createBasicSlotPNLDetails();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -472,6 +473,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public SlotPNLDetails createSlotPNLDetails() {
 		SlotPNLDetailsImpl slotPNLDetails = new SlotPNLDetailsImpl();
 		return slotPNLDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BasicSlotPNLDetails createBasicSlotPNLDetails() {
+		BasicSlotPNLDetailsImpl basicSlotPNLDetails = new BasicSlotPNLDetailsImpl();
+		return basicSlotPNLDetails;
 	}
 
 	/**

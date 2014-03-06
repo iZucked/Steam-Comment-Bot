@@ -739,6 +739,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BasicSlotPNLDetailsItemProvider basicSlotPNLDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBasicSlotPNLDetailsAdapter() {
+		if (basicSlotPNLDetailsItemProvider == null) {
+			basicSlotPNLDetailsItemProvider = new BasicSlotPNLDetailsItemProvider(this);
+		}
+
+		return basicSlotPNLDetailsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -895,6 +918,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (entityProfitAndLossItemProvider != null) entityProfitAndLossItemProvider.dispose();
 		if (entityPNLDetailsItemProvider != null) entityPNLDetailsItemProvider.dispose();
 		if (slotPNLDetailsItemProvider != null) slotPNLDetailsItemProvider.dispose();
+		if (basicSlotPNLDetailsItemProvider != null) basicSlotPNLDetailsItemProvider.dispose();
 	}
 
 }

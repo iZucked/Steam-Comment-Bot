@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -20,6 +21,7 @@ import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
+import com.mmxlabs.models.lng.schedule.SlotPNLDetails;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.properties.DetailProperty;
 import com.mmxlabs.models.ui.properties.PropertiesFactory;
@@ -96,13 +98,13 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 			dpNode.getChildren().add(entityDPPretax);
 		}
 
+		final Map<Slot, DetailProperty> slotDetailsPropertiesMap = new HashMap<>();
 		for (final GeneralPNLDetails generalPNLDetails : profitAndLossContainer.getGeneralPNLDetails()) {
 
 			if (generalPNLDetails instanceof EntityPNLDetails) {
 
-				EntityPNLDetails entityPNLDetails = (EntityPNLDetails) generalPNLDetails;
-				
-				
+				final EntityPNLDetails entityPNLDetails = (EntityPNLDetails) generalPNLDetails;
+
 				final DetailProperty entityProperty = entityDetailsPropertiesMap.get(entityPNLDetails.getEntity());
 				if (entityProperty == null) {
 					continue;
@@ -121,7 +123,36 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 				}
 
 				continue;
+			}
 
+			if (generalPNLDetails instanceof SlotPNLDetails) {
+
+				final SlotPNLDetails slotPNLDetails = (SlotPNLDetails) generalPNLDetails;
+
+				DetailProperty slotProperty = slotDetailsPropertiesMap.get(slotPNLDetails.getSlot());
+				if (slotProperty == null) {
+					slotProperty = PropertiesFactory.eINSTANCE.createDetailProperty();
+					dp.getChildren().add(slotProperty);
+					final Slot slot = slotPNLDetails.getSlot();
+					if (slot != null) {
+						slotProperty.setName(slot.getName());
+					}
+				}
+
+				for (final GeneralPNLDetails generalPNLDetails2 : slotPNLDetails.getGeneralPNLDetails()) {
+
+					final EClass eClass = generalPNLDetails2.eClass();
+					assert eClass != null;
+					final IDetailPropertyFactory factory = registry.getFactory(CATEGORY_PNL, eClass);
+					if (factory != null) {
+						final DetailProperty p = factory.createProperties(generalPNLDetails2, rootObject);
+						if (p != null) {
+							slotProperty.getChildren().add(p);
+						}
+					}
+				}
+
+				continue;
 			}
 
 			final EClass eClass = generalPNLDetails.eClass();

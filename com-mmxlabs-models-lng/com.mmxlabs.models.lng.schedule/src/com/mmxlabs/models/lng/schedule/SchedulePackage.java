@@ -4187,6 +4187,52 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl <em>Basic Slot PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	int BASIC_SLOT_PNL_DETAILS = 29;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Fees</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4194,7 +4240,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 31;
+	int FUEL_UNIT = 32;
 
 
 	/**
@@ -4205,7 +4251,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 30;
+	int FUEL = 31;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4216,7 +4262,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 29;
+	int SEQUENCE_TYPE = 30;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -4227,7 +4273,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 32;
+	int CAPACITY_VIOLATION_TYPE = 33;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4237,7 +4283,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 33;
+	int CALENDAR = 34;
 
 
 	/**
@@ -4248,7 +4294,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 34;
+	int ITERABLE = 35;
 
 
 	/**
@@ -4259,7 +4305,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 35;
+	int OBJECT = 36;
 
 
 	/**
@@ -5641,6 +5687,38 @@ public interface SchedulePackage extends EPackage {
 	EClass getGeneralPNLDetails();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails <em>Basic Slot PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Basic Slot PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails
+	 * @generated
+	 */
+	EClass getBasicSlotPNLDetails();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees <em>Cancellation Fees</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancellation Fees</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_CancellationFees();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_HedgingValue();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6836,6 +6914,32 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EClass GENERAL_PNL_DETAILS = eINSTANCE.getGeneralPNLDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl <em>Basic Slot PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getBasicSlotPNLDetails()
+		 * @generated
+		 */
+		EClass BASIC_SLOT_PNL_DETAILS = eINSTANCE.getBasicSlotPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Cancellation Fees</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = eINSTANCE.getBasicSlotPNLDetails_CancellationFees();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = eINSTANCE.getBasicSlotPNLDetails_HedgingValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

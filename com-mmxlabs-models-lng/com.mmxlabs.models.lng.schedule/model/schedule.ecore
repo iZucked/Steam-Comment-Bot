@@ -247,4 +247,10 @@
         eType="#//GeneralPNLDetails" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="GeneralPNLDetails" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicSlotPNLDetails" eSuperTypes="#//GeneralPNLDetails">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFees" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedgingValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
+  </eClassifiers>
 </ecore:EPackage>

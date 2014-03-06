@@ -163,9 +163,9 @@
           factory="com.mmxlabs.models.lng.schedule.properties.BasicPNLProperties">
     </DetailPropertyFactory>
     <DetailPropertyFactory
-          EClass="com.mmxlabs.models.lng.schedule.SlotPNLDetails"
+          EClass="com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails"
           category="pnl"
-          factory="com.mmxlabs.models.lng.schedule.properties.SlotPNLDetailsProperties">
+          factory="com.mmxlabs.models.lng.schedule.properties.BasicSlotPNLDetailsProperties">
     </DetailPropertyFactory>
  </extension>
  <extension
