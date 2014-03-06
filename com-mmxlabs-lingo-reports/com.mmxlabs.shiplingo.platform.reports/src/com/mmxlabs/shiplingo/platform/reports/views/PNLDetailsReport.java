@@ -13,10 +13,12 @@ import java.util.Set;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -38,18 +40,44 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesView;
+import com.mmxlabs.shiplingo.platform.reports.internal.Activator;
 
 public class PNLDetailsReport extends DetailPropertiesView {
+
+	private int expandLevel = 4;
 
 	public PNLDetailsReport() {
 		super("pnl", "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", false);
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
 		// Expand four levels by default
-		viewer.setAutoExpandLevel(4);
+		expandLevel = 4;
+		viewer.setAutoExpandLevel(expandLevel);
+
+		final Action collapseOneLevel = new Action("Collapse All") {
+			@Override
+			public void run() {
+				viewer.collapseAll();
+				expandLevel = 1;
+			}
+		};
+		final Action expandOneLevel = new Action("Expand one Level") {
+			@Override
+			public void run() {
+				viewer.expandToLevel(++expandLevel);
+			}
+		};
+		collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseAll.gif"));
+		expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandAll.gif"));
+
+		getViewSite().getActionBars().getToolBarManager().add(collapseOneLevel);
+		getViewSite().getActionBars().getToolBarManager().add(expandOneLevel);
+		getViewSite().getActionBars().updateActionBars();
+
+		updateFromSelection();
 	}
 
 	@Override
