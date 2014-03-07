@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1394182766343
+Build-Jdk: 1.7.0_45
+Built-By: sg
+Bundle-Description: Project containing commonly used classes and utility
+  functions.
+Bundle-DocURL: http://www.minimaxlabs.com/
+Bundle-ManifestVersion: 2
+Bundle-Name: common-nauticaldistances
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-SymbolicName: com.mmxlabs.common.common-nauticaldistances
+Bundle-Vendor: Minimax Labs Ltd.
+Bundle-Version: 2.2.3.qualifier
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.mmxlabs.common.nauticaldistances;uses:="com.mmxlabs.
+ common,org.slf4j,javax.imageio,com.mmxlabs.common.options";version="2.2
+ .3"
+Import-Package: com.mmxlabs.common,com.mmxlabs.common.options,javax.imag
+ eio,org.slf4j;version="[1.5,2)"
+Tool: Bnd-1.50.0

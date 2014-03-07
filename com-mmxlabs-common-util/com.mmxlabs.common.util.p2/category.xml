@@ -6,9 +6,11 @@
 
 -->
 <site>
-   <category-def name="all" label="Common Util"/>
-   <iu>
+   <feature id="com.mmxlabs.common.util.feature" version="0.0.0">
       <category name="all"/>
-      <query><expression type="match">providedCapabilities.exists(p | p.namespace == 'osgi.bundle')</expression></query>
-   </iu>
+   </feature>
+   <feature id="com.mmxlabs.common.util.feature.source" version="0.0.0">
+      <category name="all"/>
+   </feature>
+   <category-def name="all" label="Common Util"/>
 </site>

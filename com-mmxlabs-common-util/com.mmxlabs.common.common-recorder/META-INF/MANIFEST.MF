@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1394182765723
+Build-Jdk: 1.7.0_45
+Built-By: sg
+Bundle-Description: Project containing commonly used classes and utility
+  functions.
+Bundle-DocURL: http://www.minimaxlabs.com/
+Bundle-ManifestVersion: 2
+Bundle-Name: common-recorder
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-SymbolicName: com.mmxlabs.common.common-recorder
+Bundle-Vendor: Minimax Labs Ltd.
+Bundle-Version: 2.2.3.qualifier
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.mmxlabs.common.recorder;uses:="javax.xml.stream,com.
+ mmxlabs.common.recorder.conversion,com.mmxlabs.common.recorder.conversi
+ on.impl,javax.xml.stream.events,javax.xml.namespace";version="2.2.3",co
+ m.mmxlabs.common.recorder.conversion;version="2.2.3",com.mmxlabs.common
+ .recorder.conversion.impl;uses:="com.mmxlabs.common.recorder.conversion
+ ";version="2.2.3"
+Import-Package: javax.xml.namespace,javax.xml.stream,javax.xml.stream.ev
+ ents
+Tool: Bnd-1.50.0
+Require-Bundle: com.mmxlabs.common.common-util;bundle-version="2.2.3"

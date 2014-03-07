@@ -1,22 +1,8 @@
 target/
-.classpath
-.settings/
 .*~$
 
 syntax: regexp
-^com\.mmxlabs.*/target$
-syntax: regexp
-^com\.mmxlabs.*/\.settings$
-syntax: regexp
-^com\.mmxlabs.*/META-INF$
-syntax: regexp
-^common-recorder/META-INF$
-syntax: regexp
-^common-recorder/\.project$
-syntax: regexp
-\.project$
-syntax: regexp
-^common-nauticaldistances/META-INF$
+.*/target$
 
 syntax: regexp
 \.csv$
