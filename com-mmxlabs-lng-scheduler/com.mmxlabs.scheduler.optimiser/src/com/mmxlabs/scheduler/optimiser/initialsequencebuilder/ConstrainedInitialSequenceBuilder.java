@@ -583,7 +583,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		if (chunks.isEmpty() == false) {
 			log.error("Could not schedule the following " + chunks.size() + " elements anywhere: " + chunks);
-			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSequenceBuilder. Try manually assigning vessels." + chunks.size() + " chunks " + "could not be scheduled anywhere: " + chunks);
+			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks " + "could not be scheduled anywhere: " + chunks);
 		}
 
 		// OK, we have done our best, now build the modifiablesequences
