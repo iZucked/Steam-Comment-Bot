@@ -108,7 +108,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	private List<EObject> editedObjects;
 	private final Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
 	private IDisplayCompositeFactory displayCompositeFactory;
-	//private IScenarioEditingLocation scenarioEditingLocation;
+	// private IScenarioEditingLocation scenarioEditingLocation;
 	private IDialogEditingContext dialogContext;
 
 	public MultiDetailDialog(final Shell parentShell, final MMXRootObject root, final ICommandHandler commandHandler) {
@@ -288,8 +288,10 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 			final List<Class<?>> classesCpy = new ArrayList<>(classes);
 			for (final EObject o : range0) {
 				final int idx = classesCpy.indexOf(o.getClass());
-				commonRange[idx] = o;
-				classesCpy.set(idx, null);
+				if (idx != -1) {
+					commonRange[idx] = o;
+					classesCpy.set(idx, null);
+				}
 			}
 		}
 
@@ -515,7 +517,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					toolkit.adapt(tb, true, true);
 					final GridData gd = new GridData();
 					// TODO fix magic number - measure width properly and set everywhere
-//					gd.minimumWidth = gd.widthHint = ;
+					// gd.minimumWidth = gd.widthHint = ;
 					tb.setLayoutData(gd);
 
 					return composite;
