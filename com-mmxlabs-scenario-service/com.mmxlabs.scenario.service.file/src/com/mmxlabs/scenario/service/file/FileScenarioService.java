@@ -35,6 +35,7 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
@@ -153,7 +154,15 @@ public class FileScenarioService extends AbstractScenarioService {
 			// Copy list as delete will remove it from the resource set
 			for (final Resource r : new ArrayList<Resource>(instanceResourceSet.getResources())) {
 				try {
-					r.delete(null);
+					r.unload();
+					instanceResourceSet.getResources().remove(r);
+					URI rui = resolveURI("instances/" + instance.getUuid() + ".xmi");
+					if (rui.isFile()) {
+						FileDeleter.delete(new File(rui.toFileString()));
+					} else {
+						log.warn("Unable to securely delete scenario - " + rui.toString());
+						r.delete(null);
+					}
 				} catch (final IOException e) {
 					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + r.getURI(), e);
 				}

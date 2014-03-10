@@ -44,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
@@ -336,7 +337,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		} finally {
 			// Clean up tmp files used for migration.
 			for (final File tmpFile : tmpFiles) {
-				tmpFile.delete();
+				FileDeleter.delete(tmpFile);
 			}
 		}
 	}

@@ -49,6 +49,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
@@ -168,7 +169,15 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				delete(sub);
 			}
 		}
-		f.delete();
+		if (f.isFile()) {
+			try {
+				FileDeleter.delete(f);
+			} catch (final Exception e) {
+				log.error("Error deleting: " + f.getName(), e);
+			}
+		} else {
+			f.delete();
+		}
 	}
 
 	@Override
@@ -640,7 +649,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				if (c.getParent() == destination) {
 					continue;
 				}
-				
+
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
 					try {
