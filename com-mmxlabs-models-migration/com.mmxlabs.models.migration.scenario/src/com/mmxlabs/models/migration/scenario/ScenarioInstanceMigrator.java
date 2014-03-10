@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
@@ -121,7 +122,7 @@ public class ScenarioInstanceMigrator {
 		} finally {
 			// Done! Clean up
 			for (final File f : tmpFiles) {
-				f.delete();
+				FileDeleter.delete(f);
 			}
 		}
 	}
