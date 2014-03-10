@@ -10,11 +10,11 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.emf.validation;bundle-version="1.4.0",
  org.slf4j.api;bundle-version="1.6.4",
  com.mmxlabs.models.mmxcore;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[5.0.0,6.0.0)"
+ com.mmxlabs.scenario.service.model;bundle-version="[5.0.0,6.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[2.2.3,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui.validation,
  com.mmxlabs.models.ui.validation.gui
-Import-Package: com.mmxlabs.common;version="1.0.0"
 Service-Component: OSGI-INF/*.xml
 
