@@ -41,7 +41,7 @@ public interface ISalesPriceCalculator extends ICalculator {
 
 	/**
 	 * Another variant of {@link #estimateSalesUnitPrice(IDischargeOption, int, IDetailTree)} taking a discharge volume to calculate the exact price. This method should not be called before volume
-	 * decisio0ns have been made.
+	 * decisions have been made.
 	 * 
 	 * @param time
 	 * @param annotations
