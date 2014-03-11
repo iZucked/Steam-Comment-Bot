@@ -164,6 +164,9 @@
          <package
                namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
          </package>
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/scenario/1/">
+         </package>
          <constraints
                categories="com.mmxlabs.models.lng.assignment.validation.optimisation">
             <constraint
@@ -178,6 +181,9 @@
                <message>
                   {0}
                </message>
+               <target
+                     class="LNGScenarioModel">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.CargoVolumeVesselAssignmentConstraint"
