@@ -151,16 +151,17 @@ public class FileScenarioService extends AbstractScenarioService {
 				instanceResourceSet.createResource(rooObjectURI);
 			}
 
+			// Delete the scenario
 			// Copy list as delete will remove it from the resource set
 			for (final Resource r : new ArrayList<Resource>(instanceResourceSet.getResources())) {
 				try {
 					r.unload();
 					instanceResourceSet.getResources().remove(r);
-					URI rui = resolveURI("instances/" + instance.getUuid() + ".xmi");
-					if (rui.isFile()) {
-						FileDeleter.delete(new File(rui.toFileString()));
+					final URI scenaruiURI = resolveURI(instance.getUuid() + ".xmi");
+					if (scenaruiURI.isFile()) {
+						FileDeleter.delete(new File(scenaruiURI.toFileString()));
 					} else {
-						log.warn("Unable to securely delete scenario - " + rui.toString());
+						log.warn("Unable to securely delete scenario - " + scenaruiURI.toString());
 						r.delete(null);
 					}
 				} catch (final IOException e) {
@@ -168,10 +169,18 @@ public class FileScenarioService extends AbstractScenarioService {
 				}
 			}
 
+			// Delete backup metadata
 			if (scenarioService != null) {
 				try {
 					final Resource resource = resourceSet.createResource(resolveURI("instances/" + instance.getUuid() + ".xmi"));
-					resource.delete(null);
+
+					instanceResourceSet.getResources().remove(resource);
+					final URI metadataURI = resolveURI("instances/" + instance.getUuid() + ".xmi");
+					if (metadataURI.isFile()) {
+						FileDeleter.delete(new File(metadataURI.toFileString()));
+					} else {
+						resource.delete(null);
+					}
 					resourceSet.getResources().remove(resource);
 				} catch (final Throwable th) {
 				}
@@ -416,7 +425,7 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	@Override
-	public void makeFolder(Container parent, String name) {
+	public void makeFolder(final Container parent, final String name) {
 		if (parent instanceof ScenarioInstance) {
 			return;
 		}
