@@ -45,7 +45,8 @@ public final class FileDeleter {
 			try {
 				final FileLock lock = channel.lock();
 				try {
-					final MappedByteBuffer buffer = channel.map(MapMode.READ_WRITE, 0, raf.length());
+					// Garbage collect is the only way to free this thing! 
+					MappedByteBuffer buffer = channel.map(MapMode.READ_WRITE, 0, raf.length());
 					final byte[] bytes = new byte[4096];
 
 					Arrays.fill(bytes, (byte) 0x00);
@@ -74,6 +75,7 @@ public final class FileDeleter {
 					}
 					buffer.force();
 					buffer.clear();
+					buffer = null;
 				} finally {
 					lock.release();
 				}
