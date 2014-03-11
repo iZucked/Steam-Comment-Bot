@@ -1,9 +1,7 @@
 package com.mmxlabs.common.io;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
@@ -88,18 +86,5 @@ public final class FileDeleter {
 
 		file.delete();
 		System.gc();
-	}
-
-	public static void main(final String arg[]) throws Exception {
-
-		final File f = new File("C:/temp/test.file.txt");
-
-		final BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-		for (int i = 0; i < 1000; ++i) {
-			bw.write("Hello!");
-		}
-		bw.close();
-
-		FileDeleter.delete(f);
 	}
 }
