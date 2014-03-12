@@ -319,8 +319,9 @@ public class CargoEditorMenuHelper {
 						final Action action = new Action("Unlock") {
 							@Override
 							public void run() {
-								final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE);
-								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+								final CompoundCommand cc = new CompoundCommand("Unlock assignment");
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
+								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 							}
 						};
 						menuManager.add(action);
@@ -328,8 +329,12 @@ public class CargoEditorMenuHelper {
 						final Action action = new Action("Lock") {
 							@Override
 							public void run() {
-								final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE);
-								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+								final CompoundCommand cc = new CompoundCommand("Lock assignment");
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE));
+								if (assignableElement instanceof Cargo) {
+									cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
+								}
+								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 							}
 						};
 						menuManager.add(action);
@@ -340,9 +345,9 @@ public class CargoEditorMenuHelper {
 				final Action action = new Action("Unassign") {
 					@Override
 					public void run() {
-						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
-								SetCommand.UNSET_VALUE);
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+						final CompoundCommand cc = new CompoundCommand("Unassign");
+						cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 					}
 				};
 				menuManager.add(action);
@@ -1074,6 +1079,7 @@ public class CargoEditorMenuHelper {
 						if (cargo != null) {
 							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
 						}
 					}
 				}
@@ -1090,6 +1096,7 @@ public class CargoEditorMenuHelper {
 						if (cargo != null) {
 							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
 						}
 					}
 				}
