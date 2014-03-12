@@ -86,6 +86,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -219,9 +220,9 @@ public class LNGScenarioTransformer {
 	@Inject
 	private IHedgesProviderEditor hedgesProviderEditor;
 
-	@Inject 
+	@Inject
 	private ICancellationFeeProviderEditor cancellationFeeProviderEditor;
-	
+
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -1122,17 +1123,17 @@ public class LNGScenarioTransformer {
 
 			if (dischargeSlot.isFOBSale()) {
 				final ITimeWindow localTimeWindow;
-//				if (dischargeSlot.isDivertable()) {
-//					// Extend window out to cover whole shipping days restriction
-//					localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
-//				} else {
-					localTimeWindow = dischargeWindow;
-//				}
+				// if (dischargeSlot.isDivertable()) {
+				// // Extend window out to cover whole shipping days restriction
+				// localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
+				// } else {
+				localTimeWindow = dischargeWindow;
+				// }
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
 						pricingDate, dischargeSlot.isOptional());
 
 				if (dischargeSlot.isDivertable()) {
-//					builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
+					// builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
 				discharge = builder.createDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(), pricingDate,
@@ -1157,7 +1158,7 @@ public class LNGScenarioTransformer {
 
 		final long cancellationFee = OptimiserUnitConvertor.convertToInternalFixedCost(dischargeSlot.getSlotOrContractCancellationFee());
 		cancellationFeeProviderEditor.setCancellationFee(discharge, cancellationFee);
-		
+
 		final Set<Vessel> allowedVessels = SetUtils.getObjects(dischargeSlot.getAllowedVessels());
 		if (!allowedVessels.isEmpty()) {
 			final Set<IVessel> vesselsForSlot = new HashSet<IVessel>();
@@ -1272,7 +1273,7 @@ public class LNGScenarioTransformer {
 
 		final long cancellationFee = OptimiserUnitConvertor.convertToInternalFixedCost(loadSlot.getSlotOrContractCancellationFee());
 		cancellationFeeProviderEditor.setCancellationFee(load, cancellationFee);
-		
+
 		final Set<Vessel> allowedVessels = SetUtils.getObjects(loadSlot.getAllowedVessels());
 		if (!allowedVessels.isEmpty()) {
 			final Set<IVessel> vesselsForSlot = new HashSet<IVessel>();
@@ -2144,6 +2145,14 @@ public class LNGScenarioTransformer {
 		{
 			final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
 			int charterCount = 0;
+
+			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
+			if (charterOutStartDate != null && charterOutStartDate.getCharterOutStartDate() != null) {
+				builder.setGeneratedCharterOutStartTime(dateHelper.convertTime(charterOutStartDate.getCharterOutStartDate()));
+			} else {
+				builder.setGeneratedCharterOutStartTime(0);
+			}
+
 			for (final CharterCostModel charterCost : spotMarketsModel.getCharteringSpotMarkets()) {
 
 				for (final VesselClass eVc : charterCost.getVesselClasses()) {

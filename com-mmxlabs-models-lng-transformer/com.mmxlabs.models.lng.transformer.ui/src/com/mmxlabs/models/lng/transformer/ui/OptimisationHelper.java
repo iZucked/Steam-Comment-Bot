@@ -40,6 +40,7 @@ import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterF
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
+import com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
@@ -135,6 +136,10 @@ public final class OptimisationHelper {
 							});
 							// Set initial state.
 							// instance.setLocked(true);
+							if (!k.equals(((LNGSchedulerJobDescriptor) job).getLockKey())) {
+								int ii = 0;
+							}
+//							assert k.equals(((LNGSchedulerJobDescriptor) job).getLockKey());
 							instance.getLock(k).awaitClaim();
 							control.prepare();
 							control.start();
@@ -342,16 +347,13 @@ public final class OptimisationHelper {
 		// Only merge across specific fields - not all of them. This permits additions to the default settings to pass through to the scenario.
 		mergeFields(previousSettings, defaultSettings);
 
-		
-		
 		final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
 		if (extenders != null) {
-			for (final IParameterModeExtender  extender : extenders) {
+			for (final IParameterModeExtender extender : extenders) {
 				extender.extend(defaultSettings, parameterMode);
 			}
 		}
-		
-		
+
 		return defaultSettings;
 	}
 
