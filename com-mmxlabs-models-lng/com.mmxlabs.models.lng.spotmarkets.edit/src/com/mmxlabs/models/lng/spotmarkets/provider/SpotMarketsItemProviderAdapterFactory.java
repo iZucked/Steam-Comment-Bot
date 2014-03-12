@@ -272,6 +272,29 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutStartDateItemProvider charterOutStartDateItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutStartDateAdapter() {
+		if (charterOutStartDateItemProvider == null) {
+			charterOutStartDateItemProvider = new CharterOutStartDateItemProvider(this);
+		}
+
+		return charterOutStartDateItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -416,6 +439,7 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 		if (fobPurchasesMarketItemProvider != null) fobPurchasesMarketItemProvider.dispose();
 		if (fobSalesMarketItemProvider != null) fobSalesMarketItemProvider.dispose();
 		if (spotAvailabilityItemProvider != null) spotAvailabilityItemProvider.dispose();
+		if (charterOutStartDateItemProvider != null) charterOutStartDateItemProvider.dispose();
 	}
 
 }

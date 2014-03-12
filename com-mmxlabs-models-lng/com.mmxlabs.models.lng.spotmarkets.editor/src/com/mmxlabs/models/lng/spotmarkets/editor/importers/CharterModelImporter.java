@@ -11,6 +11,8 @@ import java.util.TimeZone;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -24,9 +26,9 @@ public class CharterModelImporter extends DefaultClassImporter {
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		if (row.get(START_DATE_KEY) != null && !row.get(START_DATE_KEY).trim().isEmpty()) {
-			final CharterOutStartDate charterOutStartDate = new CharterOutStartDate();
+			final CharterOutStartDate charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
 			try {
-				charterOutStartDate.startDate = dateAttributeImporter.parseDate(row.get(START_DATE_KEY));
+				charterOutStartDate.setCharterOutStartDate(dateAttributeImporter.parseDate(row.get(START_DATE_KEY)));
 			} catch (final ParseException e) {
 				context.addProblem(context.createProblem("Unable to parse date " + row.get(START_DATE_KEY), true, true, true));
 				return new ImportResults(null);
@@ -49,7 +51,7 @@ public class CharterModelImporter extends DefaultClassImporter {
 				final CharterOutStartDate charterOutStartDate = (CharterOutStartDate) obj;
 				final Map<String, String> dateRow = new HashMap<String, String>();
 
-				dateRow.put(START_DATE_KEY, dateAttributeImporter.formatDate(charterOutStartDate.startDate, TimeZone.getTimeZone("UTC"), false));
+				dateRow.put(START_DATE_KEY, dateAttributeImporter.formatDate(charterOutStartDate.getCharterOutStartDate(), TimeZone.getTimeZone("UTC"), false));
 				exportedObjects.add(dateRow);
 			} else {
 				generalExportObject.add(obj);

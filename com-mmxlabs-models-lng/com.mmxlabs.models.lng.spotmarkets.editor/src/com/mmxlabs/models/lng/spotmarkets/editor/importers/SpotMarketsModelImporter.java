@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.spotmarkets.editor.importers;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -98,7 +98,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 					spotMarketsModel.getCharteringSpotMarkets().add((CharterCostModel) obj);
 				} else if (obj instanceof CharterOutStartDate) {
 					final CharterOutStartDate charterOutStartDate = (CharterOutStartDate) obj;
-					spotMarketsModel.setCharterOutStartDate(charterOutStartDate.startDate);
+					spotMarketsModel.setCharterOutStartDate(charterOutStartDate);
 				}
 			}
 		}
@@ -197,10 +197,8 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 		final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) model;
 		{
 			final List<EObject> charterObjects = new LinkedList<EObject>(spotMarketsModel.getCharteringSpotMarkets());
-			final Date startDate = spotMarketsModel.getCharterOutStartDate();
-			if (startDate != null) {
-				final CharterOutStartDate charterOutStartDate = new CharterOutStartDate();
-				charterOutStartDate.startDate = startDate;
+			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
+			if (charterOutStartDate != null) {
 				charterObjects.add(charterOutStartDate);
 			}
 

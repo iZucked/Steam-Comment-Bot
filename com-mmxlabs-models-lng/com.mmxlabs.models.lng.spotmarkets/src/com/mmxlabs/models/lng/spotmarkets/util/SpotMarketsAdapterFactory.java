@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.util;
 
+import com.mmxlabs.models.lng.spotmarkets.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -114,6 +115,10 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSpotAvailability(SpotAvailability object) {
 				return createSpotAvailabilityAdapter();
+			}
+			@Override
+			public Adapter caseCharterOutStartDate(CharterOutStartDate object) {
+				return createCharterOutStartDateAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -270,6 +275,20 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSpotAvailabilityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate <em>Charter Out Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate
+	 * @generated
+	 */
+	public Adapter createCharterOutStartDateAdapter() {
 		return null;
 	}
 

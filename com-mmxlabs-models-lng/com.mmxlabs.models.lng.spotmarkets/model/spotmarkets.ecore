@@ -13,7 +13,8 @@
         eType="#//SpotMarketGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charteringSpotMarkets"
         upperBound="-1" eType="#//CharterCostModel" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutStartDate" eType="#//CharterOutStartDate"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterCostModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"
@@ -88,6 +89,13 @@
       <eGenericType eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//DataIndex">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
       </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutStartDate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="http://www.mmxlabs.com/models/lng/ui/datetime">
+        <details key="showTime" value="false"/>
+      </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
 </ecore:EPackage>
