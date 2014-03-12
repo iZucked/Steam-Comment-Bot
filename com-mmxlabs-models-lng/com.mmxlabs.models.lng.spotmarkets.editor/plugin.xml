@@ -95,6 +95,12 @@
           eClassName="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.spotmarkets.editor.importers.CharterModelImporter"
+          classImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.CharterModelImporter"
+          eClassName="com.mmxlabs.models.lng.spotmarkets.CharterCostModel"
+          inheritable="true">
+    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
@@ -136,14 +142,6 @@
           referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
     </valueProvider>
  </extension>
- <extension
-       point="com.mmxlabs.models.util.import.submodels">
-    <submodelImporter
-          ID="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMartketsModelImporter"
-          subModelClassName="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel"
-          subModelImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter">
-    </submodelImporter>
- </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated spotmarkets -->
       <editor
@@ -154,6 +152,14 @@
             class="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsEditor"
             contributorClass="com.mmxlabs.models.lng.spotmarkets.presentation.SpotMarketsActionBarContributor">
       </editor>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.submodels">
+      <submodelImporter
+            ID="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter"
+            subModelClassName="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel"
+            subModelImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter">
+      </submodelImporter>
    </extension>
 
 </plugin>

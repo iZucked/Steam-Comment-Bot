@@ -13,6 +13,7 @@
         eType="#//SpotMarketGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="charteringSpotMarkets"
         upperBound="-1" eType="#//CharterCostModel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterOutStartDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharterCostModel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"

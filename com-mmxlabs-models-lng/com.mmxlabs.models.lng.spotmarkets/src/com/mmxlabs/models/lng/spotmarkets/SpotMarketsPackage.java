@@ -134,13 +134,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Charter Out Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKETS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SPOT_MARKETS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl <em>Charter Cost Model</em>}' class.
@@ -909,6 +918,17 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getSpotMarketsModel_CharteringSpotMarkets();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Out Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate()
+	 * @see #getSpotMarketsModel()
+	 * @generated
+	 */
+	EAttribute getSpotMarketsModel_CharterOutStartDate();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel <em>Charter Cost Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1314,6 +1334,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS = eINSTANCE.getSpotMarketsModel_CharteringSpotMarkets();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Out Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE = eINSTANCE.getSpotMarketsModel_CharterOutStartDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl <em>Charter Cost Model</em>}' class.

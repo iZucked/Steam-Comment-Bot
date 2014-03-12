@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.spotmarkets;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import java.util.Date;
 
 /**
  * <!-- begin-user-doc -->
@@ -20,6 +21,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getFobPurchasesSpotMarket <em>Fob Purchases Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getFobSalesSpotMarket <em>Fob Sales Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharteringSpotMarkets <em>Chartering Spot Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  * </ul>
  * </p>
  *
@@ -147,6 +149,32 @@ public interface SpotMarketsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<CharterCostModel> getCharteringSpotMarkets();
+
+	/**
+	 * Returns the value of the '<em><b>Charter Out Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Out Start Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Out Start Date</em>' attribute.
+	 * @see #setCharterOutStartDate(Date)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel_CharterOutStartDate()
+	 * @model
+	 * @generated
+	 */
+	Date getCharterOutStartDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Out Start Date</em>' attribute.
+	 * @see #getCharterOutStartDate()
+	 * @generated
+	 */
+	void setCharterOutStartDate(Date value);
 
 } // end of  SpotMarketsModel
 
