@@ -761,4 +761,11 @@ public interface ISchedulerBuilder {
 	 * @param vessel
 	 */
 	void freezeSlotToVessel(@NonNull IPortSlot portSlot, @NonNull IVessel vessel);
+
+	/**
+	 * Set the earliest time we can start generating charter outs.
+	 * 
+	 * @param charterOutStartTime
+	 */
+	void setGeneratedCharterOutStartTime(int charterOutStartTime);
 }

@@ -1775,7 +1775,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, final ICurve charterOutCurve, final int minDuration) {
 		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration);
+	}
 
+	@Override
+	public void setGeneratedCharterOutStartTime(@NonNull final int charterOutStartTime) {
+		charterMarketProviderEditor.setCharterOutStartTime(charterOutStartTime);;
 	}
 
 	/**

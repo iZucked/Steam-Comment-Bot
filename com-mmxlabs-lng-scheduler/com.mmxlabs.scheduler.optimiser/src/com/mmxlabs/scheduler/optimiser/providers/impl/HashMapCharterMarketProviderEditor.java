@@ -62,6 +62,8 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 	private final Map<IVesselClass, List<Pair<ICurve, Integer>>> charterInOptions = new HashMap<IVesselClass, List<Pair<ICurve, Integer>>>();
 	private final Map<IVesselClass, List<Pair<ICurve, Integer>>> charterOutOptions = new HashMap<IVesselClass, List<Pair<ICurve, Integer>>>();
 
+	private int charterOutStartTime = 0;
+
 	@Override
 	public Collection<CharterMarketOptions> getCharterInOptions(final IVesselClass vesselClass, final int time) {
 		final int dateKey = dateKeyProvider.getDateKeyFromHours(time);
@@ -111,5 +113,15 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 
 		final Pair<ICurve, Integer> p = new Pair<ICurve, Integer>(curve, minDuration);
 		entry.add(p);
+	}
+
+	@Override
+	public int getCharterOutStartTime() {
+		return charterOutStartTime;
+	}
+
+	@Override
+	public void setCharterOutStartTime(int startTime) {
+		this.charterOutStartTime = startTime;
 	}
 }

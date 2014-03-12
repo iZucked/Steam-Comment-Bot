@@ -117,7 +117,6 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		boolean foundMarketPrice = false;
 		int bestDailyPrice = 0;
-		final int time = ballastStartTime + ballastDetails.getTravelTime();
 
 		final int availableTime = ballastDetails.getOptions().getAvailableTime();
 		final int distance = ballastDetails.getOptions().getDistance();
@@ -126,6 +125,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		final int travelTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
 
 		final int availableCharteringTime = availableTime - travelTime;
+		final int time = ballastStartTime + travelTime;
+		if (time < charterMarketProvider.getCharterOutStartTime()) {
+			// Charter starts too early
+			return null;
+		}
 
 		// Scan all the markets for a match
 		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
