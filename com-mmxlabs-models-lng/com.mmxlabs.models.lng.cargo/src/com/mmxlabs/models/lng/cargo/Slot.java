@@ -888,7 +888,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @return the value of the '<em>Hedges</em>' attribute.
 	 * @see #setHedges(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Hedges()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='-#'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='-########0'"
 	 * @generated
 	 */
 	int getHedges();

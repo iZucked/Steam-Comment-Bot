@@ -1617,7 +1617,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "unit", "$",
-			 "formatString", "-#"
+			 "formatString", "-########0"
 		   });		
 		addAnnotation
 		  (getSlot_CancellationFee(), 
