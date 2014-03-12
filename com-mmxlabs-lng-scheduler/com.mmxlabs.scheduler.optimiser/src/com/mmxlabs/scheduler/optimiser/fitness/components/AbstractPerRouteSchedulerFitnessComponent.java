@@ -5,10 +5,13 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -110,6 +113,12 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	}
 
 	protected abstract long endSequenceAndGetCost();
+
+	@Override
+	public boolean evaluateUnusedSlots(final List<ISequenceElement> unusedSlots, final ScheduledSequences scheduleSequences) {
+		// By default, do nothing
+		return true;
+	}
 
 	/*
 	 * (non-Javadoc)
