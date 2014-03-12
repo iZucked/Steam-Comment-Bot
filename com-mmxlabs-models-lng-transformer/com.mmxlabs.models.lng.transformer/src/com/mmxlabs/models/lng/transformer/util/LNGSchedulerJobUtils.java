@@ -437,12 +437,12 @@ public class LNGSchedulerJobUtils {
 				}
 
 				if (object != null) {
-					object.setAssignment(assignment);
-					object.setSequenceHint(index++);
+					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, assignment));
+					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, index++));
 					if (sequence.isSetSpotIndex()) {
-						object.setSpotIndex(sequence.getSpotIndex());
+						cmd.append(SetCommand.create(domain,object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, sequence.getSpotIndex()));
 					} else {
-						object.unsetSpotIndex();
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					}
 				}
 			}
