@@ -19,6 +19,7 @@ public class NegationOperator extends ArithmeticExpression {
 		return -argument.evaluate();
 	}
 
+	@Override
 	public String toString() {
 		return "-" + argument;
 	}

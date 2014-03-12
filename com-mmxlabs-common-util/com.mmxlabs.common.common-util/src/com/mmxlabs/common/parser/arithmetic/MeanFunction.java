@@ -23,6 +23,7 @@ public class MeanFunction extends ArithmeticExpression {
 		return sum / arguments.size();
 	}
 
+	@Override
 	public String toString() {
 		return "avg(" + arguments + ")";
 	}
