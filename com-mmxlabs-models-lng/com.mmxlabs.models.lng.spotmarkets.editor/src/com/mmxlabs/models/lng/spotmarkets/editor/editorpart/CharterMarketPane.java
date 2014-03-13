@@ -95,7 +95,7 @@ public class CharterMarketPane extends ScenarioTableViewerPane {
 				}
 			}
 		};
-		getToolBarManager().add(editCharterOutStartDateAction);
-		getToolBarManager().update(true);
+		getMenuManager().add(editCharterOutStartDateAction);
+		getMenuManager().update(true);
 	}
 }
