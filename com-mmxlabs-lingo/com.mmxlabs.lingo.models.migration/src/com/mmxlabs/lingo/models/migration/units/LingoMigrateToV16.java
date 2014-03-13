@@ -46,7 +46,7 @@ public class LingoMigrateToV16 implements IMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -16;
+		return 16;
 	}
 
 	@Override
