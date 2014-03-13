@@ -40,7 +40,7 @@ public class MigrateToV16 extends AbstractMigrationUnit {
 
 	@Override
 	public int getDestinationVersion() {
-		return -16;
+		return 16;
 	}
 
 	@Override
