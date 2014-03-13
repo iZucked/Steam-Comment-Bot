@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -13,6 +16,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
+import com.mmxlabs.common.csv.CSVWriter;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -48,26 +52,30 @@ public class CopyTreeToClipboardAction extends Action {
 	@Override
 	public void run() {
 
-		final StringBuffer sb = new StringBuffer();
+		final StringWriter sw = new StringWriter();
+		final CSVWriter cw = new CSVWriter(sw, separator);
 
 		// Note this may be zero if no columns have been defined. However an
 		// implicit column will be created in such cases
 		final int numColumns = tree.getColumnCount();
 
-		// Header row
-		for (int i = 0; i < numColumns; ++i) {
-			final TreeColumn tc = tree.getColumn(i);
-			sb.append(tc.getText());
-			if ((i + 1) == numColumns) {
-				sb.append("\n");
-			} else {
-				sb.append(separator);
+		try {
+			// Header row
+			for (int i = 0; i < numColumns; ++i) {
+				final TreeColumn tc = tree.getColumn(i);
+				cw.addValue(tc.getText());
+				if ((i + 1) == numColumns) {
+					cw.endRow();
+				} 
+			}
+	
+			for (final TreeItem item : tree.getItems()) {
+				// Ensure at least 1 column to grab data
+				processTreeItem(cw, Math.max(1, numColumns), item);
 			}
 		}
-
-		for (final TreeItem item : tree.getItems()) {
-			// Ensure at least 1 column to grab data
-			processTreeItem(sb, Math.max(1, numColumns), item);
+		catch (IOException e) {
+			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
 
 		// Create a new clipboard instance
@@ -76,7 +84,7 @@ public class CopyTreeToClipboardAction extends Action {
 		try {
 			// Create the text transfer and set the contents
 			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
+			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
 		} finally {
 			// Clean up our local resources - system clipboard now has the data
 			cb.dispose();
@@ -86,26 +94,25 @@ public class CopyTreeToClipboardAction extends Action {
 	/**
 	 * Recursive function to process child {@link TreeItem}s
 	 * 
-	 * @param sb
+	 * @param cw
 	 * @param numColumns
 	 * @param item
+	 * @throws IOException 
 	 */
-	private void processTreeItem(final StringBuffer sb, final int numColumns, final TreeItem item) {
+	private void processTreeItem(final CSVWriter cw, final int numColumns, final TreeItem item) throws IOException {
 
 		for (int i = 0; i < numColumns; ++i) {
 
-			sb.append(item.getText(i));
+			cw.addValue(item.getText(i));
 			// Add EOL or separator char as appropriate
 			if ((i + 1) == numColumns) {
-				sb.append("\n");
-			} else {
-				sb.append(separator);
-			}
+				cw.endRow();
+			} 
 		}
 
 		// Recurse.....
 		for (final TreeItem child : item.getItems()) {
-			processTreeItem(sb, numColumns, child);
+			processTreeItem(cw, numColumns, child);
 		}
 	}
 }

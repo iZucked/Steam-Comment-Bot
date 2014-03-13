@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -13,6 +16,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.common.csv.CSVWriter;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -49,7 +53,8 @@ public class CopyGridToClipboardAction extends Action {
 	@Override
 	public void run() {
 
-		final StringBuffer sb = new StringBuffer();
+		final StringWriter sw = new StringWriter();
+		final CSVWriter cw = new CSVWriter(sw, separator);
 
 		// Note this may be zero if no columns have been defined. However an
 		// implicit column will be created in such cases
@@ -57,25 +62,28 @@ public class CopyGridToClipboardAction extends Action {
 
 		final int numColumns = table.getColumnCount();
 
-		// Header row
-		if (getRowHeaders) {
-			// presume empty top left cell
-			sb.append(separator);
-		}
-		// other header cells
-		for (int i = 0; i < numColumns; ++i) {
-			final GridColumn tc = table.getColumn(i);
-			sb.append(tc.getText());
-			if ((i + 1) == numColumns) {
-				sb.append("\n");
-			} else {
-				sb.append(separator);
+		try {
+			// Header row
+			if (getRowHeaders) {
+				// presume empty top left cell
+				cw.addValue("");
+			}
+			// other header cells
+			for (int i = 0; i < numColumns; ++i) {
+				final GridColumn tc = table.getColumn(i);
+				cw.addValue(tc.getText());
+				if ((i + 1) == numColumns) {
+					cw.endRow();
+				} 
+			}
+	
+			for (final GridItem item : table.getItems()) {
+				// Ensure at least 1 column to grab data
+				processTableItem(cw, Math.max(1, numColumns), item);
 			}
 		}
-
-		for (final GridItem item : table.getItems()) {
-			// Ensure at least 1 column to grab data
-			processTableItem(sb, Math.max(1, numColumns), item);
+		catch (IOException e) {
+			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
 
 		// Create a new clipboard instance
@@ -84,26 +92,22 @@ public class CopyGridToClipboardAction extends Action {
 		try {
 			// Create the text transfer and set the contents
 			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
+			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
 		} finally {
 			// Clean up our local resources - system clipboard now has the data
 			cb.dispose();
 		}
 	}
 
-	private void processTableItem(final StringBuffer sb, final int numColumns, final GridItem item) {
+	private void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
 		if (rowHeadersIncluded) {
-			sb.append(item.getHeaderText());
-			sb.append(separator);
+			cw.addValue(item.getHeaderText());
 		}
 		for (int i = 0; i < numColumns; ++i) {
-
-			sb.append(item.getText(i));
-			// Add EOL or separator char as appropriate
+			cw.addValue(item.getText(i));
+			// end row
 			if ((i + 1) == numColumns) {
-				sb.append("\n");
-			} else {
-				sb.append(separator);
+				cw.endRow();
 			}
 		}
 	}
@@ -111,4 +115,5 @@ public class CopyGridToClipboardAction extends Action {
 	public void setRowHeadersIncluded(final boolean b) {
 		this.rowHeadersIncluded = true;
 	}
+
 }
