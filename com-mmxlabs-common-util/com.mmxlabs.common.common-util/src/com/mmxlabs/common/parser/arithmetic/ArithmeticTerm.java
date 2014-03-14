@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.arithmetic;
@@ -24,6 +24,7 @@ public class ArithmeticTerm extends ArithmeticExpression {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return term;
 	}

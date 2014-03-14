@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
 package com.mmxlabs.common.parser;
@@ -23,6 +23,7 @@ public class ExpressionParser<T> implements IExpressionParser<T> {
 	private IFunctionFactory<T> functionFactory;
 	private ITermFactory<T> termFactory;
 
+	@Override
 	public IExpression<T> parse(final String expression) {
 		final StreamTokenizer tok = new StreamTokenizer(new StringReader(expression));
 

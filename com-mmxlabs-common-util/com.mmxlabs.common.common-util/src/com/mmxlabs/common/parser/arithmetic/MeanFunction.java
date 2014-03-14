@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
 package com.mmxlabs.common.parser.arithmetic;
@@ -23,6 +23,7 @@ public class MeanFunction extends ArithmeticExpression {
 		return sum / arguments.size();
 	}
 
+	@Override
 	public String toString() {
 		return "avg(" + arguments + ")";
 	}
