@@ -120,21 +120,22 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				}
 			} else if (object instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
-				if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
-					if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
-						final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
-						failures.add(dsd);
-					} else if (dischargeSlot.getShippingDaysRestriction() == 0) {
-						final String message = String.format("FOB Sale|%s shipping days restriction is set to zero - unable to ship anywhere!", dischargeSlot.getName());
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
-						failures.add(dsd);
-					}
-				} else if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
+//				if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
+//					if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
+//						final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
+//						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+//						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+//						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+//						failures.add(dsd);
+//					} else if (dischargeSlot.getShippingDaysRestriction() == 0) {
+//						final String message = String.format("FOB Sale|%s shipping days restriction is set to zero - unable to ship anywhere!", dischargeSlot.getName());
+//						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+//						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+//						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+//						failures.add(dsd);
+//					}
+//				} else
+					if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
 					final Cargo cargo = dischargeSlot.getCargo();
 					if (cargo != null) {
 						for (final Slot slot : cargo.getSlots()) {
