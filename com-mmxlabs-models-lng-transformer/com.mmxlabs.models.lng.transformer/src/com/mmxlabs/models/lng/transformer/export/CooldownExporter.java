@@ -9,6 +9,7 @@ import java.util.Map;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -29,7 +30,7 @@ public class CooldownExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(ISequenceElement element, Map<String, Object> annotations) {
+	public Event export(ISequenceElement element, Map<String, IElementAnnotation> annotations) {
 		final IIdleEvent event = (IIdleEvent) annotations.get(SchedulerConstants.AI_idleInfo);
 
 		if (event == null) {

@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerE
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPNLExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
 
 
@@ -31,6 +32,7 @@ public class TransformerExtensionsActivatorModule extends PeaberryActivationModu
 		
 		bindService(EntityTransformerExtensionFactory.class).export();
 		bindService(TradingExporterExtensionFactory.class).export();
+		bindService(BasicSlotPNLExporterExtensionFactory.class).export();
 	}
 
 }

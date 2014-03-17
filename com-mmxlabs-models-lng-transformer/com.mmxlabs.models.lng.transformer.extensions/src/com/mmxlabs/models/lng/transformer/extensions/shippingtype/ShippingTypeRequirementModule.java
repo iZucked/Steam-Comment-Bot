@@ -18,15 +18,13 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 /**
  * This is a PeaberryActivationModule to hook in the restricted elements constraints into the optimisation. This in not intended to be registered directly in the MANIFEST.MF file, but installed in a
  * 
- * @link{TransformerActivatorModule}
+ * @link{TransformerActivatorModule
  * 
  * @author Simon Goodall
  * @since 2.0
  * 
  */
 public class ShippingTypeRequirementModule extends PeaberryActivationModule {
-
-	public static final String DCP_desPermissionElementProvider = "provider-DES-permissions";
 
 	@Override
 	protected void configure() {
@@ -45,7 +43,7 @@ public class ShippingTypeRequirementModule extends PeaberryActivationModule {
 		@Override
 		protected void configure() {
 
-			final HashMapShippingTypeRequirementProvider desPermissionProviderEditor = new HashMapShippingTypeRequirementProvider(DCP_desPermissionElementProvider);
+			final HashMapShippingTypeRequirementProvider desPermissionProviderEditor = new HashMapShippingTypeRequirementProvider();
 			bind(IShippingTypeRequirementProvider.class).toInstance(desPermissionProviderEditor);
 			bind(IShippingTypeRequirementProviderEditor.class).toInstance(desPermissionProviderEditor);
 		}

@@ -20,14 +20,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  */
 public class HashMapRestrictedElementsProviderEditor implements IRestrictedElementsProviderEditor {
 
-	private final String name;
-
 	private final Map<ISequenceElement, Collection<ISequenceElement>> followerMap = new HashMap<ISequenceElement, Collection<ISequenceElement>>();
 	private final Map<ISequenceElement, Collection<ISequenceElement>> precedingMap = new HashMap<ISequenceElement, Collection<ISequenceElement>>();
-
-	public HashMapRestrictedElementsProviderEditor(final String name) {
-		this.name = name;
-	}
 
 	@Override
 	public Collection<ISequenceElement> getRestrictedFollowerElements(final ISequenceElement element) {
@@ -43,17 +37,6 @@ public class HashMapRestrictedElementsProviderEditor implements IRestrictedEleme
 			return precedingMap.get(element);
 		}
 		return Collections.emptySet();
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public void dispose() {
-		precedingMap.clear();
-		followerMap.clear();
 	}
 
 	@Override
