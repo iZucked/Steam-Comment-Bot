@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
@@ -57,6 +58,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	static final Color Green = new Color(Display.getCurrent(), new RGB(0, 180, 50));
 	static final Color Light_Green = new Color(Display.getCurrent(), new RGB(100, 255, 100));
 	static final Color White = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+	static final Color Light_Grey = new Color(Display.getCurrent(), new RGB(240, 240, 240));
+	static final Color Grey = new Color(Display.getCurrent(), new RGB(200, 200, 200));
 	
 	/**
 	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j. If the ith element is -1, the ith element is not connected to anywhere.
@@ -270,27 +273,33 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			final RowData row = root.getRows().get(i);
 			// Draw left hand terminal
 			if (row.loadSlot != null) {
-				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), ca, graphics, midpoint);
+				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), row.loadSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
 			if (row.dischargeSlot != null) {
-				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), ca, graphics, midpoint);
+				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), row.dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
 			rawI++;
 		}
 	}
 
-	private void drawTerminal(boolean isLeft, boolean hollow, Color terminalColour, boolean isOptional, final Rectangle ca, final GC graphics,
+	private void drawTerminal(boolean isLeft, boolean hollow, Color terminalColour, boolean isOptional, boolean isSpot, final Rectangle ca, final GC graphics,
 			final float midpoint) {
 		Color outlineColour = Green;
 		Color fillColour = terminalColour;
 		// make non-shipped a bit bigger, but hollow
 		int extraRadius = 1; 
+		if(isSpot){
+			terminalColour = Grey;
+			outlineColour = Grey;
+			fillColour = Light_Grey;
+		}
 		if(hollow){
 			outlineColour = terminalColour;
 			fillColour = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 		}
+		
 		graphics.setLineWidth(2);
 		int x = 0;
 		if(isLeft){
@@ -304,7 +313,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		graphics.fillOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
 		graphics.drawOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
 		// draw internal dot for optional slots
-		if (isOptional) {
+		if (isOptional && !isSpot) {
 			graphics.setBackground(Green);
 			y = (int) midpoint - (terminalSize / 2) + 3;
 			if(isLeft){
