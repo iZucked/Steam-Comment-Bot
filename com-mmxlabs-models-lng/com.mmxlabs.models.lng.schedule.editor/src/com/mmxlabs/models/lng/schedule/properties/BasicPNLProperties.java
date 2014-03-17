@@ -90,11 +90,11 @@ public class BasicPNLProperties implements IDetailPropertyFactory {
 
 			final DetailProperty entityDPPostTax = PropertiesFactory.eINSTANCE.createDetailProperty();
 
-			createPnLDetailProperty(entityPnL, entityDPPostTax, name + " P&L", "Taxed profit and loss for " + name, false);
+			createPnLDetailProperty(entityPnL, entityDPPostTax, "P&L", "Taxed profit and loss for " + name, false);
 			dpNode.getChildren().add(entityDPPostTax);
 
 			final DetailProperty entityDPPretax = PropertiesFactory.eINSTANCE.createDetailProperty();
-			createPnLDetailProperty(entityPnL, entityDPPretax, name + " Pre-Tax P&L", "Pre-tax profit and loss for " + name, true);
+			createPnLDetailProperty(entityPnL, entityDPPretax, "Pre-Tax P&L", "Pre-tax profit and loss for " + name, true);
 			dpNode.getChildren().add(entityDPPretax);
 		}
 
