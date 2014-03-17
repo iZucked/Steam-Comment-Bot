@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -56,6 +57,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	private IElementDurationProvider elementDurationProvider;
 	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
+	@Inject
+	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	public TravelTimeConstraintChecker(final String name) {
 		this.name = name;
@@ -141,9 +144,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			if (firstType == PortType.Load) {
 				if (secondType == PortType.Discharge) {
 
-					// See ShippingHoursRestrictions otherwise 
-					if (slot1.getPort() == slot2.getPort()) {
-
+					// See ShippingHoursRestrictions otherwise
+//					if (slot1.getPort() == slot2.getPort()) {
+					if (!shippingHoursRestrictionProvider.isDivertable(first)) {
 						if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
 							return true;
 						}

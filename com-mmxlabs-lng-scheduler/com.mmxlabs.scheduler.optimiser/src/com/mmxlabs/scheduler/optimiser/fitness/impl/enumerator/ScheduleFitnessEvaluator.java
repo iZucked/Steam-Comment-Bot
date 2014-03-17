@@ -5,10 +5,12 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
@@ -34,7 +36,7 @@ public class ScheduleFitnessEvaluator {
 		// Evaluate fitness components
 		final long[] fitnesses = new long[fitnessComponents.size()];
 
-		if (!iterateSchedulerComponents(vpIterator, fitnessComponents, scheduledSequences, fitnesses)) {
+		if (!iterateSchedulerComponents(vpIterator, fitnessComponents, scheduledSequences, sequences.getUnusedElements(), fitnesses)) {
 			return Long.MAX_VALUE;
 		}
 
@@ -63,18 +65,25 @@ public class ScheduleFitnessEvaluator {
 	 * 
 	 * @param components
 	 * @param sequences
+	 * @param unusedElements
 	 * @param fitnesses
 	 *            output parameter containing fitnesses, in the order the iterator provides the components
 	 * @return
 	 */
 	private static boolean iterateSchedulerComponents(final VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences,
-			final long[] fitnesses) {
+			List<ISequenceElement> unusedElements, final long[] fitnesses) {
 		for (final ICargoSchedulerFitnessComponent component : components) {
 			component.startEvaluation();
 		}
 
 		for (final ScheduledSequence sequence : sequences) {
 			if (!iterateSchedulerComponents(vpItr, components, sequence)) {
+				return false;
+			}
+		}
+
+		for (final ICargoSchedulerFitnessComponent component : components) {
+			if (!component.evaluateUnusedSlots(unusedElements, sequences)) {
 				return false;
 			}
 		}

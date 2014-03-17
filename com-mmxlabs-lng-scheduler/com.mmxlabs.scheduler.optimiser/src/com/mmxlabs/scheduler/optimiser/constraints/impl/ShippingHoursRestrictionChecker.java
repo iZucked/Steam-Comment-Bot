@@ -107,7 +107,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 				final ILoadOption desPurchase = (ILoadOption) firstSlot;
 				final IDischargeSlot desSale = (IDischargeSlot) secondSlot;
 
-				if (desPurchase.getPort() != desSale.getPort()) {
+				if (shippingHoursRestrictionProvider.isDivertable(first)) {
 
 					final int shippingHours = shippingHoursRestrictionProvider.getShippingHoursRestriction(first);
 					if (shippingHours == IShippingHoursRestrictionProvider.RESTRICTION_UNDEFINED) {

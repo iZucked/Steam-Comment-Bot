@@ -21,16 +21,6 @@ public final class HashMapSlotGroupCountProviderEditor implements ISlotGroupCoun
 	private final List<SlotGroup> slotGroups = new LinkedList<SlotGroup>();
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		elementToGroups.clear();
-	}
-
-	@Override
 	public SlotGroup createSlotGroup(final Collection<ISequenceElement> elements, final int count) {
 
 		final SlotGroup slotGroup = new SlotGroup(elements, count);

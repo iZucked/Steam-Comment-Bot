@@ -28,7 +28,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
@@ -123,11 +122,11 @@ public class ScheduleTestModule extends AbstractModule {
 	private IConstraintCheckerRegistry createConstraintRegistry(Injector injector) {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
 
-		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
+		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
 		injector.injectMembers(constraintFactory);
 
-		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
+		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
 		injector.injectMembers(constraintFactory2);
 

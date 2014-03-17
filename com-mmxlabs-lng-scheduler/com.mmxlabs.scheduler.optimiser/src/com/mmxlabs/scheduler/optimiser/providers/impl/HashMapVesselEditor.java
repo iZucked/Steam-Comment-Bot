@@ -47,15 +47,4 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 		vesselResourceMap.put(vessel, resource);
 		resourceVesselMap.put(resource, vessel);
 	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		vesselResourceMap.clear();
-		resourceVesselMap.clear();
-	}
 }

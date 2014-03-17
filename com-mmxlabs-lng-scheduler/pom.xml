@@ -27,7 +27,7 @@
 	</ciManagement>
 
 	<modules>
-		<module>target-definition</module>
+		<module>com.mmxlabs.scheduler.target-definition</module>
 		<module>com.mmxlabs.scheduler.optimiser</module>
 		<module>com.mmxlabs.scheduler.optimiser.tests</module>
 		<module>com.mmxlabs.scheduler.optimiser.feature</module>
@@ -57,7 +57,7 @@
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.scheduler</groupId>
-							<artifactId>target-definition</artifactId>
+							<artifactId>com.mmxlabs.scheduler.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>

@@ -33,15 +33,4 @@ public class HashMapHedgesProviderEditor implements IHedgesProviderEditor {
 	public void setHedgeValue(final IPortSlot portSlot, final long value) {
 		map.put(portSlot, value);
 	}
-	
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		map.clear();
-	}
-
 }

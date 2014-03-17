@@ -20,6 +20,8 @@ public interface IShippingHoursRestrictionProvider extends IDataComponentProvide
 	 */
 	final int RESTRICTION_UNDEFINED = 0;
 
+	boolean isDivertable(@NonNull ISequenceElement element);
+	
 	/**
 	 * Returns the number of hours for the shipping restriction. If not specified, then {@link #RESTRICTION_UNDEFINED} will be returned.
 	 * 

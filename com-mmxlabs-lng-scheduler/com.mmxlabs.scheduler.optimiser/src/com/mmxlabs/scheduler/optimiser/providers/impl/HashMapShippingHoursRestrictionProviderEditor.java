@@ -22,17 +22,6 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	private final Map<ISequenceElement, ITimeWindow> baseTimeMap = new HashMap<>();
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		hoursMap.clear();
-		baseTimeMap.clear();
-	}
-
-	@Override
 	public int getShippingHoursRestriction(@NonNull final ISequenceElement element) {
 		if (hoursMap.containsKey(element)) {
 			return hoursMap.get(element);
@@ -52,5 +41,10 @@ public class HashMapShippingHoursRestrictionProviderEditor implements IShippingH
 	public void setShippingHoursRestriction(@NonNull final ISequenceElement element, final @NonNull ITimeWindow baseTime, final int hours) {
 		hoursMap.put(element, hours);
 		baseTimeMap.put(element, baseTime);
+	}
+	
+	@Override
+	public boolean isDivertable(@NonNull ISequenceElement element) {
+		return hoursMap.containsKey(element);
 	}
 }

@@ -158,7 +158,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IVesselProvider.class).toInstance(vesselProvider);
 		bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 
-		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>("");
+		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>();
 		bind(new TypeLiteral<IMultiMatrixEditor<IPort, Integer>>() {
 		}).toInstance(portDistanceProvider);
 		bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
@@ -177,24 +177,24 @@ public class DataComponentProviderModule extends AbstractModule {
 			portSlotsProvider = new IndexedPortSlotEditor();
 			portTypeProvider = new IndexedPortTypeEditor();
 
-			timeWindowProvider = new IndexedTimeWindowEditor("");
-			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor("");
+			timeWindowProvider = new IndexedTimeWindowEditor();
+			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor();
 
-			elementDurationsProvider = new IndexedElementDurationEditor("");
+			elementDurationsProvider = new IndexedElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>("", Integer.MAX_VALUE));
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
 		} else {
 			portProvider = new HashMapPortEditor();
 			portSlotsProvider = new HashMapPortSlotEditor();
 			portTypeProvider = new HashMapPortTypeEditor();
 
-			timeWindowProvider = new TimeWindowDataComponentProvider("");
-			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider("");
-			elementDurationsProvider = new HashMapElementDurationEditor("");
+			timeWindowProvider = new TimeWindowDataComponentProvider();
+			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider();
+			elementDurationsProvider = new HashMapElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>("", Integer.MAX_VALUE));
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
 		}
 		bind(IPortProvider.class).toInstance(portProvider);
 		bind(IPortProviderEditor.class).toInstance(portProvider);
@@ -214,7 +214,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IElementDurationProvider.class).toInstance(elementDurationsProvider);
 		bind(IElementDurationProviderEditor.class).toInstance(elementDurationsProvider);
 
-		final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider = new ResourceAllocationConstraintProvider("");
+		final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider = new ResourceAllocationConstraintProvider();
 		bind(IResourceAllocationConstraintDataComponentProvider.class).toInstance(resourceAllocationProvider);
 		bind(IResourceAllocationConstraintDataComponentProviderEditor.class).toInstance(resourceAllocationProvider);
 
@@ -246,7 +246,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 		bind(ICalculatorProviderEditor.class).toInstance(calculatorProvider);
 
-		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor("");
+		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor();
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
 
@@ -316,7 +316,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapHedgesProviderEditor hedgesProviderEditor = new HashMapHedgesProviderEditor();
 		bind(IHedgesProvider.class).toInstance(hedgesProviderEditor);
 		bind(IHedgesProviderEditor.class).toInstance(hedgesProviderEditor);
-		
+
 		final HashMapCancellationFeeProviderEditor cancellationFeeProviderEditor = new HashMapCancellationFeeProviderEditor();
 		bind(ICancellationFeeProvider.class).toInstance(cancellationFeeProviderEditor);
 		bind(ICancellationFeeProviderEditor.class).toInstance(cancellationFeeProviderEditor);
@@ -331,9 +331,9 @@ public class DataComponentProviderModule extends AbstractModule {
 	@Provides
 	public IMatrixEditor<IPort, Integer> getIMatrixEditor() {
 		if (USE_INDEXED_DCPS) {
-			return new IndexedMatrixEditor<IPort, Integer>("", Integer.MAX_VALUE);
+			return new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE);
 		} else {
-			return new HashMapMatrixProvider<IPort, Integer>("", Integer.MAX_VALUE);
+			return new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE);
 		}
 	}
 }

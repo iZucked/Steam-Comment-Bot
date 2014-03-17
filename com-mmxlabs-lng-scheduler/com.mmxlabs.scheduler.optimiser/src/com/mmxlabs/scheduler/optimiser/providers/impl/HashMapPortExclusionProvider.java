@@ -46,19 +46,6 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 	}
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		exclusionsByVesselClass.clear();
-		exclusionsByVesselClass = null;
-		exclusionsByVesselClass.clear();
-		exclusionsByVesselClass = null;
-	}
-
-	@Override
 	public void setExcludedPorts(final IVesselClass vesselClass, final Set<IPort> excludedPorts) {
 		exclusionsByVesselClass.put(vesselClass, new HashSet<IPort>(excludedPorts));
 		if (excludedPorts.isEmpty() == false) {

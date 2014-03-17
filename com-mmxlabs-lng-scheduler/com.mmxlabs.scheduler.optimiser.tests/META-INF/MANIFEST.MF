@@ -1,9 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Description: LNG Scheduler
-Bundle-DocURL: http://www.minimaxlabs.com/
 Bundle-ManifestVersion: 2
-Bundle-Module: com.mmxlabs.scheduler.optimiser.peaberry.OptimiserService
- Module
+Bundle-Module: com.mmxlabs.scheduler.optimiser.peaberry.OptimiserServiceModule
 Bundle-Name: Scheduler - Optimiser Tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Fragment-Host: com.mmxlabs.scheduler.optimiser

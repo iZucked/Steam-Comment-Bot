@@ -31,16 +31,4 @@ public class HashMapCancellationFeeProviderEditor implements ICancellationFeePro
 	public void setCancellationFee(IPortSlot portSlot, long fee) {
 		map.put(portSlot, fee);
 	}
-	
-	
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		map.clear();
-	}
-
 }

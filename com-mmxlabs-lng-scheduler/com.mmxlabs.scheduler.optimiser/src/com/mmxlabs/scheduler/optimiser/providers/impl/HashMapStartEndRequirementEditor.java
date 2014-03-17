@@ -30,20 +30,6 @@ public class HashMapStartEndRequirementEditor implements IStartEndRequirementPro
 	}
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		startRequirements.clear();
-		endRequirements.clear();
-
-		startElements.clear();
-		endElements.clear();
-	}
-
-	@Override
 	public void setStartEndRequirements(final IResource resource, final IStartEndRequirement startRequirement, final IStartEndRequirement endRequirement) {
 		startRequirements.put(resource, startRequirement);
 		endRequirements.put(resource, endRequirement);

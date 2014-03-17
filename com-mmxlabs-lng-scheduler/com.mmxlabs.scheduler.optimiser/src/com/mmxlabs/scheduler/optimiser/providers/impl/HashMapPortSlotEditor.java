@@ -32,17 +32,6 @@ public final class HashMapPortSlotEditor implements IPortSlotProviderEditor {
 	}
 
 	@Override
-	public void dispose() {
-		portSlotMap.clear();
-		elementMap.clear();
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
 	public ISequenceElement getElement(final IPortSlot portSlot) {
 		if (elementMap.containsKey(portSlot)) {
 			return elementMap.get(portSlot);

@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.annotations;
 import java.util.Collection;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 
 /**
  * A P&L annotation which goes in an {@link IAnnotatedSolution}. Each of these guys corresponds to a single P&L entry.
@@ -15,7 +16,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
  * @since 2.0
  * 
  */
-public interface IProfitAndLossAnnotation {
+public interface IProfitAndLossAnnotation extends IElementAnnotation {
 	/**
 	 * Returns a bunch of {@link IProfitAndLossEntry} instances, each pertaining to a single entity involved in this transaction.
 	 * 

@@ -37,16 +37,6 @@ public class HashMapPortVisitDurationProviderEditor implements IPortVisitDuratio
 	}
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
-	@Override
 	public int getVisitDuration(@NonNull final IPort port, @NonNull final PortType portType) {
 		if (visitDurationsMap.containsKey(port)) {
 			final Map<PortType, Integer> m = visitDurationsMap.get(port);

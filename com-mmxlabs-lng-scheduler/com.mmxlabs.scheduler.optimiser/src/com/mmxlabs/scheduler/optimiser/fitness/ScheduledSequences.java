@@ -12,6 +12,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.UnusedSlotDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -25,8 +26,10 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private static final long serialVersionUID = 1L;
 
+	// TODO: Need better mechanism for this stuff!
 	private Map<VoyagePlan, IAllocationAnnotation> allocations = null;
 	private Map<IPortSlot, IHeelLevelAnnotation> heelLevels = null;
+	private Map<IPortSlot, UnusedSlotDetails> unusedSlotDetails = null;
 
 	public final Map<VoyagePlan, IAllocationAnnotation> getAllocations() {
 		return allocations;
@@ -44,6 +47,14 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 		this.heelLevels = heelLevels;
 	}
 
+	public final Map<IPortSlot, UnusedSlotDetails> getUnusedSlotDetails() {
+		return unusedSlotDetails;
+	}
+
+	public final void setUnusedSlotDetails(final Map<IPortSlot, UnusedSlotDetails> unusedSlotDetails) {
+		this.unusedSlotDetails = unusedSlotDetails;
+	}
+
 	/**
 	 * 
 	 * @param resource
@@ -55,4 +66,9 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, int[] arrivalTimes) {
 		add(new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes));
 	}
+
+	// public void getUnusedSlotsAnnotations() {
+	// // TODO Auto-generated method stub
+	//
+	// }
 }

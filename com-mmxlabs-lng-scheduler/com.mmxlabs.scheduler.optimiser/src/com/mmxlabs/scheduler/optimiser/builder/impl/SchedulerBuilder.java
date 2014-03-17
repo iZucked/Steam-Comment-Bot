@@ -46,7 +46,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
@@ -1008,7 +1007,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		} else if (rule == 2) {
 			latestTime = Math.max(endOfLatestWindow, latestDischarge);
 		} else {
-			latestTime = latestDischarge + 60 * 24;
+			latestTime = Math.max(endOfLatestWindow,latestDischarge) + 60 * 24;
 		}
 
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
@@ -1054,12 +1053,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, timeWindowProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, elementDurationsProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, resourceAllocationProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, optionalElements);
-		data.addDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, orderedSequenceElementsEditor);
 
 		for (final IBuilderExtension extension : extensions) {
 			extension.finishBuilding(data);
@@ -1782,7 +1775,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, final ICurve charterOutCurve, final int minDuration) {
 		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration);
+	}
 
+	@Override
+	public void setGeneratedCharterOutStartTime(@NonNull final int charterOutStartTime) {
+		charterMarketProviderEditor.setCharterOutStartTime(charterOutStartTime);;
 	}
 
 	/**

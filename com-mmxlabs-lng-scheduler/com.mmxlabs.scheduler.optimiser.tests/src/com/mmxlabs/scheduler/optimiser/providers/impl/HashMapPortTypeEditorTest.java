@@ -24,10 +24,5 @@ public class HashMapPortTypeEditorTest {
 		editor.setPortType(element, PortType.Waypoint);
 
 		Assert.assertSame(PortType.Waypoint, editor.getPortType(element));
-
-		editor.dispose();
-
-		Assert.assertSame(PortType.Unknown, editor.getPortType(element));
-
 	}
 }

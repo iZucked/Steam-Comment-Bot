@@ -16,20 +16,28 @@ public interface ICharterMarketProvider extends IDataComponentProvider {
 
 	public interface CharterMarketOptions {
 
-		 int getDateKey();
+		int getDateKey();
 
 		// int getAvailability();
 
 		/**
 		 * When chartering out, this is the min duration a charter needs to be.
+		 * 
 		 * @return
 		 */
 		int getMinDuration();
-		
+
 		int getCharterPrice();
 	};
 
 	Collection<CharterMarketOptions> getCharterInOptions(IVesselClass vesselClass, int time);
 
 	Collection<CharterMarketOptions> getCharterOutOptions(IVesselClass vesselClass, int time);
+
+	/**
+	 * Return the earliest time we can charter out from.
+	 * 
+	 * @return
+	 */
+	int getCharterOutStartTime();
 }

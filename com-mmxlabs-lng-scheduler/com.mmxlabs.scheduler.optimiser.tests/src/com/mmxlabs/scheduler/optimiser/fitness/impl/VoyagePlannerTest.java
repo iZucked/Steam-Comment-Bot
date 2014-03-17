@@ -127,16 +127,16 @@ public final class VoyagePlannerTest {
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 		final ISequenceElement element4 = new SequenceElement(index, "element4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider();
 
 		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
 		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
 		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
 		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(timeWindow4));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>("");
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("");
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
 		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
@@ -145,7 +145,7 @@ public final class VoyagePlannerTest {
 		defaultDistanceProvider.set(port3, port4, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor();
 		durationsProvider.setDefaultValue(duration);
 
 		final IPortProviderEditor portProvider = new HashMapPortEditor();
@@ -387,15 +387,15 @@ public final class VoyagePlannerTest {
 		final ISequenceElement element2 = new SequenceElement(index, "element2");
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider();
 
 		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
 		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
 		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>("");
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("");
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
 		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
@@ -403,7 +403,7 @@ public final class VoyagePlannerTest {
 		defaultDistanceProvider.set(port2, port3, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor();
 		durationsProvider.setDefaultValue(duration);
 
 		final IPortProviderEditor portProvider = new HashMapPortEditor();

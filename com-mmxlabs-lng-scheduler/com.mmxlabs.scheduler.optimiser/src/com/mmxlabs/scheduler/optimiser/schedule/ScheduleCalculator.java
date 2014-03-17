@@ -22,7 +22,7 @@ import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -59,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.UnusedSlotDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -302,7 +303,7 @@ public class ScheduleCalculator {
 			// annotatedSolution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, allocations);
 
 			// now add some more data for each load slot
-			final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
+			final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();
 			for (final IAllocationAnnotation annotation : allocations.values()) {
 				if (annotation != null) {
 					final List<IPortSlot> slots = annotation.getSlots();
@@ -403,15 +404,17 @@ public class ScheduleCalculator {
 
 		}
 
-		calculateUnusedSlotPNL(sequences, annotatedSolution);
+		calculateUnusedSlotPNL(sequences, scheduledSequences, annotatedSolution);
 
 		if (annotatedSolution != null && markToMarketProvider != null) {
-			calculateMarkToMarketPNL(sequences, annotatedSolution);
+			// calculateMarkToMarketPNL(sequences, annotatedSolution);
 		}
 	}
 
-	protected void calculateUnusedSlotPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
+	protected void calculateUnusedSlotPNL(final ISequences sequences, final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
+		final Map<IPortSlot, UnusedSlotDetails> unusedSlotDetailsMap = new HashMap<>();
+		scheduledSequences.setUnusedSlotDetails(unusedSlotDetailsMap);
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (element == null) {
 				continue;
@@ -419,7 +422,10 @@ public class ScheduleCalculator {
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
 			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
 				// Calculate P&L
-				entityValueCalculator.evaluateUnusedSlot(portSlot, annotatedSolution);
+				final long groupValue = entityValueCalculator.evaluateUnusedSlot(portSlot, annotatedSolution);
+				final UnusedSlotDetails unusedSlotDetails = new UnusedSlotDetails();
+				unusedSlotDetails.setTotalGroupProfitAndLoss(groupValue);
+				unusedSlotDetailsMap.put(portSlot, unusedSlotDetails);
 			}
 		}
 	}
