@@ -11,6 +11,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,13 +33,13 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 public abstract class DetailPropertiesView extends ViewPart {
 
-	protected GridTreeViewer viewer;
+	private GridTreeViewer viewer;
 	private ISelectionListener selectionListener;
 
 	private final String category;
 	private final String helpContextId;
 
-	private boolean showUnitsInColumn;
+	boolean showUnitsInColumn;
 
 	protected DetailPropertiesView(@NonNull final String category) {
 		this(category, null, true);
@@ -58,6 +59,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 		// Set defaults
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(true);
+		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
 		viewer.setContentProvider(createContentProvider());
 
@@ -174,7 +176,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 	}
 
 	protected void hookAdapters(final Collection<?> adaptSelection) {
-
+		
 	}
 
 	protected void removeAdapters() {
