@@ -128,12 +128,15 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	private IItemPropertyDescriptor propertyDescriptor;
 
+	protected MMXRootObject rootObject;
+
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
 	}
 
 	@Override
-	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject rootObject, final EObject input, final Collection<EObject> range) {
+		this.rootObject = rootObject;
 		if (this.input != null) {
 			this.input.eAdapters().remove(this);
 		}
@@ -189,7 +192,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 		setControlsEnabled(!isFeatureReadonly() && isEditorEnabled());
 
-		firePostDisplay(dialogContext, context, input, range);
+		firePostDisplay(dialogContext, rootObject, input, range);
 	}
 
 	/**
