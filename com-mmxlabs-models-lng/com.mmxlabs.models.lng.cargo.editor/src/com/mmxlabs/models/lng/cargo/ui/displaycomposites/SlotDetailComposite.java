@@ -98,6 +98,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		pricingFeatures.add(new EStructuralFeature[] { Contract });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingDate() });
+		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Hedges(), CargoFeatures.getSlot_CancellationFee()});
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
@@ -115,6 +116,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue()});
 		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
 
 		noteFeatures = new ArrayList<EStructuralFeature[]>();
