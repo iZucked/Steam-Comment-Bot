@@ -59,6 +59,7 @@ public abstract class DetailPropertiesView extends ViewPart {
 		// Set defaults
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(true);
+		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
 
 		viewer.setContentProvider(createContentProvider());
 
