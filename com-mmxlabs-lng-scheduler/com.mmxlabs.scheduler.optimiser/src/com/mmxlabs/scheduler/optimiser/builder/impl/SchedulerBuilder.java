@@ -1181,8 +1181,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 8.0
 	 */
 	@Override
-	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed, final int serviceSpeed) {
+	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
+			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int nboSpeed, final int serviceSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -1195,10 +1195,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final VesselClass vc = (VesselClass) vesselClass;
 
-		vc.setNBORate(state, nboRateInM3PerHour);
-		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
-		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
-		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
+		vc.setNBORate(state, nboRateInM3PerDay);
+		vc.setIdleNBORate(state, idleNBORateInM3PerDay);
+		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
+		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
 		vc.setMinNBOSpeed(state, nboSpeed);
 		vc.setServiceSpeed(state, serviceSpeed);
 
@@ -1209,23 +1209,23 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * 
 	 * @param vc
 	 * @param state
-	 * @param nboRateInM3PerHour
-	 * @param idleNBORateInM3PerHour
-	 * @param idleConsumptionRateInMTPerHour
-	 * @param consumptionCalculatorInMTPerHour
+	 * @param nboRateInM3PerDay
+	 * @param idleNBORateInM3PerDay
+	 * @param idleConsumptionRateInMTPerDay
+	 * @param consumptionCalculatorInMTPerDay
 	 * @since 2.0
 	 */
 
 	@Override
-	public void setVesselClassStateParameters(@NonNull final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionCalculatorInMTPerHour, final int serviceSpeed) {
+	public void setVesselClassStateParameters(@NonNull final IVesselClass vc, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
+			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionCalculatorInMTPerDay, final int serviceSpeed) {
 
 		// Convert rate to MT equivalent per hour
-		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(nboRateInM3PerHour, vc.getBaseFuelConversionFactor());
+		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(nboRateInM3PerDay, vc.getBaseFuelConversionFactor());
 
-		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
+		final int nboSpeed = consumptionCalculatorInMTPerDay.getSpeed(nboRateInMTPerHour);
 
-		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed, serviceSpeed);
+		this.setVesselClassStateParameters(vc, state, nboRateInM3PerDay, idleNBORateInM3PerDay, idleConsumptionRateInMTPerDay, consumptionCalculatorInMTPerDay, nboSpeed, serviceSpeed);
 	}
 
 	/**

@@ -14,3 +14,5 @@ syntax: regexp
 ^target-definition/\.settings$
 syntax: regexp
 ^com\.mmxlabs\.scheduler\.optimiser\.feature/\.settings$
+syntax: glob
+*.jpage
