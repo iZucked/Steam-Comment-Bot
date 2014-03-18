@@ -6,6 +6,8 @@ package com.mmxlabs.scenario.service.ui.commands;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -13,12 +15,16 @@ import java.util.Set;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
@@ -92,27 +98,60 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		}
 
 		if (localData instanceof Iterable) {
-			for (final Object o : (Iterable<?>) localData) {
-				if (o instanceof ScenarioInstance) {
-					final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
-					log.debug("Local paste " + scenarioInstance.getName());
+			final Iterable<?> iterable = (Iterable<?>) localData;
+			int count = IProgressMonitor.UNKNOWN;
+			if (iterable instanceof Collection<?>) {
+				count = ((Collection<?>) iterable).size();
+			}
+			final int numTasks = count;
+			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 
-					final ScenarioInstance duplicate = service.duplicate(scenarioInstance, container);
-					if (duplicate != null) {
+			try {
+				dialog.run(true, true, new IRunnableWithProgress() {
 
-						final String namePrefix = "Copy of " + scenarioInstance.getName();
-						String newName = namePrefix;
-						int counter = 1;
-						while (existingNames.contains(newName)) {
-							newName = namePrefix + " (" + counter++ + ")";
+					@Override
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						monitor.beginTask("Copying", numTasks);
+						try {
+							for (final Object o : iterable) {
+								if (o instanceof ScenarioInstance) {
+									final ScenarioInstance scenarioInstance = (ScenarioInstance) o;
+									monitor.subTask("Copying " + scenarioInstance.getName());
+									log.debug("Local paste " + scenarioInstance.getName());
+									try {
+										final ScenarioInstance duplicate = service.duplicate(scenarioInstance, container);
+										if (duplicate != null) {
+
+											final String namePrefix = "Copy of " + scenarioInstance.getName();
+											String newName = namePrefix;
+											int counter = 1;
+											while (existingNames.contains(newName)) {
+												newName = namePrefix + " (" + counter++ + ")";
+											}
+
+											duplicate.setName(newName);
+											existingNames.add(newName);
+										} else {
+											log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
+										}
+									} catch (final Exception e) {
+										log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
+									}
+								}
+								monitor.worked(1);
+							}
+						} finally {
+							monitor.done();
 						}
-
-						duplicate.setName(newName);
-						existingNames.add(newName);
-					} else {
-						log.error("Unable to paste scenario: " + scenarioInstance.getName(), new RuntimeException());
 					}
-				}
+				});
+			} catch (final InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (final InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			return true;
 		}
