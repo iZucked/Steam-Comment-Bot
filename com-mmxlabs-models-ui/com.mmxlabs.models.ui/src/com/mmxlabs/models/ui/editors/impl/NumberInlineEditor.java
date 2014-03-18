@@ -41,6 +41,8 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	private int scale = 1;
 	private String unit = null;
 
+	private Label unitLabel;
+
 	public NumberInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 		type = (EDataType) feature.getEType();
@@ -106,8 +108,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		toolkit.adapt(text.getControl(), true, false);
 
 		if (unit != null) {
-			// final Label unitLabel = new Label(parent, SWT.NONE);
-			final Label unitLabel = toolkit.createLabel(parent, unit, SWT.NONE);
+			unitLabel = toolkit.createLabel(parent, unit, SWT.NONE);
 			// unitLabel.setText(unit);
 			text.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 			return parent;
@@ -178,6 +179,9 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		if (text != null) {
 			text.getControl().setEnabled(controlsEnabled);
 		}
+		if (unit != null) {
+			unitLabel.setEnabled(controlsEnabled);
+		}
 		super.setControlsEnabled(controlsEnabled);
 	}
 
@@ -185,6 +189,9 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	protected void setControlsVisible(final boolean visible) {
 		if (text != null) {
 			text.getControl().setVisible(visible);
+		}
+		if (unit != null) {
+			unitLabel.setVisible(visible);
 		}
 		super.setControlsVisible(visible);
 	}
