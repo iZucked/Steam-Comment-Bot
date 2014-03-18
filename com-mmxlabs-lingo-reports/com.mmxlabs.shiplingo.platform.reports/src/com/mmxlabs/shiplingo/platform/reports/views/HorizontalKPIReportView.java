@@ -98,19 +98,19 @@ public class HorizontalKPIReportView extends ViewPart {
 				case 5:
 					rtn = (d.shippingPNL != null ? d.shippingPNL - (pinD != null ? pinD.shippingPNL : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
-				case 6:
-					return "MtM";
-				case 7:
-					rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
-					return format(rtn, KPIContentProvider.TYPE_COST);
+//				case 6:
+//					return "MtM";
+//				case 7:
+//					rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
+//					return format(rtn, KPIContentProvider.TYPE_COST);
 //				case 8:
 //					return "Shipping Cost";
 //				case 9:
 //					rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
 //					return format(rtn, KPIContentProvider.TYPE_COST);
-				case 8:
+				case 6:
 					return "Idle Time";
-				case 9:
+				case 7:
 					rtn = (d.idleTime != null ? d.idleTime - (pinD != null ? pinD.idleTime : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_TIME);
 				}
@@ -234,13 +234,13 @@ public class HorizontalKPIReportView extends ViewPart {
 			case 4:
 				width = 63; // "P&L Shipping"
 				break;
-			case 6:
-				width = 35; // "P&L (MtM)"
-				break;
+//			case 6:
+//				width = 35; // "P&L (MtM)"
+//				break;
 //			case 8:
 //				width = 85; // "Shipping Cost"
 //				break;
-			case 8:
+			case 6:
 				width = 60; // "Idle time"
 				break;
 			}
