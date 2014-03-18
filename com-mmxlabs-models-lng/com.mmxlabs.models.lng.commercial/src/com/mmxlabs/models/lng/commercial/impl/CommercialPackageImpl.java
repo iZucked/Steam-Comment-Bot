@@ -821,6 +821,26 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/ui/numberFormat
+		createNumberFormatAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/numberFormat</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNumberFormatAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
+		addAnnotation
+		  (getContract_CancellationFee(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$"
+		   });
 	}
 
 } //CommercialPackageImpl

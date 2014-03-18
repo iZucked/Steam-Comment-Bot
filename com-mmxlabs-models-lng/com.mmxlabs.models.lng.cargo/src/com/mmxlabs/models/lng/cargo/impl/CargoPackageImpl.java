@@ -1616,14 +1616,14 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		  (getSlot_Hedges(), 
 		   source, 
 		   new String[] {
-			 "unit", "$",
+			 "unitPrefix", "$",
 			 "formatString", "-########0"
 		   });		
 		addAnnotation
 		  (getSlot_CancellationFee(), 
 		   source, 
 		   new String[] {
-			 "unit", "$"
+			 "unitPrefix", "$"
 		   });
 	}
 

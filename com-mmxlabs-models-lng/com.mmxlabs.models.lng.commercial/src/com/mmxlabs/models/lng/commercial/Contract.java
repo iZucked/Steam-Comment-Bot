@@ -321,6 +321,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see #setCancellationFee(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_CancellationFee()
 	 * @model default="0"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$'"
 	 * @generated
 	 */
 	int getCancellationFee();
