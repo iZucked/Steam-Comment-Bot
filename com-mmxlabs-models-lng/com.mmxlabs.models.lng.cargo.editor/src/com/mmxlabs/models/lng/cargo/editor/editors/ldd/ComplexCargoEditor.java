@@ -88,7 +88,7 @@ public class ComplexCargoEditor extends Dialog {
 
 	private DialogValidationSupport validationSupport;
 
-	//private final IScenarioEditingLocation scenarioEditingLocation;
+	// private final IScenarioEditingLocation scenarioEditingLocation;
 	private final ObservablesManager observablesManager = new ObservablesManager();
 	private final EMFDataBindingContext dbc = new EMFDataBindingContext();
 
@@ -109,15 +109,15 @@ public class ComplexCargoEditor extends Dialog {
 
 	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
-		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation);
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
 		this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
 	public ComplexCargoEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
-		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation);
-		
-		//this.scenarioEditingLocation = scenarioEditingLocation;
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
+
+		// this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
 	@Override
@@ -209,8 +209,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Port");
 				column.getColumn().setWidth(100);
 
-				final SingleReferenceManipulator manipulator = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), sel.getReferenceValueProviderCache(),
-						sel.getEditingDomain());
+				final SingleReferenceManipulator manipulator = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), sel.getReferenceValueProviderCache(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));

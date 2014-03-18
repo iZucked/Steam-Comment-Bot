@@ -475,9 +475,9 @@ public class CreateStripDialog extends FormDialog {
 
 			final IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(sample.eClass());
 			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), new DefaultDialogEditingContext(new NullDialogController(),
-					scenarioEditingLocation), toolkit);
+					scenarioEditingLocation, false), toolkit);
 			templateDetailComposite.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
-			templateDetailComposite.display(new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation), scenarioEditingLocation.getRootObject(), sample, null, dbc);
+			templateDetailComposite.display(new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false), scenarioEditingLocation.getRootObject(), sample, null, dbc);
 		}
 
 		// Preview Table with generated options
