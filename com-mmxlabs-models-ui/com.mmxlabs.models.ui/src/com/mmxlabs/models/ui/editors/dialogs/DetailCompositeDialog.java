@@ -392,7 +392,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
-		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), new DefaultDialogEditingContext(dialogController, location), toolkit);
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), new DefaultDialogEditingContext(dialogController, location, false), toolkit);
 
 		/**
 		 * Allow the child composites to trigger a complete redisplay of the editor components. E.g.
@@ -437,7 +437,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		displayComposite.display(new DefaultDialogEditingContext(dialogController, location), rootObject, duplicate, ranges.get(selection), dbc);
+		displayComposite.display(new DefaultDialogEditingContext(dialogController, location, false), rootObject, duplicate, ranges.get(selection), dbc);
 
 		getShell().layout(true, true);
 
