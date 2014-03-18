@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -121,7 +123,7 @@ public class CreateStripDialog extends FormDialog {
 	private EClass referenceClass;
 
 	private final IScenarioEditingLocation scenarioEditingLocation;
-	//private final IDialogEditingContext dialogContext;
+	// private final IDialogEditingContext dialogContext;
 	private EObject sample;
 	private Text pattern_n;
 	private Label label1;
@@ -147,7 +149,7 @@ public class CreateStripDialog extends FormDialog {
 			@Nullable final EObject selectedObject) {
 		super(parentShell);
 		this.scenarioEditingLocation = createScenarioEditingLocation(originalScenarioEditingLocation);
-		//this.dialogContext = dialogContext;
+		// this.dialogContext = dialogContext;
 		this.stripType = stripType;
 		createSample(selectedObject);
 	}
@@ -156,7 +158,7 @@ public class CreateStripDialog extends FormDialog {
 			@Nullable final EObject selectedObject) {
 		super(parentShell);
 		this.scenarioEditingLocation = createScenarioEditingLocation(originalScenarioEditingLocation);
-		//this.dialogContext = dialogContext;
+		// this.dialogContext = dialogContext;
 		this.stripType = stripType;
 		createSample(selectedObject);
 	}
@@ -193,6 +195,10 @@ public class CreateStripDialog extends FormDialog {
 		// Copy valid features across
 		if (selectedObject != null) {
 			for (final EStructuralFeature f : sample.eClass().getEAllStructuralFeatures()) {
+				// Skip unset features.
+				if (!selectedObject.eIsSet(f)) {
+					continue;
+				}
 				// Skip UUID
 				if (f == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()) {
 					continue;
@@ -201,12 +207,19 @@ public class CreateStripDialog extends FormDialog {
 				if (f == CargoPackage.eINSTANCE.getSlot_Cargo()) {
 					continue;
 				}
-				// Skip many - how do we handle it?
-				if (f.isMany()) {
+
+				// Skip containment references -- again how should we handle this?
+				if (f instanceof EReference && ((EReference) f).isContainment()) {
+					final EReference reference = (EReference) f;
+					if (reference.isMany()) {
+						sample.eSet(f, EcoreUtil.copyAll((Collection<EObject>) selectedObject.eGet(f)));
+					} else {
+						sample.eSet(f, EcoreUtil.copy((EObject) selectedObject.eGet(f)));
+					}
 					continue;
 				}
-				// Skip containment refernces -- again how should we handle this?
-				if (f instanceof EReference && ((EReference) f).isContainment()) {
+				// Skip many - how do we handle it?
+				if (f.isMany()) {
 					continue;
 				}
 				if (selectedObject.eClass().getEAllStructuralFeatures().contains(f) && selectedObject.eIsSet(f)) {
@@ -298,12 +311,12 @@ public class CreateStripDialog extends FormDialog {
 			}
 
 			{
-				Label spacer = toolkit.createLabel(patternComposite, "");
+				final Label spacer = toolkit.createLabel(patternComposite, "");
 				final GridData gd = new GridData();
 				gd.widthHint = 10;
 				spacer.setLayoutData(gd);
 			}
-			
+
 			{
 				label1 = toolkit.createLabel(patternComposite, "Every");
 				final GridData gd = new GridData();
@@ -366,7 +379,7 @@ public class CreateStripDialog extends FormDialog {
 					final RepeatType rt = RepeatType.values()[idx];
 					if (rt == RepeatType.Periodic) {
 						label1.setText("Create slots every");
-						((GridData) label1.getLayoutData()).widthHint = 96;						
+						((GridData) label1.getLayoutData()).widthHint = 96;
 						label2.setVisible(false);
 						label3.setVisible(true);
 						intervalType.getControl().setVisible(true);
@@ -377,7 +390,7 @@ public class CreateStripDialog extends FormDialog {
 					} else {
 						assert rt == RepeatType.Distributed;
 						label1.setText("Create");
-						((GridData) label1.getLayoutData()).widthHint = 36;						
+						((GridData) label1.getLayoutData()).widthHint = 36;
 						label2.setVisible(true);
 						label3.setVisible(false);
 						intervalType.getControl().setVisible(false);
@@ -461,7 +474,8 @@ public class CreateStripDialog extends FormDialog {
 			toolkit.adapt(template);
 
 			final IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(sample.eClass());
-			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation), toolkit);
+			final IDisplayComposite templateDetailComposite = factory.createSublevelComposite(template, sample.eClass(), new DefaultDialogEditingContext(new NullDialogController(),
+					scenarioEditingLocation), toolkit);
 			templateDetailComposite.setCommandHandler(scenarioEditingLocation.getDefaultCommandHandler());
 			templateDetailComposite.display(new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation), scenarioEditingLocation.getRootObject(), sample, null, dbc);
 		}
@@ -676,7 +690,18 @@ public class CreateStripDialog extends FormDialog {
 				} else {
 					// Copy from template
 					if (sample.eIsSet(feature)) {
-						eObj.eSet(feature, sample.eGet(feature));
+
+						// Skip containment references -- again how should we handle this?
+						if (feature instanceof EReference && ((EReference) feature).isContainment()) {
+							final EReference reference = (EReference) feature;
+							if (reference.isMany()) {
+								eObj.eSet(feature, EcoreUtil.copyAll((Collection<EObject>) sample.eGet(feature)));
+							} else {
+								eObj.eSet(feature, EcoreUtil.copy((EObject) sample.eGet(feature)));
+							}
+						} else {
+							eObj.eSet(feature, sample.eGet(feature));
+						}
 					} else {
 						eObj.eUnset(feature);
 					}
