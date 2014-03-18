@@ -398,6 +398,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	protected Object getValue() {
+		// May be null if control is hidden/disabled, but external code has still triggered a refresh
+		if (input == null) {
+			return null;
+		}
 		return input.eGet(feature);
 	}
 
