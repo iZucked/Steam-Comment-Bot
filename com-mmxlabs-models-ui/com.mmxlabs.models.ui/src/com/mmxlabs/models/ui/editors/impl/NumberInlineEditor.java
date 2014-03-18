@@ -39,9 +39,11 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	private Object defaultValue;
 	private NumberFormatter formatter;
 	private int scale = 1;
-	private String unit = null;
+	private String unitPrefix = null;
+	private String unitSuffix = null;
 
-	private Label unitLabel;
+	private Label unitPrefixLabel;
+	private Label unitSuffixLabel;
 
 	public NumberInlineEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -64,8 +66,13 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 				scale = Integer.parseInt(annotation.getDetails().get("scale"));
 			}
 
-			if (annotation.getDetails().containsKey("unit")) {
-				unit = annotation.getDetails().get("unit");
+			if (annotation.getDetails().containsKey("unitSuffix")) {
+				unitSuffix = annotation.getDetails().get("unitSuffix");
+			} else if (annotation.getDetails().containsKey("unit")) {
+				unitSuffix = annotation.getDetails().get("unit");
+			}
+			if (annotation.getDetails().containsKey("unitPrefix")) {
+				unitPrefix = annotation.getDetails().get("unitPrefix");
 			}
 		}
 
@@ -88,13 +95,17 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 	@Override
 	public Control createValueControl(Composite parent) {
-		if (unit != null) {
+		if (unitPrefix != null || unitSuffix != null) {
 			// final Composite sub = new Composite(parent, SWT.NONE);
 			final Composite sub = toolkit.createComposite(parent, SWT.NONE);
 			final GridLayout layout = new GridLayout(2, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			sub.setLayout(layout);
 			parent = sub;
+		}
+
+		if (unitPrefix != null) {
+			unitPrefixLabel = toolkit.createLabel(parent, unitPrefix, SWT.NONE);
 		}
 
 		text = new FormattedText(parent, SWT.BORDER);
@@ -107,9 +118,10 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		// Hook into Forms stuff
 		toolkit.adapt(text.getControl(), true, false);
 
-		if (unit != null) {
-			unitLabel = toolkit.createLabel(parent, unit, SWT.NONE);
-			// unitLabel.setText(unit);
+		if (unitSuffix != null) {
+			unitSuffixLabel = toolkit.createLabel(parent, unitSuffix, SWT.NONE);
+		}
+		if (unitPrefix != null || unitSuffix != null) {
 			text.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 			return parent;
 		} else {
@@ -179,8 +191,11 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		if (text != null) {
 			text.getControl().setEnabled(controlsEnabled);
 		}
-		if (unit != null) {
-			unitLabel.setEnabled(controlsEnabled);
+		if (unitPrefixLabel != null) {
+			unitPrefixLabel.setEnabled(controlsEnabled);
+		}
+		if (unitSuffixLabel != null) {
+			unitSuffixLabel.setEnabled(controlsEnabled);
 		}
 		super.setControlsEnabled(controlsEnabled);
 	}
@@ -190,8 +205,11 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		if (text != null) {
 			text.getControl().setVisible(visible);
 		}
-		if (unit != null) {
-			unitLabel.setVisible(visible);
+		if (unitPrefixLabel != null) {
+			unitPrefixLabel.setVisible(visible);
+		}
+		if (unitSuffixLabel != null) {
+			unitSuffixLabel.setVisible(visible);
 		}
 		super.setControlsVisible(visible);
 	}
