@@ -10,8 +10,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.ui.inlineeditors.AssignableElementEditorWrapper;
 import com.mmxlabs.models.lng.cargo.ui.inlineeditors.AssignmentInlineEditor;
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -71,7 +73,7 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_assignmentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new AssignmentInlineEditor());
+		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(new AssignmentInlineEditor(CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT)));
 	}
 	/**
 	 * Create the editor for the spotIndex feature on AssignableElement
@@ -79,7 +81,7 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX));
+//		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX)));
 	}
 	/**
 	 * Create the editor for the sequenceHint feature on AssignableElement
@@ -87,7 +89,7 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_sequenceHintEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT));
+//		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT)));
 	}
 	/**
 	 * Create the editor for the locked feature on AssignableElement
@@ -95,6 +97,6 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_lockedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED));
+		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED)));
 	}
 }
