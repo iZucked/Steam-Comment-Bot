@@ -208,12 +208,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		if (isCargoPlan) {
 			// Get the new cargo allocation.
 
-			final AllocationRecord currentAllocationRecord = cargoAllocator.createAllocationRecord(vessel, vesselStartTime, vp, arrivalTimes);
-			final AllocationRecord newAllocationRecord = cargoAllocator.createAllocationRecord(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
+			final IAllocationAnnotation currentAllocation =  cargoAllocator.allocate(vessel, vesselStartTime, vp, arrivalTimes);
+			newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
 
-			final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(currentAllocationRecord);
-			// final IAllocationAnnotation
-			newAllocation = cargoAllocator.allocate(newAllocationRecord);
 
 			originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, vesselStartTime, null);
 			newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, vesselStartTime, null);

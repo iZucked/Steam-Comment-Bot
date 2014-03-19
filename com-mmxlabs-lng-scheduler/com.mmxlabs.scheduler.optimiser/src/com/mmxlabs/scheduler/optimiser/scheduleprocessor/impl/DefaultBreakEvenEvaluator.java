@@ -147,8 +147,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		}
 
 		final IDetailsSequenceElement[] newSequence = currentSequence.clone();
-		final AllocationRecord currentRecord = cargoAllocator.createAllocationRecord(vessel, vesselStartTime, vp, arrivalTimes);
-		final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(currentRecord);
+		final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vesselStartTime, vp, arrivalTimes);
 
 		if (originalLoad != null) {
 
@@ -198,8 +197,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			} else {
 				voyageCalculator.calculateVoyagePlan(vp, vessel, startingHeelInM3, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newSequence);
 			}
-			final AllocationRecord newRecord = cargoAllocator.createAllocationRecord(vessel, vesselStartTime, vp, arrivalTimes);
-			final IAllocationAnnotation newAllocation = cargoAllocator.allocate(newRecord);
+			final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, vp, arrivalTimes);
 			return new Pair<>(vp, newAllocation);
 		} else if (originalDischarge != null) {
 
@@ -251,8 +249,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
 			// Redundant? Search should have found this....
 			final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vessel), sequenceElements, vesselStartTime, arrivalTimes, 0);
-			final AllocationRecord newRecord = cargoAllocator.createAllocationRecord(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
-			final IAllocationAnnotation newAllocation = cargoAllocator.allocate(newRecord);
+			final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
 			return new Pair<>(newVoyagePlan, newAllocation);
 			// seq.getVoyagePlans().set(vpIdx, newVoyagePlan);
 		}
@@ -269,8 +266,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 		final VoyagePlan newVoyagePlan = voyagePlanner.makeVoyage(vesselProvider.getResource(vessel), sequenceElements, vesselStartTime, arrivalTimes, 0);
 
-		final AllocationRecord newRecord = cargoAllocator.createAllocationRecord(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
-		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(newRecord);
+		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
 		final long newPnLValue = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, vesselStartTime, null);
 		return newPnLValue;
 	}
