@@ -40,7 +40,7 @@ public class HashMapRestrictedElementsProviderEditor implements IRestrictedEleme
 	}
 
 	@Override
-	public void setRestrictedElements(final ISequenceElement element, final Collection<ISequenceElement> restrictedPreceders, final Collection<ISequenceElement> restrictedFollowers) {
+	public void addRestrictedElements(final ISequenceElement element, final Collection<ISequenceElement> restrictedPreceders, final Collection<ISequenceElement> restrictedFollowers) {
 		if (restrictedFollowers != null) {
 			if (followerMap.containsKey(element)) {
 				followerMap.get(element).addAll(restrictedFollowers);

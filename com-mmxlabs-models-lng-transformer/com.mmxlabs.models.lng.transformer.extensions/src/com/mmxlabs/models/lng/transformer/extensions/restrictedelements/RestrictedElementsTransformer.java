@@ -93,28 +93,40 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		final Collection<ISequenceElement> sourceElements = findAssociatedISequenceElements(object);
 
 		if (elements != null && sourceElements != null) {
+
+			Set<ISequenceElement> restrictedElements = new HashSet<>();
+
 			for (final EObject element : elements) {
 				// get the list of ISequenceElements associated with each restricted element
 				Collection<ISequenceElement> destinationElements = findAssociatedISequenceElements(element);
 				if (destinationElements != null) {
-					// take the complement of the list if the list is a permissive (as opposed to prohibitive) one
-					if (isPermissive) {
-						final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
-						permissive.removeAll(destinationElements);
-						destinationElements = permissive;
-					}
+					restrictedElements.addAll(destinationElements);
+				}
+			}
+			if (restrictedElements.isEmpty()) {
+				return;
+			}
 
-					// register each prohibited pair
-					for (final ISequenceElement source : sourceElements) {
-						switch (type) {
-						case FOLLOWER:
-							restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
-							break;
-						case PRECEDENT:
-							restrictedElementsProviderEditor.setRestrictedElements(source, destinationElements, null);
-							break;
-						}
-					}
+			// take the complement of the list if the list is a permissive (as opposed to prohibitive) one
+			if (isPermissive) {
+				final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
+				permissive.removeAll(restrictedElements);
+				restrictedElements = permissive;
+			}
+
+			if (restrictedElements.toString().contains("Dahej")) {
+				int ii = 0;
+			}
+
+			// register each prohibited pair
+			for (final ISequenceElement source : sourceElements) {
+				switch (type) {
+				case FOLLOWER:
+					restrictedElementsProviderEditor.addRestrictedElements(source, null, restrictedElements);
+					break;
+				case PRECEDENT:
+					restrictedElementsProviderEditor.addRestrictedElements(source, restrictedElements, null);
+					break;
 				}
 			}
 		}
@@ -155,6 +167,10 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 						restrictedContracts = contract.getRestrictedContracts();
 						restrictedPorts = contract.getRestrictedPorts();
 					}
+				}
+
+				if (slot.getName().contains("RG2")) {
+					int ii = 0;
 				}
 				registerRestrictedElements(slot, restrictedContracts, isPermissive, RestrictionType.FOLLOWER);
 				registerRestrictedElements(slot, restrictedPorts, isPermissive, RestrictionType.FOLLOWER);

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -89,6 +90,12 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 		}
 
 		final boolean result = !restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second) && !restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first);
+		if (!result) {
+			
+			Collection<ISequenceElement> restrictedFollowerElements = restrictedElementsProvider.getRestrictedFollowerElements(first);
+			Collection<ISequenceElement> restrictedPrecedingElements = restrictedElementsProvider.getRestrictedPrecedingElements(second);
+			int ii = 0;
+		}
 		return result;
 	}
 
