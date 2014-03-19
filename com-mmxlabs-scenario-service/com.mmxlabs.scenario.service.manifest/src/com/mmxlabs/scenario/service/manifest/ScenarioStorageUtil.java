@@ -99,6 +99,9 @@ public class ScenarioStorageUtil {
 		if (model != null) {
 			final EObject rootObject = EcoreUtil.copy(model);
 			final XMIResourceImpl r = new XMIResourceImpl(rootObjectURI);
+			if (r instanceof ResourceImpl) {
+				((ResourceImpl) r).setIntrinsicIDToEObjectMap(new HashMap());
+			}
 			r.getContents().add(rootObject);
 			r.save(null);
 		} else {
