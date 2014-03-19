@@ -234,7 +234,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 	}
 
 	private void copyScenario(final Container container, final ScenarioInstance scenario, final IProgressMonitor monitor) throws IOException {
-		monitor.beginTask("Copying" + scenario.getName(), 10);
+		monitor.beginTask("Copying " + scenario.getName(), 10);
 		try {
 			final IScenarioService scenarioService = container.getScenarioService();
 			final ScenarioInstance instance = scenarioService.duplicate(scenario, container);
