@@ -23,7 +23,7 @@ public class HashMapRestrictedElementsProviderEditorTest {
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		provider.setRestrictedElements(element1, Collections.singleton(element2), null);
+		provider.addRestrictedElements(element1, Collections.singleton(element2), null);
 
 		Assert.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element1));
 		Assert.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element1));
@@ -44,14 +44,14 @@ public class HashMapRestrictedElementsProviderEditorTest {
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element3 = Mockito.mock(ISequenceElement.class);
 
-		provider.setRestrictedElements(element1, Collections.singleton(element2), null);
+		provider.addRestrictedElements(element1, Collections.singleton(element2), null);
 
 		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
 		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
 		Assert.assertTrue(provider.getRestrictedPrecedingElements(element1).contains(element2));
 		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
 
-		provider.setRestrictedElements(element1, Collections.singleton(element3), null);
+		provider.addRestrictedElements(element1, Collections.singleton(element3), null);
 
 		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element2));
 		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
@@ -68,7 +68,7 @@ public class HashMapRestrictedElementsProviderEditorTest {
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		provider.setRestrictedElements(element1, null, Collections.singleton(element2));
+		provider.addRestrictedElements(element1, null, Collections.singleton(element2));
 
 		Assert.assertFalse(provider.getRestrictedFollowerElements(element2).contains(element1));
 		Assert.assertFalse(provider.getRestrictedPrecedingElements(element2).contains(element1));
@@ -88,14 +88,14 @@ public class HashMapRestrictedElementsProviderEditorTest {
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element3 = Mockito.mock(ISequenceElement.class);
 
-		provider.setRestrictedElements(element1, null, Collections.singleton(element2));
+		provider.addRestrictedElements(element1, null, Collections.singleton(element2));
 
 		Assert.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
 		Assert.assertFalse(provider.getRestrictedFollowerElements(element1).contains(element3));
 		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element2));
 		Assert.assertFalse(provider.getRestrictedPrecedingElements(element1).contains(element3));
 
-		provider.setRestrictedElements(element1, null, Collections.singleton(element3));
+		provider.addRestrictedElements(element1, null, Collections.singleton(element3));
 
 		Assert.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element2));
 		Assert.assertTrue(provider.getRestrictedFollowerElements(element1).contains(element3));

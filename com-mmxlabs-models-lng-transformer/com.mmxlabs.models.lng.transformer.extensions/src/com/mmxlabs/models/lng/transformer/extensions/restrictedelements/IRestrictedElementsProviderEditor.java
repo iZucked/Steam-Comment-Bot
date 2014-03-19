@@ -23,5 +23,5 @@ public interface IRestrictedElementsProviderEditor extends IRestrictedElementsPr
 	 * @param restrictedPreceders May be null
 	 * @param restrictedFollowers May be null
 	 */
-	void setRestrictedElements(ISequenceElement element, Collection<ISequenceElement> restrictedPreceders, Collection<ISequenceElement> restrictedFollowers);
+	void addRestrictedElements(ISequenceElement element, Collection<ISequenceElement> restrictedPreceders, Collection<ISequenceElement> restrictedFollowers);
 }
