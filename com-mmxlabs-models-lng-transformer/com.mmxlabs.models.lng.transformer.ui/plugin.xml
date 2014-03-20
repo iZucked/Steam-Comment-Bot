@@ -126,40 +126,6 @@
             </activeWhen>
          </handler>
          <handler
-               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.PauseOptimisationHandler"
-               commandId="com.mmxlabs.commands.optimisation.pause">
-            <enabledWhen>
-               <iterate
-                     ifEmpty="false">
-                  <and>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                     </instanceof>
-                         <not><test
-                          property="com.mmxlabs.scenario.service.ui.flags.readonly"
-                          forcePluginActivation="true">
-                     </test></not>
-                     <test
-                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPause">
-                     </test>
-                  </and>
-               </iterate>
-            </enabledWhen>
-            <activeWhen>
-               <with
-                     variable="selection">
-                  <iterate
-                        ifEmpty="false">
-                     <and>
-                        <instanceof
-                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                        </instanceof>
-                     </and>
-                  </iterate>
-               </with>
-            </activeWhen>
-         </handler>
-         <handler
                class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.EvaluateOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.evaluate">
             <enabledWhen>
@@ -257,12 +223,7 @@
          <command
                categoryId="com.mmxlabs.commands.category.optimisation"
                id="com.mmxlabs.commands.optimisation.play"
-               name="Start/Resume Optimisation">
-         </command>
-         <command
-               categoryId="com.mmxlabs.commands.category.optimisation"
-               id="com.mmxlabs.commands.optimisation.pause"
-               name="Pause Optimisation">
+               name="Start Optimisation">
          </command>
          <command
                categoryId="com.mmxlabs.commands.category.optimisation"
@@ -400,25 +361,14 @@
                   tooltip="Terminate optimisation">
             </action>
             <action
-                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.PauseOptimisationEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.pause"
-                  disabledIcon="icons/dlcl16/suspend_co.gif"
-                  icon="icons/elcl16/suspend_co.gif"
-                  id="com.mmxlabs.shiplingo.platform.models.optimisation.pause"
-                  label="Pause Optimisation"
-                  style="push"
-                  toolbarPath="additions"
-                  tooltip="Pause optimisation">
-            </action>
-            <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.play"
                   disabledIcon="icons/dlcl16/resume_co.gif"
                   icon="icons/elcl16/resume_co.gif"
                   id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
-                  label="Start/Resume Optimisation"
+                  label="Start Optimisation"
                   toolbarPath="additions"
-                  tooltip="Start or Resume optimisation">
+                  tooltip="Start an optimisation">
             </action>
             <action
                   class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartEditorActionDelegate"
