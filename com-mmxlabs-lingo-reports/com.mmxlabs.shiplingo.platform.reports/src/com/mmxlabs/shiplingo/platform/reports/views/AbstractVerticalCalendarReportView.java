@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -185,8 +186,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	}
 
 	/**
-	 * Returns a list of all the Date objects corresponding to the start of a GMT day which contains 
-	 * any days in the specified range
+	 * Returns a list of all 0h00 GMT Date objects which fall within the specified range
 	 * @param start
 	 * @param end
 	 * @return
@@ -207,6 +207,15 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 		
 		return result;		
+	}
+	
+	public static Date getGMTDayFor(Date date) {
+		final Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		return c.getTime();
 	}
 
 	/**
@@ -563,6 +572,32 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 			return false;
 		}
+	}
+	
+	static protected class HashMapEventProvider extends EventProvider {
+		Map<Date, List<Event>> events = new HashMap<>();
+		final Event [] noEvents = new Event [0];
+
+		public HashMapEventProvider(EventFilter filter) {
+			super(filter);
+		}
+
+		public void addEvent(final Date date, final Event event) {
+			final List<Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<Event>();
+			list.add(event);
+			
+			// we actually want the events to be keyed on 00:00 GMT of the same day			
+			this.events.put(getGMTDayFor(date), list);
+		}
+		
+		@Override
+		protected Event[] getUnfilteredEvents(Date date) {
+			if (events.containsKey(date)) {
+				return events.get(date).toArray(noEvents);
+			}
+			return noEvents;
+		}
+		
 	}
 
 	/**
