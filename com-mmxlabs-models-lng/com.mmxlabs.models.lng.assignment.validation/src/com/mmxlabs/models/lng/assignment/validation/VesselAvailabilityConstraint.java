@@ -1,4 +1,5 @@
 /**
+ * 
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
@@ -27,6 +28,11 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
+/**
+ * Checks to test if slot and vessel event dates are consistent with the start / end dates
+ * of the assigned vessel.
+ *
+ */
 public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 	@Override
@@ -66,7 +72,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 					}
 				}
-
+				
 				if (vesselAvailability != null) {
 
 					if (assignment instanceof Cargo) {
@@ -80,11 +86,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 									failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSize());
 									failures.add(failure);
 								}
-							} else if (vesselAvailability.isSetStartBy()) {
-								// N/A
-							} else if (vesselAvailability.isSetEndAfter()) {
-								// N/A
-							} else if (vesselAvailability.isSetEndBy()) {
+							} 
+							if (vesselAvailability.isSetEndBy()) {
 								if (slot.getWindowStartWithSlotOrPortTime().after(vesselAvailability.getEndBy())) {
 									final String message = String.format("Slot|%s is assigned to vessel %s but window date is after the vessel end date.", slot.getName(), vessel.getName());
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
@@ -105,9 +108,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 								failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 								failures.add(failure);
 							}
-						} else if (vesselAvailability.isSetStartBy()) {
-						} else if (vesselAvailability.isSetEndAfter()) {
-						} else if (vesselAvailability.isSetEndBy()) {
+						} 
+						if (vesselAvailability.isSetEndBy()) {
 							if (vesselEvent.getStartAfter().after(vesselAvailability.getEndBy())) {
 								final String message = String.format("Vessel Event|%s is assigned to vessel %s but window date is after the vessel end date.", vesselEvent.getName(), vessel.getName());
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
