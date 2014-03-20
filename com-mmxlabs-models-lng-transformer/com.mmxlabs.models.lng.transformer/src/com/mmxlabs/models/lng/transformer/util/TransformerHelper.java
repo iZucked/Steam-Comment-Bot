@@ -28,7 +28,7 @@ public class TransformerHelper {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
 				OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
 				OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuelPriceInInternalUnits,
-				OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()),
+				OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getPilotLightRate()),
 				eVc.getWarmingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()), OptimiserUnitConvertor.convertToInternalDailyRate(eVc.getMinBaseFuelConsumption()));
 
 		buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
@@ -62,15 +62,15 @@ public class TransformerHelper {
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 
 		for (final FuelConsumption line : attrs.getFuelConsumption()) {
-			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalHourlyRate(line.getConsumption()));
+			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalDailyRate(line.getConsumption()));
 		}
 
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
 
-		builder.setVesselClassStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getNboRate()),
-				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleBaseRate()), cc,
+		builder.setVesselClassStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getNboRate()),
+				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleBaseRate()), cc,
 				OptimiserUnitConvertor.convertToInternalSpeed(attrs.getServiceSpeed()));
 	}
 }
