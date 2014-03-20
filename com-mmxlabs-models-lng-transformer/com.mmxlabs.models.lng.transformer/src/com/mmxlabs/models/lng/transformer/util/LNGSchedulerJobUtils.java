@@ -151,7 +151,7 @@ public class LNGSchedulerJobUtils {
 		return schedule;
 	}
 
-	public static void undoPreviousOptimsationStep(final EditingDomain editingDomain, final String lockKey, final int solutionCurrentProgress) {
+	public static void undoPreviousOptimsationStep(final EditingDomain editingDomain, final int solutionCurrentProgress) {
 		// Undo previous optimisation step if possible
 		try {
 
@@ -166,9 +166,7 @@ public class LNGSchedulerJobUtils {
 					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
 						final CommandStack stack = editingDomain.getCommandStack();
 						if (stack instanceof MMXAdaptersAwareCommandStack) {
-							// this is needed because we have claimed the lock under the given key
-							// so if we undo using EDITORS as the lock, we spin forever.
-							((MMXAdaptersAwareCommandStack) stack).undo(lockKey);
+							((MMXAdaptersAwareCommandStack) stack).undo(null);
 						} else {
 							stack.undo();
 						}
@@ -440,7 +438,7 @@ public class LNGSchedulerJobUtils {
 					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, assignment));
 					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, index++));
 					if (sequence.isSetSpotIndex()) {
-						cmd.append(SetCommand.create(domain,object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, sequence.getSpotIndex()));
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, sequence.getSpotIndex()));
 					} else {
 						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					}

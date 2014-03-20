@@ -57,7 +57,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private Injector injector = null;
 
-	private String lockKey;
+	// private String lockKey;
 
 	private LNGTransformer transformer;
 
@@ -73,8 +73,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
-		lockKey = jobDescriptor.getLockKey();
-		scenarioInstance.getLock(lockKey).awaitClaim();
 		startTimeMillis = System.currentTimeMillis();
 
 		transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
@@ -107,7 +105,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		// final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		if (jobDescriptor.isOptimising() == false) {
 			// clear lock
-			scenarioInstance.getLock(lockKey).release();
+			// scenarioInstance.getLock(lockKey).release();
 			return false; // if we are not optimising, finish.
 		}
 		optimiser.step(REPORT_PERCENTAGE);
@@ -117,12 +115,12 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		if (optimiser.isFinished()) {
 			// export final state
 
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, lockKey, 100);
+			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, 100);
 			LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, modelEntityMap, optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			super.setProgress(100);
-			scenarioInstance.getLock(lockKey).release();
+			// scenarioInstance.getLock(lockKey).release();
 			return false;
 		} else {
 			return true;
@@ -139,10 +137,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		if (optimiser != null) {
 			optimiser.dispose();
 			optimiser = null;
-		}
-		if (lockKey != null) {
-			scenarioInstance.getLock(lockKey).release();
-			lockKey = null;
 		}
 	}
 

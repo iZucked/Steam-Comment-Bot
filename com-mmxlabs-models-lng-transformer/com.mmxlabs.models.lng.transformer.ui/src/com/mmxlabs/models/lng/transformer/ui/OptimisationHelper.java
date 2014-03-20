@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.parameters.provider.ParametersItemProviderAdapterF
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
-import com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
@@ -54,6 +53,7 @@ import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public final class OptimisationHelper {
 
@@ -65,152 +65,97 @@ public final class OptimisationHelper {
 			final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
-		if (service != null) {
-			try {
-				final EObject object = service.load(instance);
+		if (service == null) {
+			return null;
+		}
+		final EObject object;
+		try {
+			object = service.load(instance);
 
-				if (object instanceof LNGScenarioModel) {
-					final LNGScenarioModel root = (LNGScenarioModel) object;
+		} catch (final IOException e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
 
-					final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
-					if (optimiserSettings == null) {
+		if (object instanceof LNGScenarioModel) {
+			final LNGScenarioModel root = (LNGScenarioModel) object;
+
+			final String uuid = instance.getUuid();
+			// Check for existing job and return if there is one.
+			{
+				final IJobDescriptor job = jobManager.findJobForResource(uuid);
+				if (job != null) {
+					return null;
+				}
+			}
+			final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
+			if (optimiserSettings == null) {
+				return null;
+			}
+
+			final ScenarioLock scenarioLock = instance.getLock(k);
+			if (scenarioLock.awaitClaim()) {
+				IJobControl control = null;
+				IJobDescriptor job = null;
+				try {
+					// create a new job
+					job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings, optimising);
+
+					// New optimisation, so check there are no validation errors.
+					if (!validateScenario(root, optimising)) {
 						return null;
 					}
 
-					final String uuid = instance.getUuid();
+					// Automatically clean up job when removed from manager
+					jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+					control = jobManager.submitJob(job, uuid);
+					// Add listener to clean up job when it finishes or has an exception.
+					final IJobDescriptor finalJob = job;
+					control.addListener(new IJobControlListener() {
 
-					IJobDescriptor job = jobManager.findJobForResource(uuid);
-					if (job == null) {
-						// create a new job
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings, optimising, k);
+						@Override
+						public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
+
+							if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
+								scenarioLock.release();
+								jobManager.removeJob(finalJob);
+								return false;
+							}
+							return true;
+						}
+
+						@Override
+						public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
+							return true;
+						}
+					});
+					// Start the job!
+					control.prepare();
+					control.start();
+				} catch (final Throwable ex) {
+					log.error(ex.getMessage(), ex);
+					if (control != null) {
+						control.cancel();
 					}
-
-					IJobControl control = jobManager.getControlForJob(job);
-					// If there is a job, but it is terminated, then we need to create a new one
-					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
+					// Manual clean up incase the control listener doesn't fire
+					if (job != null) {
 						jobManager.removeJob(job);
-						control = null;
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings, optimising, k);
-
 					}
+					// instance.setLocked(false);
+					scenarioLock.release();
 
-					if (control == null) {
-
-						// New optimisation, so check there are no validation errors.
-						if (!validateScenario(root, optimising)) {
-							return null;
-						}
-
-						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-						control = jobManager.submitJob(job, uuid);
-					}
-
-					// if (!jobManager.getSelectedJobs().contains(job)) {
-					// // Clean up when job is removed from manager
-					// jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-					// control = jobManager.submitJob(job, uuid);
-					// }
-
-					if (control.getJobState() == EJobState.CREATED) {
-						try {
-							final IJobDescriptor desc = job;
-							// Add listener to unlock scenario when it stops optimising
-							control.addListener(new IJobControlListener() {
-
-								@Override
-								public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
-
-									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-										// instance.setLocked(false);
-										instance.getLock(k).release();
-										jobManager.removeJob(desc);
-										return false;
-									}
-									return true;
-								}
-
-								@Override
-								public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-									return true;
-								}
-							});
-							// Set initial state.
-							// instance.setLocked(true);
-							if (!k.equals(((LNGSchedulerJobDescriptor) job).getLockKey())) {
-								int ii = 0;
-							}
-//							assert k.equals(((LNGSchedulerJobDescriptor) job).getLockKey());
-							instance.getLock(k).awaitClaim();
-							control.prepare();
-							control.start();
-						} catch (final Throwable ex) {
-							log.error(ex.getMessage(), ex);
-							control.cancel();
-							// instance.setLocked(false);
-							instance.getLock(k).release();
-
-							final Display display = Display.getDefault();
-							if (display != null) {
-								display.asyncExec(new Runnable() {
-
-									@Override
-									public void run() {
-										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + ex.getMessage());
-									}
-								});
-							}
-						}
-						// Resume if paused
-					} else if (control.getJobState() == EJobState.PAUSED) {
-						// instance.setLocked(true);
-						instance.getLock(k).awaitClaim();
-						control.resume();
-					} else {
-						// Add listener to unlock scenario when it stops optimising
-						control.addListener(new IJobControlListener() {
+					final Display display = Display.getDefault();
+					if (display != null) {
+						display.asyncExec(new Runnable() {
 
 							@Override
-							public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
-
-								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-									// instance.setLocked(false);
-									instance.getLock(k).release();
-									return false;
-								}
-								return true;
-							}
-
-							@Override
-							public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-								return true;
+							public void run() {
+								MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + ex.getMessage());
 							}
 						});
-						// instance.setLocked(true);
-						instance.getLock(k).awaitClaim();
-						try {
-							control.start();
-						} catch (final Throwable t) {
-							log.error(t.getMessage(), t);
-							instance.getLock(k).release();
-							control.cancel();
-
-							final Display display = Display.getDefault();
-							if (display != null) {
-								display.asyncExec(new Runnable() {
-
-									@Override
-									public void run() {
-										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + t.getMessage());
-									}
-								});
-							}
-						}
 					}
 				}
-			} catch (final IOException e) {
-				log.error(e.getMessage(), e);
 			}
-
 		}
 
 		return null;
