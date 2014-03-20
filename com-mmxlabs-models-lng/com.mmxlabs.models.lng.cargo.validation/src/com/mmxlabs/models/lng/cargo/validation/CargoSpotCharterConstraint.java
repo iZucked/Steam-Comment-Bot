@@ -37,6 +37,9 @@ public class CargoSpotCharterConstraint extends AbstractModelMultiConstraint {
 		final MMXRootObject rootObject = extraValidationContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			SpotMarketsModel spotModel = ((LNGScenarioModel) rootObject).getSpotMarketsModel();
+			if (spotModel == null) {
+				return false;
+			}
 			for (CharterCostModel market: spotModel.getCharteringSpotMarkets()) {
 				if (market.getVesselClasses().contains(vc)) {
 					return true;
