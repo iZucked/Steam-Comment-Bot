@@ -1962,12 +1962,12 @@ public class LNGScenarioTransformer {
 					builder.setVesselClassRouteTransitTime(routeParameters.getRoute().getName(), vesselAssociation.lookup(evc), routeParameters.getExtraTransitTime());
 
 					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookup(evc), VesselState.Laden,
-							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getLadenConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getLadenNBORate()));
+							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenConsumptionRate()),
+							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getLadenNBORate()));
 
 					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookup(evc), VesselState.Ballast,
-							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getBallastConsumptionRate()),
-							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getBallastNBORate()));
+							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastConsumptionRate()),
+							OptimiserUnitConvertor.convertToInternalDailyRate(routeParameters.getBallastNBORate()));
 
 				}
 			}
