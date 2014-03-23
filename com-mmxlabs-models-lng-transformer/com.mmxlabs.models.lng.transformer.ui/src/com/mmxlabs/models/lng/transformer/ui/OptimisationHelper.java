@@ -103,6 +103,7 @@ public final class OptimisationHelper {
 
 					// New optimisation, so check there are no validation errors.
 					if (!validateScenario(root, optimising)) {
+						scenarioLock.release();
 						return null;
 					}
 
