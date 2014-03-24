@@ -55,7 +55,7 @@ public class LingoMigrateToV1 implements IMigrationUnit {
 		@SuppressWarnings("null")
 		final List<IMigrationUnit> chain = registry.getMigrationChain(ModelsLNGMigrationConstants.Context, 0, 1);
 		for (final IMigrationUnit unit : chain) {
-			unit.migrate(baseURI, null);
+			unit.migrate(baseURI, extraPackagesOrig);
 		}
 	}
 
