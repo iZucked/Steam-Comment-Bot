@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.action.Action;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -27,5 +28,10 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 		addNameManipulator("Name");
 
 		defaultSetTitle("Entities");
+	}
+
+	@Override
+	protected Action createDeleteAction() {
+		return null;
 	}
 }
