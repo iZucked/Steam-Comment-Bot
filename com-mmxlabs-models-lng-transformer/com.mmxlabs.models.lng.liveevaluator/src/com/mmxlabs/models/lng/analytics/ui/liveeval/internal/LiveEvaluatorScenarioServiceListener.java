@@ -21,6 +21,10 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListener {
 
+	/**
+	 * A mapping between a {@link ScenarioInstance} and a {@link LiveEvaluator}. Note, we need to synchronize access to avoid concurrent modifications, or even multiple {@link LiveEvaluator}s for a
+	 * single {@link ScenarioInstance}.
+	 */
 	private final Map<ScenarioInstance, LiveEvaluator> evaluatorMap = new WeakHashMap<ScenarioInstance, LiveEvaluator>();
 
 	private boolean enabled;
@@ -38,7 +42,14 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 	}
 
 	public void hookExisting(final IScenarioService scenarioService) {
-		hookExisting(scenarioService.getServiceModel());
+		// getServiceModel can block for a while causing issues with the service framework. So fire off in a thread.
+
+		new Thread("LiveEvaluatorScenarioServiceListener:hookExisting") {
+			@Override
+			public void run() {
+				hookExisting(scenarioService.getServiceModel());
+			}
+		}.start();
 	}
 
 	private void hookExisting(final Container container) {
@@ -48,11 +59,17 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 				final ScheduleModel schedule = getScheduleModel(scenarioInstance);
 
 				if (schedule != null) {
-					final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
-					evaluator.setEnabled(enabled);
-					schedule.eAdapters().add(evaluator);
-					scenarioInstance.eAdapters().add(evaluator);
-					evaluatorMap.put(scenarioInstance, evaluator);
+					// Synchronize to avoid overwriting concurrently created LiveEvaluators
+					synchronized (evaluatorMap) {
+						if (!evaluatorMap.containsKey(scenarioInstance)) {
+
+							final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
+							evaluator.setEnabled(enabled);
+							schedule.eAdapters().add(evaluator);
+							scenarioInstance.eAdapters().add(evaluator);
+							evaluatorMap.put(scenarioInstance, evaluator);
+						}
+					}
 				}
 			}
 			hookExisting(c);
@@ -64,12 +81,17 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 		final ScheduleModel schedule = getScheduleModel(scenarioInstance);
 
 		if (schedule != null) {
-			final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
-			evaluator.setScenarioInstanceEvaluator(scenarioInstanceEvaluator);
-			evaluator.setEnabled(enabled);
-			schedule.eAdapters().add(evaluator);
-			scenarioInstance.eAdapters().add(evaluator);
-			evaluatorMap.put(scenarioInstance, evaluator);
+			// Synchronize to avoid overwriting concurrently created LiveEvaluators
+			synchronized (evaluatorMap) {
+				if (!evaluatorMap.containsKey(scenarioInstance)) {
+					final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
+					evaluator.setScenarioInstanceEvaluator(scenarioInstanceEvaluator);
+					evaluator.setEnabled(enabled);
+					schedule.eAdapters().add(evaluator);
+					scenarioInstance.eAdapters().add(evaluator);
+					evaluatorMap.put(scenarioInstance, evaluator);
+				}
+			}
 		}
 	}
 
@@ -80,16 +102,17 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-		final LiveEvaluator eval = evaluatorMap.get(scenarioInstance);
-
-		if (scenarioInstance != null && eval != null) {
-			scenarioInstance.eAdapters().remove(eval);
-			final ScheduleModel schedule = getScheduleModel(scenarioInstance);
-			if (schedule != null) {
-				schedule.eAdapters().remove(eval);
+		synchronized (evaluatorMap) {
+			final LiveEvaluator eval = evaluatorMap.get(scenarioInstance);
+			if (scenarioInstance != null && eval != null) {
+				scenarioInstance.eAdapters().remove(eval);
+				final ScheduleModel schedule = getScheduleModel(scenarioInstance);
+				if (schedule != null) {
+					schedule.eAdapters().remove(eval);
+				}
 			}
+			evaluatorMap.remove(scenarioInstance);
 		}
-		evaluatorMap.remove(scenarioInstance);
 	}
 
 	private ScheduleModel getScheduleModel(ScenarioInstance scenarioInstance) {
@@ -121,8 +144,10 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 
 	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
-		for (final LiveEvaluator evaluator : evaluatorMap.values()) {
-			evaluator.setEnabled(enabled);
+		synchronized (evaluatorMap) {
+			for (final LiveEvaluator evaluator : evaluatorMap.values()) {
+				evaluator.setEnabled(enabled);
+			}
 		}
 	}
 
@@ -134,8 +159,10 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 		this.scenarioInstanceEvaluator = scenarioInstanceEvaluator;
 
 		this.scenarioInstanceEvaluator = scenarioInstanceEvaluator;
-		for (final LiveEvaluator evaluator : evaluatorMap.values()) {
-			evaluator.setScenarioInstanceEvaluator(scenarioInstanceEvaluator);
+		synchronized (evaluatorMap) {
+			for (final LiveEvaluator evaluator : evaluatorMap.values()) {
+				evaluator.setScenarioInstanceEvaluator(scenarioInstanceEvaluator);
+			}
 		}
 	}
 }
