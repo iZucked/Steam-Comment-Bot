@@ -1213,10 +1213,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void setVesselClassStateParameters(@NonNull final IVesselClass vc, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
 			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionCalculatorInMTPerDay, final int serviceSpeed) {
 
-		// Convert rate to MT equivalent per hour
-		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(nboRateInM3PerDay, vc.getBaseFuelConversionFactor());
+		// Convert rate to MT equivalent per day
+		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(nboRateInM3PerDay, vc.getBaseFuelConversionFactor());
 
-		final int nboSpeed = consumptionCalculatorInMTPerDay.getSpeed(nboRateInMTPerHour);
+		final int nboSpeed = consumptionCalculatorInMTPerDay.getSpeed(nboRateInMTPerDay);
 
 		this.setVesselClassStateParameters(vc, state, nboRateInM3PerDay, idleNBORateInM3PerDay, idleConsumptionRateInMTPerDay, consumptionCalculatorInMTPerDay, nboSpeed, serviceSpeed);
 	}
