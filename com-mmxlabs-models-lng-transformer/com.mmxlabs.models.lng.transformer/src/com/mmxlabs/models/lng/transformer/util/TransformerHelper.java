@@ -61,13 +61,22 @@ public class TransformerHelper {
 			final VesselStateAttributes attrs) {
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 
+		int minSpeed = Integer.MAX_VALUE;
+		int maxSpeed = Integer.MIN_VALUE;
 		for (final FuelConsumption line : attrs.getFuelConsumption()) {
-			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalDailyRate(line.getConsumption()));
+			final int speed = OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed());
+			keypoints.put(speed, (long) OptimiserUnitConvertor.convertToInternalDailyRate(line.getConsumption()));
+			if (speed > maxSpeed) {
+				maxSpeed = speed;
+			}
+			if (speed < minSpeed) {
+				minSpeed = speed;
+			}
 		}
 
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
-		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
+		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(minSpeed, maxSpeed, consumptionCalculator);
 
 		builder.setVesselClassStateParameters(vc, state, OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getNboRate()),
 				OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalDailyRate(attrs.getIdleBaseRate()), cc,
