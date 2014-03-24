@@ -13,6 +13,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -70,7 +72,9 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
-			if (dcsd.getTarget() instanceof LegalEntity) {
+			if (dcsd.getTarget() instanceof BaseLegalEntity) {
+				return true;
+			} else if (dcsd.getTarget() instanceof BaseEntityBook) {
 				return true;
 			} else if (dcsd.getTarget() instanceof PurchaseContract) {
 				return true;
@@ -102,8 +106,10 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 				}
 			}
 
-			if (target instanceof LegalEntity) {
+			if (target instanceof BaseLegalEntity) {
 				entityEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+			} else if (target instanceof BaseEntityBook) {
+				entityEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target.eContainer()), true);
 			} else if (target instanceof PurchaseContract) {
 				purchaseContractEditorPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 			} else if (target instanceof SalesContract) {
