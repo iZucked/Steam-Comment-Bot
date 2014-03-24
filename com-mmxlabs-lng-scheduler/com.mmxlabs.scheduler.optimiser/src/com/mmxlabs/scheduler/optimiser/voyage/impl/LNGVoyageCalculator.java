@@ -122,7 +122,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 		final int equivalenceFactorM3ToMT = vesselClass.getBaseFuelConversionFactor();
 
-		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vesselClass, vesselState), additionalRouteTimeInHours);
+		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vesselClass, vesselState), additionalRouteTimeInHours) / 24l;
 
 		if (routeRequiredConsumptionInMT > 0) {
 
