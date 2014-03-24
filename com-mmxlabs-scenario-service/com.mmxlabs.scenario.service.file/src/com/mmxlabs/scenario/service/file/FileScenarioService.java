@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Dictionary;
@@ -16,9 +17,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -31,12 +38,17 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.ui.progress.IProgressConstants2;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Files;
 import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.file.internal.Activator;
+import com.mmxlabs.scenario.service.file.internal.FileScenarioServiceBackup;
+import com.mmxlabs.scenario.service.file.preferences.PreferenceConstants;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -58,13 +70,15 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	private URI storeURI;
 
+	private final Semaphore backupLock = new Semaphore(1);
+
 	public FileScenarioService() {
 		super("My Scenarios");
 		options = new HashMap<Object, Object>();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 	}
 
-	public void start(final ComponentContext context) {
+	public void start(final ComponentContext context) throws InterruptedException {
 
 		final Dictionary<?, ?> d = context.getProperties();
 
@@ -78,6 +92,110 @@ public class FileScenarioService extends AbstractScenarioService {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 
 		storeURI = URI.createFileURI(workspaceLocation + modelURIString);
+
+		if (true) {
+
+			backupWorkspace();
+		}
+
+	}
+
+	/**
+	 * Creates a complete backup of the file scenario service data. First we create a local archive as the rest of the application will block to avoid data modification issues. Then we copy to the
+	 * remote location after releasing the lock
+	 */
+	private void backupWorkspace() throws InterruptedException {
+
+		if (Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_ENABLED_KEY)) {
+
+			// First job is blocking - creating the zip file itself.
+			// The job will release the lock
+			backupLock.acquire();
+			// Create a schedule rule to avoid jobs being run concurrently
+			final ISchedulingRule rule = new ISchedulingRule() {
+
+				@Override
+				public boolean isConflicting(final ISchedulingRule rule) {
+					return rule == this;
+				}
+
+				@Override
+				public boolean contains(final ISchedulingRule rule) {
+					return rule == this;
+				}
+			};
+
+			// Get the zip file name
+			final String targetName = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_NAME_KEY);
+
+			// Use the URI to resole to the scenario-service directory (or what ever is currently defined in the service properties).
+			final URI resolveURI = resolveURI(targetName);
+			final File localArchive = new File(resolveURI.toFileString());
+			log.info("Starting scenario data backup");
+
+			final Job job = new Job("Archive scenario data") {
+
+				@Override
+				public IStatus run(final IProgressMonitor monitor) {
+					monitor.beginTask("Archive scenario data", IProgressMonitor.UNKNOWN);
+					try {
+						try {
+							new FileScenarioServiceBackup().backup(localArchive, localArchive.getParentFile());
+						} catch (final IOException e) {
+							log.error("Error archiving scenario data: " + e.getMessage(), e);
+						}
+					} catch (final Exception e) {
+						return Status.CANCEL_STATUS;
+					} finally {
+						// Release the lock
+						backupLock.release();
+					}
+
+					return Status.OK_STATUS;
+				}
+			};
+			job.setProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, Boolean.TRUE);
+			job.setSystem(true);
+			job.setUser(true);
+			job.setPriority(Job.SHORT);
+			job.setRule(rule);
+			// Run now!
+			job.schedule(0);
+
+			// Second job to copy archive to remote mapped location then "secure" delete the archive
+			final String dest = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_PATH_KEY);
+			final File destinationLocation = new File(dest);
+			if (destinationLocation.exists() && destinationLocation.isDirectory()) {
+
+				final Job moveJob = new Job("Storing scenario data backup in " + destinationLocation.toString()) {
+
+					@Override
+					public IStatus run(final IProgressMonitor monitor) {
+						monitor.beginTask("Storing scenario data backup in " + destinationLocation.toString(), IProgressMonitor.UNKNOWN);
+						try {
+							final File destFile = new File(destinationLocation + "/" + targetName);
+							Files.copy(localArchive, destFile);
+							FileDeleter.delete(localArchive);
+							log.info("Completed scenario data backup");
+						} catch (final IOException e) {
+							log.error("Error moving archive to remote " + e.getMessage(), e);
+						}
+
+						return Status.OK_STATUS;
+					}
+				};
+				job.setProperty(IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, Boolean.TRUE);
+
+				moveJob.setSystem(false);
+				moveJob.setUser(true);
+				moveJob.setPriority(Job.SHORT);
+				moveJob.setRule(rule);
+				// Wait a little while before running - give the app a chance to settle
+				moveJob.schedule(15000);
+			} else {
+				log.error("Error moving backup archive, remote directory does not exist " + dest);
+			}
+		}
 	}
 
 	public void stop(final ComponentContext context) {
@@ -273,7 +391,12 @@ public class FileScenarioService extends AbstractScenarioService {
 	};
 
 	@Override
-	protected ScenarioService initServiceModel() {
+	protected synchronized ScenarioService initServiceModel() {
+		// Attempt to get backup lock - this should block until the backup is created.
+		backupLock.acquireUninterruptibly();
+		// Unlock as we do not really need it
+		backupLock.release();
+
 		resource = resourceSet.createResource(storeURI);
 		boolean resourceExisted = false;
 		try {

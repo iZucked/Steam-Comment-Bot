@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.scenario.service.file.preferences.FileScenarioServicePreferencesPage"
+            id="com.mmxlabs.scenario.service.file.preferences.FileScenarioServicePreferencesPage"
+            name="Scenario Backup">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.mmxlabs.scenario.service.file.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

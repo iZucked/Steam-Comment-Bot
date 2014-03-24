@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: File
-Bundle-SymbolicName: com.mmxlabs.scenario.service.file
+Bundle-SymbolicName: com.mmxlabs.scenario.service.file;singleton:=true
 Bundle-Version: 5.1.1.qualifier
 Bundle-Activator: com.mmxlabs.scenario.service.file.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
