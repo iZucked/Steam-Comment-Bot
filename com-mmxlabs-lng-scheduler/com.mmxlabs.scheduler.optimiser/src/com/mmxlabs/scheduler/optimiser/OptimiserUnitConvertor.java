@@ -46,16 +46,8 @@ public final class OptimiserUnitConvertor {
 		return (int) ((double) Calculator.ScaleFactor * dailyRate);
 	}
 
-	public static int convertToInternalHourlyRate(final double dailyRate) {
-		return (int) ((double) Calculator.ScaleFactor * dailyRate / 24.0);
-	}
-
 	public static double convertToExternalDailyRate(final int dailyRate) {
 		return (double) dailyRate / (double) Calculator.ScaleFactor;
-	}
-
-	public static double convertToExternalHourlyRate(final int hourlyRate) {
-		return (double) hourlyRate * 24.0 / (double) Calculator.ScaleFactor;
 	}
 
 	/**
