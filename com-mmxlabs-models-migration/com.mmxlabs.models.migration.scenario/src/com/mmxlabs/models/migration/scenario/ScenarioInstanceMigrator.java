@@ -12,18 +12,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
@@ -33,6 +28,8 @@ import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.ResourceHelper;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * The {@link ScenarioInstanceMigrator} controls the migration process for a {@link ScenarioInstance}. It will attempt to migrate a scenario if required. It will create a copy of the scenario data to
@@ -43,9 +40,11 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class ScenarioInstanceMigrator {
 
 	private final IMigrationRegistry migrationRegistry;
+	private final IScenarioCipherProvider scenarioCipherProvider;
 
-	public ScenarioInstanceMigrator(final IMigrationRegistry migrationRegistry) {
+	public ScenarioInstanceMigrator(final IMigrationRegistry migrationRegistry, IScenarioCipherProvider scenarioCipherProvider) {
 		this.migrationRegistry = migrationRegistry;
+		this.scenarioCipherProvider = scenarioCipherProvider;
 	}
 
 	public void performMigration(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
@@ -87,17 +86,11 @@ public class ScenarioInstanceMigrator {
 			// Sanity check - can we load the new scenario without error?
 			{
 				// Construct a normal resource set. This will use the global package registry etc
-				final ResourceSetImpl resourceSet = new ResourceSetImpl();
-				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+				final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 
-				Map<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 				try {
 					// Create a sample instance object
-					final Resource r = resourceSet.createResource(tmpURI);
-					if (r instanceof ResourceImpl) {
-						((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
-					}
-					r.load(null);
+					final Resource r = ResourceHelper.loadResource(resourceSet, tmpURI);
 					final Object submodel = r.getContents().get(0);
 					if (submodel == null) {
 						throw new RuntimeException("Error loading migrated scenario model. Aborting");
