@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -877,6 +878,11 @@ public class CargoEditorMenuHelper {
 		private final boolean isDesPurchaseOrFobSale;
 		private final Port shipToShipPort;
 
+		private String getKeyForDate(final Date date) {
+			final String key = new SimpleDateFormat("yyyy-MM").format(date);
+			return key;
+		}
+
 		public CreateSlotAction(final String name, final Slot source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final Port shipToShipPort) {
 			super(name);
 			this.source = source;
@@ -925,6 +931,23 @@ public class CargoEditorMenuHelper {
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
 						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
+
+						final String yearMonthString = getKeyForDate(cal.getTime());
+
+						// Get existing names
+						final Set<String> usedIDStrings = new HashSet<>();
+						for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+							usedIDStrings.add(slot.getName());
+						}
+
+						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+						int i = 0;
+						String id = idPrefix + (i++);
+						while (usedIDStrings.contains(id)) {
+							id = idPrefix + (i++);
+						}
+						dischargeSlot.setName(id);
+
 					}
 
 					if (dischargeSlot.isFOBSale()) {
@@ -953,6 +976,24 @@ public class CargoEditorMenuHelper {
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
 						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
+						
+
+						final String yearMonthString = getKeyForDate(cal.getTime());
+
+						// Get existing names
+						final Set<String> usedIDStrings = new HashSet<>();
+						for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+							usedIDStrings.add(slot.getName());
+						}
+
+						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+						int i = 0;
+						String id = idPrefix + (i++);
+						while (usedIDStrings.contains(id)) {
+							id = idPrefix + (i++);
+						}
+						loadSlot.setName(id);
+
 					}
 					if (loadSlot.isDESPurchase()) {
 						loadSlot.setPort(source.getPort());
