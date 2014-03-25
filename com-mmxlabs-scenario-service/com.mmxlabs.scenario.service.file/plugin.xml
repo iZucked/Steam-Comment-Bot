@@ -6,7 +6,7 @@
       <page
             class="com.mmxlabs.scenario.service.file.preferences.FileScenarioServicePreferencesPage"
             id="com.mmxlabs.scenario.service.file.preferences.FileScenarioServicePreferencesPage"
-            name="Scenario Backup">
+            name="Scenario Data Backup">
       </page>
    </extension>
    <extension
@@ -15,4 +15,18 @@
             class="com.mmxlabs.scenario.service.file.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+      <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="false">
+      </toc>
+   </extension>
+   
 </plugin>
