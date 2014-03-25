@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
+import com.mmxlabs.scenario.service.util.ResourceHelper;
 
 /**
  * Abstract implementation of {@link IMigrationUnit}. This class takes care of loading and saving the ecore model resources. Subclasses are provided with a Map of {@link ModelsLNGSet_v1} to root
@@ -71,16 +73,12 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
 		// resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
 
-		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
+//		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 
 		// Record features which have no meta-model equivalent so we can perform migration
 		// resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 
-		final XMIResource modelResource = (XMIResource) resourceSet.createResource(baseURI);
-		if (modelResource instanceof ResourceImpl) {
-			((ResourceImpl) modelResource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
-		}
-		modelResource.load(resourceSet.getLoadOptions());
+		final Resource modelResource = ResourceHelper.loadResource(resourceSet, baseURI);
 
 		final EObject eObject = modelResource.getContents().get(0);
 		assert eObject != null;
