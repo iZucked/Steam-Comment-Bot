@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -904,10 +905,28 @@ public class CargoEditorMenuHelper {
 					loadSlot = (LoadSlot) source;
 					if (market == null) {
 						dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale);
+						dischargeSlot.setWindowStart(source.getWindowStart());
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
+
+						// Get start of month and create full sized window
+						final Calendar cal = Calendar.getInstance();
+						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
+						cal.setTime(source.getWindowStartWithSlotOrPortTime());
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.HOUR_OF_DAY, 0);
+						cal.set(Calendar.MINUTE, 0);
+						cal.set(Calendar.SECOND, 0);
+						cal.set(Calendar.MILLISECOND, 0);
+						final Date startDate = cal.getTime();
+						dischargeSlot.setWindowStart(startDate);
+						dischargeSlot.setWindowStartTime(0);
+						cal.add(Calendar.MONTH, 1);
+						final Date endDate = cal.getTime();
+						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
 					}
-					dischargeSlot.setWindowStart(source.getWindowStart());
+
 					if (dischargeSlot.isFOBSale()) {
 						dischargeSlot.setPort(source.getPort());
 					}
@@ -918,7 +937,22 @@ public class CargoEditorMenuHelper {
 						loadSlot.setWindowStart(source.getWindowStart());
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
-						loadSlot.setWindowStart(source.getWindowStart());
+						// Get start of month and create full sized window
+						final Calendar cal = Calendar.getInstance();
+						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
+						cal.setTime(source.getWindowStartWithSlotOrPortTime());
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.HOUR_OF_DAY, 0);
+						cal.set(Calendar.MINUTE, 0);
+						cal.set(Calendar.SECOND, 0);
+						cal.set(Calendar.MILLISECOND, 0);
+						final Date startDate = cal.getTime();
+						loadSlot.setWindowStart(startDate);
+						loadSlot.setWindowStartTime(0);
+						cal.add(Calendar.MONTH, 1);
+						final Date endDate = cal.getTime();
+						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
 					}
 					if (loadSlot.isDESPurchase()) {
 						loadSlot.setPort(source.getPort());
