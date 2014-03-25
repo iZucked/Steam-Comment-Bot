@@ -22,6 +22,10 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.Nullable;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
@@ -44,6 +48,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * 
@@ -103,7 +108,7 @@ public class AbstractOptimisationResultTester {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, false);
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
 
 		File f = null;
 		try {
@@ -123,7 +128,7 @@ public class AbstractOptimisationResultTester {
 
 		final URI uri = URI.createURI(FileLocator.toFileURL(url).toString().replaceAll(" ", "%20"));
 
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, false);
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(uri, getScenarioCipherProvider());
 
 		File f = null;
 		try {
@@ -329,6 +334,16 @@ public class AbstractOptimisationResultTester {
 	LNGScenarioModel duplicate(final LNGScenarioModel original) {
 
 		return EcoreUtil.copy(original);
+	}
+
+	@Nullable
+	private IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
 	}
 
 }

@@ -15,10 +15,14 @@ import org.eclipse.emf.compare.Diff;
 import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
@@ -37,6 +41,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * Run a test scenario several times to try and see if it varies.
@@ -73,11 +78,11 @@ public class OptimisationRepeatabilityTest {
 
 		final URL url = getClass().getResource("/OptimisationRepeatabilityTest.scenario");
 
-		testScenario(url, 5);
+		testScenario(url, 5, getScenarioCipherProvider());
 	}
 
-	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, IncompleteScenarioException {
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), false);
+	private void testScenario(final URL url, final int numTries, final IScenarioCipherProvider scenarioCipherProvider) throws IOException, InterruptedException, IncompleteScenarioException {
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), scenarioCipherProvider);
 
 		File f = null;
 		try {
@@ -148,5 +153,15 @@ public class OptimisationRepeatabilityTest {
 				f.delete();
 			}
 		}
+	}
+	
+	@Nullable
+	private IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(OptimisationRepeatabilityTest.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
 	}
 }
