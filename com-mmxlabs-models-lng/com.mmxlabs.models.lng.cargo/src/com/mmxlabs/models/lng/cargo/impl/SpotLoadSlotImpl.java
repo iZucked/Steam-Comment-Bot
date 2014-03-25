@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -12,6 +13,9 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
@@ -196,11 +200,34 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 	@Override
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		if (feature == CargoPackage.Literals.SLOT__ENTITY) {
-			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__ENTITY, null);			
-		}
-		return null;
-	}
+			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__ENTITY, null);
+		} else if (feature == CargoPackage.Literals.LOAD_SLOT__CARGO_CV) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET || changedFeature == CargoPackage.Literals.SLOT__PORT);
+				}
 
+				public Object getValue(final EObject object) {
+					Object result = null;
+					SpotMarket spotMarket = getMarket();
+					if (spotMarket instanceof DESPurchaseMarket) {
+						result = spotMarket.eGetWithDefault(SpotMarketsPackage.Literals.DES_PURCHASE_MARKET__CV);
+					} else if (spotMarket instanceof FOBPurchasesMarket) {
+						result = spotMarket.eGetWithDefault(SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET__CV);
+					}
+					if (result == null && port != null) {
+						result = port.eGetWithDefault(PortPackage.Literals.PORT__CV_VALUE);
+					}
+					if (result == null) {
+						result = (Double) 0.0;
+					}
+					return result;
+
+				}
+			};
+		}
+		return super.getUnsetValueOrDelegate(feature);
+	}
 
 } // end of SpotLoadSlotImpl
 
