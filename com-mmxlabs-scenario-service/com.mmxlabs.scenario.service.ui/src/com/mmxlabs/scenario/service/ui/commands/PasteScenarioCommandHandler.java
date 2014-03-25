@@ -173,6 +173,8 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		final IScenarioService service = container.getScenarioService();
 		if (fileData instanceof String[]) {
 
+			final IScenarioCipherProvider scenarioCipherProvider = getScenarioCipherProvider();
+
 			final String[] files = (String[]) fileData;
 			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 
@@ -187,7 +189,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 							for (final String filePath : files) {
 								monitor.subTask("Copying " + filePath);
-								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
+								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath, scenarioCipherProvider);
 								if (instance != null) {
 									service.duplicate(instance, container).setName(new File(filePath).getName());
 								}
@@ -227,6 +229,16 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 					return container;
 				}
 			}
+		}
+		return null;
+	}
+
+	@Nullable
+	private IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(PasteScenarioCommandHandler.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
 		}
 		return null;
 	}

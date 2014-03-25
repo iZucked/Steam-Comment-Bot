@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
@@ -23,11 +24,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.URIConverter.Cipher;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -55,6 +59,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * An abstract base class suitable for most scenario services.
@@ -70,6 +75,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	private static final EAttribute uuidAttribute = ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid();
 
 	private IScenarioMigrationService scenarioMigrationService;
+	private IScenarioCipherProvider scenarioCipherProvider;
 
 	protected AbstractScenarioService(final String name) {
 		this.name = name;
@@ -141,16 +147,12 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		// create MMXRootObject and connect submodel instances into it.
 		final ResourceSet resourceSet = createResourceSet();
 
-		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 		final String rooObjectURI = instance.getRootObjectURI();
 		// acquire sub models
 		log.debug("Loading rootObject from " + rooObjectURI);
 		final URI uri = resolveURI(rooObjectURI);
-		final Resource resource = resourceSet.createResource(uri);
-		if (resource instanceof ResourceImpl) {
-			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
-		}
-		resource.load(null);
+
+		final Resource resource = ResourceHelper.loadResource(resourceSet, uri);
 		final EObject implementation = resource.getContents().get(0);
 
 		if (implementation == null) {
@@ -179,18 +181,11 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	 * @since 4.0
 	 */
 	protected ResourceSet createResourceSet() {
-		final ResourceSet resourceSet = new ResourceSetImpl();
-		// Set Default Load Options
-		{
-			resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
-			resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
-			resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
-		}
-		// TODO: Set Default Save Options
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 		return resourceSet;
 	}
 
-	private EditingDomain initEditingDomain(ResourceSet resourceSet, final EObject rootObject, final ScenarioInstance instance) {
+	private EditingDomain initEditingDomain(final ResourceSet resourceSet, final EObject rootObject, final ScenarioInstance instance) {
 
 		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(instance);
 
@@ -294,16 +289,11 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				// Load the model so we can copy it
 				final ResourceSet resourceSet = createResourceSet();
 
-				final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
 				final String rooObjectURI = cpy.getRootObjectURI();
 				// acquire sub models
 				log.debug("Loading rootObject from " + rooObjectURI);
 				final URI uri = resolveURI(rooObjectURI);
-				final Resource resource = resourceSet.createResource(uri);
-				if (resource instanceof ResourceImpl) {
-					((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
-				}
-				resource.load(null);
+				final Resource resource = ResourceHelper.loadResource(resourceSet, uri);
 				rootObject = resource.getContents().get(0);
 
 				unloadScenario = true;
@@ -378,6 +368,14 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	 */
 	public void setScenarioMigrationService(final IScenarioMigrationService scenarioMigrationHandler) {
 		this.scenarioMigrationService = scenarioMigrationHandler;
+	}
+
+	public IScenarioCipherProvider getScenarioCipherProvider() {
+		return scenarioCipherProvider;
+	}
+
+	public void setScenarioCipherProvider(final IScenarioCipherProvider scenarioCipherProvider) {
+		this.scenarioCipherProvider = scenarioCipherProvider;
 	}
 
 	/**

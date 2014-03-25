@@ -5,11 +5,12 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" immediate="true" name="com.mmxlabs.scenario.service.file">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" deactivate="stop" immediate="true" name="com.mmxlabs.scenario.service.file.FileScenarioService">
    <implementation class="com.mmxlabs.scenario.service.file.FileScenarioService"/>
    <service>
       <provide interface="com.mmxlabs.scenario.service.IScenarioService"/>
    </service>
    <property name="com.mmxlabs.scenario.service.file.model" type="String" value="/scenario-service/file-service-model.xmi"/>
-   <reference bind="setScenarioMigrationService" cardinality="1..1" interface="com.mmxlabs.scenario.service.IScenarioMigrationService" name="IScenarioMigrationService" policy="static"/>
+   <reference bind="setScenarioMigrationService" cardinality="1..1" interface="com.mmxlabs.scenario.service.IScenarioMigrationService" name="IScenarioMigratdynamicvice" policy="static"/>
+   <reference bind="setScenarioCipherProvider" cardinality="0..1" interface="com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider" name="IScenarioCiphdynamicider" policy="dynamic"/>
 </scr:component>

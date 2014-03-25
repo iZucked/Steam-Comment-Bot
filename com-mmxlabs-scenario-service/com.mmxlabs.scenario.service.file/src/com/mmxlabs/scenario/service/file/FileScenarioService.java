@@ -59,6 +59,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
+import com.mmxlabs.scenario.service.util.ResourceHelper;
 
 public class FileScenarioService extends AbstractScenarioService {
 
@@ -559,8 +560,7 @@ public class FileScenarioService extends AbstractScenarioService {
 						log.warn("Recovering instance " + instanceUUID);
 						// recover the instance in f, if possible
 						try {
-							final Resource resource = resourceSet.createResource(URI.createFileURI(instanceFile.getAbsolutePath()));
-							resource.load(null);
+							final Resource resource = ResourceHelper.loadResource(resourceSet, URI.createFileURI(instanceFile.getAbsolutePath())); 
 							final EObject o = resource.getContents().get(0);
 							if (o instanceof ScenarioInstance) {
 								final ScenarioInstance theInstance = (ScenarioInstance) o;
