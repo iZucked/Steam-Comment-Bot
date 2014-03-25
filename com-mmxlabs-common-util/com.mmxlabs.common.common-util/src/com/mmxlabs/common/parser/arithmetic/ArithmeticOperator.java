@@ -34,6 +34,7 @@ public class ArithmeticOperator extends ArithmeticExpression {
 		throw new RuntimeException("Unknown operator " + op);
 	}
 
+	@Override
 	public String toString() {
 		return "(" + lhs + op + rhs + ")";
 	}

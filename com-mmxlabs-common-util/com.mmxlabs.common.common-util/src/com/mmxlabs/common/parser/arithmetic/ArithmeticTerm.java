@@ -24,6 +24,7 @@ public class ArithmeticTerm extends ArithmeticExpression {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return term;
 	}

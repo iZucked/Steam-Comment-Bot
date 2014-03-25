@@ -4,16 +4,15 @@
  */
 package com.mmxlabs.common.io;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 import java.nio.channels.FileLock;
+import java.nio.file.Files;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
@@ -51,7 +50,8 @@ public final class FileDeleter {
 			try {
 				final FileLock lock = channel.lock();
 				try {
-					final MappedByteBuffer buffer = channel.map(MapMode.READ_WRITE, 0, raf.length());
+					// Garbage collect is the only way to free this thing!
+					MappedByteBuffer buffer = channel.map(MapMode.READ_WRITE, 0, raf.length());
 					final byte[] bytes = new byte[4096];
 
 					Arrays.fill(bytes, (byte) 0x00);
@@ -80,6 +80,7 @@ public final class FileDeleter {
 					}
 					buffer.force();
 					buffer.clear();
+					buffer = null;
 				} finally {
 					lock.release();
 				}
@@ -90,20 +91,21 @@ public final class FileDeleter {
 			raf.close();
 		}
 
-		file.delete();
-		System.gc();
-	}
-
-	public static void main(final String arg[]) throws Exception {
-
-		final File f = new File("C:/temp/test.file.txt");
-
-		final BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-		for (int i = 0; i < 1000; ++i) {
-			bw.write("Hello!");
+		// We can only delete the file once the memory mapped buffer has been released. This is done when the buffer is garbage collected and finalised. This loop runs the gc() and attempts to delete
+		// the file. If it is not deleted, loop again until the limit has been reached.
+		// See http://stackoverflow.com/questions/2972986/how-to-unmap-a-file-from-memory-mapped-using-filechannel-in-java
+		for (int i = 0; i < 100; ++i) {
+			System.gc();
+			System.runFinalization();
+			try {
+				Files.delete(file.toPath());
+				break;
+			} catch (Exception e) {
+			}
 		}
-		bw.close();
-
-		FileDeleter.delete(f);
+		// If we reached the limit, then the file still exists. Invoke delete one more time to propogate the exception.
+		if (file.exists()) {
+			Files.delete(file.toPath());
+		}
 	}
 }
