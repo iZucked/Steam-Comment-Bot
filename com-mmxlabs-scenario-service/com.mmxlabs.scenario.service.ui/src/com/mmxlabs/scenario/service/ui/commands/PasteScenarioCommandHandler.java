@@ -17,6 +17,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
@@ -27,6 +28,9 @@ import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +39,7 @@ import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * @author hinton
@@ -167,13 +172,39 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		final Object fileData = clipboard.getContents(FileTransfer.getInstance());
 		final IScenarioService service = container.getScenarioService();
 		if (fileData instanceof String[]) {
+
 			final String[] files = (String[]) fileData;
-			for (final String filePath : files) {
-				final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
-				if (instance != null) {
-					service.duplicate(instance, container).setName(new File(filePath).getName());
-				}
+			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+
+			try {
+				dialog.run(true, true, new IRunnableWithProgress() {
+
+					@Override
+					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+						monitor.beginTask("Copying", files.length);
+						try {
+
+							for (final String filePath : files) {
+								monitor.subTask("Copying " + filePath);
+								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
+								if (instance != null) {
+									service.duplicate(instance, container).setName(new File(filePath).getName());
+								}
+								monitor.worked(1);
+							}
+						} catch (IOException e) {
+							log.error(e.getMessage(), e);
+						} finally {
+							monitor.done();
+						}
+					}
+				});
+			} catch (final InvocationTargetException | InterruptedException e) {
+				log.error(e.getMessage(), e);
 			}
+			return true;
+
 		}
 		return false;
 	}

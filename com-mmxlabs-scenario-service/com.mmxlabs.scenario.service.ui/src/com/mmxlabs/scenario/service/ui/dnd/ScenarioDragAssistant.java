@@ -211,19 +211,46 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 				final Object obj = FileTransfer.getInstance().nativeToJava(currentTransfer);
 
 				if (obj instanceof String[]) {
+
 					final String[] files = (String[]) obj;
 
-					for (final String filePath : files) {
-						final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
-						if (instance != null) {
-							try {
-								final String scenarioName = new File(filePath).getName();
-								container.getScenarioService().duplicate(instance, container).setName(scenarioName);
-							} catch (final IOException e) {
-								log.error(e.getMessage(), e);
+					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+
+					try {
+						dialog.run(true, true, new IRunnableWithProgress() {
+
+							@Override
+							public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+								monitor.beginTask("Copying", files.length);
+								try {
+
+									for (final String filePath : files) {
+										if (monitor.isCanceled()) {
+											return;
+										}
+										monitor.setTaskName("Copying " + filePath);
+										final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
+										if (instance != null) {
+											try {
+												final String scenarioName = new File(filePath).getName();
+												container.getScenarioService().duplicate(instance, container).setName(scenarioName);
+											} catch (final IOException e) {
+												log.error(e.getMessage(), e);
+											}
+										}
+										monitor.worked(1);
+									}
+								} finally {
+									monitor.done();
+								}
 							}
-						}
+						});
+					} catch (final Exception e) {
+						log.error(e.getMessage(), e);
+						return Status.CANCEL_STATUS;
 					}
+
 					return Status.OK_STATUS;
 				}
 
