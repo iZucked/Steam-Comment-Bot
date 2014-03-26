@@ -43,7 +43,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-//		final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
+		// final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
 		if (target instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
 			final FleetModel fleetModel = scenarioModel.getFleetModel();
@@ -62,6 +62,9 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 					if (left != null && right != null) {
 						if (left.after(right)) {
+							final Date left2 = getEndDate(prevAssignment);
+							final Date right2 = getStartDate(assignment);
+
 							// Uh oh, likely to be an error
 							problems.add(new Pair<AssignableElement, AssignableElement>(prevAssignment, assignment));
 						}
@@ -112,7 +115,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
-			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
+			final Slot slot = sortedSlots.get(0);
 			return slot.getWindowStartWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
@@ -128,7 +131,10 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
-			return slot.getWindowEndWithSlotOrPortTime();
+			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+			cal.setTime(slot.getWindowStartWithSlotOrPortTime());
+			cal.add(Calendar.HOUR_OF_DAY, slot.getSlotOrPortDuration());
+			return cal.getTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
 			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartAfter())));
