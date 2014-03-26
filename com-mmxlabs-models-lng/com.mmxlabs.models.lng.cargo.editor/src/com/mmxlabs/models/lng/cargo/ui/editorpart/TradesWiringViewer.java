@@ -1220,6 +1220,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					// Broken the wiring
 					if (loadSide.cargo != null) {
 						cargoesToRemove.add(loadSide.cargo);
+						for (final Slot s : loadSide.cargo.getSlots()) {
+							// Optional market slots can be removed.
+							if (s instanceof SpotSlot && s.isOptional()) {
+								slotsToRemove.add(s);
+							}
+						}
 					}
 				}
 			}
