@@ -51,16 +51,56 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 				failures.add(dsd);
 			}
 
+			String type = "<Unknown type>";
+			Slot slot = null;
 			if (spotSlot instanceof SpotLoadSlot) {
 				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
+				type = spotLoadSlot.isDESPurchase() ? "DES Purchase" : "FOB Purchase";
+				slot = spotLoadSlot;
+			} else if (spotSlot instanceof SpotDischargeSlot) {
+				final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) spotSlot;
+				type = spotDischargeSlot.isFOBSale() ? "FOB Sale" : "DES Sale";
+				slot = spotDischargeSlot;
+			}
 
-				if (spotLoadSlot.getContract() != null) {
-					String type = spotLoadSlot.isDESPurchase() ? "DES" : "FOB";
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName() + "] " + type
-							+ " purchase should not have a contract set."), IStatus.WARNING);
-					dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+			// Generic constraints
+			if (slot != null) {
+				if (slot.getContract() != null) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
+							+ " should not have a contract set."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
 					failures.add(dsd);
 				}
+
+				if (slot.getCancellationFee() != 0) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
+							+ " should not have a cancellation fee set."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_CancellationFee());
+					failures.add(dsd);
+				}
+
+				if (slot.getEntity() != null) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
+							+ " should not have an entity set."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Entity());
+					failures.add(dsd);
+				}
+				if (slot.getPriceExpression() != null) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
+							+ " should not have a price expression set."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
+					failures.add(dsd);
+				}
+				if (slot.getPricingDate() != null) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
+							+ " should not have a pricing date set."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PricingDate());
+					failures.add(dsd);
+				}
+			}
+
+			if (spotSlot instanceof SpotLoadSlot) {
+				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
 
 				if (market instanceof DESPurchaseMarket) {
 					final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
@@ -90,16 +130,6 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 
 			} else if (spotSlot instanceof SpotDischargeSlot) {
 				final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) spotSlot;
-				String type = spotDischargeSlot.isFOBSale() ? "FOB" : "DES";
-
-				if (spotDischargeSlot.getContract() != null) {
-
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName() + "] "
-							+ type + " sales should not have a contract set."), IStatus.WARNING);
-					dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
-					failures.add(dsd);
-
-				}
 
 				if (market instanceof DESSalesMarket) {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
