@@ -19,6 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedSet;
@@ -1094,9 +1095,17 @@ public class LNGScenarioTransformer {
 		{
 			// convenience variables
 			final String name = dischargeSlot.getName();
-			final IPort port = portAssociation.lookup(dischargeSlot.getPort());
-			final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
-			final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
+			final long minVolume;
+			final long maxVolume;
+			if (dischargeSlot instanceof SpotSlot) {
+				final SpotSlot spotSlot = (SpotSlot) dischargeSlot;
+				final SpotMarket market = spotSlot.getMarket();
+				minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
+				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
+			} else {
+				minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
+				maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
+			}
 
 			final long minCv;
 			long maxCv;
@@ -1129,6 +1138,14 @@ public class LNGScenarioTransformer {
 				// } else {
 				localTimeWindow = dischargeWindow;
 				// }
+
+				final IPort port;
+				if (dischargeSlot instanceof SpotSlot) {
+					port = null;
+				} else {
+					port = portAssociation.lookup(dischargeSlot.getPort());
+				}
+
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
 						pricingDate, dischargeSlot.isOptional());
 
@@ -1136,8 +1153,8 @@ public class LNGScenarioTransformer {
 					// builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
-				discharge = builder.createDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(), pricingDate,
-						dischargeSlot.isOptional());
+				discharge = builder.createDischargeSlot(name, portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator,
+						dischargeSlot.getSlotOrPortDuration(), pricingDate, dischargeSlot.isOptional());
 			}
 		}
 
@@ -1232,6 +1249,18 @@ public class LNGScenarioTransformer {
 
 		final int slotPricingDate = loadSlot.isSetPricingDate() ? convertTime(earliestTime, loadSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
 
+		final long minVolume;
+		final long maxVolume;
+		if (loadSlot instanceof SpotSlot) {
+			final SpotSlot spotSlot = (SpotSlot) loadSlot;
+			final SpotMarket market = spotSlot.getMarket();
+			minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
+			maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
+		} else {
+			minVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity());
+			maxVolume = OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity());
+		}
+
 		if (loadSlot.isDESPurchase()) {
 			final ITimeWindow localTimeWindow;
 			if (loadSlot.isDivertable()) {
@@ -1240,20 +1269,22 @@ public class LNGScenarioTransformer {
 			} else {
 				localTimeWindow = loadWindow;
 			}
-
-			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), localTimeWindow,
-					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
-					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate,
-					loadSlot.isOptional());
+			final IPort port;
+			if (loadSlot instanceof SpotSlot) {
+				port = null;
+			} else {
+				port = portAssociation.lookup(loadSlot.getPort());
+			}
+			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
+					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate, loadSlot.isOptional());
 
 			if (loadSlot.isDivertable()) {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
 			}
 		} else {
-			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow,
-					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
-					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(),
-					loadSlot.isArriveCold(), slotPricingDate, loadSlot.isOptional());
+			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, minVolume, maxVolume, loadPriceCalculator,
+					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(), loadSlot.isArriveCold(),
+					slotPricingDate, loadSlot.isOptional());
 		}
 		// Store market slots for lookup when building spot markets.
 		modelEntityMap.addModelObject(loadSlot, load);
@@ -1309,7 +1340,7 @@ public class LNGScenarioTransformer {
 			final SpotAvailability groupAvailability = desPurchaseSpotMarket.getAvailability();
 
 			// Loop over the date range in the optimisation generating market slots
-			final Calendar cal = Calendar.getInstance();
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			cal.setTime(earliestDate);
 
 			// Set back to start of month
@@ -1542,32 +1573,33 @@ public class LNGScenarioTransformer {
 
 			final SpotAvailability groupAvailability = desSalesSpotMarket.getAvailability();
 
-			// Loop over the date range in the optimisation generating market slots
-			final Calendar cal = Calendar.getInstance();
-			cal.setTime(earliestDate);
+			final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
 
-			// Set back to start of month
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
+			for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
+				assert market instanceof DESSalesMarket;
+				if (market instanceof DESSalesMarket) {
+					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+					final Port notionalAPort = desSalesMarket.getNotionalPort();
+					final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
 
-			Date startTime = cal.getTime();
-			while (startTime.before(latestDate)) {
+					// Loop over the date range in the optimisation generating market slots
+					final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(notionalAPort.getTimeZone()));
+					cal.setTime(earliestDate);
 
-				final String yearMonthString = getKeyForDate(cal.getTime());
-				// Roll forward
-				cal.add(Calendar.MONTH, 1);
-				final Date endTime = cal.getTime();
-				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
+					// Set back to start of month
+					cal.set(Calendar.DAY_OF_MONTH, 1);
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.set(Calendar.MILLISECOND, 0);
 
-				for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
-					assert market instanceof DESSalesMarket;
-					if (market instanceof DESSalesMarket) {
-						final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
-						final Port notionalAPort = desSalesMarket.getNotionalPort();
-						final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
+					Date startTime = cal.getTime();
+					while (startTime.before(latestDate)) {
+
+						final String yearMonthString = getKeyForDate(cal.getTime());
+						// Roll forward
+						cal.add(Calendar.MONTH, 1);
+						final Date endTime = cal.getTime();
 
 						final Collection<Slot> existing = getSpotSlots(SpotType.DES_SALE, getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
@@ -1613,9 +1645,12 @@ public class LNGScenarioTransformer {
 								}
 								final int pricingDate = desSlot.isSetPricingDate() ? convertTime(earliestTime, desSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
 
+								
+								final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
+								final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
+								
 								final IDischargeOption desSalesSlot = builder
-										.createDischargeSlot(id, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-												OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), 0, Long.MAX_VALUE, priceCalculator, desSlot.getSlotOrPortDuration(),
+										.createDischargeSlot(id, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator, desSlot.getSlotOrPortDuration(),
 												pricingDate, true);
 
 								// Key piece of information
@@ -1631,18 +1666,18 @@ public class LNGScenarioTransformer {
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);
+
+						// Take group availability curve and add into a constraint.
+						if (groupAvailability != null) {
+							final int groupCount = getAvailabilityForDate(groupAvailability, startTime);
+							if (marketGroupSlots.size() > groupCount) {
+								// builder.createSlotGroupCount(marketGroupSlots, count);
+							}
+						}
+
+						startTime = cal.getTime();
 					}
 				}
-
-				// Take group availability curve and add into a constraint.
-				if (groupAvailability != null) {
-					final int count = getAvailabilityForDate(groupAvailability, startTime);
-					if (marketGroupSlots.size() > count) {
-						// builder.createSlotGroupCount(marketGroupSlots, count);
-					}
-				}
-
-				startTime = cal.getTime();
 			}
 		}
 	}
@@ -1653,35 +1688,33 @@ public class LNGScenarioTransformer {
 
 			final SpotAvailability groupAvailability = fobPurchaseSpotMarket.getAvailability();
 
-			// Loop over the date range in the optimisation generating market slots
-			final Calendar cal = Calendar.getInstance();
-			cal.setTime(earliestDate);
+			final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
 
-			// Set back to start of month
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
+			for (final SpotMarket market : fobPurchaseSpotMarket.getMarkets()) {
+				assert market instanceof FOBPurchasesMarket;
+				if (market instanceof FOBPurchasesMarket) {
+					final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
+					final Port notionalAPort = fobPurchaseMarket.getNotionalPort();
+					final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
+					// Loop over the date range in the optimisation generating market slots
+					final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(notionalAPort.getTimeZone()));
+					cal.setTime(earliestDate);
 
-			Date startTime = cal.getTime();
-			while (startTime.before(latestDate)) {
+					// Set back to start of month
+					cal.set(Calendar.DAY_OF_MONTH, 1);
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.set(Calendar.MILLISECOND, 0);
 
-				final String yearMonthString = getKeyForDate(cal.getTime());
+					Date startTime = cal.getTime();
+					while (startTime.before(latestDate)) {
 
-				// Roll forward
-				cal.add(Calendar.MONTH, 1);
-				final Date endTime = cal.getTime();
+						final String yearMonthString = getKeyForDate(cal.getTime());
 
-				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
-
-				for (final SpotMarket market : fobPurchaseSpotMarket.getMarkets()) {
-					assert market instanceof FOBPurchasesMarket;
-					if (market instanceof FOBPurchasesMarket) {
-						final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
-						final Port notionalAPort = fobPurchaseMarket.getNotionalPort();
-						final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
-
+						// Roll forward
+						cal.add(Calendar.MONTH, 1);
+						final Date endTime = cal.getTime();
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
 						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_PURCHASE, getKeyForDate(startTime));
@@ -1721,7 +1754,7 @@ public class LNGScenarioTransformer {
 								// fobSlot.setContract(fobPurchaseMarket.getContract());
 								fobSlot.setOptional(true);
 								fobSlot.setArriveCold(true);
-//								fobSlot.setCargoCV(fobPurchaseMarket.getCv());
+								// fobSlot.setCargoCV(fobPurchaseMarket.getCv());
 								fobSlot.setPort((Port) notionalAPort);
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								fobSlot.setWindowSize((int) duration);
@@ -1743,19 +1776,20 @@ public class LNGScenarioTransformer {
 							}
 						}
 						builder.createSlotGroupCount(marketSlots, count);
+
+						// Take group availability curve and add into a constraint.
+						if (groupAvailability != null) {
+							final int groupCount = getAvailabilityForDate(groupAvailability, startTime);
+							if (marketGroupSlots.size() > groupCount) {
+								// builder.createSlotGroupCount(marketGroupSlots, count);
+							}
+						}
+
+						startTime = cal.getTime();
 					}
 				}
-
-				// Take group availability curve and add into a constraint.
-				if (groupAvailability != null) {
-					final int count = getAvailabilityForDate(groupAvailability, startTime);
-					if (marketGroupSlots.size() > count) {
-						// builder.createSlotGroupCount(marketGroupSlots, count);
-					}
-				}
-
-				startTime = cal.getTime();
 			}
+
 		}
 	}
 
