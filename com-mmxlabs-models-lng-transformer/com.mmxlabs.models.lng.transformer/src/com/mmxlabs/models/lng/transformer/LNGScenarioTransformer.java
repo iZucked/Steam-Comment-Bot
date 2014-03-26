@@ -1382,8 +1382,8 @@ public class LNGScenarioTransformer {
 								desSlot.setDESPurchase(true);
 								desSlot.setName(id);
 								desSlot.setArriveCold(false);
-								desSlot.setCargoCV(desPurchaseMarket.getCv());
 								desSlot.setWindowStart(new Date(startTime.getTime()));
+								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60;
@@ -1499,6 +1499,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setFOBSale(true);
 								fobSlot.setName(id);
 								fobSlot.setWindowStart(new Date(startTime.getTime()));
+								fobSlot.setWindowStartTime(0);
 								// fobSlot.setContract(fobSaleMarket.getContract());
 								fobSlot.setOptional(true);
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60;
@@ -1600,6 +1601,7 @@ public class LNGScenarioTransformer {
 								final SpotDischargeSlot desSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
 								desSlot.setName(id);
 								desSlot.setWindowStart(new Date(startTime.getTime()));
+								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desSalesMarket.getContract());
 								desSlot.setOptional(true);
 								desSlot.setPort((Port) notionalAPort);
@@ -1715,10 +1717,11 @@ public class LNGScenarioTransformer {
 								final SpotLoadSlot fobSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								fobSlot.setName(id);
 								fobSlot.setWindowStart(new Date(startTime.getTime()));
+								fobSlot.setWindowStartTime(0);
 								// fobSlot.setContract(fobPurchaseMarket.getContract());
 								fobSlot.setOptional(true);
 								fobSlot.setArriveCold(true);
-								fobSlot.setCargoCV(fobPurchaseMarket.getCv());
+//								fobSlot.setCargoCV(fobPurchaseMarket.getCv());
 								fobSlot.setPort((Port) notionalAPort);
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								fobSlot.setWindowSize((int) duration);

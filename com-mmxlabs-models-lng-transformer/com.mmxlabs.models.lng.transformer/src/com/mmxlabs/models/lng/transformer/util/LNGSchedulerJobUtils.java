@@ -324,15 +324,15 @@ public class LNGSchedulerJobUtils {
 				// Spot slots may not have a port set, so copy from other half
 				if (allocation.getSlotAllocations().size() == 2) {
 					if (desPurchaseSlot instanceof SpotSlot) {
-						if (desPurchaseSlot.getPort() == null) {
+//						if (desPurchaseSlot.getPort() == null) {
 							cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(1).getPort()));
-						}
+//						}
 					}
 
 					if (fobSaleSlot instanceof SpotSlot) {
-						if (fobSaleSlot.getPort() == null) {
+//						if (fobSaleSlot.getPort() == null) {
 							cmd.append(SetCommand.create(domain, fobSaleSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(0).getPort()));
-						}
+//						}
 					}
 				}
 			}
