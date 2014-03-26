@@ -15,4 +15,4 @@ Export-Package: com.mmxlabs.optimiser.ga.bytearray;uses:="com.mmxlabs.op
  .3"
 Require-Bundle: com.mmxlabs.optimiser.optimiser-common;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.common.common-util;bundle-version="[2.3.0,3.0.0)"
+ com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)"
