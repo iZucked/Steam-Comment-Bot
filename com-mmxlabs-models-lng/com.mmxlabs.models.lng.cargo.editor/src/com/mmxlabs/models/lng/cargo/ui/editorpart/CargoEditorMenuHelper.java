@@ -925,7 +925,6 @@ public class CargoEditorMenuHelper {
 
 						// Take into account travel time
 						if (loadSlot.isDESPurchase() && loadSlot.isDivertable()) {
-							final AVesselSet<? extends Vessel> assignment = loadSlot.getAssignment();
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getAssignment());
 							cal.add(Calendar.HOUR_OF_DAY, travelTime);
 						} else if (!loadSlot.isDESPurchase()) {
@@ -942,13 +941,13 @@ public class CargoEditorMenuHelper {
 						cal.set(Calendar.SECOND, 0);
 						cal.set(Calendar.MILLISECOND, 0);
 						final Date startDate = cal.getTime();
+						final String yearMonthString = getKeyForDate(cal.getTime());
 						dischargeSlot.setWindowStart(startDate);
 						dischargeSlot.setWindowStartTime(0);
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
 						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
 
-						final String yearMonthString = getKeyForDate(cal.getTime());
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
@@ -987,13 +986,14 @@ public class CargoEditorMenuHelper {
 						cal.set(Calendar.SECOND, 0);
 						cal.set(Calendar.MILLISECOND, 0);
 						final Date startDate = cal.getTime();
+
+						final String yearMonthString = getKeyForDate(cal.getTime());
+
 						loadSlot.setWindowStart(startDate);
 						loadSlot.setWindowStartTime(0);
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
 						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
-
-						final String yearMonthString = getKeyForDate(cal.getTime());
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
