@@ -15,11 +15,11 @@ import org.eclipse.jface.viewers.Viewer;
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
@@ -229,7 +229,11 @@ public class LatenessReportView extends EMFReportView {
 			protected boolean filter(final Event e) {
 				if (e instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) e;
-
+					// Exclude DES Purchase and fob sales
+					final Sequence seq = visit.getSequence();
+					if (seq.getSequenceType() == SequenceType.DES_PURCHASE || seq.getSequenceType() == SequenceType.FOB_SALE) {
+						return false;
+					}
 					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 						return true;
 					}
@@ -246,6 +250,7 @@ public class LatenessReportView extends EMFReportView {
 				} else if (e instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) e;
 					final Sequence seq = visit.getSequence();
+				
 					final VesselAvailability availability = seq.getVesselAvailability();
 					if (availability == null) {
 						return false;
