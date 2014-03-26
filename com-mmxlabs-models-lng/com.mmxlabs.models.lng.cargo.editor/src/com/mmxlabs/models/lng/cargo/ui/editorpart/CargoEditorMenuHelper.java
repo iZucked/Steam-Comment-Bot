@@ -53,7 +53,10 @@ import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -919,6 +922,19 @@ public class CargoEditorMenuHelper {
 						final Calendar cal = Calendar.getInstance();
 						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
 						cal.setTime(source.getWindowStartWithSlotOrPortTime());
+
+						// Take into account travel time
+						if (loadSlot.isDESPurchase() && loadSlot.isDivertable()) {
+							final AVesselSet<? extends Vessel> assignment = loadSlot.getAssignment();
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getAssignment());
+							cal.add(Calendar.HOUR_OF_DAY, travelTime);
+						} else if (!loadSlot.isDESPurchase()) {
+							if (loadSlot.getCargo() != null) {
+								final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getCargo().getAssignment());
+								cal.add(Calendar.HOUR_OF_DAY, travelTime);
+							}
+						}
+
 						cal.set(Calendar.DAY_OF_MONTH, 1);
 						cal.set(Calendar.DAY_OF_MONTH, 1);
 						cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -976,7 +992,6 @@ public class CargoEditorMenuHelper {
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
 						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
-						
 
 						final String yearMonthString = getKeyForDate(cal.getTime());
 
@@ -1233,5 +1248,35 @@ public class CargoEditorMenuHelper {
 			scenarioEditingLocation.setDisableUpdates(false);
 			editorLock.release();
 		}
+	}
+
+	private int getTravelTime(final Port from, final Port to, final AVesselSet<? extends Vessel> assignedVessel) {
+
+		double maxSpeed = 19.0;
+
+		if (assignedVessel instanceof Vessel) {
+			final Vessel vessel = (Vessel) assignedVessel;
+			final VesselClass vesselClass = vessel.getVesselClass();
+			if (vesselClass != null) {
+				maxSpeed = vesselClass.getMaxSpeed();
+			}
+		}
+
+		int distance = 0;
+		LOOP_ROUTES: for (final Route route : scenarioModel.getPortModel().getRoutes()) {
+			if (route.isCanal() == false) {
+				for (final RouteLine dl : route.getLines()) {
+					if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
+						distance = dl.getDistance();
+						break LOOP_ROUTES;
+					}
+				}
+
+			}
+		}
+
+		final int travelTime = (int) Math.round((double) distance / maxSpeed);
+
+		return travelTime;
 	}
 }
