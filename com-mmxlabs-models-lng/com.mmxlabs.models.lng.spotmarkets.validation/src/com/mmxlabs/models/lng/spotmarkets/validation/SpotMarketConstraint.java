@@ -50,6 +50,13 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				}
 			}
 
+			if (spotMarket.getMaxQuantity() == 0) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Max quantity should be greater than zero."));
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MinQuantity());
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MaxQuantity());
+				failures.add(dsd);
+			}
+
 			if (spotMarket instanceof DESPurchaseMarket) {
 				final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) spotMarket;
 
