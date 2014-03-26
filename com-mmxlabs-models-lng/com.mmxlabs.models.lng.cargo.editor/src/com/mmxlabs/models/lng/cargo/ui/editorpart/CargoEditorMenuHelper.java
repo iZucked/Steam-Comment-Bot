@@ -927,10 +927,12 @@ public class CargoEditorMenuHelper {
 						if (loadSlot.isDESPurchase() && loadSlot.isDivertable()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getAssignment());
 							cal.add(Calendar.HOUR_OF_DAY, travelTime);
+							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
 						} else if (!loadSlot.isDESPurchase()) {
 							if (loadSlot.getCargo() != null) {
 								final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getCargo().getAssignment());
 								cal.add(Calendar.HOUR_OF_DAY, travelTime);
+								cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
 							}
 						}
 
@@ -947,7 +949,6 @@ public class CargoEditorMenuHelper {
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
 						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
-
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
