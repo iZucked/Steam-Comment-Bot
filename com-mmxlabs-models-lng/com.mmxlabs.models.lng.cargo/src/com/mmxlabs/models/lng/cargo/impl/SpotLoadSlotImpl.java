@@ -225,6 +225,44 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 
 				}
 			};
+		} else if (feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
+				}
+
+				public Object getValue(final EObject object) {
+					Object result = null;
+					SpotMarket spotMarket = getMarket();
+					if (result == null && spotMarket != null) {
+						result = spotMarket.eGetWithDefault(SpotMarketsPackage.Literals.SPOT_MARKET__MIN_QUANTITY);
+					}
+					if (result == null) {
+						result = Integer.valueOf(0);
+					}
+					return result;
+
+				}
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					SpotMarket spotMarket = getMarket();
+					if (result == null && spotMarket != null) {
+						result = spotMarket.eGetWithDefault(SpotMarketsPackage.Literals.SPOT_MARKET__MAX_QUANTITY);
+					}
+					if (result == null || result.equals(0)) {
+						result = Integer.valueOf(140000);
+					}
+					return result;
+					
+				}
+			};
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}
