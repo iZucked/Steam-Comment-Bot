@@ -62,9 +62,6 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 					if (left != null && right != null) {
 						if (left.after(right)) {
-							final Date left2 = getEndDate(prevAssignment);
-							final Date right2 = getStartDate(assignment);
-
 							// Uh oh, likely to be an error
 							problems.add(new Pair<AssignableElement, AssignableElement>(prevAssignment, assignment));
 						}
