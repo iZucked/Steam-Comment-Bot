@@ -54,17 +54,17 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 			if (spotSlot instanceof SpotLoadSlot) {
 				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
 
+				if (spotLoadSlot.getContract() != null) {
+					String type = spotLoadSlot.isDESPurchase() ? "DES" : "FOB";
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName() + "] " + type
+							+ " purchase should not have a contract set."), IStatus.WARNING);
+					dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+					failures.add(dsd);
+				}
+
 				if (market instanceof DESPurchaseMarket) {
 					final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 
-					if (spotLoadSlot.getContract() != null) {
-
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName()
-								+ "] DES purchase should not have a contract set."), IStatus.WARNING);
-						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
-						failures.add(dsd);
-
-					}
 					final EList<APortSet<Port>> destinationPortSets = desPurchaseMarket.getDestinationPorts();
 					final Set<Port> destinationPorts = SetUtils.getObjects(destinationPortSets);
 					if (!destinationPorts.contains(spotLoadSlot.getPort())) {
@@ -86,31 +86,23 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 						failures.add(dsd);
 
 					}
-
-					if (spotLoadSlot.getContract() != null) {
-
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName()
-								+ "] FOB purchase should not have a contract set."), IStatus.WARNING);
-						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
-						failures.add(dsd);
-
-					}
-
 				}
 
 			} else if (spotSlot instanceof SpotDischargeSlot) {
 				final SpotDischargeSlot spotDischargeSlot = (SpotDischargeSlot) spotSlot;
+				String type = spotDischargeSlot.isFOBSale() ? "FOB" : "DES";
+
+				if (spotDischargeSlot.getContract() != null) {
+
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName() + "] "
+							+ type + " sales should not have a contract set."), IStatus.WARNING);
+					dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+					failures.add(dsd);
+
+				}
 
 				if (market instanceof DESSalesMarket) {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
-					if (spotDischargeSlot.getContract() != null) {
-
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName()
-								+ "] DES sales should not have a contract set."), IStatus.WARNING);
-						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
-						failures.add(dsd);
-
-					}
 
 					if (spotDischargeSlot.getPort() != desSalesMarket.getNotionalPort()) {
 
@@ -124,14 +116,6 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 				} else if (market instanceof FOBSalesMarket) {
 					final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
 
-					if (spotDischargeSlot.getContract() != null) {
-
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotDischargeSlot.getName()
-								+ "] FOB sale should not have a contract set."), IStatus.WARNING);
-						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
-						failures.add(dsd);
-
-					}
 					final Set<Port> originPorts = SetUtils.getObjects(fobSalesMarket.getOriginPorts());
 					if (!originPorts.contains(spotDischargeSlot.getPort())) {
 
