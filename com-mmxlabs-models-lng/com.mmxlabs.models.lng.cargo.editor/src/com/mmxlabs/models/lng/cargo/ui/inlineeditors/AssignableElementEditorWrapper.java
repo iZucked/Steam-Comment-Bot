@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -76,6 +77,10 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 				if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
 					enabled = true;
 				}
+			}
+		} else if (object instanceof VesselEvent) {
+			if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
+				enabled = true;
 			}
 		}
 
