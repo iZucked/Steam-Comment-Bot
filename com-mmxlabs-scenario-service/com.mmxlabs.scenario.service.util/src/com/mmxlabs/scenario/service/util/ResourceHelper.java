@@ -60,7 +60,7 @@ public final class ResourceHelper {
 			// Need to unload the model, even if it failed otherwise it is still flagged up as loaded
 			resource.unload();
 			// Fall back to pre-encrypted scenario options
-			final Map<String, String> noCipherOptions = new HashMap<>();
+			final Map<Object, Object> noCipherOptions = new HashMap<>();
 			noCipherOptions.put(Resource.OPTION_CIPHER, null);
 			resource.load(noCipherOptions);
 		}
@@ -70,5 +70,4 @@ public final class ResourceHelper {
 	public static void saveResource(@NonNull final Resource resource) throws IOException {
 		resource.save(null);
 	}
-
 }
