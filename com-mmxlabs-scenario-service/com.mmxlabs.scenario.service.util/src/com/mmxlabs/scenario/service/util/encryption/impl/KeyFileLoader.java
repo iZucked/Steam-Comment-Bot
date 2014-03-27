@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.options.InvalidArgumentException;
@@ -67,20 +68,30 @@ final class KeyFileLoader {
 		} finally {
 			// Blank array to avoid password hanging around in memory too long
 			if (password != null) {
-				Arrays.fill(password, (char)0);
+				Arrays.fill(password, (char) 0);
 			}
 		}
 	}
 
 	private static char[] promptForPassword() {
 
-		final PasswordPromptDialog dialog = new PasswordPromptDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
-		dialog.setBlockOnOpen(true);
-		if (dialog.open() == Window.OK) {
-			return dialog.getPassword();
-		}
+		final char[][] password = new char[1][];
+		final Display display = PlatformUI.getWorkbench().getDisplay();
+		display.syncExec(new Runnable() {
 
-		return null;
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				final PasswordPromptDialog dialog = new PasswordPromptDialog(display.getActiveShell());
+				dialog.setBlockOnOpen(true);
+				if (dialog.open() == Window.OK) {
+					password[0] = dialog.getPassword();
+				}
+
+			}
+		});
+
+		return password[0];
 	}
 
 	private static File getUserDataAKeyFile() {
