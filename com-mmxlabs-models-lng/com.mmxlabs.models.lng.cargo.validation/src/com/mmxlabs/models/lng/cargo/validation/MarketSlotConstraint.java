@@ -114,6 +114,14 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 			if (spotSlot instanceof SpotLoadSlot) {
 				final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) spotSlot;
 
+				if (spotLoadSlot.isSetCargoCV()) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + spotLoadSlot.getName() + "] " + type
+							+ " should not have CV set."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
+					failures.add(dsd);
+				}
+
+				
 				if (market instanceof DESPurchaseMarket) {
 					final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 
