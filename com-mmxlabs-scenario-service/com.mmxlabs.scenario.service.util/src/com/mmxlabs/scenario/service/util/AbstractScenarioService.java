@@ -227,7 +227,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 				final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
 				final Resource eResource = rootObject.eResource();
-				eResource.save(null);
+				ResourceHelper.saveResource(eResource);
 
 				// Update last modified date
 				final Metadata metadata = scenarioInstance.getMetadata();

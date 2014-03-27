@@ -434,7 +434,7 @@ public class FileScenarioService extends AbstractScenarioService {
 				final Resource instanceResource = instanceResourceSet.createResource(resolved);
 				instanceResource.getContents().add(rootObject);
 				// "Store" - map URI to model instance
-				instanceResource.save(null);
+				ResourceHelper.saveResource(instanceResource);
 				// Unload instance from memory as no longer needed
 				instanceResource.unload();
 			} catch (final IOException e) {

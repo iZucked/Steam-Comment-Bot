@@ -62,6 +62,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
+import com.mmxlabs.scenario.service.util.ResourceHelper;
 
 public class DirScanScenarioService extends AbstractScenarioService {
 
@@ -604,7 +605,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				final EObject rootObject = EcoreUtil.copy(original.getInstance());
 				final Resource instanceResource = instanceResourceSet.createResource(destURI);
 				instanceResource.getContents().add(rootObject);
-				instanceResource.save(null);
+				ResourceHelper.saveResource(instanceResource);
 			}
 
 			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();

@@ -102,7 +102,7 @@ public class ScenarioStorageUtil {
 				((ResourceImpl) r).setIntrinsicIDToEObjectMap(new HashMap());
 			}
 			r.getContents().add(rootObject);
-			r.save(null);
+			ResourceHelper.saveResource(r);
 		} else {
 			// Store data into scenario archive
 			final URIConverter conv = resourceSet.getURIConverter();
