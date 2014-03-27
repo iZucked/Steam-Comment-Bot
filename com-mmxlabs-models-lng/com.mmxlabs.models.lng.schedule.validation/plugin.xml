@@ -41,6 +41,19 @@
                 </description>
                 <target class="Sequence" />
             </constraint>
+                <constraint
+                      class="com.mmxlabs.models.lng.schedule.validation.CapacityViolationConstraint"
+                      id="com.mmxlabs.models.lng.schedule.validation.CapacityViolationConstraint"
+                      isEnabledByDefault="true"
+                      lang="Java"
+                      mode="Batch"
+                      name="Capacity Violations"
+                      severity="WARNING"
+                      statusCode="1">
+                <message>
+                    {0}
+                </message>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
