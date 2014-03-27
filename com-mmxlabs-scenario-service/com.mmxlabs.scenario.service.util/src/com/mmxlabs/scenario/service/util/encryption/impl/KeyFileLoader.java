@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.util.encryption.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.jface.window.Window;
@@ -27,24 +28,25 @@ final class KeyFileLoader {
 	public static URIConverter.Cipher loadCipher() throws Exception {
 
 		// Try to find the key file
-		final File keyFileFile = getUserDataKeyFile();
+		File keyFileFile = getUserDataAKeyFile();
 		if (keyFileFile == null) {
-			// keyFileFile == check other search locations
+			keyFileFile = getUserDataBKeyFile();
 		}
+		// TODO keyFileFile == check other search locations
 
 		if (keyFileFile == null) {
 			throw new FileNotFoundException("Unable to locate key file");
 		}
 
+		char[] password = null;
 		try (FileInputStream fis = new FileInputStream(keyFileFile)) {
 			// Read the header data
 			final KeyFileHeader header = KeyFileHeader.read(fis);
 
 			// Determine the password protecting the keyfile
-			final char[] password;
 			switch (header.passwordType) {
 			case KeyFileHeader.PASSWORD_TYPE__PROMPT: {
-				password = promptForPassword();// ;new char[] { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
+				password = promptForPassword();
 				break;
 			}
 			default:
@@ -62,6 +64,11 @@ final class KeyFileLoader {
 			default:
 				throw new InvalidArgumentException("Unknown keyfile version: " + header.version);
 			}
+		} finally {
+			// Blank array to avoid password hanging around in memory too long
+			if (password != null) {
+				Arrays.fill(password, (char)0);
+			}
 		}
 	}
 
@@ -76,11 +83,23 @@ final class KeyFileLoader {
 		return null;
 	}
 
-	private static File getUserDataKeyFile() {
+	private static File getUserDataAKeyFile() {
 
 		final String userHome = System.getProperty("user.home");
 		if (userHome != null) {
 			final File f = new File(userHome + "/mmxlabs/" + KEYFILE);
+			if (f.exists()) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	private static File getUserDataBKeyFile() {
+
+		final String userHome = System.getProperty("user.home");
+		if (userHome != null) {
+			final File f = new File(userHome + "/LiNGO/" + KEYFILE);
 			if (f.exists()) {
 				return f;
 			}

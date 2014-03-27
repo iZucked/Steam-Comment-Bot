@@ -1,5 +1,7 @@
 package com.mmxlabs.scenario.service.util.encryption.impl;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -14,23 +16,33 @@ public final class KeyFileHeader {
 
 	public static final byte PASSWORD_TYPE__PROMPT = (byte) 0;
 
+	public static final byte VERSION__0 = (byte) 0;
+
 	final byte version;
 	final byte passwordType;
+	final String name;
 
-	public KeyFileHeader(final byte version, final byte passwordType) {
+	public KeyFileHeader(final byte version, final byte passwordType, final String name) {
 		this.version = version;
 		this.passwordType = passwordType;
+		this.name = name;
 	}
 
 	public static KeyFileHeader read(final InputStream is) throws IOException {
 		final byte[] header = new byte[2];
-		is.read(header);
-		return new KeyFileHeader(header[0], header[1]);
+		final DataInputStream dis = new DataInputStream(is);
+		dis.read(header);
+		final String name = dis.readUTF();
+		return new KeyFileHeader(header[0], header[1], name);
 	}
 
 	public int write(final OutputStream os) throws IOException {
-		byte[] header = new byte[] { version, passwordType };
-		os.write(header);
+		final byte[] header = new byte[] { version, passwordType };
+
+		final DataOutputStream dos = new DataOutputStream(os);
+		dos.write(header);
+		dos.writeUTF(name);
+		dos.flush();
 		return header.length;
 	}
 }

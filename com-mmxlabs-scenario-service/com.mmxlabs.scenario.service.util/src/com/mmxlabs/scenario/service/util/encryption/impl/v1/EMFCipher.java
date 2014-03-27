@@ -13,15 +13,24 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.IvParameterSpec;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.AESCipherImpl;
 
+/**
+ * Based on {@link AESCipherImpl}
+ * 
+ * @author Simon Goodall
+ * 
+ */
 class EMFCipher implements URIConverter.Cipher {
 	private static final String ENCRYPTION_ALGORITHM = "AES/CFB8/PKCS5Padding";
 	private static final int ENCRYPTION_IV_LENGTH = 16;
 
 	private final Key key;
+	private byte[] uuid;
 
-	public EMFCipher(final Key key) {
+	public EMFCipher(final Key key, byte[] uuid) {
 		this.key = key;
+		this.uuid = uuid;
 	}
 
 	private static byte[] randomBytes(final int length) {
@@ -46,6 +55,7 @@ class EMFCipher implements URIConverter.Cipher {
 
 	@Override
 	public OutputStream encrypt(OutputStream outputStream) throws Exception {
+		outputStream.write(uuid);
 		// generate the IV for encryption
 		final byte[] encryptionIV = randomBytes(ENCRYPTION_IV_LENGTH);
 		outputStream.write(encryptionIV);
@@ -72,6 +82,11 @@ class EMFCipher implements URIConverter.Cipher {
 
 	@Override
 	public InputStream decrypt(final InputStream in) throws Exception {
+		final byte[] fileUUID = readBytes(uuid.length, in);
+		if (!uuid.equals(fileUUID)) {
+			throw new RuntimeException("Data was not encrypted with decryption key file");
+		}
+
 		final byte[] encryptionIV = readBytes(ENCRYPTION_IV_LENGTH, in);
 
 		// now create the decrypt cipher

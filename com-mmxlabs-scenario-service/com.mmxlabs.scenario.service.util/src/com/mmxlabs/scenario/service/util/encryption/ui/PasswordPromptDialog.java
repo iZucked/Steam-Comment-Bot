@@ -12,7 +12,10 @@ import org.eclipse.swt.widgets.Text;
 
 public class PasswordPromptDialog extends Dialog {
 
+	private Text nameField;
 	private Text passwordField;
+
+	private String name;
 
 	private char[] password;
 
@@ -32,24 +35,37 @@ public class PasswordPromptDialog extends Dialog {
 
 		GridLayout layout = (GridLayout) comp.getLayout();
 		layout.numColumns = 2;
+		{
+			Label nameLabel = new Label(comp, SWT.RIGHT);
+			nameLabel.setText("Name: ");
 
-		Label passwordLabel = new Label(comp, SWT.RIGHT);
-		passwordLabel.setText("Password: ");
+			nameField = new Text(comp, SWT.SINGLE | SWT.BORDER);
+			GridData data = new GridData(GridData.FILL_HORIZONTAL);
+			nameField.setLayoutData(data);
+		}
+		{
+			Label passwordLabel = new Label(comp, SWT.RIGHT);
+			passwordLabel.setText("Password: ");
 
-		passwordField = new Text(comp, SWT.SINGLE | SWT.PASSWORD);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
-		passwordField.setLayoutData(data);
-
+			passwordField = new Text(comp, SWT.SINGLE | SWT.PASSWORD | SWT.BORDER);
+			GridData data = new GridData(GridData.FILL_HORIZONTAL);
+			passwordField.setLayoutData(data);
+		}
 		return comp;
 	}
 
 	@Override
 	protected void okPressed() {
 		password = passwordField.getTextChars();
+		name = nameField.getText();
 		super.okPressed();
 	}
 
 	public char[] getPassword() {
 		return password;
+	}
+
+	public String getName() {
+		return name;
 	}
 }
