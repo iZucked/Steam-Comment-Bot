@@ -26,7 +26,9 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -84,7 +86,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 		Class<?> [] handledClasses = { Vessel.class, VesselAvailability.class, 
 				VesselEvent.class, HeelOptions.class, Cargo.class, LoadSlot.class, 
-				DischargeSlot.class, SlotContractParams.class, SlotVisit.class };
+				DischargeSlot.class, SlotContractParams.class, SlotVisit.class,
+				EndEvent.class };
 
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
@@ -117,6 +120,15 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			if (target instanceof SlotVisit) {
 				if (((SlotVisit) target).getSlotAllocation() != null) {
 					target = ((SlotVisit) target).getSlotAllocation().getSlot();
+				}
+			}
+			if (target instanceof VesselEventVisit) {
+				target = ((VesselEventVisit) target).getVesselEvent();
+			}
+			if (target instanceof EndEvent) {
+				VesselAvailability availability = ((EndEvent) target).getSequence().getVesselAvailability();
+				if (availability != null) {
+					target = availability;
 				}
 			}
 			

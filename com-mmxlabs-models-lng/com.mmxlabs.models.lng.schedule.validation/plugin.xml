@@ -54,6 +54,20 @@
                     {0}
                 </message>
             </constraint>
+            <constraint
+                      class="com.mmxlabs.models.lng.schedule.validation.LatenessConstraint"
+                      id="com.mmxlabs.models.lng.schedule.validation.LatenessConstraint"
+                      isEnabledByDefault="true"
+                      lang="Java"
+                      mode="Batch"
+                      name="Lateness Violations"
+                      severity="WARNING"
+                      statusCode="1">
+                <message>
+                    {0}
+                </message>
+                <target class="Event"/>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
