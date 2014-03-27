@@ -499,14 +499,15 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 							objectsToAdd.addAll(e.getValue());
 						} else {
 							for (final EObject ca : e.getValue()) {
-								if (ca == ref) {
-									continue;
-								}
 								if (e.getValue().size() != numberOfSchedules) {
 									// Different number of elements, so add all!
 									// This means something has been removed/added
 									objectsToAdd.addAll(e.getValue());
-								} else if (isElementDifferent(ref, ca)) {
+								} 
+								if (ca == ref) {
+									continue;
+								}
+								if (isElementDifferent(ref, ca)) {
 									// There is a data difference, so add
 									objectsToAdd.addAll(e.getValue());
 								}
