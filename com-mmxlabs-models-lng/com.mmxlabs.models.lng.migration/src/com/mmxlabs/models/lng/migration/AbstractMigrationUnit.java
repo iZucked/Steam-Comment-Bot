@@ -4,15 +4,12 @@
  */
 package com.mmxlabs.models.lng.migration;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -87,7 +84,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		doMigration(eObject);
 
 		// Save the model.
-		modelResource.save(null);
+		ResourceHelper.saveResource(modelResource);
 	}
 
 	/**
