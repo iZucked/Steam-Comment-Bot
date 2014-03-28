@@ -8,18 +8,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.jdt.annotation.Nullable;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,8 +85,7 @@ public class ScenarioStorageUtil {
 	}
 
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
 
 		final IScenarioService scenarioService = instance.getScenarioService();
 
@@ -97,10 +95,8 @@ public class ScenarioStorageUtil {
 		// Already loaded?
 		if (model != null) {
 			final EObject rootObject = EcoreUtil.copy(model);
-			final XMIResourceImpl r = new XMIResourceImpl(rootObjectURI);
-			if (r instanceof ResourceImpl) {
-				((ResourceImpl) r).setIntrinsicIDToEObjectMap(new HashMap());
-			}
+
+			final Resource r = ResourceHelper.createResource(resourceSet, rootObjectURI);
 			r.getContents().add(rootObject);
 			ResourceHelper.saveResource(r);
 		} else {
@@ -207,4 +203,15 @@ public class ScenarioStorageUtil {
 		}
 		return null;
 	}
+
+	@Nullable
+	private static IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
+	}
+
 }
