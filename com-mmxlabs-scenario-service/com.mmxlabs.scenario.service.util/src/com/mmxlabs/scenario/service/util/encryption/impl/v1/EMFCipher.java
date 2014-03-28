@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Key;
 import java.security.SecureRandom;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -86,7 +87,7 @@ class EMFCipher implements URIConverter.Cipher {
 	@Override
 	public InputStream decrypt(final InputStream in) throws Exception {
 		final byte[] fileUUID = readBytes(uuid.length, in);
-		if (!uuid.equals(fileUUID)) {
+		if (!Arrays.equals(uuid, fileUUID)) {
 			throw new RuntimeException("Data was not encrypted with decryption key file");
 		}
 
