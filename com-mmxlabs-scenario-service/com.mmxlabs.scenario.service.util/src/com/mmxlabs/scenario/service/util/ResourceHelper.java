@@ -20,7 +20,7 @@ import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 public final class ResourceHelper {
 
-	public static ResourceSet createResourceSet(IScenarioCipherProvider scenarioCipherProvider) {
+	public static ResourceSet createResourceSet(final IScenarioCipherProvider scenarioCipherProvider) {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		// Encryption hooks
 		if (false) {
@@ -69,5 +69,15 @@ public final class ResourceHelper {
 
 	public static void saveResource(@NonNull final Resource resource) throws IOException {
 		resource.save(null);
+	}
+
+	public static Resource createResource(final ResourceSet resourceSet, final URI uri) {
+		final Resource resource = resourceSet.createResource(uri);
+		if (resource instanceof ResourceImpl) {
+			// This helps speed up model loading
+			final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
+			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
+		}
+		return resource;
 	}
 }
