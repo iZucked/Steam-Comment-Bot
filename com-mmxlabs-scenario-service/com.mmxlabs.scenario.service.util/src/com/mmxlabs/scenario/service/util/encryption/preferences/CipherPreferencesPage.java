@@ -62,7 +62,7 @@ public class CipherPreferencesPage extends PreferencePage implements IWorkbenchP
 				dialog.setBlockOnOpen(true);
 				if (dialog.open() == Window.OK) {
 
-					final KeyFile newKey = KeyFile.generateKey(128);
+					final KeyFile newKey = KeyFile.generateKey(256);
 					final File f = new File("C:/temp/lingodata.key");
 					try (FileOutputStream fos = new FileOutputStream(f)) {
 						final KeyFileHeader header = new KeyFileHeader(KeyFileHeader.VERSION__0, KeyFileHeader.PASSWORD_TYPE__PROMPT, dialog.getName());
