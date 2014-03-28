@@ -51,6 +51,7 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 							try {
 								tempFiles.add(ScenarioStorageUtil.storeToTemporaryFile(instance));
 							} catch (final IOException e) {
+								e.printStackTrace();
 							}
 						}
 					}
