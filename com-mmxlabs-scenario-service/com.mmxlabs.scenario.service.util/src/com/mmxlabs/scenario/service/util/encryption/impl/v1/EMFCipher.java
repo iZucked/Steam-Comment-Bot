@@ -1,5 +1,6 @@
 package com.mmxlabs.scenario.service.util.encryption.impl.v1;
 
+import java.io.BufferedOutputStream;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +56,8 @@ class EMFCipher implements URIConverter.Cipher {
 
 	@Override
 	public OutputStream encrypt(OutputStream outputStream) throws Exception {
+		// Use a buffered outputstream to speed up write operations significantly
+		outputStream = new BufferedOutputStream(outputStream);
 		outputStream.write(uuid);
 		// generate the IV for encryption
 		final byte[] encryptionIV = randomBytes(ENCRYPTION_IV_LENGTH);
