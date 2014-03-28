@@ -61,7 +61,7 @@ class EMFCipher implements URIConverter.Cipher {
 		// Flags - currently unused
 		outputStream.write((byte) 0);
 		// generate the IV for encryption
-		final byte[] encryptionIV = randomBytes(keyFile.getKeySize() / 8);
+		final byte[] encryptionIV = randomBytes(16);
 		outputStream.write(encryptionIV);
 
 		// now create the encryption cipher
@@ -120,7 +120,7 @@ class EMFCipher implements URIConverter.Cipher {
 		}
 		// Flags - currently unused
 		byte[] flags = readBytes(1, in);
-		final byte[] encryptionIV = readBytes(keyFile.getKeySize() / 8, in);
+		final byte[] encryptionIV = readBytes(16, in);
 
 		// if (useZip) {
 		// ZipInputStream zipInputStream = new ZipInputStream(in);
