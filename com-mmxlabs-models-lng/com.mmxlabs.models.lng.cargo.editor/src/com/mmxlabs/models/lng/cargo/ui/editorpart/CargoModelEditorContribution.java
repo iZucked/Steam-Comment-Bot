@@ -26,6 +26,9 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.SlotContractParams;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -39,6 +42,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	// private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
 	private int eventPage;
+	
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -80,29 +84,24 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	@Override
 	public boolean canHandle(final IStatus status) {
 
+		Class<?> [] handledClasses = { Vessel.class, VesselAvailability.class, 
+				VesselEvent.class, HeelOptions.class, Cargo.class, LoadSlot.class, 
+				DischargeSlot.class, SlotContractParams.class, SlotVisit.class,
+				EndEvent.class };
+
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 			
-			if (dcsd.getTarget() instanceof Vessel) {
-				return true;
-			} else if (dcsd.getTarget() instanceof VesselAvailability) {
-				return true;
-			} else if (dcsd.getTarget() instanceof VesselEvent) {
-				return true;
-			} else if (dcsd.getTarget() instanceof HeelOptions) {
-				return true;
+			EObject target = dcsd.getTarget();
+			
+			for (Class<?> clazz: handledClasses) {
+				if (clazz.isInstance(target)) {
+					return true;
+				}
 			}
 			
-			if (dcsd.getTarget() instanceof Cargo) {
-				return true;
-			} else if (dcsd.getTarget() instanceof LoadSlot) {
-				return true;
-			} else if (dcsd.getTarget() instanceof DischargeSlot) {
-				return true;
-			} else if (dcsd.getTarget() instanceof SlotContractParams) {
-				return true;
-			}
 		}
+		
 
 		return false;
 	}
@@ -118,6 +117,21 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			if (target instanceof SlotContractParams) {
 				target = target.eContainer();
 			}
+			if (target instanceof SlotVisit) {
+				if (((SlotVisit) target).getSlotAllocation() != null) {
+					target = ((SlotVisit) target).getSlotAllocation().getSlot();
+				}
+			}
+			if (target instanceof VesselEventVisit) {
+				target = ((VesselEventVisit) target).getVesselEvent();
+			}
+			if (target instanceof EndEvent) {
+				VesselAvailability availability = ((EndEvent) target).getSequence().getVesselAvailability();
+				if (availability != null) {
+					target = availability;
+				}
+			}
+			
 			if (target instanceof Cargo) {
 				cargo = (Cargo) target;
 			} else if (target instanceof LoadSlot) {
