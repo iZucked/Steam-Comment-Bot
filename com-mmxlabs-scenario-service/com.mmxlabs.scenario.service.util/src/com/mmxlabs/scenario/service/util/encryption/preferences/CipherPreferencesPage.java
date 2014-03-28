@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.util.Arrays;
 
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -21,7 +22,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.scenario.service.util.encryption.impl.KeyFileHeader;
 import com.mmxlabs.scenario.service.util.encryption.impl.v1.KeyFile;
-import com.mmxlabs.scenario.service.util.encryption.ui.PasswordPromptDialog;
+import com.mmxlabs.scenario.service.util.encryption.ui.NewPasswordPromptDialog;
 
 /**
  * This class represents a preference page that is contributed to the Preferences dialog. By subclassing <samp>FieldEditorPreferencePage</samp>, we can use the field support built into JFace that
@@ -44,43 +45,42 @@ public class CipherPreferencesPage extends PreferencePage implements IWorkbenchP
 	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	@Override
-	public void init(IWorkbench workbench) {
+	public void init(final IWorkbench workbench) {
 	}
 
 	@Override
-	protected Control createContents(Composite parent) {
+	protected Control createContents(final Composite parent) {
 
-		Button btn = new Button(parent, SWT.PUSH);
+		final Button btn = new Button(parent, SWT.PUSH);
 		btn.setText("Generate a key");
 		btn.addSelectionListener(new SelectionListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+			public void widgetSelected(final SelectionEvent e) {
 
-				PasswordPromptDialog dialog = new PasswordPromptDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
+				final NewPasswordPromptDialog dialog = new NewPasswordPromptDialog(PlatformUI.getWorkbench().getDisplay().getActiveShell());
 				dialog.setBlockOnOpen(true);
-				dialog.open();
+				if (dialog.open() == Window.OK) {
 
-				KeyFile newKey = KeyFile.generateKey(128);
-				File f = new File("C:/temp/lingodata.key");
-				try (FileOutputStream fos = new FileOutputStream(f)) {
-					KeyFileHeader header = new KeyFileHeader(KeyFileHeader.VERSION__0, KeyFileHeader.PASSWORD_TYPE__PROMPT, dialog.getName());
-					header.write(fos);
+					final KeyFile newKey = KeyFile.generateKey(128);
+					final File f = new File("C:/temp/lingodata.key");
+					try (FileOutputStream fos = new FileOutputStream(f)) {
+						final KeyFileHeader header = new KeyFileHeader(KeyFileHeader.VERSION__0, KeyFileHeader.PASSWORD_TYPE__PROMPT, dialog.getName());
+						header.write(fos);
 
-					char[] password = dialog.getPassword();
-					newKey.save(fos, password);
-					// Zero out array
-					Arrays.fill(password, (char) 0);
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+						final char[] password = dialog.getPassword();
+						newKey.save(fos, password);
+						// Zero out array
+						Arrays.fill(password, (char) 0);
+					} catch (final Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				// TODO Auto-generated method stub
+			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});

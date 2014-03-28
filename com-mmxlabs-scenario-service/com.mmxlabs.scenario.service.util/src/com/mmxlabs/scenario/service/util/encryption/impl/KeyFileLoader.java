@@ -16,7 +16,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.common.options.InvalidArgumentException;
 import com.mmxlabs.scenario.service.util.encryption.impl.v1.KeyFile;
-import com.mmxlabs.scenario.service.util.encryption.ui.PasswordPromptDialog;
+import com.mmxlabs.scenario.service.util.encryption.ui.ExistingPasswordPromptDialog;
 
 /**
  * 
@@ -81,8 +81,7 @@ final class KeyFileLoader {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				final PasswordPromptDialog dialog = new PasswordPromptDialog(display.getActiveShell());
+				final ExistingPasswordPromptDialog dialog = new ExistingPasswordPromptDialog(display.getActiveShell());
 				dialog.setBlockOnOpen(true);
 				if (dialog.open() == Window.OK) {
 					password[0] = dialog.getPassword();

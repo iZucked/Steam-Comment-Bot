@@ -1,5 +1,7 @@
 package com.mmxlabs.scenario.service.util.encryption.impl.v1;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.Key;
@@ -28,19 +30,23 @@ import com.mmxlabs.scenario.service.util.encryption.impl.IKeyFile;
 public final class KeyFile implements IKeyFile {
 	private static final int UUID_LENGTH = 16;
 	private static final String ENCRYPTION_KEY_ALGORITHM = "AES";
+	// private static final String PBE_ALGORITHM = "PBKDF2WithHmacSHA1";
 	private static final String PBE_ALGORITHM = "PBEWithMD5AndDES";
 	private static final int PBE_IV_LENGTH = 8;
 	private static final int PBE_ITERATIONS = 1000;
-	
+
 	private final Key key;
 	/**
 	 * UUID of the shared key itself.
 	 */
 	private final byte[] keyUUID;
 
-	private KeyFile(final byte[] keyUUID, final Key key) {
+	private final int keySize;
+
+	private KeyFile(final byte[] keyUUID, final Key key, final int keySize) {
 		this.keyUUID = keyUUID;
 		this.key = key;
+		this.keySize = keySize;
 	}
 
 	private static byte[] randomBytes(final int length) {
@@ -63,9 +69,9 @@ public final class KeyFile implements IKeyFile {
 		return bytes;
 	}
 
-	private static byte[] transformWithPassword(final byte[] bytes, final byte[] iv, final char[] password, final int mode) throws Exception {
+	private static byte[] transformWithPassword(final byte[] bytes, final byte[] iv, final char[] password, final byte[] salt, final int mode) throws Exception {
 		// generate the key
-		final PBEKeySpec pbeKeySpec = new PBEKeySpec(password);
+		final PBEKeySpec pbeKeySpec = new PBEKeySpec(password, salt, PBE_ITERATIONS, 128);
 		final SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
 		final SecretKey pbeKey = keyFactory.generateSecret(pbeKeySpec);
 		final PBEParameterSpec pbeParamSpec = new PBEParameterSpec(iv, PBE_ITERATIONS);
@@ -78,43 +84,49 @@ public final class KeyFile implements IKeyFile {
 
 	@Override
 	public URIConverter.Cipher createCipher() {
-		return new EMFCipher(key, keyUUID);
+		return new EMFCipher(this);
 	}
 
-	public void save(final OutputStream outputStream, final char[] password) throws Exception {
+	public void save(final OutputStream os, final char[] password) throws Exception {
+		final DataOutputStream outputStream = new DataOutputStream(os);
 		// Write the UUID of this key
 		outputStream.write(keyUUID);
 
 		// create the IV for the password generation algorithm
 		final byte[] pbeIV = randomBytes(PBE_IV_LENGTH);
+		final byte[] salt = randomBytes(8);
 
 		// turn the password into an AES key
-		final byte[] encryptedKeyBytes = transformWithPassword(key.getEncoded(), pbeIV, password, Cipher.ENCRYPT_MODE);
+		final byte[] encryptedKeyBytes = transformWithPassword(key.getEncoded(), pbeIV, password, salt, Cipher.ENCRYPT_MODE);
 
-		// write the header to the output stream. this has the format
-		// (delimeters are not written):
-		// PBE IV|ENCRYPTED KEY LENGTH|ENCRYPTED KEY
+		// Write data to the keyfile
 		outputStream.write(pbeIV);
 		outputStream.write(encryptedKeyBytes.length);
 		outputStream.write(encryptedKeyBytes);
+		outputStream.write(salt);
+		outputStream.writeInt(keySize);
 	}
 
 	public static KeyFile load(final InputStream in, final char[] password) throws Exception {
-		final byte[] fileUUID = readBytes(UUID_LENGTH, in);
+
+		final DataInputStream dis = new DataInputStream(in);
+
+		final byte[] fileUUID = readBytes(UUID_LENGTH, dis);
 
 		// Read the header of the encrypted file.
-		final byte[] pbeIV = readBytes(PBE_IV_LENGTH, in);
-		final int keyLength = in.read();
-		final byte[] encryptedKeyBytes = readBytes(keyLength, in);
+		final byte[] pbeIV = readBytes(PBE_IV_LENGTH, dis);
+		final int keyLength = dis.read();
+		final byte[] encryptedKeyBytes = readBytes(keyLength, dis);
+		final byte[] salt = readBytes(8, dis);
+		final int keysize = dis.readInt();
 
 		// Decrypt the key bytes
-		final byte[] decryptedKeyBytes = transformWithPassword(encryptedKeyBytes, pbeIV, password, Cipher.DECRYPT_MODE);
+		final byte[] decryptedKeyBytes = transformWithPassword(encryptedKeyBytes, pbeIV, password, salt, Cipher.DECRYPT_MODE);
 
 		// Create the key from the key bytes
 		final Key key = new SecretKeySpec(decryptedKeyBytes, ENCRYPTION_KEY_ALGORITHM);
 
-		// If we haven't yet generated a key, just use this one
-		final KeyFile keyfile = new KeyFile(fileUUID, key);
+		final KeyFile keyfile = new KeyFile(fileUUID, key, keysize);
 
 		return keyfile;
 	}
@@ -125,11 +137,23 @@ public final class KeyFile implements IKeyFile {
 			keygen.init(keysize);
 			final byte[] keyUUID = new byte[UUID_LENGTH];
 			EcoreUtil.generateUUID(keyUUID);
-			SecretKey generatedKey = keygen.generateKey();
-			return new KeyFile(keyUUID, generatedKey);
+			final SecretKey generatedKey = keygen.generateKey();
+			return new KeyFile(keyUUID, generatedKey, keysize);
 		} catch (final Exception ex) {
 			// all implementations of Java 1.5 should support AES
 			throw new RuntimeException(ex);
 		}
+	}
+
+	public Key getKey() {
+		return key;
+	}
+
+	public byte[] getKeyUUID() {
+		return keyUUID;
+	}
+
+	public int getKeySize() {
+		return keySize;
 	}
 }
