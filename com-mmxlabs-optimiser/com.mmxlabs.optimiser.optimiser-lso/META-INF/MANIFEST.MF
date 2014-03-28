@@ -1,0 +1,37 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1393951529013
+Build-Jdk: 1.7.0_45
+Built-By: sg
+Bundle-Description: Parent maven project for core optimisation projects
+Bundle-DocURL: http://www.minimaxlabs.com/
+Bundle-ManifestVersion: 2
+Bundle-Name: Optimiser - LSO
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-SymbolicName: com.mmxlabs.optimiser.optimiser-lso
+Bundle-Vendor: Minimax Labs Ltd.
+Bundle-Version: 2.0.0.qualifier
+Created-By: Apache Maven Bundle Plugin
+Export-Package: com.mmxlabs.optimiser.lso.movegenerators.impl;uses:="com
+ .mmxlabs.optimiser.core,com.mmxlabs.optimiser.lso,org.slf4j,com.mmxlabs
+ .common,com.mmxlabs.optimiser.lso.impl";version="1.1.3",com.mmxlabs.opt
+ imiser.lso;uses:="com.mmxlabs.optimiser.core.fitness,com.mmxlabs.optimi
+ ser.core";version="1.1.3",com.mmxlabs.optimiser.lso.impl;uses:="com.mmx
+ labs.optimiser.core.impl,com.mmxlabs.optimiser.core.constraints,com.mmx
+ labs.optimiser.core,com.mmxlabs.optimiser.core.fitness,com.mmxlabs.opti
+ miser.lso,com.mmxlabs.optimiser.core.scenario,org.slf4j,com.google.comm
+ on.base,com.mmxlabs.common";version="1.1.3",com.mmxlabs.optimiser.lso.i
+ mpl.thresholders;uses:="com.mmxlabs.optimiser.lso,org.slf4j,com.mmxlabs
+ .optimiser.lso.movegenerators.impl";version="1.1.3",com.mmxlabs.optimis
+ er.lso.modules;uses:="com.mmxlabs.optimiser.lso.movegenerators.impl,com
+ .mmxlabs.optimiser.lso.impl,com.mmxlabs.optimiser.core.fitness,com.mmxl
+ abs.optimiser.lso,com.google.inject.name,com.mmxlabs.optimiser.lso.impl
+ .thresholders,com.mmxlabs.optimiser.core.fitness.impl,javax.inject,com.
+ google.inject,com.mmxlabs.optimiser.core,com.mmxlabs.optimiser.core.sce
+ nario,com.mmxlabs.optimiser.core.constraints";version="1.1.3"
+Import-Package: javax.inject;version="[1.0,2)",
+ org.slf4j;version="[1.5,2)"
+Tool: Bnd-1.50.0
+Require-Bundle: com.mmxlabs.optimiser.optimiser-core;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)",
+ com.google.inject;bundle-version="3.0.0",
+ com.google.guava;bundle-version="13.0.1"

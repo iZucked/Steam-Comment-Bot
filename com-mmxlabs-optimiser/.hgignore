@@ -1,14 +1,1 @@
 target/
-.settings/*
-
-
-syntax: regexp
-^optimiser-.*/target$
-syntax: regexp
-^optimiser-.*/\.settings$
-syntax: regexp
-^optimiser-.*/\.classpath$
-syntax: regexp
-^optimiser-.*/\.project$
-syntax: regexp
-^optimiser-.*/META-INF/MANIFEST.MF$
