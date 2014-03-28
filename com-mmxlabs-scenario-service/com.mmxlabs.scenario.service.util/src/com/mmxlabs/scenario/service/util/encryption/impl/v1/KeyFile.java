@@ -30,7 +30,6 @@ import com.mmxlabs.scenario.service.util.encryption.impl.IKeyFile;
 public final class KeyFile implements IKeyFile {
 	private static final int UUID_LENGTH = 16;
 	private static final String ENCRYPTION_KEY_ALGORITHM = "AES";
-	// private static final String PBE_ALGORITHM = "PBKDF2WithHmacSHA1";
 	private static final String PBE_ALGORITHM = "PBEWithMD5AndDES";
 	private static final int PBE_IV_LENGTH = 8;
 	private static final int PBE_ITERATIONS = 1000;
@@ -69,9 +68,9 @@ public final class KeyFile implements IKeyFile {
 		return bytes;
 	}
 
-	private static byte[] transformWithPassword(final byte[] bytes, final byte[] iv, final char[] password, final byte[] salt, final int mode) throws Exception {
+	private static byte[] transformWithPassword(final byte[] bytes, final byte[] iv, final char[] password, final byte[] salt, int keysize, final int mode) throws Exception {
 		// generate the key
-		final PBEKeySpec pbeKeySpec = new PBEKeySpec(password, salt, PBE_ITERATIONS, 128);
+		final PBEKeySpec pbeKeySpec = new PBEKeySpec(password, salt, PBE_ITERATIONS, keysize);
 		final SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
 		final SecretKey pbeKey = keyFactory.generateSecret(pbeKeySpec);
 		final PBEParameterSpec pbeParamSpec = new PBEParameterSpec(iv, PBE_ITERATIONS);
@@ -97,7 +96,7 @@ public final class KeyFile implements IKeyFile {
 		final byte[] salt = randomBytes(8);
 
 		// turn the password into an AES key
-		final byte[] encryptedKeyBytes = transformWithPassword(key.getEncoded(), pbeIV, password, salt, Cipher.ENCRYPT_MODE);
+		final byte[] encryptedKeyBytes = transformWithPassword(key.getEncoded(), pbeIV, password, salt, keySize, Cipher.ENCRYPT_MODE);
 
 		// Write data to the keyfile
 		outputStream.write(pbeIV);
@@ -121,7 +120,7 @@ public final class KeyFile implements IKeyFile {
 		final int keysize = dis.readInt();
 
 		// Decrypt the key bytes
-		final byte[] decryptedKeyBytes = transformWithPassword(encryptedKeyBytes, pbeIV, password, salt, Cipher.DECRYPT_MODE);
+		final byte[] decryptedKeyBytes = transformWithPassword(encryptedKeyBytes, pbeIV, password, salt, keysize, Cipher.DECRYPT_MODE);
 
 		// Create the key from the key bytes
 		final Key key = new SecretKeySpec(decryptedKeyBytes, ENCRYPTION_KEY_ALGORITHM);
