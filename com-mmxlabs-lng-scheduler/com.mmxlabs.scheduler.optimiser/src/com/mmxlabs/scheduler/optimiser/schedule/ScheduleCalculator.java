@@ -105,6 +105,9 @@ public class ScheduleCalculator {
 	@Inject
 	private VoyagePlanner voyagePlanner;
 
+	@Inject(optional = true)
+	private ICustomNonShippedScheduler customNonShippedScheduler;
+
 	/**
 	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
 	 * between elements may be too short (i.e. because the vessel is already travelling at max speed). In such cases, if adjustArrivals is true, then arrival times will be adjusted in the
@@ -205,6 +208,11 @@ public class ScheduleCalculator {
 		final int times[] = new int[sequence.size()];
 		Arrays.fill(times, startTime);
 		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
+
+		if (customNonShippedScheduler != null) {
+			customNonShippedScheduler.modifyArrivalTimes(resource, startTime, currentPlan, times);
+		}
+
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
@@ -225,7 +233,7 @@ public class ScheduleCalculator {
 		}
 
 		// Prime the load price calculators with the scheduled result
-		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
+		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()	) {
 			calculator.prepareEvaluation(sequences);
 		}
 

@@ -76,15 +76,19 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		boolean foundALoad = false;
 
+		final List<Integer> slotTimes= new ArrayList<>(numElements);
+		
 		// These handle current special cases around FOB/DES
 		Integer transferTime = null;
 		Long transferVolume = null;
 		IVessel nominatedVessel = null;
 		final int adjust = plan.isIgnoreEnd() ? 1 : 0;
+		int timeCounter = -1;
 		for (int i = 0; i < sequence.length - adjust; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 
 			if (element instanceof PortDetails) {
+				++timeCounter;
 				final PortDetails pd = (PortDetails) element;
 				final IPortSlot slot = pd.getOptions().getPortSlot();
 				// Special case for FOB/DES
@@ -94,6 +98,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				}
 				if (slot instanceof ILoadOption) {
 					slots.add(slot);
+					slotTimes.add(arrivalTimes.get(timeCounter));
 					final ILoadOption loadOption = (ILoadOption) slot;
 					minVolumes.add(loadOption.getMinLoadVolume());
 					maxVolumes.add(loadOption.getMaxLoadVolume());
@@ -109,6 +114,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					}
 				} else if (slot instanceof IDischargeOption) {
 					slots.add(slot);
+					slotTimes.add(arrivalTimes.get(timeCounter));
 					final IDischargeOption dischargeOption = (IDischargeOption) slot;
 					minVolumes.add(dischargeOption.getMinDischargeVolume());
 					maxVolumes.add(dischargeOption.getMaxDischargeVolume());
@@ -123,6 +129,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					}
 				} else if (slot instanceof IHeelOptionsPortSlot) {
 					slots.add(slot);
+					slotTimes.add(arrivalTimes.get(timeCounter));
 					final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) slot;
 					final IHeelOptions heelOptions = heelOptionsPortSlot.getHeelOptions();
 					minVolumes.add(heelOptions.getHeelLimit());
@@ -139,15 +146,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			return null;
 		}
 
-		final List<Integer> slotTimes;
-		if (transferTime != null) {
-			slotTimes = new ArrayList<Integer>(sequence.length - 1);
-			for (int i = 0; i < sequence.length - adjust; ++i) {
-				slotTimes.add(transferTime);
-			}
-		} else {
-			slotTimes = new ArrayList<Integer>(arrivalTimes);
-		}
 
 		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes,
 				minVolumes, maxVolumes);
