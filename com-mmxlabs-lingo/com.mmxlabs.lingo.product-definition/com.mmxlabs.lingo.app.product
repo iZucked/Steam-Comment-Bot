@@ -49,7 +49,6 @@ Build: {1}
 
    <features>
       <feature id="com.mmxlabs.lingo.feature"/>
-      <feature id="jre.feature" installMode="root"/>
    </features>
 
    <configurations>
