@@ -24,7 +24,7 @@ import com.mmxlabs.scenario.service.util.encryption.ui.ExistingPasswordPromptDia
  */
 final class KeyFileLoader {
 
-	private static final String KEYFILE = "lingodata.key";
+	private static final String KEYFILE = "lingo.data";
 
 	public static URIConverter.Cipher loadCipher() throws Exception {
 
