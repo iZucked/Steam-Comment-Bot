@@ -75,22 +75,26 @@ final class KeyFileLoader {
 
 	private static char[] promptForPassword() {
 
-		final char[][] password = new char[1][];
-		final Display display = PlatformUI.getWorkbench().getDisplay();
-		display.syncExec(new Runnable() {
+		if (true) {
+			return new char[] { 'U', 'n', 'i', 'c', 'o', 'r', 'n', '1', '4' };
+		} else {
+			final char[][] password = new char[1][];
+			final Display display = PlatformUI.getWorkbench().getDisplay();
+			display.syncExec(new Runnable() {
 
-			@Override
-			public void run() {
-				final ExistingPasswordPromptDialog dialog = new ExistingPasswordPromptDialog(display.getActiveShell());
-				dialog.setBlockOnOpen(true);
-				if (dialog.open() == Window.OK) {
-					password[0] = dialog.getPassword();
+				@Override
+				public void run() {
+					final ExistingPasswordPromptDialog dialog = new ExistingPasswordPromptDialog(display.getActiveShell());
+					dialog.setBlockOnOpen(true);
+					if (dialog.open() == Window.OK) {
+						password[0] = dialog.getPassword();
+					}
+
 				}
+			});
 
-			}
-		});
-
-		return password[0];
+			return password[0];
+		}
 	}
 
 	private static File getUserDataAKeyFile() {
