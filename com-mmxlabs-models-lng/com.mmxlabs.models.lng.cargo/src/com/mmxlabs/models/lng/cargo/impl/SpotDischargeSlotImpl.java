@@ -238,7 +238,7 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 				}
 			};
 		}
-		return null;
+		return super.getUnsetValueOrDelegate(feature);
 	}	
 } // end of SpotDischargeSlotImpl
 
