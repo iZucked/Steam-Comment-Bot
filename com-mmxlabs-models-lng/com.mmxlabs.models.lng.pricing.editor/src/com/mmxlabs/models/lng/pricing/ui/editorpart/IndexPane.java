@@ -10,6 +10,7 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -318,7 +319,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						getSortingSupport().removeSortableColumn(column);
 						column.dispose();
 					}
-					final Calendar c = Calendar.getInstance();
+					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 					c.setTime(minDisplayDate);
 					c.set(Calendar.MILLISECOND, 0);
 					c.set(Calendar.SECOND, 0);
