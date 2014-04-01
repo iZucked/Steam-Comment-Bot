@@ -120,7 +120,7 @@ public class DateAndCurveHelper {
 
 			curve.setDefaultValue(0);
 			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 			}
 		}
 		return curve;
@@ -142,7 +142,7 @@ public class DateAndCurveHelper {
 
 			curve.setDefaultValue(0);
 			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i - 1, (int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(i).intValue()));
+				curve.setValueAfter(i, (int) OptimiserUnitConvertor.convertToInternalFixedCost(parsed.evaluate(i).intValue()));
 			}
 		}
 		return curve;

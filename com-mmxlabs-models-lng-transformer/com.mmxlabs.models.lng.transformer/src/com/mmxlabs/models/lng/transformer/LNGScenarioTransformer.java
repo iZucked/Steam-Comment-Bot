@@ -339,7 +339,7 @@ public class LNGScenarioTransformer {
 					}
 				} else {
 					for (final int i : changePoints) {
-						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
 				modelEntityMap.addModelObject(index, curve);
@@ -361,7 +361,7 @@ public class LNGScenarioTransformer {
 				} else {
 
 					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
 				modelEntityMap.addModelObject(index, curve);
@@ -391,7 +391,7 @@ public class LNGScenarioTransformer {
 						if (dailyCost != (int) dailyCost) {
 							throw new IllegalStateException(String.format("Daily Cost of %d is too big.", OptimiserUnitConvertor.convertToExternalDailyCost(dailyCost)));
 						}
-						curve.setValueAfter(i - 1, (int) dailyCost);
+						curve.setValueAfter(i, (int) dailyCost);
 					}
 				}
 				modelEntityMap.addModelObject(index, curve);
@@ -1060,7 +1060,7 @@ public class LNGScenarioTransformer {
 
 					curve.setDefaultValue(0);
 					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
 				dischargePriceCalculator = new PriceExpressionContract(curve);
@@ -1213,7 +1213,7 @@ public class LNGScenarioTransformer {
 
 					curve.setDefaultValue(0);
 					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+						curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
 				loadPriceCalculator = new PriceExpressionContract(curve);
@@ -1458,7 +1458,7 @@ public class LNGScenarioTransformer {
 			final SpotAvailability groupAvailability = fobSalesSpotMarket.getAvailability();
 
 			// Loop over the date range in the optimisation generating market slots
-			final Calendar cal = Calendar.getInstance();
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			cal.setTime(earliestDate);
 
 			// Set back to start of month

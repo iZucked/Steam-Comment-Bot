@@ -124,7 +124,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 		} else {
 			curve.setDefaultValue(0);
 			for (final int i : parsed.getChangePoints()) {
-				curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+				curve.setValueAfter(i, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 			}
 		}
 		return curve;
