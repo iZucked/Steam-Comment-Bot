@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.importer;
 
 import java.io.IOException;
+import java.nio.file.SecureDirectoryStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,9 +30,15 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.Activator;
@@ -143,7 +150,8 @@ public class CargoImporter extends DefaultClassImporter {
 		return super.shouldExportFeature(feature);
 	}
 
-	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots, final IExportContext context) {
+	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots,
+			final IExportContext context) {
 
 		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
 
@@ -290,6 +298,51 @@ public class CargoImporter extends DefaultClassImporter {
 			cargo.getSlots().add(load);
 			cargo.getSlots().add(discharge);
 		}
+
+		final LoadSlot fLoad = load;
+		final DischargeSlot fDischarge = discharge;
+
+		final String buyMarket = row.get("buy.market");
+		final String sellMarket = row.get("sell.market");
+
+		context.doLater(new IDeferment() {
+
+			@Override
+			public void run(final IImportContext context) {
+				if (fLoad instanceof SpotLoadSlot) {
+
+					final SpotLoadSlot sls = (SpotLoadSlot) fLoad;
+					SpotMarket market = null;
+					// if (sls.getMarket() == null) {
+					if (sls.isDESPurchase()) {
+						market = (SpotMarket) context.getNamedObject(buyMarket, SpotMarketsPackage.Literals.DES_PURCHASE_MARKET);
+					} else {
+						market = (SpotMarket) context.getNamedObject(buyMarket, SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET);
+					}
+					// }
+					sls.setMarket(market);
+
+				}
+				if (fDischarge instanceof SpotDischargeSlot) {
+					final SpotDischargeSlot sds = (SpotDischargeSlot) fDischarge;
+					SpotMarket market = null;
+					// if (sls.getMarket() == null) {
+					if (sds.isFOBSale()) {
+						market = (SpotMarket) context.getNamedObject(sellMarket, SpotMarketsPackage.Literals.FOB_SALES_MARKET);
+					} else {
+						market = (SpotMarket) context.getNamedObject(sellMarket, SpotMarketsPackage.Literals.DES_SALES_MARKET);
+					}
+					// }
+					sds.setMarket(market);
+				}
+			}
+
+			@Override
+			public int getStage() {
+				// TODO Auto-generated method stub
+				return IImportContext.STAGE_MODIFY_SUBMODELS;
+			}
+		});
 		// Always return cargo object for LDD style cargo import
 		newResult.add(cargo);
 
