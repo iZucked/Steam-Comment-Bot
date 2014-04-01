@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl#getDeliveryType <em>Delivery Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl#getEndHeelM3 <em>End Heel M3</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl#getEndHeelMMBTu <em>End Heel MMB Tu</em>}</li>
  * </ul>
  * </p>
  *
@@ -41,6 +43,43 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @ordered
 	 */
 	protected String deliveryType = DELIVERY_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getEndHeelM3() <em>End Heel M3</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndHeelM3()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int END_HEEL_M3_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getEndHeelM3() <em>End Heel M3</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndHeelM3()
+	 * @generated
+	 * @ordered
+	 */
+	protected int endHeelM3 = END_HEEL_M3_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getEndHeelMMBTu() <em>End Heel MMB Tu</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndHeelMMBTu()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int END_HEEL_MMB_TU_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getEndHeelMMBTu() <em>End Heel MMB Tu</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEndHeelMMBTu()
+	 * @generated
+	 * @ordered
+	 */
+	protected int endHeelMMBTu = END_HEEL_MMB_TU_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -90,10 +129,60 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @generated
 	 */
 	@Override
+	public int getEndHeelM3() {
+		return endHeelM3;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEndHeelM3(int newEndHeelM3) {
+		int oldEndHeelM3 = endHeelM3;
+		endHeelM3 = newEndHeelM3;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_M3, oldEndHeelM3, endHeelM3));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getEndHeelMMBTu() {
+		return endHeelMMBTu;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setEndHeelMMBTu(int newEndHeelMMBTu) {
+		int oldEndHeelMMBTu = endHeelMMBTu;
+		endHeelMMBTu = newEndHeelMMBTu;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_MMB_TU, oldEndHeelMMBTu, endHeelMMBTu));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ActualsPackage.DISCHARGE_ACTUALS__DELIVERY_TYPE:
 				return getDeliveryType();
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_M3:
+				return getEndHeelM3();
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_MMB_TU:
+				return getEndHeelMMBTu();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -108,6 +197,12 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 		switch (featureID) {
 			case ActualsPackage.DISCHARGE_ACTUALS__DELIVERY_TYPE:
 				setDeliveryType((String)newValue);
+				return;
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_M3:
+				setEndHeelM3((Integer)newValue);
+				return;
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_MMB_TU:
+				setEndHeelMMBTu((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -124,6 +219,12 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 			case ActualsPackage.DISCHARGE_ACTUALS__DELIVERY_TYPE:
 				setDeliveryType(DELIVERY_TYPE_EDEFAULT);
 				return;
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_M3:
+				setEndHeelM3(END_HEEL_M3_EDEFAULT);
+				return;
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_MMB_TU:
+				setEndHeelMMBTu(END_HEEL_MMB_TU_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -138,6 +239,10 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 		switch (featureID) {
 			case ActualsPackage.DISCHARGE_ACTUALS__DELIVERY_TYPE:
 				return DELIVERY_TYPE_EDEFAULT == null ? deliveryType != null : !DELIVERY_TYPE_EDEFAULT.equals(deliveryType);
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_M3:
+				return endHeelM3 != END_HEEL_M3_EDEFAULT;
+			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_MMB_TU:
+				return endHeelMMBTu != END_HEEL_MMB_TU_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -154,6 +259,10 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (deliveryType: ");
 		result.append(deliveryType);
+		result.append(", endHeelM3: ");
+		result.append(endHeelM3);
+		result.append(", endHeelMMBTu: ");
+		result.append(endHeelMMBTu);
 		result.append(')');
 		return result.toString();
 	}

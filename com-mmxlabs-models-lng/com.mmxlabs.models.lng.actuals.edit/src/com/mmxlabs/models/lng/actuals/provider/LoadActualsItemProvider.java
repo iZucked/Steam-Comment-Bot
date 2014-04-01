@@ -57,6 +57,8 @@ public class LoadActualsItemProvider
 			super.getPropertyDescriptors(object);
 
 			addContractTypePropertyDescriptor(object);
+			addStartingHeelM3PropertyDescriptor(object);
+			addStartingHeelMMBTuPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -79,6 +81,50 @@ public class LoadActualsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Starting Heel M3 feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartingHeelM3PropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadActuals_startingHeelM3_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadActuals_startingHeelM3_feature", "_UI_LoadActuals_type"),
+				 ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Starting Heel MMB Tu feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addStartingHeelMMBTuPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadActuals_startingHeelMMBTu_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadActuals_startingHeelMMBTu_feature", "_UI_LoadActuals_type"),
+				 ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_MMB_TU,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -121,6 +167,8 @@ public class LoadActualsItemProvider
 
 		switch (notification.getFeatureID(LoadActuals.class)) {
 			case ActualsPackage.LOAD_ACTUALS__CONTRACT_TYPE:
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3:
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

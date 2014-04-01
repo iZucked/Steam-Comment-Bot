@@ -482,6 +482,26 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getLoadActuals_StartingHeelM3() {
+		return (EAttribute)loadActualsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getLoadActuals_StartingHeelMMBTu() {
+		return (EAttribute)loadActualsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getDischargeActuals() {
 		return dischargeActualsEClass;
 	}
@@ -494,6 +514,26 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	@Override
 	public EAttribute getDischargeActuals_DeliveryType() {
 		return (EAttribute)dischargeActualsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDischargeActuals_EndHeelM3() {
+		return (EAttribute)dischargeActualsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getDischargeActuals_EndHeelMMBTu() {
+		return (EAttribute)dischargeActualsEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -581,9 +621,13 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		loadActualsEClass = createEClass(LOAD_ACTUALS);
 		createEAttribute(loadActualsEClass, LOAD_ACTUALS__CONTRACT_TYPE);
+		createEAttribute(loadActualsEClass, LOAD_ACTUALS__STARTING_HEEL_M3);
+		createEAttribute(loadActualsEClass, LOAD_ACTUALS__STARTING_HEEL_MMB_TU);
 
 		dischargeActualsEClass = createEClass(DISCHARGE_ACTUALS);
 		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__DELIVERY_TYPE);
+		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__END_HEEL_M3);
+		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__END_HEEL_MMB_TU);
 
 		// Create enums
 		penaltyTypeEEnum = createEEnum(PENALTY_TYPE);
@@ -669,9 +713,13 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		initEClass(loadActualsEClass, LoadActuals.class, "LoadActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadActuals_ContractType(), ecorePackage.getEString(), "contractType", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadActuals_StartingHeelM3(), ecorePackage.getEInt(), "startingHeelM3", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadActuals_StartingHeelMMBTu(), ecorePackage.getEInt(), "startingHeelMMBTu", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dischargeActualsEClass, DischargeActuals.class, "DischargeActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDischargeActuals_DeliveryType(), ecorePackage.getEString(), "deliveryType", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDischargeActuals_EndHeelM3(), ecorePackage.getEInt(), "endHeelM3", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDischargeActuals_EndHeelMMBTu(), ecorePackage.getEInt(), "endHeelMMBTu", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(penaltyTypeEEnum, PenaltyType.class, "PenaltyType");

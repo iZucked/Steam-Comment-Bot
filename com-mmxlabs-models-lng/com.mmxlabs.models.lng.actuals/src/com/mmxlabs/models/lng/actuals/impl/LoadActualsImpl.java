@@ -17,6 +17,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.LoadActualsImpl#getContractType <em>Contract Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.LoadActualsImpl#getStartingHeelM3 <em>Starting Heel M3</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.LoadActualsImpl#getStartingHeelMMBTu <em>Starting Heel MMB Tu</em>}</li>
  * </ul>
  * </p>
  *
@@ -41,6 +43,43 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @ordered
 	 */
 	protected String contractType = CONTRACT_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getStartingHeelM3() <em>Starting Heel M3</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartingHeelM3()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int STARTING_HEEL_M3_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getStartingHeelM3() <em>Starting Heel M3</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartingHeelM3()
+	 * @generated
+	 * @ordered
+	 */
+	protected int startingHeelM3 = STARTING_HEEL_M3_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getStartingHeelMMBTu() <em>Starting Heel MMB Tu</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartingHeelMMBTu()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int STARTING_HEEL_MMB_TU_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getStartingHeelMMBTu() <em>Starting Heel MMB Tu</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartingHeelMMBTu()
+	 * @generated
+	 * @ordered
+	 */
+	protected int startingHeelMMBTu = STARTING_HEEL_MMB_TU_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -90,10 +129,60 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @generated
 	 */
 	@Override
+	public int getStartingHeelM3() {
+		return startingHeelM3;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStartingHeelM3(int newStartingHeelM3) {
+		int oldStartingHeelM3 = startingHeelM3;
+		startingHeelM3 = newStartingHeelM3;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3, oldStartingHeelM3, startingHeelM3));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getStartingHeelMMBTu() {
+		return startingHeelMMBTu;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStartingHeelMMBTu(int newStartingHeelMMBTu) {
+		int oldStartingHeelMMBTu = startingHeelMMBTu;
+		startingHeelMMBTu = newStartingHeelMMBTu;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU, oldStartingHeelMMBTu, startingHeelMMBTu));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ActualsPackage.LOAD_ACTUALS__CONTRACT_TYPE:
 				return getContractType();
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3:
+				return getStartingHeelM3();
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU:
+				return getStartingHeelMMBTu();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -108,6 +197,12 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 		switch (featureID) {
 			case ActualsPackage.LOAD_ACTUALS__CONTRACT_TYPE:
 				setContractType((String)newValue);
+				return;
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3:
+				setStartingHeelM3((Integer)newValue);
+				return;
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU:
+				setStartingHeelMMBTu((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -124,6 +219,12 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 			case ActualsPackage.LOAD_ACTUALS__CONTRACT_TYPE:
 				setContractType(CONTRACT_TYPE_EDEFAULT);
 				return;
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3:
+				setStartingHeelM3(STARTING_HEEL_M3_EDEFAULT);
+				return;
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU:
+				setStartingHeelMMBTu(STARTING_HEEL_MMB_TU_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -138,6 +239,10 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 		switch (featureID) {
 			case ActualsPackage.LOAD_ACTUALS__CONTRACT_TYPE:
 				return CONTRACT_TYPE_EDEFAULT == null ? contractType != null : !CONTRACT_TYPE_EDEFAULT.equals(contractType);
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3:
+				return startingHeelM3 != STARTING_HEEL_M3_EDEFAULT;
+			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU:
+				return startingHeelMMBTu != STARTING_HEEL_MMB_TU_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -154,6 +259,10 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (contractType: ");
 		result.append(contractType);
+		result.append(", startingHeelM3: ");
+		result.append(startingHeelM3);
+		result.append(", startingHeelMMBTu: ");
+		result.append(startingHeelMMBTu);
 		result.append(')');
 		return result.toString();
 	}

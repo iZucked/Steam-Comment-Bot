@@ -15,6 +15,8 @@ import com.mmxlabs.models.lng.actuals.ActualsFactory;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
+import com.mmxlabs.models.lng.actuals.DischargeActuals;
+import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -196,6 +198,11 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										slotActuals.setVolumeInM3(slotAllocation.getVolumeTransferred());
 										slotActuals.setPriceDOL(slotAllocation.getPrice());
 										slotActuals.setPortCharges(slotAllocation.getSlotVisit().getPortCost());
+										if (slotActuals instanceof LoadActuals) {
+											((LoadActuals)slotActuals).setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
+										} else if (slotActuals instanceof DischargeActuals) {
+											((DischargeActuals)slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
+										}
 
 										// set a base fuel price.
 										for (FuelQuantity fq : slotAllocation.getSlotVisit().getFuels()) {

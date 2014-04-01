@@ -62,6 +62,8 @@ public class DischargeActualsComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_deliveryTypeEditor(detailComposite, topClass);
+		add_endHeelM3Editor(detailComposite, topClass);
+		add_endHeelMMBTuEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -71,5 +73,23 @@ public class DischargeActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_deliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.DISCHARGE_ACTUALS__DELIVERY_TYPE));
+	}
+
+	/**
+	 * Create the editor for the endHeelM3 feature on DischargeActuals
+	 *
+	 * @generated
+	 */
+	protected void add_endHeelM3Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.DISCHARGE_ACTUALS__END_HEEL_M3));
+	}
+
+	/**
+	 * Create the editor for the endHeelMMBTu feature on DischargeActuals
+	 *
+	 * @generated
+	 */
+	protected void add_endHeelMMBTuEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.DISCHARGE_ACTUALS__END_HEEL_MMB_TU));
 	}
 }

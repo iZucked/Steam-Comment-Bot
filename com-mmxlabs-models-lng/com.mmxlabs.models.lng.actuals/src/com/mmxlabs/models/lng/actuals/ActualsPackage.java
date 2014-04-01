@@ -542,13 +542,31 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS__CONTRACT_TYPE = SLOT_ACTUALS_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Starting Heel M3</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__STARTING_HEEL_M3 = SLOT_ACTUALS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Starting Heel MMB Tu</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__STARTING_HEEL_MMB_TU = SLOT_ACTUALS_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Load Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 1;
+	int LOAD_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -723,13 +741,31 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS__DELIVERY_TYPE = SLOT_ACTUALS_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>End Heel M3</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__END_HEEL_M3 = SLOT_ACTUALS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>End Heel MMB Tu</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__END_HEEL_MMB_TU = SLOT_ACTUALS_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 1;
+	int DISCHARGE_ACTUALS_FEATURE_COUNT = SLOT_ACTUALS_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -1147,6 +1183,28 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getLoadActuals_ContractType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelM3 <em>Starting Heel M3</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Starting Heel M3</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelM3()
+	 * @see #getLoadActuals()
+	 * @generated
+	 */
+	EAttribute getLoadActuals_StartingHeelM3();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelMMBTu <em>Starting Heel MMB Tu</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Starting Heel MMB Tu</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelMMBTu()
+	 * @see #getLoadActuals()
+	 * @generated
+	 */
+	EAttribute getLoadActuals_StartingHeelMMBTu();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.actuals.DischargeActuals <em>Discharge Actuals</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1166,6 +1224,28 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDischargeActuals_DeliveryType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelM3 <em>End Heel M3</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Heel M3</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelM3()
+	 * @see #getDischargeActuals()
+	 * @generated
+	 */
+	EAttribute getDischargeActuals_EndHeelM3();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelMMBTu <em>End Heel MMB Tu</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Heel MMB Tu</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelMMBTu()
+	 * @see #getDischargeActuals()
+	 * @generated
+	 */
+	EAttribute getDischargeActuals_EndHeelMMBTu();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}'.
@@ -1484,6 +1564,22 @@ public interface ActualsPackage extends EPackage {
 		EAttribute LOAD_ACTUALS__CONTRACT_TYPE = eINSTANCE.getLoadActuals_ContractType();
 
 		/**
+		 * The meta object literal for the '<em><b>Starting Heel M3</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_ACTUALS__STARTING_HEEL_M3 = eINSTANCE.getLoadActuals_StartingHeelM3();
+
+		/**
+		 * The meta object literal for the '<em><b>Starting Heel MMB Tu</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_ACTUALS__STARTING_HEEL_MMB_TU = eINSTANCE.getLoadActuals_StartingHeelMMBTu();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.impl.DischargeActualsImpl <em>Discharge Actuals</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1500,6 +1596,22 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISCHARGE_ACTUALS__DELIVERY_TYPE = eINSTANCE.getDischargeActuals_DeliveryType();
+
+		/**
+		 * The meta object literal for the '<em><b>End Heel M3</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_ACTUALS__END_HEEL_M3 = eINSTANCE.getDischargeActuals_EndHeelM3();
+
+		/**
+		 * The meta object literal for the '<em><b>End Heel MMB Tu</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_ACTUALS__END_HEEL_MMB_TU = eINSTANCE.getDischargeActuals_EndHeelMMBTu();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}' enum.
