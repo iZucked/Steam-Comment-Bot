@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 
 /**
  * A cargo allocator which presumes that there are no total volume constraints, and so the total remaining capacity should be allocated
@@ -22,6 +23,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.Alloca
  * 
  */
 public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
+
+	private IActualsDataProvider actualsDataProvider;
 
 	/**
 	 * Returns x, capped by y; if x has the special value 0, it is considered undefined and y is returned.
@@ -56,9 +59,60 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
 		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.resourceVessel;
+		if (allocationRecord.allocationMode == AllocationMode.Actuals) {
 
-		// Transfer, just find the common max and replicate
-		if (allocationRecord.allocationMode == AllocationMode.Transfer) {
+			// Work out used fuel volume - adjust for heel positions and transfer volumes
+			// Actuals data will give us;
+			// * Heel before loading
+			// * Volume Loaded
+			// * Volume discharged.
+			// * Heel after discharge.
+			// * If the next load is actualised, take the heel before loading, otherwise assume safety heel.
+			long usedFuelVolume = 0;
+			for (int i = 0; i < slots.size(); i++) {
+				final IPortSlot slot = allocationRecord.slots.get(i);
+				if (actualsDataProvider.hasActuals(slot) == false) {
+					throw new IllegalStateException("Actuals Volume Mode, but no actuals specified");
+				}
+
+				annotation.getSlots().add(slot);
+
+				// Scheduler should have made this happen, but lets make sure here
+				assert allocationRecord.slotTimes.get(i) == actualsDataProvider.getArrivalTime(slot);
+				annotation.setSlotTime(slot, allocationRecord.slotTimes.get(i));
+
+				// Actuals mode, take values directly
+				annotation.setSlotVolumeInM3(slot, actualsDataProvider.getVolumeInM3(slot));
+				annotation.setSlotVolumeInMMBTu(slot, actualsDataProvider.getVolumeInMMBtu(slot));
+
+				// First slot
+				if (i == 0) {
+					// The Volume Planner should have correctly set this value
+					assert allocationRecord.startVolumeInM3 == actualsDataProvider.getStartHeelInM3(slot);
+					annotation.setStartHeelVolumeInM3(allocationRecord.startVolumeInM3);
+					usedFuelVolume += allocationRecord.startVolumeInM3;
+				}
+				if (slot instanceof ILoadOption) {
+					usedFuelVolume += actualsDataProvider.getVolumeInM3(slot);
+				} else if (slot instanceof IDischargeOption) {
+					usedFuelVolume -= actualsDataProvider.getVolumeInM3(slot);
+				}
+			}
+
+			final IPortSlot returnSlot = allocationRecord.returnSlot;
+
+			// Use safety heel if not actualised
+			long returnSlotHeelInM3 = actualsDataProvider.hasActuals(returnSlot) ? actualsDataProvider.getStartHeelInM3(returnSlot) : vessel.getVesselClass().getMinHeel();
+
+			usedFuelVolume -= returnSlotHeelInM3;
+
+			annotation.setRemainingHeelVolumeInM3(returnSlotHeelInM3);
+			annotation.setFuelVolumeInM3(usedFuelVolume);
+
+			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
+			return annotation;
+		} else if (allocationRecord.allocationMode == AllocationMode.Transfer) {
+			// Transfer, just find the common max and replicate
 			final long availableCargoSpace = vessel.getCargoCapacity() - allocationRecord.startVolumeInM3;
 			long transferVolume = availableCargoSpace;
 			for (int i = 0; i < slots.size(); ++i) {
