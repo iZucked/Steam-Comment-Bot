@@ -66,4 +66,22 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProvider {
 		return 0;
 	}
 
+	@Override
+	public int getBaseFuelPrice(IPortSlot fromPortSlot) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long getNextVoyageBaseFuelConsumptionInMT(IPortSlot fromPortSlot) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getLNGPricePerMMBTu(IPortSlot portSlot) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
