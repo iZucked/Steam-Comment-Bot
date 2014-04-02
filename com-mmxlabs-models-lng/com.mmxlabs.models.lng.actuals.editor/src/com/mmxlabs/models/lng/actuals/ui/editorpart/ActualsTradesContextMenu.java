@@ -20,6 +20,8 @@ import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -272,13 +274,13 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										slotActuals.setPortCharges(slotAllocation.getSlotVisit().getPortCost());
 										if (slotActuals instanceof LoadActuals) {
 											((LoadActuals) slotActuals).setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
-											((LoadActuals) slotActuals).setStartingHeelMMBTu((int)Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
+											((LoadActuals) slotActuals).setStartingHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
 											slotActuals.setBaseFuelConsumption(ladenBaseFuelConsumptionInMT);
 											// Reset in case of multiple loads/discharges!
 											ladenBaseFuelConsumptionInMT = 0;
 										} else if (slotActuals instanceof DischargeActuals) {
 											((DischargeActuals) slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
-											((DischargeActuals) slotActuals).setEndHeelMMBTu((int)Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
+											((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
 											slotActuals.setBaseFuelConsumption(ballastBaseFuelConsumptionInMT);
 											// Reset in case of multiple loads/discharges!
 											ballastBaseFuelConsumptionInMT = 0;
@@ -299,6 +301,12 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 					}
 
 					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, ActualsPackage.Literals.ACTUALS_MODEL__CARGO_ACTUALS, cargoActuals));
+					// Disallow re-wiring
+					cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
+					// Disallow vessel assignment changes
+					if (cargo.getCargoType() == CargoType.FLEET) {
+						cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE));
+					}
 
 					if (cmd.canExecute()) {
 						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
