@@ -95,7 +95,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	/**
 	 * Base fuel price per MT
 	 */
-	int getBaseFuelPrice(IPortSlot fromPortSlot);
+	int getBaseFuelPrice(IPortSlot slot);
 
 	/**
 	 * Returns the actual base fuel used in the next voyage. This includes and load and discharge port fuel consumptions.
@@ -103,8 +103,8 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @param fromPortSlot
 	 * @return
 	 */
-	long getNextVoyageBaseFuelConsumptionInMT(IPortSlot fromPortSlot);
+	long getNextVoyageBaseFuelConsumptionInMT(IPortSlot slot);
 
-	int getLNGPricePerMMBTu(IPortSlot portSlot);
+	int getLNGPricePerMMBTu(IPortSlot slot);
 
 }
