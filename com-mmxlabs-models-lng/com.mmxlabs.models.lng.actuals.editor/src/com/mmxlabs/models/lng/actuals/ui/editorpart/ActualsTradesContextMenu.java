@@ -29,11 +29,18 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -98,6 +105,21 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 			super("Actualise Cargo");
 			this.scenarioEditingLocation = scenarioEditingLocation;
 			this.cargo = cargo;
+		}
+
+		private int getFuelUse(FuelUsage fuelUsage, Fuel fuel, FuelUnit fuelUnit) {
+			int total = 0;
+			for (FuelQuantity fq : fuelUsage.getFuels()) {
+				if (fq.getFuel().equals(fuel)) {
+					for (FuelAmount amount : fq.getAmounts()) {
+						if (amount.getUnit().equals(fuelUnit)) {
+							total += amount.getQuantity();
+						}
+					}
+				}
+			}
+			return total;
+
 		}
 
 		@Override
@@ -190,18 +212,76 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 							for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 								if (cargoAllocation.getInputCargo() == cargo) {
 
+									double cargoCV = 0.0;
+									// Find cargo cv
+									for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
+										if (slotAllocation.getSlot() instanceof LoadSlot) {
+											LoadSlot loadSlot = (LoadSlot) slotAllocation.getSlot();
+											cargoCV = loadSlot.getSlotOrDelegatedCV();
+											break;
+										}
+									}
+
+									int ladenBaseFuelConsumptionInMT = 0;
+									int ballastBaseFuelConsumptionInMT = 0;
+
+									boolean isLaden = false;
+									for (Event event : cargoAllocation.getEvents()) {
+
+										if (event instanceof SlotVisit) {
+											SlotVisit slotVisit = (SlotVisit) event;
+											isLaden = slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot;
+
+											// All port fuel use is part of laden allocation
+											ladenBaseFuelConsumptionInMT += getFuelUse(slotVisit, Fuel.BASE_FUEL, FuelUnit.MT);
+											ladenBaseFuelConsumptionInMT += getFuelUse(slotVisit, Fuel.PILOT_LIGHT, FuelUnit.MT);
+										} else if (event instanceof Journey) {
+											Journey journey = (Journey) event;
+											if (isLaden) {
+												ladenBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.BASE_FUEL, FuelUnit.MT);
+												ladenBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.PILOT_LIGHT, FuelUnit.MT);
+											} else {
+												ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.BASE_FUEL, FuelUnit.MT);
+												ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.PILOT_LIGHT, FuelUnit.MT);
+											}
+
+										} else if (event instanceof Idle) {
+											Idle idle = (Idle) event;
+											if (isLaden) {
+												ladenBaseFuelConsumptionInMT += getFuelUse(idle, Fuel.BASE_FUEL, FuelUnit.MT);
+												ladenBaseFuelConsumptionInMT += getFuelUse(idle, Fuel.PILOT_LIGHT, FuelUnit.MT);
+											} else {
+												ballastBaseFuelConsumptionInMT += getFuelUse(idle, Fuel.BASE_FUEL, FuelUnit.MT);
+												ballastBaseFuelConsumptionInMT += getFuelUse(idle, Fuel.PILOT_LIGHT, FuelUnit.MT);
+											}
+
+										}
+
+									}
+
 									for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 										final SlotActuals slotActuals = slotActualMap.get(slotAllocation.getSlot());
 										slotActuals.setOperationsStart(slotAllocation.getLocalStart().getTime());
 										slotActuals.setOperationsEnd(slotAllocation.getLocalEnd().getTime());
 										slotActuals.setTitleTransferPoint(slotAllocation.getPort());
 										slotActuals.setVolumeInM3(slotAllocation.getVolumeTransferred());
+										slotActuals.setCV(cargoCV);
+										slotActuals.setVolumeInMMBtu((int) Math.round(cargoCV * (double) slotAllocation.getVolumeTransferred()));
+
 										slotActuals.setPriceDOL(slotAllocation.getPrice());
 										slotActuals.setPortCharges(slotAllocation.getSlotVisit().getPortCost());
 										if (slotActuals instanceof LoadActuals) {
-											((LoadActuals)slotActuals).setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
+											((LoadActuals) slotActuals).setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
+											((LoadActuals) slotActuals).setStartingHeelMMBTu((int)Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
+											slotActuals.setBaseFuelConsumption(ladenBaseFuelConsumptionInMT);
+											// Reset in case of multiple loads/discharges!
+											ladenBaseFuelConsumptionInMT = 0;
 										} else if (slotActuals instanceof DischargeActuals) {
-											((DischargeActuals)slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
+											((DischargeActuals) slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
+											((DischargeActuals) slotActuals).setEndHeelMMBTu((int)Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
+											slotActuals.setBaseFuelConsumption(ballastBaseFuelConsumptionInMT);
+											// Reset in case of multiple loads/discharges!
+											ballastBaseFuelConsumptionInMT = 0;
 										}
 
 										// set a base fuel price.
