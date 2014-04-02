@@ -22,16 +22,14 @@ import com.mmxlabs.scenario.service.util.encryption.ui.ExistingPasswordPromptDia
  * 
  * @author Simon Goodall
  */
-final class KeyFileLoader {
+public final class KeyFileLoader {
 
-	private static final String KEYFILE = "lingo.data";
-
-	public static URIConverter.Cipher loadCipher() throws Exception {
+	public static URIConverter.Cipher loadCipher(final String keyFileName) throws Exception {
 
 		// Try to find the key file
-		File keyFileFile = getUserDataAKeyFile();
+		File keyFileFile = getUserDataAKeyFile(keyFileName);
 		if (keyFileFile == null) {
-			keyFileFile = getUserDataBKeyFile();
+			keyFileFile = getUserDataBKeyFile(keyFileName);
 		}
 		// TODO keyFileFile == check other search locations
 
@@ -97,11 +95,11 @@ final class KeyFileLoader {
 		}
 	}
 
-	private static File getUserDataAKeyFile() {
+	private static File getUserDataAKeyFile(final String keyFileName) {
 
 		final String userHome = System.getProperty("user.home");
 		if (userHome != null) {
-			final File f = new File(userHome + "/mmxlabs/" + KEYFILE);
+			final File f = new File(userHome + "/mmxlabs/" + keyFileName);
 			if (f.exists()) {
 				return f;
 			}
@@ -109,11 +107,11 @@ final class KeyFileLoader {
 		return null;
 	}
 
-	private static File getUserDataBKeyFile() {
+	private static File getUserDataBKeyFile(final String keyFileName) {
 
 		final String userHome = System.getProperty("user.home");
 		if (userHome != null) {
-			final File f = new File(userHome + "/LiNGO/" + KEYFILE);
+			final File f = new File(userHome + "/LiNGO/" + keyFileName);
 			if (f.exists()) {
 				return f;
 			}
