@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -107,7 +108,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 	/**
 	 * A flag to indicate that we should just use the timewindow rather than include the previous journey time. Intended for use with the cargo shorts where each cargo is indepenedent of the others on
-	 * the route.
+	 * the route. Also used for actuals where forcast travel time is irrelevant.
 	 */
 	private boolean[][] useTimeWindow;
 
@@ -162,6 +163,9 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 	@Inject
 	private ScheduleCalculator scheduleCalculator;
+
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
 
 	/**
 	 * The sequences being evaluated at the moment
@@ -472,6 +476,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
+			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 			final List<ITimeWindow> windows;
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
@@ -493,6 +498,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 					// but can be overridden by the specified end requirement
 					final ITimeWindow timeWindow = endRequirement.getTimeWindow();
 					if (timeWindow != null) {
+						// Make sure we always use the time window
+						useTimeWindow[index] = true;
 						windows = Collections.singletonList(timeWindow);
 					} else {
 						windows = timeWindowProvider.getTimeWindows(element);
@@ -501,8 +508,13 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 					windows = timeWindowProvider.getTimeWindows(element);
 				}
 			} else {
-				// "windows" defaults to whatever windows are specified by the time window provider
-				windows = timeWindowProvider.getTimeWindows(element);
+
+				if (actualsDataProvider.hasActuals(slot)) {
+					windows = Collections.singletonList(actualsDataProvider.getArrivalTimeWindow(slot));
+				} else {
+					// "windows" defaults to whatever windows are specified by the time window provider
+					windows = timeWindowProvider.getTimeWindows(element);
+				}
 
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
@@ -558,6 +570,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 					windowEndTime[index] = window.getEnd();
 					if (useTimeWindow[index]) {
 						// Cargo shorts - pretend this is a start element
+						// Actuals - use window directly
 						windowStartTime[index] = window.getStart();
 					} else {
 						windowStartTime[index] = Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
