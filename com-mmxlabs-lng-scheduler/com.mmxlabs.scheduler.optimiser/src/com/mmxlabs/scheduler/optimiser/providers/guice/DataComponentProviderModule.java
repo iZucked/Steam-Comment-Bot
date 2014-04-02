@@ -41,6 +41,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolum
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
@@ -325,7 +326,7 @@ public class DataComponentProviderModule extends AbstractModule {
 
 		bind(HashMapActualsDataProviderEditor.class).in(Singleton.class);
 		bind(IActualsDataProvider.class).to(HashMapActualsDataProviderEditor.class);
-//		bind(IActualsDataProviderEditor.class).to(HashMapCancellationFeeProviderEditor.class);
+		bind(IActualsDataProviderEditor.class).to(HashMapActualsDataProviderEditor.class);
 		
 	}
 
