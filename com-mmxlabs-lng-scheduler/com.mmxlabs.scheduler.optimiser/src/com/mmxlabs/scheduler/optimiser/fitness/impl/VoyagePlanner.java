@@ -264,6 +264,7 @@ public class VoyagePlanner {
 		ISequenceElement prevElement = null;
 		IPort prevPort = null;
 		IPort prev2Port = null;
+		IPortSlot prevPortSlot = null; 
 
 		VoyageOptions previousOptions = null;
 		boolean useNBO = false;
@@ -333,7 +334,8 @@ public class VoyagePlanner {
 
 			if (breakSequence[idx]) {
 
-				if (actualsDataProvider.hasActuals(thisPortSlot)) {
+				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
+				if (actualsDataProvider.hasActuals(prevPortSlot)) {
 					heelVolumeInM3 = generateActualsVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, currentTimes, heelVolumeInM3);
 				} else {
 
@@ -379,6 +381,7 @@ public class VoyagePlanner {
 			prevPort = thisPort;
 			prevVisitDuration = visitDuration;
 			prevElement = element;
+			prevPortSlot = thisPortSlot;
 		}
 
 		// TODO: Do we need to run optimiser when we only have a load port here?
@@ -418,7 +421,7 @@ public class VoyagePlanner {
 					if (element instanceof PortOptions) {
 						PortOptions portOptions = (PortOptions) element;
 
-						if (portOptions.getPortSlot() instanceof ILoadOption && idx != voyageOrPortOptions.size()) {
+						if (portOptions.getPortSlot() instanceof ILoadOption && idx != voyageOrPortOptions.size() - 1) {
 							cargoCV = actualsDataProvider.getCVValue(portOptions.getPortSlot());
 						}
 
@@ -465,7 +468,7 @@ public class VoyagePlanner {
 					voyageDetails.setTravelTime(voyageOptions.getAvailableTime());
 					voyageDetails.setIdleTime(0);
 					// Not known
-					// voyageDetails.setSpeed(speed);
+					 voyageDetails.setSpeed(10);
 
 					// Base Fuel
 
