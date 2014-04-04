@@ -62,7 +62,13 @@ public final class ResourceHelper {
 			// Fall back to pre-encrypted scenario options
 			final Map<Object, Object> noCipherOptions = new HashMap<>();
 			noCipherOptions.put(Resource.OPTION_CIPHER, null);
-			resource.load(noCipherOptions);
+			try {
+				resource.load(noCipherOptions);
+			} catch (final Exception e2) {
+				// Unable to load using fallback, so rethrow original exception
+				throw e;
+			}
+
 		}
 		return resource;
 	}
