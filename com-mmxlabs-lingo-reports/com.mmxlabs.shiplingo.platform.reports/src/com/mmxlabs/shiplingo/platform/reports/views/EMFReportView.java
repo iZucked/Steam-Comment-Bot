@@ -266,7 +266,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		private final int dp;
 
-		public NumberOfDPFormatter(int dp) {
+		public NumberOfDPFormatter(final int dp) {
 			Preconditions.checkArgument(dp >= 0);
 			this.dp = dp;
 		}
@@ -309,6 +309,13 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @since 4.0
 	 */
 	public class CostFormatter implements IFormatter {
+
+		private final boolean includeUnits;
+
+		public CostFormatter(final boolean includeUnits) {
+			this.includeUnits = includeUnits;
+		}
+
 		public Integer getIntValue(final Object object) {
 			if (object == null) {
 				return null;
@@ -325,7 +332,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			if (x == null) {
 				return "";
 			}
-			return String.format("$%,d", x);
+			return String.format(includeUnits ? "$%,d" : "%,d", x);
 		}
 
 		@Override
@@ -347,6 +354,13 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @since 4.0
 	 */
 	public class PriceFormatter implements IFormatter {
+
+		private final boolean includeUnits;
+
+		public PriceFormatter(final boolean includeUnits) {
+			this.includeUnits = includeUnits;
+		}
+
 		public Double getDoubleValue(final Object object) {
 			if (object == null) {
 				return null;
@@ -363,7 +377,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			if (x == null) {
 				return "";
 			}
-			return String.format("$%,.2f", x);
+			return String.format(includeUnits ? "$%,.2f" : "%,.2f", x);
 		}
 
 		@Override
@@ -503,7 +517,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 									// Different number of elements, so add all!
 									// This means something has been removed/added
 									objectsToAdd.addAll(e.getValue());
-								} 
+								}
 								if (ca == ref) {
 									continue;
 								}

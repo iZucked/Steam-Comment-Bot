@@ -189,7 +189,7 @@ public class PortRotationReportView extends EMFReportView {
 					}
 				}
 			});
-			addColumn(fuelName + " Unit Price", "Price per " + fuelUnitPriceUnits.get(fuelName), new PriceFormatter() {
+			addColumn(fuelName + " Unit Price", "Price per " + fuelUnitPriceUnits.get(fuelName), new PriceFormatter(true) {
 				@Override
 				public Double getDoubleValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -208,7 +208,7 @@ public class PortRotationReportView extends EMFReportView {
 					return null;
 				}
 			});
-			addColumn(fuelName + " Cost", new CostFormatter() {
+			addColumn(fuelName + " Cost", new CostFormatter(true) {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -225,7 +225,7 @@ public class PortRotationReportView extends EMFReportView {
 			});
 		}
 
-		addColumn("Fuel Cost", new CostFormatter() {
+		addColumn("Fuel Cost", new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof FuelUsage) {
@@ -235,16 +235,16 @@ public class PortRotationReportView extends EMFReportView {
 				}
 			}
 		});
-		addColumn("Charter Cost", new CostFormatter() {
+		addColumn("Charter Cost", new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				return (int) ((Event) object).getCharterCost();
 			}
 		});
 
-		addColumn("Canal Cost", new CostFormatter(), sp.getJourney_Toll());
+		addColumn("Canal Cost", new CostFormatter(true), sp.getJourney_Toll());
 
-		addColumn("Port Costs", new CostFormatter() {
+		addColumn("Port Costs", new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -255,7 +255,7 @@ public class PortRotationReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Total Cost", new CostFormatter() {
+		addColumn("Total Cost", new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				long total = 0;
