@@ -10,8 +10,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -23,9 +25,12 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.Nullable;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.lingo.its.internal.Activator;
 import com.mmxlabs.lingo.its.utils.MigrationHelper;
@@ -49,6 +54,7 @@ import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
 
 /**
  * 
@@ -90,6 +96,36 @@ public class AbstractOptimisationResultTester {
 	// Key prefixes used in the properties file.
 	private static final String originalFitnessesMapName = "originalFitnesses";
 	private static final String endFitnessesMapName = "endFitnesses";
+
+	// // Register a cipher provider with the osgi framework for running these tests
+
+	private static ServiceRegistration<IScenarioCipherProvider> cipherServiceRef = null;
+
+	@BeforeClass
+	public static void registerCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		IScenarioCipherProvider provider = new PassthroughCipherProvider();
+		Dictionary<String, Object> properties = new Hashtable<>();
+		cipherServiceRef = bundleContext.registerService(IScenarioCipherProvider.class, provider, properties);
+	}
+
+	@AfterClass
+	public static void dregisterCipherProvider() {
+		if (cipherServiceRef != null) {
+			cipherServiceRef.unregister();
+			cipherServiceRef = null;
+		}
+	}
+
+	@Nullable
+	private IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
+	}
 
 	public AbstractOptimisationResultTester() {
 		super();
@@ -334,16 +370,6 @@ public class AbstractOptimisationResultTester {
 	LNGScenarioModel duplicate(final LNGScenarioModel original) {
 
 		return EcoreUtil.copy(original);
-	}
-
-	@Nullable
-	private IScenarioCipherProvider getScenarioCipherProvider() {
-		final BundleContext bundleContext = FrameworkUtil.getBundle(AbstractOptimisationResultTester.class).getBundleContext();
-		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
-		if (serviceReference != null) {
-			return bundleContext.getService(serviceReference);
-		}
-		return null;
 	}
 
 }
