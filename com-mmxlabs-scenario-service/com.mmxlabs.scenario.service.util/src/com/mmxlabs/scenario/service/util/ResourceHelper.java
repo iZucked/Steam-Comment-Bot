@@ -23,7 +23,7 @@ public final class ResourceHelper {
 	public static ResourceSet createResourceSet(final IScenarioCipherProvider scenarioCipherProvider) {
 		final ResourceSet resourceSet = new ResourceSetImpl();
 		// Encryption hooks
-		if (true) {
+		if (false) {
 			if (scenarioCipherProvider == null) {
 				throw new RuntimeException("No cipher provided, unable to load or save scenarios");
 			}
