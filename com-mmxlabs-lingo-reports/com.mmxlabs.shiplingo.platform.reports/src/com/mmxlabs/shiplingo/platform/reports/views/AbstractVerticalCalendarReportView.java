@@ -546,7 +546,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * @param <T>
 	 *            The data type to initialise the event provider with.
 	 */
-	abstract static protected class EventProvider {
+	public abstract static class EventProvider {
 		final protected EventFilter filter;
 		
 		public EventProvider(EventFilter filter) {
