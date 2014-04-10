@@ -29,6 +29,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -38,6 +40,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -45,6 +48,7 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.impl.EventImpl;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -143,14 +147,13 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					for (final Object element : svso.getCollectedElements()) {
 						root = (LNGScenarioModel) element;
 					}
+					// extract the relevant data from the root object
+					final ScheduleSequenceData data = new ScheduleSequenceData(root);
+					setData(data);
+					// setup table columns and rows
+					setCols(data);
+					setRows(data);
 				}
-
-				// extract the relevant data from the root object
-				final ScheduleSequenceData data = new ScheduleSequenceData(root);
-				setData(data);
-				// setup table columns and rows
-				setCols(data);
-				setRows(data);
 			}
 
 			protected void setCols(final ScheduleSequenceData data) {
@@ -186,7 +189,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	}
 
 	/**
-	 * Returns a list of all 0h00 GMT Date objects which fall within the specified range
+	 * Returns a list of all 00h00 GMT Date objects which fall within the specified range
 	 * @param start
 	 * @param end
 	 * @return
@@ -578,6 +581,15 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		Map<Date, List<Event>> events = new HashMap<>();
 		final Event [] noEvents = new Event [0];
 
+		public HashMapEventProvider(Date start, Date end, EventProvider wrapped) {
+			this(null);
+			for (Date day: getGMTDaysBetween(start, end)) {
+				for (Event event: wrapped.getEvents(day)) {
+					addEvent(day, event);
+				}
+			}
+		}
+		
 		public HashMapEventProvider(EventFilter filter) {
 			super(filter);
 		}
@@ -642,9 +654,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 	}
 
-	
-
-
 	protected enum PrecedenceType { COLOUR, TEXT }
 
 	/**
@@ -662,75 +671,84 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		final public Sequence[] vessels;
 		final public Sequence fobSales;
 		final public Sequence desPurchases;
+		final public LoadSlot [] longLoads;
+		final public DischargeSlot [] shortDischarges;
 		final public Date start;
 		final public Date end;
 
 		/** Extracts the relevant information from the model */
 		public ScheduleSequenceData(final LNGScenarioModel model) {
-			if (model == null) {
+			final ScheduleModel scheduleModel = (model == null ? null : model.getPortfolioModel().getScheduleModel());
+			final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
+			
+			if (schedule == null) {
 				vessels = null;
 				fobSales = desPurchases = null;
 				start = end = null;
-				return;
+				longLoads = null;
+				shortDischarges = null;
+				return;				
 			}
-
-			final ScheduleModel scheduleModel = model.getPortfolioModel().getScheduleModel();
-
+			
 			Date startDate = null;
 			Date endDate = null;
 
 			// find start and end dates of entire calendar
-			if (scheduleModel != null) {
-				final Schedule schedule = scheduleModel.getSchedule();
-				if (schedule != null) {
-					for (final Sequence seq : schedule.getSequences()) {
-						for (final Event event : seq.getEvents()) {
-							final Date sDate = event.getStart();
-							final Date eDate = event.getEnd();
-							if (startDate == null || startDate.after(sDate)) {
-								startDate = sDate;
-							}
-							if (endDate == null || endDate.before(eDate)) {
-								endDate = eDate;
-							}
-						}
+			for (final Sequence seq : schedule.getSequences()) {
+				for (final Event event : seq.getEvents()) {
+					final Date sDate = event.getStart();
+					final Date eDate = event.getEnd();
+					if (startDate == null || startDate.after(sDate)) {
+						startDate = sDate;
+					}
+					if (endDate == null || endDate.before(eDate)) {
+						endDate = eDate;
 					}
 				}
 			}
-
 			// set the final record fields
 			start = startDate;
 			end = endDate;
-
-			// find the des, fob and other sequences in the schedule
-			Sequence desSequence = null;
-			Sequence fobSequence = null;
+			
+			
+			// find the sequences per vessel, and the FOB & DES sequences
+			Sequence tempDes = null;
+			Sequence tempFob = null;
 
 			final ArrayList<Sequence> vesselList = new ArrayList<Sequence>();
 
-			if (scheduleModel != null) {
-				final Schedule schedule = scheduleModel.getSchedule();
+			for (final Sequence seq : schedule.getSequences()) {
+				if (seq.getSequenceType() == SequenceType.DES_PURCHASE) {
+					tempDes = seq;
+				} else if (seq.getSequenceType() == SequenceType.FOB_SALE) {
+					tempFob = seq;
+				} else {
+					vesselList.add(seq);
+				}
+			}			
+			// set the final record fields
+			desPurchases = tempDes;
+			fobSales = tempFob;			
+			vessels = vesselList.toArray(new Sequence[0]);
+			
+			// find the open slots in the schedule
+			final List<LoadSlot> longLoadList = new ArrayList<>();
+			final List<DischargeSlot> shortDischargeList = new ArrayList<>();
 
-				if (schedule != null) {
-					for (final Sequence seq : schedule.getSequences()) {
-						if (seq.getSequenceType() == SequenceType.DES_PURCHASE) {
-							desSequence = seq;
-						} else if (seq.getSequenceType() == SequenceType.FOB_SALE) {
-							fobSequence = seq;
-						} else {
-							vesselList.add(seq);
-						}
-					}
+			for (OpenSlotAllocation allocation: schedule.getOpenSlotAllocations()) {
+				Slot slot = allocation.getSlot();
+				if (slot instanceof LoadSlot) {
+					longLoadList.add((LoadSlot) slot);
+				}
+				else if (slot instanceof DischargeSlot) {
+					shortDischargeList.add((DischargeSlot) slot);
 				}
 			}
-
-			// set the final record fields
-			fobSales = fobSequence;
-			desPurchases = desSequence;
-
-			vessels = vesselList.toArray(new Sequence[0]);
-
+			
+			this.longLoads = longLoadList.toArray(new LoadSlot [] {});
+			this.shortDischarges = longLoadList.toArray(new DischargeSlot [] {});
 		}
+
 	}
 
 	/**
@@ -934,6 +952,28 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 */
 	public String getShortPortName(Port port) {
 		return port.getName();		
+	}
+
+	public class HashLabelProvider<T> extends ColumnLabelProvider {
+		
+	}
+	
+	
+	/**
+	 * Virtual "Event" class for additional data which isn't organised in a Sequence. 
+	 *
+	 */
+	public class VirtualEvent<T> extends EventImpl {
+		T data = null;
+		
+		public VirtualEvent() {
+			super();
+		}
+		
+		public VirtualEvent(T obj) {
+			this();
+			data = obj;
+		}
 	}
 
 }
