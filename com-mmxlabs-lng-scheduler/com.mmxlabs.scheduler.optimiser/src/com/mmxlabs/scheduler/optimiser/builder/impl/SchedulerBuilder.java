@@ -337,7 +337,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			public int calculateCooldownUnitPrice(final int time) {
 				return 0;
 			}
-		});
+		}, ""/* no timezone */);
 
 		// setup fake vessels for virtual elements.
 		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
@@ -555,10 +555,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator) {
+	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId) {
 
 		final Port port = new Port(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator);
+		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
 		return port;
 	}
 
@@ -610,10 +610,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId) {
 
 		final XYPort port = new XYPort(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator);
+		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
 		port.setX(x);
 		port.setY(y);
 
@@ -627,12 +627,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param name
 	 * @param arriveCold
 	 * @param cooldownPriceCalculator
+	 * @param timezoneId 
 	 */
-	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator) {
+	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, String timezoneId) {
 
 		port.setName(name);
 		port.setShouldVesselsArriveCold(arriveCold);
 		port.setCooldownPriceCalculator(cooldownPriceCalculator);
+		port.setTimeZoneId(timezoneId);
 		ports.add(port);
 
 		// Pin variable for null analysis...

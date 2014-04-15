@@ -23,6 +23,13 @@ public interface IPort extends IIndexedObject {
 	String getName();
 
 	/**
+	 * The time zone id of the port
+	 * 
+	 * @return the port's time zone id
+	 */
+	String getTimeZoneId();
+	
+	/**
 	 * Some ports do not typically provide cooldown facilities to inbound vessels. These ports will return true here, indicating that vessels should arrive cold. If a vessel <em>cannot</em> arrive
 	 * cold, because its earlier journey does not allow any LNG to load, cooldown may still be performed.
 	 * 

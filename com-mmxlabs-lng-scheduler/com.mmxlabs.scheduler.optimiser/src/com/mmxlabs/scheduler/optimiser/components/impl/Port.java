@@ -21,6 +21,12 @@ public class Port extends IndexedObject implements IPort {
 	 * The name of the port
 	 */
 	private String name;
+
+	/**
+	 * The time zone id of the port
+	 */
+	private String timeZoneId = "";
+	
 	/**
 	 * True if no cooldown is provided
 	 */
@@ -46,6 +52,15 @@ public class Port extends IndexedObject implements IPort {
 
 	public void setName(final String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public String getTimeZoneId() {
+		return timeZoneId;		
+	}
+	
+	public void setTimeZoneId(String id) {
+		this.timeZoneId = id;
 	}
 
 	@Override

@@ -89,6 +89,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
@@ -121,6 +122,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.LazyDateKeyProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCostEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
@@ -321,6 +323,9 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(ICancellationFeeProvider.class).toInstance(cancellationFeeProviderEditor);
 		bind(ICancellationFeeProviderEditor.class).toInstance(cancellationFeeProviderEditor);
 
+//		final TimeZoneToUtcOffsetProvider timezoneToUtcOffsetProvider = new TimeZoneToUtcOffsetProvider();
+//		bind(ITimeZoneToUtcOffsetProvider.class).toInstance(timezoneToUtcOffsetProvider);
+		
 	}
 
 	/**
