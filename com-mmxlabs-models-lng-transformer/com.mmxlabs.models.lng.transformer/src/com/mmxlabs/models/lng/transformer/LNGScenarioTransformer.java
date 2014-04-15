@@ -432,10 +432,11 @@ public class LNGScenarioTransformer {
 			final IPort port;
 			if (ePort.getLocation() != null) {
 				final Location loc = ePort.getLocation();
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon());
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone());
 			} else {
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort));
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone());
 			}
+			
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
