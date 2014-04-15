@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class AllocationRecord {
 
 	public enum AllocationMode {
-		Shipped, Transfer
+		Actuals, Shipped, Transfer
 	}
 
 	/** The LNG volume which the vessel starts with (the start heel) */
@@ -58,8 +58,13 @@ public final class AllocationRecord {
 
 	public int vesselStartTime;
 
-	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3, final long requiredFuelVolumeInM3, final long minEndVolumeInM3,
-			final List<IPortSlot> slots, final List<Integer> times, List<Long> minVolumes, List<Long> maxVolumes) {
+	/**
+	 * The {@link IPortSlot} the vessel "returns" to after the loads and discharges.
+	 */
+	public IPortSlot returnSlot;
+
+	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3, final long requiredFuelVolumeInM3,
+			final long minEndVolumeInM3, final List<IPortSlot> slots, final List<Integer> times, IPortSlot returnSlot, List<Long> minVolumes, List<Long> maxVolumes) {
 		this.resourceVessel = resourceVessel;
 		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.vesselStartTime = vesselStartTime;
@@ -68,6 +73,7 @@ public final class AllocationRecord {
 		this.minEndVolumeInM3 = minEndVolumeInM3;
 		this.slotTimes = times;
 		this.slots = slots;
+		this.returnSlot = returnSlot;
 		this.minVolumes = minVolumes;
 		this.maxVolumes = maxVolumes;
 		this.allocationMode = (resourceVessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || resourceVessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) ? AllocationMode.Transfer

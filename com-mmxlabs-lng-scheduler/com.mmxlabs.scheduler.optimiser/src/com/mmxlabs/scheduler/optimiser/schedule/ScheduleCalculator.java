@@ -130,9 +130,9 @@ public class ScheduleCalculator {
 			return desOrFobSchedule(resource, sequence);
 		}
 
-		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
-		// TODO: document this code path
+		// If this is the cargo shorts sequence, but we have no data (i.e. there are no short cargoes), return the basic data structure to avoid any exceptions
+		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 		if (isShortsSequence && arrivalTimes.length == 0) {
 			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
 		}
@@ -140,6 +140,7 @@ public class ScheduleCalculator {
 		// Get start time
 		final int startTime = arrivalTimes[0];
 
+		// Generate all the voyageplans and extra annotations for this sequence
 		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = voyagePlanner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		if (voyagePlans == null) {
 			return null;
@@ -156,6 +157,7 @@ public class ScheduleCalculator {
 			allocationsMap.put(t.getFirst(), t.getThird());
 		}
 
+		// Put it all together and return
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, voyagePlansList, arrivalTimes);
 		scheduledSequence.getAllocations().putAll(allocationsMap);
 		scheduledSequence.getHeelLevels().putAll(heelLevelsMap);

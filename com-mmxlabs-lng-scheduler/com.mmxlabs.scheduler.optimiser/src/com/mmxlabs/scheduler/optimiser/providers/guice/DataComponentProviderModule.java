@@ -40,6 +40,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
@@ -97,6 +99,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
@@ -323,8 +326,13 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(ICancellationFeeProvider.class).toInstance(cancellationFeeProviderEditor);
 		bind(ICancellationFeeProviderEditor.class).toInstance(cancellationFeeProviderEditor);
 
+		bind(HashMapActualsDataProviderEditor.class).in(Singleton.class);
+		bind(IActualsDataProvider.class).to(HashMapActualsDataProviderEditor.class);
+		bind(IActualsDataProviderEditor.class).to(HashMapActualsDataProviderEditor.class);
+		
 //		final TimeZoneToUtcOffsetProvider timezoneToUtcOffsetProvider = new TimeZoneToUtcOffsetProvider();
 //		bind(ITimeZoneToUtcOffsetProvider.class).toInstance(timezoneToUtcOffsetProvider);
+				
 		
 	}
 

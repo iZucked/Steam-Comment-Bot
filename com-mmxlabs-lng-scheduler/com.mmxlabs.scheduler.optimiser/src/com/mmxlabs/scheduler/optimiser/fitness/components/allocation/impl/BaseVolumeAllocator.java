@@ -147,7 +147,11 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		}
 
 
-		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes,
+		
+		// how to get this port slot?
+		IPortSlot returnSlot = null;
+		
+		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes, returnSlot,
 				minVolumes, maxVolumes);
 
 		allocationRecord.nominatedVessel = nominatedVessel;
