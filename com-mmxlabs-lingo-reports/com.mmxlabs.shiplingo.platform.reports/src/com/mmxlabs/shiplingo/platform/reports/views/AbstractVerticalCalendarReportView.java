@@ -42,13 +42,15 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.impl.EventImpl;
+import com.mmxlabs.models.lng.schedule.impl.SequenceImpl;
+import com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -75,7 +77,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected static RGB Orange = new RGB(255, 168, 64);
 	protected static RGB Light_Orange = new RGB(255, 197, 168);
 	protected static RGB Grey = new RGB(168, 168, 168);
-	protected static RGB Light_Grey = new RGB(200, 200, 200);
+	protected static RGB Light_Grey = new RGB(240, 240, 240);
+	protected static RGB Header_Grey = new RGB(228, 228, 228);
+	protected static RGB Black = new RGB(0, 0, 0);
 	protected GridTableViewer gridViewer;
 	private ScenarioViewerSynchronizer jobManagerListener;
 	protected SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yy");
@@ -94,9 +98,36 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		gridViewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		gridViewer.setContentProvider(createContentProvider());
 
-//		gridViewer.getGrid().getDataVisualizer().setRowSpan(3, 3, 1);
 		gridViewer.getGrid().setHeaderVisible(true);
 		gridViewer.getGrid().setLinesVisible(true);
+		
+		// following unfinished code allows the date to display as a row header
+		/*
+		gridViewer.getGrid().setRowHeaderVisible(true);
+		gridViewer.getGrid().setRowHeaderRenderer(new AbstractRenderer() {
+
+			@Override
+			public Point computeSize(GC arg0, int arg1, int arg2, Object arg3) {
+				return new Point(50, 10);
+			}
+
+			@Override
+			public void paint(GC arg0, Object arg1) {
+				Rectangle bounds = getBounds();
+				arg0.setBackground(getColour(Light_Grey));
+				arg0.fillRectangle(bounds);
+				arg0.setForeground(getColour(Black));
+				if (arg1 instanceof GridItem) {
+					GridItem item = (GridItem) arg1;
+					Date date = (Date) item.getData();
+					if (date != null) {
+						arg0.drawString(sdf.format(date),  bounds.x,  bounds.y);
+					}
+				}
+			}
+			
+		});
+		*/
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(gridViewer, createElementCollector());
 
@@ -671,8 +702,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		final public Sequence[] vessels;
 		final public Sequence fobSales;
 		final public Sequence desPurchases;
-		final public LoadSlot [] longLoads;
-		final public DischargeSlot [] shortDischarges;
+		final public VirtualSequence longLoads;
+		final public VirtualSequence shortDischarges;
 		final public Date start;
 		final public Date end;
 
@@ -732,21 +763,21 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			vessels = vesselList.toArray(new Sequence[0]);
 			
 			// find the open slots in the schedule
-			final List<LoadSlot> longLoadList = new ArrayList<>();
-			final List<DischargeSlot> shortDischargeList = new ArrayList<>();
+			final List<VirtualSlotVisit> longLoadList = new ArrayList<>();
+			final List<VirtualSlotVisit> shortDischargeList = new ArrayList<>();
 
 			for (OpenSlotAllocation allocation: schedule.getOpenSlotAllocations()) {
 				Slot slot = allocation.getSlot();
 				if (slot instanceof LoadSlot) {
-					longLoadList.add((LoadSlot) slot);
+					longLoadList.add(new VirtualSlotVisit(slot));
 				}
 				else if (slot instanceof DischargeSlot) {
-					shortDischargeList.add((DischargeSlot) slot);
+					shortDischargeList.add(new VirtualSlotVisit(slot));
 				}
 			}
 			
-			this.longLoads = longLoadList.toArray(new LoadSlot [] {});
-			this.shortDischarges = longLoadList.toArray(new DischargeSlot [] {});
+			this.longLoads = new VirtualSequence(longLoadList);
+			this.shortDischarges = new VirtualSequence(shortDischargeList);
 		}
 
 	}
@@ -765,38 +796,31 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	}
 
 	protected GridViewerColumn createEventColumn(EventProvider eventProvider, String title) {
-		final GridViewerColumn result = new GridViewerColumn(gridViewer, SWT.NONE);
-		result.setLabelProvider(new EventColumnLabelProvider(eventProvider));
-		result.getColumn().setText(title);
-		result.getColumn().pack();				
-		return result;		
+		return createColumn(new EventColumnLabelProvider(eventProvider), title);
+	}
+
+	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String title) {
+		return createColumn(labeller, title, (GridColumn) null);
 	}
 
 	protected GridViewerColumn createEventColumn(EventProvider eventProvider, String name, GridColumnGroup columnGroup) {
-		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
-		final GridViewerColumn result = new GridViewerColumn(gridViewer, column);
-		result.setLabelProvider(new EventColumnLabelProvider(eventProvider));
-		// result.getColumn().getCellRenderer().setWordWrap(true);
-		result.getColumn().setText(name);
-		result.getColumn().pack();
-
-		return result;
-		
+		return createColumn(new EventColumnLabelProvider(eventProvider), name, columnGroup);
 	}
 
 	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String name, GridColumnGroup columnGroup) {
 		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
-		final GridViewerColumn result = new GridViewerColumn(gridViewer, column);
-		result.setLabelProvider(labeller);
-		result.getColumn().setText(name);
-		result.getColumn().pack();
-
-		return result;
+		return createColumn(labeller, name, column);
 		
 	}
 
-	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String name) {
-		final GridViewerColumn result = new GridViewerColumn(gridViewer, SWT.NONE);
+	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String name, GridColumn column) {
+		final GridViewerColumn result;
+		if (column == null) {
+			result = new GridViewerColumn(gridViewer, SWT.NONE); 
+		}
+		else {
+			result = new GridViewerColumn(gridViewer, column);
+		}
 		result.setLabelProvider(labeller);
 		result.getColumn().setText(name);
 		result.getColumn().pack();
@@ -963,16 +987,23 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * Virtual "Event" class for additional data which isn't organised in a Sequence. 
 	 *
 	 */
-	public class VirtualEvent<T> extends EventImpl {
-		T data = null;
-		
-		public VirtualEvent() {
+	public static class VirtualSlotVisit extends SlotVisitImpl {
+		public VirtualSlotVisit(Slot slot) {
 			super();
+			this.setStart(slot.getWindowStartWithSlotOrPortTime());
+			this.setEnd(slot.getWindowEndWithSlotOrPortTime());
+			this.setPort(slot.getPort());
+			SlotAllocation sa = ScheduleFactory.eINSTANCE.createSlotAllocation();
+			sa.setSlot(slot);
+			sa.setSlotVisit(this);						
+			this.setSlotAllocation(sa);
 		}
-		
-		public VirtualEvent(T obj) {
-			this();
-			data = obj;
+	}
+	
+	public static class VirtualSequence extends SequenceImpl {
+		public VirtualSequence(List<? extends Event> events) {
+			super();
+			this.getEvents().addAll(events);
 		}
 	}
 
