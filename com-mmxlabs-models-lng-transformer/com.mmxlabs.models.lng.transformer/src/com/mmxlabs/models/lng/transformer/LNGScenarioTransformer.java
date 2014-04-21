@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
@@ -133,6 +134,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 
 /**
@@ -177,6 +179,12 @@ public class LNGScenarioTransformer {
 	@Inject
 	private IShipToShipBindingProviderEditor shipToShipBindingProvider;
 
+	@Inject
+	private Injector injector;
+	
+	@Inject
+	private TimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+	
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
@@ -303,6 +311,8 @@ public class LNGScenarioTransformer {
 		modelEntityMap.setEarliestDate(earliestTime);
 		modelEntityMap.setLatestDate(latestTime);
 
+		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(earliestTime.getTime());
+		
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -422,6 +432,7 @@ public class LNGScenarioTransformer {
 		final Map<Port, ICooldownPriceCalculator> cooldownCalculators = new HashMap<Port, ICooldownPriceCalculator>();
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
 			final ICooldownPriceCalculator cooldownCalculator = new PriceExpressionContract(commodityIndexAssociation.lookup(price.getIndex()));
+			injector.injectMembers(cooldownCalculator);
 
 			for (final Port port : SetUtils.getObjects(price.getPorts())) {
 				cooldownCalculators.put(port, cooldownCalculator);
@@ -1065,6 +1076,7 @@ public class LNGScenarioTransformer {
 					}
 				}
 				dischargePriceCalculator = new PriceExpressionContract(curve);
+				injector.injectMembers(dischargePriceCalculator);
 			}
 		} else if (dischargeSlot instanceof SpotSlot) {
 			final SpotSlot spotSlot = (SpotSlot) dischargeSlot;
@@ -1218,6 +1230,8 @@ public class LNGScenarioTransformer {
 					}
 				}
 				loadPriceCalculator = new PriceExpressionContract(curve);
+				injector.injectMembers(loadPriceCalculator);
+
 			}
 
 		} else if (loadSlot instanceof SpotSlot) {

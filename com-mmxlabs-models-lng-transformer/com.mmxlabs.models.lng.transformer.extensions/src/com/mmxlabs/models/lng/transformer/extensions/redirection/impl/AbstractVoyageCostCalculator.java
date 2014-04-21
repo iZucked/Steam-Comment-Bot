@@ -27,17 +27,17 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	@Override
 	public @Nullable
-	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, final int dischargeDuration,
-			@NonNull final IVessel vessel, final int vesselCharterInRatePerDay, long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue, @NonNull final String route,
-			final int basePricePerMT, final int salesPricePerMMBTu) {
+	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
+			final int dischargeDuration, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int notionalBallastSpeed, final int cargoCVValue,
+			@NonNull final String route, final int basePricePerMT, final int salesPricePerMMBTu) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, vessel, vesselCharterInRatePerDay, startHeelInM3, notionalBallastSpeed,
 				cargoCVValue, route, basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
 	}
 
 	public @Nullable
-	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, final int dischargeDuration,
-			final int returnTime, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, long startHeelInM3, final int cargoCVValue, @NonNull final String route,
-			final int basePricePerMT, final int salesPricePerMMBTu) {
+	VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
+			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
+			@NonNull final String route, final int basePricePerMT, final int salesPricePerMMBTu) {
 		return calculateShippingCosts(loadPort, dischargePort, loadTime, loadDuration, dischargeTime, dischargeDuration, returnTime, vessel, vesselCharterInRatePerDay, startHeelInM3, cargoCVValue,
 				route, basePricePerMT, createSalesPriceCalculator(salesPricePerMMBTu));
 	}
@@ -89,7 +89,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		return new SimpleContract() {
 
 			@Override
-			protected int calculateSimpleUnitPrice(final int loadTime) {
+			protected int calculateSimpleUnitPrice(final int loadTime, final IPort port) {
 				return salesPricePerMMBTu;
 			}
 		};

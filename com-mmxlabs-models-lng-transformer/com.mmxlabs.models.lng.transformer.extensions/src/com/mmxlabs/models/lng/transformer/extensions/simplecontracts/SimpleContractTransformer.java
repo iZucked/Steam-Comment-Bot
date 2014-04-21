@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
@@ -50,6 +51,9 @@ public class SimpleContractTransformer implements IContractTransformer {
 			CommercialPackage.eINSTANCE.getPurchaseContract());
 
 	@Inject
+	private Injector injector;
+
+	@Inject
 	@Named(LNGTransformerModule.Parser_Commodity)
 	private SeriesParser indices;
 
@@ -77,7 +81,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
+	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable final SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return instantiate(priceParameters);
 	}
 
@@ -85,7 +89,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 * @since 3.0
 	 */
 	@Override
-	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable final PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
 		return instantiate(priceParameters);
 	}
 
@@ -111,7 +115,9 @@ public class SimpleContractTransformer implements IContractTransformer {
 	 */
 	private PriceExpressionContract createPriceExpressionContract(final String priceExpression) {
 		final ICurve curve = generateExpressionCurve(priceExpression);
-		return new PriceExpressionContract(curve);
+		final PriceExpressionContract contract = new PriceExpressionContract(curve);
+		injector.injectMembers(contract);
+		return contract;
 	}
 
 	private StepwiseIntegerCurve generateExpressionCurve(final String priceExpression) {
