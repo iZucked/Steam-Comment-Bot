@@ -103,6 +103,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	@Override
 	protected long endSequenceAndGetCost() {
 
+		// TODO: UTC!
 		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime,
 				Calculator.quantityFromRateTime(charterPrice.getValueAtPoint(firstLoadTime), lastTime - firstLoadTime))
 				/ 24l / Calculator.ScaleFactor;

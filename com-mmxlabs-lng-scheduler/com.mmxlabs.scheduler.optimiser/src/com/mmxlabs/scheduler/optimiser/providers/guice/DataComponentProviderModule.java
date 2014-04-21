@@ -329,11 +329,9 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(HashMapActualsDataProviderEditor.class).in(Singleton.class);
 		bind(IActualsDataProvider.class).to(HashMapActualsDataProviderEditor.class);
 		bind(IActualsDataProviderEditor.class).to(HashMapActualsDataProviderEditor.class);
-		
-//		final TimeZoneToUtcOffsetProvider timezoneToUtcOffsetProvider = new TimeZoneToUtcOffsetProvider();
-//		bind(ITimeZoneToUtcOffsetProvider.class).toInstance(timezoneToUtcOffsetProvider);
-				
-		
+
+		bind(TimeZoneToUtcOffsetProvider.class).in(Singleton.class);
+		bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 	}
 
 	/**

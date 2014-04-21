@@ -334,7 +334,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 
 			@Override
-			public int calculateCooldownUnitPrice(final int time) {
+			public int calculateCooldownUnitPrice(final int time, final IPort port) {
 				return 0;
 			}
 		}, ""/* no timezone */);

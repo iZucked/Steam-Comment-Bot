@@ -466,7 +466,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						cooldownCV = ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue();
 						cooldownM3Price = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, cooldownCV);
 					} else {
-						cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice(cooldownTime);
+						cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice(cooldownTime, port);
 						cooldownCV = portCVProvider.getPortCV(port);
 						cooldownM3Price = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, cooldownCV);
 					}
