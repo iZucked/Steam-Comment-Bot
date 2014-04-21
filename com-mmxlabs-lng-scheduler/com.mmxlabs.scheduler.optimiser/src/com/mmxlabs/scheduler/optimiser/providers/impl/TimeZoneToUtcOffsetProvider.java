@@ -84,7 +84,9 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 			// check for illegal/wrong timezoneId
 			if (tz != null) {
 				final long localTimeInMillis = convertInternalToMillis(localTime);
-				final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
+				//final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
+				final long utcInMillis = localTimeInMillis + tz.getOffsetFromLocal(localTimeInMillis);
+
 				return convertMillisToInternal(utcInMillis);
 			} else {
 				// TODO-3: Warn about the wrong timezoneId; currently returning localTime to keep things going
