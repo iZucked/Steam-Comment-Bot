@@ -61,7 +61,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	public int calculateSalesUnitPrice(ILoadOption loadOption, final IDischargeOption option, final int loadTime, final int dischargeTime, final long discahrgeVolumeInMMBTu, IDetailTree annotations) {
 		final int dischargePricingDate = option == null ? IPortSlot.NO_PRICING_DATE : option.getPricingDate();
 		final int pricingDate = (dischargePricingDate == IPortSlot.NO_PRICING_DATE ? dischargeTime : dischargePricingDate);
-		final IPort port = loadOption == null ? null : loadOption.getPort();
+		final IPort port = option == null ? null : option.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
