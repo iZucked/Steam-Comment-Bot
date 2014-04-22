@@ -43,24 +43,26 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
 			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
-		final int loadPricingDate = loadSlot.getPricingDate();
+		final int loadPricingDate = loadSlot == null ? IPortSlot.NO_PRICING_DATE : loadSlot.getPricingDate();
 		final int pricingDate = (loadPricingDate == IPortSlot.NO_PRICING_DATE ? loadTime : loadPricingDate);
-		return calculateSimpleUnitPrice(pricingDate, loadSlot.getPort());
+		final IPort port = loadSlot == null ? null : loadSlot.getPort();
+		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(final IDischargeOption option, final int time, final IDetailTree annotations) {
-		final int dischargePricingDate = option.getPricingDate();
+	public int estimateSalesUnitPrice(final IDischargeOption option, final int time, IDetailTree annotations) {
+		final int dischargePricingDate = option == null ? IPortSlot.NO_PRICING_DATE : option.getPricingDate();
 		final int pricingDate = (dischargePricingDate == IPortSlot.NO_PRICING_DATE ? time : dischargePricingDate);
-		return calculateSimpleUnitPrice(pricingDate, option.getPort());
+		final IPort port = option == null ? null : option.getPort();
+		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(final ILoadOption loadOption, final IDischargeOption option, final int loadTime, final int dischargeTime, final long discahrgeVolumeInMMBTu,
-			final IDetailTree annotations) {
-		final int dischargePricingDate = option.getPricingDate();
+	public int calculateSalesUnitPrice(ILoadOption loadOption, final IDischargeOption option, final int loadTime, final int dischargeTime, final long discahrgeVolumeInMMBTu, IDetailTree annotations) {
+		final int dischargePricingDate = option == null ? IPortSlot.NO_PRICING_DATE : option.getPricingDate();
 		final int pricingDate = (dischargePricingDate == IPortSlot.NO_PRICING_DATE ? dischargeTime : dischargePricingDate);
-		return calculateSimpleUnitPrice(pricingDate, loadOption.getPort());
+		final IPort port = loadOption == null ? null : loadOption.getPort();
+		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
 	@Override
