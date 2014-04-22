@@ -12,13 +12,19 @@ import static org.mockito.Mockito.when;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -39,7 +45,7 @@ public class TestPriceExpressionContract {
 	public void testCalculateSimpleUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
 		final ICurve curve = mock(ICurve.class);
-		PriceExpressionContract contract = new PriceExpressionContract(curve);
+		PriceExpressionContract contract = createPriceExpressionContract(curve);
 
 		// create named test constants
 		final int p1 = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
@@ -47,13 +53,16 @@ public class TestPriceExpressionContract {
 		final int t1 = 35;
 		final int t2 = 55;
 
+		IPort port = mock(IPort.class);
+		when(port.getTimeZoneId()).thenReturn("UTC");
+		
 		// tell the ICurve mock to return specified values at given points
 		when(curve.getValueAtPoint(t1)).thenReturn(p1);
 		when(curve.getValueAtPoint(t2)).thenReturn(p2);
 
 		// calculate the unit price at times t1 and t2
-		final int price1 = contract.calculateSimpleUnitPrice(t1);
-		final int price2 = contract.calculateSimpleUnitPrice(t2);
+		final int price1 = contract.calculateSimpleUnitPrice(t1, port);
+		final int price2 = contract.calculateSimpleUnitPrice(t2, port);
 
 		// make sure the mock was evaluated at the right points and nowhere else
 		verify(curve).getValueAtPoint(t1);
@@ -69,7 +78,7 @@ public class TestPriceExpressionContract {
 	public void testCalculateLoadUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
 		final ICurve curve = mock(ICurve.class);
-		PriceExpressionContract contract = new PriceExpressionContract(curve);
+		PriceExpressionContract contract = createPriceExpressionContract(curve);
 
 		// create named test constants
 		final int priceAtLoadTime = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
@@ -108,8 +117,10 @@ public class TestPriceExpressionContract {
 		verifyNoMoreInteractions(curve);
 
 		verify(loadSlotWithPricingDate).getPricingDate();
+		verify(loadSlotWithPricingDate).getPort();
 		verifyNoMoreInteractions(loadSlotWithPricingDate);
 
+		verify(loadSlotNoPricingDate).getPort();
 		verify(loadSlotNoPricingDate).getPricingDate();
 		verifyNoMoreInteractions(loadSlotNoPricingDate);
 
@@ -123,7 +134,7 @@ public class TestPriceExpressionContract {
 	public void testCalculateDischargeUnitPrice() {
 		// create a PriceExpressionContract with a mocked ICurve object
 		final ICurve curve = mock(ICurve.class);
-		PriceExpressionContract contract = new PriceExpressionContract(curve);
+		PriceExpressionContract contract = createPriceExpressionContract(curve);
 
 		// create named test constants
 		final int priceAtDischargeTime = (int) OptimiserUnitConvertor.convertToInternalDailyCost(40);
@@ -135,7 +146,9 @@ public class TestPriceExpressionContract {
 		when(curve.getValueAtPoint(dischargeTime)).thenReturn(priceAtDischargeTime);
 		when(curve.getValueAtPoint(pricingDate)).thenReturn(priceAtPricingDate);
 
+		final IPort port = mock(IPort.class);
 		final IDischargeSlot dischargeSlotWithPricingDate = mock(IDischargeSlot.class);
+		when(dischargeSlotWithPricingDate.getPort()).thenReturn(port);
 		when(dischargeSlotWithPricingDate.getPricingDate()).thenReturn(pricingDate);
 
 		final IDischargeSlot dischargeSlotNoPricingDate = mock(IDischargeSlot.class);
@@ -153,5 +166,21 @@ public class TestPriceExpressionContract {
 		Assert.assertEquals(priceAtDischargeTime, salesPriceNoPricingDate);
 		Assert.assertEquals(priceAtPricingDate, salesPriceWithPricingDate);
 
+	}
+
+	private PriceExpressionContract createPriceExpressionContract(final ICurve curve) {
+		PriceExpressionContract contract = new PriceExpressionContract(curve);
+		
+		Injector injector = Guice.createInjector(new AbstractModule() {
+			
+			@Override
+			protected void configure() {
+				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
+			}
+		});
+		
+		
+		injector.injectMembers(contract);
+		return contract;
 	}
 }

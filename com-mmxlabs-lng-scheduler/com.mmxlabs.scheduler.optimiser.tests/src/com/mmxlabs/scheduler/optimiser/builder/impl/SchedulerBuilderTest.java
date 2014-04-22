@@ -58,7 +58,7 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = createScheduleBuilder();
 
-		final IPort port = builder.createPort("port", false, null);
+		final IPort port = builder.createPort("port", false, null, "UTC");
 		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
 
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
@@ -90,7 +90,7 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = createScheduleBuilder();
 
-		final IPort port = builder.createPort("port", false, null);
+		final IPort port = builder.createPort("port", false, null, "UTC");
 		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
 
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
