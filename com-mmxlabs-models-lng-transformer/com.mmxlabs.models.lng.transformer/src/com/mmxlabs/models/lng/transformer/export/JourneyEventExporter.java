@@ -34,7 +34,7 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 		if (event == null)
 			return null;
 
-		if (event.getDuration() == 0)
+		if (event.getDuration() == 0 && event.getDistance() == 0)
 			return null; // filter out zero-length journeys
 
 		final Port eFromPort = modelEntityMap.getModelObject(event.getFromPort(), Port.class);
