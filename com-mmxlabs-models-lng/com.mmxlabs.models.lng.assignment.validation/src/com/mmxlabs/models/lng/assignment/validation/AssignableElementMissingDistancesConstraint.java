@@ -110,7 +110,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 						final Cargo cargo = (Cargo) assignment;
 						for (final Slot slot : cargo.getSortedSlots()) {
 							final Port currentPort = slot.getPort();
-							if (prevPort != null) {
+							if (prevPort != null && currentPort != null) {
 								if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
 									reportError(ctx, prevObject, prevFeature, prevPort, slot, CargoPackage.Literals.SLOT__PORT, currentPort, statuses);
 								}
@@ -125,7 +125,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 						final CharterOutEvent charterOutEvent = (CharterOutEvent) assignment;
 
 						final Port currentPort = charterOutEvent.getPort();
-						if (prevPort != null) {
+						if (prevPort != null && currentPort != null) {
 							if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
 								reportError(ctx, prevObject, prevFeature, prevPort, charterOutEvent, CargoPackage.Literals.VESSEL_EVENT__PORT, currentPort, statuses);
 							}
@@ -143,7 +143,7 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 						final VesselEvent vesselEvent = (VesselEvent) assignment;
 						// single port
 						final Port currentPort = vesselEvent.getPort();
-						if (prevPort != null) {
+						if (prevPort != null && currentPort != null) {
 							if (!hasDistance(hasDistanceMap, prevPort, currentPort)) {
 								reportError(ctx, prevObject, prevFeature, prevPort, vesselEvent, CargoPackage.Literals.VESSEL_EVENT__PORT, currentPort, statuses);
 							}
@@ -165,12 +165,19 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 	private void reportError(final IValidationContext ctx, final EObject fromObject, final EStructuralFeature fromFeature, final Port fromPort, final EObject toObject,
 			final EStructuralFeature toFeature, final Port toPort, final List<IStatus> statuses) {
 
-		final String msg = String.format("Missing distance: %s to %s (%s to %s).", fromPort.getName(),toPort.getName(), getID(fromObject, fromFeature), getID(toObject, toFeature));
+		final String msg = String.format("Missing distance: %s to %s (%s to %s).", getPortName(fromPort), getPortName(toPort), getID(fromObject, fromFeature), getID(toObject, toFeature));
 		final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 		failure.addEObjectAndFeature(fromObject, fromFeature);
 		failure.addEObjectAndFeature(toObject, toFeature);
 
 		statuses.add(failure);
+	}
+
+	private String getPortName(final Port port) {
+		if (port == null) {
+			return "<Unspecified port>";
+		}
+		return port.getName();
 	}
 
 	private String getID(final EObject target, final EStructuralFeature feature) {
@@ -185,9 +192,9 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 			final Vessel vessel = vesselAvailability.getVessel();
 			final String vesselName = vessel == null ? "Vessel <unnamed>" : "\"" + vessel.getName() + "\"";
 			String featureString = "";
-			if(feature == VESSEL_AVAILABILITY__START_AT){ 
+			if (feature == VESSEL_AVAILABILITY__START_AT) {
 				featureString = " start ";
-			} else if(feature == VESSEL_AVAILABILITY__END_AT){ 
+			} else if (feature == VESSEL_AVAILABILITY__END_AT) {
 				featureString = " end ";
 			}
 			return (featureString == "" ? "Vessel " + vesselName : vesselName + featureString);
