@@ -215,7 +215,7 @@ public class LNGVoyageCalculatorTest {
 		int expectedTravelTime = 48;
 		int expectedIdleTime = 72;
 
-		assert expectedTravelTime + expectedTravelTime == options.getAvailableTime();
+		assert expectedTravelTime + expectedIdleTime == options.getAvailableTime();
 		options.setDistance(15 * expectedTravelTime);
 
 		final VoyageDetails details = new VoyageDetails();
