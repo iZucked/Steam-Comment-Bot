@@ -100,7 +100,10 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	@Override
 	public int UTC(final int localTime, final IPort port) {
 		
-		final String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
+		String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
+		if (timeZoneId == null || timeZoneId.isEmpty()) {
+			timeZoneId = "UTC";
+		}
 		return UTC(localTime, timeZoneId);
 	}
 
