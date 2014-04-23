@@ -998,11 +998,11 @@ public class NewLNGVoyageCalculatorTest {
 		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, 1000);
 
 		// Expect the non-load slot branch - time 3 == time of next Port
-		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(2, null)).thenReturn(expectedCooldownPrice);
+		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(2, toPort)).thenReturn(expectedCooldownPrice);
 
 		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), arrivalTimes, fromPortDetails, voyageDetails, toPortDetails);
 
-		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(2, null);
+		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(2, toPort);
 
 		Assert.assertEquals(expectedCooldownPrice, cooldownM3Price);
 		Assert.assertEquals(expectedCooldownPrice, voyageDetails.getFuelUnitPrice(FuelComponent.Cooldown));
