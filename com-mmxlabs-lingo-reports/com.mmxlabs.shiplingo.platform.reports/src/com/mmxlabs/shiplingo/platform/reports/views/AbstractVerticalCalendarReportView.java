@@ -131,6 +131,10 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(gridViewer, createElementCollector());
 
+		makeActions();
+	}
+
+	protected void makeActions() {
 		final PackGridTableColumnsAction packColumnsAction = PackActionFactory.createPackColumnsAction(gridViewer);
 		final CopyGridToClipboardAction copyToClipboardAction = CopyToClipboardActionFactory.createCopyToClipboardAction(gridViewer);
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyToClipboardAction);
