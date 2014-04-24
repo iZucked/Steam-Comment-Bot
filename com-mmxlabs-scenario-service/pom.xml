@@ -27,7 +27,7 @@
 	</ciManagement>
 
 	<modules>
-		<module>target-definition</module>
+		<module>com.mmxlabs.scenario.service.target-definition</module>
 
 		<module>com.mmxlabs.scenario.service.ui</module>
 		<module>com.mmxlabs.scenario.service.util</module>
@@ -68,7 +68,7 @@
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.scenario.service</groupId>
-							<artifactId>target-definition</artifactId>
+							<artifactId>com.mmxlabs.scenario.service.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>

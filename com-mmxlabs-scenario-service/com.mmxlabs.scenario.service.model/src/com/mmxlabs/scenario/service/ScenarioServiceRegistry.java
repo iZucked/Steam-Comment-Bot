@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.mmxlabs.scenario.service.model.ScenarioModel;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 
 /**
@@ -55,8 +56,16 @@ public final class ScenarioServiceRegistry {
 	public void bindScenarioService(final IScenarioService scenarioService) {
 		// Add to local list
 		scenarioServices.add(scenarioService);
-		// Add to EMF model
-		scenarioModel.getScenarioServices().add(scenarioService.getServiceModel());
+		// Add to EMF model -- note, this can be blocking!
+		new Thread() {
+			public void run() {
+				ScenarioService serviceModel = scenarioService.getServiceModel();
+				// Avoid concurrent adds
+				synchronized (scenarioModel) {
+					scenarioModel.getScenarioServices().add(serviceModel);
+				}
+			}
+		}.start();
 	}
 
 	/**
@@ -68,6 +77,8 @@ public final class ScenarioServiceRegistry {
 		// Remove local list
 		scenarioServices.remove(scenarioService);
 		// Update EMF model
-		scenarioModel.getScenarioServices().remove(scenarioService.getServiceModel());
+		synchronized (scenarioModel) {
+			scenarioModel.getScenarioServices().remove(scenarioService.getServiceModel());
+		}
 	}
 }

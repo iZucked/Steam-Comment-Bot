@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Scenario" link_to="../com.mmxlabs.lingo.doc/toc.xml#reports"> 
+	<topic label="Scenario Data Backup">
+    <topic href="html/scenariodatabackup.html" label="General">
+    </topic> 
+	</topic>
+</toc>

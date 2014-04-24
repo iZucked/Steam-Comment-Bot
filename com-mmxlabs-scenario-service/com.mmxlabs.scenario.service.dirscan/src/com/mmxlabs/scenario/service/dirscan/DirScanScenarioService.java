@@ -49,6 +49,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.io.FileDeleter;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
@@ -61,6 +62,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
+import com.mmxlabs.scenario.service.util.ResourceHelper;
 
 public class DirScanScenarioService extends AbstractScenarioService {
 
@@ -93,7 +95,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 * A {@link ReadWriteLock} to co-ordinate access between file system watcher and manipulation code. In this case the "write" lock is the watcher and the read locks belong to the manipulation code.
 	 * Multiple Filesystem change operations are permitted (this may be a flawed assumption) but the filesystem watch code runs exclusively.
 	 */
-	private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+	private final ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
 	private final EContentAdapter serviceModelAdapter = new EContentAdapter() {
 		@Override
@@ -108,7 +110,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
-					final Path newName = path.getParent().resolve(notification.getNewStringValue() + ".lingo");
+					// Append .lingo if it is a scenario
+					final String ext = c instanceof ScenarioInstance ? ".lingo" : "";
+					final Path newName = path.getParent().resolve(notification.getNewStringValue() + ext);
 					lock.readLock().lock();
 					try {
 						// Remove from tree as file system watcher will re-add
@@ -166,7 +170,15 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				delete(sub);
 			}
 		}
-		f.delete();
+		if (f.isFile()) {
+			try {
+				FileDeleter.delete(f);
+			} catch (final Exception e) {
+				log.error("Error deleting: " + f.getName(), e);
+			}
+		} else {
+			f.delete();
+		}
 	}
 
 	@Override
@@ -239,7 +251,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				while (watchThreadRunning) {
 
 					// wait for key to be signalled
-					WatchKey key;
+					final WatchKey key;
 					try {
 						// Yield every 2 seconds to check running state
 						key = watcher.poll(2, TimeUnit.SECONDS);
@@ -252,7 +264,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					if (key == null) {
 						continue;
 					}
-
 					lock.writeLock().lock();
 					try {
 						final Path dir = keys.get(key);
@@ -265,10 +276,11 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 								// all directories are inaccessible
 								if (keys.isEmpty()) {
-									break;
+									watchThreadRunning = false;
+									return;
 								}
 							}
-							continue;
+							return;
 						}
 
 						for (final WatchEvent<?> event : key.pollEvents()) {
@@ -286,6 +298,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 							final Path name = ev.context();
 							final Path child = dir.resolve(name);
 
+							log.debug("Event " + ev.kind().name() + " - " + child);
 							// if directory is created, and watching recursively, then
 							// register it and its sub-directories
 							if (kind == ENTRY_CREATE) {
@@ -319,7 +332,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 							// all directories are inaccessible
 							if (keys.isEmpty()) {
-								break;
+								watchThreadRunning = false;
+								return;
 							}
 						}
 					} finally {
@@ -366,7 +380,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
 			@Override
 			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-
+				log.debug("preVisitDirectory: " + dir.normalize());
 				addFolder(dir);
 
 				return FileVisitResult.CONTINUE;
@@ -374,6 +388,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 			@Override
 			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+				log.debug("visitFile: " + file.normalize());
 
 				addFile(file);
 
@@ -383,6 +398,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void removeFolder(final Path dir) {
+		log.debug("removeFolder: " + dir.normalize());
+
 		final WeakReference<Container> remove = folderMap.remove(dir.normalize().toString());
 		if (remove == null) {
 			return;
@@ -397,6 +414,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		}
 		for (final Map.Entry<WatchKey, Path> e : keys.entrySet()) {
 			if (e.getValue().equals(dir)) {
+				log.debug("Unwatching " + dir.toString());
 				final WatchKey key = e.getKey();
 				key.cancel();
 				keys.remove(key);
@@ -406,6 +424,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void addFolder(final Path dir) throws IOException {
+		log.debug("addFolder: " + dir.normalize());
 
 		final String pathKey = dir.normalize().toString();
 		if (!folderMap.containsKey(pathKey)) {
@@ -452,6 +471,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	protected void addFile(final Path file) {
+		log.debug("addFile: " + file.normalize());
 
 		// Filter based on file extension
 		if (!(file.toString().endsWith(".lingo") || file.toString().endsWith(".scenario"))) {
@@ -494,6 +514,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		if (file == null) {
 			return;
 		}
+		log.debug("removeFile: " + file.normalize());
 		final Path normal = file.normalize();
 		if (normal == null) {
 			return;
@@ -520,6 +541,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 * @param c
 	 */
 	private void detachSubTree(final Container c) {
+		log.debug("detachSubTree: " + c.getName());
 
 		for (final Container cc : c.getElements()) {
 			detachSubTree(cc);
@@ -536,11 +558,16 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				@Override
 				public void run() {
-					final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-					final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
-					// TODO: Prompt to save?
-					activePage.closeEditors(editorReferences, false);
+					lock.readLock().lock();
+					try {
 
+						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+						final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+						// TODO: Prompt to save?
+						activePage.closeEditors(editorReferences, false);
+					} finally {
+						lock.readLock().unlock();
+					}
 				}
 			});
 		}
@@ -578,7 +605,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				final EObject rootObject = EcoreUtil.copy(original.getInstance());
 				final Resource instanceResource = instanceResourceSet.createResource(destURI);
 				instanceResource.getContents().add(rootObject);
-				instanceResource.save(null);
+				ResourceHelper.saveResource(instanceResource);
 			}
 
 			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
@@ -601,6 +628,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void moveInto(final List<Container> elements, final Container destination) {
+		log.debug("moveInto -> " + destination.getName());
 
 		lock.readLock().lock();
 		try {
@@ -616,6 +644,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 			// Loop over targets and move (rename)
 			for (final Container c : elements) {
+
+				if (c.getParent() == destination) {
+					continue;
+				}
 
 				final Path path = modelToFilesystemMap.get(c);
 				if (path != null) {
@@ -643,6 +675,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	}
 
 	private void moveFileTree(final Path source, final Path dest) throws IOException {
+		log.debug("moveFileTree: " + source.normalize() + " -> " + dest.normalize());
 
 		// Maps the old file tree to the new file tree
 		final Map<String, Path> oldToNewMap = new HashMap<>();
@@ -729,6 +762,8 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		if (parent instanceof ScenarioInstance) {
 			return;
 		}
+
+		log.debug("makeFolder: " + parent.getName() + " ::  " + name);
 
 		lock.readLock().lock();
 		try {

@@ -8,29 +8,27 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
+import org.eclipse.jdt.annotation.Nullable;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.io.ByteStreams;
-import com.mmxlabs.models.mmxcore.MMXCoreFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.util.ResourceHelper;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * Utility class for getting a scenario out into a zipfile or vice-versa
@@ -87,8 +85,7 @@ public class ScenarioStorageUtil {
 	}
 
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
 
 		final IScenarioService scenarioService = instance.getScenarioService();
 
@@ -98,9 +95,10 @@ public class ScenarioStorageUtil {
 		// Already loaded?
 		if (model != null) {
 			final EObject rootObject = EcoreUtil.copy(model);
-			final XMIResourceImpl r = new XMIResourceImpl(rootObjectURI);
+
+			final Resource r = ResourceHelper.createResource(resourceSet, rootObjectURI);
 			r.getContents().add(rootObject);
-			r.save(null);
+			ResourceHelper.saveResource(r);
 		} else {
 			// Store data into scenario archive
 			final URIConverter conv = resourceSet.getURIConverter();
@@ -154,8 +152,8 @@ public class ScenarioStorageUtil {
 	 * @param filePath
 	 * @return
 	 */
-	public static ScenarioInstance loadInstanceFromFile(final String filePath) {
-		return loadInstanceFromURI(URI.createFileURI(filePath), false);
+	public static ScenarioInstance loadInstanceFromFile(final String filePath, IScenarioCipherProvider scenarioCipherProvider) {
+		return loadInstanceFromURI(URI.createFileURI(filePath), scenarioCipherProvider);
 	}
 
 	/**
@@ -164,19 +162,13 @@ public class ScenarioStorageUtil {
 	 *            If true, load the resources and hook up submodels. If false, just hook up the URIs. Use false if this will be used in the {@link IScenarioService} / ModelService context
 	 * @return
 	 */
-	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI, final boolean preLoad) {
+	public static ScenarioInstance loadInstanceFromURI(final URI scenarioURI, IScenarioCipherProvider scenarioCipherProvider) {
 		final URI manifestURI = URI.createURI("archive:" + scenarioURI.toString() + "!/MANIFEST.xmi");
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl(true));
-		resourceSet.getLoadOptions().put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, new HashMap<Object, Object>());
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
 
-		final HashMap<String, EObject> intrinsicIDToEObjectMap = new HashMap<String, EObject>();
-
-		final Resource resource = resourceSet.createResource(manifestURI);
 		try {
-			resource.load(null);
+
+			Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
 			if (resource.getContents().size() == 1) {
 				final EObject top = resource.getContents().get(0);
 				if (top instanceof Manifest) {
@@ -203,17 +195,6 @@ public class ScenarioStorageUtil {
 						break;
 					}
 
-					if (preLoad) {
-						final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-						result.setInstance(implementation);
-
-						final Resource r = resourceSet.createResource(URI.createURI(result.getRootObjectURI()));
-						if (r instanceof ResourceImpl) {
-							((ResourceImpl) r).setIntrinsicIDToEObjectMap(intrinsicIDToEObjectMap);
-						}
-						r.load(null);
-					}
-
 					return result;
 				}
 			}
@@ -222,4 +203,15 @@ public class ScenarioStorageUtil {
 		}
 		return null;
 	}
+
+	@Nullable
+	private static IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(ScenarioStorageUtil.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
+	}
+
 }

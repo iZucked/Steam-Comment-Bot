@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: File
-Bundle-SymbolicName: com.mmxlabs.scenario.service.file
+Bundle-SymbolicName: com.mmxlabs.scenario.service.file;singleton:=true
 Bundle-Version: 5.1.1.qualifier
 Bundle-Activator: com.mmxlabs.scenario.service.file.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
@@ -14,7 +14,9 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
  org.eclipse.emf.edit;bundle-version="2.7.1",
  com.mmxlabs.scenario.service.model;bundle-version="[5.1.0,6.0.0)",
- com.mmxlabs.scenario.service.util;bundle-version="[5.1.0,6.0.0)"
+ com.mmxlabs.scenario.service.util;bundle-version="[5.1.0,6.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)",
+ com.google.guava
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceContentProvider;
+import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
 /**
  * A {@link Saveable} implementation to hook into the {@link ScenarioServiceContentProvider} internal {@link SaveablesProvider} implementation.
@@ -81,7 +82,7 @@ public class ScenarioInstanceSavable extends Saveable {
 					}
 				}
 
-			}, monitor);
+			}, new ScenarioInstanceSchedulingRule(scenarioInstance), 0, monitor);
 		} catch (final CoreException e) {
 			log.error("Error during save", e);
 		}

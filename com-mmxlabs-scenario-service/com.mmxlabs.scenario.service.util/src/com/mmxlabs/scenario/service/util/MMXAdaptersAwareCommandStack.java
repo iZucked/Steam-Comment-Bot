@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.util;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -72,28 +73,41 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 		undo(ScenarioLock.EDITORS);
 	}
 
-	public void undo(final String lockKey) {
-		final ScenarioLock lock = instance.getLock(lockKey);
-		if (lock.awaitClaim()) {
-			try {
-				if (editingDomain != null) {
-					final boolean isEnabled = editingDomain.isEnabled();
-					if (isEnabled) {
-						editingDomain.setAdaptersEnabled(false);
-					}
-					try {
-						super.undo();
-					} finally {
-						if (isEnabled) {
-							editingDomain.setAdaptersEnabled(true);
-						}
-					}
-				} else {
-					super.undo();
+	/**
+	 * Perform undo aquiring the named lock. If the named lock is null, then perform undo with no locking at all - i.e. this is being called from within an existing lock.
+	 * 
+	 * @param lockKey
+	 */
+	public void undo(@Nullable final String lockKey) {
+		if (lockKey == null) {
+			reallyUndo();
+		} else {
+			final ScenarioLock lock = instance.getLock(lockKey);
+			if (lock.awaitClaim()) {
+				try {
+					reallyUndo();
+				} finally {
+					lock.release();
 				}
-			} finally {
-				lock.release();
 			}
+		}
+	}
+
+	public void reallyUndo() {
+		if (editingDomain != null) {
+			final boolean isEnabled = editingDomain.isEnabled();
+			if (isEnabled) {
+				editingDomain.setAdaptersEnabled(false);
+			}
+			try {
+				super.undo();
+			} finally {
+				if (isEnabled) {
+					editingDomain.setAdaptersEnabled(true);
+				}
+			}
+		} else {
+			super.undo();
 		}
 	}
 
