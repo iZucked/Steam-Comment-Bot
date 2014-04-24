@@ -34,14 +34,4 @@ public final class HashMapPortEditor implements IPortProviderEditor {
 	public void setPortForElement(final IPort port, final ISequenceElement element) {
 		map.put(element, port);
 	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		map.clear();
-	}
 }

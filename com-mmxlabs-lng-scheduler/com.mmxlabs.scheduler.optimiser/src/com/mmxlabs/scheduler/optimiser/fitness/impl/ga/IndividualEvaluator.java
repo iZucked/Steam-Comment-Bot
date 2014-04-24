@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
@@ -44,7 +44,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 @Deprecated
 public final class IndividualEvaluator implements IIndividualEvaluator<ByteArrayIndividual> {
 
-	private AbstractSequenceScheduler sequenceScheduler;
+	private ISequenceScheduler sequenceScheduler;
 
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
@@ -473,11 +473,11 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 		}
 	}
 
-	public final AbstractSequenceScheduler getSequenceScheduler() {
+	public final ISequenceScheduler getSequenceScheduler() {
 		return sequenceScheduler;
 	}
 
-	public final void setSequenceScheduler(final AbstractSequenceScheduler sequenceScheduler) {
+	public final void setSequenceScheduler(final ISequenceScheduler sequenceScheduler) {
 		this.sequenceScheduler = sequenceScheduler;
 	}
 

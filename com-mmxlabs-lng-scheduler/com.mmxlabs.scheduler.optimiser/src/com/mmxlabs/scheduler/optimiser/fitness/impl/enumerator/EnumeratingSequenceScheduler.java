@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,16 +28,18 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractLoggingSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 /**
  * A sequence scheduler which enumerates possible combinations of arrival times explicitly, rather than using the GA byte array decoding method. This should be subclassable into a random sequence
@@ -47,7 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * @author hinton
  * 
  */
-public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
+public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceScheduler {
 
 	private static final int DISCHARGE_SEQUENCE_INDEX_OFFSET = 0;
 	private static final int DISCHARGE_WITHIN_SEQUENCE_INDEX_OFFSET = 1;
@@ -107,7 +108,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	/**
 	 * A flag to indicate that we should just use the timewindow rather than include the previous journey time. Intended for use with the cargo shorts where each cargo is indepenedent of the others on
-	 * the route.
+	 * the route. Also used for actuals where forcast travel time is irrelevant.
 	 */
 	private boolean[][] useTimeWindow;
 
@@ -149,50 +150,22 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	private IPortProvider portProvider;
 
 	@Inject
+	private IRouteCostProvider routeCostProvider;
+
+	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	@Inject
 	private IElementDurationProvider durationProvider;
-	
+
 	@Inject
 	private IVesselProvider vesselProvider;
 
-	/**
-	 * Resize one of the integer buffers above
-	 */
-	private final void resize(final int[][] arrays, final int arrayIndex, final int size) {
-		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
-			arrays[arrayIndex] = new int[(size)];
-		}
-	}
+	@Inject
+	private ScheduleCalculator scheduleCalculator;
 
-	/**
-	 * Resize one of the boolean buffers above.
-	 */
-	private void resize(final boolean[][] arrays, final int arrayIndex, final int size) {
-		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
-			arrays[arrayIndex] = new boolean[(size)];
-		}
-	}
-
-	/**
-	 * Resize all the integer buffers for a given route
-	 * 
-	 * @param arrayIndex
-	 * @param size
-	 */
-	private final void resizeAll(final int sequenceIndex, final int size) {
-		resize(arrivalTimes, sequenceIndex, size);
-		resize(windowStartTime, sequenceIndex, size);
-		resize(windowEndTime, sequenceIndex, size);
-		resize(minTimeToNextElement, sequenceIndex, size);
-		resize(maxTimeToNextElement, sequenceIndex, size);
-
-		resize(isVirtual, sequenceIndex, size);
-		resize(useTimeWindow, sequenceIndex, size);
-
-		sizes[sequenceIndex] = size;
-	}
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
 
 	/**
 	 * The sequences being evaluated at the moment
@@ -216,11 +189,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	private boolean lastEvaluationWasBestResult = false;
 
 	/**
-	 * The last result which was accepted externally, for the purposes of doing partial evaluations.
-	 */
-	private ScheduledSequences lastAcceptedResult = null;
-
-	/**
 	 * Contains the last valid value calculated by evaluate(). TODO this is ugly.
 	 */
 	private long lastValue;
@@ -235,49 +203,32 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-		return schedule(sequences, sequences.getResources(), solution);
-	}
-
-	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		setSequences(sequences);
 		resetBest();
 
 		startLogEntry(1);
-		prepare(getResourceIndices(sequences, affectedResources));
+		prepare();
 		enumerate(0, 0);
 		endLogEntry();
 
 		return reEvaluateAndGetBestResult(solution);
 	}
 
-	/**
-	 * @param sequences
-	 * @param affectedResources
-	 * @return
-	 */
-	protected int[] getResourceIndices(final ISequences sequences, final Collection<IResource> affectedResources) {
-		final List<IResource> resources = sequences.getResources();
-
-		final int[] affectedIndices = new int[affectedResources.size()];
-		int k = 0;
-		for (int i = 0; i < resources.size(); i++) {
-			if (affectedResources.contains(resources.get(i))) {
-				affectedIndices[k++] = i;
-			}
-		}
-
-		return affectedIndices;
-	}
-
 	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
-		if (bestResult == null) {
+
+		// TODO: Trigger only if solution != null?
+
+		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
+		if (scheduledSequences == null) {
 			return null;
 		}
+
 		if (evaluator != null) {
-			evaluator.evaluateSchedule(sequences, bestResult, solution);
+			long evaluateSchedule = evaluator.evaluateSchedule(sequences, scheduledSequences, solution);
+			// Make sure we re-evaluate to the same state!
+			assert evaluateSchedule == bestValue;
 		}
-		return bestResult;
+		return scheduledSequences;
 	}
 
 	protected final void resetBest() {
@@ -290,22 +241,6 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 	protected final void setSequences(final ISequences sequences) {
 		this.sequences = sequences;
-	}
-
-	protected final void prepare(final int[] indices) {
-		final int size = sequences.size();
-		bindings.clear();
-
-		if ((arrivalTimes == null) || (arrivalTimes.length != size)) {
-			prepare();
-			return;
-		}
-
-		for (final int i : indices) {
-			// for (int i = 0; i < size; i++) {
-			prepare(i);
-		}
-		imposeShipToShipConstraints();
 	}
 
 	protected ScheduledSequences getBestResult() {
@@ -456,7 +391,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 				// Must be on different routes
 				assert discharge_seq != load_seq;
-				
+
 				recalculateDischarge = false;
 				recalculateLoad = false;
 
@@ -507,7 +442,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * Unpack some distance/time/speed information, set up arrays etc
 	 * 
 	 * @param maxValue
-s	 * 
+	 *            s *
 	 * @param sequence
 	 * @return
 	 */
@@ -517,6 +452,7 @@ s	 *
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			// TODO: Implement something here rather than rely on VoyagePlanner
 			return;
 		}
 
@@ -540,6 +476,7 @@ s	 *
 
 		// first pass, collecting start time windows
 		for (final ISequenceElement element : sequence) {
+			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 			final List<ITimeWindow> windows;
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
@@ -561,6 +498,8 @@ s	 *
 					// but can be overridden by the specified end requirement
 					final ITimeWindow timeWindow = endRequirement.getTimeWindow();
 					if (timeWindow != null) {
+						// Make sure we always use the time window
+						useTimeWindow[index] = true;
 						windows = Collections.singletonList(timeWindow);
 					} else {
 						windows = timeWindowProvider.getTimeWindows(element);
@@ -569,8 +508,13 @@ s	 *
 					windows = timeWindowProvider.getTimeWindows(element);
 				}
 			} else {
-				// "windows" defaults to whatever windows are specified by the time window provider
-				windows = timeWindowProvider.getTimeWindows(element);
+
+				if (actualsDataProvider.hasActuals(slot)) {
+					windows = Collections.singletonList(actualsDataProvider.getArrivalTimeWindow(slot));
+				} else {
+					// "windows" defaults to whatever windows are specified by the time window provider
+					windows = timeWindowProvider.getTimeWindows(element);
+				}
 
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
@@ -626,6 +570,7 @@ s	 *
 					windowEndTime[index] = window.getEnd();
 					if (useTimeWindow[index]) {
 						// Cargo shorts - pretend this is a start element
+						// Actuals - use window directly
 						windowStartTime[index] = window.getStart();
 					} else {
 						windowStartTime[index] = Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]);
@@ -693,72 +638,18 @@ s	 *
 		}
 	}
 
-	/**
-	 * Use {@link #evaluator} to evaluate the current arrival times array, and if it is the best solution so far take a copy of the result.
-	 * 
-	 * @return true if the result is the new best case, false otherwise
-	 */
-	protected boolean evaluate() {
-		return evaluate(getResourceIndices(sequences, sequences.getResources()));
-		// count++;
-		//
-		// final ScheduledSequences scheduledSequences = super.schedule(sequences, arrivalTimes);
-		//
-		// if (scheduledSequences == null)
-		// return false;
-		//
-		// lastValue = evaluator.evaluateSchedule(scheduledSequences);
-		//
-		// logValue(lastValue);
-		//
-		// if (lastValue < bestValue) {
-		// lastEvaluationWasBestResult = true;
-		// bestIndex = count;
-		// // if (bestValue == Long.MAX_VALUE) {
-		// // initialValue = value;
-		// // }
-		// bestValue = lastValue;
-		// bestResult = scheduledSequences;
-		// // System.err.println(String.format("%.2f%% gain at %d (%s)", (100.0
-		// // * (initialValue - bestValue))/initialValue, count,
-		// // Long.toString(bestValue)));
-		// return true;
-		// } else {
-		// lastEvaluationWasBestResult = false;
-		// }
-		// return false;
-	}
-
 	@Override
 	public void acceptLastSchedule() {
-		lastAcceptedResult = bestResult;
+
 	}
 
-	protected boolean evaluate(int[] changedSequences) {
-		if (lastAcceptedResult == null) {
-			changedSequences = getResourceIndices(sequences, sequences.getResources());
-		}
+	protected boolean evaluate() {
 
 		count++;
 
-		final List<IResource> resources = sequences.getResources();
-
-		final ScheduledSequences scheduledSequences = new ScheduledSequences();
-
-		if (lastAcceptedResult != null) {
-			scheduledSequences.addAll(lastAcceptedResult);
-		} else {
-			for (int i = 0; i < sequences.size(); i++) {
-				scheduledSequences.add(null);
-			}
-		}
-
-		for (final int index : changedSequences) {
-			final ScheduledSequence sequence = super.schedule(resources.get(index), sequences.getSequence(index), arrivalTimes[index]);
-			if (sequence == null) {
-				return false; // break out now, something bad has happened
-			}
-			scheduledSequences.set(index, sequence);
+		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, null);
+		if (scheduledSequences == null) {
+			return false;
 		}
 
 		if (evaluator != null) {
@@ -888,5 +779,42 @@ s	 *
 	 */
 	public int[][] getArrivalTimes() {
 		return arrivalTimes;
+	}
+
+	/**
+	 * Resize one of the integer buffers above
+	 */
+	private final void resize(final int[][] arrays, final int arrayIndex, final int size) {
+		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
+			arrays[arrayIndex] = new int[(size)];
+		}
+	}
+
+	/**
+	 * Resize one of the boolean buffers above.
+	 */
+	private void resize(final boolean[][] arrays, final int arrayIndex, final int size) {
+		if ((arrays[arrayIndex] == null) || (arrays[arrayIndex].length < (size))) {
+			arrays[arrayIndex] = new boolean[(size)];
+		}
+	}
+
+	/**
+	 * Resize all the integer buffers for a given route
+	 * 
+	 * @param arrayIndex
+	 * @param size
+	 */
+	private final void resizeAll(final int sequenceIndex, final int size) {
+		resize(arrivalTimes, sequenceIndex, size);
+		resize(windowStartTime, sequenceIndex, size);
+		resize(windowEndTime, sequenceIndex, size);
+		resize(minTimeToNextElement, sequenceIndex, size);
+		resize(maxTimeToNextElement, sequenceIndex, size);
+
+		resize(isVirtual, sequenceIndex, size);
+		resize(useTimeWindow, sequenceIndex, size);
+
+		sizes[sequenceIndex] = size;
 	}
 }

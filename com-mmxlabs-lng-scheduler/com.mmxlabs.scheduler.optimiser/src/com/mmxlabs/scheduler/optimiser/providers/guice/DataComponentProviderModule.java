@@ -40,10 +40,14 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListVolumeAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
@@ -51,6 +55,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INextLoadDateProvider;
@@ -85,15 +91,21 @@ import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultNextLoadDateProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.DefaultVesselCharterCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapActualsDataProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCancellationFeeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapHedgesProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapNominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
@@ -113,6 +125,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.LazyDateKeyProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCostEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
@@ -150,7 +163,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IVesselProvider.class).toInstance(vesselProvider);
 		bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 
-		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>("");
+		final IndexedMultiMatrixProvider<IPort, Integer> portDistanceProvider = new IndexedMultiMatrixProvider<IPort, Integer>();
 		bind(new TypeLiteral<IMultiMatrixEditor<IPort, Integer>>() {
 		}).toInstance(portDistanceProvider);
 		bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
@@ -169,24 +182,24 @@ public class DataComponentProviderModule extends AbstractModule {
 			portSlotsProvider = new IndexedPortSlotEditor();
 			portTypeProvider = new IndexedPortTypeEditor();
 
-			timeWindowProvider = new IndexedTimeWindowEditor("");
-			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor("");
+			timeWindowProvider = new IndexedTimeWindowEditor();
+			orderedSequenceElementsEditor = new IndexedOrderedSequenceElementsEditor();
 
-			elementDurationsProvider = new IndexedElementDurationEditor("");
+			elementDurationsProvider = new IndexedElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>("", Integer.MAX_VALUE));
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE));
 		} else {
 			portProvider = new HashMapPortEditor();
 			portSlotsProvider = new HashMapPortSlotEditor();
 			portTypeProvider = new HashMapPortTypeEditor();
 
-			timeWindowProvider = new TimeWindowDataComponentProvider("");
-			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider("");
-			elementDurationsProvider = new HashMapElementDurationEditor("");
+			timeWindowProvider = new TimeWindowDataComponentProvider();
+			orderedSequenceElementsEditor = new OrderedSequenceElementsDataComponentProvider();
+			elementDurationsProvider = new HashMapElementDurationEditor();
 
 			// Create a default matrix entry
-			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>("", Integer.MAX_VALUE));
+			portDistanceProvider.set(IMultiMatrixProvider.Default_Key, new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE));
 		}
 		bind(IPortProvider.class).toInstance(portProvider);
 		bind(IPortProviderEditor.class).toInstance(portProvider);
@@ -206,7 +219,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IElementDurationProvider.class).toInstance(elementDurationsProvider);
 		bind(IElementDurationProviderEditor.class).toInstance(elementDurationsProvider);
 
-		final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider = new ResourceAllocationConstraintProvider("");
+		final IResourceAllocationConstraintDataComponentProviderEditor resourceAllocationProvider = new ResourceAllocationConstraintProvider();
 		bind(IResourceAllocationConstraintDataComponentProvider.class).toInstance(resourceAllocationProvider);
 		bind(IResourceAllocationConstraintDataComponentProviderEditor.class).toInstance(resourceAllocationProvider);
 
@@ -238,7 +251,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(ICalculatorProvider.class).toInstance(calculatorProvider);
 		bind(ICalculatorProviderEditor.class).toInstance(calculatorProvider);
 
-		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor("");
+		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor();
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
 
@@ -301,6 +314,24 @@ public class DataComponentProviderModule extends AbstractModule {
 		final DefaultNextLoadDateProvider nexDateProviderEditor = new DefaultNextLoadDateProvider();
 		bind(INextLoadDateProvider.class).toInstance(nexDateProviderEditor);
 		bind(INextLoadDateProviderEditor.class).toInstance(nexDateProviderEditor);
+
+		bind(DefaultVesselCharterCurveProvider.class).in(Singleton.class);
+		bind(IVesselCharterInRateProvider.class).to(DefaultVesselCharterCurveProvider.class);
+
+		final HashMapHedgesProviderEditor hedgesProviderEditor = new HashMapHedgesProviderEditor();
+		bind(IHedgesProvider.class).toInstance(hedgesProviderEditor);
+		bind(IHedgesProviderEditor.class).toInstance(hedgesProviderEditor);
+
+		final HashMapCancellationFeeProviderEditor cancellationFeeProviderEditor = new HashMapCancellationFeeProviderEditor();
+		bind(ICancellationFeeProvider.class).toInstance(cancellationFeeProviderEditor);
+		bind(ICancellationFeeProviderEditor.class).toInstance(cancellationFeeProviderEditor);
+
+		bind(HashMapActualsDataProviderEditor.class).in(Singleton.class);
+		bind(IActualsDataProvider.class).to(HashMapActualsDataProviderEditor.class);
+		bind(IActualsDataProviderEditor.class).to(HashMapActualsDataProviderEditor.class);
+
+		bind(TimeZoneToUtcOffsetProvider.class).in(Singleton.class);
+		bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 	}
 
 	/**
@@ -311,9 +342,9 @@ public class DataComponentProviderModule extends AbstractModule {
 	@Provides
 	public IMatrixEditor<IPort, Integer> getIMatrixEditor() {
 		if (USE_INDEXED_DCPS) {
-			return new IndexedMatrixEditor<IPort, Integer>("", Integer.MAX_VALUE);
+			return new IndexedMatrixEditor<IPort, Integer>(Integer.MAX_VALUE);
 		} else {
-			return new HashMapMatrixProvider<IPort, Integer>("", Integer.MAX_VALUE);
+			return new HashMapMatrixProvider<IPort, Integer>(Integer.MAX_VALUE);
 		}
 	}
 }

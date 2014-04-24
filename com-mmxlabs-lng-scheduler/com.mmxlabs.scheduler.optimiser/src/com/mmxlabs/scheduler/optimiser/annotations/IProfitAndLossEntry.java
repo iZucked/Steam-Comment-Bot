@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.annotations;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 
 /**
  * A single P&L entry.
@@ -16,11 +16,11 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
  */
 public interface IProfitAndLossEntry {
 	/**
-	 * The entity with which this entry is connected.
+	 * The {@link IEntityBook} with which this entry is connected.
 	 * 
 	 * @return
 	 */
-	public IEntity getEntity();
+	public IEntityBook getEntityBook();
 
 	/**
 	 * @return The final contribution to group profit from this entry.

@@ -32,16 +32,6 @@ public class HashMapAlternativeElementProviderEditor implements IAlternativeElem
 	}
 
 	@Override
-	public void dispose() {
-		map.clear();
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
 	public void setAlternativeElements(final ISequenceElement elementA, final ISequenceElement elementB) {
 		map.put(elementA, elementB);
 	}

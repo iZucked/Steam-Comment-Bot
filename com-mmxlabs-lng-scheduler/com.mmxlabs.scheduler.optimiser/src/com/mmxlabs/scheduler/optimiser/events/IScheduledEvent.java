@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.events;
 
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
@@ -13,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
  * @author Simon Goodall
  * 
  */
-public interface IScheduledEvent {
+public interface IScheduledEvent extends IElementAnnotation {
 
 	/**
 	 * Return the sequence element this event is bound to.

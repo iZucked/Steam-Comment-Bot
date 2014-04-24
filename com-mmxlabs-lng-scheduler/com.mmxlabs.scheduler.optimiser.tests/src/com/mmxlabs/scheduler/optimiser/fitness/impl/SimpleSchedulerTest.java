@@ -57,12 +57,12 @@ public class SimpleSchedulerTest {
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
-		final IPort port1 = builder.createPort("port-1", false, null, 0, 0);
-		final IPort port2 = builder.createPort("port-2", false, null, 0, 5);
-		final IPort port3 = builder.createPort("port-3", false, null, 5, 0);
-		final IPort port4 = builder.createPort("port-4", false, null, 5, 5);
-		final IPort port5 = builder.createPort("port-5", false, null, 0, 10);
-		final IPort port6 = builder.createPort("port-6", false, null, 5, 10);
+		final IPort port1 = builder.createPort("port-1", false, null, 0, 0, "UTC");
+		final IPort port2 = builder.createPort("port-2", false, null, 0, 5, "UTC");
+		final IPort port3 = builder.createPort("port-3", false, null, 5, 0, "UTC");
+		final IPort port4 = builder.createPort("port-4", false, null, 5, 5, "UTC");
+		final IPort port5 = builder.createPort("port-5", false, null, 0, 10, "UTC");
+		final IPort port6 = builder.createPort("port-6", false, null, 5, 10, "UTC");
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 		keypoints.put(12000, 12000l);
@@ -76,7 +76,7 @@ public class SimpleSchedulerTest {
 		keypoints.put(20000, 20000l);
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);
 
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000, 0);
@@ -102,21 +102,35 @@ public class SimpleSchedulerTest {
 		final ILoadPriceCalculator purchaseCurve = new FixedPriceContract(5);
 		final ISalesPriceCalculator salesCurve = new FixedPriceContract(200000);
 
-		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, IPortSlot.NO_PRICING_DATE, false);
-		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, IPortSlot.NO_PRICING_DATE, false);
-		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, IPortSlot.NO_PRICING_DATE, false);
-		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, IPortSlot.NO_PRICING_DATE, false);
-		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, IPortSlot.NO_PRICING_DATE, false);
-		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, IPortSlot.NO_PRICING_DATE, false);
-		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, IPortSlot.NO_PRICING_DATE, false);
+		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
+				IPortSlot.NO_PRICING_DATE, false);
+		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
+				IPortSlot.NO_PRICING_DATE, false);
+		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
+				IPortSlot.NO_PRICING_DATE, false);
+		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
+				IPortSlot.NO_PRICING_DATE, false);
+		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
+				IPortSlot.NO_PRICING_DATE, false);
+		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
+				IPortSlot.NO_PRICING_DATE, false);
+		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false,
+				IPortSlot.NO_PRICING_DATE, false);
 
-		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1", port2, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, IPortSlot.NO_PRICING_DATE, false);
-		final IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2", port2, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, IPortSlot.NO_PRICING_DATE, false);
-		final IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3", port2, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, IPortSlot.NO_PRICING_DATE, false);
-		final IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4", port6, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, IPortSlot.NO_PRICING_DATE, false);
-		final IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5", port4, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, IPortSlot.NO_PRICING_DATE, false);
-		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6", port4, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, IPortSlot.NO_PRICING_DATE, false);
-		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24, IPortSlot.NO_PRICING_DATE, false);
+		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1", port2, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
+				IPortSlot.NO_PRICING_DATE, false);
+		final IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2", port2, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
+				IPortSlot.NO_PRICING_DATE, false);
+		final IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3", port2, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
+				IPortSlot.NO_PRICING_DATE, false);
+		final IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4", port6, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
+				IPortSlot.NO_PRICING_DATE, false);
+		final IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5", port4, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
+				IPortSlot.NO_PRICING_DATE, false);
+		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6", port4, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
+				IPortSlot.NO_PRICING_DATE, false);
+		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), 0, Long.MAX_VALUE, salesCurve, 24,
+				IPortSlot.NO_PRICING_DATE, false);
 
 		builder.createCargo(Lists.<IPortSlot> newArrayList(load1, discharge1), false);
 		builder.createCargo(Lists.<IPortSlot> newArrayList(load2, discharge2), false);

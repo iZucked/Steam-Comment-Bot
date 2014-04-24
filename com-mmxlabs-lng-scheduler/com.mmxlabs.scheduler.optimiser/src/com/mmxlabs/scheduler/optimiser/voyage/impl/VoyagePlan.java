@@ -21,30 +21,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  */
 public final class VoyagePlan implements Cloneable {
 
-	/**
-	 * An enum for use with remaining heel to denote it's allocation.
-	 * 
-	 * @since 3.1
-	 * 
-	 */
-	public enum HeelType {
-
-		/**
-		 * No heel, nothing to do.
-		 */
-		NONE,
-
-		/**
-		 * Remaining heel is left at end of voyage. It should be included in total consumed voyage gas, then discarded
-		 */
-		END,
-		/**
-		 * Remaining heel will be discharged.
-		 */
-		DISCHARGE
-	}
-
 	private IDetailsSequenceElement[] sequence;
+	private int charterInRatePerDay;
 	private final LongFastEnumMap<FuelComponent> fuelConsumptions;
 	private final LongFastEnumMap<FuelComponent> routeAdditionalConsumption;
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
@@ -52,9 +30,8 @@ public final class VoyagePlan implements Cloneable {
 	private int violationsCount;
 	private boolean ignoreEnd;
 
+	private long startingHeelInM3;
 	private long remainingHeelInM3;
-
-	private HeelType remainingHeelType = HeelType.NONE;
 
 	public VoyagePlan() {
 		fuelConsumptions = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
@@ -63,18 +40,20 @@ public final class VoyagePlan implements Cloneable {
 		ignoreEnd = true;
 	}
 
-	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
-			final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd, final long remainingHeelInM3, final HeelType remainingHeelType) {
+	protected VoyagePlan(final IDetailsSequenceElement[] sequence, final int charterInRatePerDay, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions,
+			final LongFastEnumMap<FuelComponent> routeAdditionalConsumption, final LongFastEnumMap<FuelComponent> fuelCosts, final int violationsCount, final boolean ignoreEnd,
+			final long startingHeelInM3, final long remainingHeelInM3) {
 		super();
 		this.sequence = sequence;
+		this.charterInRatePerDay = charterInRatePerDay;
 		this.fuelConsumptions = fuelConsumptions;
 		this.routeAdditionalConsumption = routeAdditionalConsumption;
 		this.fuelCosts = fuelCosts;
 		this.lngFuelVolume = fuelVolume;
 		this.violationsCount = violationsCount;
 		this.ignoreEnd = ignoreEnd;
+		this.startingHeelInM3 = startingHeelInM3;
 		this.remainingHeelInM3 = remainingHeelInM3;
-		this.remainingHeelType = remainingHeelType;
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -139,12 +118,13 @@ public final class VoyagePlan implements Cloneable {
 			// @formatter:off
 			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
 					&& Objects.equal(sequence, plan.sequence)
+					&& Objects.equal(charterInRatePerDay, plan.charterInRatePerDay)
 					&& Objects.equal(violationsCount, plan.violationsCount)
 					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)
 					&& Objects.equal(routeAdditionalConsumption, plan.routeAdditionalConsumption)
 					&& Objects.equal(fuelCosts, plan.fuelCosts)
+					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
-					&& Objects.equal(remainingHeelType, plan.remainingHeelType)
 					;
 			// @formatter:on
 		}
@@ -154,8 +134,8 @@ public final class VoyagePlan implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", fuelConsumptions=" + fuelConsumptions + ", routeAdditionalConsumption=" + routeAdditionalConsumption + ", fuelCosts="
-				+ fuelCosts + "]";
+		return "VoyagePlan [sequence=" + Arrays.toString(sequence) + ", charterInRatePerDay=" + charterInRatePerDay + ", fuelConsumptions=" + fuelConsumptions + ", routeAdditionalConsumption="
+				+ routeAdditionalConsumption + ", fuelCosts=" + fuelCosts + "]";
 	}
 
 	@Override
@@ -171,7 +151,8 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, remainingHeelInM3, remainingHeelType);
+		return new VoyagePlan(clonedSequence, charterInRatePerDay, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, violationsCount, ignoreEnd, startingHeelInM3,
+				remainingHeelInM3);
 	}
 
 	/**
@@ -222,22 +203,27 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	/**
-	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel class min heel. This heel may be discharged or discarded depending where in the voyage plan it
-	 * occurred (where is not tracked explicitly).
+	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel class min heel.
 	 * 
 	 * @param remainingHeelInM3
-	 * @param remainingHeelType
-	 * @since 3.1
 	 */
-	public void setRemainingHeelInM3(final long remainingHeelInM3, final HeelType remainingHeelType) {
+	public void setRemainingHeelInM3(final long remainingHeelInM3) {
 		this.remainingHeelInM3 = remainingHeelInM3;
-		this.remainingHeelType = remainingHeelType;
 	}
 
-	/**
-	 * @since 3.1
-	 */
-	public HeelType getRemainingHeelType() {
-		return remainingHeelType;
+	public long getStartingHeelInM3() {
+		return startingHeelInM3;
+	}
+
+	public void setStartingHeelInM3(final long startingHeelInM3) {
+		this.startingHeelInM3 = startingHeelInM3;
+	}
+
+	public int getCharterInRatePerDay() {
+		return charterInRatePerDay;
+	}
+
+	public void setCharterInRatePerDay(final int charterInRatePerDay) {
+		this.charterInRatePerDay = charterInRatePerDay;
 	}
 }

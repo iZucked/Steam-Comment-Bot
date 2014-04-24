@@ -4,10 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -20,6 +20,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -30,17 +31,17 @@ import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -48,8 +49,9 @@ import com.mmxlabs.scheduler.optimiser.components.impl.Port;
 import com.mmxlabs.scheduler.optimiser.components.impl.SequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.impl.Vessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -72,7 +74,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public final class AbstractSequenceSchedulerTest {
+public final class VoyagePlannerTest {
 
 	/**
 	 * Test high level inputs for a a two {@link VoyagePlan} sequence. Outputs cannot easily be tested with e JMock'd {@link IVoyagePlanOptimiser} so we just expect something to come out.
@@ -84,7 +86,6 @@ public final class AbstractSequenceSchedulerTest {
 	@Test
 	public void testSchedule_1() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
 		final Port port1 = new Port(index, "port1");
 		final Port port2 = new Port(index, "port2");
@@ -126,16 +127,16 @@ public final class AbstractSequenceSchedulerTest {
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 		final ISequenceElement element4 = new SequenceElement(index, "element4");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider();
 
 		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
 		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
 		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
 		timeWindowProvider.setTimeWindows(element4, Collections.singletonList(timeWindow4));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>("");
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("");
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
 		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
@@ -144,7 +145,7 @@ public final class AbstractSequenceSchedulerTest {
 		defaultDistanceProvider.set(port3, port4, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor();
 		durationsProvider.setDefaultValue(duration);
 
 		final IPortProviderEditor portProvider = new HashMapPortEditor();
@@ -198,11 +199,13 @@ public final class AbstractSequenceSchedulerTest {
 				bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+				bind(VoyagePlanner.class);
+				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 			}
 		});
 
 		// Init scheduler and ensure all required components are in place
-		injector.injectMembers(scheduler);
+		VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
@@ -214,7 +217,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions1.setVessel(vessel);
 		expectedVoyageOptions1.setVesselState(VesselState.Laden);
 		expectedVoyageOptions1.setNBOSpeed(15000);
-		expectedVoyageOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
@@ -232,7 +234,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions2.setVessel(vessel);
 		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 		expectedVoyageOptions2.setNBOSpeed(15000);
-		expectedVoyageOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
 		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
@@ -248,7 +249,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions3.setVessel(vessel);
 		expectedVoyageOptions3.setVesselState(VesselState.Laden);
 		expectedVoyageOptions3.setNBOSpeed(15000);
-		expectedVoyageOptions3.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.clone();
 		expectedVoyageOptions3a.setRoute(IMultiMatrixProvider.Default_Key);
@@ -312,10 +312,11 @@ public final class AbstractSequenceSchedulerTest {
 		final int[] arrivalTimes2 = new int[] { 15, 20 };
 
 		// Schedule sequence
-		final ScheduledSequence plans = scheduler.schedule(resource, sequence, arrivalTimes);
+		// final LinkedHashMap<VoyagePlan, IAllocationAnnotation> plans =
+		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
 
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
@@ -342,7 +343,7 @@ public final class AbstractSequenceSchedulerTest {
 		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes2)));
 
 		Assert.assertNotNull(plans);
-		Assert.assertEquals(2, plans.getVoyagePlans().size());
+		Assert.assertEquals(2, plans.size());
 	}
 
 	/**
@@ -355,7 +356,6 @@ public final class AbstractSequenceSchedulerTest {
 	@Test
 	public void testSchedule_2() throws CloneNotSupportedException {
 		final IIndexingContext index = new SimpleIndexingContext();
-		final MockSequenceScheduler scheduler = new MockSequenceScheduler();
 
 		final Port port1 = new Port(index, "port1");
 		final Port port2 = new Port(index, "port2");
@@ -387,15 +387,15 @@ public final class AbstractSequenceSchedulerTest {
 		final ISequenceElement element2 = new SequenceElement(index, "element2");
 		final ISequenceElement element3 = new SequenceElement(index, "element3");
 
-		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider("");
+		final ITimeWindowDataComponentProviderEditor timeWindowProvider = new TimeWindowDataComponentProvider();
 
 		timeWindowProvider.setTimeWindows(element1, Collections.singletonList(timeWindow1));
 		timeWindowProvider.setTimeWindows(element2, Collections.singletonList(timeWindow2));
 		timeWindowProvider.setTimeWindows(element3, Collections.singletonList(timeWindow3));
 
-		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>("");
+		final HashMapMatrixProvider<IPort, Integer> defaultDistanceProvider = new HashMapMatrixProvider<IPort, Integer>();
 
-		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>("");
+		final HashMapMultiMatrixProvider<IPort, Integer> distanceProvider = new HashMapMultiMatrixProvider<IPort, Integer>();
 		distanceProvider.set(IMultiMatrixProvider.Default_Key, defaultDistanceProvider);
 
 		// Only need sparse matrix for testing
@@ -403,7 +403,7 @@ public final class AbstractSequenceSchedulerTest {
 		defaultDistanceProvider.set(port2, port3, 400);
 
 		final int duration = 1;
-		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor("");
+		final IElementDurationProviderEditor durationsProvider = new HashMapElementDurationEditor();
 		durationsProvider.setDefaultValue(duration);
 
 		final IPortProviderEditor portProvider = new HashMapPortEditor();
@@ -454,11 +454,14 @@ public final class AbstractSequenceSchedulerTest {
 				bind(IVesselProviderEditor.class).toInstance(vesselProvider);
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+				bind(VoyagePlanner.class);
+				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
+
 			}
 		});
 
 		// Init scheduler and ensure all required components are in place
-		injector.injectMembers(scheduler);
+		VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
@@ -470,7 +473,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions1.setVessel(vessel);
 		expectedVoyageOptions1.setVesselState(VesselState.Laden);
 		expectedVoyageOptions1.setNBOSpeed(15000);
-		expectedVoyageOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
@@ -488,7 +490,6 @@ public final class AbstractSequenceSchedulerTest {
 		expectedVoyageOptions2.setVessel(vessel);
 		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
 		expectedVoyageOptions2.setNBOSpeed(15000);
-		expectedVoyageOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
 		expectedVoyageOptions2.setShouldBeCold(true);
 		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
 		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
@@ -539,10 +540,11 @@ public final class AbstractSequenceSchedulerTest {
 		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
-		final ScheduledSequence plansAndTime = scheduler.schedule(resource, sequence, arrivalTimes);
+		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 5, 0);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
+
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
 
@@ -563,9 +565,8 @@ public final class AbstractSequenceSchedulerTest {
 
 		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes)));
 
-		Assert.assertNotNull(plansAndTime);
-		final List<VoyagePlan> plans = plansAndTime.getVoyagePlans();
-		Assert.assertEquals(1, plans.size());
+		Assert.assertNotNull(voyagePlans);
+		Assert.assertEquals(1, voyagePlans.size());
 
 		// TODO: Check plan details are as expected
 		// TODO: Return a default plan from VPO and check expected output is
@@ -573,7 +574,7 @@ public final class AbstractSequenceSchedulerTest {
 		// TODO: Can we return different objects for each invocation?
 		//
 		// // Check plan 1
-		final VoyagePlan plan1 = plans.get(0);
+		final VoyagePlan plan1 = voyagePlans.get(0).getFirst();
 		Assert.assertSame(testVoyagePlan, plan1);
 
 		final Object[] outputSequence = testVoyagePlan.getSequence();
@@ -592,30 +593,4 @@ public final class AbstractSequenceSchedulerTest {
 		// ((PortDetails) outputSequence[4]).getStartTime());
 		Assert.assertEquals(1, ((PortDetails) outputSequence[4]).getOptions().getVisitDuration());
 	}
-
-	/**
-	 * Mock implementation of {@link AbstractSequenceScheduler} to allow use of abstract class in tests
-	 * 
-	 * @author Simon Goodall
-	 * 
-	 */
-	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
-
-		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-
-		}
-
-		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-		}
-
-		@Override
-		public void acceptLastSchedule() {
-			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
-		}
-	}
-
 }

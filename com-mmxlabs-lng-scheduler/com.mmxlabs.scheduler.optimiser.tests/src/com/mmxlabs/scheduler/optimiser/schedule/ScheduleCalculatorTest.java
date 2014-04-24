@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import static org.mockito.Matchers.anyListOf;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -24,31 +23,42 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IAnnotations;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
+import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -65,7 +75,15 @@ public class ScheduleCalculatorTest {
 		final ICalculatorProvider calculatorProvider = mock(ICalculatorProvider.class);
 		final IVesselProvider vesselProvider = mock(IVesselProvider.class);
 		final INominatedVesselProvider nominatedVesselProvider = mock(INominatedVesselProvider.class);
+		final IMultiMatrixProvider<IPort, Integer> distanceProvider = mock(IMultiMatrixProvider.class);
+		final IPortProvider portProvider = mock(IPortProvider.class);
+		final IPortTypeProvider portTypeProvider = mock(IPortTypeProvider.class);
+		final IRouteCostProvider routeCostProvider = mock(IRouteCostProvider.class);
+		final IVoyagePlanOptimiser voyagePlanOptimiser = mock(IVoyagePlanOptimiser.class);
+		final IElementDurationProvider elementDurationProvider = mock(IElementDurationProvider.class);
 		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
+		final ICharterRateCalculator charterRateCalculator = mock(ICharterRateCalculator.class);
+		final IActualsDataProvider actualsDataProvider = mock(IActualsDataProvider.class);
 
 		class TestModule extends AbstractModule {
 			@Override
@@ -78,6 +96,16 @@ public class ScheduleCalculatorTest {
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(IPortCostProvider.class).toInstance(portCostProvider);
 				bind(INominatedVesselProvider.class).toInstance(nominatedVesselProvider);
+				bind(IElementDurationProvider.class).toInstance(elementDurationProvider);
+				bind(IPortProvider.class).toInstance(portProvider);
+				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+				bind(IRouteCostProvider.class).toInstance(routeCostProvider);
+				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
+				bind(ICharterRateCalculator.class).toInstance(charterRateCalculator);
+				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
+
+				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
+				}).toInstance(distanceProvider);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());
@@ -85,7 +113,7 @@ public class ScheduleCalculatorTest {
 		final ISequences sequences = mock(ISequences.class);
 
 		final IAnnotatedSolution annotatedSolution = mock(IAnnotatedSolution.class);
-		final IAnnotations annotations = mock(IAnnotations.class);
+		final IElementAnnotationsMap annotations = mock(IElementAnnotationsMap.class);
 		when(annotatedSolution.getElementAnnotations()).thenReturn(annotations);
 
 		final ISequenceElement element1 = mock(ISequenceElement.class, "element1");
@@ -161,11 +189,11 @@ public class ScheduleCalculatorTest {
 		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot3)), eq(expectedList));
 		verify(volumeAllocator, times(1)).allocate(Matchers.<IVessel> any(), Matchers.anyInt(), argThat(new VoyagePlanMatcher(portSlot4)), eq(expectedList));
 
-		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element3), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, times(1)).setAnnotation(eq(element4), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
-		verify(annotations, never()).setAnnotation(eq(element5), eq(SchedulerConstants.AI_volumeAllocationInfo), anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element1), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element2), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element3), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, times(1)).setAnnotation(eq(element4), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
+		verify(annotations, never()).setAnnotation(eq(element5), eq(SchedulerConstants.AI_volumeAllocationInfo), Matchers.<IElementAnnotation>anyObject());
 	}
 
 	/**

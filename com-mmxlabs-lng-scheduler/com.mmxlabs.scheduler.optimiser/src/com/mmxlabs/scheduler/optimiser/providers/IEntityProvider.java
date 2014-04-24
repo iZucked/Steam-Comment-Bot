@@ -6,7 +6,10 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 
 /**
  * DCP linking IPortSlot instances with IEntity instances. ICalculators are not linked, because of the fixed price override creating a bogus calculator.
@@ -18,10 +21,6 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
  * 
  */
 public interface IEntityProvider extends IDataComponentProvider {
-	/**
-	 * @return The IEntity responsible for shipping
-	 */
-	public IEntity getShippingEntity();
 
 	/**
 	 * Get the entity which owns contracts at the given slot.
@@ -30,5 +29,9 @@ public interface IEntityProvider extends IDataComponentProvider {
 	 *            a calculator
 	 * @return the entity which owns the contract at the given slot
 	 */
-	public IEntity getEntityForSlot(final IPortSlot slot);
+	IEntity getEntityForSlot(IPortSlot slot);
+
+	IEntity getEntityForVessel(IVessel vessel);
+
+	IEntityBook getEntityBook(IEntity entity, EntityBookType shipping);
 }

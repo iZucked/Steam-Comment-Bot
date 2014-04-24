@@ -4,8 +4,13 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl;
 
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import java.util.List;
+
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Empty implementation of {@link IGeneratedCharterOutEvaluator}
@@ -16,9 +21,15 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEva
  */
 public class NullGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
 
+//	@Override
+//	public void processSchedule(final ScheduledSequences scheduledSequences) {
+//		// Does nothing
+//	}
+
 	@Override
-	public void processSchedule(final ScheduledSequences scheduledSequences) {
-		// Does nothing
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, IVessel vessel, VoyagePlan vp, List<Integer> arrivalTimes) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

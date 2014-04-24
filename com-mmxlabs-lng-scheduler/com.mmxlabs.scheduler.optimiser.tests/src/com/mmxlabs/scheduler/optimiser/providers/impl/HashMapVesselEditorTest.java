@@ -29,27 +29,4 @@ public class HashMapVesselEditorTest {
 		Assert.assertSame(vessel1, editor.getVessel(resource1));
 		Assert.assertSame(resource1, editor.getResource(vessel1));
 	}
-
-	@Test
-	public void testDispose() {
-		final HashMapVesselEditor editor = new HashMapVesselEditor();
-
-		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
-		final IVessel vessel1 = Mockito.mock(IVessel.class, "vessel-1");
-
-		Assert.assertNull(editor.getResource(vessel1));
-		Assert.assertNull(editor.getVessel(resource1));
-
-		editor.setVesselResource(resource1, vessel1);
-
-		Assert.assertSame(vessel1, editor.getVessel(resource1));
-		Assert.assertSame(resource1, editor.getResource(vessel1));
-
-		editor.dispose();
-
-		Assert.assertNull(editor.getResource(vessel1));
-		Assert.assertNull(editor.getVessel(resource1));
-
-	}
-
 }

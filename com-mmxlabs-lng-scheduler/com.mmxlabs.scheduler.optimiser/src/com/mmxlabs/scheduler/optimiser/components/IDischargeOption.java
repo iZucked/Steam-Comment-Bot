@@ -54,4 +54,6 @@ public interface IDischargeOption extends IPortSlot {
 	 * @since 6.0
 	 */
 	int getPricingDate();
+		
+	//BE long getHedgingPnL();
 }

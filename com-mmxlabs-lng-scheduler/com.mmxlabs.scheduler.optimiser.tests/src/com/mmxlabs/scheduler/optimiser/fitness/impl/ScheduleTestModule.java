@@ -28,8 +28,9 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
@@ -75,6 +76,7 @@ public class ScheduleTestModule extends AbstractModule {
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
 		bind(IVolumeAllocator.class).to(UnconstrainedVolumeAllocator.class).in(Singleton.class);
+		bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
 
 		bind(VoyagePlanOptimiser.class);
 
@@ -115,29 +117,16 @@ public class ScheduleTestModule extends AbstractModule {
 		return factory;
 	}
 
-	//
-	// @Provides
-	// @Singleton
-	// IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ResourcelessModelEntityMap entities) throws IncompleteScenarioException {
-	// final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(entities);
-	//
-	// return optimisationData;
-	// }
-
-	// final IFitnessFunctionRegistry fitnessRegistry = createFitnessRegistry();
-	// final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
-	// final IEvaluationProcessRegistry evaluationProcessRegistry = createEvaluationProcessRegistry();
-
 	@Provides
 	@Singleton
 	private IConstraintCheckerRegistry createConstraintRegistry(Injector injector) {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
 
-		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
+		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
 		injector.injectMembers(constraintFactory);
 
-		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
+		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
 		injector.injectMembers(constraintFactory2);
 

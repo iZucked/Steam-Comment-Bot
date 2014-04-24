@@ -56,7 +56,7 @@ public interface IVesselClass {
 	 * @since 2.0
 	 */
 
-	long getInPortConsumptionRate(PortType portType);
+	long getInPortConsumptionRateInMTPerDay(PortType portType);
 
 	/**
 	 * Returns the rate of NBO when the vessel is idle. Units are M3 Per Hour
@@ -153,4 +153,9 @@ public interface IVesselClass {
 	 */
 	long getCooldownVolume();
 
+	/**
+	 * MT/day of base fuel required as a *minimum* consumption for all events (port, travel & idle).
+	 * @return
+	 */
+	int getMinBaseFuelConsumptionInMTPerDay();
 }

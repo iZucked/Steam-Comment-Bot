@@ -47,9 +47,13 @@ public final class LookupTableConsumptionRateCalculator implements IConsumptionR
 		for (int i = 0; i < table.length; i++) {
 			if (table[i] == rate) {
 				return i + minSpeed;
+			} else if (table[i] > rate) {
+				return i > 0 ? i - 1 + minSpeed : minSpeed;
 			}
 		}
-		return 0;
+		// Hit max speed
+		return minSpeed + table.length;
+		// throw new IllegalStateException();
 	}
 
 	private void init(final IConsumptionRateCalculator calc) {

@@ -16,7 +16,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -26,11 +25,8 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 
 	private int price;
 
-	/**
-	 * @since 8.0
-	 */
 	@Override
-	public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 		price = 0;
 	}
 
@@ -75,4 +71,8 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 		this.price = newPrice;
 	}
 
+	@Override
+	public void prepareRealPNL() {
+
+	}
 }

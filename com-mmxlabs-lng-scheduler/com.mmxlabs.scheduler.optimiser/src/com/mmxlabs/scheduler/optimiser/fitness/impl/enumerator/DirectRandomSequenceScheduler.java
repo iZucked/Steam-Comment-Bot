@@ -4,12 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
-import java.util.Collection;
 import java.util.Random;
 
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
@@ -32,44 +30,37 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
-		return schedule(sequences, sequences.getResources(), solution);
-	}
-
-	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		random = new Random(seed);
 
 		setSequences(sequences);
 		resetBest();
 
-		final int[] resourceIndices = getResourceIndices(sequences, affectedResources);
-
-		prepare(resourceIndices);
+		prepare();
 
 		final int sampleCount = samplingUpperBound;
 		for (int i = 0; i < sampleCount; i++) {
-			for (final int index : resourceIndices) {
+			for (int index = 0; index < sequences.size(); ++index) {
 				random.setSeed(seed);
 				randomise(index);
 			}
 			synchroniseShipToShipBindings();
-			evaluate(resourceIndices);
+			evaluate();
 		}
 
 		return reEvaluateAndGetBestResult(solution);
 	}
 
 	private void synchroniseShipToShipBindings() {
-		for (int i = 0; i < bindings.size(); i+=4) {
+		for (int i = 0; i < bindings.size(); i += 4) {
 			final int discharge_seq = bindings.get(i);
-			final int discharge_index = bindings.get(i+1);
-			final int load_seq = bindings.get(i+2);
-			final int load_index = bindings.get(i+3);
-			
+			final int discharge_index = bindings.get(i + 1);
+			final int load_seq = bindings.get(i + 2);
+			final int load_index = bindings.get(i + 3);
+
 			// sequence elements bound by ship-to-ship transfers are effectively the same slot, so the arrival times must be synchronised
 			arrivalTimes[load_seq][load_index] = arrivalTimes[discharge_seq][discharge_index];
 		}
-		
+
 	}
 
 	private void randomise(final int seq) {
@@ -83,7 +74,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 				final int min = getMinArrivalTime(seq, pos);
 				final int max = getMaxArrivalTime(seq, pos);
 				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
-				// TODO force sync this with any ship-to-ship bindings 
+				// TODO force sync this with any ship-to-ship bindings
 			}
 
 			// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.

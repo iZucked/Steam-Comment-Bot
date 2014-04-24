@@ -61,7 +61,7 @@ public class MarkToMarketVessel implements IVessel {
 	}
 
 	@Override
-	public ICurve getHourlyCharterInPrice() {
+	public ICurve getDailyCharterInPrice() {
 		return curve;
 	}
 

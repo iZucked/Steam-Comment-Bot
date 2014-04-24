@@ -29,7 +29,7 @@ public final class Vessel extends IndexedObject implements IVessel {
 
 	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
 
-	private ICurve hourlyCharterInPrice;
+	private ICurve dailyCharterInRate;
 	
 	private long cargoCapacity;
 
@@ -69,15 +69,15 @@ public final class Vessel extends IndexedObject implements IVessel {
 	 * @since 2.0
 	 */
 	@Override
-	public ICurve getHourlyCharterInPrice() {
-		return hourlyCharterInPrice;
+	public ICurve getDailyCharterInPrice() {
+		return dailyCharterInRate;
 	}
 
 	/**
 	 * @since 2.0
 	 */
-	public void setHourlyCharterInPrice(final ICurve hourlyCharterInPrice) {
-		this.hourlyCharterInPrice = hourlyCharterInPrice;
+	public void setDailyCharterInPrice(final ICurve dailyCharterInRate) {
+		this.dailyCharterInRate = dailyCharterInRate;
 	}
 
 	/**
@@ -85,7 +85,6 @@ public final class Vessel extends IndexedObject implements IVessel {
 	 */
 	@Override
 	public long getCargoCapacity() {
-		// TODO Auto-generated method stub
 		return cargoCapacity;
 	}
 	

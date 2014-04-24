@@ -47,15 +47,4 @@ public final class HashMapVirtualVesselSlotProviderEditor implements IVirtualVes
 		vesselElementMap.put(vessel, element);
 		elementVesselMap.put(element, vessel);
 	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		vesselElementMap.clear();
-		elementVesselMap.clear();
-	}
 }

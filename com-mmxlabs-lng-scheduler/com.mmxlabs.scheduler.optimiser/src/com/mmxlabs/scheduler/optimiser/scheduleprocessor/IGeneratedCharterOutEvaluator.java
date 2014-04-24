@@ -4,13 +4,18 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor;
 
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import java.util.List;
+
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @since 2.0
  */
 public interface IGeneratedCharterOutEvaluator {
 
-	void processSchedule(ScheduledSequences scheduledSequences);
-
+//	void processSchedule(ScheduledSequences scheduledSequences);
+	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, final IVessel vessel ,final VoyagePlan vp, final List<Integer> arrivalTimes );
 }

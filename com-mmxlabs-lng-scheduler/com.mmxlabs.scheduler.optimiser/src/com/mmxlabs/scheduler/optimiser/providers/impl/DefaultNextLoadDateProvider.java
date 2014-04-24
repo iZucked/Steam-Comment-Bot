@@ -53,18 +53,6 @@ public class DefaultNextLoadDateProvider implements INextLoadDateProviderEditor 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		contractToConstantSpeedMap.clear();
-		contractToRuleMap.clear();
-		contractToSlotsMap.clear();
-	}
-
-	@Override
 	public INextLoadDate getNextLoadDate(final ILoadOption origin, final IPort fromPort, final int time, final IVessel vessel) {
 
 		final ILoadPriceCalculator contract = origin.getLoadPriceCalculator();

@@ -5,12 +5,16 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -18,25 +22,40 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.annotations.impl.HeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan.HeelType;
 
 /**
  * @since 7.1
@@ -66,6 +85,25 @@ public class VoyagePlanner {
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
+	@Inject
+	private IVolumeAllocator volumeAllocator;
+
+	@com.google.inject.Inject(optional = true)
+	private IBreakEvenEvaluator breakEvenEvaluator;
+
+	@com.google.inject.Inject(optional = true)
+	private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
+
+	@Inject
+	private ICharterRateCalculator charterRateCalculator;
+
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
+
+	//
+	// @Inject
+	// private ILNGVoyageCalculator voyageCalculator;
+
 	/**
 	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
 	 * messes with the VPO).
@@ -79,7 +117,7 @@ public class VoyagePlanner {
 	 * @param useNBO
 	 * @return
 	 */
-	final public VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVessel vessel, final VesselState vesselState, final int availableTime, final ISequenceElement element,
+	private VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVessel vessel, final VesselState vesselState, final int availableTime, final ISequenceElement element,
 			final ISequenceElement prevElement, final VoyageOptions previousOptions, final IVoyagePlanOptimiser optimiser, boolean useNBO) {
 
 		final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(vesselState);
@@ -110,18 +148,12 @@ public class VoyagePlanner {
 			final IHeelOptionsPortSlot heelOptionsSlot = (IHeelOptionsPortSlot) prevPortSlot;
 			// options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), heelOptions.getHeelOptions().getHeelLimit()));
 			if (heelOptionsSlot.getHeelOptions().getHeelLimit() > 0) {
-				options.setAvailableLNG(heelOptionsSlot.getHeelOptions().getHeelLimit());
 				useNBO = true;
-				forceNBO = true;
+				forceNBO = false;
+			} else {
+				useNBO = false;
+				forceNBO = false;
 			}
-		} else if (useNBO) {
-			options.setAvailableLNG(vessel.getCargoCapacity());
-		} else {
-			options.setAvailableLNG(0);
-		}
-
-		if (options.getAvailableLNG() == 0) {
-			useNBO = false;
 		}
 
 		if ((prevPortType == PortType.DryDock) || (prevPortType == PortType.Maintenance)) {
@@ -190,6 +222,11 @@ public class VoyagePlanner {
 			optimiser.addChoice(new RouteVoyagePlanChoice(options, distances));
 		}
 
+		if (vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End) {
+			options.setAllowCooldown(false);
+			options.setShouldBeCold(true);
+		}
+
 		return options;
 	}
 
@@ -201,16 +238,24 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public List<VoyagePlan> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+	final public List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> makeVoyagePlans(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
+
+		// TODO: Handle FOB/DES cargoes also
+
+		// IF FOB/DES
+		// customFOBDESModeller.createVoyagePlan()
+		final int vesselStartTime = arrivalTimes[0];
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		// TODO: Extract out further for custom base fuel pricing logic?
 		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		voyagePlanOptimiser.setVessel(vessel, arrivalTimes[0], baseFuelPricePerMT);
+		voyagePlanOptimiser.setVessel(vessel, baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
-		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap = new LinkedList<>();
+		final List<VoyagePlan> voyagePlansList = new LinkedList<>();
+
 		final List<IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<IOptionsSequenceElement>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
 		final boolean[] breakSequence = findSequenceBreaks(sequence);
@@ -219,6 +264,7 @@ public class VoyagePlanner {
 		ISequenceElement prevElement = null;
 		IPort prevPort = null;
 		IPort prev2Port = null;
+		IPortSlot prevPortSlot = null; 
 
 		VoyageOptions previousOptions = null;
 		boolean useNBO = false;
@@ -227,6 +273,10 @@ public class VoyagePlanner {
 		final Iterator<ISequenceElement> itr = sequence.iterator();
 
 		long heelVolumeInM3 = 0;
+		// For spot charters, start with the safety heel.
+		if (vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
+			heelVolumeInM3 = vessel.getVesselClass().getMinHeel();
+		}
 
 		for (int idx = 0; itr.hasNext(); ++idx) {
 			final ISequenceElement element = itr.next();
@@ -265,12 +315,15 @@ public class VoyagePlanner {
 				previousOptions = options;
 			}
 
-			final int visitDuration = durationsProvider.getElementDuration(element, resource);
+			final int visitDuration = actualsDataProvider.hasActuals(thisPortSlot) ? actualsDataProvider.getVisitDuration(thisPortSlot) : durationsProvider.getElementDuration(element, resource);
 
 			final PortOptions portOptions = new PortOptions();
 			portOptions.setVisitDuration(visitDuration);
 			portOptions.setPortSlot(thisPortSlot);
 			portOptions.setVessel(vessel);
+
+			// Sequence scheduler should be using the actuals time
+			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getArrivalTime(thisPortSlot) == arrivalTimes[idx];
 
 			if (isShortsSequence && portType == PortType.Short_Cargo_End) {
 				currentTimes.add(shortCargoReturnArrivalTime);
@@ -281,26 +334,28 @@ public class VoyagePlanner {
 
 			if (breakSequence[idx]) {
 
-				final boolean shortCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Short_Cargo_End;
+				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
+				if (actualsDataProvider.hasActuals(prevPortSlot)) {
+					heelVolumeInM3 = generateActualsVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, currentTimes, heelVolumeInM3);
+				} else {
 
-				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
-				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
-				if (!shortCargoEnd) {
-					final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
-					if (plan == null) {
-						return null;
+					final boolean shortCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Short_Cargo_End;
+
+					// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model
+					// the
+					// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
+					if (!shortCargoEnd) {
+						final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
+						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
+						if (plan == null) {
+							return null;
+						}
+						heelVolumeInM3 = evaluateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
 					}
-					voyagePlans.add(plan);
 
-					if (plan.getRemainingHeelType() == HeelType.END) {
-						heelVolumeInM3 = plan.getRemainingHeelInM3();
-					} else {
-						heelVolumeInM3 = 0;
+					if (isShortsSequence) {
+						voyagePlansList.get(voyagePlansList.size() - 1).setIgnoreEnd(false);
 					}
-				}
-
-				if (isShortsSequence) {
-					voyagePlans.get(voyagePlans.size() - 1).setIgnoreEnd(false);
 				}
 
 				// Reset useNBO flag
@@ -312,7 +367,12 @@ public class VoyagePlanner {
 
 				voyageOrPortOptions.add(portOptions);
 				currentTimes.add(arrivalTimes[idx]);
+			}
 
+			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
+			// TODO: Move (back?)into VPO code
+			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
+				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
 			}
 
 			// Setup for next iteration
@@ -321,20 +381,322 @@ public class VoyagePlanner {
 			prevPort = thisPort;
 			prevVisitDuration = visitDuration;
 			prevElement = element;
+			prevPortSlot = thisPortSlot;
 		}
 
 		// TODO: Do we need to run optimiser when we only have a load port here?
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
+			final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
+			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 			if (plan == null) {
 				return null;
 			}
-			voyagePlans.add(plan);
+			plan.setIgnoreEnd(false);
+			heelVolumeInM3 = evaluateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
 		}
 
-		return voyagePlans;
+		return voyagePlansMap;
+	}
+
+	private long generateActualsVoyagePlan(IVessel vessel, int vesselStartTime, List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap,
+			List<VoyagePlan> voyagePlansList, List<IOptionsSequenceElement> voyageOrPortOptions, List<Integer> currentTimes, final long startHeelVolumeInM3) {
+
+		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
+
+		final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
+		final VoyagePlan plan = new VoyagePlan();
+		plan.setCharterInRatePerDay(vesselCharterInRatePerDay);
+		plan.setStartingHeelInM3(startHeelVolumeInM3);
+		{
+
+			// Pass 1, get CV and sales price
+			int idx = -1;
+			int lngSalesPricePerMMBTu = 0;
+			int cargoCV = 0;
+			{
+				for (IOptionsSequenceElement element : voyageOrPortOptions) {
+					++idx;
+					if (element instanceof PortOptions) {
+						PortOptions portOptions = (PortOptions) element;
+
+						if (portOptions.getPortSlot() instanceof ILoadOption && idx != voyageOrPortOptions.size() - 1) {
+							cargoCV = actualsDataProvider.getCVValue(portOptions.getPortSlot());
+						}
+
+						else if (portOptions.getPortSlot() instanceof IDischargeOption) {
+							lngSalesPricePerMMBTu = actualsDataProvider.getLNGPricePerMMBTu(portOptions.getPortSlot());
+						}
+					}
+				}
+			}
+
+			// Pass 2, work out everything else
+
+			// Totals for voyage plan
+			final long[] fuelConsumptions = new long[FuelComponent.values().length];
+			final long[] fuelCosts = new long[FuelComponent.values().length];
+			final int totalRouteCost = 0;
+
+			long lngCommitmentInM3 = 0;
+			long endHeelInM3 = 0;
+
+			idx = -1;
+			IDetailsSequenceElement[] detailedSequence = new IDetailsSequenceElement[voyageOrPortOptions.size()];
+			for (IOptionsSequenceElement element : voyageOrPortOptions) {
+				++idx;
+				if (element instanceof PortOptions) {
+					PortOptions portOptions = (PortOptions) element;
+
+					PortDetails portDetails = new PortDetails();
+					portDetails.setOptions(portOptions);
+
+					// No port fuel consumption, rolled into the voyage details.
+					// portDetails.setFuelConsumption(fuel, consumption);
+					// portDetails.setFuelUnitPrice(fuel, price);
+
+					detailedSequence[idx] = portDetails;
+				} else if (element instanceof VoyageOptions) {
+					VoyageOptions voyageOptions = (VoyageOptions) element;
+
+					VoyageDetails voyageDetails = new VoyageDetails();
+
+					voyageDetails.setOptions(voyageOptions);
+
+					// No distinction between travel and idle
+					voyageDetails.setTravelTime(voyageOptions.getAvailableTime());
+					voyageDetails.setIdleTime(0);
+					// Not known
+					 voyageDetails.setSpeed(10);
+
+					// Base Fuel
+
+					int baseFuelPricePerMT = actualsDataProvider.getBaseFuelPrice(voyageOptions.getFromPortSlot());
+					voyageDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
+
+					long baseFuelConsumptionInMt = actualsDataProvider.getNextVoyageBaseFuelConsumptionInMT(voyageOptions.getFromPortSlot());
+					voyageDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, baseFuelConsumptionInMt);
+
+					fuelConsumptions[FuelComponent.Base.ordinal()] += baseFuelConsumptionInMt;
+					fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricePerMT);
+
+					// LNG
+					long lngInM3;
+					if (voyageOptions.getVesselState() == VesselState.Laden) {
+						// Volume after loading
+						lngInM3 = actualsDataProvider.getStartHeelInM3(voyageOptions.getFromPortSlot()) + actualsDataProvider.getVolumeInM3(voyageOptions.getFromPortSlot());
+						// Volume Left after discharge. This leave BOG + remaining heel
+						lngInM3 -= actualsDataProvider.getVolumeInM3(voyageOptions.getToPortSlot());
+
+						// Take off heel left at end of discharge. This is now our laden BOG quantity;
+						lngInM3 -= actualsDataProvider.getEndHeelInM3(voyageOptions.getToPortSlot());
+
+						voyageDetails.setFuelUnitPrice(FuelComponent.NBO, lngSalesPricePerMMBTu);
+
+						voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, lngInM3);
+
+						final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(actualsDataProvider.getStartHeelInM3(voyageOptions.getFromPortSlot()),
+								actualsDataProvider.getStartHeelInM3(voyageOptions.getFromPortSlot()) + actualsDataProvider.getVolumeInM3(voyageOptions.getFromPortSlot()));
+						heelLevelAnnotations.put(voyageOptions.getFromPortSlot(), heelLevelAnnotation);
+
+					} else {
+						assert voyageOptions.getVesselState() == VesselState.Ballast;
+						// Volume after discharging
+						lngInM3 = actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot());
+
+						if (actualsDataProvider.hasActuals(voyageOptions.getToPortSlot())) {
+							// Take off heel left at start of next load.
+							endHeelInM3 = actualsDataProvider.getStartHeelInM3(voyageOptions.getToPortSlot());
+						} else {
+							// Assume we arrive with safety heel at next destination.
+							endHeelInM3 = vessel.getVesselClass().getMinHeel();
+						}
+						// Take of end heel, this is now our laden BOG quantity;
+						lngInM3 -= endHeelInM3;
+						voyageDetails.setFuelUnitPrice(FuelComponent.NBO, lngSalesPricePerMMBTu);
+						voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.M3, lngInM3);
+
+						final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot())
+								+ actualsDataProvider.getVolumeInM3(voyageOptions.getFromPortSlot()), actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot()));
+						heelLevelAnnotations.put(voyageOptions.getFromPortSlot(), heelLevelAnnotation);
+
+					}
+
+					final long consumptionInMMBTu = Calculator.convertM3ToMMBTu(lngInM3, cargoCV);
+					voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu, consumptionInMMBTu);
+
+					fuelConsumptions[FuelComponent.NBO.ordinal()] += lngInM3;
+					fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(consumptionInMMBTu, lngSalesPricePerMMBTu);
+					lngCommitmentInM3 += lngInM3;
+
+					// Consumption rolled into normal fuel consumption
+					// Route costs not specified.
+					// voyageDetails.setRouteAdditionalConsumption(fuel, fuelUnit, consumption);
+					// voyageDetails.setRouteCost(price);
+					// totalRouteCost += price
+
+					detailedSequence[idx] = voyageDetails;
+				}
+			}
+
+			// Store results in plan
+			plan.setSequence(detailedSequence);
+
+			plan.setLNGFuelVolume(lngCommitmentInM3);
+
+			// Set the totals
+			for (final FuelComponent fc : FuelComponent.values()) {
+				plan.setFuelConsumption(fc, fuelConsumptions[fc.ordinal()]);
+				plan.setTotalFuelCost(fc, fuelCosts[fc.ordinal()]);
+			}
+
+			// Nothing!
+			plan.setTotalRouteCost(totalRouteCost);
+
+		}
+
+		voyagePlansList.add(plan);
+
+		final AllocationRecord allocationRecord = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, plan, currentTimes);
+		allocationRecord.allocationMode = AllocationMode.Actuals;
+		IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
+		
+		// Sanity check
+		assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
+
+		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, allocationAnnotation));
+
+		return plan.getRemainingHeelInM3();
+	}
+
+	// TODO: Better naming?
+	private long evaluateVoyagePlan(final IVessel vessel, final int vesselStartTime, final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap,
+			final List<VoyagePlan> voyagePlansList, final List<Integer> currentTimes, final long startHeelVolumeInM3, VoyagePlan plan) {
+
+		// TODO: Handle LNG at end of charter out
+		long endHeelVolumeInM3 = 0;
+		boolean planSet = false;
+		IAllocationAnnotation allocationAnnotation = null;
+		if (generatedCharterOutEvaluator != null) {
+			final Pair<VoyagePlan, IAllocationAnnotation> p = generatedCharterOutEvaluator.processSchedule(vesselStartTime, vessel, plan, currentTimes);
+			if (p != null) {
+				plan = p.getFirst();
+				voyagePlansList.add(p.getFirst());
+				allocationAnnotation = p.getSecond();
+
+				if (allocationAnnotation != null) {
+					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+				} else {
+					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
+				}
+				planSet = true;
+			}
+		}
+
+		// FIXME: This should be more customisable
+
+		// Execute custom logic to manipulate the schedule and choices
+		if (breakEvenEvaluator != null) {
+			final Pair<VoyagePlan, IAllocationAnnotation> p = breakEvenEvaluator.processSchedule(vesselStartTime, vessel, plan, currentTimes);
+			if (p != null) {
+				plan = p.getFirst();
+				voyagePlansList.add(p.getFirst());
+				allocationAnnotation = p.getSecond();
+
+				if (allocationAnnotation != null) {
+					endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+				} else {
+					endHeelVolumeInM3 = plan.getRemainingHeelInM3();
+				}
+				planSet = true;
+			}
+		}
+
+		if (!planSet) {
+			voyagePlansList.add(plan);
+			// TODO: Non-cargo cases?
+			allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
+			if (allocationAnnotation == null) {
+				// not a cargo plan?
+				endHeelVolumeInM3 = plan.getRemainingHeelInM3();
+			} else {
+				endHeelVolumeInM3 = allocationAnnotation.getRemainingHeelVolumeInM3();
+			}
+		}
+
+		// Generate heel level annotations
+		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
+		{
+			final IDetailsSequenceElement[] sequence = plan.getSequence();
+			long currentHeelInM3 = startHeelVolumeInM3;
+			long totalVoyageBOG = 0;
+			int voyageTime = 0;
+			IPortSlot optionalHeelUsePortSlot = null;
+			int adjust = plan.isIgnoreEnd() ? 1 : 0;
+			for (int i = 0; i < sequence.length - adjust; ++i) {
+				final IDetailsSequenceElement e = sequence[i];
+				if (e instanceof PortDetails) {
+					final PortDetails portDetails = (PortDetails) e;
+					final IPortSlot portSlot = portDetails.getOptions().getPortSlot();
+					final long start = currentHeelInM3;
+					if (portSlot.getPortType() != PortType.End) {
+						optionalHeelUsePortSlot = null;
+						if (allocationAnnotation != null) {
+							if (portSlot.getPortType() == PortType.Load) {
+								currentHeelInM3 += allocationAnnotation.getSlotVolumeInM3(portSlot);
+							} else if (portSlot.getPortType() == PortType.Discharge) {
+								currentHeelInM3 -= allocationAnnotation.getSlotVolumeInM3(portSlot);
+							}
+						} else {
+							if (portSlot instanceof IHeelOptionsPortSlot) {
+								optionalHeelUsePortSlot = portSlot;
+								// FIXME: This volume is optional use
+								final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
+								currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
+							} else if (portSlot.getPortType() != PortType.End) {
+								currentHeelInM3 = 0;
+							}
+						}
+					}
+					final long end = currentHeelInM3;
+
+					final HeelLevelAnnotation heelLevelAnnotation = new HeelLevelAnnotation(start, end);
+					heelLevelAnnotations.put(portSlot, heelLevelAnnotation);
+				} else if (e instanceof VoyageDetails) {
+					final VoyageDetails voyageDetails = (VoyageDetails) e;
+					long voyageBOGInM3 = 0;
+					for (final FuelComponent fuel : FuelComponent.getLNGFuelComponents()) {
+						voyageBOGInM3 += voyageDetails.getFuelConsumption(fuel, FuelUnit.M3);
+						voyageBOGInM3 += voyageDetails.getRouteAdditionalConsumption(fuel, FuelUnit.M3);
+					}
+					totalVoyageBOG += voyageBOGInM3;
+					currentHeelInM3 -= voyageBOGInM3;
+
+					voyageTime += voyageDetails.getTravelTime();
+					voyageTime += voyageDetails.getIdleTime();
+
+				}
+			}
+			// The optional heel use port slot has heel on board which may or may not have been used.
+			// The default code path assumes it has been used. However, if there is no NBO at all, we assume it did not exist,
+			// thus we need to update the data to accommodate.
+			if (optionalHeelUsePortSlot != null && voyageTime > 0 && totalVoyageBOG == 0) {
+				// Replace heel level annotation
+				heelLevelAnnotations.put(optionalHeelUsePortSlot, new HeelLevelAnnotation(0, 0));
+				// Update current heel - this will still be the start heel value as there was no boil-off
+				currentHeelInM3 = 0;
+			}
+
+			// Sanity check these calculations match expected values
+			assert totalVoyageBOG == plan.getLNGFuelVolume();
+			assert endHeelVolumeInM3 == currentHeelInM3;
+		}
+
+		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, allocationAnnotation));
+
+		return endHeelVolumeInM3;
+
 	}
 
 	/**
@@ -345,11 +707,12 @@ public class VoyagePlanner {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int startTime, final List<Integer> arrivalTimes, final long heelVolumeInM3) {
+	final public VoyagePlan makeVoyage(final IResource resource, final List<ISequenceElement> sequenceElements, final int vesselCharterInRatePerDay, final List<Integer> arrivalTimes,
+			long heelVolumeInM3) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		voyagePlanOptimiser.setVessel(vessel, startTime, baseFuelPricePerMT);
+		voyagePlanOptimiser.setVessel(vessel, baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -371,6 +734,11 @@ public class VoyagePlanner {
 			final IPort thisPort = portProvider.getPortForElement(element);
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
+
+			// If we are a heel options slots (i.e. Start or other vessel event slot, overwrite previous heel (assume lost) and replace with a new heel value
+			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
+				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
+			}
 
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
@@ -428,7 +796,7 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			return getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3);
+			return getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 		}
 		return null;
 	}
@@ -440,14 +808,16 @@ public class VoyagePlanner {
 	 *            An alternating list of PortOptions and VoyageOptions objects
 	 * @param arrivalTimes
 	 * @param optimiser
-	 * @param heelVolumeInM3
+	 * @param startHeelVolumeInM3
 	 * @return An optimised VoyagePlan
 	 */
-	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser, final long heelVolumeInM3) {
+	final public VoyagePlan getOptimisedVoyagePlan(final List<IOptionsSequenceElement> voyageOrPortOptionsSubsequence, final List<Integer> arrivalTimes, final IVoyagePlanOptimiser optimiser,
+			final long startHeelVolumeInM3, final int vesselCharterInRatePerDay) {
 		// Run sequencer evaluation
+		optimiser.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 		optimiser.setBasicSequence(voyageOrPortOptionsSubsequence);
 		optimiser.setArrivalTimes(arrivalTimes);
-		optimiser.setStartHeel(heelVolumeInM3);
+		optimiser.setStartHeel(startHeelVolumeInM3);
 		optimiser.init();
 		final VoyagePlan result = optimiser.optimise();
 		if (result == null) {
@@ -482,23 +852,13 @@ public class VoyagePlanner {
 
 	}
 
-	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<IOptionsSequenceElement> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser, final long startHeel) {
-		final VoyagePlan plan = getOptimisedVoyagePlan(currentSequence, currentTimes, optimiser, startHeel);
-		if (plan == null) {
-			return false;
-		}
-
-		voyagePlans.add(plan);
-		return true;
-	}
-
 	/**
 	 * Returns an array of boolean values indicating whether, for each index of the vessel location sequence, a sequence break occurs at that location (separating one cargo from the next one).
 	 * 
 	 * @param sequence
 	 * @return
 	 */
-	final public boolean[] findSequenceBreaks(final ISequence sequence) {
+	private boolean[] findSequenceBreaks(final ISequence sequence) {
 		final boolean[] result = new boolean[sequence.size()];
 
 		int idx = 0;
@@ -510,6 +870,7 @@ public class VoyagePlanner {
 				break;
 			case CharterOut:
 			case DryDock:
+			case Other:
 			case Maintenance:
 			case Short_Cargo_End:
 				result[idx] = true;
@@ -530,7 +891,7 @@ public class VoyagePlanner {
 	 * @param sequence
 	 * @return
 	 */
-	final public VesselState[] findVesselStates(final ISequence sequence) {
+	private VesselState[] findVesselStates(final ISequence sequence) {
 		final VesselState[] result = new VesselState[sequence.size()];
 
 		VesselState state = VesselState.Ballast;
@@ -577,7 +938,7 @@ public class VoyagePlanner {
 	 * @param sequence
 	 * @return
 	 */
-	final public VesselState[] findVesselStates(final List<ISequenceElement> elements) {
+	private VesselState[] findVesselStates(final List<ISequenceElement> elements) {
 		final VesselState[] result = new VesselState[elements.size()];
 
 		VesselState state = VesselState.Ballast;

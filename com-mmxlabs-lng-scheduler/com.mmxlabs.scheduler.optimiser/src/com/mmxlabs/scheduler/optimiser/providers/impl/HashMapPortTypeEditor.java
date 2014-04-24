@@ -29,14 +29,4 @@ public final class HashMapPortTypeEditor implements IPortTypeProviderEditor {
 
 		return PortType.Unknown;
 	}
-
-	@Override
-	public void dispose() {
-		portTypes.clear();
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
 }

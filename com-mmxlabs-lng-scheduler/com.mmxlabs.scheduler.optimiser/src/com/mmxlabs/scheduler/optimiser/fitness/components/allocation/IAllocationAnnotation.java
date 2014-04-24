@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.List;
 
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -16,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * @author hinton
  * 
  */
-public interface IAllocationAnnotation {
+public interface IAllocationAnnotation extends IElementAnnotation {
 	/**
 	 * @since 5.0
 	 */
@@ -51,19 +52,23 @@ public interface IAllocationAnnotation {
 	 * @since 5.0
 	 */
 	int getSlotTime(IPortSlot slot);
-
-	/**
-	 * Returns the price per M3 for LNG bought or sold at this slot
-	 * 
-	 * @param slot
-	 * @return
-	 * @since 5.0
-	 */
-	int getSlotPricePerM3(IPortSlot slot);
-	
-	
-	/**
-	 * @since 8.0
-	 */
+//
+//	/**
+//	 * Returns the price per M3 for LNG bought or sold at this slot
+//	 * 
+//	 * @param slot
+//	 * @return
+//	 * @since 5.0
+//	 */
+//	int getSlotPricePerM3(IPortSlot slot);
+//	
+//	
+//	/**
+//	 * @since 8.0
+//	 */
 	int getSlotPricePerMMBTu(IPortSlot slot);
+
+	long getStartHeelVolumeInM3();
+
+	long getSlotVolumeInMMBTu(IPortSlot slot);
 }

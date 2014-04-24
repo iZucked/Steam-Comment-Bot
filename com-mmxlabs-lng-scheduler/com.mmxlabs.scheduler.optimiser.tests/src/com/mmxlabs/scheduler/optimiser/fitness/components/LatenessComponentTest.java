@@ -79,7 +79,6 @@ public class LatenessComponentTest {
 		final IStartEndRequirement startRequirement = Mockito.mock(IStartEndRequirement.class, "Start");
 		final IStartEndRequirement endRequirement = Mockito.mock(IStartEndRequirement.class, "End");
 
-		Mockito.when(data.getDataComponentProvider(dcp, IStartEndRequirementProvider.class)).thenReturn(startEndRequirementProvider);
 		Mockito.when(startEndRequirementProvider.getStartRequirement(resource)).thenReturn(startRequirement);
 		Mockito.when(startEndRequirementProvider.getEndRequirement(resource)).thenReturn(endRequirement);
 

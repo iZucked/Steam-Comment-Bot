@@ -16,4 +16,5 @@ public interface ICharterMarketProviderEditor extends ICharterMarketProvider {
 
 	void addCharterOutOption(IVesselClass vesselClass, ICurve charterOutCurve, int minDuration);
 
+	void setCharterOutStartTime(int startTime);
 }

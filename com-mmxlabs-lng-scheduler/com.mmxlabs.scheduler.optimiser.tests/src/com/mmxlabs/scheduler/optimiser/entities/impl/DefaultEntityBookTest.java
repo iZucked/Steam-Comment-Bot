@@ -7,28 +7,27 @@ package com.mmxlabs.scheduler.optimiser.entities.impl;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
-public class SimpleEntityTest {
+public class DefaultEntityBookTest {
 
 	@Test
 	public void testGetTaxedProfit() {
 		final ICurve curve = mock(ICurve.class);
+		final IEntity entity = mock(IEntity.class);
 
-		final SimpleEntity entity = new SimpleEntity("name", 500000, curve);
+		final DefaultEntityBook entityBook = new DefaultEntityBook(entity, EntityBookType.Trading, curve);
 
 		final int time = 12345;
 
-		// 50 %
-		when(curve.getValueAtPoint(time)).thenReturn(500);
-
-		// 50% * 50% * 10000
-		Assert.assertEquals(2500, entity.getTaxedProfit(10000, time));
+		// 50% * 10000
+		Assert.assertEquals(10000, entityBook.getTaxedProfit(10000, time));
 
 		verify(curve).getValueAtPoint(time);
 

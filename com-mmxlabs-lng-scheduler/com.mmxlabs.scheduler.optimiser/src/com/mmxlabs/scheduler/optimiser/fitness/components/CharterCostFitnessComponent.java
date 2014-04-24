@@ -23,7 +23,6 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	@Inject
 	private IVesselProvider vesselProvider;
 
-
 	public CharterCostFitnessComponent(final String name, final CargoSchedulerFitnessCore core) {
 		super(name, core);
 	}
@@ -42,16 +41,17 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	protected boolean reallyStartSequence(final IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
+		// FIXME: Use VoyagePlans to get charter in rate
 		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
+			hireRate = vessel.getDailyCharterInPrice();
 			break;
 		case TIME_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
+			hireRate = vessel.getDailyCharterInPrice();
 			break;
 		case CARGO_SHORTS:
-			hireRate = vessel.getHourlyCharterInPrice();
+			hireRate = vessel.getDailyCharterInPrice();
 			break;
 		default:
 			// we are not interested in this sequence - we won't
@@ -103,8 +103,9 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	@Override
 	protected long endSequenceAndGetCost() {
 
+		// TODO: UTC!
 		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime,
 				Calculator.quantityFromRateTime(charterPrice.getValueAtPoint(firstLoadTime), lastTime - firstLoadTime))
-				/ Calculator.ScaleFactor;
+				/ 24l / Calculator.ScaleFactor;
 	}
 }

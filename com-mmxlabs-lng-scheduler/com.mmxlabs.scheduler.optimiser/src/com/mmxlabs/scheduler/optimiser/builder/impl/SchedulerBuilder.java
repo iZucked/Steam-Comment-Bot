@@ -46,7 +46,6 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.IndexedMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
@@ -90,7 +89,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
@@ -327,7 +325,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE", false, new ICooldownPriceCalculator() {
 			@Override
-			public void prepareEvaluation(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+			public void prepareEvaluation(final ISequences sequences) {
 			}
 
 			@Override
@@ -336,13 +334,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 
 			@Override
-			public int calculateCooldownUnitPrice(final int time) {
+			public int calculateCooldownUnitPrice(final int time, final IPort port) {
 				return 0;
 			}
-		});
+		}, ""/* no timezone */);
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	/**
@@ -557,10 +555,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator) {
+	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId) {
 
 		final Port port = new Port(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator);
+		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
 		return port;
 	}
 
@@ -612,10 +610,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId) {
 
 		final XYPort port = new XYPort(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator);
+		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
 		port.setX(x);
 		port.setY(y);
 
@@ -629,12 +627,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param name
 	 * @param arriveCold
 	 * @param cooldownPriceCalculator
+	 * @param timezoneId 
 	 */
-	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator) {
+	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, String timezoneId) {
 
 		port.setName(name);
 		port.setShouldVesselsArriveCold(arriveCold);
 		port.setCooldownPriceCalculator(cooldownPriceCalculator);
+		port.setTimeZoneId(timezoneId);
 		ports.add(port);
 
 		// Pin variable for null analysis...
@@ -673,9 +673,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final IStartEndRequirement start, final IStartEndRequirement end,
+	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve dailyCharterInRate, final IStartEndRequirement start, final IStartEndRequirement end,
 			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity) {
-		return this.createVessel(name, vesselClass, hourlyCharterInRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice, cargoCapacity);
+		return this.createVessel(name, vesselClass, dailyCharterInRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice, cargoCapacity);
 	}
 
 	/**
@@ -688,10 +688,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public List<IVessel> createSpotVessels(final String namePrefix, @NonNull final IVesselClass vesselClass, final int count, final ICurve hourlyCharterPrice) {
+	public List<IVessel> createSpotVessels(final String namePrefix, @NonNull final IVesselClass vesselClass, final int count, final ICurve dailyCharterInPrice) {
 		final List<IVessel> answer = new ArrayList<IVessel>(count);
 		for (int i = 0; i < count; i++) {
-			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), vesselClass, hourlyCharterPrice));
+			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), vesselClass, dailyCharterInPrice));
 		}
 		return answer;
 	}
@@ -706,11 +706,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createSpotVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve hourlyCharterInPrice) {
+	public IVessel createSpotVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve dailyCharterInPrice) {
 		final IStartEndRequirement start = createStartEndRequirement();
 		final IStartEndRequirement end = createStartEndRequirement();
 
-		return createVessel(name, vesselClass, hourlyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0, vesselClass.getCargoCapacity());
+		return createVessel(name, vesselClass, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0, vesselClass.getCargoCapacity());
 	}
 
 	/**
@@ -718,7 +718,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve hourlyCharterInRate, final VesselInstanceType vesselInstanceType,
+	public IVessel createVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve dailyCharterInRate, final VesselInstanceType vesselInstanceType,
 			final IStartEndRequirement start, final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity) {
 
 		if (!vesselClasses.contains(vesselClass)) {
@@ -741,7 +741,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vessel.setVesselInstanceType(vesselInstanceType);
 
-		vessel.setHourlyCharterInPrice(hourlyCharterInRate);
+		vessel.setDailyCharterInPrice(dailyCharterInRate);
 
 		vessel.setCargoCapacity(cargoCapacity);
 
@@ -952,27 +952,66 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				}
 			}
 		}
-		/**
-		 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
-		 */
-		final int maxFastReturnTime;
-		if ((dischargePort != null) && (loadPort != null)) {
-			final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
-			// what's the slowest vessel class
-			int slowestMaxSpeed = Integer.MAX_VALUE;
-			for (final IVesselClass vesselClass : vesselClasses) {
-				if (vesselClass == virtualClass) {
-					continue;
-				}
-				slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
-			}
 
-			maxFastReturnTime = Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance);
+		// 0 == return to current load,
+		// 1 == return to farthest in time load
+		// 2== end window
+		// 3 == discharge + 60
+		final int rule = 3;
+		final int latestTime;
+		if (rule == 0) {
+			/**
+			 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+			 */
+			int maxFastReturnTime = 0;
+			if ((dischargePort != null) && (loadPort != null)) {
+				final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadPort);
+				// what's the slowest vessel class
+				int slowestMaxSpeed = Integer.MAX_VALUE;
+				for (final IVesselClass vesselClass : vesselClasses) {
+					if (vesselClass == virtualClass) {
+						continue;
+					}
+					slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+				}
+				maxFastReturnTime = Math.max(maxFastReturnTime, Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance));
+			} else {
+				latestDischarge = 0;
+				maxFastReturnTime = 0;
+			}
+			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
+		} else if (rule == 1) {
+			/**
+			 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
+			 */
+			int maxFastReturnTime = 0;
+			if ((dischargePort != null)) { // && (loadPort != null)) {
+				for (final ILoadOption loadSlot : loadSlots) {
+					final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadSlot.getPort());
+					if (returnDistance == Integer.MAX_VALUE) {
+						continue;
+					}
+					// what's the slowest vessel class
+					int slowestMaxSpeed = Integer.MAX_VALUE;
+					for (final IVesselClass vesselClass : vesselClasses) {
+						if (vesselClass == virtualClass) {
+							continue;
+						}
+						slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
+					}
+					maxFastReturnTime = Math.max(maxFastReturnTime, Calculator.getTimeFromSpeedDistance(slowestMaxSpeed, returnDistance));
+				}
+			} else {
+				latestDischarge = 0;
+				maxFastReturnTime = 0;
+			}
+			latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
+		} else if (rule == 2) {
+			latestTime = Math.max(endOfLatestWindow, latestDischarge);
 		} else {
-			maxFastReturnTime = 0;
-			latestDischarge = 0;
+			latestTime = Math.max(endOfLatestWindow,latestDischarge) + 60 * 24;
 		}
-		final int latestTime = Math.max(endOfLatestWindow + (24 * minDaysFromLastEventToEnd), maxFastReturnTime + latestDischarge);
+
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
 			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
@@ -1016,12 +1055,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.setResources(resources);
 		data.setSequenceElements(sequenceElements);
-
-		data.addDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, timeWindowProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, elementDurationsProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, resourceAllocationProvider);
-		data.addDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, optionalElements);
-		data.addDataComponentProvider(SchedulerConstants.DCP_orderedElementsProvider, orderedSequenceElementsEditor);
 
 		for (final IBuilderExtension extension : extensions) {
 			extension.finishBuilding(data);
@@ -1114,7 +1147,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	@NonNull
 	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long minHeelInM3, final int baseFuelUnitPricePerMT,
-			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3) {
+			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -1132,6 +1165,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setCooldownVolume(cooldownVolumeM3);
 
 		vesselClass.setPilotLightRate(pilotLightRate);
+		vesselClass.setMinBaseFuelConsumptionInMTPerDay(minBaseFuelConsumptionPerDay);
 
 		vesselClasses.add(vesselClass);
 
@@ -1142,8 +1176,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 8.0
 	 */
 	@Override
-	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed, final int serviceSpeed) {
+	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
+			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int nboSpeed, final int serviceSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -1156,10 +1190,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final VesselClass vc = (VesselClass) vesselClass;
 
-		vc.setNBORate(state, nboRateInM3PerHour);
-		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
-		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
-		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
+		vc.setNBORate(state, nboRateInM3PerDay);
+		vc.setIdleNBORate(state, idleNBORateInM3PerDay);
+		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
+		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
 		vc.setMinNBOSpeed(state, nboSpeed);
 		vc.setServiceSpeed(state, serviceSpeed);
 
@@ -1170,32 +1204,32 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * 
 	 * @param vc
 	 * @param state
-	 * @param nboRateInM3PerHour
-	 * @param idleNBORateInM3PerHour
-	 * @param idleConsumptionRateInMTPerHour
-	 * @param consumptionCalculatorInMTPerHour
+	 * @param nboRateInM3PerDay
+	 * @param idleNBORateInM3PerDay
+	 * @param idleConsumptionRateInMTPerDay
+	 * @param consumptionCalculatorInMTPerDay
 	 * @since 2.0
 	 */
 
 	@Override
-	public void setVesselClassStateParameters(@NonNull final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionCalculatorInMTPerHour, final int serviceSpeed) {
+	public void setVesselClassStateParameters(@NonNull final IVesselClass vc, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
+			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionCalculatorInMTPerDay, final int serviceSpeed) {
 
-		// Convert rate to MT equivalent per hour
-		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(nboRateInM3PerHour, vc.getBaseFuelConversionFactor());
+		// Convert rate to MT equivalent per day
+		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(nboRateInM3PerDay, vc.getBaseFuelConversionFactor());
 
-		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
+		final int nboSpeed = consumptionCalculatorInMTPerDay.getSpeed(nboRateInMTPerDay);
 
-		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed, serviceSpeed);
+		this.setVesselClassStateParameters(vc, state, nboRateInM3PerDay, idleNBORateInM3PerDay, idleConsumptionRateInMTPerDay, consumptionCalculatorInMTPerDay, nboSpeed, serviceSpeed);
 	}
 
 	/**
 	 * @since 2.0
 	 */
 	@Override
-	public void setVesselClassPortTypeParameters(@NonNull final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerHour) {
+	public void setVesselClassPortTypeParameters(@NonNull final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerDay) {
 
-		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);
+		((VesselClass) vc).setInPortConsumptionRateInMTPerDay(portType, inPortConsumptionRateInMTPerDay);
 	}
 
 	@Override
@@ -1421,17 +1455,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 	}
 
-	/**
-	 * @since 5.0
-	 */
 	@Override
-	public void setCargoVesselRestriction(final Collection<IPortSlot> cargoSlots, final Set<IVessel> vessels) {
+	public void setSlotVesselRestriction(final IPortSlot slot, final Set<IVessel> vessels) {
 
-		for (final IPortSlot slot : cargoSlots) {
-			assert slot != null;
-			constrainSlotToVessels(slot, vessels);
-
-		}
+		assert slot != null;
+		constrainSlotToVessels(slot, vessels);
 	}
 
 	@Override
@@ -1749,7 +1777,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, final ICurve charterOutCurve, final int minDuration) {
 		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration);
+	}
 
+	@Override
+	public void setGeneratedCharterOutStartTime(@NonNull final int charterOutStartTime) {
+		charterMarketProviderEditor.setCharterOutStartTime(charterOutStartTime);;
 	}
 
 	/**

@@ -4,25 +4,49 @@
  */
 package com.mmxlabs.scheduler.optimiser.entities;
 
-import com.mmxlabs.common.detailtree.IDetailTree;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-/**
- * @since 2.0
- */
 public interface IEntityValueCalculator {
 
-	long evaluate(VoyagePlan plan, IAllocationAnnotation currentAllocation, IVessel vessel, int vesselStartTime, IAnnotatedSolution annotatedSolution);
-
-	long evaluate(VoyagePlan plan, IVessel vessel, int planStartTime, int vesselStartTime, IAnnotatedSolution annotatedSolution);
+	/**
+	 * Evaluate a Cargo based {@link VoyagePlan} - returning the post tax P&L value
+	 * 
+	 * @param plan
+	 * @param currentAllocation
+	 * @param vessel
+	 * @param vesselStartTime
+	 * @param annotatedSolution
+	 * @return
+	 */
+	long evaluate(@NonNull VoyagePlan plan, @NonNull IAllocationAnnotation currentAllocation, @NonNull IVessel vessel, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
-	 * Add method to obtain the shipping costs for P&L calculations
-	 * @since 7.0
+	 * Evaluate a non-cargo based {@link VoyagePlan} returning the post tax P&L value
+	 * 
+	 * @param plan
+	 * @param vessel
+	 * @param planStartTime
+	 * @param vesselStartTime
+	 * @param annotatedSolution
+	 * @return
 	 */
-	long getShippingCosts(VoyagePlan plan, IVessel vessel, boolean includeLNG, boolean includeTimeCharterCosts, int vesselStartTime, IDetailTree[] detailsRef);
+	long evaluate(@NonNull VoyagePlan plan, @NonNull IVessel vessel, int planStartTime, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
 
+	/**
+	 * Evaluate an unused port slot for P&L contributions (e.g. cancellation fees). The port slot is expected to be an instanceof {@link ILoadOption} or {@link IDischargeOption}.
+	 * 
+	 * @param portSlot
+	 * @param annotatedSolution
+	 * @return
+	 */
+	long evaluateUnusedSlot(@NonNull IPortSlot portSlot, @Nullable IAnnotatedSolution annotatedSolution);
 }

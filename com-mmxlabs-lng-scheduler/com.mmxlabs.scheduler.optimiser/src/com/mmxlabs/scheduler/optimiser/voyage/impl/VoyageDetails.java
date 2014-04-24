@@ -20,11 +20,11 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 
 	private VoyageOptions options;
 
-	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption;
+	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
 
-	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption;
+	private final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
 
-	private final LongFastEnumMap<FuelComponent> fuelUnitPrices;
+	private final LongFastEnumMap<FuelComponent> fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 
 	private int idleTime;
 
@@ -36,14 +36,11 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 
 	private long routeCost = 0;
 
-	private boolean charterOutIdleTime;
+	// private boolean charterOutIdleTime;
 
 	private long totalGroupProfitAndLoss;
 
 	public VoyageDetails() {
-		fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
-		routeAdditionalConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
-		fuelUnitPrices = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 	}
 
 	public VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final long routeCost2, final VoyageOptions options,
@@ -55,10 +52,20 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 		this.startTime = startTime2;
 		this.routeCost = routeCost2;
 		this.options = options;
-		this.fuelConsumption = fuelConsumption2;
-		this.fuelUnitPrices = fuelUnitPrices2;
-		this.routeAdditionalConsumption = routeAdditionalConsumption2;
+		putAll(this.fuelConsumption, fuelConsumption2);
+		this.fuelUnitPrices.putAll(fuelUnitPrices2);
+		putAll(this.routeAdditionalConsumption, routeAdditionalConsumption2);
 		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss2;
+	}
+
+	// TODO: Add to LongFastEnumEnumMap
+	private final void putAll(final LongFastEnumEnumMap<FuelComponent, FuelUnit> dst, final LongFastEnumEnumMap<FuelComponent, FuelUnit> src) {
+
+		for (final FuelComponent fc : FuelComponent.values()) {
+			for (final FuelUnit fu : FuelUnit.values()) {
+				dst.put(fc, fu, src.get(fc, fu));
+			}
+		}
 	}
 
 	@Override
@@ -144,7 +151,7 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 				&& Objects.equal(idleTime,  d.idleTime)
 				&& Objects.equal(travelTime,  d.travelTime)
 				&& Objects.equal(startTime,  d.startTime)
-				&& Objects.equal(charterOutIdleTime,  d.charterOutIdleTime)
+//				&& Objects.equal(charterOutIdleTime,  d.charterOutIdleTime)
 				&& Objects.equal(routeCost,  d.routeCost)
 				&& Objects.equal(options,  d.options)
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
@@ -181,7 +188,7 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 	}
 
 	@Override
-	public void setTotalGroupProfitAndLoss(long totalGroupProfitAndLoss) {
+	public void setTotalGroupProfitAndLoss(final long totalGroupProfitAndLoss) {
 		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
 	}
 }

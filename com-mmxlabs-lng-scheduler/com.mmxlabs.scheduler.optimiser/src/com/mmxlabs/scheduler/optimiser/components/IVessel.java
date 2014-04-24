@@ -51,5 +51,5 @@ public interface IVessel extends IResource {
 	 * @return hourly charter in price
 	 * @since 2.0
 	 */
-	ICurve getHourlyCharterInPrice();
+	ICurve getDailyCharterInPrice();
 }

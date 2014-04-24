@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -46,15 +45,15 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private IVessel vessel;
 
 	private int baseFuelPricePerMT;
-	
-	private int vesselStartTime;
+
+	private int vesselCharterInRatePerDay;
 
 	private int bestProblemCount = Integer.MAX_VALUE;
 
 	private long bestCost = Long.MAX_VALUE;
 
 	private VoyagePlan bestPlan = null;
-	
+
 	private long startHeel;
 
 	/**
@@ -214,19 +213,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int bestLastProblemCount = Short.MAX_VALUE;
 			int bestAvailableTime = options.getAvailableTime();
 
-			final ICurve hireRateCurve;
-			switch (vessel.getVesselInstanceType()) {
-			case SPOT_CHARTER:
-				hireRateCurve = vessel.getHourlyCharterInPrice();
-				break;
-			case TIME_CHARTER:
-				hireRateCurve = vessel.getHourlyCharterInPrice();
-				break;
-			default:
-				hireRateCurve = null;
-				break;
-			}
-
 			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
 			for (int i = 0; i < timeExtent / RELAXATION_STEP; i++) {
 
@@ -241,9 +227,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					// Hire cost will be properly calculated in a different step.
 
 					// This is not calculator.multiply, because hireRate is not scaled.
-					if (hireRateCurve != null) {
-						int hireRate = hireRateCurve.getValueAtPoint(vesselStartTime);
-						final long hireCost = (long) hireRate * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
+					{
+						int hireRatePerDay = currentPlan.getCharterInRatePerDay();
+						final long hireCost = (long) hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
 						currentCost += hireCost;
 					}
 
@@ -348,14 +334,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					// Skip cast check as we created the object in the first
 					// place
 					final VoyageOptions options = details.getOptions();
-
-					try {
-						details.setOptions(options.clone());
-					} catch (final CloneNotSupportedException e) {
-						// Record error, wrap up and rethrow
-						log.error(e.getMessage(), e);
-						throw new RuntimeException(e);
-					}
+					details.setOptions(options.clone());
 				}
 			}
 		}
@@ -408,9 +387,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final List<IDetailsSequenceElement> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(basicSequence.toArray(new IOptionsSequenceElement[0]));
 
 		final VoyagePlan currentPlan = new VoyagePlan();
+		currentPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray(new IDetailsSequenceElement[0]));
+		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		return currentPlan;
 	}
@@ -460,9 +440,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @since 8.0
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final int vesselStartTime, int baseFuelPricePerMT) {
+	public void setVessel(final IVessel vessel, int baseFuelPricePerMT) {
 		this.vessel = vessel;
-		this.vesselStartTime = vesselStartTime;
 		this.baseFuelPricePerMT = baseFuelPricePerMT;
 	}
 
@@ -515,4 +494,10 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	public long getStartHeel() {
 		return startHeel;
 	}
+
+	@Override
+	public void setVesselCharterInRatePerDay(final int vesselCharterInRatePerDay) {
+		this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
+	}
+
 }

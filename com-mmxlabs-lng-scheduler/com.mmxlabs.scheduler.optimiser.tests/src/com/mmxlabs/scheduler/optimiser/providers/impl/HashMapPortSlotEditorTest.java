@@ -29,26 +29,4 @@ public class HashMapPortSlotEditorTest {
 		Assert.assertSame(element, editor.getElement(portSlot));
 
 	}
-
-	@Test
-	public void testDispose() {
-
-		final HashMapPortSlotEditor editor = new HashMapPortSlotEditor();
-		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
-		final IPortSlot portSlot = Mockito.mock(IPortSlot.class);
-
-		Assert.assertNull(editor.getPortSlot(element));
-		Assert.assertNull(editor.getElement(portSlot));
-
-		editor.setPortSlot(element, portSlot);
-
-		Assert.assertSame(portSlot, editor.getPortSlot(element));
-		Assert.assertSame(element, editor.getElement(portSlot));
-
-		editor.dispose();
-
-		Assert.assertNull(editor.getPortSlot(element));
-		Assert.assertNull(editor.getElement(portSlot));
-	}
-
 }

@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import java.util.List;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -58,6 +61,13 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * @return true if the sequence is OK, or false if there's a problem
 	 */
 	boolean endSequence();
+
+	/**
+	 * Give the fitness component a chance to evaluate unused elements, taking the {@link ScheduledSequences} object as a way to get any additional information needed.
+	 * 
+	 * @return true if the unused elements are OK, or false if there's a problem
+	 */
+	boolean evaluateUnusedSlots(List<ISequenceElement> unusedSlots, ScheduledSequences scheduleSequences);
 
 	/**
 	 * Finish evaluating a solution and return its cost. The cost should also be stored for {@link IFitnessComponent#getFitness()}.

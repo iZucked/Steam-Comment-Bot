@@ -10,21 +10,21 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 
 public class ProfitAndLossEntryTest {
 
 	@Test
 	public void test() {
 
-		final IEntity entity = mock(IEntity.class);
+		final IEntityBook entityBook = mock(IEntityBook.class);
 		final long groupValue = 1234567890l;
 		final long groupValuePreTax = 2234567890l;
 		final IDetailTree details = mock(IDetailTree.class);
 
-		final ProfitAndLossEntry entry = new ProfitAndLossEntry(entity, groupValue, groupValuePreTax, details);
+		final ProfitAndLossEntry entry = new ProfitAndLossEntry(entityBook, groupValue, groupValuePreTax, details);
 
-		Assert.assertSame(entity, entry.getEntity());
+		Assert.assertSame(entityBook, entry.getEntityBook());
 		Assert.assertEquals(groupValue, entry.getFinalGroupValue());
 		Assert.assertSame(details, entry.getDetails());
 	}

@@ -18,7 +18,6 @@ public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 	// TODO maybe make this indexed as well, although the getElement method is not called in the main loop
 	private final HashMap<IPortSlot, ISequenceElement> elements = new HashMap<IPortSlot, ISequenceElement>();
 
-
 	@Override
 	public final IPortSlot getPortSlot(final ISequenceElement element) {
 		return slots.maybeGet(element);
@@ -27,17 +26,6 @@ public final class IndexedPortSlotEditor implements IPortSlotProviderEditor {
 	@Override
 	public final ISequenceElement getElement(final IPortSlot portSlot) {
 		return elements.get(portSlot);
-	}
-
-	@Override
-	public String getName() {
-		return "";
-	}
-
-	@Override
-	public void dispose() {
-		elements.clear();
-		slots.clear();
 	}
 
 	@Override

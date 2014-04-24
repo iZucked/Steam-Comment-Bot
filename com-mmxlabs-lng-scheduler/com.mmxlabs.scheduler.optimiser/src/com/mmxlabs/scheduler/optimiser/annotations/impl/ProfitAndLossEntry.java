@@ -5,16 +5,16 @@
 package com.mmxlabs.scheduler.optimiser.annotations.impl;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
-import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
 
 /**
- * @author hinton
- * @since 2.0
+ * A list item for {@link IProfitAndLossAnnotation} storing the details for a specific {@link IEntityBook}.
  * 
  */
 public class ProfitAndLossEntry implements IProfitAndLossEntry {
-	private final IEntity entity;
+	private final IEntityBook entityBook;
 	private final long groupValue;
 	private final long groupValuePreTax;
 	private final IDetailTree details;
@@ -22,17 +22,17 @@ public class ProfitAndLossEntry implements IProfitAndLossEntry {
 	/**
 	 * @since 8.0
 	 */
-	public ProfitAndLossEntry(final IEntity entity, final long groupValue, final long groupValuePreTax, final IDetailTree details) {
+	public ProfitAndLossEntry(final IEntityBook entityBook, final long groupValue, final long groupValuePreTax, final IDetailTree details) {
 		super();
-		this.entity = entity;
+		this.entityBook = entityBook;
 		this.groupValue = groupValue;
 		this.groupValuePreTax = groupValuePreTax;
 		this.details = details;
 	}
 
 	@Override
-	public IEntity getEntity() {
-		return entity;
+	public IEntityBook getEntityBook() {
+		return entityBook;
 	}
 
 	@Override

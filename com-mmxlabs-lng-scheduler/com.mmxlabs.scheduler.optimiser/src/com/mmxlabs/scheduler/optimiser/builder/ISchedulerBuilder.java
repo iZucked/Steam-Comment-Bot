@@ -91,7 +91,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
-			int warmupTimeInHours, long cooldownVolumeInM3);
+			int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -147,7 +147,7 @@ public interface ISchedulerBuilder {
 	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @since 2.0
 	 */
-	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerHour);
+	void setVesselClassPortTypeParameters(@NonNull IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerDay);
 
 	/**
 	 * Create a charter out event
@@ -245,7 +245,7 @@ public interface ISchedulerBuilder {
 	 * @since 5.0
 	 */
 	@NonNull
-	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
+	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
 			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
 
 	/**
@@ -310,7 +310,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator);
+	IPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -321,7 +321,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y);
+	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y, final String timezoneId);
 
 	/**
 	 * Create a cargo with the initial port slots. If allowRewiring is false, bind the slot sequence.
@@ -341,17 +341,16 @@ public interface ISchedulerBuilder {
 	ICargo createCargo(final boolean allowRewiring, final IPortSlot... slots);
 
 	/**
-	 * Restrict the set of vessels which can carry this cargo to those in the second argument.
+	 * Restrict the set of vessels which can carry this slot to those in the second argument.
 	 * 
-	 * If this method is never called, the cargo can be carried by any vessel.
+	 * If this method is never called, the slot can be carried by any vessel.
 	 * 
-	 * @param cargo
-	 *            a cargo created by {@link #createCargo()}
+	 * @param slot
+	 *            a {@link ILoadOption} or {@link IDischargeOption}
 	 * @param vessels
 	 *            a set of vessels on which this cargo may be carried
-	 * @since 5.0
 	 */
-	void setCargoVesselRestriction(Collection<IPortSlot> cargoSlots, Set<IVessel> vessels);
+	void setSlotVesselRestriction(IPortSlot slot, Set<IVessel> vessels);
 
 	/**
 	 * Create a time window with the specified start and end time.
@@ -516,7 +515,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	List<IVessel> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve hourlyCharterInPrice);
+	List<IVessel> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve dailyCharterInPrice);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
@@ -529,7 +528,7 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@NonNull
-	IVessel createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInPrice);
+	IVessel createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice);
 
 	/**
 	 * Set the list of ports this vessel is not permitted to travel to.
@@ -762,4 +761,11 @@ public interface ISchedulerBuilder {
 	 * @param vessel
 	 */
 	void freezeSlotToVessel(@NonNull IPortSlot portSlot, @NonNull IVessel vessel);
+
+	/**
+	 * Set the earliest time we can start generating charter outs.
+	 * 
+	 * @param charterOutStartTime
+	 */
+	void setGeneratedCharterOutStartTime(int charterOutStartTime);
 }

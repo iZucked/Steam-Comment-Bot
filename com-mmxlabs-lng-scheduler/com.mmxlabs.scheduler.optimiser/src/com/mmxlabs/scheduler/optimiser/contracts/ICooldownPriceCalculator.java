@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.contracts;
 
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
 /**
@@ -24,7 +25,7 @@ public interface ICooldownPriceCalculator extends ICalculator {
 	 * @param scheduledSequences
 	 * @since 8.0
 	 */
-	public void prepareEvaluation(ISequences sequences, ScheduledSequences scheduledSequences);
+	public void prepareEvaluation(ISequences sequences);
 
 	/**
 	 * Find the unit price in dollars per mmbtu for gas at the given {@link ILoadSlot}, at the given time.
@@ -38,7 +39,8 @@ public interface ICooldownPriceCalculator extends ICalculator {
 	 * Find the unit price in dollars per mmbtu for gas at the given time. To be used when an {@link ILoadSlot} is not available.
 	 * 
 	 * @param time
-	 * @since 2.0
+	 * @param port
+	 *            {@link IPort} for local to UTC conversion
 	 */
-	public int calculateCooldownUnitPrice(int time);
+	public int calculateCooldownUnitPrice(int time, IPort port);
 }
