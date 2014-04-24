@@ -8,18 +8,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -42,6 +48,9 @@ public class KPIContentProvider implements IStructuredContentProvider {
 	private static final String IDLE = "Idle Time";
 	private static final String TOTAL_COST = "Shipping Cost";
 	private static final String TOTAL_PNL = "P&L";
+	private static final String SHIPPING_PNL = "Shipping P&L";
+	private static final String TRADING_PNL = "Trading P&L";
+	private static final String MTM_PNL = "MtM P&L";
 
 	public static final String TYPE_COST = "Cost";
 	public static final String TYPE_TIME = "Days, hours";
@@ -77,7 +86,9 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 		long totalCost = 0l;
 		long lateness = 0l;
-		long totalPNL = 0l;
+		long totalTradingPNL = 0l;
+		long totalShippingPNL = 0l;
+		long totalMtMPNL = 0l;
 		long totalIdleHours = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
@@ -145,31 +156,68 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-						totalPNL += getElementPNL(cargoAllocation);
+						totalTradingPNL += getElementTradingPNL(cargoAllocation);
+						totalShippingPNL += getElementShippingPNL(cargoAllocation);
 					}
 
 				} else if (evt instanceof ProfitAndLossContainer) {
-					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
+					totalTradingPNL += getElementTradingPNL((ProfitAndLossContainer) evt);
+					totalShippingPNL += getElementShippingPNL((ProfitAndLossContainer) evt);
 				}
 			}
 		}
 
-		if (totalPNL != 0) {
-			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID, false));
+		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			totalTradingPNL += getElementTradingPNL(openSlotAllocation);
+			totalShippingPNL += getElementShippingPNL(openSlotAllocation);
 		}
+
+		for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
+			totalMtMPNL += getElementTradingPNL(marketAllocation);
+			totalMtMPNL += getElementShippingPNL(marketAllocation);
+		}
+
+		output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalTradingPNL + totalShippingPNL, TotalsHierarchyView.ID, false));
+		output.add(new RowData(scenarioInstance.getName(), TRADING_PNL, TYPE_COST, totalTradingPNL, TotalsHierarchyView.ID, false));
+		output.add(new RowData(scenarioInstance.getName(), SHIPPING_PNL, TYPE_COST, totalShippingPNL, TotalsHierarchyView.ID, false));
+		output.add(new RowData(scenarioInstance.getName(), MTM_PNL, TYPE_COST, totalMtMPNL, TotalsHierarchyView.ID, false));
+
 		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
 		output.add(new RowData(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true));
 		output.add(new RowData(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true));
 	}
 
-	private long getElementPNL(final ProfitAndLossContainer container) {
-		final long total = 0l;
+	private long getElementShippingPNL(final ProfitAndLossContainer container) {
+		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+	}
+
+	private long getElementTradingPNL(final ProfitAndLossContainer container) {
+		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+	}
+
+	private long getElementPNL(final ProfitAndLossContainer container, final EStructuralFeature containmentFeature) {
 
 		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
 		if (groupProfitAndLoss != null) {
-			return groupProfitAndLoss.getProfitAndLoss();
+			long totalPNL = 0;
+			for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+				final BaseEntityBook entityBook = entityPNL.getEntityBook();
+				if (entityBook == null) {
+					// Fall back code path for old models.
+					if (containmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+						return groupProfitAndLoss.getProfitAndLoss();
+					} else {
+						return 0;
+					}
+				} else {
+					if (entityBook.eContainmentFeature() == containmentFeature) {
+						totalPNL += entityPNL.getProfitAndLoss();
+					}
+				}
+			}
+			return totalPNL;
 		}
-		return total;
+		return 0;
 	}
 
 	private final List<RowData> pinnedData = new ArrayList<RowData>();

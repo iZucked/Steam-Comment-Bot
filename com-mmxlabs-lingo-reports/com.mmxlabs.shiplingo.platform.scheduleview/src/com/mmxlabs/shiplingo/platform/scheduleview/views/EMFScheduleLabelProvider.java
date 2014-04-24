@@ -29,8 +29,8 @@ import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -105,9 +105,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			text = seqText;
 		} else if (element instanceof Journey) {
 			Journey j = (Journey) element;
-			if (j.getRoute().isCanal()) {
-				if (memento.getBoolean(Show_Canals)) {
-					text = j.getRoute().getName().replace("canal", "");
+			Route route = j.getRoute();
+			if (route != null) {
+				if (route.isCanal()) {
+					if (memento.getBoolean(Show_Canals)) {
+						text = route.getName().replace("canal", "");
+					}
 				}
 			}
 		}
@@ -195,6 +198,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public String getToolTipText(final Object element) {
+
 		if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
@@ -228,8 +232,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				for (FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", fq.getFuel().toString()));
 				}
-				if (journey.getRoute().isCanal()) {
-					eventText.append(" | " + journey.getRoute() + "\n");
+				Route route = journey.getRoute();
+				if (route != null && route.isCanal()) {
+					eventText.append(" | " + route + "\n");
 				}
 
 			} else if (element instanceof SlotVisit) {
@@ -375,7 +380,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return c;
 		} else if (object instanceof VesselEventVisit) {
 			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
-			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 			if (timeZone == null)
 				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));

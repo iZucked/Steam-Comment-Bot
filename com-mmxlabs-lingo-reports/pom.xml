@@ -26,7 +26,7 @@
 	</ciManagement>
 
 	<modules>
-		<module>target-definition</module>
+		<module>com.mmxlabs.shiplingo.platform.target-definition</module>
 
 		<module>com.mmxlabs.shiplingo.platform.scheduleview</module>
 
@@ -63,7 +63,7 @@
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.shiplingo.platform</groupId>
-							<artifactId>target-definition</artifactId>
+							<artifactId>com.mmxlabs.shiplingo.platform.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>

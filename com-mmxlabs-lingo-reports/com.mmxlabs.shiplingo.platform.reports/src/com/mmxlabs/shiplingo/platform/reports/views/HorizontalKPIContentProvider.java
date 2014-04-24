@@ -10,11 +10,15 @@ import java.util.EventObject;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -22,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -51,17 +56,21 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 	private Viewer currentViewer;
 
 	public static class RowData {
-		public RowData(final String scheduleName, final Long pnl, final Long mtmPnl, final Long shippingCost, final Long idleTime) {
+		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime) {
 			super();
 			this.scheduleName = scheduleName;
-			this.pnl = pnl;
+			this.totalPNL = totalPNL;
+			this.tradingPNL = tradingPNL;
+			this.shippingPNL = shippingPNL;
 			this.mtmPnl = mtmPnl;
 			this.shippingCost = shippingCost;
 			this.idleTime = idleTime;
 		}
 
 		public final String scheduleName;
-		public final Long pnl;
+		public Long totalPNL;
+		public final Long tradingPNL;
+		public final Long shippingPNL;
 		public final Long mtmPnl;
 		public final Long shippingCost;
 		public final Long idleTime;
@@ -77,7 +86,8 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 	private RowData createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance) {
 
 		long totalCost = 0l;
-		long totalPNL = 0l;
+		long totalTradingPNL = 0l;
+		long totalShippingPNL = 0l;
 		long totalMtMPNL = 0l;
 		long totalIdleHours = 0l;
 
@@ -109,17 +119,24 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 
 					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
 						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-						totalPNL += getElementPNL(cargoAllocation);
+						totalTradingPNL += getElementTradingPNL(cargoAllocation);
+						totalShippingPNL += getElementShippingPNL(cargoAllocation);
 					}
 
 				} else if (evt instanceof ProfitAndLossContainer) {
-					totalPNL += getElementPNL((ProfitAndLossContainer) evt);
+					totalTradingPNL += getElementTradingPNL((ProfitAndLossContainer) evt);
+					totalShippingPNL += getElementShippingPNL((ProfitAndLossContainer) evt);
 				}
 			}
 
 		}
 		for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
-			totalMtMPNL += getElementPNL(marketAllocation);
+			totalMtMPNL += getElementTradingPNL(marketAllocation);
+			totalMtMPNL += getElementShippingPNL(marketAllocation);
+		}
+		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			totalTradingPNL += getElementTradingPNL(openSlotAllocation);
+			totalShippingPNL += getElementShippingPNL(openSlotAllocation);
 		}
 
 		EObject object = schedule.eContainer();
@@ -127,14 +144,38 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 			object = object.eContainer();
 		}
 
-		return new RowData(scenarioInstance.getName(), totalPNL, totalMtMPNL, totalCost, totalIdleHours);
+		return new RowData(scenarioInstance.getName(), totalTradingPNL + totalShippingPNL, totalTradingPNL, totalShippingPNL, totalMtMPNL, totalCost, totalIdleHours);
 	}
 
-	private long getElementPNL(final ProfitAndLossContainer container) {
+	private long getElementShippingPNL(final ProfitAndLossContainer container) {
+		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+	}
+
+	private long getElementTradingPNL(final ProfitAndLossContainer container) {
+		return getElementPNL(container, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+	}
+
+	private long getElementPNL(final ProfitAndLossContainer container, final EStructuralFeature containmentFeature) {
 
 		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
 		if (groupProfitAndLoss != null) {
-			return groupProfitAndLoss.getProfitAndLoss();
+			long totalPNL = 0;
+			for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+				final BaseEntityBook entityBook = entityPNL.getEntityBook();
+				if (entityBook == null) {
+					// Fall back code path for old models.
+					if (containmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+						return groupProfitAndLoss.getProfitAndLoss();
+					} else {
+						return 0;
+					}
+				} else {
+					if (entityBook.eContainmentFeature() == containmentFeature) {
+						totalPNL += entityPNL.getProfitAndLoss();
+					}
+				}
+			}
+			return totalPNL;
 		}
 		return 0;
 	}
@@ -172,12 +213,12 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 		}
 
 		if (rowData.length == 0) {
-			rowData = new RowData[] { new RowData("", null, null, null, null) };
+			rowData = new RowData[] { new RowData("", null, null, null, null, null, null) };
 		}
 
 	}
 
-	private RowData pinnedData = new RowData("", null, null, null, null);
+	private RowData pinnedData = new RowData("", null, null, null, null, null, null);
 
 	public RowData getPinnedData() {
 		return pinnedData;

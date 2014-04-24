@@ -8,21 +8,26 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.MarketAllocation;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -30,19 +35,53 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesView;
 
 public class PNLDetailsReport extends DetailPropertiesView {
+
+	private int expandLevel = 4;
 
 	public PNLDetailsReport() {
 		super("pnl", "com.mmxlabs.shiplingo.platform.reports.views.PNLDetailsReport", false);
 	}
 
 	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+//		// Expand four levels by default
+//		expandLevel = 4;
+//		viewer.setAutoExpandLevel(expandLevel);
+//
+//		final Action collapseOneLevel = new Action("Collapse All") {
+//			@Override
+//			public void run() {
+//				viewer.collapseAll();
+//				expandLevel = 1;
+//			}
+//		};
+//		final Action expandOneLevel = new Action("Expand one Level") {
+//			@Override
+//			public void run() {
+//				viewer.expandToLevel(++expandLevel);
+//			}
+//		};
+//		collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseAll.gif"));
+//		expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandAll.gif"));
+//
+//		getViewSite().getActionBars().getToolBarManager().add(collapseOneLevel);
+//		getViewSite().getActionBars().getToolBarManager().add(expandOneLevel);
+//		getViewSite().getActionBars().updateActionBars();
+//
+//		updateFromSelection();
+	}
+
+	@Override
 	protected Collection<?> adaptSelection(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 
-			final Iterator<Object> itr = ((IStructuredSelection) selection).iterator();
+			final Iterator<?> itr = ((IStructuredSelection) selection).iterator();
 			final Set<Object> adaptedObjects = new HashSet<>();
 			while (itr.hasNext()) {
 				final Object a = itr.next();
@@ -50,6 +89,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 				// map to events
 				if (a instanceof CargoAllocation) {
 					adaptedObjects.add(a);
+				} else if (a instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) a;
+					adaptedObjects.add(slotAllocation.getCargoAllocation());
 				} else if (a instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) a;
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
@@ -58,6 +100,8 @@ public class PNLDetailsReport extends DetailPropertiesView {
 					} else if (slotAllocation.getMarketAllocation() != null) {
 						adaptedObjects.add(slotAllocation.getMarketAllocation());
 					}
+				} else if (a instanceof OpenSlotAllocation) {
+					adaptedObjects.add(a);
 				} else if (a instanceof VesselEventVisit) {
 					adaptedObjects.add(a);
 				} else if (a instanceof StartEvent) {
@@ -121,6 +165,12 @@ public class PNLDetailsReport extends DetailPropertiesView {
 									}
 								}
 							} else {
+								for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+									if (slot.equals(openSlotAllocation.getSlot())) {
+										adaptedObject.add(openSlotAllocation);
+										return;
+									}
+								}
 								for (final MarketAllocation marketAllocation : schedule.getMarketAllocations()) {
 									if (slot.equals(marketAllocation.getSlot())) {
 										adaptedObject.add(marketAllocation);
@@ -135,9 +185,9 @@ public class PNLDetailsReport extends DetailPropertiesView {
 		} else if (a instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) a;
 			final EObject eContainer = vesselEvent.eContainer();
-			if (eContainer instanceof ScenarioFleetModel) {
-				final ScenarioFleetModel scenarioFleetModel = (ScenarioFleetModel) eContainer;
-				final EObject eContainer2 = scenarioFleetModel.eContainer();
+			if (eContainer instanceof CargoModel) {
+				final CargoModel cargoModel = (CargoModel) eContainer;
+				final EObject eContainer2 = cargoModel.eContainer();
 				if (eContainer2 instanceof LNGPortfolioModel) {
 					final LNGPortfolioModel lngPortfolioModel = (LNGPortfolioModel) eContainer2;
 					final ScheduleModel scheduleModel = lngPortfolioModel.getScheduleModel();
@@ -160,6 +210,73 @@ public class PNLDetailsReport extends DetailPropertiesView {
 					}
 				}
 			}
+		}
+	}
+
+	private final Set<ScheduleModel> hookedSchedules = new HashSet<>();
+
+	private final MMXContentAdapter contentAdapter = new MMXContentAdapter() {
+
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+			if (notification.getEventType() != Notification.REMOVING_ADAPTER) {
+				Display.getDefault().asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						PNLDetailsReport.this.refresh();
+					}
+				});
+			}
+		}
+
+		@Override
+		protected void missedNotifications(final List<Notification> missed) {
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					PNLDetailsReport.this.refresh();
+				}
+			});
+
+		}
+
+	};
+
+	@Override
+	protected void hookAdapters(final Collection<?> adaptSelection) {
+		final Set<ScheduleModel> schedules = new HashSet<>();
+		for (final Object object : adaptSelection) {
+			if (object instanceof EObject) {
+				EObject eObject = (EObject) object;
+				while (eObject != null && !(eObject instanceof MMXRootObject)) {
+					eObject = eObject.eContainer();
+				}
+
+				if (eObject instanceof LNGScenarioModel) {
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) eObject;
+					final LNGPortfolioModel portfolioModel = scenarioModel.getPortfolioModel();
+					if (portfolioModel != null) {
+						final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
+						if (scheduleModel != null) {
+							schedules.add(scheduleModel);
+						}
+					}
+
+				}
+			}
+		}
+		for (final ScheduleModel scheduleModel : schedules) {
+			scheduleModel.eAdapters().add(contentAdapter);
+			hookedSchedules.add(scheduleModel);
+		}
+	}
+
+	@Override
+	protected void removeAdapters() {
+		for (final ScheduleModel scheduleModel : hookedSchedules) {
+			scheduleModel.eAdapters().remove(contentAdapter);
 		}
 	}
 }

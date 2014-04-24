@@ -17,10 +17,11 @@ Require-Bundle: org.eclipse.help;bundle-version="3.5.0",
  com.mmxlabs.models.lng.scenario.model;bundle-version="[8.0.0,9.0.0)",
  com.mmxlabs.scenario.service.model;bundle-version="[5.1.0,6.0.0)",
  com.mmxlabs.models.lng.fleet.editor;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.scheduler.optimiser;bundle-version="[9.0.0,10.0.0)"
+ com.mmxlabs.scheduler.optimiser;bundle-version="[9.0.0,10.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.shiplingo.platform.scheduleview.views
-Import-Package: com.mmxlabs.common;version="2.1.0",
- javax.inject;version="1.0.0"
+Export-Package: com.mmxlabs.shiplingo.platform.scheduleview.views,
+ com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes
+Import-Package: javax.inject;version="1.0.0"
 

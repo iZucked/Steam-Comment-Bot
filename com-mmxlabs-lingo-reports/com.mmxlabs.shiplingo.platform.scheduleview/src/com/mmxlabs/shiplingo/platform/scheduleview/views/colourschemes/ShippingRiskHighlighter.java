@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Warning_Yellow;
+import static com.mmxlabs.shiplingo.platform.reports.ColourPalette.Warning_Yellow;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.findIdleForJourney;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.findJourneyForIdle;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isRiskyVoyage;

@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Warning_Yellow;
+import static com.mmxlabs.shiplingo.platform.reports.ColourPalette.Warning_Yellow;
 
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;

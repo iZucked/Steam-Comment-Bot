@@ -8,7 +8,7 @@
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
 		<version>6.0.2-SNAPSHOT</version>
 	</parent>
-	<artifactId>target-definition</artifactId>
+	<artifactId>com.mmxlabs.shiplingo.platform.target-definition</artifactId>
 	<version>6.0.2-SNAPSHOT</version>
 	<packaging>eclipse-target-definition</packaging>
 

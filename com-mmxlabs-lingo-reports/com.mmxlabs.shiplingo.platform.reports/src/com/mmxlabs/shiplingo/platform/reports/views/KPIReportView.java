@@ -56,7 +56,6 @@ public class KPIReportView extends ViewPart {
 
 	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
 
-	private boolean inverseSort = false;
 	/**
 	 * The ID of the view as specified by the extension.
 	 */

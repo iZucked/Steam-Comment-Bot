@@ -9,32 +9,37 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -62,27 +67,29 @@ public class SchedulePnLReport extends EMFReportView {
 	private final EStructuralFeature cargoAllocationRef;
 	private final EStructuralFeature loadAllocationRef;
 	private final EStructuralFeature dischargeAllocationRef;
+	private final EStructuralFeature openSlotAllocationRef;
 
 	public SchedulePnLReport() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
 
-		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "name", "cargo", "load", "discharge");
-		nameObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
+		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge", "openslot");
+		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
+		nameObjectRef = 		GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
+//		GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
 		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
 		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "discharge");
+		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
 
-		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, nameObjectRef, s.getEvent__Name());
+		addColumn("ID", objectFormatter, nameObjectRef);
 
 		// add the total (aggregate) P&L column
-		addPNLColumn();
-
-		// CommercialModel.getEntities();
+		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 
 		// addPNLColumn("Asia");
 		// addPNLColumn("Europe");
@@ -170,72 +177,21 @@ public class SchedulePnLReport extends EMFReportView {
 				return 0.0;
 			}
 		}, dischargeAllocationRef);
-		// addColumn("Shipping Cost", new BaseFormatter() {
-		//
-		// Double getValue(final SlotVisit visit) {
-		// final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-		// if (cargoAllocation == null) {
-		// return null;
-		// }
-		// final Cargo inputCargo = cargoAllocation.getInputCargo();
-		// if (inputCargo == null) {
-		// return null;
-		// }
-		// if (inputCargo.getCargoType() != CargoType.FLEET) {
-		// return null;
-		// }
-		// // TODO: Fixed (other) port costs?
-		// // TODO: Boil-off included?
-		//
-		// final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
-		// if (dataWithKey != null) {
-		// final Integer v = dataWithKey.getValueAs(Integer.class);
-		// if (v != null) {
-		// final SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
-		// if (loadAllocation == null) {
-		// return null;
-		// }
-		// final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) loadAllocation.getSlot()).getSlotOrPortCV();
-		// if (dischargeVolumeInMMBTu == 0.0) {
-		// return 0.0;
-		// }
-		// final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
-		// return shipping;
-		// }
-		// }
-		// return 0.0;
-		// }
-		//
-		// @Override
-		// public String format(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// final Double value = getValue(slotVisit);
-		// if (value != null) {
-		// return String.format("%,.2f", value);
-		// }
-		//
-		// }
-		// return null;
-		// }
-		//
-		// @Override
-		// public Comparable getComparable(final Object object) {
-		// if (object instanceof SlotVisit) {
-		// final SlotVisit slotVisit = (SlotVisit) object;
-		// final Double value = getValue(slotVisit);
-		// if (value != null) {
-		// return value;
-		// }
-		// }
-		// return 0.0;
-		// }
-		// });
 
 		addColumn("Type", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
-				if (object instanceof SlotVisit || object instanceof CargoAllocation) {
+				if (object instanceof OpenSlotAllocation ) {
+					OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
+					String type = "Open Slot";
+					final Slot slot = openSlotAllocation.getSlot();
+					if (slot instanceof LoadSlot) {
+						type = "Long";
+					} else if (slot instanceof DischargeSlot) {
+						type = "Short";
+					}
+					return type;
+				} else if (object instanceof SlotVisit || object instanceof CargoAllocation) {
 					return "Cargo";
 				} else if (object instanceof StartEvent) {
 					return "Start";
@@ -257,18 +213,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 	}
 
-	//
-	// @Override
-	// protected boolean handleSelections() {
-	// return true;
-	// }
-	//
-	// @Override
-	// protected Class<?> getSelectionAdaptionClass() {
-	// return Event.class;
-	// }
-
-	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity) {
+	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
 		if (container == null) {
 			return null;
 		}
@@ -278,38 +223,42 @@ public class SchedulePnLReport extends EMFReportView {
 			return null;
 		}
 
-		// supplying null for the entity name indicates that the total group P&L should be returned
-		if (entity == null) {
-			return (int) groupProfitAndLoss.getProfitAndLoss();
-		}
-		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
-		else {
-			int groupTotal = 0;
-			boolean foundValue = false;
-			for (final EntityProfitAndLoss ePnl : groupProfitAndLoss.getEntityProfitAndLosses()) {
-				if (ePnl.getEntity().getName().equals(entity)) {
-
-					groupTotal += ePnl.getProfitAndLoss();
-					foundValue = true;
+		int groupTotal = 0;
+		boolean foundValue = false;
+		for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+			if (entity == null || entityPNL.getEntity().getName().equals(entity)) {
+				foundValue = true;
+				final BaseEntityBook entityBook = entityPNL.getEntityBook();
+				if (entityBook == null) {
+					// Fall back code path for old models.
+					if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+						groupTotal += groupProfitAndLoss.getProfitAndLoss();
+					}
+				} else {
+					if (entityBook.eContainmentFeature() == bookContainmentFeature) {
+						groupTotal += entityPNL.getProfitAndLoss();
+					}
 				}
 			}
-			if (foundValue) {
-				return groupTotal;
-			}
 		}
+		if (foundValue) {
+			return groupTotal;
+		}
+		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		return null;
 	}
 
-	private void addPNLColumn() {
-		addPNLColumn("Group Total", null);
+	private void addPNLColumn(final EStructuralFeature bookContainmentFeature) {
+		addPNLColumn("Group Total", null, bookContainmentFeature);
 	}
 
-	private void addPNLColumn(final String entityName) {
-		addPNLColumn(entityName, entityName);
+	private void addPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
+		addPNLColumn(entityName, entityName, bookContainmentFeature);
 	}
 
-	private void addPNLColumn(final String entityLabel, final String entityKey) {
-		final String title = String.format("P&L (%s)", entityLabel);
+	private void addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
+		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
 		// HACK: don't the label to the entity column names if the column is for total group P&L
 		if (entityKey != null) {
@@ -321,7 +270,7 @@ public class SchedulePnLReport extends EMFReportView {
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
 
-				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut) {
+				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut || object instanceof OpenSlotAllocation) {
 					container = (ProfitAndLossContainer) object;
 				}
 				if (object instanceof SlotVisit) {
@@ -331,7 +280,7 @@ public class SchedulePnLReport extends EMFReportView {
 					}
 				}
 
-				return getEntityPNLEntry(container, entityKey);
+				return getEntityPNLEntry(container, entityKey, bookContainmentFeature);
 			}
 		}, targetObjectRef);
 	}
@@ -364,8 +313,9 @@ public class SchedulePnLReport extends EMFReportView {
 
 								final CommercialModel commercialModel = rootObject.getCommercialModel();
 								if (commercialModel != null) {
-									for (final LegalEntity e : commercialModel.getEntities()) {
-										addPNLColumn(e.getName());
+									for (final BaseLegalEntity e : commercialModel.getEntities()) {
+										addPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+										addPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 									}
 								}
 							}
@@ -387,17 +337,17 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				return superProvider.getChildren(parentElement);
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return superProvider.getParent(element);
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return superProvider.hasChildren(element);
 			}
 		};
@@ -445,6 +395,9 @@ public class SchedulePnLReport extends EMFReportView {
 					} else if (a instanceof StartEvent) {
 						final StartEvent startEvent = (StartEvent) a;
 						setInputEquivalents(row, Lists.<Object> newArrayList(startEvent, startEvent.getSequence().getVesselAvailability().getVessel()));
+					} else if (a instanceof OpenSlotAllocation) {
+						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
+						setInputEquivalents(row, Lists.<Object> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
 					}
 				}
 			}
@@ -468,7 +421,7 @@ public class SchedulePnLReport extends EMFReportView {
 			@Override
 			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
 
-				final List<Event> interestingEvents = new LinkedList<Event>();
+				final List<EObject> interestingEvents = new LinkedList<EObject>();
 				for (final Sequence sequence : schedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
 						if (event instanceof StartEvent) {
@@ -484,7 +437,8 @@ public class SchedulePnLReport extends EMFReportView {
 							}
 						}
 					}
-				}
+				} 
+				interestingEvents.addAll(schedule.getOpenSlotAllocations());
 
 				final List<EObject> nodes = generateNodes(dataModelInstance, interestingEvents);
 
@@ -521,7 +475,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 	@Override
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return ScheduleDiffUtils.isElementDifferent((EObject)pinnedObject.eGet(targetObjectRef), (EObject)otherObject.eGet(targetObjectRef));
+		return ScheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
 	}
 
 	@Override
@@ -536,13 +490,13 @@ public class SchedulePnLReport extends EMFReportView {
 		return adaptedSelection;
 	}
 
-	private List<EObject> generateNodes(final EObject dataModelInstance, final List<Event> interestingElements) {
+	private List<EObject> generateNodes(final EObject dataModelInstance, final List<EObject> interestingElements) {
 		final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
 
-		for (Object element : interestingElements) {
+		for (final Object element : interestingElements) {
 
 			if (element instanceof SlotVisit) {
-				SlotVisit slotVisit = (SlotVisit) element;
+				final SlotVisit slotVisit = (SlotVisit) element;
 				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
@@ -573,15 +527,32 @@ public class SchedulePnLReport extends EMFReportView {
 						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "discharge", dischargeSlots.get(i));
 					}
 					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", cargoAllocation);
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", element);
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slotVisit.name());
 					nodes.add(node);
 				}
-			} else {
+			} else if (element instanceof OpenSlotAllocation) {
+
+				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
+				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", openSlotAllocation);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "openslot", openSlotAllocation);
+				final Slot slot = openSlotAllocation.getSlot();
+				if (slot == null) {
+					
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", "??");
+				} else {
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slot.getName());
+				}
+				nodes.add(node);
+				
+			} else if (element instanceof Event) {
+				final Event event = (Event) element;
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
 
 				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", element);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", element);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", event);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", event.name());
 				nodes.add(node);
 			}
 		}
