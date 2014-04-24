@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.IExportContext;
@@ -133,7 +132,6 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 		subModels.add(scenarioModel.getSpotMarketsModel());
 		subModels.add(scenarioModel.getAnalyticsModel());
 
-		subModels.add(scenarioModel.getPortfolioModel().getScenarioFleetModel());
 		subModels.add(scenarioModel.getPortfolioModel().getCargoModel());
 		subModels.add(scenarioModel.getPortfolioModel().getScheduleModel());
 

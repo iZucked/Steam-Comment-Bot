@@ -6,8 +6,10 @@ package com.mmxlabs.models.lng.cargo.validation;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.management.timer.Timer;
 
@@ -18,17 +20,21 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
-import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -60,7 +66,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, Slot slot, final int availableTime, final boolean inDialog, List<IStatus> failures) {
+	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final boolean inDialog, final List<IStatus> failures) {
 		if (availableTime < 0) {
 			final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName() + "'"), severity);
@@ -91,28 +97,44 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, Slot from, Slot to, final int availableTime, final boolean inDialog, List<IStatus> failures) {
-		
-		// Skip for FOB/DES cargoes. 
+	private void validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final Slot from, final Slot to, final int availableTime, final boolean inDialog, final List<IStatus> failures) {
+
+		// Skip for FOB/DES cargoes.
 		// TODO: Roll in common des redirection travel time
 		if (cargo.getCargoType() != CargoType.FLEET) {
 			return;
 		}
-		
+
 		if (availableTime >= 0) {
 
 			final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
 			if (scenario instanceof LNGScenarioModel) {
 
 				double maxSpeedKnots = 0.0;
-				final FleetModel fleetModel = ((LNGScenarioModel) scenario).getFleetModel();
+				final CargoModel cargoModel = ((LNGScenarioModel) scenario).getPortfolioModel().getCargoModel();
+				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) scenario).getSpotMarketsModel();
 
-				if (fleetModel.getVesselClasses().isEmpty()) {
+				final Set<VesselClass> usedClasses = new HashSet<>();
+
+				for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+					final Vessel vessel = va.getVessel();
+					if (vessel != null) {
+						usedClasses.add(vessel.getVesselClass());
+					}
+				}
+				for (final CharterCostModel charterCostModel : spotMarketsModel.getCharteringSpotMarkets()) {
+					if (charterCostModel.getCharterInPrice() != null && charterCostModel.getSpotCharterCount() > 0) {
+						usedClasses.addAll(charterCostModel.getVesselClasses());
+					}
+				}
+				usedClasses.remove(null);
+
+				if (usedClasses.isEmpty()) {
 					// Cannot perform our validation, so return
 					return;
 				}
 
-				for (final VesselClass vc : fleetModel.getVesselClasses()) {
+				for (final VesselClass vc : usedClasses) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
 
@@ -122,7 +144,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				if (minTimes == null) {
 					minTimes = new HashMap<Pair<Port, Port>, Integer>();
 
-					for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
+					for (final VesselClass vesselClass : usedClasses) {
 						for (final VesselClassRouteParameters parameters : vesselClass.getRouteParameters()) {
 							collectMinTimes(minTimes, parameters.getRoute(), parameters.getExtraTransitTime(), vesselClass.getMaxSpeed());
 						}
@@ -184,7 +206,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, Slot slot, final int availableTime, final boolean inDialog, List<IStatus> failures) {
+	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final boolean inDialog, final List<IStatus> failures) {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
 			final int severity = inDialog ? IStatus.WARNING : IStatus.WARNING;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName() + "'", availableTime / 24,
@@ -196,7 +218,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	protected String validate(IValidationContext ctx, List<IStatus> failures) {
+	protected String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		boolean inDialog = false;
 
@@ -215,14 +237,14 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 				// && (loadSlot != null) && (dischargeSlot != null) && (loadSlot.getWindowStart() != null) && (dischargeSlot.getWindowStart() != null)) {
 				// }
 				Slot prevSlot = null;
-				for (Slot slot : cargo.getSortedSlots()) {
+				for (final Slot slot : cargo.getSortedSlots()) {
 					if (prevSlot != null) {
 						final Port loadPort = prevSlot.getPort();
 						final Port dischargePort = slot.getPort();
 						if ((loadPort != null) && (dischargePort != null)) {
 
-							Date windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
-							Date windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
+							final Date windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
+							final Date windowStartWithSlotOrPortTime = prevSlot.getWindowStartWithSlotOrPortTime();
 
 							if (windowEndWithSlotOrPortTime != null && windowStartWithSlotOrPortTime != null) {
 								final int availableTime = (int) ((windowEndWithSlotOrPortTime.getTime() - windowStartWithSlotOrPortTime.getTime()) / Timer.ONE_HOUR)

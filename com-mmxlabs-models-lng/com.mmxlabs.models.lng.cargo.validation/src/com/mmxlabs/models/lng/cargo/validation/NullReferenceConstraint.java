@@ -19,7 +19,10 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
@@ -30,9 +33,9 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
-	// TODO add any more refs to check here
-			CargoPackage.eINSTANCE.getSlot_Port(), 
-			CargoPackage.eINSTANCE.getSlot_Contract());
+			// TODO add any more refs to check here
+			CargoPackage.eINSTANCE.getSlot_Port(), CargoPackage.eINSTANCE.getSlot_Contract(), CargoPackage.eINSTANCE.getCharterOutEvent_RelocateTo(), CargoPackage.eINSTANCE.getVesselEvent_Port(),
+			CargoPackage.eINSTANCE.getVesselAvailability_Vessel(), CargoPackage.eINSTANCE.getVesselAvailability_Entity());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 
@@ -64,14 +67,27 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 		} else {
 			final StringBuilder sb = new StringBuilder();
 			boolean first = true;
-			for (final EReference ref : errors) {
+			for (final EReference ref : errors) {				
 				if (!first) {
 					sb.append(", ");
 				}
 				sb.append(ref.getName());
 				first = false;
 			}
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(sb.toString()));
+			sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+						
+			String targetType = "";
+			String name = "";
+			if(target instanceof Cargo){
+				targetType = "Cargo";
+				name = ((Cargo) target).getName();
+			} else if (target instanceof VesselAvailability){
+				targetType = "Vessel";
+				Vessel v = ((VesselAvailability) target).getVessel();
+				name = v == null ? "<unspecified>" : v.getName();
+			}
+			String msg = "" + targetType + " \"" + name + "\" - " + sb.toString() + " must be set.";	
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			for (final EReference ref : errors) {
 				dcsd.addEObjectAndFeature(target, ref);
 			}

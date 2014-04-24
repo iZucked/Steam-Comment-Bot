@@ -6,15 +6,20 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
+import java.util.Collection;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  * </ul>
  * </p>
  *
@@ -52,6 +58,16 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
+
+	/**
+	 * The cached value of the '{@link #getGeneralPNLDetails() <em>General PNL Details</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGeneralPNLDetails()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<GeneralPNLDetails> generalPNLDetails;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -166,6 +182,18 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
+		if (generalPNLDetails == null) {
+			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
+		}
+		return generalPNLDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -173,6 +201,8 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 				return basicSetGroupProfitAndLoss(null, msgs);
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS:
+				return ((InternalEList<?>)getGeneralPNLDetails()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -189,6 +219,8 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 				return getGroupProfitAndLoss();
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return getGroupProfitAndLossNoTimeCharter();
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS:
+				return getGeneralPNLDetails();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -198,6 +230,7 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -206,6 +239,10 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 				return;
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
+				return;
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS:
+				getGeneralPNLDetails().clear();
+				getGeneralPNLDetails().addAll((Collection<? extends GeneralPNLDetails>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -225,6 +262,9 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
 				return;
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS:
+				getGeneralPNLDetails().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -241,6 +281,8 @@ public class ProfitAndLossContainerImpl extends MMXObjectImpl implements ProfitA
 				return groupProfitAndLoss != null;
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return groupProfitAndLossNoTimeCharter != null;
+			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS:
+				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

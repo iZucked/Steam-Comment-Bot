@@ -152,6 +152,15 @@ public interface ScheduleFactory extends EFactory {
 	MarketAllocation createMarketAllocation();
 
 	/**
+	 * Returns a new object of class '<em>Open Slot Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Open Slot Allocation</em>'.
+	 * @generated
+	 */
+	OpenSlotAllocation createOpenSlotAllocation();
+
+	/**
 	 * Returns a new object of class '<em>Slot Allocation</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -244,6 +253,33 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	EntityProfitAndLoss createEntityProfitAndLoss();
+
+	/**
+	 * Returns a new object of class '<em>Entity PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Entity PNL Details</em>'.
+	 * @generated
+	 */
+	EntityPNLDetails createEntityPNLDetails();
+
+	/**
+	 * Returns a new object of class '<em>Slot PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Slot PNL Details</em>'.
+	 * @generated
+	 */
+	SlotPNLDetails createSlotPNLDetails();
+
+	/**
+	 * Returns a new object of class '<em>Basic Slot PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Basic Slot PNL Details</em>'.
+	 * @generated
+	 */
+	BasicSlotPNLDetails createBasicSlotPNLDetails();
 
 	/**
 	 * Returns the package supported by this factory.

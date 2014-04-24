@@ -79,7 +79,6 @@ public class FleetModelItemProvider
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_CLASSES);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__BASE_FUELS);
 			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS);
-			childrenFeatures.add(FleetPackage.Literals.FLEET_MODEL__SPECIAL_VESSEL_GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -138,7 +137,6 @@ public class FleetModelItemProvider
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
 			case FleetPackage.FLEET_MODEL__BASE_FUELS:
 			case FleetPackage.FLEET_MODEL__VESSEL_GROUPS:
-			case FleetPackage.FLEET_MODEL__SPECIAL_VESSEL_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -175,11 +173,6 @@ public class FleetModelItemProvider
 			(createChildParameter
 				(FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS,
 				 FleetFactory.eINSTANCE.createVesselGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(FleetPackage.Literals.FLEET_MODEL__SPECIAL_VESSEL_GROUPS,
-				 FleetFactory.eINSTANCE.createVesselTypeGroup()));
 	}
 
 }

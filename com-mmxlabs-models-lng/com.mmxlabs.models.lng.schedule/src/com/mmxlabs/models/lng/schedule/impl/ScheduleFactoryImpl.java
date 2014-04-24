@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 */
 	public static ScheduleFactory init() {
 		try {
-			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/schedule/1/"); 
+			ScheduleFactory theScheduleFactory = (ScheduleFactory)EPackage.Registry.INSTANCE.getEFactory(SchedulePackage.eNS_URI);
 			if (theScheduleFactory != null) {
 				return theScheduleFactory;
 			}
@@ -104,6 +105,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.CARGO_ALLOCATION: return createCargoAllocation();
 			case SchedulePackage.MARKET_ALLOCATION: return createMarketAllocation();
+			case SchedulePackage.OPEN_SLOT_ALLOCATION: return createOpenSlotAllocation();
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
 			case SchedulePackage.SEQUENCE: return createSequence();
 			case SchedulePackage.EVENT: return createEvent();
@@ -124,6 +126,9 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.PROFIT_AND_LOSS_CONTAINER: return createProfitAndLossContainer();
 			case SchedulePackage.GROUP_PROFIT_AND_LOSS: return createGroupProfitAndLoss();
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: return createEntityProfitAndLoss();
+			case SchedulePackage.ENTITY_PNL_DETAILS: return createEntityPNLDetails();
+			case SchedulePackage.SLOT_PNL_DETAILS: return createSlotPNLDetails();
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS: return createBasicSlotPNLDetails();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -330,6 +335,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public OpenSlotAllocation createOpenSlotAllocation() {
+		OpenSlotAllocationImpl openSlotAllocation = new OpenSlotAllocationImpl();
+		return openSlotAllocation;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public SlotAllocation createSlotAllocation() {
 		SlotAllocationImpl slotAllocation = new SlotAllocationImpl();
 		return slotAllocation;
@@ -438,6 +453,36 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public EntityProfitAndLoss createEntityProfitAndLoss() {
 		EntityProfitAndLossImpl entityProfitAndLoss = new EntityProfitAndLossImpl();
 		return entityProfitAndLoss;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EntityPNLDetails createEntityPNLDetails() {
+		EntityPNLDetailsImpl entityPNLDetails = new EntityPNLDetailsImpl();
+		return entityPNLDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SlotPNLDetails createSlotPNLDetails() {
+		SlotPNLDetailsImpl slotPNLDetails = new SlotPNLDetailsImpl();
+		return slotPNLDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BasicSlotPNLDetails createBasicSlotPNLDetails() {
+		BasicSlotPNLDetailsImpl basicSlotPNLDetails = new BasicSlotPNLDetailsImpl();
+		return basicSlotPNLDetails;
 	}
 
 	/**

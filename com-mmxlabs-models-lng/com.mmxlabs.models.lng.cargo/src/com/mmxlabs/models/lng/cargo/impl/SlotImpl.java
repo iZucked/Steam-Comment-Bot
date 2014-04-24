@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Collection;
@@ -26,11 +27,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -64,11 +63,15 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isDivertable <em>Divertable</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getHedges <em>Hedges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -477,6 +480,26 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	protected String notes = NOTES_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #isDivertable() <em>Divertable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDivertable()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DIVERTABLE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDivertable() <em>Divertable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDivertable()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean divertable = DIVERTABLE_EDEFAULT;
+
+	/**
 	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -507,7 +530,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 * @ordered
 	 */
-	protected LegalEntity entity;
+	protected BaseLegalEntity entity;
 
 	/**
 	 * This is true if the Entity reference has been set.
@@ -572,6 +595,65 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean restrictedListsArePermissiveESet;
+
+	/**
+	 * The default value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedges()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEDGES_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHedges() <em>Hedges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHedges()
+	 * @generated
+	 * @ordered
+	 */
+	protected int hedges = HEDGES_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAllowedVessels() <em>Allowed Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAllowedVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet<Vessel>> allowedVessels;
+
+	/**
+	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CANCELLATION_FEE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected int cancellationFee = CANCELLATION_FEE_EDEFAULT;
+
+	/**
+	 * This is true if the Cancellation Fee attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean cancellationFeeESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -1312,10 +1394,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity getEntity() {
+	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
-			entity = (LegalEntity)eResolveProxy(oldEntity);
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.SLOT__ENTITY, oldEntity, entity));
@@ -1330,18 +1412,17 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity basicGetEntity() {
+	public BaseLegalEntity basicGetEntity() {
 		return entity;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntity(LegalEntity newEntity) {
-		LegalEntity oldEntity = entity;
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
 		boolean oldEntityESet = entityESet;
 		entityESet = true;
@@ -1356,7 +1437,7 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @generated
 	 */
 	public void unsetEntity() {
-		LegalEntity oldEntity = entity;
+		BaseLegalEntity oldEntity = entity;
 		boolean oldEntityESet = entityESet;
 		entity = null;
 		entityESet = false;
@@ -1491,6 +1572,108 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHedges() {
+		return hedges;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHedges(int newHedges) {
+		int oldHedges = hedges;
+		hedges = newHedges;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__HEDGES, oldHedges, hedges));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCancellationFee() {
+		return cancellationFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCancellationFee(int newCancellationFee) {
+		int oldCancellationFee = cancellationFee;
+		cancellationFee = newCancellationFee;
+		boolean oldCancellationFeeESet = cancellationFeeESet;
+		cancellationFeeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, cancellationFee, !oldCancellationFeeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetCancellationFee() {
+		int oldCancellationFee = cancellationFee;
+		boolean oldCancellationFeeESet = cancellationFeeESet;
+		cancellationFee = CANCELLATION_FEE_EDEFAULT;
+		cancellationFeeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CANCELLATION_FEE, oldCancellationFee, CANCELLATION_FEE_EDEFAULT, oldCancellationFeeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetCancellationFee() {
+		return cancellationFeeESet;
+	}
+
+        /**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isDivertable() {
+		return divertable;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDivertable(boolean newDivertable) {
+		boolean oldDivertable = divertable;
+		divertable = newDivertable;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTABLE, oldDivertable, divertable));
+	}
+
+								/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AVesselSet<Vessel>> getAllowedVessels() {
+		if (allowedVessels == null) {
+			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);
+		}
+		return allowedVessels;
+	}
+
+	
+	
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -1563,8 +1746,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public LegalEntity getSlotOrDelegatedEntity() {
-		return (LegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
+	public BaseLegalEntity getSlotOrDelegatedEntity() {
+		return (BaseLegalEntity) eGetWithDefault(CargoPackage.Literals.SLOT__ENTITY);
 	}
 
 	/**
@@ -1582,13 +1765,11 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@SuppressWarnings("unchecked")
 	public EList<Port> getSlotOrContractRestrictedPorts() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+		return (EList<Port>) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_PORTS);
 	}
 
 	/**
@@ -1599,6 +1780,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 */
 	public boolean getSlotOrContractRestrictedListsArePermissive() {
 		return (Boolean) eGetWithDefault(CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public int getSlotOrContractCancellationFee() {
+		return (Integer) eGetWithDefault(CargoPackage.Literals.SLOT__CANCELLATION_FEE);
 	}
 
 	/**
@@ -1690,6 +1880,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return getNotes();
+			case CargoPackage.SLOT__DIVERTABLE:
+				return isDivertable();
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				return getShippingDaysRestriction();
 			case CargoPackage.SLOT__ENTITY:
@@ -1701,6 +1893,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getRestrictedPorts();
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isRestrictedListsArePermissive();
+			case CargoPackage.SLOT__HEDGES:
+				return getHedges();
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				return getAllowedVessels();
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				return getCancellationFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1767,11 +1965,14 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes((String)newValue);
 				return;
+			case CargoPackage.SLOT__DIVERTABLE:
+				setDivertable((Boolean)newValue);
+				return;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction((Integer)newValue);
 				return;
 			case CargoPackage.SLOT__ENTITY:
-				setEntity((LegalEntity)newValue);
+				setEntity((BaseLegalEntity)newValue);
 				return;
 			case CargoPackage.SLOT__RESTRICTED_CONTRACTS:
 				getRestrictedContracts().clear();
@@ -1783,6 +1984,16 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				setRestrictedListsArePermissive((Boolean)newValue);
+				return;
+			case CargoPackage.SLOT__HEDGES:
+				setHedges((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
+				getAllowedVessels().addAll((Collection<? extends AVesselSet<Vessel>>)newValue);
+				return;
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				setCancellationFee((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -1849,6 +2060,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__DIVERTABLE:
+				setDivertable(DIVERTABLE_EDEFAULT);
+				return;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
 				return;
@@ -1863,6 +2077,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				unsetRestrictedListsArePermissive();
+				return;
+			case CargoPackage.SLOT__HEDGES:
+				setHedges(HEDGES_EDEFAULT);
+				return;
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				getAllowedVessels().clear();
+				return;
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				unsetCancellationFee();
 				return;
 		}
 		super.eUnset(featureID);
@@ -1911,6 +2134,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
+			case CargoPackage.SLOT__DIVERTABLE:
+				return divertable != DIVERTABLE_EDEFAULT;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 			case CargoPackage.SLOT__ENTITY:
@@ -1921,6 +2146,12 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetRestrictedPorts();
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return isSetRestrictedListsArePermissive();
+			case CargoPackage.SLOT__HEDGES:
+				return hedges != HEDGES_EDEFAULT;
+			case CargoPackage.SLOT__ALLOWED_VESSELS:
+				return allowedVessels != null && !allowedVessels.isEmpty();
+			case CargoPackage.SLOT__CANCELLATION_FEE:
+				return isSetCancellationFee();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1945,10 +2176,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		}
 		if (baseClass == AssignableElement.class) {
 			switch (derivedFeatureID) {
-				case CargoPackage.SLOT__ASSIGNMENT: return FleetPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
-				case CargoPackage.SLOT__SPOT_INDEX: return FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
-				case CargoPackage.SLOT__SEQUENCE_HINT: return FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
-				case CargoPackage.SLOT__LOCKED: return FleetPackage.ASSIGNABLE_ELEMENT__LOCKED;
+				case CargoPackage.SLOT__ASSIGNMENT: return CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
+				case CargoPackage.SLOT__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
+				case CargoPackage.SLOT__SEQUENCE_HINT: return CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
+				case CargoPackage.SLOT__LOCKED: return CargoPackage.ASSIGNABLE_ELEMENT__LOCKED;
 				default: return -1;
 			}
 		}
@@ -1975,10 +2206,10 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		}
 		if (baseClass == AssignableElement.class) {
 			switch (baseFeatureID) {
-				case FleetPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.SLOT__ASSIGNMENT;
-				case FleetPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.SLOT__SPOT_INDEX;
-				case FleetPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.SLOT__SEQUENCE_HINT;
-				case FleetPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.SLOT__LOCKED;
+				case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.SLOT__ASSIGNMENT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.SLOT__SPOT_INDEX;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.SLOT__SEQUENCE_HINT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.SLOT__LOCKED;
 				default: return -1;
 			}
 		}
@@ -2039,6 +2270,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrContractRestrictedPorts();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE:
 				return getSlotOrContractRestrictedListsArePermissive();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE:
+				return getSlotOrContractCancellationFee();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
@@ -2082,10 +2315,16 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (pricingDateESet) result.append(pricingDate); else result.append("<unset>");
 		result.append(", notes: ");
 		result.append(notes);
+		result.append(", divertable: ");
+		result.append(divertable);
 		result.append(", shippingDaysRestriction: ");
 		result.append(shippingDaysRestriction);
 		result.append(", restrictedListsArePermissive: ");
 		if (restrictedListsArePermissiveESet) result.append(restrictedListsArePermissive); else result.append("<unset>");
+		result.append(", hedges: ");
+		result.append(hedges);
+		result.append(", cancellationFee: ");
+		if (cancellationFeeESet) result.append(cancellationFee); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -2111,7 +2350,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedPorts(), null);
 		} else if (CargoPackage.Literals.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_RestrictedListsArePermissive(), (Boolean) false);
-		} 
+		} else if (CargoPackage.Literals.SLOT__CANCELLATION_FEE == feature) {
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_CancellationFee(), (Integer)0);
+		}
 		
 		return super.getUnsetValueOrDelegate(feature);
 	}	

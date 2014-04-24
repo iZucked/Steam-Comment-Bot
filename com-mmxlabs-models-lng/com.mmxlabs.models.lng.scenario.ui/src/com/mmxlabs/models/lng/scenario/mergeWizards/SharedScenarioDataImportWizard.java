@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.merge.EMFModelMergeTools;
 import com.mmxlabs.models.ui.merge.IMappingDescriptor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class SharedScenarioDataImportWizard extends Wizard implements IImportWizard {
 
@@ -165,7 +166,7 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 							destRoot = destScenario.getInstance();
 							// Unload after processing
 							unloadDestScenario = true;
-						} catch (final IOException e) {
+						} catch (final Exception e) {
 							log.error("Unable to load scenario " + destScenario.getName() + ". skipping.", e);
 							monitor.worked(1);
 							continue;
@@ -178,7 +179,14 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 						continue;
 					}
 
-					mergeScenarioData(sourceRoot, destRoot, (EditingDomain) destScenario.getAdapters().get(EditingDomain.class), dataOptions);
+					final ScenarioLock editorLock = destScenario.getLock(ScenarioLock.EDITORS);
+					if (editorLock.awaitClaim()) {
+						try {
+							mergeScenarioData(sourceRoot, destRoot, (EditingDomain) destScenario.getAdapters().get(EditingDomain.class), dataOptions);
+						} finally {
+							editorLock.release();
+						}
+					}
 
 					// Unload if required
 					if (unloadDestScenario) {
@@ -190,7 +198,6 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 							log.error("Error saving scenario: " + destScenario.getName());
 						}
 					}
-
 					monitor.worked(1);
 				}
 
@@ -258,9 +265,6 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 						CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()));
 				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
 						CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()));
-				
-				descriptors.add(EMFModelMergeTools.generateMappingDescriptor(copiedModel.getCommercialModel(), destScenarioModel.getCommercialModel(),
-						CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity()));
 			}
 
 			if (dataOptions.contains(DataOptions.PricingData)) {

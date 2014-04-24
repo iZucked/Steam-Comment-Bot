@@ -22,9 +22,9 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
@@ -39,12 +39,12 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	 */
 	protected IDisplayComposite bottomLevel = null;
 
-	public ContractTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-		super(parent, style, location, toolkit);
+	public ContractTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		super(parent, style, dialogContext, toolkit);
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
 		final EClass eClass = object.eClass();
 
@@ -94,14 +94,14 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		bottomLevel.setCommandHandler(commandHandler);
 		bottomLevel.setEditorWrapper(editorWrapper);
 
-		topLevel.display(location, root, object, range, dbc);
-		bottomLevel.display(location, root, object, range, dbc);
+		topLevel.display(dialogContext, root, object, range, dbc);
+		bottomLevel.display(dialogContext, root, object, range, dbc);
 
 		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 
 		while (refs.hasNext()) {
-			children.next().display(location, root, (EObject) object.eGet(refs.next()), range, dbc);
+			children.next().display(dialogContext, root, (EObject) object.eGet(refs.next()), range, dbc);
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row

@@ -22,6 +22,7 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
@@ -106,6 +107,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 * @since 2.0
 	 */
 	protected ToolBarManager externalToolbarManager;
+	protected MenuManager externalMenuManager;
 
 	/**
 	 * @since 2.0
@@ -115,7 +117,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 * @since 2.0
 	 */
 	protected Action deleteAction;
-	
+
 	/**
 	 * @since 5.0
 	 */
@@ -170,6 +172,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			externalToolbarManager.update(true);
 		}
 		externalToolbarManager = null;
+		if (externalMenuManager != null) {
+			externalMenuManager.removeAll();
+			externalMenuManager.update(true);
+		}
+		externalMenuManager = null;
 
 		scenarioViewer = null;
 
@@ -180,12 +187,26 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		this.externalToolbarManager = manager;
 	}
 
+	public void setExternalMenuManager(MenuManager menuManager) {
+		this.externalMenuManager = menuManager;
+
+	}
+
 	@Override
 	public ToolBarManager getToolBarManager() {
 		if (externalToolbarManager != null) {
 			return externalToolbarManager;
 		} else {
 			return super.getToolBarManager();
+		}
+	}
+
+	@Override
+	public MenuManager getMenuManager() {
+		if (externalMenuManager != null) {
+			return externalMenuManager;
+		} else {
+			return super.getMenuManager();
 		}
 	}
 
@@ -345,15 +366,15 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected void defaultSetTitle(final String string) {
 		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
-	
+
 	/**
 	 * @since 5.0
 	 */
 	protected Action createAddAction(final EReference containment) {
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment));
-		
+
 	}
-	
+
 	/**
 	 * @since 5.0
 	 */
@@ -388,7 +409,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			public ISelection getCurrentSelection() {
 				return viewer.getSelection();
 			}
-		};		
+		};
 	}
 
 	/**

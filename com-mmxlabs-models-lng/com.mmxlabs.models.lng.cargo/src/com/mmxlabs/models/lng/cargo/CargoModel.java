@@ -19,6 +19,9 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getDischargeSlots <em>Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoes <em>Cargoes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getCargoGroups <em>Cargo Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents <em>Vessel Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -90,6 +93,54 @@ public interface CargoModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<CargoGroup> getCargoGroups();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Availabilities</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselAvailability}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Availabilities</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Availabilities</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_VesselAvailabilities()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselAvailability> getVesselAvailabilities();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselEvent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Events</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Events</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_VesselEvents()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselEvent> getVesselEvents();
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Type Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.VesselTypeGroup}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Type Groups</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Type Groups</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoModel_VesselTypeGroups()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<VesselTypeGroup> getVesselTypeGroups();
 
 } // end of  CargoModel
 

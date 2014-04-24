@@ -134,13 +134,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Charter Out Start Date</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKETS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int SPOT_MARKETS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl <em>Charter Cost Model</em>}' class.
@@ -833,6 +842,34 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_AVAILABILITY_FEATURE_COUNT = 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutStartDateImpl <em>Charter Out Start Date</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.spotmarkets.impl.CharterOutStartDateImpl
+	 * @see com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsPackageImpl#getCharterOutStartDate()
+	 * @generated
+	 */
+	int CHARTER_OUT_START_DATE = 9;
+
+	/**
+	 * The feature id for the '<em><b>Charter Out Start Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_START_DATE__CHARTER_OUT_START_DATE = 0;
+
+	/**
+	 * The number of structural features of the '<em>Charter Out Start Date</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_START_DATE_FEATURE_COUNT = 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -840,7 +877,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsPackageImpl#getSpotType()
 	 * @generated
 	 */
-	int SPOT_TYPE = 9;
+	int SPOT_TYPE = 10;
 
 
 	/**
@@ -907,6 +944,17 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSpotMarketsModel_CharteringSpotMarkets();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Charter Out Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate()
+	 * @see #getSpotMarketsModel()
+	 * @generated
+	 */
+	EReference getSpotMarketsModel_CharterOutStartDate();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel <em>Charter Cost Model</em>}'.
@@ -1234,6 +1282,27 @@ public interface SpotMarketsPackage extends EPackage {
 	EReference getSpotAvailability_Curve();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate <em>Charter Out Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter Out Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate
+	 * @generated
+	 */
+	EClass getCharterOutStartDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate#getCharterOutStartDate <em>Charter Out Start Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Out Start Date</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate#getCharterOutStartDate()
+	 * @see #getCharterOutStartDate()
+	 * @generated
+	 */
+	EAttribute getCharterOutStartDate_CharterOutStartDate();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1314,6 +1383,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS = eINSTANCE.getSpotMarketsModel_CharteringSpotMarkets();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Out Start Date</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE = eINSTANCE.getSpotMarketsModel_CharterOutStartDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl <em>Charter Cost Model</em>}' class.
@@ -1573,6 +1650,24 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPOT_AVAILABILITY__CURVE = eINSTANCE.getSpotAvailability_Curve();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterOutStartDateImpl <em>Charter Out Start Date</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.spotmarkets.impl.CharterOutStartDateImpl
+		 * @see com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsPackageImpl#getCharterOutStartDate()
+		 * @generated
+		 */
+		EClass CHARTER_OUT_START_DATE = eINSTANCE.getCharterOutStartDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Out Start Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_START_DATE__CHARTER_OUT_START_DATE = eINSTANCE.getCharterOutStartDate_CharterOutStartDate();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.

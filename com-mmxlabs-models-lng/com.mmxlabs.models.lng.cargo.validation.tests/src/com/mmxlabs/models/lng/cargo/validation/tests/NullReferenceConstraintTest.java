@@ -13,12 +13,15 @@ import static org.mockito.Mockito.when;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.validation.NullReferenceConstraint;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -127,5 +130,77 @@ public class NullReferenceConstraintTest {
 		verify(validationContext, atLeast(0)).createFailureStatus(Matchers.anyString());
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(validationContext);
+	}
+
+	private CharterOutEvent initCharterOut() {
+		final CharterOutEvent co = CargoFactory.eINSTANCE.createCharterOutEvent();
+	
+		// start and end ports are both checked and are initially null, so set them.
+		co.setRelocateTo(PortFactory.eINSTANCE.createPort());
+		co.setPort(PortFactory.eINSTANCE.createPort());
+		return co;
+	}
+
+	/**
+	 * Check {@link CharterOut#getEndPort()} is not null, and expect a failure if it is.
+	 * <p>
+	 * NullReferenceConstraint also checks the start port (since CharterOut is an implementation of VesselEvent, which is checked for the start port), so here it is set to a value.
+	 */
+	@Test
+	public void testCharterOut() {
+		final CharterOutEvent co = initCharterOut();
+	
+		// only test end port. Start port is tested by testVesselEvent()
+		Assert.assertNotNull(co.getRelocateTo());
+		testNullReferenceConstraint(true, co);
+	}
+
+	private VesselEvent initVesselEvent() {
+		final VesselEvent vesselEvent = CargoFactory.eINSTANCE.createDryDockEvent();
+		vesselEvent.setPort(PortFactory.eINSTANCE.createPort());
+		return vesselEvent;
+	}
+
+	/**
+	 * Check {@link CharterOut#getEndPort()} is not null, and expect a failure if it is.
+	 * <p>
+	 * NullReferenceConstraint also checks the start port (since CharterOut is an implementation of VesselEvent, which is checked for the start port), so here it is set to a value.
+	 */
+	@Test
+	public void testCharterOutEndPortNull() {
+		final CharterOutEvent co = initCharterOut();
+	
+		// Set the end port to null.
+		co.setRelocateTo(null);
+		// now the test should fail.
+		testNullReferenceConstraint(false, co);
+	}
+
+	/**
+	 * Test the interface VesselEvent by using the implementation CharterOut.
+	 * <p>
+	 * {@link VesselEvent#getStartPort()} should not be null, and the constraint should fail when it is.
+	 */
+	@Test
+	public void testVesselEvent() {
+		final VesselEvent ve = initVesselEvent();
+		// test it
+		Assert.assertNotNull(ve.getPort());
+		testNullReferenceConstraint(true, ve);
+	}
+
+	/**
+	 * Test the interface VesselEvent by using the implementation CharterOut.
+	 * <p>
+	 * {@link VesselEvent#getStartPort()} should not be null, and the constraint should fail when it is.
+	 */
+	@Test
+	public void testVesselEventNullPort() {
+		// CharterOut is an implementation of VesselEvent
+		final VesselEvent ve = initVesselEvent();
+		// Set start port to null.
+		ve.setPort(null);
+		// now the test should fail.
+		testNullReferenceConstraint(false, ve);
 	}
 }

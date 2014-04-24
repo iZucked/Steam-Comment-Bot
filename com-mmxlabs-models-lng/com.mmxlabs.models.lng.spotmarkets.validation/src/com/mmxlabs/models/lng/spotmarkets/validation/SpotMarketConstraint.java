@@ -50,6 +50,13 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				}
 			}
 
+			if (spotMarket.getMaxQuantity() == 0) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Max quantity should be greater than zero."));
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MinQuantity());
+				dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MaxQuantity());
+				failures.add(dsd);
+			}
+
 			if (spotMarket instanceof DESPurchaseMarket) {
 				final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) spotMarket;
 
@@ -64,10 +71,13 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				boolean foundDischarge = false;
 				for (final Port port : ports) {
 					if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Port " + port.getName()
-								+ " is not a discharge port"), IStatus.WARNING);
-						dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
-						failures.add(dsd);
+						// Only complain if the discharge port is directly included
+						if (desPurchaseMarket.getDestinationPorts().contains(port)) {
+							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Port " + port.getName()
+									+ " is not a discharge port"), IStatus.WARNING);
+							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
+							failures.add(dsd);
+						}
 					} else {
 						foundDischarge = true;
 					}

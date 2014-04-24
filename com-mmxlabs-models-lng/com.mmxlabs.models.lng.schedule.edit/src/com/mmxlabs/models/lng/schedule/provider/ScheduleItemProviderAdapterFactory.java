@@ -412,6 +412,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected OpenSlotAllocationItemProvider openSlotAllocationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createOpenSlotAllocationAdapter() {
+		if (openSlotAllocationItemProvider == null) {
+			openSlotAllocationItemProvider = new OpenSlotAllocationItemProvider(this);
+		}
+
+		return openSlotAllocationItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.SlotAllocation} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -670,6 +693,75 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.EntityPNLDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EntityPNLDetailsItemProvider entityPNLDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.EntityPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEntityPNLDetailsAdapter() {
+		if (entityPNLDetailsItemProvider == null) {
+			entityPNLDetailsItemProvider = new EntityPNLDetailsItemProvider(this);
+		}
+
+		return entityPNLDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.SlotPNLDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SlotPNLDetailsItemProvider slotPNLDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.SlotPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSlotPNLDetailsAdapter() {
+		if (slotPNLDetailsItemProvider == null) {
+			slotPNLDetailsItemProvider = new SlotPNLDetailsItemProvider(this);
+		}
+
+		return slotPNLDetailsItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BasicSlotPNLDetailsItemProvider basicSlotPNLDetailsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBasicSlotPNLDetailsAdapter() {
+		if (basicSlotPNLDetailsItemProvider == null) {
+			basicSlotPNLDetailsItemProvider = new BasicSlotPNLDetailsItemProvider(this);
+		}
+
+		return basicSlotPNLDetailsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -803,6 +895,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
 		if (cargoAllocationItemProvider != null) cargoAllocationItemProvider.dispose();
 		if (marketAllocationItemProvider != null) marketAllocationItemProvider.dispose();
+		if (openSlotAllocationItemProvider != null) openSlotAllocationItemProvider.dispose();
 		if (slotAllocationItemProvider != null) slotAllocationItemProvider.dispose();
 		if (sequenceItemProvider != null) sequenceItemProvider.dispose();
 		if (eventItemProvider != null) eventItemProvider.dispose();
@@ -823,6 +916,9 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (profitAndLossContainerItemProvider != null) profitAndLossContainerItemProvider.dispose();
 		if (groupProfitAndLossItemProvider != null) groupProfitAndLossItemProvider.dispose();
 		if (entityProfitAndLossItemProvider != null) entityProfitAndLossItemProvider.dispose();
+		if (entityPNLDetailsItemProvider != null) entityPNLDetailsItemProvider.dispose();
+		if (slotPNLDetailsItemProvider != null) slotPNLDetailsItemProvider.dispose();
+		if (basicSlotPNLDetailsItemProvider != null) basicSlotPNLDetailsItemProvider.dispose();
 	}
 
 }

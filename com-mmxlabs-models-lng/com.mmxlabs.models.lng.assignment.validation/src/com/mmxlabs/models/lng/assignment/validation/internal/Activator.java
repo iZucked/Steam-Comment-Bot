@@ -14,7 +14,7 @@ import com.mmxlabs.models.ui.validation.ValidationPlugin;
 public class Activator extends ValidationPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.models.lng.input.validation"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.models.lng.assignment.validation"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.impl;
 
+import com.mmxlabs.models.lng.spotmarkets.*;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -75,6 +76,7 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 			case SpotMarketsPackage.FOB_PURCHASES_MARKET: return createFOBPurchasesMarket();
 			case SpotMarketsPackage.FOB_SALES_MARKET: return createFOBSalesMarket();
 			case SpotMarketsPackage.SPOT_AVAILABILITY: return createSpotAvailability();
+			case SpotMarketsPackage.CHARTER_OUT_START_DATE: return createCharterOutStartDate();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -188,6 +190,16 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	public SpotAvailability createSpotAvailability() {
 		SpotAvailabilityImpl spotAvailability = new SpotAvailabilityImpl();
 		return spotAvailability;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterOutStartDate createCharterOutStartDate() {
+		CharterOutStartDateImpl charterOutStartDate = new CharterOutStartDateImpl();
+		return charterOutStartDate;
 	}
 
 	/**

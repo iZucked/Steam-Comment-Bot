@@ -13,13 +13,13 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -49,7 +49,7 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 						final String type = loadSlot.isDESPurchase() ? "DES" : "FOB";
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
 								"Divertable %s Purchase|%s needs a nominated vessel", type, loadSlot.getName())));
-						failure.addEObjectAndFeature(assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 						failures.add(failure);
 					}
 				}

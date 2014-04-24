@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,6 +33,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isDESPurchase <em>DES Purchase</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getTransferFrom <em>Transfer From</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getSalesDeliveryType <em>Sales Delivery Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -126,6 +128,35 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @ordered
 	 */
 	protected DischargeSlot transferFrom;
+
+	/**
+	 * The default value of the '{@link #getSalesDeliveryType() <em>Sales Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSalesDeliveryType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CargoDeliveryType SALES_DELIVERY_TYPE_EDEFAULT = CargoDeliveryType.ANY;
+
+	/**
+	 * The cached value of the '{@link #getSalesDeliveryType() <em>Sales Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSalesDeliveryType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoDeliveryType salesDeliveryType = SALES_DELIVERY_TYPE_EDEFAULT;
+
+	/**
+	 * This is true if the Sales Delivery Type attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean salesDeliveryTypeESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -326,10 +357,65 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CargoDeliveryType getSalesDeliveryType() {
+		return salesDeliveryType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSalesDeliveryType(CargoDeliveryType newSalesDeliveryType) {
+		CargoDeliveryType oldSalesDeliveryType = salesDeliveryType;
+		salesDeliveryType = newSalesDeliveryType == null ? SALES_DELIVERY_TYPE_EDEFAULT : newSalesDeliveryType;
+		boolean oldSalesDeliveryTypeESet = salesDeliveryTypeESet;
+		salesDeliveryTypeESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE, oldSalesDeliveryType, salesDeliveryType, !oldSalesDeliveryTypeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetSalesDeliveryType() {
+		CargoDeliveryType oldSalesDeliveryType = salesDeliveryType;
+		boolean oldSalesDeliveryTypeESet = salesDeliveryTypeESet;
+		salesDeliveryType = SALES_DELIVERY_TYPE_EDEFAULT;
+		salesDeliveryTypeESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE, oldSalesDeliveryType, SALES_DELIVERY_TYPE_EDEFAULT, oldSalesDeliveryTypeESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetSalesDeliveryType() {
+		return salesDeliveryTypeESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrDelegatedCV() {
 		return (Double) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__CARGO_CV);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public CargoDeliveryType getSlotOrContractDeliveryType() {
+		return (CargoDeliveryType) eGetWithDefault(CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE);	
 	}
 
 	/**
@@ -379,6 +465,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
 				if (resolve) return getTransferFrom();
 				return basicGetTransferFrom();
+			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
+				return getSalesDeliveryType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -402,6 +490,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return;
 			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
 				setTransferFrom((DischargeSlot)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
+				setSalesDeliveryType((CargoDeliveryType)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -427,6 +518,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
 				setTransferFrom((DischargeSlot)null);
 				return;
+			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
+				unsetSalesDeliveryType();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -447,6 +541,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return desPurchase != DES_PURCHASE_EDEFAULT;
 			case CargoPackage.LOAD_SLOT__TRANSFER_FROM:
 				return transferFrom != null;
+			case CargoPackage.LOAD_SLOT__SALES_DELIVERY_TYPE:
+				return isSetSalesDeliveryType();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -461,6 +557,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		switch (operationID) {
 			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV:
 				return getSlotOrDelegatedCV();
+			case CargoPackage.LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE:
+				return getSlotOrContractDeliveryType();
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -481,6 +579,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		if (arriveColdESet) result.append(arriveCold); else result.append("<unset>");
 		result.append(", DESPurchase: ");
 		result.append(desPurchase);
+		result.append(", salesDeliveryType: ");
+		if (salesDeliveryTypeESet) result.append(salesDeliveryType); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -513,6 +613,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			};
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD) {
 			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__ALLOW_COOLDOWN, Boolean.TRUE);
+		} else if (feature == CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE, CargoDeliveryType.ANY);			
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

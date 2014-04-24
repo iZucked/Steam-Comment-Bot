@@ -53,6 +53,9 @@ public class ContractDetailComposite extends DefaultDetailComposite {
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MinCvValue()) {
 			mainTabElement = false;
 		}
+		if (editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_SalesDeliveryType()) {
+			mainTabElement = false;
+		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_PurchaseDeliveryType()) {
 			mainTabElement = false;
 		}

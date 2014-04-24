@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import com.mmxlabs.models.lng.schedule.*;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
@@ -134,6 +135,14 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				T result = caseMarketAllocation(marketAllocation);
 				if (result == null) result = caseProfitAndLossContainer(marketAllocation);
 				if (result == null) result = caseMMXObject(marketAllocation);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.OPEN_SLOT_ALLOCATION: {
+				OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation)theEObject;
+				T result = caseOpenSlotAllocation(openSlotAllocation);
+				if (result == null) result = caseProfitAndLossContainer(openSlotAllocation);
+				if (result == null) result = caseMMXObject(openSlotAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -306,6 +315,33 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS: {
 				EntityProfitAndLoss entityProfitAndLoss = (EntityProfitAndLoss)theEObject;
 				T result = caseEntityProfitAndLoss(entityProfitAndLoss);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.ENTITY_PNL_DETAILS: {
+				EntityPNLDetails entityPNLDetails = (EntityPNLDetails)theEObject;
+				T result = caseEntityPNLDetails(entityPNLDetails);
+				if (result == null) result = caseGeneralPNLDetails(entityPNLDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.SLOT_PNL_DETAILS: {
+				SlotPNLDetails slotPNLDetails = (SlotPNLDetails)theEObject;
+				T result = caseSlotPNLDetails(slotPNLDetails);
+				if (result == null) result = caseGeneralPNLDetails(slotPNLDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.GENERAL_PNL_DETAILS: {
+				GeneralPNLDetails generalPNLDetails = (GeneralPNLDetails)theEObject;
+				T result = caseGeneralPNLDetails(generalPNLDetails);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.BASIC_SLOT_PNL_DETAILS: {
+				BasicSlotPNLDetails basicSlotPNLDetails = (BasicSlotPNLDetails)theEObject;
+				T result = caseBasicSlotPNLDetails(basicSlotPNLDetails);
+				if (result == null) result = caseGeneralPNLDetails(basicSlotPNLDetails);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -526,6 +562,21 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Open Slot Allocation</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Open Slot Allocation</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOpenSlotAllocation(OpenSlotAllocation object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Slot Allocation</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -692,6 +743,66 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEntityProfitAndLoss(EntityProfitAndLoss object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Entity PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Entity PNL Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEntityPNLDetails(EntityPNLDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Slot PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Slot PNL Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSlotPNLDetails(SlotPNLDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>General PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>General PNL Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGeneralPNLDetails(GeneralPNLDetails object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Basic Slot PNL Details</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Basic Slot PNL Details</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBasicSlotPNLDetails(BasicSlotPNLDetails object) {
 		return null;
 	}
 

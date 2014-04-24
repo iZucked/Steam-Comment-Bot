@@ -28,7 +28,7 @@ public class SlotPricingConstraint extends AbstractModelConstraint {
 			} else {
 
 				if (!slot.isSetPriceExpression() && !slot.isSetContract()) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A contract or price expression must be set"));
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot \"" + slot.getName() + "\" - A contract or price expression must be set"));
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
 					return dsd;

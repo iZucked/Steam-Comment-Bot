@@ -66,7 +66,10 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DefaultDialogEditingContext;
 import com.mmxlabs.models.ui.editors.dialogs.DialogValidationSupport;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.editors.dialogs.NullDialogController;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
@@ -85,7 +88,7 @@ public class ComplexCargoEditor extends Dialog {
 
 	private DialogValidationSupport validationSupport;
 
-	private final IScenarioEditingLocation scenarioEditingLocation;
+	// private final IScenarioEditingLocation scenarioEditingLocation;
 	private final ObservablesManager observablesManager = new ObservablesManager();
 	private final EMFDataBindingContext dbc = new EMFDataBindingContext();
 
@@ -100,14 +103,21 @@ public class ComplexCargoEditor extends Dialog {
 	// For LDD we need to link min.max discharge volumes
 	private final boolean linkDischargeVolumes = true;
 
+	private IDialogEditingContext dialogContext;
+
+	private IScenarioEditingLocation scenarioEditingLocation;
+
 	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
 		this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
 	public ComplexCargoEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
-		this.scenarioEditingLocation = scenarioEditingLocation;
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
+
+		// this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
 	@Override
@@ -119,8 +129,9 @@ public class ComplexCargoEditor extends Dialog {
 	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
+		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
-		validationSupport = new DialogValidationSupport(scenarioEditingLocation.getExtraValidationContext());
+		validationSupport = new DialogValidationSupport(sel.getExtraValidationContext());
 
 		final Composite area = new Composite(c, SWT.NONE);
 		area.setLayout(new GridLayout(1, true));
@@ -174,7 +185,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Name");
 				column.getColumn().setWidth(60);
 
-				final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), scenarioEditingLocation.getEditingDomain());
+				final BasicAttributeManipulator manipulator = new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -185,7 +196,7 @@ public class ComplexCargoEditor extends Dialog {
 				final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 				column.getColumn().setText("Contract");
 				column.getColumn().setWidth(150);
-				final ContractManipulator manipulator = new ContractManipulator(scenarioEditingLocation.getReferenceValueProviderCache(), scenarioEditingLocation.getEditingDomain());
+				final ContractManipulator manipulator = new ContractManipulator(sel.getReferenceValueProviderCache(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -198,8 +209,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Port");
 				column.getColumn().setWidth(100);
 
-				final SingleReferenceManipulator manipulator = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), scenarioEditingLocation.getReferenceValueProviderCache(),
-						scenarioEditingLocation.getEditingDomain());
+				final SingleReferenceManipulator manipulator = new SingleReferenceManipulator(CargoPackage.eINSTANCE.getSlot_Port(), sel.getReferenceValueProviderCache(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -212,7 +222,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setWidth(100);
 				// column.setLabelProvider(new GenericMapCellLabelProvider("{0}", attributeMap));
 
-				final DateAttributeManipulator manipulator = new DateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), scenarioEditingLocation.getEditingDomain());
+				final DateAttributeManipulator manipulator = new DateAttributeManipulator(CargoPackage.eINSTANCE.getSlot_WindowStart(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false));
@@ -223,7 +233,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Volume (Min)");
 				column.getColumn().setWidth(100);
 
-				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), scenarioEditingLocation.getEditingDomain());
+				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MinQuantity(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false)) {
@@ -234,9 +244,9 @@ public class ComplexCargoEditor extends Dialog {
 
 							final CompoundCommand cmd = new CompoundCommand("Set discharge volumes");
 
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
-							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
+							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
+							sel.getEditingDomain().getCommandStack().execute(cmd);
 
 						} else {
 							super.setValue(element, value);
@@ -251,7 +261,7 @@ public class ComplexCargoEditor extends Dialog {
 				column.getColumn().setText("Volume (Max)");
 				column.getColumn().setWidth(100);
 
-				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), scenarioEditingLocation.getEditingDomain());
+				final NumericAttributeManipulator manipulator = new NumericAttributeManipulator(CargoPackage.eINSTANCE.getSlot_MaxQuantity(), sel.getEditingDomain());
 				column.setLabelProvider(new CellRendererColumnLabelProvider(viewer, manipulator, validationErrors, new EMFPath(false)));
 
 				final CellManipulatorEditingSupport es = new CellManipulatorEditingSupport(column.getViewer(), viewer, manipulator, new EMFPath(false)) {
@@ -262,9 +272,9 @@ public class ComplexCargoEditor extends Dialog {
 
 							final CompoundCommand cmd = new CompoundCommand("Set discharge volumes");
 
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
-							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MinQuantity(), value));
+							cmd.append(SetCommand.create(sel.getEditingDomain(), dischargeSlot, CargoPackage.eINSTANCE.getSlot_MaxQuantity(), value));
+							sel.getEditingDomain().getCommandStack().execute(cmd);
 
 						} else {
 							super.setValue(element, value);
@@ -279,7 +289,7 @@ public class ComplexCargoEditor extends Dialog {
 
 			viewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
 
-				private final LNGScenarioModel scenarioModel = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
+				private final LNGScenarioModel scenarioModel = (LNGScenarioModel) sel.getRootObject();
 
 				private Menu menu;
 				private final CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), scenarioEditingLocation, scenarioModel, scenarioModel.getPortfolioModel());
@@ -347,7 +357,7 @@ public class ComplexCargoEditor extends Dialog {
 
 			@Override
 			public void run() {
-				final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
+				final EditingDomain editingDomain = dialogContext.getScenarioEditingLocation().getEditingDomain();
 				{
 					final IEMFEditValueProperty property = EMFEditProperties.value(editingDomain, FeaturePath.fromList(MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 					final IObservableValue modelObservableValue = property.observe(cargo);
@@ -372,15 +382,16 @@ public class ComplexCargoEditor extends Dialog {
 
 	@Override
 	public int open() {
+		final IScenarioEditingLocation sel = dialogContext.getScenarioEditingLocation();
 
-		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(scenarioEditingLocation.getExtraValidationContext(), false));
+		validationSupport = new DialogValidationSupport(new DefaultExtraValidationContext(sel.getExtraValidationContext(), false));
 
 		final List<EObject> validationTargets = new ArrayList<EObject>();
 		validationTargets.add(cargo);
 		validationTargets.addAll(cargo.getSlots());
 		validationSupport.setValidationTargets(validationTargets);
 
-		final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
+		final CommandStack commandStack = sel.getEditingDomain().getCommandStack();
 		final CommandStackListener listener = new CommandStackListener() {
 
 			@Override
@@ -391,13 +402,13 @@ public class ComplexCargoEditor extends Dialog {
 		};
 		commandStack.addCommandStackListener(listener);
 		try {
-			scenarioEditingLocation.pushExtraValidationContext(validationSupport.getValidationContext());
+			sel.pushExtraValidationContext(validationSupport.getValidationContext());
 			validate();
 			return super.open();
 		} finally {
 			commandStack.removeCommandStackListener(listener);
 
-			scenarioEditingLocation.popExtraValidationContext();
+			sel.popExtraValidationContext();
 
 		}
 	}

@@ -3,13 +3,14 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -35,11 +36,15 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isDivertable <em>Divertable</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -687,17 +692,16 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @return the value of the '<em>Entity</em>' reference.
 	 * @see #isSetEntity()
 	 * @see #unsetEntity()
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Entity()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	LegalEntity getEntity();
+	BaseLegalEntity getEntity();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Entity</em>' reference.
 	 * @see #isSetEntity()
@@ -705,7 +709,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #getEntity()
 	 * @generated
 	 */
-	void setEntity(LegalEntity value);
+	void setEntity(BaseLegalEntity value);
 
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference.
@@ -714,7 +718,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * <!-- end-user-doc -->
 	 * @see #isSetEntity()
 	 * @see #getEntity()
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @generated
 	 */
 	void unsetEntity();
@@ -727,7 +731,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @return whether the value of the '<em>Entity</em>' reference is set.
 	 * @see #unsetEntity()
 	 * @see #getEntity()
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @generated
 	 */
 	boolean isSetEntity();
@@ -874,6 +878,128 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	boolean isSetRestrictedListsArePermissive();
 
 	/**
+	 * Returns the value of the '<em><b>Hedges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Hedges</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hedges</em>' attribute.
+	 * @see #setHedges(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Hedges()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='-########0'"
+	 * @generated
+	 */
+	int getHedges();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hedges</em>' attribute.
+	 * @see #getHedges()
+	 * @generated
+	 */
+	void setHedges(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}&lt;com.mmxlabs.models.lng.fleet.Vessel>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Allowed Vessels</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Allowed Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_AllowedVessels()
+	 * @model
+	 * @generated
+	 */
+	EList<AVesselSet<Vessel>> getAllowedVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cancellation Fee</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cancellation Fee</em>' attribute.
+	 * @see #isSetCancellationFee()
+	 * @see #unsetCancellationFee()
+	 * @see #setCancellationFee(int)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationFee()
+	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$'"
+	 * @generated
+	 */
+	int getCancellationFee();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cancellation Fee</em>' attribute.
+	 * @see #isSetCancellationFee()
+	 * @see #unsetCancellationFee()
+	 * @see #getCancellationFee()
+	 * @generated
+	 */
+	void setCancellationFee(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetCancellationFee()
+	 * @see #getCancellationFee()
+	 * @see #setCancellationFee(int)
+	 * @generated
+	 */
+	void unsetCancellationFee();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Cancellation Fee</em>' attribute is set.
+	 * @see #unsetCancellationFee()
+	 * @see #getCancellationFee()
+	 * @see #setCancellationFee(int)
+	 * @generated
+	 */
+	boolean isSetCancellationFee();
+
+	/**
+	 * Returns the value of the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Divertable</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Divertable</em>' attribute.
+	 * @see #setDivertable(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Divertable()
+	 * @model
+	 * @generated
+	 */
+	boolean isDivertable();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertable <em>Divertable</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Divertable</em>' attribute.
+	 * @see #isDivertable()
+	 * @generated
+	 */
+	void setDivertable(boolean value);
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
@@ -928,7 +1054,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @model kind="operation"
 	 * @generated
 	 */
-	LegalEntity getSlotOrDelegatedEntity();
+	BaseLegalEntity getSlotOrDelegatedEntity();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -956,6 +1082,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	boolean getSlotOrContractRestrictedListsArePermissive();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getSlotOrContractCancellationFee();
 
 } // end of  Slot
 

@@ -17,7 +17,7 @@
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
          </package>
          <constraints
                categories=" com.mmxlabs.models.lng.assignment.validation.base">
@@ -139,6 +139,19 @@
                   {0}
                </message>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.assignment.validation.AssignableElementMissingDistancesConstraint"
+                  id="com.mmxlabs.models.lng.assignment.validation.ScheduledCargoMissingDistancesConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="ScheduledCargoMissingDistancesConstraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
          </constraints>
       </constraintProvider>
             <category
@@ -149,7 +162,10 @@
       <constraintProvider
             cache="true">
          <package
-               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
+               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
+         </package>
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/scenario/1/">
          </package>
          <constraints
                categories="com.mmxlabs.models.lng.assignment.validation.optimisation">
@@ -165,6 +181,9 @@
                <message>
                   {0}
                </message>
+               <target
+                     class="LNGScenarioModel">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.assignment.validation.CargoVolumeVesselAssignmentConstraint"

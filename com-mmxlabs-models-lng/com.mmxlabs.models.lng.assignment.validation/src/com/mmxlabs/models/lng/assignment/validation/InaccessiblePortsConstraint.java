@@ -16,12 +16,11 @@ import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -68,7 +67,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 								if (inaccessiblePortSet.contains(slot.getPort())) {
 									final String msg = String.format("The port %s is not an accessible port for the assigned vessel", slot.getPort().getName());
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-									dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+									dsd.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 									dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 									statues.add(dsd);
 								}
@@ -81,7 +80,7 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 								if (inaccessiblePortSet.contains(slot.getPort())) {
 									final String msg = String.format("The port %s is not an accessible port for the assigned vessel", slot.getPort().getName());
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-									dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+									dsd.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 									dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 									statues.add(dsd);
 								}
@@ -91,8 +90,8 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 							if (inaccessiblePortSet.contains(vesselEvent.getPort())) {
 								final String msg = String.format("The port %s is not an accessible port for the assigned vessel", vesselEvent.getPort().getName());
 								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-								dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
-								dsd.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_Port());
+								dsd.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+								dsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_Port());
 								statues.add(dsd);
 							}
 							if (vesselEvent instanceof CharterOutEvent) {
@@ -100,8 +99,8 @@ public class InaccessiblePortsConstraint extends AbstractModelMultiConstraint {
 								if (inaccessiblePortSet.contains(charterOutEvent.getRelocateTo())) {
 									final String msg = String.format("The port %s is not an accessible port for the assigned vessel", charterOutEvent.getRelocateTo().getName());
 									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
-									dsd.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
-									dsd.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getCharterOutEvent_RelocateTo());
+									dsd.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+									dsd.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getCharterOutEvent_RelocateTo());
 									statues.add(dsd);
 								}
 							}

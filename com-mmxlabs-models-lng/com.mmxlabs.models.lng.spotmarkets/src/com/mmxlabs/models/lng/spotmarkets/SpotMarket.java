@@ -3,8 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -143,23 +143,22 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Entity</em>' reference.
-	 * @see #setEntity(LegalEntity)
+	 * @see #setEntity(BaseLegalEntity)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_Entity()
 	 * @model
 	 * @generated
 	 */
-	LegalEntity getEntity();
+	BaseLegalEntity getEntity();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getEntity <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Entity</em>' reference.
 	 * @see #getEntity()
 	 * @generated
 	 */
-	void setEntity(LegalEntity value);
+	void setEntity(BaseLegalEntity value);
 
 	/**
 	 * <!-- begin-user-doc -->

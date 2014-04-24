@@ -150,7 +150,7 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 
 	@Override
 	protected String stringFromAttribute(final EObject container, final EAttribute attribute, final Object value, final IExportContext context) {
-		if (attribute.isUnsettable() && container.eIsSet(attribute) == false) {
+		if (value == null || attribute.isUnsettable() && container.eIsSet(attribute) == false) {
 			return "";
 		}
 

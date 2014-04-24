@@ -674,6 +674,8 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		// Create annotations
 		// http://www.mmxlabs.com/models/mmxcore/annotations/namedobject
 		createNamedobjectAnnotations();
+		// http://www.mmxlabs.com/models/ui/numberFormat
+		createNumberFormatAnnotations();
 	}
 
 	/**
@@ -689,6 +691,28 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   source, 
 		   new String[] {
 			 "showOtherNames", "true"
+		   });		
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/numberFormat</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNumberFormatAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
+		addAnnotation
+		  (getLocation_Lat(), 
+		   source, 
+		   new String[] {
+			 "formatString", "-##.###"
+		   });		
+		addAnnotation
+		  (getLocation_Lon(), 
+		   source, 
+		   new String[] {
+			 "formatString", "-##.###"
 		   });
 	}
 

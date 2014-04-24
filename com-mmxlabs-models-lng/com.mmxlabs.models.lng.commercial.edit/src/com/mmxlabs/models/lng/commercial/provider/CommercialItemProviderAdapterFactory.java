@@ -253,6 +253,52 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ContractExpressionMapEntryItemProvider contractExpressionMapEntryItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createContractExpressionMapEntryAdapter() {
+		if (contractExpressionMapEntryItemProvider == null) {
+			contractExpressionMapEntryItemProvider = new ContractExpressionMapEntryItemProvider(this);
+		}
+
+		return contractExpressionMapEntryItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SimpleEntityBook} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SimpleEntityBookItemProvider simpleEntityBookItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SimpleEntityBook}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSimpleEntityBookAdapter() {
+		if (simpleEntityBookItemProvider == null) {
+			simpleEntityBookItemProvider = new SimpleEntityBookItemProvider(this);
+		}
+
+		return simpleEntityBookItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -388,6 +434,8 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
 		if (taxRateItemProvider != null) taxRateItemProvider.dispose();
 		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
+		if (contractExpressionMapEntryItemProvider != null) contractExpressionMapEntryItemProvider.dispose();
+		if (simpleEntityBookItemProvider != null) simpleEntityBookItemProvider.dispose();
 	}
 
 }

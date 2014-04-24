@@ -124,6 +124,7 @@ public class ScheduleItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__OPEN_SLOT_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__MARKET_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESSES);
@@ -179,6 +180,7 @@ public class ScheduleItemProvider
 
 		switch (notification.getFeatureID(Schedule.class)) {
 			case SchedulePackage.SCHEDULE__SEQUENCES:
+			case SchedulePackage.SCHEDULE__OPEN_SLOT_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__MARKET_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__FITNESSES:
@@ -203,6 +205,11 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__SEQUENCES,
 				 ScheduleFactory.eINSTANCE.createSequence()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SCHEDULE__OPEN_SLOT_ALLOCATIONS,
+				 ScheduleFactory.eINSTANCE.createOpenSlotAllocation()));
 
 		newChildDescriptors.add
 			(createChildParameter

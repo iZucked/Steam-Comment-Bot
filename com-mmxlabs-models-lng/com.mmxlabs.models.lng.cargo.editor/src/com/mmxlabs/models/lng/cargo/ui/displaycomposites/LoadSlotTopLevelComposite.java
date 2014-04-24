@@ -19,8 +19,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
@@ -32,13 +32,13 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  */
 public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 
-	public LoadSlotTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location, FormToolkit toolkit) {
-		super(parent, style, location, toolkit);
+	public LoadSlotTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, FormToolkit toolkit) {
+		super(parent, style, dialogContext, toolkit);
 		toolkit.adapt(this);
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
@@ -59,18 +59,18 @@ public class LoadSlotTopLevelComposite extends DefaultTopLevelComposite {
 		g.setText(groupName);
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location, toolkit);
+		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, dialogContext, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
 		createChildComposites(root, object, eClass, this);
 
-		topLevel.display(location, root, object, range, dbc);
+		topLevel.display(dialogContext, root, object, range, dbc);
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 		final Iterator<EObject> childObjectsItr = childObjects.iterator();
 
 		while (childObjectsItr.hasNext()) {
-			children.next().display(location, root, childObjectsItr.next(), range, dbc);
+			children.next().display(dialogContext, root, childObjectsItr.next(), range, dbc);
 		}
 
 		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));

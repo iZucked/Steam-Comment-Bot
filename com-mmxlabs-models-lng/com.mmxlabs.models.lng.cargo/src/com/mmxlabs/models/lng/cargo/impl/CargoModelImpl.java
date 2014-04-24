@@ -18,6 +18,9 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -31,6 +34,9 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDischargeSlots <em>Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoes <em>Cargoes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoGroups <em>Cargo Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselAvailabilities <em>Vessel Availabilities</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getVesselTypeGroups <em>Vessel Type Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -76,6 +82,36 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<CargoGroup> cargoGroups;
+
+	/**
+	 * The cached value of the '{@link #getVesselAvailabilities() <em>Vessel Availabilities</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselAvailabilities()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselAvailability> vesselAvailabilities;
+
+	/**
+	 * The cached value of the '{@link #getVesselEvents() <em>Vessel Events</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselEvents()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselEvent> vesselEvents;
+
+	/**
+	 * The cached value of the '{@link #getVesselTypeGroups() <em>Vessel Type Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselTypeGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselTypeGroup> vesselTypeGroups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -149,6 +185,42 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<VesselAvailability> getVesselAvailabilities() {
+		if (vesselAvailabilities == null) {
+			vesselAvailabilities = new EObjectContainmentEList.Resolving<VesselAvailability>(VesselAvailability.class, this, CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES);
+		}
+		return vesselAvailabilities;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<VesselEvent> getVesselEvents() {
+		if (vesselEvents == null) {
+			vesselEvents = new EObjectContainmentEList.Resolving<VesselEvent>(VesselEvent.class, this, CargoPackage.CARGO_MODEL__VESSEL_EVENTS);
+		}
+		return vesselEvents;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<VesselTypeGroup> getVesselTypeGroups() {
+		if (vesselTypeGroups == null) {
+			vesselTypeGroups = new EObjectContainmentEList.Resolving<VesselTypeGroup>(VesselTypeGroup.class, this, CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS);
+		}
+		return vesselTypeGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -160,6 +232,12 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getCargoes()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				return ((InternalEList<?>)getCargoGroups()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
+				return ((InternalEList<?>)getVesselAvailabilities()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
+				return ((InternalEList<?>)getVesselEvents()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+				return ((InternalEList<?>)getVesselTypeGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -180,6 +258,12 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getCargoes();
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				return getCargoGroups();
+			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
+				return getVesselAvailabilities();
+			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
+				return getVesselEvents();
+			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+				return getVesselTypeGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -209,6 +293,18 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getCargoGroups().clear();
 				getCargoGroups().addAll((Collection<? extends CargoGroup>)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
+				getVesselAvailabilities().clear();
+				getVesselAvailabilities().addAll((Collection<? extends VesselAvailability>)newValue);
+				return;
+			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
+				getVesselEvents().clear();
+				getVesselEvents().addAll((Collection<? extends VesselEvent>)newValue);
+				return;
+			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+				getVesselTypeGroups().clear();
+				getVesselTypeGroups().addAll((Collection<? extends VesselTypeGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -233,6 +329,15 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				getCargoGroups().clear();
 				return;
+			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
+				getVesselAvailabilities().clear();
+				return;
+			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
+				getVesselEvents().clear();
+				return;
+			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+				getVesselTypeGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -253,6 +358,12 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return cargoes != null && !cargoes.isEmpty();
 			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				return cargoGroups != null && !cargoGroups.isEmpty();
+			case CargoPackage.CARGO_MODEL__VESSEL_AVAILABILITIES:
+				return vesselAvailabilities != null && !vesselAvailabilities.isEmpty();
+			case CargoPackage.CARGO_MODEL__VESSEL_EVENTS:
+				return vesselEvents != null && !vesselEvents.isEmpty();
+			case CargoPackage.CARGO_MODEL__VESSEL_TYPE_GROUPS:
+				return vesselTypeGroups != null && !vesselTypeGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -6,59 +6,23 @@ package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
 
-import com.google.common.collect.Lists;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class FleetModelEditorContribution extends BaseJointModelEditorContribution<FleetModel> {
-	private VesselViewerPane_Editor vesselViewerPane;
 	// private VesselClassViewerPane vesselClassViewerPane;
-	private VesselEventViewerPane eventViewerPane;
-	private int eventPage;
 
 	@Override
 	public void addPages(final Composite parent) {
-		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
 
-		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		vesselViewerPane.createControl(sash);
-		vesselViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getScenarioFleetModel_VesselAvailabilities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
-
-		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		eventViewerPane.createControl(sash);
-		eventViewerPane.init(Lists.newArrayList(FleetPackage.eINSTANCE.getScenarioFleetModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
-
-		vesselViewerPane.getViewer().setInput(modelObject);
-		eventViewerPane.getViewer().setInput(modelObject);
-
-		eventPage = editorPart.addPage(sash);
-		editorPart.setPageText(eventPage, "Fleet");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution#lock()
-	 */
 	@Override
 	public void setLocked(final boolean locked) {
 		// vesselClassViewerPane.setLocked(locked);
-		if (vesselViewerPane != null)
-			vesselViewerPane.setLocked(locked);
-		if (eventViewerPane != null)
-			eventViewerPane.setLocked(locked);
 	}
 
 	@Override
@@ -67,13 +31,6 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 			final EObject target = dcsd.getTarget();
-			if (target instanceof Vessel) {
-				return true;
-			} else if (target instanceof VesselEvent) {
-				return true;
-			} else if (target instanceof HeelOptions) {
-				return true;
-			}
 		}
 
 		return false;
@@ -83,27 +40,6 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 	public void handle(final IStatus status) {
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
-			editorPart.setActivePage(eventPage);
-
-			EObject target = dcsd.getTarget();
-
-			// extract viewable target from a faulty HeelOptions object
-			if (target instanceof HeelOptions) {
-				EObject container = target.eContainer();
-				if (container instanceof VesselAvailability) {
-					target = ((VesselAvailability) container).getVessel();
-				} else if (container instanceof CharterOutEvent) {
-					target = container;
-				}
-			}
-
-			if (target instanceof Vessel) {
-				final Vessel vessel = (Vessel) target;
-				vesselViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vessel), true);
-			} else if (target instanceof VesselEvent) {
-				final VesselEvent vesselEvent = (VesselEvent) target;
-				eventViewerPane.getScenarioViewer().setSelection(new StructuredSelection(vesselEvent), true);
-			}
 		}
 	}
 }

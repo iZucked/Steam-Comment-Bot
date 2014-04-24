@@ -16,9 +16,11 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.models.lng.assignment.validation.AllowedVesselAssignmentConstraint;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -49,7 +51,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		vessel2.setVesselClass(vesselClass);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.getAllowedVessels().add(vessel1);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vessel1);
 
 		// Permitted!
 		cargo.setAssignment(vessel1);
@@ -67,7 +73,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		vessel2.setVesselClass(vesselClass);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.getAllowedVessels().add(vessel1);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vessel1);
 
 		// Not permitted!
 		cargo.setAssignment(vessel2);
@@ -83,7 +93,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.getAllowedVessels().add(vesselClass1);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vesselClass1);
 
 		// Permitted!
 		cargo.setAssignment(vessel1);
@@ -100,7 +114,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.getAllowedVessels().add(vesselClass2);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vesselClass2);
 
 		// Not permitted!
 		cargo.setAssignment(vessel1);
@@ -116,7 +134,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.getAllowedVessels().add(vesselClass1);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vesselClass1);
 
 		// Permitted!
 		cargo.setAssignment(vesselClass1);
@@ -133,7 +155,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.getAllowedVessels().add(vesselClass2);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vesselClass2);
 
 		// Not permitted!
 		cargo.setAssignment(vesselClass1);
@@ -152,7 +178,11 @@ public class AllowedVesselAssignmentConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.getAllowedVessels().add(vessel1);
+		final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+		final DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+		cargo.getSlots().add(loadSlot);
+		cargo.getSlots().add(dischargeSlot);
+		loadSlot.getAllowedVessels().add(vessel1);
 
 		cargo.setAssignment(vesselClass1);
 

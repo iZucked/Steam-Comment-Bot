@@ -30,6 +30,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.GroupData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.RowData;
@@ -47,9 +48,6 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireD
  * 
  * @author Simon Goodall (original work by Tom Hinton)
  * 
- *         FIXME: Fork of {@link WiringDiagram} as which this does work as is, partial re-paints do not work - bg fill is ok, but terminals and lines are only partially drawn if at all. Unknown why
- *         this is the case as it is the same listener code on a canvas, but the objects are separated. Disabling double buffer does not help. Only idea is that some methods are synchronized - it
- *         maybe by splitting the classes code which was previously synchronous can now be executed in parallel.
  * @since 3.0
  */
 public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener, KeyListener {
@@ -57,7 +55,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	static final Color Green = new Color(Display.getCurrent(), new RGB(0, 180, 50));
 	static final Color Light_Green = new Color(Display.getCurrent(), new RGB(100, 255, 100));
 	static final Color White = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-	
+	static final Color Light_Grey = new Color(Display.getCurrent(), new RGB(240, 240, 240));
+	static final Color Grey = new Color(Display.getCurrent(), new RGB(200, 200, 200));
+
 	/**
 	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j. If the ith element is -1, the ith element is not connected to anywhere.
 	 */
@@ -157,25 +157,24 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				continue;
 			}
 
-			
 			// Draw terminal background discs
 			final RowData row = root.getRows().get(i);
 			graphics.setBackground(White);
 			// Left
 			if (row.loadSlot != null) {
 				int extraRadius = 1;
-				int x = ca.x + terminalSize - extraRadius/2;
-				int y = (int) (midpoint - (terminalSize)/ 2 - 1 - extraRadius/2);
-				graphics.fillOval(x - 2, y-2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
+				int x = ca.x + terminalSize - extraRadius / 2;
+				int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
+				graphics.fillOval(x - 2, y - 2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
 			}
 			// Right
 			if (row.dischargeSlot != null) {
 				int extraRadius = 0;
 				extraRadius = 1;
-				int x = ca.x + ca.width - 2 * terminalSize - extraRadius/2;
-				int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius/2);
+				int x = ca.x + ca.width - 2 * terminalSize - extraRadius / 2;
+				int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
 				graphics.setBackground(White);
-				graphics.fillOval(x - 2, y-2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
+				graphics.fillOval(x - 2, y - 2, terminalSize + extraRadius + 4, terminalSize + extraRadius + 4);
 			}
 			rawI++;
 		}
@@ -184,7 +183,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		// Fill whole area - not for use in a table
 		// graphics.fillRectangle(0, 0, ca.width, ca.height);
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-//		graphics.setLineWidth(2);
+		// graphics.setLineWidth(2);
 
 		// draw paths
 		for (final GroupData groupData : root.getGroups()) {
@@ -270,47 +269,52 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			final RowData row = root.getRows().get(i);
 			// Draw left hand terminal
 			if (row.loadSlot != null) {
-				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), ca, graphics, midpoint);
+				drawTerminal(true, row.loadSlot.isDESPurchase(), row.loadTerminalColour, row.loadSlot.isOptional(), row.loadSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
 			graphics.setLineWidth(linewidth);
 			// Draw right hand terminal
 			if (row.dischargeSlot != null) {
-				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), ca, graphics, midpoint);
+				drawTerminal(false, !row.dischargeSlot.isFOBSale(), row.dischargeTerminalColour, row.dischargeSlot.isOptional(), row.dischargeSlot instanceof SpotSlot, ca, graphics, midpoint);
 			}
 			rawI++;
 		}
 	}
 
-	private void drawTerminal(boolean isLeft, boolean hollow, Color terminalColour, boolean isOptional, final Rectangle ca, final GC graphics,
-			final float midpoint) {
+	private void drawTerminal(boolean isLeft, boolean hollow, Color terminalColour, boolean isOptional, boolean isSpot, final Rectangle ca, final GC graphics, final float midpoint) {
 		Color outlineColour = Green;
 		Color fillColour = terminalColour;
 		// make non-shipped a bit bigger, but hollow
-		int extraRadius = 1; 
-		if(hollow){
+		int extraRadius = 1;
+		if (isSpot) {
+			terminalColour = Grey;
+			outlineColour = Grey;
+			fillColour = Light_Grey;
+		}
+		if (hollow) {
 			outlineColour = terminalColour;
 			fillColour = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 		}
+
 		graphics.setLineWidth(2);
 		int x = 0;
-		if(isLeft){
-			x = ca.x + terminalSize - extraRadius/2;
-		} else{
-			x = ca.x + ca.width - 2 * terminalSize - extraRadius/2;
+		if (isLeft) {
+			x = ca.x + terminalSize - extraRadius / 2;
+		} else {
+			x = ca.x + ca.width - 2 * terminalSize - extraRadius / 2;
 		}
-		int y = (int) (midpoint - (terminalSize)/ 2 - 1 - extraRadius/2);			
+		int y = (int) (midpoint - (terminalSize) / 2 - 1 - extraRadius / 2);
 		graphics.setForeground(terminalColour == CargoModelRowTransformer.InvalidTerminalColour ? CargoModelRowTransformer.InvalidTerminalColour : outlineColour);
 		graphics.setBackground(fillColour);
 		graphics.fillOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
 		graphics.drawOval(x, y, terminalSize + extraRadius, terminalSize + extraRadius);
 		// draw internal dot for optional slots
-		if (isOptional) {
+		if (isOptional && !isSpot) {
 			graphics.setBackground(Green);
 			y = (int) midpoint - (terminalSize / 2) + 3;
-			if(isLeft){
-				graphics.fillOval(ca.x + terminalSize + 4, y, 4, 4);				
+			if (isLeft) {
+				graphics.fillOval(ca.x + terminalSize + 4, y, 4, 4);
 			} else {
-				graphics.fillOval(x + 4 + extraRadius/2, y, 4, 4);				
+				graphics.fillOval(x + 4 + extraRadius / 2, y, 4, 4);
 			}
 		}
 	}
@@ -338,7 +342,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		if (ca == null) {
 			return;
 		}
-		
+
 		// determine which row ( if any )
 		int terminal = 0;
 		final List<Float> positions = getTerminalPositions(rootData);

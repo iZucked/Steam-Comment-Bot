@@ -281,13 +281,14 @@ public class DistanceEditorDialog extends Dialog {
 		return distanceModel;
 	}
 
-	public int open(final IWorkbenchSite site, final IScenarioEditingLocation iScenarioEditingLocation, final Route dm) {
-		iScenarioEditingLocation.getReferenceValueProviderCache();
-		this.editingDomain = iScenarioEditingLocation.getEditingDomain();
+	public int open(final IWorkbenchSite site, final IScenarioEditingLocation location, final Route dm) {
+		final IScenarioEditingLocation sel = location;
+		sel.getReferenceValueProviderCache();
+		this.editingDomain = sel.getEditingDomain();
 		currentEditingDomain = new WeakReference<EditingDomain>(editingDomain);
 		this.distanceModel = EcoreUtil.copy(dm);
 		currentDistanceModel = new WeakReference<Route>(distanceModel);
-		this.rootObject = (LNGScenarioModel) iScenarioEditingLocation.getRootObject();
+		this.rootObject = (LNGScenarioModel) sel.getRootObject();
 		currentPortModel = new WeakReference<PortModel>(rootObject.getPortModel());
 		return super.open();
 	}

@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 
@@ -134,11 +134,11 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject rootObject, EObject input, Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, MMXRootObject rootObject, EObject input, Collection<EObject> range) {
 		if (rootObject instanceof LNGScenarioModel) {
 			portModel = ((LNGScenarioModel) rootObject).getPortModel();
 		}
-		super.display(location, rootObject, input, range);
+		super.display(dialogContext, rootObject, input, range);
 	}
 
 	@Override

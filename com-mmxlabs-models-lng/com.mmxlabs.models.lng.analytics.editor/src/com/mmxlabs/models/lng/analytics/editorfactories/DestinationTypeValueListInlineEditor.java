@@ -27,7 +27,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 
 /**
@@ -94,8 +94,8 @@ public class DestinationTypeValueListInlineEditor extends BasicAttributeInlineEd
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		super.display(location, context, input, range);
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+		super.display(dialogContext, context, input, range);
 		if (input != null) {
 			final Object obj = input.eGet(feature);
 			if (obj instanceof DestinationType) {

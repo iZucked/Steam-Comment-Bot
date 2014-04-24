@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 import org.eclipse.emf.ecore.EClass;
@@ -25,7 +26,6 @@ import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -83,7 +83,7 @@ public class DataIndexImporter extends AbstractClassImporter {
 			for (final String s : row.keySet()) {
 				try {
 					final Date date = dateParser.parseDate(s);
-					final Calendar c = Calendar.getInstance();
+					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 					c.setTime(date);
 					// Set back to start of month
 					c.set(Calendar.DAY_OF_MONTH, 1);

@@ -23,7 +23,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
@@ -68,7 +67,6 @@ public class CargoItemProvider
 			addSequenceHintPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addAllowRewiringPropertyDescriptor(object);
-			addAllowedVesselsPropertyDescriptor(object);
 			addSlotsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -111,7 +109,7 @@ public class CargoItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_assignment_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_assignment_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
 				 true,
 				 false,
 				 true,
@@ -134,7 +132,7 @@ public class CargoItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_spotIndex_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_spotIndex_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX,
 				 true,
 				 false,
 				 false,
@@ -157,7 +155,7 @@ public class CargoItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_sequenceHint_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_sequenceHint_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT,
 				 true,
 				 false,
 				 false,
@@ -180,7 +178,7 @@ public class CargoItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_locked_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_locked_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED,
 				 true,
 				 false,
 				 false,
@@ -207,28 +205,6 @@ public class CargoItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Allowed Vessels feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAllowedVesselsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Cargo_allowedVessels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_allowedVessels_feature", "_UI_Cargo_type"),
-				 CargoPackage.Literals.CARGO__ALLOWED_VESSELS,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

@@ -162,6 +162,11 @@
           category="pnl"
           factory="com.mmxlabs.models.lng.schedule.properties.BasicPNLProperties">
     </DetailPropertyFactory>
+    <DetailPropertyFactory
+          EClass="com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails"
+          category="pnl"
+          factory="com.mmxlabs.models.lng.schedule.properties.BasicSlotPNLDetailsProperties">
+    </DetailPropertyFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.properties.DetailPropertyCategory">

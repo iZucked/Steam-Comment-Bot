@@ -15,21 +15,21 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 public class LegalEntityDisplayCompositeFactory implements IDisplayCompositeFactory {
 	final IDisplayCompositeFactory defaultFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(EcorePackage.eINSTANCE.getEObject());
 
 	@Override
-	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-		return defaultFactory.createToplevelComposite(composite, eClass, location, toolkit);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		return new BaseLegalEntityTopLevelComposite(composite, SWT.NONE, dialogContext, toolkit);
 	}
 
 	@Override
-	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location, final FormToolkit toolkit) {
-		return new LegalEntityDetailComposite(composite, SWT.NONE, toolkit);
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, IDialogEditingContext dialogContext, final FormToolkit toolkit) {
+		return defaultFactory.createSublevelComposite(composite, eClass, dialogContext, toolkit);
 	}
 
 	@Override

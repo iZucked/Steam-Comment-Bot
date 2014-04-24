@@ -12,9 +12,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -43,7 +41,7 @@ public class CooldownPriceComponentHelper extends BaseComponentHelper {
 	 */
 	public CooldownPriceComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(PricingPackage.Literals.PORTS_PRICE_MAP));
 	}
 	
 	/**
@@ -64,23 +62,5 @@ public class CooldownPriceComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_portsEditor(detailComposite, topClass);
-		add_indexEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the ports feature on CooldownPrice
-	 *
-	 * @generated
-	 */
-	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COOLDOWN_PRICE__PORTS));
-	}
-	/**
-	 * Create the editor for the index feature on CooldownPrice
-	 *
-	 * @generated
-	 */
-	protected void add_indexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.COOLDOWN_PRICE__INDEX));
 	}
 }

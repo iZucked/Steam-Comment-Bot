@@ -56,6 +56,24 @@
 		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
 		inheritable="false"
 		modelClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters" />
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
+ </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseEntityBookComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.BaseEntityBookComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.BaseEntityBook">
+ </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleEntityBookComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleEntityBookComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.SimpleEntityBook">
+ </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -73,7 +91,7 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CommercialProviderFactory"
           id="com.mmxlabs.models.lng.commercial.editor.entityProvider"
-          referenceEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+          referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
     </valueProvider>
  </extension>
  <extension
@@ -83,15 +101,6 @@
           subModelClassName="com.mmxlabs.models.lng.commercial.CommercialModel"
           subModelImporterClass="com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter">
     </submodelImporter>
- </extension>
-  <extension
-       point="com.mmxlabs.models.util.import.classes">
-    <classImporter
-          ID="com.mmxlabs.models.lng.commercial.editor.legalEntityImporter"
-          classImporterClass="com.mmxlabs.models.lng.commercial.importer.LegalEntityImporter"
-          eClassName="com.mmxlabs.models.lng.commercial.LegalEntity"
-          inheritable="false">
-    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -133,9 +142,15 @@
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
     <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.commercial.LegalEntity"
+          eClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity"
           factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
           id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.BaseEntityBook"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityBookDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityBookDisplayCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>
@@ -205,6 +220,15 @@
                attributeTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
          </dataType>
       </attributeImporter>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.classes">
+      <classImporter
+            ID="com.mmxlabs.models.lng.commercial.importer.BaseLegalEntityImporter"
+            classImporterClass="com.mmxlabs.models.lng.commercial.importer.BaseLegalEntityImporter"
+            eClassName="com.mmxlabs.models.lng.commercial.BaseLegalEntity"
+            inheritable="true">
+      </classImporter>
    </extension>
 
 </plugin>

@@ -249,6 +249,121 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselAvailability} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselAvailabilityItemProvider vesselAvailabilityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselAvailability}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselAvailabilityAdapter() {
+		if (vesselAvailabilityItemProvider == null) {
+			vesselAvailabilityItemProvider = new VesselAvailabilityItemProvider(this);
+		}
+
+		return vesselAvailabilityItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.MaintenanceEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MaintenanceEventItemProvider maintenanceEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.MaintenanceEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMaintenanceEventAdapter() {
+		if (maintenanceEventItemProvider == null) {
+			maintenanceEventItemProvider = new MaintenanceEventItemProvider(this);
+		}
+
+		return maintenanceEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.DryDockEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DryDockEventItemProvider dryDockEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.DryDockEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDryDockEventAdapter() {
+		if (dryDockEventItemProvider == null) {
+			dryDockEventItemProvider = new DryDockEventItemProvider(this);
+		}
+
+		return dryDockEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CharterOutEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutEventItemProvider charterOutEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CharterOutEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutEventAdapter() {
+		if (charterOutEventItemProvider == null) {
+			charterOutEventItemProvider = new CharterOutEventItemProvider(this);
+		}
+
+		return charterOutEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.VesselTypeGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselTypeGroupItemProvider vesselTypeGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.VesselTypeGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselTypeGroupAdapter() {
+		if (vesselTypeGroupItemProvider == null) {
+			vesselTypeGroupItemProvider = new VesselTypeGroupItemProvider(this);
+		}
+
+		return vesselTypeGroupItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -384,6 +499,11 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (spotLoadSlotItemProvider != null) spotLoadSlotItemProvider.dispose();
 		if (spotDischargeSlotItemProvider != null) spotDischargeSlotItemProvider.dispose();
 		if (cargoGroupItemProvider != null) cargoGroupItemProvider.dispose();
+		if (vesselAvailabilityItemProvider != null) vesselAvailabilityItemProvider.dispose();
+		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
+		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
+		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
+		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
 	}
 
 }

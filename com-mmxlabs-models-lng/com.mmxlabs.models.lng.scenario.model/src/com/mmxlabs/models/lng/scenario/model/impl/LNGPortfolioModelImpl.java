@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -27,7 +26,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getScenarioFleetModel <em>Scenario Fleet Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.impl.LNGPortfolioModelImpl#getParameters <em>Parameters</em>}</li>
@@ -37,16 +35,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * @generated
  */
 public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfolioModel {
-	/**
-	 * The cached value of the '{@link #getScenarioFleetModel() <em>Scenario Fleet Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getScenarioFleetModel()
-	 * @generated
-	 * @ordered
-	 */
-	protected ScenarioFleetModel scenarioFleetModel;
-
 	/**
 	 * The cached value of the '{@link #getCargoModel() <em>Cargo Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -95,72 +83,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	@Override
 	protected EClass eStaticClass() {
 		return LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ScenarioFleetModel getScenarioFleetModel() {
-		if (scenarioFleetModel != null && scenarioFleetModel.eIsProxy()) {
-			InternalEObject oldScenarioFleetModel = (InternalEObject)scenarioFleetModel;
-			scenarioFleetModel = (ScenarioFleetModel)eResolveProxy(oldScenarioFleetModel);
-			if (scenarioFleetModel != oldScenarioFleetModel) {
-				InternalEObject newScenarioFleetModel = (InternalEObject)scenarioFleetModel;
-				NotificationChain msgs = oldScenarioFleetModel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL, null, null);
-				if (newScenarioFleetModel.eInternalContainer() == null) {
-					msgs = newScenarioFleetModel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL, null, msgs);
-				}
-				if (msgs != null) msgs.dispatch();
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL, oldScenarioFleetModel, scenarioFleetModel));
-			}
-		}
-		return scenarioFleetModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ScenarioFleetModel basicGetScenarioFleetModel() {
-		return scenarioFleetModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetScenarioFleetModel(ScenarioFleetModel newScenarioFleetModel, NotificationChain msgs) {
-		ScenarioFleetModel oldScenarioFleetModel = scenarioFleetModel;
-		scenarioFleetModel = newScenarioFleetModel;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL, oldScenarioFleetModel, newScenarioFleetModel);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setScenarioFleetModel(ScenarioFleetModel newScenarioFleetModel) {
-		if (newScenarioFleetModel != scenarioFleetModel) {
-			NotificationChain msgs = null;
-			if (scenarioFleetModel != null)
-				msgs = ((InternalEObject)scenarioFleetModel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL, null, msgs);
-			if (newScenarioFleetModel != null)
-				msgs = ((InternalEObject)newScenarioFleetModel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL, null, msgs);
-			msgs = basicSetScenarioFleetModel(newScenarioFleetModel, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL, newScenarioFleetModel, newScenarioFleetModel));
 	}
 
 	/**
@@ -373,8 +295,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL:
-				return basicSetScenarioFleetModel(null, msgs);
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				return basicSetCargoModel(null, msgs);
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
@@ -393,9 +313,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL:
-				if (resolve) return getScenarioFleetModel();
-				return basicGetScenarioFleetModel();
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				if (resolve) return getCargoModel();
 				return basicGetCargoModel();
@@ -417,9 +334,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL:
-				setScenarioFleetModel((ScenarioFleetModel)newValue);
-				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				setCargoModel((CargoModel)newValue);
 				return;
@@ -441,9 +355,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL:
-				setScenarioFleetModel((ScenarioFleetModel)null);
-				return;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				setCargoModel((CargoModel)null);
 				return;
@@ -465,8 +376,6 @@ public class LNGPortfolioModelImpl extends UUIDObjectImpl implements LNGPortfoli
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL:
-				return scenarioFleetModel != null;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 				return cargoModel != null;
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:

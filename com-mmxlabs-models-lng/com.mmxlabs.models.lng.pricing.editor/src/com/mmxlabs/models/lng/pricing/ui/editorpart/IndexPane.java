@@ -10,6 +10,7 @@ import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -43,7 +44,6 @@ import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -75,6 +75,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.tabular.DefaultToolTipProvider;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -161,6 +162,22 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// TODO: API subject to change!
 		getScenarioViewer().setCurrentContainerAndContainment(pricingModel, PricingPackage.Literals.NAMED_INDEX_CONTAINER__DATA);
 
+		ColumnViewerToolTipSupport.enableFor((ColumnViewer) scenarioViewer, ToolTip.NO_RECREATE);
+
+		scenarioViewer.setToolTipProvider(new DefaultToolTipProvider() {
+						
+			@Override
+			public String getToolTipText(Object element) {
+				if (element instanceof NamedIndexContainer<?>) {
+					Index<?> index = ((NamedIndexContainer<?>) element).getData();
+					if (index instanceof DerivedIndex<?>) {
+						return ((DerivedIndex<?>) index).getExpression();
+					}
+				}
+				return null;
+			}
+		});
+		
 		final GridViewerColumn nameColumn = addTypicalColumn("Name", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()) {
 			@Override
 			public boolean canEdit(final Object object) {
@@ -302,7 +319,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						getSortingSupport().removeSortableColumn(column);
 						column.dispose();
 					}
-					final Calendar c = Calendar.getInstance();
+					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 					c.setTime(minDisplayDate);
 					c.set(Calendar.MILLISECOND, 0);
 					c.set(Calendar.SECOND, 0);
@@ -569,34 +586,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 					return null;
 				}
-				
-				@SuppressWarnings("rawtypes")
-				@Override
-				public String getToolTipText(Object element) {
-					if (element instanceof NamedIndexContainer<?>) {
-						Index index = ((NamedIndexContainer) element).getData();
-						if (index instanceof DerivedIndex<?>) {
-							return ((DerivedIndex) index).getExpression();
-						}
-					}
-					return null;
-				}
-				
-				@Override
-				public Point getToolTipShift(Object object) {
-					return new Point(5, 5);
-				}
-				
-				@Override
-				public int getToolTipDisplayDelayTime(Object object) {
-					return 100; // msec
-				}
-				
-				@Override
-				public int getToolTipTimeDisplayed(Object object) {
-					return 5000; // msec
-				}
-				
 			});
 		}
 	}

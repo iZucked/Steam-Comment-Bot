@@ -42,10 +42,10 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorControlFactory;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
@@ -90,7 +90,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
-		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port() });
+		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(),  CargoFeatures.getSlot_Entity()});
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity() });
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 
@@ -98,6 +98,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		pricingFeatures.add(new EStructuralFeature[] { Contract });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingDate() });
+		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Hedges(), CargoFeatures.getSlot_CancellationFee()});
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
@@ -109,12 +110,26 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold() });
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_CargoCV() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts()});
+
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertable(), CargoFeatures.getSlot_ShippingDaysRestriction()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType()});
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertable(), CargoFeatures.getSlot_ShippingDaysRestriction()});
 		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
 
 		noteFeatures = new ArrayList<EStructuralFeature[]>();
@@ -221,9 +236,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
-		super.display(location, root, object, range, dbc);
+		super.display(dialogContext, root, object, range, dbc);
 		final MMXObject eo = (MMXObject) object;
 		esPricing.init(eo);
 		esWindow.init(eo);

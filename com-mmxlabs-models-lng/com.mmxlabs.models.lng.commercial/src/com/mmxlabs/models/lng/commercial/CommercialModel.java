@@ -17,7 +17,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getEntities <em>Entities</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getSalesContracts <em>Sales Contracts</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity <em>Shipping Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.CommercialModel#getPurchaseContracts <em>Purchase Contracts</em>}</li>
  * </ul>
  * </p>
@@ -29,7 +28,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 public interface CommercialModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Entities</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.LegalEntity}.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.BaseLegalEntity}.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Entities</em>' containment reference list isn't clear,
@@ -41,7 +40,7 @@ public interface CommercialModel extends UUIDObject {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<LegalEntity> getEntities();
+	EList<BaseLegalEntity> getEntities();
 
 	/**
 	 * Returns the value of the '<em><b>Sales Contracts</b></em>' containment reference list.
@@ -58,32 +57,6 @@ public interface CommercialModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<SalesContract> getSalesContracts();
-
-	/**
-	 * Returns the value of the '<em><b>Shipping Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Shipping Entity</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Shipping Entity</em>' reference.
-	 * @see #setShippingEntity(LegalEntity)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getCommercialModel_ShippingEntity()
-	 * @model required="true"
-	 * @generated
-	 */
-	LegalEntity getShippingEntity();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity <em>Shipping Entity</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Shipping Entity</em>' reference.
-	 * @see #getShippingEntity()
-	 * @generated
-	 */
-	void setShippingEntity(LegalEntity value);
 
 	/**
 	 * Returns the value of the '<em><b>Purchase Contracts</b></em>' containment reference list.

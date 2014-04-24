@@ -22,7 +22,6 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -80,7 +79,6 @@ public class LNGPortfolioModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScenarioFleetModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_CargoModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScheduleModel());
 			childrenFeatures.add(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters());
@@ -138,7 +136,6 @@ public class LNGPortfolioModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(LNGPortfolioModel.class)) {
-			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__CARGO_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL:
 			case LNGScenarioPackage.LNG_PORTFOLIO_MODEL__PARAMETERS:
@@ -158,11 +155,6 @@ public class LNGPortfolioModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ScenarioFleetModel(),
-				 FleetFactory.eINSTANCE.createScenarioFleetModel()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -41,6 +41,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getNextEvent <em>Next Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getCharterCost <em>Charter Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getHeelAtStart <em>Heel At Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getHeelAtEnd <em>Heel At End</em>}</li>
  * </ul>
  * </p>
  *
@@ -138,6 +140,46 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @ordered
 	 */
 	protected int charterCost = CHARTER_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHeelAtStart() <em>Heel At Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelAtStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_AT_START_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelAtStart() <em>Heel At Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelAtStart()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelAtStart = HEEL_AT_START_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHeelAtEnd() <em>Heel At End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelAtEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_AT_END_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelAtEnd() <em>Heel At End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelAtEnd()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelAtEnd = HEEL_AT_END_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -365,7 +407,7 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 */
 	public Sequence getSequence() {
 		if (eContainerFeatureID() != SchedulePackage.EVENT__SEQUENCE) return null;
-		return (Sequence)eContainer();
+		return (Sequence)eInternalContainer();
 	}
 
 	/**
@@ -420,6 +462,48 @@ public class EventImpl extends MMXObjectImpl implements Event {
 		charterCost = newCharterCost;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__CHARTER_COST, oldCharterCost, charterCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelAtStart() {
+		return heelAtStart;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelAtStart(int newHeelAtStart) {
+		int oldHeelAtStart = heelAtStart;
+		heelAtStart = newHeelAtStart;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__HEEL_AT_START, oldHeelAtStart, heelAtStart));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHeelAtEnd() {
+		return heelAtEnd;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelAtEnd(int newHeelAtEnd) {
+		int oldHeelAtEnd = heelAtEnd;
+		heelAtEnd = newHeelAtEnd;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__HEEL_AT_END, oldHeelAtEnd, heelAtEnd));
 	}
 
 	/**
@@ -565,6 +649,10 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return getSequence();
 			case SchedulePackage.EVENT__CHARTER_COST:
 				return getCharterCost();
+			case SchedulePackage.EVENT__HEEL_AT_START:
+				return getHeelAtStart();
+			case SchedulePackage.EVENT__HEEL_AT_END:
+				return getHeelAtEnd();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -597,6 +685,12 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return;
 			case SchedulePackage.EVENT__CHARTER_COST:
 				setCharterCost((Integer)newValue);
+				return;
+			case SchedulePackage.EVENT__HEEL_AT_START:
+				setHeelAtStart((Integer)newValue);
+				return;
+			case SchedulePackage.EVENT__HEEL_AT_END:
+				setHeelAtEnd((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -631,6 +725,12 @@ public class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__CHARTER_COST:
 				setCharterCost(CHARTER_COST_EDEFAULT);
 				return;
+			case SchedulePackage.EVENT__HEEL_AT_START:
+				setHeelAtStart(HEEL_AT_START_EDEFAULT);
+				return;
+			case SchedulePackage.EVENT__HEEL_AT_END:
+				setHeelAtEnd(HEEL_AT_END_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -657,6 +757,10 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return getSequence() != null;
 			case SchedulePackage.EVENT__CHARTER_COST:
 				return charterCost != CHARTER_COST_EDEFAULT;
+			case SchedulePackage.EVENT__HEEL_AT_START:
+				return heelAtStart != HEEL_AT_START_EDEFAULT;
+			case SchedulePackage.EVENT__HEEL_AT_END:
+				return heelAtEnd != HEEL_AT_END_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -717,6 +821,10 @@ public class EventImpl extends MMXObjectImpl implements Event {
 		result.append(end);
 		result.append(", charterCost: ");
 		result.append(charterCost);
+		result.append(", heelAtStart: ");
+		result.append(heelAtStart);
+		result.append(", heelAtEnd: ");
+		result.append(heelAtEnd);
 		result.append(')');
 		return result.toString();
 	}

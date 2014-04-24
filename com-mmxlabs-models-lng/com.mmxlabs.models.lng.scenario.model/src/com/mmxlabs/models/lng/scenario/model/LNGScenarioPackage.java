@@ -226,22 +226,13 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_PORTFOLIO_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Scenario Fleet Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PORTFOLIO_MODEL__SCENARIO_FLEET_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Cargo Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__CARGO_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int LNG_PORTFOLIO_MODEL__CARGO_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Schedule Model</b></em>' containment reference.
@@ -250,7 +241,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int LNG_PORTFOLIO_MODEL__SCHEDULE_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Parameters</b></em>' containment reference.
@@ -260,7 +251,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL__PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int LNG_PORTFOLIO_MODEL__PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>LNG Portfolio Model</em>' class.
@@ -269,7 +260,7 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -404,17 +395,6 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getLNGPortfolioModel();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Scenario Fleet Model</em>'.
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScenarioFleetModel()
-	 * @see #getLNGPortfolioModel()
-	 * @generated
-	 */
-	EReference getLNGPortfolioModel_ScenarioFleetModel();
 
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getCargoModel <em>Cargo Model</em>}'.

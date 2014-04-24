@@ -154,6 +154,33 @@ public interface PricingFactory extends EFactory {
 	<Value> NamedIndexContainer<Value> createNamedIndexContainer();
 
 	/**
+	 * Returns a new object of class '<em>Ports Price Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Ports Price Map</em>'.
+	 * @generated
+	 */
+	PortsPriceMap createPortsPriceMap();
+
+	/**
+	 * Returns a new object of class '<em>Ports Expression Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Ports Expression Map</em>'.
+	 * @generated
+	 */
+	PortsExpressionMap createPortsExpressionMap();
+
+	/**
+	 * Returns a new object of class '<em>Ports Split Price Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Ports Split Price Map</em>'.
+	 * @generated
+	 */
+	PortsSplitPriceMap createPortsSplitPriceMap();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

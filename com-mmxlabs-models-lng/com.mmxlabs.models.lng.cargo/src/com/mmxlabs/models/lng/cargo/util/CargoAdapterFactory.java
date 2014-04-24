@@ -4,7 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.util;
 
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.*;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
+import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -118,6 +120,34 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createCargoGroupAdapter();
 			}
 			@Override
+			public Adapter caseVesselAvailability(VesselAvailability object) {
+				return createVesselAvailabilityAdapter();
+			}
+			@Override
+			public Adapter caseVesselEvent(VesselEvent object) {
+				return createVesselEventAdapter();
+			}
+			@Override
+			public Adapter caseMaintenanceEvent(MaintenanceEvent object) {
+				return createMaintenanceEventAdapter();
+			}
+			@Override
+			public Adapter caseDryDockEvent(DryDockEvent object) {
+				return createDryDockEventAdapter();
+			}
+			@Override
+			public Adapter caseCharterOutEvent(CharterOutEvent object) {
+				return createCharterOutEventAdapter();
+			}
+			@Override
+			public Adapter caseAssignableElement(AssignableElement object) {
+				return createAssignableElementAdapter();
+			}
+			@Override
+			public Adapter caseVesselTypeGroup(VesselTypeGroup object) {
+				return createVesselTypeGroupAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -130,12 +160,16 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createNamedObjectAdapter();
 			}
 			@Override
-			public Adapter caseAssignableElement(AssignableElement object) {
-				return createAssignableElementAdapter();
-			}
-			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
 				return createITimezoneProviderAdapter();
+			}
+			@Override
+			public <T extends ObjectSet<T, U>, U> Adapter caseObjectSet(ObjectSet<T, U> object) {
+				return createObjectSetAdapter();
+			}
+			@Override
+			public <U> Adapter caseAVesselSet(AVesselSet<U> object) {
+				return createAVesselSetAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -284,6 +318,76 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VesselAvailability <em>Vessel Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability
+	 * @generated
+	 */
+	public Adapter createVesselAvailabilityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VesselEvent <em>Vessel Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent
+	 * @generated
+	 */
+	public Adapter createVesselEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.MaintenanceEvent <em>Maintenance Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.MaintenanceEvent
+	 * @generated
+	 */
+	public Adapter createMaintenanceEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.DryDockEvent <em>Dry Dock Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.DryDockEvent
+	 * @generated
+	 */
+	public Adapter createDryDockEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent <em>Charter Out Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent
+	 * @generated
+	 */
+	public Adapter createCharterOutEventAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -326,16 +430,30 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.AssignableElement <em>Assignable Element</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.AssignableElement <em>Assignable Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.fleet.AssignableElement
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement
 	 * @generated
 	 */
 	public Adapter createAssignableElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.VesselTypeGroup <em>Vessel Type Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.VesselTypeGroup
+	 * @generated
+	 */
+	public Adapter createVesselTypeGroupAdapter() {
 		return null;
 	}
 
@@ -350,6 +468,34 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ObjectSet <em>Object Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ObjectSet
+	 * @generated
+	 */
+	public Adapter createObjectSetAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AVesselSet <em>AVessel Set</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.AVesselSet
+	 * @generated
+	 */
+	public Adapter createAVesselSetAdapter() {
 		return null;
 	}
 

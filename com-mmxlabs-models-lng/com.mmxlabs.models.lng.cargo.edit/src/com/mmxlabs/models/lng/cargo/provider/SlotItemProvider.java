@@ -22,7 +22,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
@@ -79,11 +78,15 @@ public class SlotItemProvider
 			addCargoPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
+			addDivertablePropertyDescriptor(object);
 			addShippingDaysRestrictionPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
 			addRestrictedPortsPropertyDescriptor(object);
 			addRestrictedListsArePermissivePropertyDescriptor(object);
+			addHedgesPropertyDescriptor(object);
+			addAllowedVesselsPropertyDescriptor(object);
+			addCancellationFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -125,7 +128,7 @@ public class SlotItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_assignment_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_assignment_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
 				 true,
 				 false,
 				 true,
@@ -148,7 +151,7 @@ public class SlotItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_spotIndex_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_spotIndex_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX,
 				 true,
 				 false,
 				 false,
@@ -171,7 +174,7 @@ public class SlotItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_sequenceHint_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_sequenceHint_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT,
 				 true,
 				 false,
 				 false,
@@ -194,7 +197,7 @@ public class SlotItemProvider
 				 getResourceLocator(),
 				 getString("_UI_AssignableElement_locked_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_locked_feature", "_UI_AssignableElement_type"),
-				 FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED,
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED,
 				 true,
 				 false,
 				 false,
@@ -609,6 +612,94 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Hedges feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHedgesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_hedges_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_hedges_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__HEDGES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Allowed Vessels feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addAllowedVesselsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_allowedVessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_allowedVessels_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__ALLOWED_VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cancellation Fee feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCancellationFeePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_cancellationFee_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_cancellationFee_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__CANCELLATION_FEE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Divertable feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDivertablePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_divertable_feature"),
+				 getString("_UI_Slot_divertable_description"),
+				 CargoPackage.Literals.SLOT__DIVERTABLE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -659,8 +750,11 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 			case CargoPackage.SLOT__PRICING_DATE:
 			case CargoPackage.SLOT__NOTES:
+			case CargoPackage.SLOT__DIVERTABLE:
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+			case CargoPackage.SLOT__HEDGES:
+			case CargoPackage.SLOT__CANCELLATION_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -66,7 +66,6 @@ public class CommercialModelComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_entitiesEditor(detailComposite, topClass);
 		add_salesContractsEditor(detailComposite, topClass);
-		add_shippingEntityEditor(detailComposite, topClass);
 		add_purchaseContractsEditor(detailComposite, topClass);
 	}
 	/**
@@ -84,15 +83,6 @@ public class CommercialModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_salesContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS));
-	}
-
-	/**
-	 * Create the editor for the shippingEntity feature on CommercialModel
-	 *
-	 * @generated
-	 */
-	protected void add_shippingEntityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.COMMERCIAL_MODEL__SHIPPING_ENTITY));
 	}
 
 	/**

@@ -60,7 +60,7 @@ public class ExportCSVWizardPage extends WizardPage {
 	private RadioSelectionGroup decimalSelectionGroup;
 
 	protected ExportCSVWizardPage(ISelection selection) {
-		super("Export Scenario as CSV");
+		super("Export Scenario as CSV", "Export Scenario as CSV", null);
 		this.selection = selection;
 	}
 
@@ -107,7 +107,10 @@ public class ExportCSVWizardPage extends WizardPage {
 		destination.setLayout(layout2);
 		destination.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		destination.setFont(parent.getFont());
-
+		GridData gd2 = new GridData(GridData.FILL_HORIZONTAL);
+		gd2.horizontalSpan = 2;
+		destination.setLayoutData(gd2);
+		
 		final DirectoryFieldEditor editor = new DirectoryFieldEditor("destination-directory", "Export to directory:", destination);
 
 		this.editor = editor;

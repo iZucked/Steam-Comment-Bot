@@ -14,17 +14,17 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -73,8 +73,8 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-				final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
-				for (final VesselAvailability va : scenarioFleetModel.getVesselAvailabilities()) {
+				final CargoModel cargoModel = portfolioModel.getCargoModel();
+				for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 					scenarioVessels.add(va.getVessel());
 				}
 			}
@@ -84,7 +84,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 				if (!scenarioVessels.contains(vessel)) {
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel event " + event.getName()
 							+ " is assigned to non-scenario vessel " + vessel.getName()));
-					failure.addEObjectAndFeature(assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+					failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
 					failures.add(failure);
 				}
@@ -95,7 +95,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 						if (!scenarioVessels.contains(vessel)) {
 							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getName()
 									+ " is assigned to non-scenario vessel " + vessel.getName()));
-							failure.addEObjectAndFeature(assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+							failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
 							failures.add(failure);
 						}
@@ -105,13 +105,13 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 						if (scenarioVessels.contains(vessel)) {
 							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Non-shipped cargo " + cargo.getName()
 									+ " is assigned to scenario vessel " + vessel.getName() + "."));
-							failure.addEObjectAndFeature(assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+							failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 							failures.add(failure);
 						}
 					} else if (vessel != null) {
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Non-shipped cargo " + cargo.getName()
 								+ " can only be assigned to a specific vessel"));
-						failure.addEObjectAndFeature(assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 
 						failures.add(failure);
 					}
@@ -130,13 +130,13 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 						if (scenarioVessels.contains(vessel)) {
 							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot " + slot.getName()
 									+ " is assigned to scenario vessel " + vessel.getName() + "."));
-							failure.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+							failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 							failures.add(failure);
 						}
 					} else if (vessel != null) {
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot " + slot.getName()
 								+ " can only be assigned to a specific vessel"));
-						failure.addEObjectAndFeature(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment());
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 						failures.add(failure);
 					}
 				}

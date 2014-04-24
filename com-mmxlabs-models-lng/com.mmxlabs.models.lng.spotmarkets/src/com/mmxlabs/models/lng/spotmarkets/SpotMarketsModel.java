@@ -20,6 +20,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getFobPurchasesSpotMarket <em>Fob Purchases Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getFobSalesSpotMarket <em>Fob Sales Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharteringSpotMarkets <em>Chartering Spot Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
  * </ul>
  * </p>
  *
@@ -147,6 +148,32 @@ public interface SpotMarketsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<CharterCostModel> getCharteringSpotMarkets();
+
+	/**
+	 * Returns the value of the '<em><b>Charter Out Start Date</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Out Start Date</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Out Start Date</em>' containment reference.
+	 * @see #setCharterOutStartDate(CharterOutStartDate)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel_CharterOutStartDate()
+	 * @model containment="true"
+	 * @generated
+	 */
+	CharterOutStartDate getCharterOutStartDate();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Out Start Date</em>' containment reference.
+	 * @see #getCharterOutStartDate()
+	 * @generated
+	 */
+	void setCharterOutStartDate(CharterOutStartDate value);
 
 } // end of  SpotMarketsModel
 

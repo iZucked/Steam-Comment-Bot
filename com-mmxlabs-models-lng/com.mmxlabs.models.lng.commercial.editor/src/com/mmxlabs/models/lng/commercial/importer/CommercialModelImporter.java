@@ -12,11 +12,12 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
  */
 public class CommercialModelImporter implements ISubmodelImporter {
 	public static final String ENTITIES_KEY = "ENTITIES";
+	public static final String ENTITY_BOOKS_KEY = "ENTITYBOOKS";
 	public static final String SALES_CON_KEY = "SALES";
 	public static final String PURCHASE_CON_KEY = "PURCHASE";
 	final static Map<String, String> inputs = new LinkedHashMap<String, String>();
@@ -40,12 +42,14 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	@Inject
 	private IImporterRegistry importerRegistry;
 
-	private LegalEntityImporter entityImporter;
+	private IClassImporter entityImporter;
+	private LegalEntityBookImporter entityBookImporter;
 	private IClassImporter purchaseImporter;
 	private IClassImporter salesImporter;
 
 	static {
 		inputs.put(ENTITIES_KEY, "Entities");
+		inputs.put(ENTITY_BOOKS_KEY, "Entity Books");
 		inputs.put(PURCHASE_CON_KEY, "Purchase Contracts");
 		inputs.put(SALES_CON_KEY, "Sales Contracts");
 	}
@@ -66,10 +70,10 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	private void registryInit() {
 		if (importerRegistry != null) {
 
-			entityImporter = (LegalEntityImporter) importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
+			entityBookImporter = new LegalEntityBookImporter();// (LegalEntityBookImporter) importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
+			entityImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
-
 		}
 	}
 
@@ -82,11 +86,25 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final CommercialModel commercial = CommercialFactory.eINSTANCE.createCommercialModel();
 		if (inputs.containsKey(ENTITIES_KEY)) {
-			commercial.getEntities().addAll((Collection<? extends LegalEntity>) entityImporter.importObjects(CommercialPackage.eINSTANCE.getLegalEntity(), inputs.get(ENTITIES_KEY), context));
-			/*
-			 * LegalEntity shippingEntity = entityImporter.getShippingEntity(); if (commercial.getEntities().isEmpty() == false && shippingEntity == null) {
-			 * commercial.setShippingEntity(commercial.getEntities().get(0)); }
-			 */
+			final Collection<EObject> entities = entityImporter.importObjects(CommercialPackage.eINSTANCE.getBaseLegalEntity(), inputs.get(ENTITIES_KEY), context);
+			for (final EObject entity : entities) {
+				if (entity instanceof BaseLegalEntity) {
+					final BaseLegalEntity baseLegalEntity = (BaseLegalEntity) entity;
+					commercial.getEntities().add(baseLegalEntity);
+					// Ensure a book exists. Note the LegalEntityBookImporter will overwrite this data if needed.
+					// A post model importer may be a more robust way of ensuring books exist should implementations change.
+					if (baseLegalEntity.getShippingBook() == null) {
+						baseLegalEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+					}
+					if (baseLegalEntity.getTradingBook() == null) {
+						baseLegalEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+					}
+				}
+
+			}
+		}
+		if (inputs.containsKey(ENTITY_BOOKS_KEY)) {
+			entityBookImporter.importObjects(CommercialPackage.eINSTANCE.getBaseEntityBook(), inputs.get(ENTITY_BOOKS_KEY), context);
 		}
 		if (inputs.containsKey(SALES_CON_KEY)) {
 			commercial.getSalesContracts()
@@ -103,6 +121,8 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final CommercialModel cm = (CommercialModel) model;
 		output.put(ENTITIES_KEY, entityImporter.exportObjects(cm.getEntities(), context));
+		output.put(ENTITY_BOOKS_KEY, entityBookImporter.exportObjects(cm.getEntities(), context));
+
 		final LinkedList<PurchaseContract> purchase = new LinkedList<PurchaseContract>();
 		final LinkedList<SalesContract> sales = new LinkedList<SalesContract>();
 		for (final SalesContract c : cm.getSalesContracts()) {

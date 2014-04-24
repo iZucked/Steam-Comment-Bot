@@ -73,6 +73,8 @@ public class EventComponentHelper extends BaseComponentHelper {
 		add_nextEventEditor(detailComposite, topClass);
 		add_sequenceEditor(detailComposite, topClass);
 		add_charterCostEditor(detailComposite, topClass);
+		add_heelAtStartEditor(detailComposite, topClass);
+		add_heelAtEndEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the start feature on Event
@@ -133,5 +135,23 @@ public class EventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_charterCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__CHARTER_COST));
+	}
+
+	/**
+	 * Create the editor for the heelAtStart feature on Event
+	 *
+	 * @generated
+	 */
+	protected void add_heelAtStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__HEEL_AT_START));
+	}
+
+	/**
+	 * Create the editor for the heelAtEnd feature on Event
+	 *
+	 * @generated
+	 */
+	protected void add_heelAtEndEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__HEEL_AT_END));
 	}
 }

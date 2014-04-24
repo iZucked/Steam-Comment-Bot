@@ -49,6 +49,9 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	 * @since 2.0
 	 */
 	public static final String IMAGE_CARGO_LOCK = "cargo.lock";
+	
+	public static final String IMAGE_CARGO_NOTES = "cargo.notes";
+	
 	/**
 	 * @since 2.0
 	 */
@@ -196,6 +199,7 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		private void initImageRegistry(final ImageRegistry imageRegistry) {
 			imageRegistry.put(IMAGE_CARGO_LINK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/wired.gif"));
 			imageRegistry.put(IMAGE_CARGO_LOCK, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/assigned.gif"));
+			imageRegistry.put(IMAGE_CARGO_NOTES, AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/small_notes.gif"));
 			{
 				final ImageDescriptor swapImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "icons/swap.gif");
 				imageRegistry.put(IMAGE_CARGO_SWAP, swapImageDescriptor);

@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.ui.views;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
@@ -77,6 +78,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
 				viewerPane = createViewerPane();
+				viewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(childComposite);
 				viewerPane.setLocked(isLocked());

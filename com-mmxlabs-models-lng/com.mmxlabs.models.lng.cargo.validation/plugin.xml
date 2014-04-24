@@ -40,6 +40,19 @@
                </message>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoSpotCharterConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoSpotCharterConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cargo Volumes"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.ShippingTypeConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.ShippingTypeConstraint"
                   isEnabledByDefault="true"
@@ -136,13 +149,19 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  The attribute(s) {0} must be set.
+                  {0}
                   
                </message>
                <target
                      class="Cargo"></target>
                <target
                      class="Slot">
+               </target>
+               <target
+                     class="VesselAvailability">
+               </target>
+               <target
+                     class="VesselEvent">
                </target>
             </constraint>
             <constraint
@@ -394,19 +413,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.cargo.validation.DESPurchaseCVConstraint"
-                  id="com.mmxlabs.models.lng.cargo.validation.DESPurchaseCVConstraint"
-                  isEnabledByDefault="true"
-                  lang="java"
-                  mode="Batch"
-                  name="DES Purchase CV Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.SlotContractTypeConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.SlotContractTypeConstraint"
                   isEnabledByDefault="true"
@@ -435,6 +441,272 @@
                      class="Slot">
                </target>
             </constraint>
+  <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselDateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel date order"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel {0} has invalid start and end requirement dates - the start occurs after the end.
+               </message>
+               <description>
+                  The end requirement of the vessel should be after the start requirement.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityDateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Start / End Date Consistency"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel {0}'s {1} requirement has inconsistent start and end dates set (the start date is after the end date).
+               </message>
+               <description>
+                  The start and end window of a vessel event must be set and consistent.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.SensibleAvailabilityDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Sensible Start / End Dates"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel {0}'s {1} date is earlier than {2}.
+               </message>
+               <description>
+                  Vessel availability dates must be within a sensible range.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.SensibleEventDateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.SensibleEventDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Sensible Start / End Dates"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0} {1} date is earlier than {2}.
+               </message>
+               <description>
+                  Vessel event dates must be within a sensible range.
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityVesselConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityVesselConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Availability Attached To Vessel"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Vessel availability information for a portfolio must be attached to a particular vessel.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselUniqueAvailabilityConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselUniqueAvailabilityConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Availability Is Unique"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  A vessel cannot be given more than one availability for the same portfolio.
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselEventDateConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselEventDateConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Event Date Consistency"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel Event {0} has invalid start and end dates - they must both be set, and the start date must not be after the end date.
+               </message>
+               <description>
+                  The start end end window of a vessel event must be set and consistent.
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselEventDurationConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselEventDurationConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Event Duration"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel Event {0} has no duration set.
+               </message>
+               <description>
+                  The event duration must be greater than zero.
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.TimeCharterCostConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.TimeCharterCostConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Time Charter Hire Cost"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  Vessel {0} has time charter set, but no cost set.
+               </message>
+               <description>
+                  A time charter vessel should have a daily hire rate
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselEventVesselSetConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselEventVesselSetConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Event - Vessel Assignment"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Dry dock and Maintenance events need a vessel assignment.
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>  
+              <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.EventDurationConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.EventDurationConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Event Duration Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Check for sensible event duration
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.EventWindowConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.EventWindowConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Event Window Constraint"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Check for sensible event window size
+               </description>
+               <target
+                     class="VesselEvent">
+               </target>
+            </constraint>   
+               <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CharterOutConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CharterOutConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Charter Out Event Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Charter out events need a vessel assignment.
+               </description>
+               <target
+                     class="CharterOutEvent">
+               </target>
+            </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.SlotEntityConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.SlotEntityConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="SlotEntityConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="Slot">
+                  </target>
+               </constraint>
+               <constraint
+                     class="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
+                     id="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
+                     isEnabledByDefault="true"
+                     lang="java"
+                     mode="Batch"
+                     name="DivertableSlotConstraint"
+                     severity="ERROR"
+                     statusCode="1">
+                  <message>
+                     {0}
+                  </message>
+                  <target
+                        class="Slot">
+                  </target>
+               </constraint>       
         </constraints>
       </constraintProvider>
       <constraintProvider
@@ -463,6 +735,39 @@
                      class="Cargo">
                </target>
             </constraint></constraints>
+      </constraintProvider>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/cargo/1/">
+         </package>
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
+         </package>
+         <constraints
+               categories=" com.mmxlabs.models.lng.cargo.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.VesselAvailabilityPortConstraint.port_access"
+                  lang="Java"
+                  mode="Batch"
+                  name="Start / End Port Accessibility"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  The start or end port of a vessel must be compatible with that vessel's class
+               </description>
+               <target
+                     class="VesselAvailability">
+               </target>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+         </constraints>
       </constraintProvider>
    </extension>
 

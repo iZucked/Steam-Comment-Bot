@@ -31,9 +31,9 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -131,20 +131,20 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 				}
 
 				@Override
-				public void display(final IScenarioEditingLocation location, MMXRootObject scenario, EObject object, final Collection<EObject> range) {
+				public void display(final IDialogEditingContext dialogContext, MMXRootObject scenario, EObject object, final Collection<EObject> range) {
 					// mangle
 					if (object instanceof PortCost) {
 						final PortCost pc = (PortCost) object;
 						for (final PortCostEntry entry : pc.getEntries()) {
 							if (entry.getActivity() == capability) {
-								numberEditor.display(location, scenario, entry, range);
+								numberEditor.display(dialogContext, scenario, entry, range);
 								return;
 							}
 						}
 						final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
 						entry.setActivity(capability);
 						pc.getEntries().add(entry);
-						numberEditor.display(location, scenario, entry, range);
+						numberEditor.display(dialogContext, scenario, entry, range);
 					}
 				}
 

@@ -84,6 +84,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createCommercialModelAdapter();
 			}
 			@Override
+			public Adapter caseBaseLegalEntity(BaseLegalEntity object) {
+				return createBaseLegalEntityAdapter();
+			}
+			@Override
 			public Adapter caseLegalEntity(LegalEntity object) {
 				return createLegalEntityAdapter();
 			}
@@ -114,6 +118,22 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSlotContractParams(SlotContractParams object) {
 				return createSlotContractParamsAdapter();
+			}
+			@Override
+			public Adapter caseContractExpressionMapEntry(ContractExpressionMapEntry object) {
+				return createContractExpressionMapEntryAdapter();
+			}
+			@Override
+			public Adapter caseVolumeParams(VolumeParams object) {
+				return createVolumeParamsAdapter();
+			}
+			@Override
+			public Adapter caseBaseEntityBook(BaseEntityBook object) {
+				return createBaseEntityBookAdapter();
+			}
+			@Override
+			public Adapter caseSimpleEntityBook(SimpleEntityBook object) {
+				return createSimpleEntityBookAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -158,6 +178,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCommercialModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity <em>Base Legal Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity
+	 * @generated
+	 */
+	public Adapter createBaseLegalEntityAdapter() {
 		return null;
 	}
 
@@ -273,6 +307,62 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSlotContractParamsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry <em>Contract Expression Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry
+	 * @generated
+	 */
+	public Adapter createContractExpressionMapEntryAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.VolumeParams <em>Volume Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeParams
+	 * @generated
+	 */
+	public Adapter createVolumeParamsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.BaseEntityBook <em>Base Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.BaseEntityBook
+	 * @generated
+	 */
+	public Adapter createBaseEntityBookAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SimpleEntityBook <em>Simple Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleEntityBook
+	 * @generated
+	 */
+	public Adapter createSimpleEntityBookAdapter() {
 		return null;
 	}
 

@@ -25,6 +25,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getNextEvent <em>Next Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtStart <em>Heel At Start</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtEnd <em>Heel At End</em>}</li>
  * </ul>
  * </p>
  *
@@ -222,6 +224,58 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @generated
 	 */
 	void setCharterCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Heel At Start</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Heel At Start</em>' attribute.
+	 * @see #setHeelAtStart(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_HeelAtStart()
+	 * @model
+	 * @generated
+	 */
+	int getHeelAtStart();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtStart <em>Heel At Start</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Heel At Start</em>' attribute.
+	 * @see #getHeelAtStart()
+	 * @generated
+	 */
+	void setHeelAtStart(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Heel At End</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Heel At End</em>' attribute.
+	 * @see #setHeelAtEnd(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_HeelAtEnd()
+	 * @model
+	 * @generated
+	 */
+	int getHeelAtEnd();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtEnd <em>Heel At End</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Heel At End</em>' attribute.
+	 * @see #getHeelAtEnd()
+	 * @generated
+	 */
+	void setHeelAtEnd(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

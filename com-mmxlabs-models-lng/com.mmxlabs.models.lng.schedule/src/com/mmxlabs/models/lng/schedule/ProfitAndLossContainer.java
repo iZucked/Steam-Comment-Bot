@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.schedule;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,6 +20,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  * </ul>
  * </p>
  *
@@ -80,5 +82,21 @@ public interface ProfitAndLossContainer extends MMXObject {
 	 * @generated
 	 */
 	void setGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss value);
+
+	/**
+	 * Returns the value of the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.GeneralPNLDetails}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>General PNL Details</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>General PNL Details</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getProfitAndLossContainer_GeneralPNLDetails()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<GeneralPNLDetails> getGeneralPNLDetails();
 
 } // ProfitAndLossContainer

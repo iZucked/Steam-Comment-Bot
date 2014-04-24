@@ -18,6 +18,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSequences <em>Sequences</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getOpenSlotAllocations <em>Open Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getMarketAllocations <em>Market Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
@@ -61,6 +62,22 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<CargoAllocation> getCargoAllocations();
+
+	/**
+	 * Returns the value of the '<em><b>Open Slot Allocations</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Open Slot Allocations</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Open Slot Allocations</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_OpenSlotAllocations()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<OpenSlotAllocation> getOpenSlotAllocations();
 
 	/**
 	 * Returns the value of the '<em><b>Market Allocations</b></em>' containment reference list.

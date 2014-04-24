@@ -22,16 +22,23 @@ public class ShippingCostPlanSSListenerFactoryService {
 		service.addScenarioServiceListener(listener);
 		map.put(service, listener);
 
-		final Iterator<EObject> itr = service.getServiceModel().eAllContents();
-		while (itr.hasNext()) {
-			final EObject eObj = itr.next();
-			if (eObj instanceof ScenarioInstance) {
-				final ScenarioInstance scenarioInstance = (ScenarioInstance) eObj;
-				if (scenarioInstance.getInstance() != null) {
-					listener.onPostScenarioInstanceLoad(scenarioInstance.getScenarioService(), scenarioInstance);
+		// This can block fork off in thread.
+		new Thread("ShippingCostPlanSSListenerFactoryService:bind") {
+			@Override
+			public void run() {
+				final Iterator<EObject> itr = service.getServiceModel().eAllContents();
+				while (itr.hasNext()) {
+					final EObject eObj = itr.next();
+					if (eObj instanceof ScenarioInstance) {
+						final ScenarioInstance scenarioInstance = (ScenarioInstance) eObj;
+						if (scenarioInstance.getInstance() != null) {
+							listener.onPostScenarioInstanceLoad(scenarioInstance.getScenarioService(), scenarioInstance);
+						}
+					}
 				}
-			}
-		}
+
+			};
+		}.start();
 	}
 
 	public void unbindScenarioService(final IScenarioService service) {

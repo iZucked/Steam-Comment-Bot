@@ -70,13 +70,52 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotDischargeSlotComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot" />
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoGroupComponentHelper"
-        id="com.mmxlabs.models.lng.cargo.helpers.CargoGroup"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.cargo.CargoGroup">
-  </componentHelper>
+		<componentHelper
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoGroupComponentHelper"
+			id="com.mmxlabs.models.lng.cargo.helpers.CargoGroup"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.CargoGroup"/>
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.VesselAvailiability"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselAvailabilityComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.VesselAvailability" />			
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.VesselEvent"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselEventComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.VesselEvent" />
+			
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.DryDockEvent"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.DryDockEventComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.DryDockEvent" />
 		
+		<componentHelper
+			id="com.mmxlabs.models.lng.cargo.helpers.CharterOutEvent"
+			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CharterOutEventComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.cargo.CharterOutEvent" />
+			
+		<componentHelper
+		    helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.MaintenanceEventComponentHelper"
+	        id="com.mmxlabs.models.lng.cargo.helpers.MaintenanceEvent"
+        	inheritable="false"
+        	modelClass="com.mmxlabs.models.lng.cargo.MaintenanceEvent"/>
+  
+	    <componentHelper
+	        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.AssignableElementComponentHelper"
+	        id="com.mmxlabs.models.lng.cargo.presentation.composites.AssignableElementComponentHelper"
+	        inheritable="true"
+	        modelClass="com.mmxlabs.models.lng.cargo.AssignableElement"/>
+        
+         <componentHelper
+        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.VesselTypeGroupComponentHelper"
+        id="com.mmxlabs.models.lng.cargo.presentation.composites.VesselTypeGroupComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.cargo.VesselTypeGroup"/>
+        
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -127,6 +166,34 @@
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.DischargeSlot"
           referenceEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory.Slot"
+          referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.AssignableElement"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselPortValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselPortValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          referenceEClass="com.mmxlabs.models.lng.types.APortSet">
+    </valueProvider>
+     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.AVesselSetValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.fleetValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -157,6 +224,12 @@
           subModelImporterClass="com.mmxlabs.models.lng.cargo.importer.CargoModelImporter">
     </submodelImporter>
  </extension>
+    <extension
+         point="com.mmxlabs.models.util.import.extramodelimporters">
+      <extramodelimporter
+            class="com.mmxlabs.models.lng.cargo.importer.AssignmentModelImporter">
+      </extramodelimporter>
+   </extension>
  <extension
        id="com.mmxlabs.models.lng.cargo.import.classes"
        point="com.mmxlabs.models.util.import.classes">
@@ -178,6 +251,13 @@
           eClassName="com.mmxlabs.models.lng.cargo.DischargeSlot"
           inheritable="true">
     </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.cargo.importer.VesselEventImporter"
+          classImporterClass="com.mmxlabs.models.lng.cargo.importer.VesselEventImporter"
+          eClassName="com.mmxlabs.models.lng.cargo.VesselEvent"
+          inheritable="true">
+    </classImporter>
+    
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
@@ -224,6 +304,34 @@
           label="Spot Discharge Slot"
           targetEClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot">
     </factory>
+  
+      <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.vesselAvailabilityFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="VesselAvailability"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselAvailability">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.charterOutFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Out"
+          outputEClass="com.mmxlabs.models.lng.cargo.CharterOutEvent"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.dryDockFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Dry Dock"
+          outputEClass="com.mmxlabs.models.lng.cargo.DryDockEvent"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.maintenanceFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Maintenance"
+          outputEClass="com.mmxlabs.models.lng.cargo.MaintenanceEvent"
+          targetEClass="com.mmxlabs.models.lng.cargo.VesselEvent">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
@@ -251,8 +359,8 @@
  <extension
        point="com.mmxlabs.models.common.modelcommandprovider">
     <ModelCommandProvider
-          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider"
-          id="com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider">
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotDateUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.SlotDateUpdatingCommandProvider">
     </ModelCommandProvider>
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider"
@@ -265,6 +373,18 @@
     <ModelCommandProvider
           commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider"
           id="com.mmxlabs.models.lng.cargo.ui.commands.SlotShipToShipBindingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.EventDateUpdatingCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.EventDateUpdatingCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.VesselAvailabilityCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.VesselAvailabilityCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider"
+          id="com.mmxlabs.models.lng.cargo.ui.commands.AssignableElementCommandProvider">
     </ModelCommandProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">

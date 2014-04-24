@@ -6,13 +6,14 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getEntityBook <em>Entity Book</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getProfitAndLoss <em>Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}</li>
  * </ul>
@@ -41,7 +43,17 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * @generated
 	 * @ordered
 	 */
-	protected LegalEntity entity;
+	protected BaseLegalEntity entity;
+
+	/**
+	 * The cached value of the '{@link #getEntityBook() <em>Entity Book</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntityBook()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseEntityBook entityBook;
 
 	/**
 	 * The default value of the '{@link #getProfitAndLoss() <em>Profit And Loss</em>}' attribute.
@@ -109,10 +121,10 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity getEntity() {
+	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
-			entity = (LegalEntity)eResolveProxy(oldEntity);
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY, oldEntity, entity));
@@ -126,7 +138,7 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity basicGetEntity() {
+	public BaseLegalEntity basicGetEntity() {
 		return entity;
 	}
 
@@ -135,11 +147,49 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntity(LegalEntity newEntity) {
-		LegalEntity oldEntity = entity;
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY, oldEntity, entity));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseEntityBook getEntityBook() {
+		if (entityBook != null && entityBook.eIsProxy()) {
+			InternalEObject oldEntityBook = (InternalEObject)entityBook;
+			entityBook = (BaseEntityBook)eResolveProxy(oldEntityBook);
+			if (entityBook != oldEntityBook) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK, oldEntityBook, entityBook));
+			}
+		}
+		return entityBook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BaseEntityBook basicGetEntityBook() {
+		return entityBook;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEntityBook(BaseEntityBook newEntityBook) {
+		BaseEntityBook oldEntityBook = entityBook;
+		entityBook = newEntityBook;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK, oldEntityBook, entityBook));
 	}
 
 	/**
@@ -197,6 +247,9 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK:
+				if (resolve) return getEntityBook();
+				return basicGetEntityBook();
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				return getProfitAndLoss();
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:
@@ -210,11 +263,15 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY:
-				setEntity((LegalEntity)newValue);
+				setEntity((BaseLegalEntity)newValue);
+				return;
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK:
+				setEntityBook((BaseEntityBook)newValue);
 				return;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				setProfitAndLoss((Long)newValue);
@@ -235,7 +292,10 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY:
-				setEntity((LegalEntity)null);
+				setEntity((BaseLegalEntity)null);
+				return;
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK:
+				setEntityBook((BaseEntityBook)null);
 				return;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				setProfitAndLoss(PROFIT_AND_LOSS_EDEFAULT);
@@ -257,6 +317,8 @@ public class EntityProfitAndLossImpl extends EObjectImpl implements EntityProfit
 		switch (featureID) {
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY:
 				return entity != null;
+			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK:
+				return entityBook != null;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS:
 				return profitAndLoss != PROFIT_AND_LOSS_EDEFAULT;
 			case SchedulePackage.ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX:

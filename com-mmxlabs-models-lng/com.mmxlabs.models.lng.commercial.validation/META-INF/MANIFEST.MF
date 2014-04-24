@@ -11,11 +11,9 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.lng.port;bundle-version="[8.0.0,9.0.0)",
  com.mmxlabs.models.lng.fleet;bundle-version="[8.0.0,9.0.0)",
  com.mmxlabs.models.lng.commercial;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.models.lng.pricing;bundle-version="[8.0.0,9.0.0)"
+ com.mmxlabs.models.ui.validation;bundle-version="[9.0.0,10.0.0)",
+ com.mmxlabs.models.lng.pricing;bundle-version="[8.0.0,9.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)",
+ com.mmxlabs.models.lng.pricing.validation;bundle-version="[8.0.3,9.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: com.mmxlabs.common;version="2.0.0",
- com.mmxlabs.common.parser;version="2.0.0",
- com.mmxlabs.common.parser.series;version="2.0.0",
- com.mmxlabs.models.lng.pricing.validation.utils

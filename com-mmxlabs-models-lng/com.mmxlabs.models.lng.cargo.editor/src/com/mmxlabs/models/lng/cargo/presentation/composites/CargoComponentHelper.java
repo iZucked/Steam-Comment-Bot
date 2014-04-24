@@ -24,16 +24,15 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -63,7 +62,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(FleetPackage.Literals.ASSIGNABLE_ELEMENT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(CargoPackage.Literals.ASSIGNABLE_ELEMENT));
 	}
 
 	/**
@@ -91,7 +90,6 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_allowRewiringEditor(detailComposite, topClass);
-		add_allowedVesselsEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -132,23 +130,24 @@ public class CargoComponentHelper extends BaseComponentHelper {
 
 		editor.addNotificationChangedListener(new IInlineEditorExternalNotificationListener() {
 
-			private IScenarioEditingLocation location;
+			//private IScenarioEditingLocation location;
+			private IDialogEditingContext dialogContext;
 
 			private EObject input;
 
 			@Override
-			public void postDisplay(final IInlineEditor editor, final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-				this.location = location;
+			public void postDisplay(final IInlineEditor editor, final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+				this.dialogContext = dialogContext;
 				this.input = object;
 			}
 
 			@Override
 			public void notifyChanged(final Notification notification) {
-				if (notification.getFeature() == FleetPackage.eINSTANCE.getAssignableElement_Locked()) {
+				if (notification.getFeature() == CargoPackage.eINSTANCE.getAssignableElement_Locked()) {
 					editor.setEditorEnabled(!notification.getNewBooleanValue());
 					if (notification.getNewBooleanValue()) {
-						final ICommandHandler handler = location.getDefaultCommandHandler();
-						handler.handleCommand(SetCommand.create(location.getEditingDomain(), input, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), false), input,
+						final ICommandHandler handler = dialogContext.getScenarioEditingLocation().getDefaultCommandHandler();
+						handler.handleCommand(SetCommand.create(dialogContext.getScenarioEditingLocation().getEditingDomain(), input, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), false), input,
 								CargoPackage.eINSTANCE.getCargo_AllowRewiring());
 					}
 				}
@@ -156,17 +155,6 @@ public class CargoComponentHelper extends BaseComponentHelper {
 			}
 		});
 
-		detailComposite.addInlineEditor(editor);
-	}
-
-	/**
-	 * Create the editor for the allowedVessels feature on Cargo
-	 * 
-	 * @generated NOT
-	 */
-	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS);
-		editor.addNotificationChangedListener(new ShippingDaysRestrictionInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);
 	}
 

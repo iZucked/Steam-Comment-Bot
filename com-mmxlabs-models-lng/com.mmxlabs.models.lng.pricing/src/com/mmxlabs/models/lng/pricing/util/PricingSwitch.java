@@ -157,6 +157,7 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.COOLDOWN_PRICE: {
 				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
 				T result = caseCooldownPrice(cooldownPrice);
+				if (result == null) result = casePortsPriceMap(cooldownPrice);
 				if (result == null) result = caseMMXObject(cooldownPrice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -197,6 +198,27 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = caseUUIDObject(namedIndexContainer);
 				if (result == null) result = caseNamedObject(namedIndexContainer);
 				if (result == null) result = caseMMXObject(namedIndexContainer);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PORTS_PRICE_MAP: {
+				PortsPriceMap portsPriceMap = (PortsPriceMap)theEObject;
+				T result = casePortsPriceMap(portsPriceMap);
+				if (result == null) result = caseMMXObject(portsPriceMap);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PORTS_EXPRESSION_MAP: {
+				PortsExpressionMap portsExpressionMap = (PortsExpressionMap)theEObject;
+				T result = casePortsExpressionMap(portsExpressionMap);
+				if (result == null) result = caseMMXObject(portsExpressionMap);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.PORTS_SPLIT_PRICE_MAP: {
+				PortsSplitPriceMap portsSplitPriceMap = (PortsSplitPriceMap)theEObject;
+				T result = casePortsSplitPriceMap(portsSplitPriceMap);
+				if (result == null) result = caseMMXObject(portsSplitPriceMap);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -430,6 +452,51 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public <Value> T caseNamedIndexContainer(NamedIndexContainer<Value> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Ports Price Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Ports Price Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortsPriceMap(PortsPriceMap object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Ports Expression Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Ports Expression Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortsExpressionMap(PortsExpressionMap object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Ports Split Price Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Ports Split Price Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePortsSplitPriceMap(PortsSplitPriceMap object) {
 		return null;
 	}
 

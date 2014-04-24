@@ -5,7 +5,7 @@
 package com.mmxlabs.models.lng.schedule;
 import org.eclipse.emf.common.util.EList;
 
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
@@ -71,7 +71,6 @@ public interface Sequence extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Vessel Availability</em>' reference.
 	 * @see #isSetVesselAvailability()

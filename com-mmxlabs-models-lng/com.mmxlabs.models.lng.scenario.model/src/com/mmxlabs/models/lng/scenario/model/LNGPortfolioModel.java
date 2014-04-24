@@ -7,7 +7,6 @@
 package com.mmxlabs.models.lng.scenario.model;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -20,7 +19,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getCargoModel <em>Cargo Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScheduleModel <em>Schedule Model</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getParameters <em>Parameters</em>}</li>
@@ -32,32 +30,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @generated
  */
 public interface LNGPortfolioModel extends UUIDObject {
-	/**
-	 * Returns the value of the '<em><b>Scenario Fleet Model</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Scenario Fleet Model</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Scenario Fleet Model</em>' containment reference.
-	 * @see #setScenarioFleetModel(ScenarioFleetModel)
-	 * @see com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage#getLNGPortfolioModel_ScenarioFleetModel()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	ScenarioFleetModel getScenarioFleetModel();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getScenarioFleetModel <em>Scenario Fleet Model</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Scenario Fleet Model</em>' containment reference.
-	 * @see #getScenarioFleetModel()
-	 * @generated
-	 */
-	void setScenarioFleetModel(ScenarioFleetModel value);
-
 	/**
 	 * Returns the value of the '<em><b>Cargo Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

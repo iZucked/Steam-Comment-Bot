@@ -107,22 +107,13 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__SALES_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Shipping Entity</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMERCIAL_MODEL__SHIPPING_ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Purchase Contracts</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -131,7 +122,71 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl <em>Base Legal Entity</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBaseLegalEntity()
+	 * @generated
+	 */
+	int BASE_LEGAL_ENTITY = 1;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Shipping Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__SHIPPING_BOOK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Trading Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY__TRADING_BOOK = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Base Legal Entity</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -141,7 +196,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLegalEntity()
 	 * @generated
 	 */
-	int LEGAL_ENTITY = 1;
+	int LEGAL_ENTITY = 2;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -150,7 +205,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+	int LEGAL_ENTITY__EXTENSIONS = BASE_LEGAL_ENTITY__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -159,7 +214,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+	int LEGAL_ENTITY__UUID = BASE_LEGAL_ENTITY__UUID;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -168,17 +223,25 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+	int LEGAL_ENTITY__NAME = BASE_LEGAL_ENTITY__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Shipping Book</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY__TAX_RATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int LEGAL_ENTITY__SHIPPING_BOOK = BASE_LEGAL_ENTITY__SHIPPING_BOOK;
+
+	/**
+	 * The feature id for the '<em><b>Trading Book</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__TRADING_BOOK = BASE_LEGAL_ENTITY__TRADING_BOOK;
 
 	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
@@ -187,7 +250,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int LEGAL_ENTITY_FEATURE_COUNT = BASE_LEGAL_ENTITY_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl <em>Contract</em>}' class.
@@ -197,7 +260,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContract()
 	 * @generated
 	 */
-	int CONTRACT = 2;
+	int CONTRACT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -332,13 +395,22 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__CONTRACT_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -348,7 +420,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSalesContract()
 	 * @generated
 	 */
-	int SALES_CONTRACT = 3;
+	int SALES_CONTRACT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -483,6 +555,15 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__CANCELLATION_FEE = CONTRACT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -529,7 +610,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPurchaseContract()
 	 * @generated
 	 */
-	int PURCHASE_CONTRACT = 4;
+	int PURCHASE_CONTRACT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -664,6 +745,15 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
 
 	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__CANCELLATION_FEE = CONTRACT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -674,13 +764,22 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__CARGO_CV = CONTRACT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__SALES_DELIVERY_TYPE = CONTRACT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 1;
+	int PURCHASE_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -691,7 +790,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getTaxRate()
 	 * @generated
 	 */
-	int TAX_RATE = 5;
+	int TAX_RATE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -732,7 +831,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLNGPriceCalculatorParameters()
 	 * @generated
 	 */
-	int LNG_PRICE_CALCULATOR_PARAMETERS = 6;
+	int LNG_PRICE_CALCULATOR_PARAMETERS = 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -773,7 +872,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
 	 * @generated
 	 */
-	int EXPRESSION_PRICE_PARAMETERS = 7;
+	int EXPRESSION_PRICE_PARAMETERS = 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -824,7 +923,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
 	 * @generated
 	 */
-	int SLOT_CONTRACT_PARAMS = 8;
+	int SLOT_CONTRACT_PARAMS = 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -857,6 +956,154 @@ public interface CommercialPackage extends EPackage {
 	int SLOT_CONTRACT_PARAMS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl <em>Contract Expression Map Entry</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractExpressionMapEntry()
+	 * @generated
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY = 10;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY__CONTRACT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION = 1;
+
+	/**
+	 * The number of structural features of the '<em>Contract Expression Map Entry</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT_EXPRESSION_MAP_ENTRY_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl <em>Volume Params</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeParams()
+	 * @generated
+	 */
+	int VOLUME_PARAMS = 11;
+
+	/**
+	 * The number of structural features of the '<em>Volume Params</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VOLUME_PARAMS_FEATURE_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl <em>Base Entity Book</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBaseEntityBook()
+	 * @generated
+	 */
+	int BASE_ENTITY_BOOK = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK__TAX_RATES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Base Entity Book</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_ENTITY_BOOK_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl <em>Simple Entity Book</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleEntityBook()
+	 * @generated
+	 */
+	int SIMPLE_ENTITY_BOOK = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK__EXTENSIONS = BASE_ENTITY_BOOK__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK__UUID = BASE_ENTITY_BOOK__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK__TAX_RATES = BASE_ENTITY_BOOK__TAX_RATES;
+
+	/**
+	 * The number of structural features of the '<em>Simple Entity Book</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_ENTITY_BOOK_FEATURE_COUNT = BASE_ENTITY_BOOK_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -865,7 +1112,7 @@ public interface CommercialPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
 	 * @generated
 	 */
-	int CONTRACT_TYPE = 9;
+	int CONTRACT_TYPE = 14;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -900,17 +1147,6 @@ public interface CommercialPackage extends EPackage {
 	EReference getCommercialModel_SalesContracts();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity <em>Shipping Entity</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Shipping Entity</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getShippingEntity()
-	 * @see #getCommercialModel()
-	 * @generated
-	 */
-	EReference getCommercialModel_ShippingEntity();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getPurchaseContracts <em>Purchase Contracts</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -922,6 +1158,38 @@ public interface CommercialPackage extends EPackage {
 	EReference getCommercialModel_PurchaseContracts();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity <em>Base Legal Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base Legal Entity</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity
+	 * @generated
+	 */
+	EClass getBaseLegalEntity();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook <em>Shipping Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Shipping Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#getShippingBook()
+	 * @see #getBaseLegalEntity()
+	 * @generated
+	 */
+	EReference getBaseLegalEntity_ShippingBook();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook <em>Trading Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Trading Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseLegalEntity#getTradingBook()
+	 * @see #getBaseLegalEntity()
+	 * @generated
+	 */
+	EReference getBaseLegalEntity_TradingBook();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -930,18 +1198,6 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getLegalEntity();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.LegalEntity#getTaxRates <em>Tax Rates</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Tax Rates</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.LegalEntity#getTaxRates()
-	 * @see #getLegalEntity()
-	 * @generated
-	 */
-	EReference getLegalEntity_TaxRates();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.Contract <em>Contract</em>}'.
@@ -1081,6 +1337,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getContract_ContractType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationFee <em>Cancellation Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancellation Fee</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getCancellationFee()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_CancellationFee();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1147,6 +1414,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPurchaseContract_CargoCV();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType <em>Sales Delivery Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sales Delivery Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesDeliveryType()
+	 * @see #getPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getPurchaseContract_SalesDeliveryType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.TaxRate <em>Tax Rate</em>}'.
@@ -1230,6 +1508,79 @@ public interface CommercialPackage extends EPackage {
 	EClass getSlotContractParams();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry <em>Contract Expression Map Entry</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Contract Expression Map Entry</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry
+	 * @generated
+	 */
+	EClass getContractExpressionMapEntry();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getContract()
+	 * @see #getContractExpressionMapEntry()
+	 * @generated
+	 */
+	EReference getContractExpressionMapEntry_Contract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getExpression <em>Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ContractExpressionMapEntry#getExpression()
+	 * @see #getContractExpressionMapEntry()
+	 * @generated
+	 */
+	EAttribute getContractExpressionMapEntry_Expression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.VolumeParams <em>Volume Params</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Volume Params</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.VolumeParams
+	 * @generated
+	 */
+	EClass getVolumeParams();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.BaseEntityBook <em>Base Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Base Entity Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseEntityBook
+	 * @generated
+	 */
+	EClass getBaseEntityBook();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.BaseEntityBook#getTaxRates <em>Tax Rates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Tax Rates</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.BaseEntityBook#getTaxRates()
+	 * @see #getBaseEntityBook()
+	 * @generated
+	 */
+	EReference getBaseEntityBook_TaxRates();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SimpleEntityBook <em>Simple Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Simple Entity Book</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SimpleEntityBook
+	 * @generated
+	 */
+	EClass getSimpleEntityBook();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1289,20 +1640,38 @@ public interface CommercialPackage extends EPackage {
 		EReference COMMERCIAL_MODEL__SALES_CONTRACTS = eINSTANCE.getCommercialModel_SalesContracts();
 
 		/**
-		 * The meta object literal for the '<em><b>Shipping Entity</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COMMERCIAL_MODEL__SHIPPING_ENTITY = eINSTANCE.getCommercialModel_ShippingEntity();
-
-		/**
 		 * The meta object literal for the '<em><b>Purchase Contracts</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference COMMERCIAL_MODEL__PURCHASE_CONTRACTS = eINSTANCE.getCommercialModel_PurchaseContracts();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl <em>Base Legal Entity</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.BaseLegalEntityImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBaseLegalEntity()
+		 * @generated
+		 */
+		EClass BASE_LEGAL_ENTITY = eINSTANCE.getBaseLegalEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Book</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_LEGAL_ENTITY__SHIPPING_BOOK = eINSTANCE.getBaseLegalEntity_ShippingBook();
+
+		/**
+		 * The meta object literal for the '<em><b>Trading Book</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_LEGAL_ENTITY__TRADING_BOOK = eINSTANCE.getBaseLegalEntity_TradingBook();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -1313,15 +1682,6 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass LEGAL_ENTITY = eINSTANCE.getLegalEntity();
-
-		/**
-		 * The meta object literal for the '<em><b>Tax Rates</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * @since 3.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference LEGAL_ENTITY__TAX_RATES = eINSTANCE.getLegalEntity_TaxRates();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl <em>Contract</em>}' class.
@@ -1428,6 +1788,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute CONTRACT__CONTRACT_TYPE = eINSTANCE.getContract_ContractType();
 
 		/**
+		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__CANCELLATION_FEE = eINSTANCE.getContract_CancellationFee();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1482,6 +1850,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PURCHASE_CONTRACT__CARGO_CV = eINSTANCE.getPurchaseContract_CargoCV();
+
+		/**
+		 * The meta object literal for the '<em><b>Sales Delivery Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PURCHASE_CONTRACT__SALES_DELIVERY_TYPE = eINSTANCE.getPurchaseContract_SalesDeliveryType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
@@ -1553,6 +1929,70 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SLOT_CONTRACT_PARAMS = eINSTANCE.getSlotContractParams();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl <em>Contract Expression Map Entry</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.ContractExpressionMapEntryImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractExpressionMapEntry()
+		 * @generated
+		 */
+		EClass CONTRACT_EXPRESSION_MAP_ENTRY = eINSTANCE.getContractExpressionMapEntry();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT_EXPRESSION_MAP_ENTRY__CONTRACT = eINSTANCE.getContractExpressionMapEntry_Contract();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT_EXPRESSION_MAP_ENTRY__EXPRESSION = eINSTANCE.getContractExpressionMapEntry_Expression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl <em>Volume Params</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.VolumeParamsImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getVolumeParams()
+		 * @generated
+		 */
+		EClass VOLUME_PARAMS = eINSTANCE.getVolumeParams();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl <em>Base Entity Book</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.BaseEntityBookImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getBaseEntityBook()
+		 * @generated
+		 */
+		EClass BASE_ENTITY_BOOK = eINSTANCE.getBaseEntityBook();
+
+		/**
+		 * The meta object literal for the '<em><b>Tax Rates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_ENTITY_BOOK__TAX_RATES = eINSTANCE.getBaseEntityBook_TaxRates();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl <em>Simple Entity Book</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.SimpleEntityBookImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSimpleEntityBook()
+		 * @generated
+		 */
+		EClass SIMPLE_ENTITY_BOOK = eINSTANCE.getSimpleEntityBook();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.

@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -16,7 +17,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
@@ -216,7 +216,6 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -411,7 +410,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			return "FOB Sale";
 		} else if (getSequenceType() == SequenceType.CARGO_SHORTS) {
 			return "Short Cargoes";
-		} else if (isSetVesselAvailability()) {
+		} else if (isSetVesselAvailability() && getVesselAvailability() != null) {
 			return getVesselAvailability().getVessel().getName();
 		} else if (isSetVesselClass()) {
 			return getVesselClass().getName();

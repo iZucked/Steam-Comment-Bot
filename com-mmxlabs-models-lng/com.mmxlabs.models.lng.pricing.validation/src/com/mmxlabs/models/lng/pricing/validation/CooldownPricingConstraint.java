@@ -56,7 +56,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 						
 						if (c.getIndex() == null) {
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing a price index."));
-							dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getCooldownPrice_Index());
+							dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getPortsPriceMap_Index());
 							failures.add(dcsd);
 						}
 						
@@ -77,7 +77,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 							dcsd.addEObjectAndFeature(port, null);
 							if (count > 0) {
 								for (final CooldownPrice c : entry.getValue()) {
-									dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getCooldownPrice_Ports());
+									dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getPortsPriceMap_Ports());
 								}
 							}
 							failures.add(dcsd);

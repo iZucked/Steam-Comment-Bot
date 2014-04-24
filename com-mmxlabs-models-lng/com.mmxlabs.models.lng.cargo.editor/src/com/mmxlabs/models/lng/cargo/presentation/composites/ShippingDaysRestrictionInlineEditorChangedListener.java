@@ -12,11 +12,9 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 
 /**
@@ -34,13 +32,12 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 	@Override
 	public void notifyChanged(final Notification notification) {
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() || notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()
-				|| notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
+				|| notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Divertable()) {
 
 			if (input instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) input;
 				if (loadSlot.isDESPurchase()) {
-					final Port port = notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Port() ? (Port) notification.getNewValue() : loadSlot.getPort();
-					if (port != null && port.getCapabilities().contains(PortCapability.LOAD)) {
+					if (loadSlot.isDivertable()) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
 					} else {
@@ -52,33 +49,31 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 					editor.setEditorVisible(false);
 				}
 			} else if (input instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) input;
-				if (dischargeSlot.isFOBSale()) {
-					final Port port = notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Port() ? (Port) notification.getNewValue() : dischargeSlot.getPort();
-					if (port != null && port.getCapabilities().contains(PortCapability.DISCHARGE)) {
-						editor.setEditorEnabled(true);
-						editor.setEditorVisible(true);
-					} else {
-						editor.setEditorEnabled(false);
-						editor.setEditorVisible(false);
-					}
-				} else {
+//				final DischargeSlot dischargeSlot = (DischargeSlot) input;
+//				if (dischargeSlot.isFOBSale()) {
+//					if (dischargeSlot.isDivertable()) {
+//						editor.setEditorEnabled(true);
+//						editor.setEditorVisible(true);
+//					} else {
+//						editor.setEditorEnabled(false);
+//						editor.setEditorVisible(false);
+//					}
+//				} else {
 					editor.setEditorEnabled(false);
 					editor.setEditorVisible(false);
-				}
+//				}
 			}
 		}
 	}
 
 	@Override
-	public void postDisplay(final IInlineEditor editor, final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+	public void postDisplay(final IInlineEditor editor, final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 		this.editor = editor;
 		this.input = object;
 		if (input instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) input;
 			if (loadSlot.isDESPurchase()) {
-				final Port port = loadSlot.getPort();
-				if (port != null && port.getCapabilities().contains(PortCapability.LOAD)) {
+				if (loadSlot.isDivertable()) {
 					editor.setEditorEnabled(true);
 					editor.setEditorVisible(true);
 				} else {
@@ -90,20 +85,19 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 				editor.setEditorVisible(false);
 			}
 		} else if (input instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) input;
-			if (dischargeSlot.isFOBSale()) {
-				final Port port = dischargeSlot.getPort();
-				if (port != null && port.getCapabilities().contains(PortCapability.DISCHARGE)) {
-					editor.setEditorEnabled(true);
-					editor.setEditorVisible(true);
-				} else {
-					editor.setEditorEnabled(false);
-					editor.setEditorVisible(false);
-				}
-			} else {
+//			final DischargeSlot dischargeSlot = (DischargeSlot) input;
+//			if (dischargeSlot.isFOBSale()) {
+//				if (dischargeSlot.isDivertable()) {
+//					editor.setEditorEnabled(true);
+//					editor.setEditorVisible(true);
+//				} else {
+//					editor.setEditorEnabled(false);
+//					editor.setEditorVisible(false);
+//				}
+//			} else {
 				editor.setEditorEnabled(false);
 				editor.setEditorVisible(false);
-			}
+//			}
 		}
 	}
 }

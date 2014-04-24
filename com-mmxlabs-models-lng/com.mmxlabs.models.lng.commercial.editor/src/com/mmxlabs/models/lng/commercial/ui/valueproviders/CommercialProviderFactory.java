@@ -29,7 +29,7 @@ public class CommercialProviderFactory implements IReferenceValueProviderFactory
 			} else if (CommercialPackage.eINSTANCE.getContract().isSuperTypeOf(referenceClass)) {
 				return new MergedReferenceValueProvider(((LNGScenarioModel) rootObject).getCommercialModel(), CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts(),
 						CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts());
-			} else if (CommercialPackage.eINSTANCE.getLegalEntity().isSuperTypeOf(referenceClass)) {
+			} else if (CommercialPackage.eINSTANCE.getBaseLegalEntity().isSuperTypeOf(referenceClass)) {
 				return new MergedReferenceValueProvider(((LNGScenarioModel) rootObject).getCommercialModel(), CommercialPackage.eINSTANCE.getCommercialModel_Entities());
 
 			}

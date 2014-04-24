@@ -5,10 +5,12 @@
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +38,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -43,16 +46,17 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.editors.ldd.ComplexCargoEditor;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
@@ -288,7 +292,6 @@ public class CargoEditorMenuHelper {
 			final MenuManager reassignMenuManager = new MenuManager("Assign to...", null);
 			menuManager.add(reassignMenuManager);
 
-			final ScenarioFleetModel fleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 			class AssignAction extends Action {
 				private final AVesselSet<Vessel> vessel;
 
@@ -300,47 +303,56 @@ public class CargoEditorMenuHelper {
 				public void run() {
 
 					final Object value = vessel == null ? SetCommand.UNSET_VALUE : vessel;
-					final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, value);
+					final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, value);
 					scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
 				}
 			}
 
 			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
-					.getValueProviderFactory(FleetPackage.eINSTANCE.getAssignableElement(), FleetPackage.eINSTANCE.getAssignableElement_Assignment());
-			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(FleetPackage.eINSTANCE.getAssignableElement(),
-					FleetPackage.eINSTANCE.getAssignableElement_Assignment(), scenarioModel);
+					.getValueProviderFactory(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
+					CargoPackage.eINSTANCE.getAssignableElement_Assignment(), scenarioModel);
 
-			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(assignableElement, FleetPackage.eINSTANCE.getAssignableElement_Assignment())) {
+			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment())) {
 				if (p.getSecond() != assignableElement.getAssignment()) {
 					reassignMenuManager.add(new AssignAction(p.getFirst(), (AVesselSet<Vessel>) p.getSecond()));
 				}
 			}
-			if (assignableElement.isLocked()) {
-				final Action action = new Action("Unlock") {
-					@Override
-					public void run() {
-						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE);
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+			if (assignableElement instanceof Cargo || assignableElement instanceof VesselEvent) {
+				if (assignableElement.getAssignment() != null) {
+					if (assignableElement.isLocked()) {
+						final Action action = new Action("Unlock") {
+							@Override
+							public void run() {
+								final CompoundCommand cc = new CompoundCommand("Unlock assignment");
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
+								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+							}
+						};
+						menuManager.add(action);
+					} else {
+						final Action action = new Action("Lock") {
+							@Override
+							public void run() {
+								final CompoundCommand cc = new CompoundCommand("Lock assignment");
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE));
+								if (assignableElement instanceof Cargo) {
+									cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
+								}
+								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+							}
+						};
+						menuManager.add(action);
 					}
-				};
-				menuManager.add(action);
-			} else {
-				final Action action = new Action("Lock") {
-					@Override
-					public void run() {
-						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE);
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-					}
-				};
-				menuManager.add(action);
+				}
 			}
 			{
 				final Action action = new Action("Unassign") {
 					@Override
 					public void run() {
-						final Command cmd = SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
-								SetCommand.UNSET_VALUE);
-						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+						final CompoundCommand cc = new CompoundCommand("Unassign");
+						cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 					}
 				};
 				menuManager.add(action);
@@ -869,6 +881,11 @@ public class CargoEditorMenuHelper {
 		private final boolean isDesPurchaseOrFobSale;
 		private final Port shipToShipPort;
 
+		private String getKeyForDate(final Date date) {
+			final String key = new SimpleDateFormat("yyyy-MM").format(date);
+			return key;
+		}
+
 		public CreateSlotAction(final String name, final Slot source, final SpotMarket market, final boolean isDesPurchaseOrFobSale, final Port shipToShipPort) {
 			super(name);
 			this.source = source;
@@ -897,10 +914,58 @@ public class CargoEditorMenuHelper {
 					loadSlot = (LoadSlot) source;
 					if (market == null) {
 						dischargeSlot = cec.createNewDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale);
+						dischargeSlot.setWindowStart(source.getWindowStart());
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
+
+						// Get start of month and create full sized window
+						final Calendar cal = Calendar.getInstance();
+						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
+						cal.setTime(source.getWindowStartWithSlotOrPortTime());
+
+						// Take into account travel time
+						if (loadSlot.isDESPurchase() && loadSlot.isDivertable()) {
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getAssignment());
+							cal.add(Calendar.HOUR_OF_DAY, travelTime);
+							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
+						} else if (!loadSlot.isDESPurchase()) {
+							if (loadSlot.getCargo() != null) {
+								final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getCargo().getAssignment());
+								cal.add(Calendar.HOUR_OF_DAY, travelTime);
+								cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
+							}
+						}
+
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.HOUR_OF_DAY, 0);
+						cal.set(Calendar.MINUTE, 0);
+						cal.set(Calendar.SECOND, 0);
+						cal.set(Calendar.MILLISECOND, 0);
+						final Date startDate = cal.getTime();
+						final String yearMonthString = getKeyForDate(cal.getTime());
+						dischargeSlot.setWindowStart(startDate);
+						dischargeSlot.setWindowStartTime(0);
+						cal.add(Calendar.MONTH, 1);
+						final Date endDate = cal.getTime();
+						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
+
+						// Get existing names
+						final Set<String> usedIDStrings = new HashSet<>();
+						for (final DischargeSlot slot : cargoModel.getDischargeSlots()) {
+							usedIDStrings.add(slot.getName());
+						}
+
+						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+						int i = 0;
+						String id = idPrefix + (i++);
+						while (usedIDStrings.contains(id)) {
+							id = idPrefix + (i++);
+						}
+						dischargeSlot.setName(id);
+
 					}
-					dischargeSlot.setWindowStart(source.getWindowStart());
+
 					if (dischargeSlot.isFOBSale()) {
 						dischargeSlot.setPort(source.getPort());
 					}
@@ -911,7 +976,40 @@ public class CargoEditorMenuHelper {
 						loadSlot.setWindowStart(source.getWindowStart());
 					} else {
 						loadSlot = cec.createNewSpotLoad(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
-						loadSlot.setWindowStart(source.getWindowStart());
+						// Get start of month and create full sized window
+						final Calendar cal = Calendar.getInstance();
+						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
+						cal.setTime(source.getWindowStartWithSlotOrPortTime());
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						cal.set(Calendar.HOUR_OF_DAY, 0);
+						cal.set(Calendar.MINUTE, 0);
+						cal.set(Calendar.SECOND, 0);
+						cal.set(Calendar.MILLISECOND, 0);
+						final Date startDate = cal.getTime();
+
+						final String yearMonthString = getKeyForDate(cal.getTime());
+
+						loadSlot.setWindowStart(startDate);
+						loadSlot.setWindowStartTime(0);
+						cal.add(Calendar.MONTH, 1);
+						final Date endDate = cal.getTime();
+						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
+
+						// Get existing names
+						final Set<String> usedIDStrings = new HashSet<>();
+						for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+							usedIDStrings.add(slot.getName());
+						}
+
+						final String idPrefix = market.getName() + "-" + yearMonthString + "-";
+						int i = 0;
+						String id = idPrefix + (i++);
+						while (usedIDStrings.contains(id)) {
+							id = idPrefix + (i++);
+						}
+						loadSlot.setName(id);
+
 					}
 					if (loadSlot.isDESPurchase()) {
 						loadSlot.setPort(source.getPort());
@@ -1063,13 +1161,16 @@ public class CargoEditorMenuHelper {
 				if (SlotClassifier.classify(loadSlot) != SlotType.DES_Buy) {
 					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, !loadSlot.isDESPurchase()));
 					if (loadSlot.isDESPurchase()) {
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					} else {
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.SLOT__DIVERTABLE, Boolean.TRUE));
+
 						final Cargo cargo = loadSlot.getCargo();
 						if (cargo != null) {
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
 						}
 					}
 				}
@@ -1078,13 +1179,15 @@ public class CargoEditorMenuHelper {
 				if (SlotClassifier.classify(dischargeSlot) != SlotType.FOB_Sale) {
 					cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE, !dischargeSlot.isFOBSale()));
 					if (dischargeSlot.isFOBSale()) {
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					} else {
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.SLOT__DIVERTABLE, Boolean.TRUE));
 						final Cargo cargo = dischargeSlot.getCargo();
 						if (cargo != null) {
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
-							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, FleetPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
 						}
 					}
 				}
@@ -1146,5 +1249,35 @@ public class CargoEditorMenuHelper {
 			scenarioEditingLocation.setDisableUpdates(false);
 			editorLock.release();
 		}
+	}
+
+	private int getTravelTime(final Port from, final Port to, final AVesselSet<? extends Vessel> assignedVessel) {
+
+		double maxSpeed = 19.0;
+
+		if (assignedVessel instanceof Vessel) {
+			final Vessel vessel = (Vessel) assignedVessel;
+			final VesselClass vesselClass = vessel.getVesselClass();
+			if (vesselClass != null) {
+				maxSpeed = vesselClass.getMaxSpeed();
+			}
+		}
+
+		int distance = 0;
+		LOOP_ROUTES: for (final Route route : scenarioModel.getPortModel().getRoutes()) {
+			if (route.isCanal() == false) {
+				for (final RouteLine dl : route.getLines()) {
+					if (dl.getFrom().equals(from) && dl.getTo().equals(to)) {
+						distance = dl.getDistance();
+						break LOOP_ROUTES;
+					}
+				}
+
+			}
+		}
+
+		final int travelTime = (int) Math.round((double) distance / maxSpeed);
+
+		return travelTime;
 	}
 }

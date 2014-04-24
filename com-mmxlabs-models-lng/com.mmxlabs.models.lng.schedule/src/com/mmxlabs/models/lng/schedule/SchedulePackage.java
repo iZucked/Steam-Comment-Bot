@@ -192,6 +192,15 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__CARGO_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Open Slot Allocations</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCHEDULE__OPEN_SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Market Allocations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 5.0
@@ -199,7 +208,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__MARKET_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int SCHEDULE__MARKET_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' containment reference list.
@@ -208,7 +217,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Fitnesses</b></em>' containment reference list.
@@ -217,7 +226,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Unused Elements</b></em>' reference list.
@@ -226,7 +235,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
@@ -235,7 +244,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -281,7 +290,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequence()
 	 * @generated
 	 */
-	int SEQUENCE = 6;
+	int SEQUENCE = 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EventImpl <em>Event</em>}' class.
@@ -291,7 +300,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEvent()
 	 * @generated
 	 */
-	int EVENT = 7;
+	int EVENT = 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl <em>Slot Visit</em>}' class.
@@ -301,7 +310,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotVisit()
 	 * @generated
 	 */
-	int SLOT_VISIT = 13;
+	int SLOT_VISIT = 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl <em>Vessel Event Visit</em>}' class.
@@ -311,7 +320,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getVesselEventVisit()
 	 * @generated
 	 */
-	int VESSEL_EVENT_VISIT = 14;
+	int VESSEL_EVENT_VISIT = 15;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.JourneyImpl <em>Journey</em>}' class.
@@ -321,7 +330,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getJourney()
 	 * @generated
 	 */
-	int JOURNEY = 10;
+	int JOURNEY = 11;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.IdleImpl <em>Idle</em>}' class.
@@ -331,7 +340,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIdle()
 	 * @generated
 	 */
-	int IDLE = 11;
+	int IDLE = 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
@@ -342,7 +351,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
 	 * @generated
 	 */
-	int GENERATED_CHARTER_OUT = 15;
+	int GENERATED_CHARTER_OUT = 16;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.
@@ -352,7 +361,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUsage()
 	 * @generated
 	 */
-	int FUEL_USAGE = 17;
+	int FUEL_USAGE = 18;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelQuantityImpl <em>Fuel Quantity</em>}' class.
@@ -362,7 +371,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelQuantity()
 	 * @generated
 	 */
-	int FUEL_QUANTITY = 18;
+	int FUEL_QUANTITY = 19;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CooldownImpl <em>Cooldown</em>}' class.
@@ -372,7 +381,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCooldown()
 	 * @generated
 	 */
-	int COOLDOWN = 16;
+	int COOLDOWN = 17;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl <em>Cargo Allocation</em>}' class.
@@ -392,7 +401,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocation()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION = 5;
+	int SLOT_ALLOCATION = 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelAmountImpl <em>Fuel Amount</em>}' class.
@@ -402,7 +411,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelAmount()
 	 * @generated
 	 */
-	int FUEL_AMOUNT = 19;
+	int FUEL_AMOUNT = 20;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FitnessImpl <em>Fitness</em>}' class.
@@ -516,6 +525,15 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -523,7 +541,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -532,7 +550,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -542,7 +560,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -551,7 +569,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -560,7 +578,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -615,7 +633,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
 	 * @generated
 	 */
-	int PORT_VISIT = 12;
+	int PORT_VISIT = 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl <em>Start Event</em>}' class.
@@ -625,7 +643,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getStartEvent()
 	 * @generated
 	 */
-	int START_EVENT = 8;
+	int START_EVENT = 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EndEventImpl <em>End Event</em>}' class.
@@ -635,7 +653,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEndEvent()
 	 * @generated
 	 */
-	int END_EVENT = 9;
+	int END_EVENT = 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
@@ -646,7 +664,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATIONS_HOLDER = 20;
+	int CAPACITY_VIOLATIONS_HOLDER = 21;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
@@ -657,7 +675,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
 	 * @generated
 	 */
-	int CAPACITY_MAP_ENTRY = 21;
+	int CAPACITY_MAP_ENTRY = 22;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
@@ -668,7 +686,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
 	 * @generated
 	 */
-	int PROFIT_AND_LOSS_CONTAINER = 22;
+	int PROFIT_AND_LOSS_CONTAINER = 23;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -701,6 +719,15 @@ public interface SchedulePackage extends EPackage {
 	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -708,7 +735,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -790,6 +817,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MARKET_ALLOCATION__GENERAL_PNL_DETAILS = PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
@@ -890,6 +926,106 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_ALLOCATION_OPERATION_COUNT = PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.OpenSlotAllocationImpl <em>Open Slot Allocation</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.OpenSlotAllocationImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getOpenSlotAllocation()
+	 * @generated
+	 */
+	int OPEN_SLOT_ALLOCATION = 5;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION__EXTENSIONS = PROFIT_AND_LOSS_CONTAINER__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION__GROUP_PROFIT_AND_LOSS = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
+
+	/**
+	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION__GENERAL_PNL_DETAILS = PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION__SLOT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Open Slot Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION_FEATURE_COUNT = PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION___GET_UNSET_VALUE__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = PROFIT_AND_LOSS_CONTAINER___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION___ECONTAINER_OP = PROFIT_AND_LOSS_CONTAINER___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Open Slot Allocation</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OPEN_SLOT_ALLOCATION_OPERATION_COUNT = PROFIT_AND_LOSS_CONTAINER_OPERATION_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1276,13 +1412,31 @@ public interface SchedulePackage extends EPackage {
 	int EVENT__CHARTER_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT__HEEL_AT_START = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT__HEEL_AT_END = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1448,6 +1602,24 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1496,13 +1668,22 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -1511,7 +1692,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1686,6 +1867,24 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1734,13 +1933,22 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -1749,7 +1957,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1922,6 +2130,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2169,6 +2395,24 @@ public interface SchedulePackage extends EPackage {
 	int IDLE__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2369,6 +2613,24 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -2559,6 +2821,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_VISIT__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2779,6 +3059,24 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -2818,13 +3116,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -2833,7 +3140,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3006,6 +3313,24 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__CHARTER_COST = EVENT__CHARTER_COST;
 
 	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__HEEL_AT_END = EVENT__HEEL_AT_END;
+
+	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3026,6 +3351,15 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -3033,7 +3367,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 2;
+	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
@@ -3043,7 +3377,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3208,6 +3542,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int COOLDOWN__CHARTER_COST = EVENT__CHARTER_COST;
+
+	/**
+	 * The feature id for the '<em><b>Heel At Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__HEEL_AT_START = EVENT__HEEL_AT_START;
+
+	/**
+	 * The feature id for the '<em><b>Heel At End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__HEEL_AT_END = EVENT__HEEL_AT_END;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -3592,7 +3944,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
 	 * @generated
 	 */
-	int GROUP_PROFIT_AND_LOSS = 23;
+	int GROUP_PROFIT_AND_LOSS = 24;
 
 	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
@@ -3653,7 +4005,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
 	 * @generated
 	 */
-	int ENTITY_PROFIT_AND_LOSS = 24;
+	int ENTITY_PROFIT_AND_LOSS = 25;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -3666,6 +4018,15 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS__ENTITY = 0;
 
 	/**
+	 * The feature id for the '<em><b>Entity Book</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK = 1;
+
+	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3673,7 +4034,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 1;
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS = 2;
 
 	/**
 	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
@@ -3683,7 +4044,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 2;
+	int ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = 3;
 
 	/**
 	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
@@ -3693,7 +4054,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 3;
+	int ENTITY_PROFIT_AND_LOSS_FEATURE_COUNT = 4;
 
 	/**
 	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
@@ -3706,6 +4067,172 @@ public interface SchedulePackage extends EPackage {
 	int ENTITY_PROFIT_AND_LOSS_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl <em>Entity PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityPNLDetails()
+	 * @generated
+	 */
+	int ENTITY_PNL_DETAILS = 26;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl <em>General PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneralPNLDetails()
+	 * @generated
+	 */
+	int GENERAL_PNL_DETAILS = 28;
+
+	/**
+	 * The number of structural features of the '<em>General PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERAL_PNL_DETAILS_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>General PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERAL_PNL_DETAILS_OPERATION_COUNT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS__ENTITY = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Entity PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Entity PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ENTITY_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl <em>Slot PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotPNLDetails()
+	 * @generated
+	 */
+	int SLOT_PNL_DETAILS = 27;
+
+	/**
+	 * The feature id for the '<em><b>Slot</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS__SLOT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl <em>Basic Slot PNL Details</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	int BASIC_SLOT_PNL_DETAILS = 29;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Fees</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = GENERAL_PNL_DETAILS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Hedging Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = GENERAL_PNL_DETAILS_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Basic Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS_FEATURE_COUNT = GENERAL_PNL_DETAILS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Basic Slot PNL Details</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_SLOT_PNL_DETAILS_OPERATION_COUNT = GENERAL_PNL_DETAILS_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3713,7 +4240,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 27;
+	int FUEL_UNIT = 32;
 
 
 	/**
@@ -3724,7 +4251,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 26;
+	int FUEL = 31;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -3735,7 +4262,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 25;
+	int SEQUENCE_TYPE = 30;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
@@ -3746,7 +4273,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
 	 * @generated
 	 */
-	int CAPACITY_VIOLATION_TYPE = 28;
+	int CAPACITY_VIOLATION_TYPE = 33;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -3756,7 +4283,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 29;
+	int CALENDAR = 34;
 
 
 	/**
@@ -3767,7 +4294,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 30;
+	int ITERABLE = 35;
 
 
 	/**
@@ -3778,7 +4305,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 31;
+	int OBJECT = 36;
 
 
 	/**
@@ -3845,6 +4372,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_CargoAllocations();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getOpenSlotAllocations <em>Open Slot Allocations</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Open Slot Allocations</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Schedule#getOpenSlotAllocations()
+	 * @see #getSchedule()
+	 * @generated
+	 */
+	EReference getSchedule_OpenSlotAllocations();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getMarketAllocations <em>Market Allocations</em>}'.
@@ -4096,6 +4634,28 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getEvent_CharterCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtStart <em>Heel At Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel At Start</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getHeelAtStart()
+	 * @see #getEvent()
+	 * @generated
+	 */
+	EAttribute getEvent_HeelAtStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Event#getHeelAtEnd <em>Heel At End</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel At End</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getHeelAtEnd()
+	 * @see #getEvent()
+	 * @generated
+	 */
+	EAttribute getEvent_HeelAtEnd();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getDuration() <em>Get Duration</em>}' operation.
@@ -4554,6 +5114,27 @@ public interface SchedulePackage extends EPackage {
 	EReference getMarketAllocation_SlotVisit();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation <em>Open Slot Allocation</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Open Slot Allocation</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.OpenSlotAllocation
+	 * @generated
+	 */
+	EClass getOpenSlotAllocation();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.OpenSlotAllocation#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.OpenSlotAllocation#getSlot()
+	 * @see #getOpenSlotAllocation()
+	 * @generated
+	 */
+	EReference getOpenSlotAllocation_Slot();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotAllocation <em>Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4916,6 +5497,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGeneralPNLDetails()
+	 * @see #getProfitAndLossContainer()
+	 * @generated
+	 */
+	EReference getProfitAndLossContainer_GeneralPNLDetails();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -4986,6 +5578,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getEntityProfitAndLoss_Entity();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntityBook <em>Entity Book</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity Book</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntityBook()
+	 * @see #getEntityProfitAndLoss()
+	 * @generated
+	 */
+	EReference getEntityProfitAndLoss_EntityBook();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -5008,6 +5611,112 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getEntityProfitAndLoss_ProfitAndLossPreTax();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EntityPNLDetails <em>Entity PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Entity PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityPNLDetails
+	 * @generated
+	 */
+	EClass getEntityPNLDetails();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityPNLDetails#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityPNLDetails#getEntity()
+	 * @see #getEntityPNLDetails()
+	 * @generated
+	 */
+	EReference getEntityPNLDetails_Entity();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.EntityPNLDetails#getGeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.EntityPNLDetails#getGeneralPNLDetails()
+	 * @see #getEntityPNLDetails()
+	 * @generated
+	 */
+	EReference getEntityPNLDetails_GeneralPNLDetails();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.SlotPNLDetails <em>Slot PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Slot PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotPNLDetails
+	 * @generated
+	 */
+	EClass getSlotPNLDetails();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SlotPNLDetails#getSlot <em>Slot</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Slot</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotPNLDetails#getSlot()
+	 * @see #getSlotPNLDetails()
+	 * @generated
+	 */
+	EReference getSlotPNLDetails_Slot();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.SlotPNLDetails#getGeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotPNLDetails#getGeneralPNLDetails()
+	 * @see #getSlotPNLDetails()
+	 * @generated
+	 */
+	EReference getSlotPNLDetails_GeneralPNLDetails();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GeneralPNLDetails <em>General PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>General PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GeneralPNLDetails
+	 * @generated
+	 */
+	EClass getGeneralPNLDetails();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails <em>Basic Slot PNL Details</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Basic Slot PNL Details</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails
+	 * @generated
+	 */
+	EClass getBasicSlotPNLDetails();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees <em>Cancellation Fees</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancellation Fees</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getCancellationFees()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_CancellationFees();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue <em>Hedging Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedging Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails#getHedgingValue()
+	 * @see #getBasicSlotPNLDetails()
+	 * @generated
+	 */
+	EAttribute getBasicSlotPNLDetails_HedgingValue();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -5158,6 +5867,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__CARGO_ALLOCATIONS = eINSTANCE.getSchedule_CargoAllocations();
+
+		/**
+		 * The meta object literal for the '<em><b>Open Slot Allocations</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCHEDULE__OPEN_SLOT_ALLOCATIONS = eINSTANCE.getSchedule_OpenSlotAllocations();
 
 		/**
 		 * The meta object literal for the '<em><b>Market Allocations</b></em>' containment reference list feature.
@@ -5350,6 +6067,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute EVENT__CHARTER_COST = eINSTANCE.getEvent_CharterCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel At Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EVENT__HEEL_AT_START = eINSTANCE.getEvent_HeelAtStart();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel At End</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EVENT__HEEL_AT_END = eINSTANCE.getEvent_HeelAtEnd();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Duration</b></em>' operation.
@@ -5718,6 +6451,24 @@ public interface SchedulePackage extends EPackage {
 		EReference MARKET_ALLOCATION__SLOT_VISIT = eINSTANCE.getMarketAllocation_SlotVisit();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.OpenSlotAllocationImpl <em>Open Slot Allocation</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.OpenSlotAllocationImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getOpenSlotAllocation()
+		 * @generated
+		 */
+		EClass OPEN_SLOT_ALLOCATION = eINSTANCE.getOpenSlotAllocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference OPEN_SLOT_ALLOCATION__SLOT = eINSTANCE.getOpenSlotAllocation_Slot();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6011,6 +6762,14 @@ public interface SchedulePackage extends EPackage {
 		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
 
 		/**
+		 * The meta object literal for the '<em><b>General PNL Details</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS = eINSTANCE.getProfitAndLossContainer_GeneralPNLDetails();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * @since 4.0
@@ -6069,6 +6828,14 @@ public interface SchedulePackage extends EPackage {
 		EReference ENTITY_PROFIT_AND_LOSS__ENTITY = eINSTANCE.getEntityProfitAndLoss_Entity();
 
 		/**
+		 * The meta object literal for the '<em><b>Entity Book</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PROFIT_AND_LOSS__ENTITY_BOOK = eINSTANCE.getEntityProfitAndLoss_EntityBook();
+
+		/**
 		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * @since 4.0
@@ -6085,6 +6852,94 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ENTITY_PROFIT_AND_LOSS__PROFIT_AND_LOSS_PRE_TAX = eINSTANCE.getEntityProfitAndLoss_ProfitAndLossPreTax();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl <em>Entity PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.EntityPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityPNLDetails()
+		 * @generated
+		 */
+		EClass ENTITY_PNL_DETAILS = eINSTANCE.getEntityPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PNL_DETAILS__ENTITY = eINSTANCE.getEntityPNLDetails_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>General PNL Details</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ENTITY_PNL_DETAILS__GENERAL_PNL_DETAILS = eINSTANCE.getEntityPNLDetails_GeneralPNLDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl <em>Slot PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.SlotPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotPNLDetails()
+		 * @generated
+		 */
+		EClass SLOT_PNL_DETAILS = eINSTANCE.getSlotPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_PNL_DETAILS__SLOT = eINSTANCE.getSlotPNLDetails_Slot();
+
+		/**
+		 * The meta object literal for the '<em><b>General PNL Details</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT_PNL_DETAILS__GENERAL_PNL_DETAILS = eINSTANCE.getSlotPNLDetails_GeneralPNLDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl <em>General PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.GeneralPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneralPNLDetails()
+		 * @generated
+		 */
+		EClass GENERAL_PNL_DETAILS = eINSTANCE.getGeneralPNLDetails();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl <em>Basic Slot PNL Details</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.BasicSlotPNLDetailsImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getBasicSlotPNLDetails()
+		 * @generated
+		 */
+		EClass BASIC_SLOT_PNL_DETAILS = eINSTANCE.getBasicSlotPNLDetails();
+
+		/**
+		 * The meta object literal for the '<em><b>Cancellation Fees</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__CANCELLATION_FEES = eINSTANCE.getBasicSlotPNLDetails_CancellationFees();
+
+		/**
+		 * The meta object literal for the '<em><b>Hedging Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute BASIC_SLOT_PNL_DETAILS__HEDGING_VALUE = eINSTANCE.getBasicSlotPNLDetails_HedgingValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

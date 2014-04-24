@@ -6,14 +6,15 @@ package com.mmxlabs.models.lng.port.ui.editors;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -27,7 +28,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Location;
@@ -35,9 +35,10 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
+import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
@@ -47,7 +48,12 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
  * @author Tom Hinton
  * 
  */
-public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
+public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
+
+	/** @see MultipleReferenceManipulator */
+	private final static int MAX_DISPLAY_LENGTH = 32;
+	private static final int MIN_DISPLAY_NAMES = 2;
+
 	private IReferenceValueProvider valueProvider;
 	private Label theLabel;
 	private Button button;
@@ -63,13 +69,13 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
-		super.display(location, context, input, range);
+		super.display(dialogContext, context, input, range);
 	}
 
 	@Override
-	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	public Control createValueControl(final Composite parent) {
 		final Composite buttonAndLabel = new Composite(parent, SWT.NONE);
 		final GridLayout gl = new GridLayout(2, false);
 		buttonAndLabel.setLayout(gl);
@@ -99,12 +105,16 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected Command createSetCommand(final Object value) {
-		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
-		return setter;
+		if (value == SetCommand.UNSET_VALUE) {
+			return SetCommand.create(commandHandler.getEditingDomain(), input, feature, value);
+		} else {
+			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
+			return setter;
+		}
 	}
 
 	@Override
-	protected void updateDisplay(final Object value) {
+	protected void updateValueDisplay(final Object value) {
 		if (theLabel == null || theLabel.isDisposed()) {
 			return;
 		}
@@ -112,10 +122,19 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		if (selectedValues != null) {
 			final StringBuilder sb = new StringBuilder();
+			int numNamesAdded = 0;
 			for (final EObject obj : selectedValues) {
-				if (sb.length() > 0)
+				String name = valueProvider.getName(input, (EReference) feature, obj);
+				if (sb.length() > 0) {
 					sb.append(", ");
-				sb.append(valueProvider.getName(input, (EReference) feature, obj));
+				}
+				if (sb.length() + name.length() <= MAX_DISPLAY_LENGTH || numNamesAdded <= MIN_DISPLAY_NAMES - 1) {
+					sb.append(name);
+					++numNamesAdded;
+				} else {
+					sb.append("...");
+					break;
+				}
 			}
 			theLabel.setText(sb.toString());
 		}
@@ -208,11 +227,12 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
+		final boolean controlsEnabled = !isFeatureReadonly() && enabled;
 
-		theLabel.setEnabled(enabled);
-		button.setEnabled(enabled);
+		theLabel.setEnabled(controlsEnabled);
+		button.setEnabled(controlsEnabled);
 
-		super.setControlsEnabled(enabled);
+		super.setControlsEnabled(controlsEnabled);
 	}
 
 	@Override
@@ -222,5 +242,10 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		button.setVisible(visible);
 
 		super.setControlsVisible(visible);
+	}
+
+	@Override
+	protected Object getInitialUnsetValue() {
+		return Collections.emptyList();
 	}
 }

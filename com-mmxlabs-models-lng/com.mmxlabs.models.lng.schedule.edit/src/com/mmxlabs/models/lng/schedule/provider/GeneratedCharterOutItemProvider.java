@@ -127,6 +127,7 @@ public class GeneratedCharterOutItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
 			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER);
+			childrenFeatures.add(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
 		}
 		return childrenFeatures;
 	}
@@ -187,6 +188,7 @@ public class GeneratedCharterOutItemProvider
 				return;
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS:
 			case SchedulePackage.GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
+			case SchedulePackage.GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -213,6 +215,21 @@ public class GeneratedCharterOutItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER,
 				 ScheduleFactory.eINSTANCE.createGroupProfitAndLoss()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createEntityPNLDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createSlotPNLDetails()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS,
+				 ScheduleFactory.eINSTANCE.createBasicSlotPNLDetails()));
 	}
 
 	/**

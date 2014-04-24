@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -163,6 +164,7 @@ public class PortGroupView extends ScenarioInstanceView {
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
 				viewerPane = new PortGroupEditorPane(getSite().getPage(), this, this, getViewSite().getActionBars());
+				viewerPane.setExternalMenuManager((MenuManager) getViewSite().getActionBars().getMenuManager());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
 				viewerPane.init(Lists.newArrayList(LNGScenarioPackage.eINSTANCE.getLNGScenarioModel_PortModel(), PortPackage.eINSTANCE.getPortModel_PortGroups()), getAdapterFactory(),

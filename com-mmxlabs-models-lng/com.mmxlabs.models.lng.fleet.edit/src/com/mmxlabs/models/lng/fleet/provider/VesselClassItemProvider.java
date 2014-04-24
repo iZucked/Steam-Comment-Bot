@@ -72,6 +72,7 @@ public class VesselClassItemProvider
 			addCoolingVolumePropertyDescriptor(object);
 			addRouteParametersPropertyDescriptor(object);
 			addPilotLightRatePropertyDescriptor(object);
+			addMinBaseFuelConsumptionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -319,6 +320,28 @@ public class VesselClassItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Base Fuel Consumption feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinBaseFuelConsumptionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_VesselClass_minBaseFuelConsumption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_VesselClass_minBaseFuelConsumption_feature", "_UI_VesselClass_type"),
+				 FleetPackage.Literals.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -395,6 +418,7 @@ public class VesselClassItemProvider
 			case FleetPackage.VESSEL_CLASS__WARMING_TIME:
 			case FleetPackage.VESSEL_CLASS__COOLING_VOLUME:
 			case FleetPackage.VESSEL_CLASS__PILOT_LIGHT_RATE:
+			case FleetPackage.VESSEL_CLASS__MIN_BASE_FUEL_CONSUMPTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case FleetPackage.VESSEL_CLASS__LADEN_ATTRIBUTES:

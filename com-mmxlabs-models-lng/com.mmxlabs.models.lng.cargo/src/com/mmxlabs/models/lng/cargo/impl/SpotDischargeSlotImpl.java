@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -197,9 +198,47 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		if (feature == CargoPackage.Literals.SLOT__ENTITY) {
 			// delegate entity information to the spot market, not the contract
-			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__ENTITY, null);			
+			return new DelegateInformation(CargoPackage.Literals.SPOT_SLOT__MARKET, SpotMarketsPackage.Literals.SPOT_MARKET__ENTITY, null);
+		} else if (feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
+				}
+
+				public Object getValue(final EObject object) {
+					Object result = null;
+					SpotMarket spotMarket = getMarket();
+					if (result == null && spotMarket != null) {
+						result = spotMarket.eGetWithDefault(SpotMarketsPackage.Literals.SPOT_MARKET__MIN_QUANTITY);
+					}
+					if (result == null) {
+						result = Integer.valueOf(0);
+					}
+					return result;
+
+				}
+			};
+		} else if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY) {
+			return new DelegateInformation(null, null, null) {
+				public boolean delegatesTo(final Object changedFeature) {
+					return (changedFeature == CargoPackage.Literals.SPOT_SLOT__MARKET);
+				}
+				
+				public Object getValue(final EObject object) {
+					Object result = null;
+					SpotMarket spotMarket = getMarket();
+					if (result == null && spotMarket != null) {
+						result = spotMarket.eGetWithDefault(SpotMarketsPackage.Literals.SPOT_MARKET__MAX_QUANTITY);
+					}
+					if (result == null || result.equals(0)) {
+						result = Integer.valueOf(140000);
+					}
+					return result;
+					
+				}
+			};
 		}
-		return null;
+		return super.getUnsetValueOrDelegate(feature);
 	}	
 } // end of SpotDischargeSlotImpl
 

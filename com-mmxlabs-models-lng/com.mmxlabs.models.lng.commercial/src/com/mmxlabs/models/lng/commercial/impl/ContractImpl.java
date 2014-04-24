@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -17,7 +18,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -43,6 +43,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,7 +80,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @generated
 	 * @ordered
 	 */
-	protected LegalEntity entity;
+	protected BaseLegalEntity entity;
 
 	/**
 	 * The cached value of the '{@link #getAllowedPorts() <em>Allowed Ports</em>}' reference list.
@@ -240,6 +241,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	protected ContractType contractType = CONTRACT_TYPE_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CANCELLATION_FEE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCancellationFee()
+	 * @generated
+	 * @ordered
+	 */
+	protected int cancellationFee = CANCELLATION_FEE_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -286,10 +307,10 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity getEntity() {
+	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
-			entity = (LegalEntity)eResolveProxy(oldEntity);
+			entity = (BaseLegalEntity)eResolveProxy(oldEntity);
 			if (entity != oldEntity) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.CONTRACT__ENTITY, oldEntity, entity));
@@ -303,7 +324,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LegalEntity basicGetEntity() {
+	public BaseLegalEntity basicGetEntity() {
 		return entity;
 	}
 
@@ -312,8 +333,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setEntity(LegalEntity newEntity) {
-		LegalEntity oldEntity = entity;
+	public void setEntity(BaseLegalEntity newEntity) {
+		BaseLegalEntity oldEntity = entity;
 		entity = newEntity;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__ENTITY, oldEntity, entity));
@@ -557,6 +578,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getCancellationFee() {
+		return cancellationFee;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCancellationFee(int newCancellationFee) {
+		int oldCancellationFee = cancellationFee;
+		cancellationFee = newCancellationFee;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__CANCELLATION_FEE, oldCancellationFee, cancellationFee));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -600,6 +642,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getNotes();
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				return getContractType();
+			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
+				return getCancellationFee();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -617,7 +661,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				setName((String)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ENTITY:
-				setEntity((LegalEntity)newValue);
+				setEntity((BaseLegalEntity)newValue);
 				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
@@ -652,6 +696,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				setContractType((ContractType)newValue);
 				return;
+			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
+				setCancellationFee((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -668,7 +715,7 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				setName(NAME_EDEFAULT);
 				return;
 			case CommercialPackage.CONTRACT__ENTITY:
-				setEntity((LegalEntity)null);
+				setEntity((BaseLegalEntity)null);
 				return;
 			case CommercialPackage.CONTRACT__ALLOWED_PORTS:
 				getAllowedPorts().clear();
@@ -699,6 +746,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return;
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				setContractType(CONTRACT_TYPE_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
+				setCancellationFee(CANCELLATION_FEE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -736,6 +786,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				return contractType != CONTRACT_TYPE_EDEFAULT;
+			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
+				return cancellationFee != CANCELLATION_FEE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -794,6 +846,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(notes);
 		result.append(", contractType: ");
 		result.append(contractType);
+		result.append(", cancellationFee: ");
+		result.append(cancellationFee);
 		result.append(')');
 		return result.toString();
 	}

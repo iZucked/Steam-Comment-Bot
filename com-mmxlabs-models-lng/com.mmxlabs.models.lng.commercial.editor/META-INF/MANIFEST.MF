@@ -14,23 +14,19 @@ Export-Package: com.mmxlabs.models.lng.commercial.editorfactories,
  com.mmxlabs.models.lng.commercial.presentation,
  com.mmxlabs.models.lng.commercial.ui.modelfactories
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- org.eclipse.core.resources;visibility:=reexport;bundle-version="3.7.101",
- org.eclipse.emf.edit.ui;visibility:=reexport;bundle-version="2.7.0",
- org.eclipse.ui.ide;visibility:=reexport;bundle-version="3.7.0",
+ org.eclipse.core.resources;bundle-version="3.7.101";visibility:=reexport,
+ org.eclipse.emf.edit.ui;bundle-version="2.7.0";visibility:=reexport,
+ org.eclipse.ui.ide;bundle-version="3.7.0";visibility:=reexport,
  com.mmxlabs.models.lng.types.edit;visibility:=reexport,
  com.mmxlabs.models.mmxcore.edit;visibility:=reexport,
  com.mmxlabs.models.lng.port.edit;visibility:=reexport,
- com.mmxlabs.models.lng.commercial.edit;visibility:=reexport;bundle-version="[8.0.0,9.0.0)",
+ com.mmxlabs.models.lng.commercial.edit;bundle-version="[8.0.0,9.0.0)";visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  com.mmxlabs.models.lng.scenario.model;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.models.ui;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.models.util;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.models.ui.tabular;bundle-version="[8.0.0,9.0.0)",
- com.mmxlabs.models.lng.ui;bundle-version="[8.0.0,9.0.0)"
+ com.mmxlabs.models.ui;bundle-version="[9.0.0,10.0.0)",
+ com.mmxlabs.models.util;bundle-version="[9.0.0,10.0.0)",
+ com.mmxlabs.models.ui.tabular;bundle-version="[9.0.0,10.0.0)",
+ com.mmxlabs.models.lng.ui;bundle-version="[8.0.0,9.0.0)",
+ org.eclipse.nebula.widgets.formattedtext;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Import-Package: com.mmxlabs.common;version="2.0.0",
- com.mmxlabs.models.lng.cargo,
- com.mmxlabs.models.lng.pricing,
- com.mmxlabs.models.lng.schedule,
- javax.inject;version="1.0.0",
- org.eclipse.nebula.widgets.formattedtext
+Import-Package: javax.inject;version="1.0.0"

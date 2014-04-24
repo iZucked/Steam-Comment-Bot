@@ -76,6 +76,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 		add_arriveColdEditor(detailComposite, topClass);
 		add_DESPurchaseEditor(detailComposite, topClass);
 		add_transferFromEditor(detailComposite, topClass);
+		add_salesDeliveryTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -123,6 +124,15 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_transferFromEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__TRANSFER_FROM));
+	}
+
+	/**
+	 * Create the editor for the salesDeliveryType feature on LoadSlot
+	 *
+	 * @generated
+	 */
+	protected void add_salesDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE));
 	}
 
 	@Override

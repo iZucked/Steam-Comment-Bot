@@ -61,11 +61,16 @@ public class FOBDESCargoDatesConstraint extends AbstractModelConstraint {
 				if (loadSlot != null && dischargeSlot != null) {
 					// Check this is the correct type of DES Purchase and FOB Sale
 					if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy || SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
+						final boolean valid;
+						if (loadSlot.getWindowStartWithSlotOrPortTime().before(dischargeSlot.getWindowStartWithSlotOrPortTime())) {
+							valid = checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
+									|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowStartWithSlotOrPortTime());
+						} else {
+							valid = checkDates(dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime())
+									|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowStartWithSlotOrPortTime());
+						}
 
-						if (!(checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
-								|| checkDates(loadSlot.getWindowStartWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime())
-								|| checkDates(dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowStartWithSlotOrPortTime()) || checkDates(
-									dischargeSlot.getWindowStartWithSlotOrPortTime(), dischargeSlot.getWindowEndWithSlotOrPortTime(), loadSlot.getWindowEndWithSlotOrPortTime()))) {
+						if (!valid) {
 
 							final String message = String.format("[Cargo|%s] Incompatible slot windows.", cargo.getName());
 

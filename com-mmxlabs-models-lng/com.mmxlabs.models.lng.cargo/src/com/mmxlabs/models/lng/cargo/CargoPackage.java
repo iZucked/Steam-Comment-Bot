@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
@@ -148,15 +149,6 @@ public interface CargoPackage extends EPackage {
 	int CARGO__ALLOW_REWIRING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
-
-	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -164,7 +156,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int CARGO__SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
@@ -173,7 +165,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int CARGO_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -429,6 +421,15 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__DIVERTABLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -436,7 +437,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int SLOT__SHIPPING_DAYS_RESTRICTION = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -446,7 +447,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int SLOT__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
@@ -456,7 +457,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+	int SLOT__RESTRICTED_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
@@ -466,7 +467,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+	int SLOT__RESTRICTED_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
@@ -476,7 +477,34 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
+	int SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
+
+	/**
+	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__HEDGES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 25;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 26;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -485,7 +513,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -618,13 +646,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 10;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -824,6 +861,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__NOTES = SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__DIVERTABLE = SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -874,6 +920,33 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
+	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__HEDGES = SLOT__HEDGES;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -911,13 +984,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__TRANSFER_FROM = SLOT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__SALES_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 4;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1050,6 +1132,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1060,13 +1151,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = SLOT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = SLOT_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 1;
+	int LOAD_SLOT_OPERATION_COUNT = SLOT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
@@ -1266,6 +1366,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__NOTES = SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__DIVERTABLE = SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1314,6 +1423,33 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__HEDGES = SLOT__HEDGES;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__ALLOWED_VESSELS = SLOT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -1504,6 +1640,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1607,13 +1752,40 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__CARGO_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Availabilities</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__VESSEL_AVAILABILITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Type Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_MODEL__VESSEL_TYPE_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1922,6 +2094,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NOTES = LOAD_SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__DIVERTABLE = LOAD_SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -1972,6 +2153,33 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
+	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__HEDGES = LOAD_SLOT__HEDGES;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__ALLOWED_VESSELS = LOAD_SLOT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__CANCELLATION_FEE = LOAD_SLOT__CANCELLATION_FEE;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2007,6 +2215,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__TRANSFER_FROM = LOAD_SLOT__TRANSFER_FROM;
+
+	/**
+	 * The feature id for the '<em><b>Sales Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__SALES_DELIVERY_TYPE = LOAD_SLOT__SALES_DELIVERY_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -2157,6 +2374,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -2165,6 +2391,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE;
 
 	/**
 	 * The number of operations of the '<em>Spot Load Slot</em>' class.
@@ -2373,6 +2608,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NOTES = DISCHARGE_SLOT__NOTES;
 
 	/**
+	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__DIVERTABLE = DISCHARGE_SLOT__DIVERTABLE;
+
+	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -2421,6 +2665,33 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Hedges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__HEDGES = DISCHARGE_SLOT__HEDGES;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__ALLOWED_VESSELS = DISCHARGE_SLOT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__CANCELLATION_FEE = DISCHARGE_SLOT__CANCELLATION_FEE;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -2621,6 +2892,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -2742,6 +3022,1066 @@ public interface CargoPackage extends EPackage {
 	int CARGO_GROUP_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselAvailability()
+	 * @generated
+	 */
+	int VESSEL_AVAILABILITY = 9;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__TIME_CHARTER_RATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Start At</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_AT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>End At</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__END_AT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>End After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__END_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>End By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__END_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__START_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Availability</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>Vessel Availability</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_AVAILABILITY_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEvent()
+	 * @generated
+	 */
+	int VESSEL_EVENT = 10;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__ASSIGNMENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__SPOT_INDEX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__SEQUENCE_HINT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__LOCKED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__DURATION_IN_DAYS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__ALLOWED_VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__PORT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__START_AFTER = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__START_BY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Vessel Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getMaintenanceEvent()
+	 * @generated
+	 */
+	int MAINTENANCE_EVENT = 11;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__UUID = VESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__ASSIGNMENT = VESSEL_EVENT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__SPOT_INDEX = VESSEL_EVENT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__SEQUENCE_HINT = VESSEL_EVENT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__LOCKED = VESSEL_EVENT__LOCKED;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The number of structural features of the '<em>Maintenance Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = VESSEL_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = VESSEL_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___ECONTAINER_OP = VESSEL_EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT___GET_TIME_ZONE__EATTRIBUTE = VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The number of operations of the '<em>Maintenance Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDryDockEvent()
+	 * @generated
+	 */
+	int DRY_DOCK_EVENT = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__UUID = VESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__ASSIGNMENT = VESSEL_EVENT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__SPOT_INDEX = VESSEL_EVENT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__SEQUENCE_HINT = VESSEL_EVENT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__LOCKED = VESSEL_EVENT__LOCKED;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The number of structural features of the '<em>Dry Dock Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = VESSEL_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = VESSEL_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___ECONTAINER_OP = VESSEL_EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT___GET_TIME_ZONE__EATTRIBUTE = VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The number of operations of the '<em>Dry Dock Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterOutEvent()
+	 * @generated
+	 */
+	int CHARTER_OUT_EVENT = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__EXTENSIONS = VESSEL_EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__UUID = VESSEL_EVENT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__ASSIGNMENT = VESSEL_EVENT__ASSIGNMENT;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__SPOT_INDEX = VESSEL_EVENT__SPOT_INDEX;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__SEQUENCE_HINT = VESSEL_EVENT__SEQUENCE_HINT;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__LOCKED = VESSEL_EVENT__LOCKED;
+
+	/**
+	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__DURATION_IN_DAYS = VESSEL_EVENT__DURATION_IN_DAYS;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__ALLOWED_VESSELS = VESSEL_EVENT__ALLOWED_VESSELS;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__PORT = VESSEL_EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Start After</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__START_AFTER = VESSEL_EVENT__START_AFTER;
+
+	/**
+	 * The feature id for the '<em><b>Start By</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__START_BY = VESSEL_EVENT__START_BY;
+
+	/**
+	 * The feature id for the '<em><b>Relocate To</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__RELOCATE_TO = VESSEL_EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Heel Options</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__HEEL_OPTIONS = VESSEL_EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Repositioning Fee</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__REPOSITIONING_FEE = VESSEL_EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Hire Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__HIRE_RATE = VESSEL_EVENT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Charter Out Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT_FEATURE_COUNT = VESSEL_EVENT_FEATURE_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = VESSEL_EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = VESSEL_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___ECONTAINER_OP = VESSEL_EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___GET_TIME_ZONE__EATTRIBUTE = VESSEL_EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get End Port</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT___GET_END_PORT = VESSEL_EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Charter Out Event</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT_OPERATION_COUNT = VESSEL_EVENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getAssignableElement()
+	 * @generated
+	 */
+	int ASSIGNABLE_ELEMENT = 14;
+
+	/**
+	 * The feature id for the '<em><b>Assignment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__ASSIGNMENT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__SPOT_INDEX = 1;
+
+	/**
+	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__SEQUENCE_HINT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Locked</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT__LOCKED = 3;
+
+	/**
+	 * The number of structural features of the '<em>Assignable Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Assignable Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASSIGNABLE_ELEMENT_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselTypeGroup()
+	 * @generated
+	 */
+	int VESSEL_TYPE_GROUP = 15;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__VESSEL_TYPE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Type Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___GET_UNSET_VALUE__ESTRUCTURALFEATURE = TypesPackage.AVESSEL_SET___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = TypesPackage.AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___ECONTAINER_OP = TypesPackage.AVESSEL_SET___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Collect</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP___COLLECT__ELIST = TypesPackage.AVESSEL_SET___COLLECT__ELIST;
+
+	/**
+	 * The number of operations of the '<em>Vessel Type Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP_OPERATION_COUNT = TypesPackage.AVESSEL_SET_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2749,7 +4089,18 @@ public interface CargoPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCargoType()
 	 * @generated
 	 */
-	int CARGO_TYPE = 9;
+	int CARGO_TYPE = 16;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.cargo.VesselType
+	 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
+	 * @generated
+	 */
+	int VESSEL_TYPE = 17;
 
 
 	/**
@@ -2772,17 +4123,6 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCargo_AllowRewiring();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Allowed Vessels</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels()
-	 * @see #getCargo()
-	 * @generated
-	 */
-	EReference getCargo_AllowedVessels();
 
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}'.
@@ -3046,6 +4386,52 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_RestrictedListsArePermissive();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getHedges <em>Hedges</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hedges</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getHedges()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Hedges();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cancellation Fee</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getCancellationFee()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_CancellationFee();
+
+	
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertable <em>Divertable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Divertable</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isDivertable()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Divertable();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_AllowedVessels();
+
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3150,6 +4536,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee() <em>Get Slot Or Contract Cancellation Fee</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Cancellation Fee</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractCancellationFee()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrContractCancellationFee();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3205,6 +4601,17 @@ public interface CargoPackage extends EPackage {
 	EReference getLoadSlot_TransferFrom();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType <em>Sales Delivery Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sales Delivery Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSalesDeliveryType()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_SalesDeliveryType();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV() <em>Get Slot Or Delegated CV</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -3214,6 +4621,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getLoadSlot__GetSlotOrDelegatedCV();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrContractDeliveryType() <em>Get Slot Or Contract Delivery Type</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrContractDeliveryType()
+	 * @generated
+	 */
+	EOperation getLoadSlot__GetSlotOrContractDeliveryType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.DischargeSlot <em>Discharge Slot</em>}'.
@@ -3372,6 +4789,39 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoModel_CargoGroups();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselAvailabilities <em>Vessel Availabilities</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Availabilities</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselAvailabilities()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_VesselAvailabilities();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents <em>Vessel Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Events</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselEvents()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_VesselEvents();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups <em>Vessel Type Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Type Groups</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CargoModel#getVesselTypeGroups()
+	 * @see #getCargoModel()
+	 * @generated
+	 */
+	EReference getCargoModel_VesselTypeGroups();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3434,6 +4884,350 @@ public interface CargoPackage extends EPackage {
 	EReference getCargoGroup_Cargoes();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselAvailability <em>Vessel Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Availability</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability
+	 * @generated
+	 */
+	EClass getVesselAvailability();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_Vessel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Time Charter Rate</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getTimeCharterRate()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_TimeCharterRate();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAt <em>Start At</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Start At</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAt()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_StartAt();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfter <em>Start After</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start After</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfter()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_StartAfter();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartBy <em>Start By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start By</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getStartBy()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_StartBy();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAt <em>End At</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>End At</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAt()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_EndAt();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAfter <em>End After</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End After</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAfter()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_EndAfter();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndBy <em>End By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End By</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getEndBy()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EAttribute getVesselAvailability_EndBy();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartHeel <em>Start Heel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Start Heel</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getStartHeel()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_StartHeel();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Entity</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity()
+	 * @see #getVesselAvailability()
+	 * @generated
+	 */
+	EReference getVesselAvailability_Entity();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselEvent <em>Vessel Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Event</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent
+	 * @generated
+	 */
+	EClass getVesselEvent();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getDurationInDays <em>Duration In Days</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Duration In Days</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getDurationInDays()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_DurationInDays();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getAllowedVessels <em>Allowed Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Allowed Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getAllowedVessels()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_AllowedVessels();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getPort()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EReference getVesselEvent_Port();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartAfter <em>Start After</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start After</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getStartAfter()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_StartAfter();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselEvent#getStartBy <em>Start By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start By</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselEvent#getStartBy()
+	 * @see #getVesselEvent()
+	 * @generated
+	 */
+	EAttribute getVesselEvent_StartBy();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.MaintenanceEvent <em>Maintenance Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Maintenance Event</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.MaintenanceEvent
+	 * @generated
+	 */
+	EClass getMaintenanceEvent();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.DryDockEvent <em>Dry Dock Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Dry Dock Event</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DryDockEvent
+	 * @generated
+	 */
+	EClass getDryDockEvent();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent <em>Charter Out Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Charter Out Event</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent
+	 * @generated
+	 */
+	EClass getCharterOutEvent();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRelocateTo <em>Relocate To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Relocate To</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getRelocateTo()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EReference getCharterOutEvent_RelocateTo();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHeelOptions <em>Heel Options</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Heel Options</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getHeelOptions()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EReference getCharterOutEvent_HeelOptions();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getRepositioningFee <em>Repositioning Fee</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Repositioning Fee</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getRepositioningFee()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_RepositioningFee();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate <em>Hire Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Rate</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getHireRate()
+	 * @see #getCharterOutEvent()
+	 * @generated
+	 */
+	EAttribute getCharterOutEvent_HireRate();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.CharterOutEvent#getEndPort() <em>Get End Port</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get End Port</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.CharterOutEvent#getEndPort()
+	 * @generated
+	 */
+	EOperation getCharterOutEvent__GetEndPort();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.AssignableElement <em>Assignable Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Assignable Element</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement
+	 * @generated
+	 */
+	EClass getAssignableElement();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getAssignment <em>Assignment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Assignment</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#getAssignment()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EReference getAssignableElement_Assignment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Spot Index</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_SpotIndex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSequenceHint <em>Sequence Hint</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sequence Hint</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#getSequenceHint()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_SequenceHint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.AssignableElement#isLocked <em>Locked</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Locked</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.AssignableElement#isLocked()
+	 * @see #getAssignableElement()
+	 * @generated
+	 */
+	EAttribute getAssignableElement_Locked();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.VesselTypeGroup <em>Vessel Type Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Type Group</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselTypeGroup
+	 * @generated
+	 */
+	EClass getVesselTypeGroup();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.VesselTypeGroup#getVesselType <em>Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselTypeGroup#getVesselType()
+	 * @see #getVesselTypeGroup()
+	 * @generated
+	 */
+	EAttribute getVesselTypeGroup_VesselType();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3442,6 +5236,16 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getCargoType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Vessel Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.VesselType
+	 * @generated
+	 */
+	EEnum getVesselType();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -3482,14 +5286,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO__ALLOW_REWIRING = eINSTANCE.getCargo_AllowRewiring();
-
-		/**
-		 * The meta object literal for the '<em><b>Allowed Vessels</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO__ALLOWED_VESSELS = eINSTANCE.getCargo_AllowedVessels();
 
 		/**
 		 * The meta object literal for the '<em><b>Slots</b></em>' reference list feature.
@@ -3681,6 +5477,38 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot_RestrictedListsArePermissive();
 
 		/**
+		 * The meta object literal for the '<em><b>Hedges</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__HEDGES = eINSTANCE.getSlot_Hedges();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SLOT__ALLOWED_VESSELS = eINSTANCE.getSlot_AllowedVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Divertable</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__DIVERTABLE = eINSTANCE.getSlot_Divertable();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3765,6 +5593,14 @@ public interface CargoPackage extends EPackage {
 		EOperation SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getSlot__GetSlotOrContractRestrictedListsArePermissive();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Cancellation Fee</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = eINSTANCE.getSlot__GetSlotOrContractCancellationFee();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3808,6 +5644,14 @@ public interface CargoPackage extends EPackage {
 		EReference LOAD_SLOT__TRANSFER_FROM = eINSTANCE.getLoadSlot_TransferFrom();
 
 		/**
+		 * The meta object literal for the '<em><b>Sales Delivery Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__SALES_DELIVERY_TYPE = eINSTANCE.getLoadSlot_SalesDeliveryType();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegated CV</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * @since 8.0
@@ -3815,6 +5659,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation LOAD_SLOT___GET_SLOT_OR_DELEGATED_CV = eINSTANCE.getLoadSlot__GetSlotOrDelegatedCV();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Contract Delivery Type</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation LOAD_SLOT___GET_SLOT_OR_CONTRACT_DELIVERY_TYPE = eINSTANCE.getLoadSlot__GetSlotOrContractDeliveryType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
@@ -3940,6 +5792,30 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_MODEL__CARGO_GROUPS = eINSTANCE.getCargoModel_CargoGroups();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel Availabilities</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__VESSEL_AVAILABILITIES = eINSTANCE.getCargoModel_VesselAvailabilities();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Events</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__VESSEL_EVENTS = eINSTANCE.getCargoModel_VesselEvents();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Type Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_MODEL__VESSEL_TYPE_GROUPS = eINSTANCE.getCargoModel_VesselTypeGroups();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.SpotSlot <em>Spot Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3996,6 +5872,276 @@ public interface CargoPackage extends EPackage {
 		EReference CARGO_GROUP__CARGOES = eINSTANCE.getCargoGroup_Cargoes();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl <em>Vessel Availability</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselAvailability()
+		 * @generated
+		 */
+		EClass VESSEL_AVAILABILITY = eINSTANCE.getVesselAvailability();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__VESSEL = eINSTANCE.getVesselAvailability_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Time Charter Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__TIME_CHARTER_RATE = eINSTANCE.getVesselAvailability_TimeCharterRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Start At</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__START_AT = eINSTANCE.getVesselAvailability_StartAt();
+
+		/**
+		 * The meta object literal for the '<em><b>Start After</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__START_AFTER = eINSTANCE.getVesselAvailability_StartAfter();
+
+		/**
+		 * The meta object literal for the '<em><b>Start By</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__START_BY = eINSTANCE.getVesselAvailability_StartBy();
+
+		/**
+		 * The meta object literal for the '<em><b>End At</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__END_AT = eINSTANCE.getVesselAvailability_EndAt();
+
+		/**
+		 * The meta object literal for the '<em><b>End After</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__END_AFTER = eINSTANCE.getVesselAvailability_EndAfter();
+
+		/**
+		 * The meta object literal for the '<em><b>End By</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_AVAILABILITY__END_BY = eINSTANCE.getVesselAvailability_EndBy();
+
+		/**
+		 * The meta object literal for the '<em><b>Start Heel</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__START_HEEL = eINSTANCE.getVesselAvailability_StartHeel();
+
+		/**
+		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_AVAILABILITY__ENTITY = eINSTANCE.getVesselAvailability_Entity();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl <em>Vessel Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VesselEventImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselEvent()
+		 * @generated
+		 */
+		EClass VESSEL_EVENT = eINSTANCE.getVesselEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Duration In Days</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__DURATION_IN_DAYS = eINSTANCE.getVesselEvent_DurationInDays();
+
+		/**
+		 * The meta object literal for the '<em><b>Allowed Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__ALLOWED_VESSELS = eINSTANCE.getVesselEvent_AllowedVessels();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_EVENT__PORT = eINSTANCE.getVesselEvent_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Start After</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__START_AFTER = eINSTANCE.getVesselEvent_StartAfter();
+
+		/**
+		 * The meta object literal for the '<em><b>Start By</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_EVENT__START_BY = eINSTANCE.getVesselEvent_StartBy();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl <em>Maintenance Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.MaintenanceEventImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getMaintenanceEvent()
+		 * @generated
+		 */
+		EClass MAINTENANCE_EVENT = eINSTANCE.getMaintenanceEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl <em>Dry Dock Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.DryDockEventImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getDryDockEvent()
+		 * @generated
+		 */
+		EClass DRY_DOCK_EVENT = eINSTANCE.getDryDockEvent();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl <em>Charter Out Event</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.CharterOutEventImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getCharterOutEvent()
+		 * @generated
+		 */
+		EClass CHARTER_OUT_EVENT = eINSTANCE.getCharterOutEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Relocate To</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_EVENT__RELOCATE_TO = eINSTANCE.getCharterOutEvent_RelocateTo();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Options</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CHARTER_OUT_EVENT__HEEL_OPTIONS = eINSTANCE.getCharterOutEvent_HeelOptions();
+
+		/**
+		 * The meta object literal for the '<em><b>Repositioning Fee</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__REPOSITIONING_FEE = eINSTANCE.getCharterOutEvent_RepositioningFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_OUT_EVENT__HIRE_RATE = eINSTANCE.getCharterOutEvent_HireRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Get End Port</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation CHARTER_OUT_EVENT___GET_END_PORT = eINSTANCE.getCharterOutEvent__GetEndPort();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl <em>Assignable Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getAssignableElement()
+		 * @generated
+		 */
+		EClass ASSIGNABLE_ELEMENT = eINSTANCE.getAssignableElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Assignment</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ASSIGNABLE_ELEMENT__ASSIGNMENT = eINSTANCE.getAssignableElement_Assignment();
+
+		/**
+		 * The meta object literal for the '<em><b>Spot Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__SPOT_INDEX = eINSTANCE.getAssignableElement_SpotIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Sequence Hint</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__SEQUENCE_HINT = eINSTANCE.getAssignableElement_SequenceHint();
+
+		/**
+		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ASSIGNABLE_ELEMENT__LOCKED = eINSTANCE.getAssignableElement_Locked();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.impl.VesselTypeGroupImpl
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselTypeGroup()
+		 * @generated
+		 */
+		EClass VESSEL_TYPE_GROUP = eINSTANCE.getVesselTypeGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_TYPE_GROUP__VESSEL_TYPE = eINSTANCE.getVesselTypeGroup_VesselType();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.CargoType <em>Type</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4004,6 +6150,16 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CARGO_TYPE = eINSTANCE.getCargoType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.VesselType <em>Vessel Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.cargo.VesselType
+		 * @see com.mmxlabs.models.lng.cargo.impl.CargoPackageImpl#getVesselType()
+		 * @generated
+		 */
+		EEnum VESSEL_TYPE = eINSTANCE.getVesselType();
 
 	}
 

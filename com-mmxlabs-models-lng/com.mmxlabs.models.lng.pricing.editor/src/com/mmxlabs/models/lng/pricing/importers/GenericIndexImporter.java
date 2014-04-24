@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 import org.eclipse.emf.ecore.EClass;
@@ -89,7 +90,7 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 				}
 				try {
 					final Date date = dateParser.parseDate(s);
-					final Calendar c = Calendar.getInstance();
+					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 					c.setTime(date);
 					// Set back to start of month
 					c.set(Calendar.DAY_OF_MONTH, 1);

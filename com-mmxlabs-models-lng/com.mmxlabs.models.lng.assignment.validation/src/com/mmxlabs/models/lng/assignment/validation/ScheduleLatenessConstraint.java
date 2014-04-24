@@ -18,17 +18,15 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.fleet.editor.utils.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.fleet.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -45,14 +43,13 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-//		final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
+		// final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
 		if (target instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
 			final FleetModel fleetModel = scenarioModel.getFleetModel();
 			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
-			final ScenarioFleetModel scenarioFleetModel = scenarioModel.getPortfolioModel().getScenarioFleetModel();
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, scenarioFleetModel);
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
 
 			final List<Pair<AssignableElement, AssignableElement>> problems = new LinkedList<>();
 
@@ -95,7 +92,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			failure.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 		}
 	}
 
@@ -107,7 +104,7 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			failure.addEObjectAndFeature(vesselEvent, FleetPackage.eINSTANCE.getVesselEvent_StartAfter());
+			failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
 		}
 	}
 
@@ -115,11 +112,11 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 		if (uuidObject instanceof Cargo) {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
-			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
+			final Slot slot = sortedSlots.get(0);
 			return slot.getWindowStartWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy())));
+			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartBy())));
 			calendar.setTime(vesselEvent.getStartBy());
 			return calendar.getTime();
 		}
@@ -131,10 +128,13 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
-			return slot.getWindowEndWithSlotOrPortTime();
+			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+			cal.setTime(slot.getWindowStartWithSlotOrPortTime());
+			cal.add(Calendar.HOUR_OF_DAY, slot.getSlotOrPortDuration());
+			return cal.getTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
-			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartAfter())));
+			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartAfter())));
 			calendar.setTime(vesselEvent.getStartAfter());
 			return calendar.getTime();
 		}

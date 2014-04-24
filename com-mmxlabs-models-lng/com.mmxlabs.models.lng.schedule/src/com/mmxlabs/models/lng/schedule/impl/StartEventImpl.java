@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneralPNLDetails;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
@@ -41,6 +42,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  * </p>
@@ -110,6 +112,16 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
+
+	/**
+	 * The cached value of the '{@link #getGeneralPNLDetails() <em>General PNL Details</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGeneralPNLDetails()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<GeneralPNLDetails> generalPNLDetails;
 
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
@@ -283,6 +295,18 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<GeneralPNLDetails> getGeneralPNLDetails() {
+		if (generalPNLDetails == null) {
+			generalPNLDetails = new EObjectContainmentEList<GeneralPNLDetails>(GeneralPNLDetails.class, this, SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS);
+		}
+		return generalPNLDetails;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public SlotAllocation getSlotAllocation() {
 		if (slotAllocation != null && slotAllocation.eIsProxy()) {
 			InternalEObject oldSlotAllocation = (InternalEObject)slotAllocation;
@@ -345,6 +369,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return basicSetGroupProfitAndLoss(null, msgs);
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
+			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
+				return ((InternalEList<?>)getGeneralPNLDetails()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -368,6 +394,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return getGroupProfitAndLoss();
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return getGroupProfitAndLossNoTimeCharter();
+			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
+				return getGeneralPNLDetails();
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -400,6 +428,10 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
 				return;
+			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
+				getGeneralPNLDetails().clear();
+				getGeneralPNLDetails().addAll((Collection<? extends GeneralPNLDetails>)newValue);
+				return;
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
@@ -430,6 +462,9 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
 				return;
+			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
+				getGeneralPNLDetails().clear();
+				return;
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
@@ -455,6 +490,8 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return groupProfitAndLoss != null;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
 				return groupProfitAndLossNoTimeCharter != null;
+			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
+				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -490,6 +527,7 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			switch (derivedFeatureID) {
 				case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
 				case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+				case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
 		}
@@ -525,6 +563,7 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS;
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
+				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
 		}

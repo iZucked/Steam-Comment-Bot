@@ -37,7 +37,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 */
 	public static CommercialFactory init() {
 		try {
-			CommercialFactory theCommercialFactory = (CommercialFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/commercial/1/"); 
+			CommercialFactory theCommercialFactory = (CommercialFactory)EPackage.Registry.INSTANCE.getEFactory(CommercialPackage.eNS_URI);
 			if (theCommercialFactory != null) {
 				return theCommercialFactory;
 			}
@@ -73,6 +73,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case CommercialPackage.TAX_RATE: return createTaxRate();
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
+			case CommercialPackage.CONTRACT_EXPRESSION_MAP_ENTRY: return createContractExpressionMapEntry();
+			case CommercialPackage.SIMPLE_ENTITY_BOOK: return createSimpleEntityBook();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -180,6 +182,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public ExpressionPriceParameters createExpressionPriceParameters() {
 		ExpressionPriceParametersImpl expressionPriceParameters = new ExpressionPriceParametersImpl();
 		return expressionPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ContractExpressionMapEntry createContractExpressionMapEntry() {
+		ContractExpressionMapEntryImpl contractExpressionMapEntry = new ContractExpressionMapEntryImpl();
+		return contractExpressionMapEntry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SimpleEntityBook createSimpleEntityBook() {
+		SimpleEntityBookImpl simpleEntityBook = new SimpleEntityBookImpl();
+		return simpleEntityBook;
 	}
 
 	/**
