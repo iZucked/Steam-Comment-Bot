@@ -4,25 +4,18 @@
  */
 package com.mmxlabs.jobmanager.views;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -33,25 +26,17 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DropTargetAdapter;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.DropTargetListener;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ResourceTransfer;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
-import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
@@ -272,98 +257,6 @@ public class JobManagerView extends ViewPart {
 		}
 	};
 
-	private final DropTargetListener dropTargetListener = new DropTargetAdapter() {
-
-		@Override
-		public void dragOver(final DropTargetEvent event) {
-			// always indicate a copy
-			event.detail = DND.DROP_COPY;
-			event.feedback = DND.FEEDBACK_NONE;
-		}
-
-		@Override
-		public void dragOperationChanged(final DropTargetEvent event) {
-			// always indicate a copy
-			event.detail = DND.DROP_COPY;
-			event.feedback = DND.FEEDBACK_NONE;
-
-		}
-
-		@Override
-		public void dragEnter(final DropTargetEvent event) {
-			// always indicate a copy
-			event.detail = DND.DROP_COPY;
-			event.feedback = DND.FEEDBACK_NONE;
-
-		}
-
-		@Override
-		public void drop(final DropTargetEvent event) {
-
-			performDrop(event);
-		}
-
-		private void performDrop(final DropTargetEvent event) {
-
-			if (ResourceTransfer.getInstance().isSupportedType(event.currentDataType)) {
-				Assert.isTrue(event.data instanceof IResource[]);
-				final IResource[] files = (IResource[]) event.data;
-				final IRunnableWithProgress runnable = new IRunnableWithProgress() {
-
-					@Override
-					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
-
-						final IAdapterManager adapterManger = Platform.getAdapterManager();
-						monitor.beginTask("Create Jobs", files.length);
-						try {
-							for (int i = 0; i < files.length; i++) {
-
-								// Check to see if user has cancelled operation
-								if (monitor.isCanceled()) {
-									break;
-								}
-
-								final IResource res = files[i];
-								// Use adapter factory to create a new job instance.
-								final IJobDescriptor job = (IJobDescriptor) adapterManger.getAdapter(res, IJobDescriptor.class);
-
-								if (job != null) {
-
-									// Adapter may return an existing job for the resource .. so skip it
-									if (jobManager.getJobs().contains(job)) {
-										monitor.worked(1);
-										continue;
-									}
-
-									jobManager.submitJob(job, res);
-
-									// Hook in a listener to automatically dispose the job once it is no
-									// longer needed
-									jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-
-								}
-								monitor.worked(1);
-							}
-
-						} finally {
-							monitor.done();
-						}
-					}
-				};
-				// Run job modally in a progress dialog
-				final Display d = Display.getCurrent();
-				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(d.getActiveShell());
-				try {
-					dialog.run(true, true, runnable);
-				} catch (final InvocationTargetException e) {
-					Activator.error(e.getMessage(), e);
-				} catch (final InterruptedException e) {
-					Activator.error(e.getMessage(), e);
-				}
-			}
-		}
-	};
-
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
@@ -403,10 +296,6 @@ public class JobManagerView extends ViewPart {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-
-		final Transfer[] dropTransferTypes = new Transfer[] { ResourceTransfer.getInstance() };
-
-		viewer.addDropSupport(DND.DROP_COPY, dropTransferTypes, dropTargetListener);
 
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 

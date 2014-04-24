@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,9 +32,9 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
  * 
  */
 public abstract class AbstractEclipseJobControl implements IJobControl {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
-	
+
 	private class Runner extends Job {
 		public Runner(final String name) {
 			super(name);
@@ -122,6 +123,14 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			runner.setProperty(entry.getKey(), entry.getValue());
 		}
 		currentState = EJobState.CREATED;
+	}
+
+	public void setRule(ISchedulingRule rule) {
+		runner.setRule(rule);
+	}
+
+	public ISchedulingRule getRule() {
+		return runner.getRule();
 	}
 
 	private synchronized void setJobState(final EJobState newState) {

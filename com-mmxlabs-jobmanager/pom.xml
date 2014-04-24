@@ -27,7 +27,7 @@
 	</ciManagement>
 
 	<modules>
-		<module>target-definition</module>
+		<module>com.mmxlabs.jobmanager.target-definition</module>
 
 		<module>com.mmxlabs.jobmanager</module>
 		<module>com.mmxlabs.jobmanager.ui</module>
@@ -59,7 +59,7 @@
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.jobmanager</groupId>
-							<artifactId>target-definition</artifactId>
+							<artifactId>com.mmxlabs.jobmanager.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
