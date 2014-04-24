@@ -14,7 +14,14 @@ import java.io.OutputStream;
  */
 public final class KeyFileHeader {
 
-	public static final byte PASSWORD_TYPE__PROMPT = (byte) 0;
+	/**
+	 * Use default password built in to application
+	 */
+	public static final byte PASSWORD_TYPE__DEFAULT = (byte) 0;
+	/**
+	 * Prompt user for password
+	 */
+	public static final byte PASSWORD_TYPE__PROMPT = (byte) 1;
 
 	public static final byte VERSION__0 = (byte) 0;
 
