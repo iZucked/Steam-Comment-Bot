@@ -24,23 +24,33 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 public class MetamodelUtils {
 
 	public static EClass getEClass(final EPackage ePackage, final String className) {
-		return (EClass) ePackage.getEClassifier(className);
+		final EClass eClassifier = (EClass) ePackage.getEClassifier(className);
+		assert eClassifier != null;
+		return eClassifier;
 	}
 
 	public static EEnum getEEnum(final EPackage ePackage, final String className) {
-		return (EEnum) ePackage.getEClassifier(className);
+		final EEnum eClassifier = (EEnum) ePackage.getEClassifier(className);
+		assert eClassifier != null;
+		return eClassifier;
 	}
 
 	public static EStructuralFeature getStructuralFeature(final EClass eClass, final String featureName) {
-		return eClass.getEStructuralFeature(featureName);
+		final EStructuralFeature eStructuralFeature = eClass.getEStructuralFeature(featureName);
+		assert eStructuralFeature != null;
+		return eStructuralFeature;
 	}
 
 	public static EReference getReference(final EClass eClass, final String featureName) {
-		return (EReference) eClass.getEStructuralFeature(featureName);
+		final EReference eStructuralFeature = (EReference) eClass.getEStructuralFeature(featureName);
+		assert eStructuralFeature != null;
+		return eStructuralFeature;
 	}
 
 	public static EAttribute getAttribute(final EClass eClass, final String featureName) {
-		return (EAttribute) eClass.getEStructuralFeature(featureName);
+		final EAttribute eStructuralFeature = (EAttribute) eClass.getEStructuralFeature(featureName);
+		assert eStructuralFeature != null;
+		return eStructuralFeature;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -59,7 +69,9 @@ public class MetamodelUtils {
 	 */
 	public static EEnumLiteral getEEnum_Literal(final EEnum eEnum, final String literal) {
 
-		return eEnum.getEEnumLiteral(literal);
+		final EEnumLiteral eEnumLiteral = eEnum.getEEnumLiteral(literal);
+		assert eEnumLiteral != null;
+		return eEnumLiteral;
 	}
 
 	/**
@@ -71,7 +83,9 @@ public class MetamodelUtils {
 	 * @return
 	 * @since 2.0
 	 */
-	public static EDataType getEDataType(EPackage ePackage, String dataTypeName) {
-		return (EDataType) ePackage.getEClassifier(dataTypeName);
+	public static EDataType getEDataType(final EPackage ePackage, final String dataTypeName) {
+		final EDataType eClassifier = (EDataType) ePackage.getEClassifier(dataTypeName);
+		assert eClassifier != null;
+		return eClassifier;
 	}
 }

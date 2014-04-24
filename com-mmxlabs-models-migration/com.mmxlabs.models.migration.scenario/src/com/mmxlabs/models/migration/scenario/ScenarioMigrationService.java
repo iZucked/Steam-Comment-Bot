@@ -10,6 +10,7 @@ import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * @since 2.0
@@ -17,6 +18,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 public class ScenarioMigrationService implements IScenarioMigrationService {
 
 	private IMigrationRegistry migrationRegistry;
+	private IScenarioCipherProvider scenarioCipherProvider;
 
 	@Override
 	public void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
@@ -37,9 +39,9 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 
 			if (latestVersion < 0 || scenarioVersion < latestVersion) {
 
-				final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry());
+				final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry(), getScenarioCipherProvider());
 				// Disable for now, fix up later
-				 migrator.performMigration(scenarioService, scenarioInstance);
+				migrator.performMigration(scenarioService, scenarioInstance);
 			}
 		}
 	}
@@ -50,5 +52,13 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 
 	public void setMigrationRegistry(final IMigrationRegistry migrationRegistry) {
 		this.migrationRegistry = migrationRegistry;
+	}
+
+	public IScenarioCipherProvider getScenarioCipherProvider() {
+		return scenarioCipherProvider;
+	}
+
+	public void setScenarioCipherProvider(IScenarioCipherProvider scenarioCipherProvider) {
+		this.scenarioCipherProvider = scenarioCipherProvider;
 	}
 }

@@ -11,4 +11,5 @@
    <service>
       <provide interface="com.mmxlabs.scenario.service.IScenarioMigrationService"/>
    </service>
+   <reference bind="setScenarioCipherProvider" cardinality="0..1" interface="com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider" name="IScenarioCipherProvider" policy="dynamic"/>
 </scr:component>

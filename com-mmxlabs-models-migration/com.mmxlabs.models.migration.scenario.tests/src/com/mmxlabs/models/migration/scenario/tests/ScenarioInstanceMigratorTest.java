@@ -20,6 +20,7 @@ import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.scenario.ScenarioInstanceMigrator;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 public class ScenarioInstanceMigratorTest {
 
@@ -27,6 +28,7 @@ public class ScenarioInstanceMigratorTest {
 	public void migrationTest() throws Exception {
 
 		final IMigrationRegistry migrationRegistry = Mockito.mock(IMigrationRegistry.class);
+		final IScenarioCipherProvider scenarioCipherProvider = Mockito.mock(IScenarioCipherProvider.class);
 
 		final URI tmpURI = URI.createURI("migration");
 
@@ -48,7 +50,7 @@ public class ScenarioInstanceMigratorTest {
 
 		when(migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion)).thenReturn(units);
 
-		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry);
+		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry, scenarioCipherProvider);
 		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURI);
 
 		final InOrder order = inOrder(unit1, unit2);

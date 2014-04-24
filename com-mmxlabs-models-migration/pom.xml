@@ -27,7 +27,7 @@
 	</ciManagement>
 
 	<modules>
-		<module>target-definition</module>
+		<module>com.mmxlabs.models.migration.target-definition</module>
 		<module>com.mmxlabs.models.migration</module>
 
 		<module>com.mmxlabs.models.migration.scenario</module>
@@ -59,7 +59,7 @@
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.models.migration</groupId>
-							<artifactId>target-definition</artifactId>
+							<artifactId>com.mmxlabs.models.migration.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
