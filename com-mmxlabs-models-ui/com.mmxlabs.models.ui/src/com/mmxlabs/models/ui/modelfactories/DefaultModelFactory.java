@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
@@ -125,7 +126,7 @@ public class DefaultModelFactory implements IModelFactory {
 
 		addSelectionToInstance(output.eClass(), output, selection);
 
-		final Calendar nowCal = Calendar.getInstance();
+		final Calendar nowCal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		nowCal.clear(Calendar.MILLISECOND);
 		nowCal.clear(Calendar.SECOND);
 		nowCal.clear(Calendar.MINUTE);

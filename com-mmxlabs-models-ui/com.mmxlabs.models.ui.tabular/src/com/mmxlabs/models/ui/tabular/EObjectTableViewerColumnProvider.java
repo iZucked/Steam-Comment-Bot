@@ -9,6 +9,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -81,9 +83,55 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 				return getMessages(s);
 			}
 		}
+		
+		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
+			final String toolTip = this.eObjectTableViewer.delegateToolTipProvider.getToolTipText(element);
+			if (toolTip != null) {
+				return toolTip;
+			}
+		}
+
 		return super.getToolTipText(element);
 	}
 
+	@Override
+	public int getToolTipDisplayDelayTime(Object object) {
+		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
+			return this.eObjectTableViewer.delegateToolTipProvider.getToolTipDisplayDelayTime(object);
+		}
+		return super.getToolTipDisplayDelayTime(object);
+	}
+	
+	@Override
+	public Image getToolTipImage(Object object) {
+		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
+			final Image im = this.eObjectTableViewer.delegateToolTipProvider.getToolTipImage(object);
+			if(im!=null){
+				return im;
+			}
+		}
+		return super.getToolTipImage(object);
+	}
+	
+	@Override
+	public Point getToolTipShift(Object object) {
+		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
+			Point p = this.eObjectTableViewer.delegateToolTipProvider.getToolTipShift(object);
+			if(p!=null){
+				return p;
+			}
+		}		
+		return super.getToolTipShift(object);
+	}
+	
+	@Override
+	public int getToolTipTimeDisplayed(Object object) {
+		if (this.eObjectTableViewer.delegateToolTipProvider != null) {
+			return this.eObjectTableViewer.delegateToolTipProvider.getToolTipTimeDisplayed(object);
+		}
+		return super.getToolTipTimeDisplayed(object);
+	}
+	
 	/**
 	 * Extract message hierarchy and construct the tool tip message.
 	 * 

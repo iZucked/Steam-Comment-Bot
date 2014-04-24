@@ -21,11 +21,6 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -33,10 +28,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 
 /**
@@ -121,7 +116,7 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		this.input = input;
 		this.ranges = range;
 		if (input != null) {
@@ -157,7 +152,7 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 				label.setText(labelText);
 		}
 
-		firePostDisplay(location, context, input, range);
+		firePostDisplay(dialogContext, context, input, range);
 	}
 
 	/**
@@ -520,11 +515,11 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 		}
 	}
 
-	private void firePostDisplay(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	private void firePostDisplay(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<IInlineEditorExternalNotificationListener>(listeners);
 		for (final IInlineEditorExternalNotificationListener l : copy) {
 			try {
-				l.postDisplay(this, location, context, input, range);
+				l.postDisplay(this, dialogContext, context, input, range);
 			} catch (final Exception e) {
 				log.error(e.getMessage(), e);
 			}

@@ -40,10 +40,10 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 
@@ -128,12 +128,15 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	private IItemPropertyDescriptor propertyDescriptor;
 
+	protected MMXRootObject rootObject;
+
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject rootObject, final EObject input, final Collection<EObject> range) {
+		this.rootObject = rootObject;
 		if (this.input != null) {
 			this.input.eAdapters().remove(this);
 		}
@@ -189,7 +192,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 		setControlsEnabled(!isFeatureReadonly() && isEditorEnabled());
 
-		firePostDisplay(location, context, input, range);
+		firePostDisplay(dialogContext, rootObject, input, range);
 	}
 
 	/**
@@ -395,6 +398,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	protected Object getValue() {
+		// May be null if control is hidden/disabled, but external code has still triggered a refresh
+		if (input == null) {
+			return null;
+		}
 		return input.eGet(feature);
 	}
 
@@ -553,11 +560,11 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 	}
 
-	private void firePostDisplay(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	private void firePostDisplay(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<IInlineEditorExternalNotificationListener>(listeners);
 		for (final IInlineEditorExternalNotificationListener l : copy) {
 			try {
-				l.postDisplay(this, location, context, input, range);
+				l.postDisplay(this, dialogContext, context, input, range);
 			} catch (final Exception e) {
 				log.error(e.getMessage(), e);
 			}

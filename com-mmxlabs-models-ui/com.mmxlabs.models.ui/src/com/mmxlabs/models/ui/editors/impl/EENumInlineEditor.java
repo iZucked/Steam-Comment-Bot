@@ -17,7 +17,19 @@ public class EENumInlineEditor extends ValueListInlineEditor {
 	public EENumInlineEditor(EAttribute feature) {
 		super(feature, getValues((EEnum) feature.getEAttributeType()));
 	}
+	
+	/**
+	 * Create from a list of String/Enum Object pairs { label1, enum1, lable2, enum2....}
+	 * 
+	 * @param feature
+	 * @param elements
+	 */
+	public EENumInlineEditor(EAttribute feature, Object... elements) {
+		super(feature, createPairList(elements));
+	}
 
+	
+	
 	private static List<Pair<String, Object>> getValues(final EEnum eenum) {
 		final LinkedList<Pair<String, Object>> values = new LinkedList<Pair<String, Object>>();
 		for (final EEnumLiteral literal : eenum.getELiterals()) {

@@ -35,12 +35,20 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 	}
 
 	public void hookExisting(final IScenarioService scenarioService) {
-		hookExisting(scenarioService.getServiceModel());
+		new Thread() {
+			@Override
+			public void run() {
+				hookExisting(scenarioService.getServiceModel());
+			}
+		}.start();
 	}
 
 	public void hookExisting(final IValidationService validationService) {
-		for (final ScenarioInstanceValidator validator : instanceMap.values()) {
-			validator.setValidationService(validationService);
+		synchronized (instanceMap) {
+
+			for (final ScenarioInstanceValidator validator : instanceMap.values()) {
+				validator.setValidationService(validationService);
+			}
 		}
 	}
 
@@ -49,10 +57,14 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 			if (c instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 				if (scenarioInstance.getInstance() != null) {
-					final ScenarioInstanceValidator validator = new ScenarioInstanceValidator(scenarioInstance);
-					instanceMap.put(scenarioInstance, validator);
-					validator.setValidationService(validationService);
-					validator.performValidation();
+					synchronized (instanceMap) {
+						if (!instanceMap.containsKey(scenarioInstance)) {
+							final ScenarioInstanceValidator validator = new ScenarioInstanceValidator(scenarioInstance);
+							instanceMap.put(scenarioInstance, validator);
+							validator.setValidationService(validationService);
+							validator.performValidation();
+						}
+					}
 				}
 			}
 			hookExisting(c);
@@ -61,10 +73,14 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 
 	@Override
 	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-		final ScenarioInstanceValidator validator = new ScenarioInstanceValidator(scenarioInstance);
-		validator.setValidationService(validationService);
-		instanceMap.put(scenarioInstance, validator);
-		validator.performValidation();
+		synchronized (instanceMap) {
+			if (!instanceMap.containsKey(scenarioInstance)) {
+				final ScenarioInstanceValidator validator = new ScenarioInstanceValidator(scenarioInstance);
+				validator.setValidationService(validationService);
+				instanceMap.put(scenarioInstance, validator);
+				validator.performValidation();
+			}
+		}
 	}
 
 	@Override
@@ -74,11 +90,14 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-		final ScenarioInstanceValidator validator = instanceMap.get(scenarioInstance);
-		if (validator != null) {
-			validator.dispose();
+		synchronized (instanceMap) {
+
+			final ScenarioInstanceValidator validator = instanceMap.get(scenarioInstance);
+			if (validator != null) {
+				validator.dispose();
+			}
+			instanceMap.remove(scenarioInstance);
 		}
-		instanceMap.remove(scenarioInstance);
 	}
 
 	public void dispose() {

@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -29,6 +30,25 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class ValueListInlineEditor extends UnsettableInlineEditor {
+	
+	/**
+	 * Create a new List<Pair<String, Object>> from the list of elements. This method assumes an even number of elements 
+	 * in the form { label1, enum1, label2, enum2...}
+	 * 
+	 * @param elements
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected static List<Pair<String, Object>> createPairList(Object[] elements) {
+		final LinkedList<Pair<String, Object>> pairList = new LinkedList<Pair<String, Object>>();
+		for (int i = 0; i < elements.length; i += 2) {
+			final String key = (String) elements[i];
+			final Object value = (Object) elements[i + 1];
+			pairList.add(new Pair<String, Object>(key, value));
+		}		
+		return pairList;
+	}
+
 	private Combo combo;
 
 	private final List<String> names;

@@ -33,19 +33,20 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
 public abstract class DetailPropertiesView extends ViewPart {
 
-	private GridTreeViewer viewer;
+	protected GridTreeViewer viewer;
 	private ISelectionListener selectionListener;
 
 	private final String category;
 	private final String helpContextId;
-	
-	boolean showUnitsInColumn;
+
+	private boolean showUnitsInColumn;
+	private Action packColumnsAction;
 
 	protected DetailPropertiesView(@NonNull final String category) {
 		this(category, null, true);
 	}
 
-	protected DetailPropertiesView(@NonNull final String category, @Nullable final String helpContextId, boolean showUnitsInSeparateColumn) {
+	protected DetailPropertiesView(@NonNull final String category, @Nullable final String helpContextId, final boolean showUnitsInSeparateColumn) {
 		this.category = category;
 		this.helpContextId = helpContextId;
 		showUnitsInColumn = showUnitsInSeparateColumn;
@@ -60,12 +61,11 @@ public abstract class DetailPropertiesView extends ViewPart {
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(true);
 		viewer.setAutoExpandLevel(AbstractTreeViewer.ALL_LEVELS);
-		
+
 		viewer.setContentProvider(createContentProvider());
 
 		ColumnViewerToolTipSupport.enableFor(viewer);
 
-		
 		// TODO: Units presentation options probably need to be refactored and customisable at the concrete instance.
 		boolean showDimensionedValue = !showUnitsInColumn;
 		// Create columns
@@ -81,10 +81,10 @@ public abstract class DetailPropertiesView extends ViewPart {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Value");
 			gvc.getColumn().setWidth(100);
-			
+
 			gvc.setLabelProvider(createLabelProvider(showDimensionedValue ? DetailPropertyColumnType.DIMENSIONED_VALUE : DetailPropertyColumnType.VALUE, gvc));
 		}
-		if(showUnitsInColumn){
+		if (showUnitsInColumn) {
 			final GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 			gvc.getColumn().setText("Units");
 			gvc.getColumn().setWidth(50);
@@ -104,13 +104,17 @@ public abstract class DetailPropertiesView extends ViewPart {
 
 		// Initial selection
 		{
-			selectionListener.selectionChanged(null, getSite().getPage().getSelection());
+			updateFromSelection();
 		}
 
 	}
 
+	protected void updateFromSelection() {
+		selectionListener.selectionChanged(null, getSite().getPage().getSelection());
+	}
+
 	protected void makeActions() {
-		final Action packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
+		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		final Action copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
@@ -122,10 +126,11 @@ public abstract class DetailPropertiesView extends ViewPart {
 
 	@Override
 	public void dispose() {
+		removeAdapters();
+
 		if (selectionListener != null) {
 			getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(selectionListener);
 		}
-
 		super.dispose();
 	}
 
@@ -143,9 +148,22 @@ public abstract class DetailPropertiesView extends ViewPart {
 					// Ignore
 					return;
 				}
-				viewer.setInput(adaptSelection(selection));
+
+				removeAdapters();
+				final Collection<?> adaptSelection = adaptSelection(selection);
+				viewer.setInput(adaptSelection);
+				hookAdapters(adaptSelection);
+				if (packColumnsAction != null) {
+					packColumnsAction.run();
+				}
+
 			}
+
 		};
+	}
+
+	protected void refresh() {
+		selectionListener.selectionChanged(null, getSite().getPage().getSelection());
 	}
 
 	protected CellLabelProvider createLabelProvider(final DetailPropertyColumnType columnType, final GridViewerColumn gvc) {
@@ -165,4 +183,13 @@ public abstract class DetailPropertiesView extends ViewPart {
 		return Collections.emptySet();
 
 	}
+
+	protected void hookAdapters(final Collection<?> adaptSelection) {
+
+	}
+
+	protected void removeAdapters() {
+
+	}
+
 }

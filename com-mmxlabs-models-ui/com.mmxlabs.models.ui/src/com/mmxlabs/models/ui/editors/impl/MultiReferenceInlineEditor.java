@@ -6,6 +6,7 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
@@ -31,7 +32,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
@@ -42,7 +43,7 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
  * @author Tom Hinton
  * 
  */
-public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
+public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 	private IReferenceValueProvider valueProvider;
 	private Label theLabel;
 	private Button button;
@@ -58,16 +59,21 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
-		super.display(location, context, input, range);
+		super.display(dialogContext, context, input, range);
 	}
 
-	/**
-	 * @since 6.0
-	 */
+
+
+
 	@Override
-	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+	protected Object getInitialUnsetValue() {
+		return Collections.emptyList();
+	}
+	
+	@Override
+	protected Control createValueControl(final Composite parent) {
 		final Composite buttonAndLabel = toolkit.createComposite(parent);
 		final GridLayout gl = new GridLayout(2, false);
 		buttonAndLabel.setLayout(gl);
@@ -102,7 +108,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected void updateDisplay(final Object value) {
+	protected void updateValueDisplay(final Object value) {
 		if (theLabel == null || theLabel.isDisposed()) {
 			return;
 		}

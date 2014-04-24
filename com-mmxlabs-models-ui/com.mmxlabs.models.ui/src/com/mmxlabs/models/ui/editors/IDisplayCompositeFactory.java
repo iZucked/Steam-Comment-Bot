@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 /**
  * Interface for factories which will create composites for displaying model objects.
@@ -29,7 +29,7 @@ public interface IDisplayCompositeFactory {
 	 * @return
 	 * @since 6.0
 	 */
-	IDisplayComposite createToplevelComposite(Composite composite, EClass eClass, IScenarioEditingLocation location, FormToolkit toolkit);
+	IDisplayComposite createToplevelComposite(Composite composite, EClass eClass, IDialogEditingContext context, FormToolkit toolkit);
 
 	/**
 	 * This is for creating a composite which can be displayed within a top level composite somewhere; it should just handle the direct fields on the eClass, not any contained classes.
@@ -38,7 +38,7 @@ public interface IDisplayCompositeFactory {
 	 * @return
 	 * @since 6.0
 	 */
-	IDisplayComposite createSublevelComposite(Composite composite, EClass eClass, IScenarioEditingLocation location, FormToolkit toolkit);
+	IDisplayComposite createSublevelComposite(Composite composite, EClass eClass, IDialogEditingContext context, FormToolkit toolkit);
 
 	/**
 	 * This is for asking what non-contained objects a composite can edit on this value.

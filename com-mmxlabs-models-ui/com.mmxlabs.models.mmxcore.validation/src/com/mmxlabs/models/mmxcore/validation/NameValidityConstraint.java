@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.mmxcore.validation;
 
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -33,9 +32,10 @@ public class NameValidityConstraint extends AbstractModelConstraint {
 
 		return ctx.createSuccessStatus();
 	}
-	
+
 	/**
 	 * Check whether the given attribute on the target object is null, empty, or whitespace. If it is any of these, error out
+	 * 
 	 * @param target
 	 * @param attribute
 	 * @param ctx
@@ -43,15 +43,19 @@ public class NameValidityConstraint extends AbstractModelConstraint {
 	 */
 	private IStatus validate(final EObject target, final EAttribute attribute, final IValidationContext ctx) {
 		final String name = (String) target.eGet(attribute);
-		
+
 		if (name == null || name.trim().isEmpty()) {
-			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-					(IConstraintStatus) ctx.createFailureStatus(target
-							.eClass().getName(), attribute.getName()));
+			final String msg = String.format("%s has an invalid %s - the %s must not be empty or composed of whitespace.", target.eClass().getName(), attribute.getName(), attribute.getName());
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+			dsd.addEObjectAndFeature(target, attribute);
+			return dsd;
+		} else if (!name.equals(name.trim())) {
+			final String msg = String.format("%s has an invalid %s -  remove leading and trailing whitespace.", target.eClass().getName(), attribute.getName());
+			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 			dsd.addEObjectAndFeature(target, attribute);
 			return dsd;
 		}
-		
+
 		return ctx.createSuccessStatus();
 	}
 }

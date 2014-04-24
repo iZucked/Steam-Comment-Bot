@@ -102,7 +102,7 @@ public class MMXObjectEquivalance {
 		} else if (o2.getName() == null) {
 			return false;
 		} else {
-			return o1.getName().equals(o2.getName());
+			return o1.getName().trim().equals(o2.getName().trim());
 		}
 	}
 
@@ -122,14 +122,19 @@ public class MMXObjectEquivalance {
 		final Set<String> names1 = new HashSet<String>();
 		final Set<String> names2 = new HashSet<String>();
 
-		names1.add(o1.getName());
-		names1.addAll(o1.getOtherNames());
-
-		names2.add(o2.getName());
-		names2.addAll(o2.getOtherNames());
-
+		if (o1.getName() != null) {
+			names1.add(o1.getName().trim());
+		}
+		for (final String n : o1.getOtherNames()) {
+			names1.add(n.trim());
+		}
+		if (o2.getName() != null) {
+			names2.add(o2.getName().trim());
+		}
+		for (final String n : o2.getOtherNames()) {
+			names2.add(n.trim());
+		}
 		names1.retainAll(names2);
-		names1.remove(null);
 
 		// If not empty, then we have a match!
 		return !names1.isEmpty();

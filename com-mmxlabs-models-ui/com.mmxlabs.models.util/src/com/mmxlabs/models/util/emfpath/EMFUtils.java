@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -265,7 +266,7 @@ public class EMFUtils {
 	 * @return the input
 	 */
 	public static EObject fixNullDates(final EObject input) {
-		final Calendar calendar = Calendar.getInstance();
+		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		calendar.setTime(new Date());
 		calendar.clear(Calendar.MINUTE);
 		calendar.clear(Calendar.SECOND);

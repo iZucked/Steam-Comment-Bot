@@ -108,7 +108,8 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 		final Object value = super.getValue(object);
 		final int x = valueList.indexOf(value);
 		if (x == -1) {
-			log.warn(String.format("Index of %s (value: %s) to be selected is -1, so it is not a legal option in the control", object, value));
+			// Ignore warning - this can happen where there is no existing selection
+//			log.warn(String.format("Index of %s (value: %s) to be selected is -1, so it is not a legal option in the control", object, value));
 		}
 		return x;
 	}
