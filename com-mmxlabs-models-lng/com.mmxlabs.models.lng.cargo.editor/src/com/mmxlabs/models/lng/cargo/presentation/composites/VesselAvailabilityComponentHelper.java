@@ -88,7 +88,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_timeCharterRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		 detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__TIME_CHARTER_RATE));
 	}
 	/**
 	 * Create the editor for the startAt feature on VesselAvailability

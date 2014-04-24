@@ -692,7 +692,7 @@
                   </target>
                </constraint>
                <constraint
-                     class="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
+                     class="com.mmxlabs.models.lng.cargo.validation.DivertibleSlotConstraint"
                      id="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
                      isEnabledByDefault="true"
                      lang="java"

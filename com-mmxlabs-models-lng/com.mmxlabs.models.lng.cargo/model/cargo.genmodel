@@ -49,6 +49,8 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/cargo"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/pricingDate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/notes"/>
+      <genFeatures createChild="false" propertyDescription="Is this slot divertible to a different market?"
+          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/divertible"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/shippingDaysRestriction"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/entity"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/restrictedContracts"/>
@@ -57,8 +59,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/hedges"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//Slot/allowedVessels"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/cancellationFee"/>
-      <genFeatures createChild="false" propertyDescription="Is this slot divertable to a different market?"
-          ecoreFeature="ecore:EAttribute cargo.ecore#//Slot/divertable"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrPortDuration"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractMinQuantity"/>
       <genOperations ecoreOperation="cargo.ecore#//Slot/getSlotOrContractMaxQuantity"/>

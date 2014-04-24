@@ -984,7 +984,7 @@ public class CargoEditorMenuHelper {
 						cal.setTime(source.getWindowStartWithSlotOrPortTime());
 
 						// Take into account travel time
-						if (loadSlot.isDESPurchase() && loadSlot.isDivertable()) {
+						if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getAssignment());
 							cal.add(Calendar.HOUR_OF_DAY, travelTime);
 							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
@@ -1227,7 +1227,7 @@ public class CargoEditorMenuHelper {
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					} else {
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.SLOT__DIVERTABLE, Boolean.TRUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), loadSlot, CargoPackage.Literals.SLOT__DIVERTIBLE, Boolean.TRUE));
 
 						final Cargo cargo = loadSlot.getCargo();
 						if (cargo != null) {
@@ -1245,7 +1245,7 @@ public class CargoEditorMenuHelper {
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					} else {
-						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.SLOT__DIVERTABLE, Boolean.TRUE));
+						cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSlot, CargoPackage.Literals.SLOT__DIVERTIBLE, Boolean.TRUE));
 						final Cargo cargo = dischargeSlot.getCargo();
 						if (cargo != null) {
 							cmd.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));

@@ -416,6 +416,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSlot_Divertible() {
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -480,15 +489,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 */
 	public EAttribute getSlot_CancellationFee() {
 		return (EAttribute)slotEClass.getEStructuralFeatures().get(21);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSlot_Divertable() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(13);
 	}
 
 	/**
@@ -1245,7 +1245,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(slotEClass, SLOT__CARGO);
 		createEAttribute(slotEClass, SLOT__PRICING_DATE);
 		createEAttribute(slotEClass, SLOT__NOTES);
-		createEAttribute(slotEClass, SLOT__DIVERTABLE);
+		createEAttribute(slotEClass, SLOT__DIVERTIBLE);
 		createEAttribute(slotEClass, SLOT__SHIPPING_DAYS_RESTRICTION);
 		createEReference(slotEClass, SLOT__ENTITY);
 		createEReference(slotEClass, SLOT__RESTRICTED_CONTRACTS);
@@ -1436,7 +1436,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getSlot_Cargo(), this.getCargo(), this.getCargo_Slots(), "cargo", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_PricingDate(), ecorePackage.getEDate(), "pricingDate", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_Divertable(), ecorePackage.getEBoolean(), "divertable", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlot_Divertible(), ecorePackage.getEBoolean(), "divertible", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_ShippingDaysRestriction(), ecorePackage.getEInt(), "shippingDaysRestriction", null, 0, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_RestrictedContracts(), theCommercialPackage.getContract(), null, "restrictedContracts", null, 0, -1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
