@@ -28,8 +28,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+
 import com.google.common.io.ByteStreams;
-import com.google.common.util.concurrent.AbstractScheduledService;
 import com.mmxlabs.lingo.app.headless.exporter.FitnessTraceExporter;
 import com.mmxlabs.lingo.app.headless.exporter.IRunExporter;
 import com.mmxlabs.lingo.app.headless.internal.Activator;
@@ -47,6 +47,7 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * Note duplication with various bits of ITS including ScenarioRunner and MigrationHelper
@@ -79,7 +80,8 @@ public class HeadlessApplication implements IApplication {
 			return IApplication.EXIT_OK;
 		}
 
-		final LNGScenarioModel rootObject = loadScenario(scenarioFile);
+		final IScenarioCipherProvider scenarioCipherProvider = null;
+		final LNGScenarioModel rootObject = loadScenario(scenarioFile, scenarioCipherProvider);
 		if (rootObject == null) {
 			System.err.println("Unable to load scenario");
 			return IApplication.EXIT_OK;
@@ -162,10 +164,10 @@ public class HeadlessApplication implements IApplication {
 
 	}
 
-	private LNGScenarioModel loadScenario(final String scenarioFile) throws IOException {
+	private LNGScenarioModel loadScenario(final String scenarioFile, final IScenarioCipherProvider scenarioCipherProvider) throws IOException {
 
 		// Create instance and preload scenario.
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createFileURI(scenarioFile), false);
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createFileURI(scenarioFile), scenarioCipherProvider);
 
 		if (instance == null) {
 			return null;
@@ -237,9 +239,9 @@ public class HeadlessApplication implements IApplication {
 		options.addOption("data", true, "(OSGi) OSGi instance area");
 		options.addOption(OptionBuilder.withLongOpt("debug").withDescription("[options file] (OSGi) debug mode").hasOptionalArg().create());
 		options.addOption(OptionBuilder.withLongOpt("dev").withDescription("[entires] (OSGi) dev mode").hasOptionalArg().create());
-//		options.addOption("eclipse.keyring", true, "(Equinox) Set to override location of the default secure storage");
-//		options.addOption("eclipse.password", true,
-//				"(Equinox) If specified, the secure storage treats contents of the file as a default password. When not set, password providers are used to obtain a password.");
+		// options.addOption("eclipse.keyring", true, "(Equinox) Set to override location of the default secure storage");
+		// options.addOption("eclipse.password", true,
+		// "(Equinox) If specified, the secure storage treats contents of the file as a default password. When not set, password providers are used to obtain a password.");
 		options.addOption("feature", true, "(Equinox) equivalent to setting eclipse.product to <feature id>");
 		options.addOption("framework", true, "(Equinox) equivalent to setting osgi.framework to <location>");
 		options.addOption(

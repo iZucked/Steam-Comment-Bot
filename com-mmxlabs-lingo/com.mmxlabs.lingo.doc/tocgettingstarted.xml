@@ -7,11 +7,14 @@
 -->
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Getting Started" link_to="toc.xml#gettingstarted"> 
-	<topic label="Main Topic"  href="html/gettingstarted/maintopic.html"> 
-		<topic label="Sub Topic" href="html/gettingstarted/subtopic.html" /> 
-	</topic>
-	<topic label="Main Topic 2">
-		<topic label="Sub Topic 2" href="html/gettingstarted/subtopic2.html" />
+<toc label="Getting Started" link_to="toc.xml#gettingstarted">
+	<topic href="html/gettingstarted/overview/applicationoverview.html" label="Application Overview">
+		<topic label="Data Perspective" href="html/gettingstarted/overview/dataperspective.html" />
+  <topic href="html/gettingstarted/overview/analysisperspective.html" label="Analysis Perspective">
+  </topic>
+  <topic href="html/gettingstarted/overview/scenarionavigator.html" label="Scenario Navigator">
+  </topic>
+	</topic> 
+	<topic label="New Scenario"  href="html/gettingstarted/newscenario/newscenario.html"> 
 	</topic> 
 </toc>

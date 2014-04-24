@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.feature"
       label="Lingo"
-      version="3.2.1.qualifier"
+      version="3.3.0.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.lingo.app">
 
@@ -70,6 +70,14 @@
 
    <includes
          id="com.mmxlabs.scheduler.optimiser.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.optimiser.feature"
+         version="0.0.0"/>
+
+   <includes
+         id="com.mmxlabs.common.util.feature"
          version="0.0.0"/>
 
    <plugin

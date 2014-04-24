@@ -15,15 +15,21 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.lingo.its.internal.Activator;
+import com.mmxlabs.lingo.its.tests.AbstractOptimisationResultTester;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.scenario.ScenarioMigrationService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 public class MigrationHelper {
 	private static class TestScenarioService extends AbstractScenarioService {
@@ -52,22 +58,24 @@ public class MigrationHelper {
 		}
 
 		@Override
-		public void moveInto(List<Container> elements, Container destination) {
+		public void moveInto(final List<Container> elements, final Container destination) {
 			
 		}
 
 		@Override
-		public void makeFolder(Container parent, String name) {
+		public void makeFolder(final Container parent, final String name) {
 			
 		}
 
 	}
 
-	public static void migrateAndLoad(final ScenarioInstance instance) throws IOException {
+	public static File migrateAndLoad(final ScenarioInstance instance) throws IOException {
 		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 
 		final ScenarioMigrationService migrationService = new ScenarioMigrationService();
 		migrationService.setMigrationRegistry(migrationRegistry);
+		final IScenarioCipherProvider scenarioCipherProvider = getScenarioCipherProvider();
+		migrationService.setScenarioCipherProvider(scenarioCipherProvider);
 
 		// ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry);
 		final TestScenarioService scenarioService = new TestScenarioService("Test");
@@ -80,7 +88,9 @@ public class MigrationHelper {
 
 		// migrator.performMigration(ss, instance);
 		scenarioService.setScenarioMigrationService(migrationService);
+		scenarioService.setScenarioCipherProvider(scenarioCipherProvider);
 
+		final File f;
 		{
 
 			final String subModelURI = instance.getRootObjectURI();
@@ -91,7 +101,7 @@ public class MigrationHelper {
 			final URI uri = scenarioService.resolveURI(subModelURI);
 			// Copy data files for manipulation
 			assert uri != null;
-			final File f = File.createTempFile("migration", ".xmi");
+			f = File.createTempFile("migration", ".xmi");
 			// Create a temp file and generate a URI to it to pass into migration code.
 			final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
 			assert tmpURI != null;
@@ -107,6 +117,8 @@ public class MigrationHelper {
 		}
 
 		scenarioService.load(instance);
+		
+		return f;
 	}
 
 	@SuppressWarnings("resource")
@@ -137,4 +149,15 @@ public class MigrationHelper {
 			}
 		}
 	}
+	
+	@Nullable
+	private static IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
+	}
+
 }

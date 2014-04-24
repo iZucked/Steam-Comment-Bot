@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="How Tos" link_to="toc.xml#howtos"> 
+	<topic label="Import from CSV"  href="html/howtos/importfromcsv.html"> 
+	</topic>
+	<topic href="html/howtos/exporttocsv.html" label="Export to CSV">
+	</topic>
+ <topic href="html/howtos/updatepricecurves.html" label="Update price curves">
+ </topic>
+ <topic href="html/howtos/copyscenariodata.html" label="Copy scenario data">
+ </topic>
+ <topic href="html/howtos/scenariodiffing.html" label="Scenario Diffing">
+ </topic>
+ <topic href="html/howtos/runevaluations.html" label="Run an evaluation">
+ </topic>
+ <topic href="html/howtos/runoptimisations.html" label="Run an optimisation">
+ </topic> 
+</toc>

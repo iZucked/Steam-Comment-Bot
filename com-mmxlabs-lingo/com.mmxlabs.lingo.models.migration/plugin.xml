@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="6"
+            latestVersion="16"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -51,13 +51,83 @@
             from="4"
             to="5">
       </MigrationUnit>
-        <MigrationUnit
+      <MigrationUnit
             id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV6"
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV6"
             context="com.mmxlabs.lingo"
             from="5"
             to="6">
-      </MigrationUnit>            
+      </MigrationUnit>
+      <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV7"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV7"
+            context="com.mmxlabs.lingo"
+            from="6"
+            to="7">
+              </MigrationUnit>
+       <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV8"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV8"
+            context="com.mmxlabs.lingo"
+            from="7"
+            to="8">
+              </MigrationUnit>
+       <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV9"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV9"
+            context="com.mmxlabs.lingo"
+            from="8"
+            to="9">
+      </MigrationUnit>
+        <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV10"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV10"
+            context="com.mmxlabs.lingo"
+            from="9"
+            to="10">
+      </MigrationUnit>     
+      <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV11"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV11"
+            context="com.mmxlabs.lingo"
+            from="10"
+            to="11">
+      </MigrationUnit>
+            <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV12"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV12"
+            context="com.mmxlabs.lingo"
+            from="11"
+            to="12">
+      </MigrationUnit>                 
+      <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV13"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV13"
+            context="com.mmxlabs.lingo"
+            from="12"
+            to="13">
+      </MigrationUnit>
+            <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV14"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV14"
+            context="com.mmxlabs.lingo"
+            from="13"
+            to="14">
+      </MigrationUnit>
+      <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV15"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV15"
+            context="com.mmxlabs.lingo"
+            from="14"
+            to="15">
+      </MigrationUnit>
+       <MigrationUnit
+            id="com.mmxlabs.lingo.models.migration.units.LingoMigrateToV16"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.models.migration.units.LingoMigrateToV16"
+            context="com.mmxlabs.lingo"
+            from="15"
+            to="16">
+      </MigrationUnit>    
    </extension>
    <extension
          point="org.ops4j.peaberry.eclipse.modules">
