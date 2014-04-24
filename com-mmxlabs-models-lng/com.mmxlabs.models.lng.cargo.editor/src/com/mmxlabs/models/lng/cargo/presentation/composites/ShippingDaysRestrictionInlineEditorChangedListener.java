@@ -32,12 +32,12 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 	@Override
 	public void notifyChanged(final Notification notification) {
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase() || notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()
-				|| notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Divertable()) {
+				|| notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Divertible()) {
 
 			if (input instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) input;
 				if (loadSlot.isDESPurchase()) {
-					if (loadSlot.isDivertable()) {
+					if (loadSlot.isDivertible()) {
 						editor.setEditorEnabled(true);
 						editor.setEditorVisible(true);
 					} else {
@@ -73,7 +73,7 @@ public class ShippingDaysRestrictionInlineEditorChangedListener implements IInli
 		if (input instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) input;
 			if (loadSlot.isDESPurchase()) {
-				if (loadSlot.isDivertable()) {
+				if (loadSlot.isDivertible()) {
 					editor.setEditorEnabled(true);
 					editor.setEditorVisible(true);
 				} else {

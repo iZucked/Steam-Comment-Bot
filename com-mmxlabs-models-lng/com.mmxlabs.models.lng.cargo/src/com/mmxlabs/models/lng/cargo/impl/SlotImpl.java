@@ -63,7 +63,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNotes <em>Notes</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isDivertable <em>Divertable</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isDivertible <em>Divertible</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getShippingDaysRestriction <em>Shipping Days Restriction</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
@@ -480,24 +480,24 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	protected String notes = NOTES_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isDivertable() <em>Divertable</em>}' attribute.
+	 * The default value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isDivertable()
+	 * @see #isDivertible()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean DIVERTABLE_EDEFAULT = false;
+	protected static final boolean DIVERTIBLE_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isDivertable() <em>Divertable</em>}' attribute.
+	 * The cached value of the '{@link #isDivertible() <em>Divertible</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isDivertable()
+	 * @see #isDivertible()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean divertable = DIVERTABLE_EDEFAULT;
+	protected boolean divertible = DIVERTIBLE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
@@ -1367,6 +1367,27 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isDivertible() {
+		return divertible;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDivertible(boolean newDivertible) {
+		boolean oldDivertible = divertible;
+		divertible = newDivertible;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTIBLE, oldDivertible, divertible));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1643,27 +1664,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isDivertable() {
-		return divertable;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDivertable(boolean newDivertable) {
-		boolean oldDivertable = divertable;
-		divertable = newDivertable;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__DIVERTABLE, oldDivertable, divertable));
-	}
-
-								/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<AVesselSet<Vessel>> getAllowedVessels() {
 		if (allowedVessels == null) {
 			allowedVessels = new EObjectResolvingEList<AVesselSet<Vessel>>(AVesselSet.class, this, CargoPackage.SLOT__ALLOWED_VESSELS);
@@ -1880,8 +1880,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return getNotes();
-			case CargoPackage.SLOT__DIVERTABLE:
-				return isDivertable();
+			case CargoPackage.SLOT__DIVERTIBLE:
+				return isDivertible();
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				return getShippingDaysRestriction();
 			case CargoPackage.SLOT__ENTITY:
@@ -1965,8 +1965,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes((String)newValue);
 				return;
-			case CargoPackage.SLOT__DIVERTABLE:
-				setDivertable((Boolean)newValue);
+			case CargoPackage.SLOT__DIVERTIBLE:
+				setDivertible((Boolean)newValue);
 				return;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction((Integer)newValue);
@@ -2060,8 +2060,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__NOTES:
 				setNotes(NOTES_EDEFAULT);
 				return;
-			case CargoPackage.SLOT__DIVERTABLE:
-				setDivertable(DIVERTABLE_EDEFAULT);
+			case CargoPackage.SLOT__DIVERTIBLE:
+				setDivertible(DIVERTIBLE_EDEFAULT);
 				return;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				setShippingDaysRestriction(SHIPPING_DAYS_RESTRICTION_EDEFAULT);
@@ -2134,8 +2134,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetPricingDate();
 			case CargoPackage.SLOT__NOTES:
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
-			case CargoPackage.SLOT__DIVERTABLE:
-				return divertable != DIVERTABLE_EDEFAULT;
+			case CargoPackage.SLOT__DIVERTIBLE:
+				return divertible != DIVERTIBLE_EDEFAULT;
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 				return shippingDaysRestriction != SHIPPING_DAYS_RESTRICTION_EDEFAULT;
 			case CargoPackage.SLOT__ENTITY:
@@ -2315,8 +2315,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		if (pricingDateESet) result.append(pricingDate); else result.append("<unset>");
 		result.append(", notes: ");
 		result.append(notes);
-		result.append(", divertable: ");
-		result.append(divertable);
+		result.append(", divertible: ");
+		result.append(divertible);
 		result.append(", shippingDaysRestriction: ");
 		result.append(shippingDaysRestriction);
 		result.append(", restrictedListsArePermissive: ");

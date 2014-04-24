@@ -10,8 +10,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -62,7 +60,68 @@ public class MigrateToV17 extends AbstractMigrationUnit {
 	@Override
 	protected void doMigration(final EObject model) {
 
-		// Nothing required here - stun migration for client bump
+		final MetamodelLoader modelLoader = getDestinationMetamodelLoader(null);
+		fixDivertibleFlagTypo(modelLoader, model);
 
+	}
+
+	/**
+	 * Fix spelling of "divertible" flag
+	 * 
+	 * @param modelLoader
+	 * @param model
+	 */
+	private void fixDivertibleFlagTypo(final MetamodelLoader modelLoader, final EObject model) {
+
+		final EPackage package_ScenarioModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EPackage package_CargoModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
+
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EClass class_LNGPortfolioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
+
+		final EReference reference_LNGScenarioModel_portfolioModel = MetamodelUtils.getReference(class_LNGScenarioModel, "portfolioModel");
+		final EReference reference_LNGPortfolioModel_cargoModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "cargoModel");
+
+		final EClass class_CargoModel = MetamodelUtils.getEClass(package_CargoModel, "CargoModel");
+		final EClass class_Slot = MetamodelUtils.getEClass(package_CargoModel, "Slot");
+
+		final EReference reference_CargoModel_loadSlots = MetamodelUtils.getReference(class_CargoModel, "loadSlots");
+		final EReference reference_CargoModel_dischargeSlots = MetamodelUtils.getReference(class_CargoModel, "dischargeSlots");
+
+		final EAttribute attribute_Slot_divertable = MetamodelUtils.getAttribute(class_Slot, "divertable");
+		final EAttribute attribute_Slot_divertible = MetamodelUtils.getAttribute(class_Slot, "divertible");
+
+		final EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
+		if (portfolioModel == null) {
+			return;
+		}
+		final EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
+
+		if (cargoModel == null) {
+			return;
+		}
+
+		// Check load slots
+		final EList<EObject> loadSlots = MetamodelUtils.getValueAsTypedList(cargoModel, reference_CargoModel_loadSlots);
+		if (loadSlots != null) {
+			for (final EObject slot : loadSlots) {
+
+				if (slot.eIsSet(attribute_Slot_divertable)) {
+					slot.eSet(attribute_Slot_divertible, slot.eIsSet(attribute_Slot_divertable));
+					slot.eUnset(attribute_Slot_divertable);
+				}
+			}
+		}
+
+		// Check discharge slots
+		final EList<EObject> dischargeSlots = MetamodelUtils.getValueAsTypedList(cargoModel, reference_CargoModel_dischargeSlots);
+		if (dischargeSlots != null) {
+			for (final EObject slot : dischargeSlots) {
+				if (slot.eIsSet(attribute_Slot_divertable)) {
+					slot.eSet(attribute_Slot_divertible, slot.eIsSet(attribute_Slot_divertable));
+					slot.eUnset(attribute_Slot_divertable);
+				}
+			}
+		}
 	}
 }
