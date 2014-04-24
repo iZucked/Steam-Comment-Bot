@@ -158,7 +158,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule(), createShippingCostModule());
 			final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
-			final ModelEntityMap entities = injector.getInstance(ModelEntityMap.class);
+			final ModelEntityMap modelEntityMap = injector.getInstance(ModelEntityMap.class);
 
 			/*
 			 * Create ports and distances
@@ -168,7 +168,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			for (final Port port : portModel.getPorts()) {
 				final IPort optPort = builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator);
 				ports.add(port, optPort);
-				entities.addModelObject(portModel, optPort);
+				modelEntityMap.addModelObject(portModel, optPort);
 			}
 			for (final Route route : portModel.getRoutes()) {
 				for (final RouteLine line : route.getLines()) {
@@ -246,11 +246,11 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 					// Earliest date, record!
 					builder.setEarliestDate(row.getDate());
-					entities.setEarliestDate(row.getDate());
+					modelEntityMap.setEarliestDate(row.getDate());
 
 				}
 
-				final int time = entities.getHoursFromDate(row.getDate());
+				final int time = modelEntityMap.getHoursFromDate(row.getDate());
 				final IPort port = ports.lookup(row.getPort());
 
 				if (idx == 0) {

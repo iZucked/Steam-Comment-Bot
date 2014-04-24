@@ -27,6 +27,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -35,8 +36,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.fleet.AssignableElement;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -71,7 +70,6 @@ import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 
 /**
  * @author Simon Goodall
@@ -92,7 +90,7 @@ public class LNGSchedulerJobUtils {
 	 * @param injector
 	 * @param scenario
 	 * @param editingDomain
-	 * @param entities
+	 * @param modelEntityMap
 	 * @param solution
 	 * @param lockKey
 	 * @param solutionCurrentProgress
@@ -101,7 +99,7 @@ public class LNGSchedulerJobUtils {
 	 * @since 5.0
 	 */
 	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
-			final ModelEntityMap entities, final IAnnotatedSolution solution, final int solutionCurrentProgress) {
+			final ModelEntityMap modelEntityMap, final IAnnotatedSolution solution, final int solutionCurrentProgress) {
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		{
@@ -110,7 +108,7 @@ public class LNGSchedulerJobUtils {
 		}
 		final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
 
-		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(modelEntityMap, solution);
 		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
@@ -153,7 +151,7 @@ public class LNGSchedulerJobUtils {
 		return schedule;
 	}
 
-	public static void undoPreviousOptimsationStep(final EditingDomain editingDomain, final String lockKey, final int solutionCurrentProgress) {
+	public static void undoPreviousOptimsationStep(final EditingDomain editingDomain, final int solutionCurrentProgress) {
 		// Undo previous optimisation step if possible
 		try {
 
@@ -168,9 +166,7 @@ public class LNGSchedulerJobUtils {
 					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
 						final CommandStack stack = editingDomain.getCommandStack();
 						if (stack instanceof MMXAdaptersAwareCommandStack) {
-							// this is needed because we have claimed the lock under the given key
-							// so if we undo using EDITORS as the lock, we spin forever.
-							((MMXAdaptersAwareCommandStack) stack).undo(lockKey);
+							((MMXAdaptersAwareCommandStack) stack).undo(null);
 						} else {
 							stack.undo();
 						}
@@ -324,16 +320,31 @@ public class LNGSchedulerJobUtils {
 				if (allocation.getSlotAllocations().size() > 2) {
 					throw new IllegalStateException("Multiple Load/Discharges for a DES Purchase or FOB Sale is not permitted");
 				}
+
+				// Spot slots may not have a port set, so copy from other half
+				if (allocation.getSlotAllocations().size() == 2) {
+					if (desPurchaseSlot instanceof SpotSlot) {
+//						if (desPurchaseSlot.getPort() == null) {
+							cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(1).getPort()));
+//						}
+					}
+
+					if (fobSaleSlot instanceof SpotSlot) {
+//						if (fobSaleSlot.getPort() == null) {
+							cmd.append(SetCommand.create(domain, fobSaleSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(0).getPort()));
+//						}
+					}
+				}
 			}
 
-//			// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
-//			if (fobSaleSlot != null) {
-//				// Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
-//				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
-//				if (elementAssignment !=null) {
-//					cmd.append(DeleteCommand.create(domain, elementAssignment));
-//				}
-//			}
+			// // If the cargo is to become a FOB Sale - then we remove the vessel assignment.
+			// if (fobSaleSlot != null) {
+			// // Slot discharge = allocation.getSlotAllocations().get(1).getSlot();
+			// final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(assignmentModel, loadCargo);
+			// if (elementAssignment !=null) {
+			// cmd.append(DeleteCommand.create(domain, elementAssignment));
+			// }
+			// }
 
 			// Remove references to slots no longer in the cargo
 			final Set<Slot> oldSlots = new HashSet<Slot>();
@@ -376,13 +387,13 @@ public class LNGSchedulerJobUtils {
 				if (loadSlot.getCargo() != null) {
 					final Cargo c = loadSlot.getCargo();
 					possibleUnusedCargoes.remove(c);
-					
+
 					// Sanity check
 					// Unused non-optional slots now handled by optimiser
 					// if (!loadSlot.isOptional()) {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
-					cmd.append(SetCommand.create(domain, c, FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
@@ -424,12 +435,12 @@ public class LNGSchedulerJobUtils {
 				}
 
 				if (object != null) {
-					object.setAssignment(assignment);
-					object.setSequenceHint(index++);
+					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, assignment));
+					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, index++));
 					if (sequence.isSetSpotIndex()) {
-						object.setSpotIndex(sequence.getSpotIndex());
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, sequence.getSpotIndex()));
 					} else {
-						object.unsetSpotIndex();
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					}
 				}
 			}
@@ -445,7 +456,7 @@ public class LNGSchedulerJobUtils {
 	}
 
 	public static IAnnotatedSolution evaluateCurrentState(final LNGTransformer transformer) {
-		final ModelEntityMap entities = transformer.getEntities();
+		final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 		final IOptimisationData data = transformer.getOptimisationData();
 		final Injector injector = transformer.getInjector();
 		/**
@@ -453,7 +464,7 @@ public class LNGSchedulerJobUtils {
 		 */
 
 		// Step 1. Get or derive the initial sequences from the input scenario data
-		final IModifiableSequences sequences = new ModifiableSequences(transformer.getOptimisationTransformer().createInitialSequences(data, entities));
+		final IModifiableSequences sequences = new ModifiableSequences(transformer.getOptimisationTransformer().createInitialSequences(data, modelEntityMap));
 
 		// Run through the sequences manipulator of things such as start/end port replacement
 
@@ -464,7 +475,11 @@ public class LNGSchedulerJobUtils {
 
 		// run a scheduler on the sequences - there is no SchedulerFitnessEvaluator to guide it!
 		final ISequenceScheduler scheduler = injector.getInstance(DirectRandomSequenceScheduler.class);
-		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
+
+		// The output data structured, a solution with all the output data as annotations
+		final AnnotatedSolution solution = new AnnotatedSolution();
+		solution.setSequences(sequences);
+		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, solution);
 
 		// Make sure a schedule was created.
 		if (scheduledSequences == null) {
@@ -472,11 +487,6 @@ public class LNGSchedulerJobUtils {
 			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
 		}
 
-		// Get a ScheduleCalculator to process the schedule and obtain output data
-		final ScheduleCalculator scheduleCalculator = injector.getInstance(ScheduleCalculator.class);
-
-		// The output data structured, a solution with all the output data as annotations
-		final AnnotatedSolution solution = (AnnotatedSolution) scheduleCalculator.calculateSchedule(sequences, scheduledSequences);
 		// Create a fake context
 		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
 		return solution;

@@ -27,6 +27,7 @@ public class ModelEntityMap {
 	private final Map<Object, Object> optimiserToModel = new HashMap<Object, Object>();
 
 	private Date earliestDate;
+	private Date latestDate;
 
 	public <U> U getModelObject(final Object internalObject, final Class<? extends U> clz) {
 		return clz.cast(optimiserToModel.get(internalObject));
@@ -43,6 +44,7 @@ public class ModelEntityMap {
 
 	public void dispose() {
 		this.earliestDate = null;
+		this.latestDate = null;
 		modelToOptimiser.clear();
 		optimiserToModel.clear();
 	}
@@ -68,6 +70,9 @@ public class ModelEntityMap {
 	public Date getEarliestDate() {
 		return earliestDate;
 	}
+	public Date getLatestDate() {
+		return latestDate;
+	}
 
 	/**
 	 * @param earliestDate
@@ -78,17 +83,11 @@ public class ModelEntityMap {
 		this.earliestDate = earliestDate;
 	}
 
+	public void setLatestDate(Date latestTime) {
+		this.latestDate = latestTime;
+	}
+
 	public Date getDateFromHours(final long hours) {
 		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR);
 	}
-
-	/**
-	 * @since 2.0
-	 */
-	public int getHoursFromDate(final Date date) {
-		long diff = date.getTime() - earliestDate.getTime();
-		long hours = diff / Timer.ONE_HOUR;
-		return (int) Math.max(hours, 0);
-	}
-
 }

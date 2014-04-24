@@ -26,11 +26,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.EvaluationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.OptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.internal.Activator;
+import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -194,6 +195,7 @@ public class LNGTransformer {
 
 		installModuleOverrides(modules, new OptimiserSettingsModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_ParametersModule);
 
+		installModuleOverrides(modules, new EvaluationModule(hints), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_Evaluation);
 		if (performOptimisation) {
 			installModuleOverrides(modules, new OptimisationModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_Optimisation);
 		}
@@ -241,7 +243,7 @@ public class LNGTransformer {
 	/**
 	 * @since 3.0
 	 */
-	public ModelEntityMap getEntities() {
+	public ModelEntityMap getModelEntityMap() {
 		return injector.getInstance(ModelEntityMap.class);
 	}
 

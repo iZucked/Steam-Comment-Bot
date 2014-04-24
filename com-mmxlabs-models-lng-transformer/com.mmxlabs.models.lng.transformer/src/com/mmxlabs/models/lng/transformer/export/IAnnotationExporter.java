@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
@@ -33,7 +34,7 @@ public interface IAnnotationExporter {
 	/**
 	 * @param entities
 	 */
-	void setModelEntityMap(ModelEntityMap entities);
+	void setModelEntityMap(ModelEntityMap modelEntityMap);
 
 	void init();
 
@@ -47,5 +48,5 @@ public interface IAnnotationExporter {
 	 * @param key
 	 * @return
 	 */
-	Event export(final ISequenceElement element, final Map<String, Object> annotations);
+	Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations);
 }

@@ -18,18 +18,19 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.IRestrictedElementsProvider;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -51,7 +52,7 @@ public class SlotOverridesTest {
 
 	static class SlotTester {
 		final LNGTransformer transformer;
-		final ModelEntityMap modelOptimiserMap;
+		final ModelEntityMap modelEntityMap;
 
 		public SlotTester(LNGScenarioModel scenario) {
 			this(scenario, false);
@@ -65,15 +66,15 @@ public class SlotOverridesTest {
 				if (failSilently == false)
 					e.printStackTrace(System.err);
 			}
-			modelOptimiserMap = transformer.getEntities();
+			modelEntityMap = transformer.getModelEntityMap();
 		}
 
 		public <T> T getOptimiserObject(final EObject modelObject, final Class<? extends T> clz) {
-			return modelOptimiserMap.getOptimiserObject(modelObject, clz);
+			return modelEntityMap.getOptimiserObject(modelObject, clz);
 		}
 
 		public <T> T getModelObject(final Object internalObject, final Class<? extends T> clz) {
-			return modelOptimiserMap.getModelObject(internalObject, clz);
+			return modelEntityMap.getModelObject(internalObject, clz);
 		}
 
 		public <T> T getProvider(final Class<? extends T> clz) {
@@ -152,7 +153,7 @@ public class SlotOverridesTest {
 		// don't override the first slot's entity
 		final Slot eSlot = msc.cargo.getSortedSlots().get(0);
 		// expect the entity from the contract
-		final LegalEntity eEntity = eSlot.getContract().getEntity();
+		final BaseLegalEntity eEntity = eSlot.getContract().getEntity();
 
 		// build the optimiser data
 		final SlotTester tester = new SlotTester(scenario);
@@ -163,7 +164,7 @@ public class SlotOverridesTest {
 		IEntity oEntity = entityProvider.getEntityForSlot(oSlot);
 
 		// make sure it matches
-		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, LegalEntity.class));
+		Assert.assertEquals(eEntity, tester.getModelObject(oEntity, BaseLegalEntity.class));
 	}
 
 	@Test

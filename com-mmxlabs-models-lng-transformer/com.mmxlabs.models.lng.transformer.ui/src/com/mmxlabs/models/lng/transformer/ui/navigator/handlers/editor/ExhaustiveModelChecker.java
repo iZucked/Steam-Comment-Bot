@@ -71,11 +71,13 @@ public class ExhaustiveModelChecker {
 	
 	// special object representing the unset value
 	protected static Object unsetValueObject = new DummyValue() { 
+		@Override
 		public String toString() { return "<Unset Value>"; }
 	}; 
 	
 	// special object representing an empty list
 	protected static Object emptyListObject = new DummyValue() {
+		@Override
 		public String toString() { return "<Empty List>"; }
 	}; 
 

@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
@@ -28,8 +26,6 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class StartOptimisationEditorActionDelegate extends AbstractOptimisationEditorActionDelegate {
-
-	private static final Logger log = LoggerFactory.getLogger(StartOptimisationEditorActionDelegate.class);
 
 	protected final boolean optimising;
 
@@ -145,7 +141,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), null, false, optimising, ScenarioLock.OPTIMISER);
+				doRun(jobManager, scenarioServiceEditorInput.getScenarioInstance(), null, false, optimising, ScenarioLock.OPTIMISER);
 			}
 		}
 	}
@@ -156,7 +152,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), mode, false, optimising, ScenarioLock.OPTIMISER);
+				doRun(jobManager, scenarioServiceEditorInput.getScenarioInstance(), mode, false, optimising, ScenarioLock.OPTIMISER);
 			}
 		}
 	}
@@ -167,8 +163,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), OptimisationHelper.PARAMETER_MODE_CUSTOM, false, optimising,
-						ScenarioLock.OPTIMISER);
+				doRun(jobManager, scenarioServiceEditorInput.getScenarioInstance(), OptimisationHelper.PARAMETER_MODE_CUSTOM, false, optimising, ScenarioLock.OPTIMISER);
 			}
 		}
 	}
@@ -179,10 +174,13 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				OptimisationHelper.evaluateScenarioInstance(jobManager, scenarioServiceEditorInput.getScenarioInstance(), OptimisationHelper.PARAMETER_MODE_CUSTOM, true, optimising,
-						ScenarioLock.OPTIMISER);
+				doRun(jobManager, scenarioServiceEditorInput.getScenarioInstance(), OptimisationHelper.PARAMETER_MODE_CUSTOM, true, optimising, ScenarioLock.OPTIMISER);
 			}
 		}
+	}
 
+	protected void doRun(final IEclipseJobManager jobManager, final ScenarioInstance instance, final String parameterMode, final boolean promptForOptimiserSettings, final boolean optimising,
+			final String k) {
+		OptimisationHelper.evaluateScenarioInstance(jobManager, instance, parameterMode, promptForOptimiserSettings, optimising, k);
 	}
 }

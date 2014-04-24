@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;

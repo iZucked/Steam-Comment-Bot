@@ -21,8 +21,8 @@ import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
@@ -122,8 +122,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ModelEntityMap entities) throws IncompleteScenarioException {
-		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(entities);
+	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
+		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(modelEntityMap);
 
 		return optimisationData;
 	}
@@ -156,9 +156,9 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Named("Initial")
-	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ModelEntityMap mem) {
+	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ModelEntityMap modelEntityMap) {
 
-		final ISequences sequences = optimisationTransformer.createInitialSequences(data, mem);
+		final ISequences sequences = optimisationTransformer.createInitialSequences(data, modelEntityMap);
 
 		return sequences;
 	}

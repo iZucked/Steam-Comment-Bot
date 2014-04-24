@@ -9,6 +9,7 @@ import java.util.Map;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -26,32 +27,32 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Journey export(final ISequenceElement element, final Map<String, Object> annotations) {
+	public Journey export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 
 		final IJourneyEvent event = (IJourneyEvent) annotations.get(SchedulerConstants.AI_journeyInfo);
 
 		if (event == null)
 			return null;
 
-		if (event.getDistance() == 0)
+		if (event.getDuration() == 0 && event.getDistance() == 0)
 			return null; // filter out zero-length journeys
 
-		final Port eFromPort = entities.getModelObject(event.getFromPort(), Port.class);
-		final Port eToPort = entities.getModelObject(event.getToPort(), Port.class);
+		final Port eFromPort = modelEntityMap.getModelObject(event.getFromPort(), Port.class);
+		final Port eToPort = modelEntityMap.getModelObject(event.getToPort(), Port.class);
 
 		if (eFromPort == null || eToPort == null)
 			return null;
 
 		final Journey journey = factory.createJourney();
 
-		journey.setStart(entities.getDateFromHours(event.getStartTime()));
-		journey.setEnd(entities.getDateFromHours(event.getEndTime()));
+		journey.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
+		journey.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
 
 		journey.setPort(eFromPort);
 		journey.setDestination(eToPort);
 
 		journey.setDistance(event.getDistance());
-		journey.setRoute(entities.getModelObject(event.getRoute(), Route.class));
+		journey.setRoute(modelEntityMap.getModelObject(event.getRoute(), Route.class));
 		journey.setToll(OptimiserUnitConvertor.convertToExternalFixedCost(event.getRouteCost()));
 
 		journey.setLaden(VesselState.Laden.equals(event.getVesselState()));

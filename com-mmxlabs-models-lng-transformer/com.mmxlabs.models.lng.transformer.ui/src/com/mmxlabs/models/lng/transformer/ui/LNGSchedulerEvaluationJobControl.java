@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * A simple {@link IJobControl} to evaluate a schedule.
@@ -35,8 +34,6 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 	private LNGSchedulerJobDescriptor jobDescriptor;
 
 	private EJobState currentState = EJobState.UNKNOWN;
-
-	private ScenarioLock scenarioLock;
 
 	public LNGSchedulerEvaluationJobControl(final LNGSchedulerJobDescriptor descriptor) {
 		this.jobDescriptor = descriptor;
@@ -57,8 +54,6 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		scenarioLock = scenarioInstance.getLock(jobDescriptor.getLockKey());
-		scenarioLock.awaitClaim();
 		try {
 			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
@@ -70,14 +65,12 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			final IAnnotatedSolution solution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
 
 			// Pass annotated solution to utils to create a new Schedule object and update the other data models as required.
-			LNGSchedulerJobUtils.exportSolution(injector, scenario, jobDescriptor.getOptimiserSettings(), editingDomain, transformer.getEntities(), solution, 0);
+			LNGSchedulerJobUtils.exportSolution(injector, scenario, jobDescriptor.getOptimiserSettings(), editingDomain, transformer.getModelEntityMap(), solution, 0);
 
 			setJobState(EJobState.COMPLETED);
 		} catch (final Throwable e) {
 			setJobState(EJobState.CANCELLED);
 			throw new RuntimeException(e);
-		} finally {
-			scenarioLock.release();
 		}
 	}
 
@@ -131,10 +124,10 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 	@Override
 	public void dispose() {
 
-		if (scenarioLock != null) {
-			scenarioLock.release();
-			scenarioLock = null;
-		}
+//		if (scenarioLock != null) {
+//			scenarioLock.release();
+//			scenarioLock = null;
+//		}
 
 		jobDescriptor = null;
 		this.currentState = EJobState.UNKNOWN;

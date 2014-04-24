@@ -10,12 +10,12 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -26,10 +26,11 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -64,7 +65,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
+	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 
 		// "element" represents an IPortSlot
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
@@ -73,7 +74,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			return null;
 		}
 
-		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
+		final Port ePort = modelEntityMap.getModelObject(slot.getPort(), Port.class);
 		if (ePort == null) {
 			// Port maybe null for e.g. DES Purchases.
 			// return null;
@@ -91,7 +92,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			output.getSlotAllocations().add(slotAllocation);
 			// TODO this will have to look at market-generated slots.
-			final Slot optSlot = entities.getModelObject(slot, Slot.class);
+			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
 				slotAllocation.setSpotMarket(((SpotSlot) optSlot).getMarket());
 			}
@@ -100,7 +101,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			// Output allocation info
 			// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
-			// TODO: Break up IAllocatiobAnnotation to pull out fuel use as a separate chunk.
+			// TODO: Break up IAllocationAnnotation to pull out fuel use as a separate chunk.
 			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
 
 			eAllocation = allocations.get(slot);
@@ -125,7 +126,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			// final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
 			if (slot instanceof ILoadOption) {
 				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), ((ILoadOption) slot).getCargoCVValue());
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			} else {
@@ -139,7 +140,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 					throw new IllegalStateException("Discharge Slot without a Load Slot");
 				}
 				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), cargoCV);
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			}
@@ -155,7 +156,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
-			final VesselEvent event = entities.getModelObject(slot, VesselEvent.class);
+			final VesselEvent event = modelEntityMap.getModelObject(slot, VesselEvent.class);
 			if (event == null)
 				return null;
 			final VesselEventVisit vev;
@@ -207,8 +208,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
-		portVisit.setStart(entities.getDateFromHours(visitEvent.getStartTime()));
-		portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
+		portVisit.setStart(modelEntityMap.getDateFromHours(visitEvent.getStartTime()));
+		portVisit.setEnd(modelEntityMap.getDateFromHours(visitEvent.getEndTime()));
 
 		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
 		if (capacityViolationAnnotation != null) {
@@ -294,6 +295,16 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		// set up hire cost
 		portVisit.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(visitEvent.getCharterCost()));
+
+		// Output allocation info
+		// TODO: Break up IAllocationAnnotation in separate instances for the load and discharge.
+		// TODO: Break up IAllocationAnnotation to pull out fuel use as a separate chunk.
+		final IHeelLevelAnnotation heelLevel = (IHeelLevelAnnotation) annotations.get(SchedulerConstants.AI_heelLevelInfo);
+
+		if (heelLevel != null) {
+			portVisit.setHeelAtStart(OptimiserUnitConvertor.convertToExternalVolume(heelLevel.getStartHeelInM3()));
+			portVisit.setHeelAtEnd(OptimiserUnitConvertor.convertToExternalVolume(heelLevel.getEndHeelInM3()));
+		}
 
 		return portVisit;
 	}

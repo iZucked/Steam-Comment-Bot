@@ -12,7 +12,6 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
-import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.entities.EntityTransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
@@ -21,11 +20,13 @@ import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRe
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.BasicSlotPNLExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IPostExportProcessorFactory;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
+import com.mmxlabs.models.lng.transformer.util.OptimisationTransformer;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
@@ -77,6 +78,7 @@ public class TransformerExtensionTestModule extends AbstractModule {
 
 			final List<IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<IExporterExtensionFactory>();
 			exporterExtensionFactories.add(new TradingExporterExtensionFactory());
+			exporterExtensionFactories.add(new BasicSlotPNLExporterExtensionFactory());
 			bind(TypeLiterals.iterable(IExporterExtensionFactory.class)).toInstance(exporterExtensionFactories);
 
 			final List<IPostExportProcessorFactory> postExportExtensionFactories = new ArrayList<IPostExportProcessorFactory>();
@@ -115,11 +117,11 @@ public class TransformerExtensionTestModule extends AbstractModule {
 	public IConstraintCheckerRegistry createConstraintCheckerRegistry() {
 		final ConstraintCheckerRegistry constraintCheckerRegistry = new ConstraintCheckerRegistry();
 		{
-			final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
+			final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();
 			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
 		}
 		{
-			final ResourceAllocationConstraintCheckerFactory constraintFactory = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
+			final ResourceAllocationConstraintCheckerFactory constraintFactory = new ResourceAllocationConstraintCheckerFactory();
 			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
 		}
 

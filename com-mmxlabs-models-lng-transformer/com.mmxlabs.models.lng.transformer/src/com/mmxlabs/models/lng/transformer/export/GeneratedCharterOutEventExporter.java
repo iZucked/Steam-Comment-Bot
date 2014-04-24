@@ -9,6 +9,7 @@ import java.util.Map;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -38,14 +39,14 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
+	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 		final IGeneratedCharterOutEvent event = (IGeneratedCharterOutEvent) annotations.get(SchedulerConstants.AI_generatedCharterOutInfo);
 
 		if (event == null) {
 			return null;
 		}
 
-		Port ePort = entities.getModelObject(event.getPort(), Port.class);
+		Port ePort = modelEntityMap.getModelObject(event.getPort(), Port.class);
 
 		// TODO this is a bit of a kludge; the ANYWHERE port does not
 		// have an EMF representation, but we do want idle time for it
@@ -59,8 +60,8 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 
 		final GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
 		generatedCharterOutEvent.setPort(ePort);
-		generatedCharterOutEvent.setStart(entities.getDateFromHours(event.getStartTime()));
-		generatedCharterOutEvent.setEnd(entities.getDateFromHours(event.getEndTime()));
+		generatedCharterOutEvent.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
+		generatedCharterOutEvent.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
 		generatedCharterOutEvent.setRevenue(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterOutRevenue()));
 		
 		generatedCharterOutEvent.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));

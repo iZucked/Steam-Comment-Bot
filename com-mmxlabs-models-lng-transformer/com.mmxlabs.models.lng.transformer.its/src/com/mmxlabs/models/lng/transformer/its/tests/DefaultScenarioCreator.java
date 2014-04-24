@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.management.timer.Timer;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
@@ -24,9 +25,15 @@ import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
@@ -34,19 +41,13 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
-import com.mmxlabs.models.lng.fleet.CharterOutEvent;
-import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
-import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
-import com.mmxlabs.models.lng.fleet.ScenarioFleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -119,7 +120,7 @@ public class DefaultScenarioCreator {
 
 	public DefaultScenarioCreator() {
 		scenario = ManifestJointModel.createEmptyInstance(null);
-		//minimalScenarioSetup = new MinimalScenarioSetup();
+		// minimalScenarioSetup = new MinimalScenarioSetup();
 	}
 
 	public Date addHours(final Date date, final int hours) {
@@ -132,6 +133,8 @@ public class DefaultScenarioCreator {
 	public LegalEntity addEntity(final String name) {
 		final CommercialModel commercialModel = scenario.getCommercialModel();
 		final LegalEntity entity = CommercialFactory.eINSTANCE.createLegalEntity();
+		entity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		entity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		commercialModel.getEntities().add(entity);
 		return entity;
 	}
@@ -214,7 +217,7 @@ public class DefaultScenarioCreator {
 		final int speed = 10;
 		final int defaultCapacity = 10000;
 		final int defaultPilotLightRate = 0;
-		final int defaultMinHeelVolume = 500;
+		final int defaultMinHeelVolume = 0;
 
 		final int defaultWarmupTime = Integer.MAX_VALUE;
 		final double defaultEquivalenceFactor = 1.0;
@@ -248,19 +251,19 @@ public class DefaultScenarioCreator {
 				indexData = PricingFactory.eINSTANCE.createDataIndex();
 				bfi.setData(indexData);
 			}
-			
-			List<IndexPoint<Double>> points = ((DataIndex<Double>) indexData).getPoints();
-			
+
+			final List<IndexPoint<Double>> points = ((DataIndex<Double>) indexData).getPoints();
+
 			if (points.isEmpty()) {
-				IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
-				
+				final IndexPoint<Double> point = PricingFactory.eINSTANCE.createIndexPoint();
+
 				points.add(point);
 			}
-			
+
 			points.get(0).setValue(price);
 			points.get(0).setDate(new Date());
 		}
-		
+
 		/**
 		 * Creates a base fuel with default settings.
 		 * 
@@ -333,22 +336,23 @@ public class DefaultScenarioCreator {
 		 * @param vc
 		 * @return
 		 */
-		public Vessel createDefaultVessel(final String name, final VesselClass vc) {
+		public Vessel createDefaultVessel(final String name, final VesselClass vc, final BaseLegalEntity shippingEntity) {
 			final FleetModel fleetModel = scenario.getFleetModel();
 			final LNGPortfolioModel portfolioModel = scenario.getPortfolioModel();
-			final ScenarioFleetModel scenarioFleetModel = portfolioModel.getScenarioFleetModel();
+			final CargoModel cargoModel = portfolioModel.getCargoModel();
 
 			final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
 			vessel.setVesselClass(vc);
 			vessel.setName(name);
 
-			final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
+			final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
 
 			availability.setVessel(vessel);
 			availability.setStartHeel(createDefaultHeelOptions());
+			availability.setEntity(shippingEntity);
 
 			fleetModel.getVessels().add(vessel);
-			scenarioFleetModel.getVesselAvailabilities().add(availability);
+			cargoModel.getVesselAvailabilities().add(availability);
 
 			return vessel;
 		}
@@ -360,10 +364,10 @@ public class DefaultScenarioCreator {
 		 * @param num
 		 * @return
 		 */
-		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num) {
+		public Vessel[] createMultipleDefaultVessels(final VesselClass vc, final int num, final BaseLegalEntity shippingEntity) {
 			final Vessel[] result = new Vessel[num];
 			for (int i = 0; i < num; i++) {
-				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc);
+				result[i] = createDefaultVessel(i + "(class " + vc.getName() + ")", vc,shippingEntity);
 			}
 			return result;
 		}
@@ -377,8 +381,8 @@ public class DefaultScenarioCreator {
 		 * @param endPort
 		 * @param endDate
 		 */
-		public VesselAvailability setAvailability(final ScenarioFleetModel scenarioFleetModel, final Vessel vessel, final Port startPort, final Date startDate, final Port endPort, final Date endDate) {
-			for (final VesselAvailability availability : scenarioFleetModel.getVesselAvailabilities()) {
+		public VesselAvailability setAvailability(final CargoModel cargoModel, final Vessel vessel, final Port startPort, final Date startDate, final Port endPort, final Date endDate) {
+			for (final VesselAvailability availability : cargoModel.getVesselAvailabilities()) {
 				if (availability.getVessel() == vessel) {
 					availability.getStartAt().add(startPort);
 					availability.getEndAt().add(endPort);
@@ -579,7 +583,7 @@ public class DefaultScenarioCreator {
 			loadCalendar.set(Calendar.MILLISECOND, 0);
 			slot.setWindowStart(loadCalendar.getTime());
 		}
-		
+
 		public Cargo createDefaultCargo(String name, final Port loadPort, final Port dischargePort, Date loadTime, final int travelTimeInHours) {
 			final Cargo result = CargoFactory.eINSTANCE.createCargo();
 			final LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
@@ -683,7 +687,7 @@ public class DefaultScenarioCreator {
 			final DataIndex<Double> result = createIndex(value);
 			final PricingModel pricingModel = scenario.getPricingModel();
 
-			CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
+			final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
 			index.setName(name);
 			index.setData(result);
 
@@ -714,9 +718,9 @@ public class DefaultScenarioCreator {
 			final CharterCostModel result = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 			result.getVesselClasses().add(vc);
 			result.setMinCharterOutDuration(minDuration);
-			
+
 			final String indexName = String.format("Charter-out cost for vessel class %s", vc.getName());
-			CharterIndex charterIndex = PricingFactory.eINSTANCE.createCharterIndex();
+			final CharterIndex charterIndex = PricingFactory.eINSTANCE.createCharterIndex();
 			charterIndex.setName(indexName);
 			charterIndex.setData(createIndex(price));
 			result.setCharterOutPrice(charterIndex);
@@ -725,11 +729,11 @@ public class DefaultScenarioCreator {
 			marketModel.getCharteringSpotMarkets().add(result);
 
 			scenario.getPricingModel().getCharterIndices().add(charterIndex);
-			
+
 			return result;
 		}
 
-		public PortCost setPortCost(Port port, PortCapability activity, int cost) {
+		public PortCost setPortCost(final Port port, final PortCapability activity, final int cost) {
 			final PricingModel pricingModel = scenario.getPricingModel();
 
 			/*
@@ -761,24 +765,24 @@ public class DefaultScenarioCreator {
 			event.setDurationInDays(defaultDurationInDays);
 			event.setStartBy(startByDate);
 			event.setStartAfter(startAfterDate);
-			final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
-			scenarioFleetModel.getVesselEvents().add(event);
+			final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
+			cargoModel.getVesselEvents().add(event);
 		}
 
 		public DryDockEvent createDryDockEvent(final String name, final Port port, final Date startByDate, final Date startAfterDate) {
-			final DryDockEvent event = FleetFactory.eINSTANCE.createDryDockEvent();
+			final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 			addEventToModel(event, name, port, startAfterDate, startAfterDate);
 			return event;
 		}
 
 		public MaintenanceEvent createMaintenanceEvent(final String name, final Port port, final Date startByDate, final Date startAfterDate) {
-			final MaintenanceEvent event = FleetFactory.eINSTANCE.createMaintenanceEvent();
+			final MaintenanceEvent event = CargoFactory.eINSTANCE.createMaintenanceEvent();
 			addEventToModel(event, name, port, startAfterDate, startAfterDate);
 			return event;
 		}
 
 		public CharterOutEvent createCharterOutEvent(final String name, final Port startPort, final Port endPort, final Date startByDate, final Date startAfterDate, final int hireRate) {
-			final CharterOutEvent event = FleetFactory.eINSTANCE.createCharterOutEvent();
+			final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 			addEventToModel(event, name, startPort, startAfterDate, startAfterDate);
 			event.setHireRate(hireRate);
 			final HeelOptions options = FleetFactory.eINSTANCE.createHeelOptions();
@@ -815,14 +819,14 @@ public class DefaultScenarioCreator {
 			portModel.getPorts().add(startPort);
 		}
 
-		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
+		final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
 		// Set up dry dock.
-		final DryDockEvent dryDock = FleetFactory.eINSTANCE.createDryDockEvent();
+		final DryDockEvent dryDock = CargoFactory.eINSTANCE.createDryDockEvent();
 		dryDock.setName("Drydock");
 		dryDock.setDurationInDays(durationDays);
 		dryDock.setPort(startPort);
 		// add to scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(dryDock);
+		cargoModel.getVesselEvents().add(dryDock);
 
 		// define the start and end time
 		dryDock.setStartAfter(start);
@@ -899,8 +903,8 @@ public class DefaultScenarioCreator {
 	public CharterOutEvent addCharterOut(final String id, final Port startPort, final Port endPort, final Date startCharterOut, final int heelLimit, final int charterOutDurationDays,
 			final float cvValue, final float dischargePrice, final int dailyCharterOutPrice, final int repositioningFee) {
 
-		final CharterOutEvent charterOut = FleetFactory.eINSTANCE.createCharterOutEvent();
-		final ScenarioFleetModel scenarioFleetModel = scenario.getPortfolioModel().getScenarioFleetModel();
+		final CharterOutEvent charterOut = CargoFactory.eINSTANCE.createCharterOutEvent();
+		final CargoModel cargoModel = scenario.getPortfolioModel().getCargoModel();
 
 		// the start and end of the charter out starting-window is 0, for simplicity.
 		charterOut.setStartAfter(startCharterOut);
@@ -924,7 +928,7 @@ public class DefaultScenarioCreator {
 		charterOut.setHireRate(dailyCharterOutPrice);
 		charterOut.setRepositioningFee(repositioningFee);
 		// add to the scenario's fleet model
-		scenarioFleetModel.getVesselEvents().add(charterOut);
+		cargoModel.getVesselEvents().add(charterOut);
 
 		return charterOut;
 	}
@@ -1021,8 +1025,9 @@ public class DefaultScenarioCreator {
 
 			for (final Cargo c : cargoModel.getCargoes()) {
 				if (c.equals(cargo)) {
-					c.getAllowedVessels().addAll(allowedVessels);
-
+					for (final Slot s : c.getSlots()) {
+						s.getAllowedVessels().addAll(allowedVessels);
+					}
 					return true;
 				}
 			}

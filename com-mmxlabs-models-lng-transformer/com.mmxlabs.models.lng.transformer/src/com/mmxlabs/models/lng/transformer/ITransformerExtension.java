@@ -22,11 +22,11 @@ public interface ITransformerExtension {
 	 * This will be called *after* basic port and curve data has been configured .
 	 * 
 	 * @param scenario
-	 * @param map
+	 * @param modelEntityMap
 	 * @param builder
 	 * @since 4.0
 	 */
-	public void startTransforming(LNGScenarioModel rootObject, ModelEntityMap map, ISchedulerBuilder builder);
+	public void startTransforming(LNGScenarioModel rootObject, ModelEntityMap modelEntityMap, ISchedulerBuilder builder);
 
 	/**
 	 * This method will be called just before the transformation is completed and the builder's {@link ISchedulerBuilder#getOptimisationData()} method is called.

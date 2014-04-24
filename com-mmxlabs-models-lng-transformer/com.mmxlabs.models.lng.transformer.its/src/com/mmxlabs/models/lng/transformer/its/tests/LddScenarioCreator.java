@@ -11,7 +11,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
@@ -57,7 +57,6 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		contractEntity = addEntity("Third-parties");
 		// need to create a legal entity for shipping
 		shippingEntity = addEntity("Shipping");
-		commercialModel.setShippingEntity(shippingEntity);
 
 		// need to create sales and purchase contracts
 		salesContract = addSalesContract("Sales Contract", dischargePrice);
@@ -66,7 +65,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		// create a vessel class with default name
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create a vessel in that class
-		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1)[0];
+		vessel = fleetCreator.createMultipleDefaultVessels(vc, 1, shippingEntity)[0];
 
 		// need to create a default route
 		addRoute(ScenarioTools.defaultRouteName);
@@ -109,7 +108,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 		final Date startDate = addHours(loadDate, -2 * getTravelTime(originPort, loadPort, null, (int) maxSpeed));
 		final Date endDate = addHours(lastDischargeDate, 2 * getTravelTime(dischargePort2, originPort, null, (int) maxSpeed));
 
-		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessel, originPort, startDate, originPort, endDate);
+		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate, originPort, endDate);
 
 		cargo.setAssignment(vessel);
 	}

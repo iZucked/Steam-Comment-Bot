@@ -9,6 +9,7 @@ import java.util.Map;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -38,14 +39,14 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
+	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 		final IIdleEvent event = (IIdleEvent) annotations.get(SchedulerConstants.AI_idleInfo);
 
 		if (event == null) {
 			return null;
 		}
 
-		Port ePort = entities.getModelObject(event.getPort(), Port.class);
+		Port ePort = modelEntityMap.getModelObject(event.getPort(), Port.class);
 
 		// TODO this is a bit of a kludge; the ANYWHERE port does not
 		// have an EMF representation, but we do want idle time for it
@@ -59,8 +60,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		final Idle idle = factory.createIdle();
 
 		idle.setPort(ePort);
-		idle.setStart(entities.getDateFromHours(event.getStartTime()));
-		idle.setEnd(entities.getDateFromHours(event.getEndTime()));
+		idle.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
+		idle.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
 
 		idle.setLaden(VesselState.Laden.equals(event.getVesselState()));
 

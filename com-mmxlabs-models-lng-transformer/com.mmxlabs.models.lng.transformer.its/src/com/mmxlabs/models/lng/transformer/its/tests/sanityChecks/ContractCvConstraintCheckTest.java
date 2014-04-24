@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -20,12 +21,12 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;

@@ -12,8 +12,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.parameters.ParametersPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -50,7 +50,7 @@ public class ExhaustiveLNGScenarioChecker extends ExhaustiveModelChecker {
 	protected List<EStructuralFeature> createExcludedFeatures() {
 		List<EStructuralFeature> result = super.createExcludedFeatures();
 		result.add(MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS);
-		result.add(FleetPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+		result.add(CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
 		return result;
 	}
 	
@@ -63,7 +63,7 @@ public class ExhaustiveLNGScenarioChecker extends ExhaustiveModelChecker {
 		result.add(MMXCorePackage.Literals.UUID_OBJECT);
 		result.add(PricingPackage.Literals.NAMED_INDEX_CONTAINER);
 		result.add(CommercialPackage.Literals.CONTRACT);
-		result.add(FleetPackage.Literals.VESSEL_EVENT);
+		result.add(CargoPackage.Literals.VESSEL_EVENT);
 		result.add(TypesPackage.Literals.AVESSEL_SET);
 		result.add(TypesPackage.Literals.APORT_SET);
 		return result;

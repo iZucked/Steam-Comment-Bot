@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -30,8 +31,8 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -275,7 +276,7 @@ public class TransformerUtils {
 	 * @return the input
 	 */
 	public static EObject fixNullDates(final EObject input) {
-		final Calendar calendar = Calendar.getInstance();
+		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		calendar.setTime(new Date());
 		calendar.clear(Calendar.MINUTE);
 		calendar.clear(Calendar.SECOND);

@@ -18,8 +18,8 @@ import com.mmxlabs.models.lng.schedule.MarketAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -53,7 +53,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 	}
 
 	@Override
-	public Event export(final ISequenceElement element, final Map<String, Object> annotations) {
+	public Event export(final ISequenceElement element, final Map<String, IElementAnnotation> annotations) {
 
 		if (element == null) {
 			return null;
@@ -66,7 +66,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			return null;
 		}
 
-		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
+		final Port ePort = modelEntityMap.getModelObject(slot.getPort(), Port.class);
 		if (ePort == null) {
 			// Port maybe null for e.g. DES Purchases.
 			// return null;
@@ -80,7 +80,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			}
 
 			// TODO this will have to look at market-generated slots.
-			final Slot optSlot = entities.getModelObject(slot, Slot.class);
+			final Slot optSlot = modelEntityMap.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
 				// Skip spot slots
 				return null;
@@ -99,7 +99,7 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			final MarketAllocation eAllocation = scheduleFactory.createMarketAllocation();
 			eAllocation.setSlot(optSlot);
 			eAllocation.setSlotVisit(sv);
-			eAllocation.setMarket(entities.getModelObject(market, SpotMarket.class));
+			eAllocation.setMarket(modelEntityMap.getModelObject(market, SpotMarket.class));
 			allocations.put(slot, eAllocation);
 			output.getMarketAllocations().add(eAllocation);
 			eAllocation.setSlotAllocation(slotAllocation);
@@ -112,12 +112,12 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			}
 
 			if (slot instanceof ILoadOption) {
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), ((ILoadOption) slot).getCargoCVValue());
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 
 			} else {
-				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(slot), cargoCV);
+				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			}
@@ -138,17 +138,17 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 				// Look up price and add to MarketAllocation.
 				final IPortSlot mtmSlot = slots.iterator().next();
 				if (mtmSlot instanceof ILoadOption) {
-					final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(mtmSlot), cargoCV);
+					final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(mtmSlot);
 					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 
 				} else {
-					final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getSlotPricePerM3(mtmSlot), cargoCV);
+					final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(mtmSlot);
 					eAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				}
 
 			}
-			sv.setStart(entities.getDateFromHours(allocation.getSlotTime(slot)));
-			sv.setEnd(entities.getDateFromHours(allocation.getSlotTime(slot)));
+			sv.setStart(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot)));
+			sv.setEnd(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot)));
 
 			sv.setSlotAllocation(slotAllocation);
 

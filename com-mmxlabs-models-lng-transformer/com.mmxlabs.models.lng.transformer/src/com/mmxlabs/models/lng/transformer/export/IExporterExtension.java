@@ -19,11 +19,11 @@ public interface IExporterExtension {
 	 * Called before any export stuff happens
 	 * 
 	 * @param output
-	 * @param entities
+	 * @param modelEntityMap
 	 * @param annotatedSolution
 	 * @since 3.0
 	 */
-	void startExporting(Schedule output, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution);
+	void startExporting(Schedule output, final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Called after the main export has happened, and after any other prior export steps have happened.
