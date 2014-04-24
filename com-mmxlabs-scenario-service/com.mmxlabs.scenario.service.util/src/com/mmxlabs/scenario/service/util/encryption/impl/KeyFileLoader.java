@@ -27,11 +27,21 @@ public final class KeyFileLoader {
 	public static URIConverter.Cipher loadCipher(final String keyFileName) throws Exception {
 
 		// Try to find the key file
-		File keyFileFile = getUserDataAKeyFile(keyFileName);
+
+		// Look in instance area - e.g. workspace folder / runtime folder
+		File keyFileFile = getInstanceDataKeyFile(keyFileName);
 		if (keyFileFile == null) {
+			// Look in eclipse top of installation directory
+			keyFileFile = getEclipseDataKeyFile(keyFileName);
+		}
+		if (keyFileFile == null) {
+			// Look in <user home>/mmxlabs
+			keyFileFile = getUserDataAKeyFile(keyFileName);
+		}
+		if (keyFileFile == null) {
+			// Look in <user home>/LiNGO
 			keyFileFile = getUserDataBKeyFile(keyFileName);
 		}
-		// TODO keyFileFile == check other search locations
 
 		if (keyFileFile == null) {
 			throw new FileNotFoundException("Unable to locate key file");
@@ -112,6 +122,30 @@ public final class KeyFileLoader {
 		final String userHome = System.getProperty("user.home");
 		if (userHome != null) {
 			final File f = new File(userHome + "/LiNGO/" + keyFileName);
+			if (f.exists()) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	private static File getInstanceDataKeyFile(final String keyFileName) {
+
+		final String userHome = System.getProperty("osgi.instance.area");
+		if (userHome != null) {
+			final File f = new File(userHome + "/" + keyFileName);
+			if (f.exists()) {
+				return f;
+			}
+		}
+		return null;
+	}
+
+	private static File getEclipseDataKeyFile(final String keyFileName) {
+
+		final String userHome = System.getProperty("eclipse.home.location");
+		if (userHome != null) {
+			final File f = new File(userHome + "/" + keyFileName);
 			if (f.exists()) {
 				return f;
 			}
