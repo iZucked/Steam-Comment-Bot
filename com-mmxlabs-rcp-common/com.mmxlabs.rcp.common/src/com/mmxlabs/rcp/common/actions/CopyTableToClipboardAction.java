@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.rcp.common.actions;
 
+import java.io.IOException;
+import java.io.StringWriter;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -13,6 +16,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.mmxlabs.common.csv.CSVWriter;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -47,26 +51,30 @@ public class CopyTableToClipboardAction extends Action {
 	@Override
 	public void run() {
 
-		final StringBuffer sb = new StringBuffer();
+		final StringWriter sw = new StringWriter();
+		final CSVWriter cw = new CSVWriter(sw, separator);
 
 		// Note this may be zero if no columns have been defined. However an
 		// implicit column will be created in such cases
 		final int numColumns = table.getColumnCount();
 
-		// Header row
-		for (int i = 0; i < numColumns; ++i) {
-			final TableColumn tc = table.getColumn(i);
-			sb.append(tc.getText());
-			if ((i + 1) == numColumns) {
-				sb.append("\n");
-			} else {
-				sb.append(separator);
+		try {
+			// Header row
+			for (int i = 0; i < numColumns; ++i) {
+				final TableColumn tc = table.getColumn(i);
+				cw.addValue(tc.getText());
+				if ((i + 1) == numColumns) {
+					cw.endRow();
+				} 
+			}
+	
+			for (final TableItem item : table.getItems()) {
+				// Ensure at least 1 column to grab data
+				processTableItem(cw, Math.max(1, numColumns), item);
 			}
 		}
-
-		for (final TableItem item : table.getItems()) {
-			// Ensure at least 1 column to grab data
-			processTableItem(sb, Math.max(1, numColumns), item);
+		catch (IOException e) {
+			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
 
 		// Create a new clipboard instance
@@ -75,23 +83,21 @@ public class CopyTableToClipboardAction extends Action {
 		try {
 			// Create the text transfer and set the contents
 			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sb.toString() }, new Transfer[] { textTransfer });
+			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
 		} finally {
 			// Clean up our local resources - system clipboard now has the data
 			cb.dispose();
 		}
 	}
 
-	private void processTableItem(final StringBuffer sb, final int numColumns, final TableItem item) {
+	private void processTableItem(final CSVWriter cw, final int numColumns, final TableItem item) throws IOException {
 		for (int i = 0; i < numColumns; ++i) {
 
-			sb.append(item.getText(i));
+			cw.addValue(item.getText(i));
 			// Add EOL or separator char as appropriate
 			if ((i + 1) == numColumns) {
-				sb.append("\n");
-			} else {
-				sb.append(separator);
-			}
+				cw.endRow();
+			} 
 		}
 	}
 }

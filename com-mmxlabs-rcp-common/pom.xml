@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.rcp.common</groupId>
 	<artifactId>com.mmxlabs.rcp.common.parent</artifactId>
@@ -25,7 +27,7 @@
 	</ciManagement>
 
 	<modules>
-		<module>target-definition</module>
+		<module>com.mmxlabs.rcp.common.target-definition</module>
 		<module>com.mmxlabs.rcp.common</module>
 		<module>com.mmxlabs.rcp.common.win32</module>
 
@@ -50,21 +52,6 @@
 		<!-- Required for some tycho workaround - may no longer be needed -->
 		<sourceDirectory>src</sourceDirectory>
 
-		<pluginManagement>
-			<plugins>
-				<!-- Override default of Java 1.6 -->
-				<plugin>
-					<groupId>org.eclipse.tycho</groupId>
-					<artifactId>tycho-compiler-plugin</artifactId>
-					<version>${tycho.version}</version>
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
 		<plugins>
 
 			<plugin>
@@ -84,7 +71,7 @@
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.rcp.common</groupId>
-							<artifactId>target-definition</artifactId>
+							<artifactId>com.mmxlabs.rcp.common.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
