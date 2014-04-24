@@ -7,6 +7,8 @@ package com.mmxlabs.scenario.service.util.encryption.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -133,9 +135,14 @@ public final class KeyFileLoader {
 
 		final String userHome = System.getProperty("osgi.instance.area");
 		if (userHome != null) {
-			final File f = new File(userHome + "/" + keyFileName);
-			if (f.exists()) {
-				return f;
+			try {
+				final URL u = new URL(userHome + "/" + keyFileName);
+				final File f = new File(u.getFile());
+				if (f.exists()) {
+					return f;
+				}
+			} catch (final MalformedURLException e) {
+				// Ignore
 			}
 		}
 		return null;
@@ -145,9 +152,14 @@ public final class KeyFileLoader {
 
 		final String userHome = System.getProperty("eclipse.home.location");
 		if (userHome != null) {
-			final File f = new File(userHome + "/" + keyFileName);
-			if (f.exists()) {
-				return f;
+			try {
+				final URL u = new URL(userHome + "/" + keyFileName);
+				final File f = new File(u.getFile());
+				if (f.exists()) {
+					return f;
+				}
+			} catch (final MalformedURLException e) {
+				// Ignore
 			}
 		}
 		return null;
