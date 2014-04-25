@@ -27,6 +27,10 @@ public final class CopyToClipboardActionFactory {
 
 	}
 
+	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTableViewer viewer) {
+		return new CopyGridToHtmlClipboardAction(viewer.getGrid());
+	}
+
 	public static CopyGridToClipboardAction createCopyToClipboardAction(final Grid grid) {
 		return new CopyGridToClipboardAction(grid);
 	}
