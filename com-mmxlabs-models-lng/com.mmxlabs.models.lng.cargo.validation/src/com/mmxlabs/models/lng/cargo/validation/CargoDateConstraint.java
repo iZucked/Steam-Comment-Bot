@@ -161,7 +161,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 
 				final Integer minTime = minTimes.get(key);
 
-				final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
+				final int severity = IStatus.ERROR;
 				if (minTime == null) {
 					// distance line is missing
 					// TODO customise message for this case.
