@@ -142,11 +142,24 @@ public class CopyGridToHtmlClipboardAction extends Action {
 			}
 			sw.write(">");
 		}
+		text = htmlEscape(text);
+		
 		if (text.equals("")) {
 			text = "&nbsp;";
-		}
+		}			
+		
 		sw.write(text); // TODO: escape this for HTML
 		sw.write("</" + tag + ">");
+	}
+	
+	/**
+	 * Does rough HTML escaping on a piece of text. 
+	 * @param text
+	 * @return
+	 */
+	// TODO: replace with proper HTML escaping from a library somewhere
+	public String htmlEscape(String text) {
+		return text.replace("&", "&amp;").replace(">", "&gt;").replace("<", "&gt;").replace("\"", "&quot;");
 	}
 	
 
