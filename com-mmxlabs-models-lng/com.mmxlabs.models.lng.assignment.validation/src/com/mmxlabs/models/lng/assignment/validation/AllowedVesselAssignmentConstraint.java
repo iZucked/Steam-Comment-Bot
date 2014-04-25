@@ -97,6 +97,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					} else if (s instanceof VesselClass) {
 						expandedVessels.add(s);
 					} else {
+						// This is ok as other impl (VesselGroup and VesselTypeGroup) only permit contained Vessels
 						expandedVessels.addAll(SetUtils.getObjects(s));
 					}
 				}
