@@ -66,9 +66,9 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final boolean inDialog, final List<IStatus> failures) {
+	private void validateSlotOrder(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final List<IStatus> failures) {
 		if (availableTime < 0) {
-			final int severity = inDialog ? IStatus.WARNING : IStatus.ERROR;
+			final int severity = IStatus.ERROR;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName() + "'"), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 			failures.add(status);
@@ -97,7 +97,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final Slot from, final Slot to, final int availableTime, final boolean inDialog, final List<IStatus> failures) {
+	private void validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final Slot from, final Slot to, final int availableTime, final List<IStatus> failures) {
 
 		// Skip for FOB/DES cargoes.
 		// TODO: Roll in common des redirection travel time
@@ -206,9 +206,9 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final boolean inDialog, final List<IStatus> failures) {
+	private void validateSlotAvailableTime(final IValidationContext ctx, final Cargo cargo, final Slot slot, final int availableTime, final List<IStatus> failures) {
 		if ((availableTime / 24) > SENSIBLE_TRAVEL_TIME) {
-			final int severity = inDialog ? IStatus.WARNING : IStatus.WARNING;
+			final int severity = IStatus.WARNING;
 			final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("'" + cargo.getName() + "'", availableTime / 24,
 					SENSIBLE_TRAVEL_TIME), severity);
 			status.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -220,12 +220,6 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	@Override
 	protected String validate(final IValidationContext ctx, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
-		boolean inDialog = false;
-
-		// Simple check that may indicate that we are in a dialog rather the full validation.
-		if (object.eContainer() == null) {
-			inDialog = true;
-		}
 
 		if (object instanceof Cargo) {
 			final String constraintID = ctx.getCurrentConstraintId();
@@ -251,11 +245,11 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 										- (prevSlot.getSlotOrPortDuration());
 
 								if (constraintID.equals(DATE_ORDER_ID)) {
-									validateSlotOrder(ctx, cargo, prevSlot, availableTime, inDialog, failures);
+									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);
 								} else if (constraintID.equals(TRAVEL_TIME_ID)) {
-									validateSlotTravelTime(ctx, cargo, prevSlot, slot, availableTime, inDialog, failures);
+									validateSlotTravelTime(ctx, cargo, prevSlot, slot, availableTime, failures);
 								} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
-									validateSlotAvailableTime(ctx, cargo, prevSlot, availableTime, inDialog, failures);
+									validateSlotAvailableTime(ctx, cargo, prevSlot, availableTime, failures);
 								}
 							}
 						}
