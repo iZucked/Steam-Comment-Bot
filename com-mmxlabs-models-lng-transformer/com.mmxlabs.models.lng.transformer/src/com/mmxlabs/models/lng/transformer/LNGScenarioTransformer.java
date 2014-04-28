@@ -998,7 +998,7 @@ public class LNGScenarioTransformer {
 
 	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allLoadPorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge) {
 		if (dischargeSlot.isFOBSale()) {
-			if (dischargeSlot.isDivertable()) {
+			if (dischargeSlot.isDivertible()) {
 				// Bind to all loads
 				// TODO: Take into account shipping days restriction
 				builder.bindLoadSlotsToFOBSale(discharge, allLoadPorts);
@@ -1034,7 +1034,7 @@ public class LNGScenarioTransformer {
 				builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 			} else {
 				// Bind FOB/DES slots to resource
-				if (loadSlot.isDivertable()) {
+				if (loadSlot.isDivertible()) {
 					// Bind to all discharges
 					// TODO: Take into account shipping days restriction
 					builder.bindDischargeSlotsToDESPurchase(load, allDischargePorts);
@@ -1162,7 +1162,7 @@ public class LNGScenarioTransformer {
 				discharge = builder.createFOBSaleDischargeSlot(name, port, localTimeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
 						pricingDate, dischargeSlot.isOptional());
 
-				if (dischargeSlot.isDivertable()) {
+				if (dischargeSlot.isDivertible()) {
 					// builder.setShippingHoursRestriction(discharge, dischargeWindow, dischargeSlot.getShippingDaysRestriction() * 24);
 				}
 			} else {
@@ -1278,7 +1278,7 @@ public class LNGScenarioTransformer {
 
 		if (loadSlot.isDESPurchase()) {
 			final ITimeWindow localTimeWindow;
-			if (loadSlot.isDivertable()) {
+			if (loadSlot.isDivertible()) {
 				// Extend window out to cover whole shipping days restriction
 				localTimeWindow = builder.createTimeWindow(loadWindow.getStart(), loadWindow.getEnd() + loadSlot.getShippingDaysRestriction() * 24);
 			} else {
@@ -1293,7 +1293,7 @@ public class LNGScenarioTransformer {
 			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), port, localTimeWindow, minVolume, maxVolume, loadPriceCalculator,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrDelegatedCV()), loadSlot.getSlotOrPortDuration(), slotPricingDate, loadSlot.isOptional());
 
-			if (loadSlot.isDivertable()) {
+			if (loadSlot.isDivertible()) {
 				builder.setShippingHoursRestriction(load, loadWindow, loadSlot.getShippingDaysRestriction() * 24);
 			}
 		} else {
