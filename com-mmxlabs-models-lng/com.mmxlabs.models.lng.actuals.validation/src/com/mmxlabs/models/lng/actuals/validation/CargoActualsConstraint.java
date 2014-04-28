@@ -73,7 +73,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						if (slot instanceof LoadSlot) {
 							final LoadSlot loadSlot = (LoadSlot) slot;
 							if (loadSlot.isDESPurchase()) {
-							if (loadSlot.getAssignment() != null  && !loadSlot.getAssignment().equals(cargoActuals.getVessel())) {
+								if (loadSlot.getAssignment() != null && !loadSlot.getAssignment().equals(cargoActuals.getVessel())) {
 									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
 									status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
 									status.addEObjectAndFeature(loadSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
@@ -96,6 +96,17 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				}
 
 				for (final SlotActuals slotActuals : cargoActuals.getActuals()) {
+
+					if (slotActuals.getOperationsStart() == null) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs an operations start date"));
+						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+						failures.add(status);
+					}
+					if (slotActuals.getOperationsEnd() == null) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs an operations end date"));
+						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
+						failures.add(status);
+					}
 
 					// Sanity check cv and m3 -> mmbtu conversions
 					if (Math.abs((slotActuals.getCV() * slotActuals.getVolumeInM3()) - slotActuals.getVolumeInMMBtu()) > 1.0) {
