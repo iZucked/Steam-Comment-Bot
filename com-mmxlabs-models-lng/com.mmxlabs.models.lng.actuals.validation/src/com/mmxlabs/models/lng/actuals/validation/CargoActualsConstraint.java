@@ -73,7 +73,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						if (slot instanceof LoadSlot) {
 							final LoadSlot loadSlot = (LoadSlot) slot;
 							if (loadSlot.isDESPurchase()) {
-								if (!loadSlot.getAssignment().equals(cargoActuals.getVessel())) {
+							if (loadSlot.getAssignment() != null  && !loadSlot.getAssignment().equals(cargoActuals.getVessel())) {
 									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
 									status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
 									status.addEObjectAndFeature(loadSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
