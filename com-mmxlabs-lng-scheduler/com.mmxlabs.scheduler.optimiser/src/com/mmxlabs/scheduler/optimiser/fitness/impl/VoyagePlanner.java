@@ -265,6 +265,8 @@ public class VoyagePlanner {
 		IPort prevPort = null;
 		IPort prev2Port = null;
 		IPortSlot prevPortSlot = null;
+		// Used for end of sequence checks
+		IPortSlot prevPrevPortSlot = null;
 
 		VoyageOptions previousOptions = null;
 		boolean useNBO = false;
@@ -381,6 +383,7 @@ public class VoyagePlanner {
 			prevPort = thisPort;
 			prevVisitDuration = visitDuration;
 			prevElement = element;
+			prevPrevPortSlot = prevPortSlot;
 			prevPortSlot = thisPortSlot;
 		}
 
@@ -388,13 +391,17 @@ public class VoyagePlanner {
 
 		// Populate final plan details
 		if (voyageOrPortOptions.size() > 1) {
-			final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
-			final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
-			if (plan == null) {
-				return null;
+			if (actualsDataProvider.hasActuals(prevPrevPortSlot)) {
+				heelVolumeInM3 = generateActualsVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, currentTimes, heelVolumeInM3);
+			} else {
+				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
+				final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
+				if (plan == null) {
+					return null;
+				}
+				plan.setIgnoreEnd(false);
+				heelVolumeInM3 = evaluateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
 			}
-			plan.setIgnoreEnd(false);
-			heelVolumeInM3 = evaluateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
 		}
 
 		return voyagePlansMap;
@@ -455,7 +462,7 @@ public class VoyagePlanner {
 					// No port fuel consumption, rolled into the voyage details.
 					// portDetails.setFuelConsumption(fuel, consumption);
 					// portDetails.setFuelUnitPrice(fuel, price);
-					
+
 					if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
 						portDetails.setPortCosts(actualsDataProvider.getPortCosts(portOptions.getPortSlot()));
 					}
@@ -531,7 +538,7 @@ public class VoyagePlanner {
 					voyageDetails.setFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu, consumptionInMMBTu);
 
 					fuelConsumptions[FuelComponent.NBO.ordinal()] += lngInM3;
-					fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(consumptionInMMBTu, lngSalesPricePerMMBTu);
+					fuelCosts[FuelComponent.NBO.ordinal()] += Calculator.costFromConsumption(consumptionInMMBTu, lngSalesPricePerMMBTu);
 					lngCommitmentInM3 += lngInM3;
 
 					// Consumption rolled into normal fuel consumption
@@ -715,6 +722,7 @@ public class VoyagePlanner {
 			long heelVolumeInM3) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
+		// FIXME: Use actuals
 		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
 		voyagePlanOptimiser.setVessel(vessel, baseFuelPricePerMT);
 
