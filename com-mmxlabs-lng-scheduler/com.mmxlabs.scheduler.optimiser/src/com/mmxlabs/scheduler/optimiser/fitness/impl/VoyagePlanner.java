@@ -479,7 +479,6 @@ public class VoyagePlanner {
 					VoyageOptions voyageOptions = (VoyageOptions) element;
 
 					VoyageDetails voyageDetails = new VoyageDetails();
-
 					voyageDetails.setOptions(voyageOptions);
 
 					// No distinction between travel and idle
@@ -526,6 +525,10 @@ public class VoyagePlanner {
 						if (actualsDataProvider.hasActuals(voyageOptions.getToPortSlot())) {
 							// Take off heel left at start of next load.
 							endHeelInM3 = actualsDataProvider.getStartHeelInM3(voyageOptions.getToPortSlot());
+						} else if (actualsDataProvider.hasActuals(voyageOptions.getFromPortSlot())) {
+							long heelAfterDischarge = actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot());
+							// end heel cannot be larger than discharge heel
+							endHeelInM3 = Math.min(heelAfterDischarge, vessel.getVesselClass().getMinHeel());
 						} else {
 							// Assume we arrive with safety heel at next destination.
 							endHeelInM3 = vessel.getVesselClass().getMinHeel();
@@ -579,7 +582,7 @@ public class VoyagePlanner {
 
 		final AllocationRecord allocationRecord = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, plan, currentTimes);
 		allocationRecord.allocationMode = AllocationMode.Actuals;
-		IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
+		IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(allocationRecord);
 
 		// Sanity check
 		assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
