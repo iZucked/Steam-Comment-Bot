@@ -92,6 +92,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		int timeCounter = -1;
 		// Assume true, unless a slot has said otherwise
 		boolean hasActuals = true;
+		
+		// how to get this port slot?
+		IPortSlot returnSlot = null;
 		for (int i = 0; i < sequence.length - adjust; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 
@@ -99,6 +102,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				++timeCounter;
 				final PortDetails pd = (PortDetails) element;
 				final IPortSlot slot = pd.getOptions().getPortSlot();
+				
+				// Update each time
+				returnSlot = slot; 
+				
 				// Special case for FOB/DES
 				// Need better bit#
 				if (slot instanceof StartPortSlot) {
@@ -156,8 +163,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			return null;
 		}
 
-		// how to get this port slot?
-		IPortSlot returnSlot = null;
+	
 
 		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes,
 				returnSlot, minVolumes, maxVolumes);
