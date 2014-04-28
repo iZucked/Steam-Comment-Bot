@@ -264,7 +264,7 @@ public class VoyagePlanner {
 		ISequenceElement prevElement = null;
 		IPort prevPort = null;
 		IPort prev2Port = null;
-		IPortSlot prevPortSlot = null; 
+		IPortSlot prevPortSlot = null;
 
 		VoyageOptions previousOptions = null;
 		boolean useNBO = false;
@@ -455,6 +455,10 @@ public class VoyagePlanner {
 					// No port fuel consumption, rolled into the voyage details.
 					// portDetails.setFuelConsumption(fuel, consumption);
 					// portDetails.setFuelUnitPrice(fuel, price);
+					
+					if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
+						portDetails.setPortCosts(actualsDataProvider.getPortCosts(portOptions.getPortSlot()));
+					}
 
 					detailedSequence[idx] = portDetails;
 				} else if (element instanceof VoyageOptions) {
@@ -468,7 +472,7 @@ public class VoyagePlanner {
 					voyageDetails.setTravelTime(voyageOptions.getAvailableTime());
 					voyageDetails.setIdleTime(0);
 					// Not known
-					 voyageDetails.setSpeed(10);
+					voyageDetails.setSpeed(10);
 
 					// Base Fuel
 
@@ -561,7 +565,7 @@ public class VoyagePlanner {
 		final AllocationRecord allocationRecord = volumeAllocator.createAllocationRecord(vessel, vesselStartTime, plan, currentTimes);
 		allocationRecord.allocationMode = AllocationMode.Actuals;
 		IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, vesselStartTime, plan, currentTimes);
-		
+
 		// Sanity check
 		assert plan.getRemainingHeelInM3() == allocationAnnotation.getRemainingHeelVolumeInM3();
 

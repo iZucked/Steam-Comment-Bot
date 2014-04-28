@@ -48,10 +48,7 @@ public class ShippingCostHelper {
 			if (obj instanceof PortDetails) {
 
 				final PortDetails portDetails = (PortDetails) obj;
-
-				final IPort port = portDetails.getOptions().getPortSlot().getPort();
-				final PortType portType = portDetails.getOptions().getPortSlot().getPortType();
-				portCosts += portCostProvider.getPortCost(port, vessel, portType);
+				portCosts += portDetails.getPortCosts();
 			}
 
 		}
@@ -119,7 +116,7 @@ public class ShippingCostHelper {
 		}
 		return false;
 	}
-	
+
 	public long getGeneratedCharterOutCosts(final VoyagePlan plan) {
 
 		int planDuration = 0;

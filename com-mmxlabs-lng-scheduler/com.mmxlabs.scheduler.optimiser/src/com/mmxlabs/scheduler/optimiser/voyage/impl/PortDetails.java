@@ -28,13 +28,16 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 
 	private long totalGroupProfitAndLoss;
 
+	private long portCosts;
+	
 	public PortDetails() {
 
 	}
 
-	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final EnumMap<FuelComponent, Integer> fuelPrice,
+	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final EnumMap<FuelComponent, Integer> fuelPrice, long portCosts,
 			final LongFastEnumMap<CapacityViolationType> capacityViolations, final long totalGroupProfitAndLoss) {
 		this.options = options;
+		this.portCosts = portCosts;
 		this.fuelConsumption.putAll(fuelConsumption);
 		this.fuelPrice.putAll(fuelPrice);
 		this.capacityViolations.putAll(capacityViolations);
@@ -104,6 +107,7 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 				&& Objects.equal(fuelConsumption, d.fuelConsumption)
 				&& Objects.equal(capacityViolations, d.capacityViolations)
 				&& Objects.equal(fuelPrice, d.fuelPrice)
+				&& Objects.equal(portCosts, d.portCosts)
 				&& Objects.equal(options, d.options)
 						;
 			// @formatter:on
@@ -114,15 +118,17 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(options, capacityViolations, fuelConsumption, totalGroupProfitAndLoss);
+		return Objects.hashCode(options, capacityViolations, fuelConsumption, fuelPrice, portCosts, totalGroupProfitAndLoss);
 	}
 
 	@Override
 	public String toString() {
 		// @formatter:off
 		return Objects.toStringHelper(PortDetails.class)
-				.add("fuelConsumption", fuelConsumption)
 				.add("options", options)
+				.add("fuelConsumption", fuelConsumption)
+				.add("fuelPrice", fuelPrice)
+				.add("portCosts", portCosts)
 				.add("capacityViolations", capacityViolations)
 				.add("totalGroupProfitAndLoss", totalGroupProfitAndLoss)
 				.toString();
@@ -131,7 +137,7 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 
 	@Override
 	public PortDetails clone() {
-		return new PortDetails(new PortOptions(options), fuelConsumption, fuelPrice, capacityViolations, totalGroupProfitAndLoss);
+		return new PortDetails(new PortOptions(options), fuelConsumption, fuelPrice, portCosts, capacityViolations, totalGroupProfitAndLoss);
 	}
 
 	@Override
@@ -142,6 +148,14 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 	@Override
 	public void setTotalGroupProfitAndLoss(final long totalGroupProfitAndLoss) {
 		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
+	}
+
+	public long getPortCosts() {
+		return portCosts;
+	}
+
+	public void setPortCosts(long portCosts) {
+		this.portCosts = portCosts;
 	}
 
 }
