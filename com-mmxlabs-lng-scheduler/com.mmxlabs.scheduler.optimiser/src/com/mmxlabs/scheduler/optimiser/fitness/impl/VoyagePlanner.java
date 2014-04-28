@@ -408,8 +408,7 @@ public class VoyagePlanner {
 	}
 
 	private long generateActualsVoyagePlan(IVessel vessel, int vesselStartTime, List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap,
-			List<VoyagePlan> voyagePlansList, List<IOptionsSequenceElement> voyageOrPortOptions, List<Integer> currentTimes, final long startHeelVolumeInM3) {
-
+			List<VoyagePlan> voyagePlansList, List<IOptionsSequenceElement> voyageOrPortOptions, List<Integer> currentTimes, long startHeelVolumeInM3) {
 		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
 
 		final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
@@ -465,6 +464,14 @@ public class VoyagePlanner {
 
 					if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
 						portDetails.setPortCosts(actualsDataProvider.getPortCosts(portOptions.getPortSlot()));
+					}
+
+					// TODO: This should not be required in future as preceeding voyages should also be actualised!
+					if (idx == 0) {
+						if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
+							startHeelVolumeInM3 = actualsDataProvider.getStartHeelInM3(portOptions.getPortSlot());
+							plan.setStartingHeelInM3(startHeelVolumeInM3);
+						}
 					}
 
 					detailedSequence[idx] = portDetails;
@@ -552,6 +559,7 @@ public class VoyagePlanner {
 			}
 
 			// Store results in plan
+			plan.setRemainingHeelInM3(endHeelInM3);
 			plan.setSequence(detailedSequence);
 
 			plan.setLNGFuelVolume(lngCommitmentInM3);

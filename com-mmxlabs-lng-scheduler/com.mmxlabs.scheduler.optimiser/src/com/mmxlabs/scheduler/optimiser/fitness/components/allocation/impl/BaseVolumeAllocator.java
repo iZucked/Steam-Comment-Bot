@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
+import java.nio.file.AccessMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord.AllocationMode;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
@@ -43,6 +46,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
+
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
 
 	public BaseVolumeAllocator() {
 		super();
@@ -76,14 +82,16 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		boolean foundALoad = false;
 
-		final List<Integer> slotTimes= new ArrayList<>(numElements);
-		
+		final List<Integer> slotTimes = new ArrayList<>(numElements);
+
 		// These handle current special cases around FOB/DES
 		Integer transferTime = null;
 		Long transferVolume = null;
 		IVessel nominatedVessel = null;
 		final int adjust = plan.isIgnoreEnd() ? 1 : 0;
 		int timeCounter = -1;
+		// Assume true, unless a slot has said otherwise
+		boolean hasActuals = true;
 		for (int i = 0; i < sequence.length - adjust; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 
@@ -112,6 +120,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						}
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(loadOption));
 					}
+					hasActuals &= actualsDataProvider.hasActuals(slot);
 				} else if (slot instanceof IDischargeOption) {
 					slots.add(slot);
 					slotTimes.add(arrivalTimes.get(timeCounter));
@@ -127,6 +136,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						}
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));
 					}
+					hasActuals &= actualsDataProvider.hasActuals(slot);
 				} else if (slot instanceof IHeelOptionsPortSlot) {
 					slots.add(slot);
 					slotTimes.add(arrivalTimes.get(timeCounter));
@@ -146,14 +156,15 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			return null;
 		}
 
-
-		
 		// how to get this port slot?
 		IPortSlot returnSlot = null;
-		
-		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes, returnSlot,
-				minVolumes, maxVolumes);
 
+		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes,
+				returnSlot, minVolumes, maxVolumes);
+
+		if (hasActuals) {
+			allocationRecord.allocationMode = AllocationMode.Actuals;
+		}
 		allocationRecord.nominatedVessel = nominatedVessel;
 
 		return allocationRecord;

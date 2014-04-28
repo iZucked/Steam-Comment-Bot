@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -24,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
  */
 public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
+	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
 	/**
