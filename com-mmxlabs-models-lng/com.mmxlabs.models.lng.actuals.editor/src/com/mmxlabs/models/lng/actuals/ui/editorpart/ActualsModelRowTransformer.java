@@ -56,7 +56,7 @@ public class ActualsModelRowTransformer {
 			}
 
 			// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
-			for (int i = 0; i < Math.max(cargoActuals.size(), Math.max(loadSlots.size(), dischargeSlots.size())); ++i) {
+			for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 
 				LoadActuals loadSlot = null;
 				if (i < loadSlots.size()) {
