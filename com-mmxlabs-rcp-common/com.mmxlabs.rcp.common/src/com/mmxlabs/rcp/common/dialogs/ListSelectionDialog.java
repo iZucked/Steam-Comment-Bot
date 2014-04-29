@@ -478,7 +478,7 @@ public class ListSelectionDialog extends Dialog {
 					return true;
 				if (contentProvider.hasChildren(element))
 					return true;
-				final String t = labelProvider.getText(element).toLowerCase();
+				final String t = getFilterableText(element);
 
 				for (final String f : filters) {
 					if (t.contains(f))
@@ -570,9 +570,12 @@ public class ListSelectionDialog extends Dialog {
 	 * 
 	 * @param title
 	 * @param columnLabelProvider
+	 * @return 
 	 */
-	public void addColumn(final String title, final ColumnLabelProvider columnLabelProvider) {
-		this.columns.add(new Pair<String, CellLabelProvider>(title, contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty())));
+	public CellLabelProvider addColumn(final String title, final ColumnLabelProvider columnLabelProvider) {
+		CellLabelProvider result = contentProvider.wrapColumnLabelProvider(columnLabelProvider, columns.isEmpty());
+		this.columns.add(new Pair<String, CellLabelProvider>(title, result));
+		return result;
 	}
 
 	public String getTitle() {
@@ -597,6 +600,18 @@ public class ListSelectionDialog extends Dialog {
 
 	public Object[] getResult() {
 		return dialogResult;
+	}
+	
+	/**
+	 * Returns the text which the filter box searches through per display row element. 
+	 * Search is done on a trimmed string, so concatenating fields with whitespace will allow multiple
+	 * fields to be searched. 
+	 * 
+	 * @param element
+	 * @return
+	 */
+	protected String getFilterableText(final Object element) {
+		return labelProvider.getText(element).toLowerCase();
 	}
 
 	@Override
