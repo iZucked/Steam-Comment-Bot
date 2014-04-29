@@ -339,6 +339,8 @@ public class VoyagePlanner {
 				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
 				if (actualsDataProvider.hasActuals(prevPortSlot)) {
 					heelVolumeInM3 = generateActualsVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, currentTimes, heelVolumeInM3);
+					// Reset VPO ready for next iteration - some data may have been added
+					voyagePlanOptimiser.reset();
 				} else {
 
 					final boolean shortCargoEnd = ((PortOptions) voyageOrPortOptions.get(0)).getPortSlot().getPortType() == PortType.Short_Cargo_End;
@@ -393,6 +395,8 @@ public class VoyagePlanner {
 		if (voyageOrPortOptions.size() > 1) {
 			if (actualsDataProvider.hasActuals(prevPrevPortSlot)) {
 				heelVolumeInM3 = generateActualsVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, currentTimes, heelVolumeInM3);
+				// Reset VPO ready for next iteration - some data may have been added
+				voyagePlanOptimiser.reset();
 			} else {
 				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
 				final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, currentTimes, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
@@ -999,6 +1003,7 @@ public class VoyagePlanner {
 
 			idx++;
 		}
+
 		return result;
 	}
 
