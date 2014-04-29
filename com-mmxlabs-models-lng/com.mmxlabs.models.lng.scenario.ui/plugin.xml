@@ -150,6 +150,24 @@
                allPopups="false"
                locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler">
             <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
+                  label="Import Charter Curves"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
+                  label="Import Base Fuel Curves"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler">
+            <command
                   commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
                   label="Import Cargoes"
                   style="push">
@@ -181,6 +199,16 @@
          <command
                defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
                id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
+               name="Bulk Import Prices from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
+               name="Bulk Import Prices from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
                name="Bulk Import Prices from CSV">
          </command>
          <command

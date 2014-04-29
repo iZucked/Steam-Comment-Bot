@@ -33,9 +33,27 @@ public class SimpleImportAction extends ImportAction {
 	/**
 	 * @since 3.1
 	 */
-	public interface FieldInfoProvider {
-		EObject getContainer();
-		EReference getContainment();
+	public static class FieldInfoProvider {
+		private final EObject container;
+		private final EReference containment;
+		
+		public FieldInfoProvider() {
+			this(null, null);
+		}
+		
+		public FieldInfoProvider(final EObject container, final EReference containment) {
+			this.container = container;
+			this.containment = containment;
+		}
+		
+		public EObject getContainer() {
+			return container;
+		}
+		
+		public EReference getContainment() {
+			return containment;
+		}
+		
 	}
 
 	private final FieldInfoProvider fieldInfoProvider;
@@ -46,6 +64,11 @@ public class SimpleImportAction extends ImportAction {
 	public SimpleImportAction(final ImportHooksProvider iph, final FieldInfoProvider fip) {
 		super(iph);
 		this.fieldInfoProvider = fip;
+	}
+	
+	public SimpleImportAction(final ImportHooksProvider iph, final EObject container, final EReference containment) {
+		super(iph);
+		this.fieldInfoProvider = new FieldInfoProvider(container, containment);
 	}
 	
 	public SimpleImportAction(final IScenarioEditingLocation part, final ScenarioTableViewer viewer) {
