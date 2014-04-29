@@ -48,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
@@ -84,6 +85,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private ICancellationFeeProvider cancellationFeeProvider;
+
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
 
 	/**
 	 * Internal data structure to store handy data needed for Cargo P&L calculations. Note similarity to {@link IAllocationAnnotation} - and even {@link AllocationRecord} (which is not visible here).
@@ -176,6 +180,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			taxTime = cargoPNLData.arrivalTimes[idx] = currentAllocation.getSlotTime(slot);
 			cargoPNLData.slotVolumeInM3[idx] = currentAllocation.getSlotVolumeInM3(slot);
 			cargoPNLData.slotVolumeInMMBTu[idx] = currentAllocation.getSlotVolumeInMMBTu(slot);
+
 			idx++;
 		}
 
@@ -246,6 +251,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
 
 			}
+
+			// Sanity checks for actuals DCP
+			if (actualsDataProvider.hasActuals(slot)) {
+				assert cargoPNLData.arrivalTimes[idx] == actualsDataProvider.getArrivalTime(slot);
+				assert cargoPNLData.slotVolumeInM3[idx] == actualsDataProvider.getVolumeInM3(slot);
+				assert cargoPNLData.slotVolumeInMMBTu[idx] == actualsDataProvider.getVolumeInMMBtu(slot);
+				assert cargoPNLData.slotPricePerMMBTu[idx] == actualsDataProvider.getLNGPricePerMMBTu(slot);
+			}
+
 			idx++;
 		}
 
