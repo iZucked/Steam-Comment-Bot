@@ -447,7 +447,7 @@ public class VoyagePlanner {
 			// Totals for voyage plan
 			final long[] fuelConsumptions = new long[FuelComponent.values().length];
 			final long[] fuelCosts = new long[FuelComponent.values().length];
-			final int totalRouteCost = 0;
+			int totalRouteCost = 0;
 
 			long lngCommitmentInM3 = 0;
 			long endHeelInM3 = 0;
@@ -556,10 +556,13 @@ public class VoyagePlanner {
 					lngCommitmentInM3 += lngInM3;
 
 					// Consumption rolled into normal fuel consumption
-					// Route costs not specified.
+					// Route costs
+					long routeCosts = actualsDataProvider.getNextVoyageRouteCosts(voyageOptions.getFromPortSlot());
 					// voyageDetails.setRouteAdditionalConsumption(fuel, fuelUnit, consumption);
-					// voyageDetails.setRouteCost(price);
-					// totalRouteCost += price
+					voyageDetails.setRouteCost(routeCosts);
+					totalRouteCost += routeCosts;
+
+					voyageOptions.setDistance(actualsDataProvider.getNextVoyageDistance(voyageOptions.getFromPortSlot()));
 
 					detailedSequence[idx] = voyageDetails;
 				}
@@ -577,7 +580,6 @@ public class VoyagePlanner {
 				plan.setTotalFuelCost(fc, fuelCosts[fc.ordinal()]);
 			}
 
-			// Nothing!
 			plan.setTotalRouteCost(totalRouteCost);
 
 		}

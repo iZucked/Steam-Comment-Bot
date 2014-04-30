@@ -104,7 +104,10 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	long getNextVoyageBaseFuelConsumptionInMT(IPortSlot slot);
+	
+	int getNextVoyageDistance(IPortSlot slot);
 
 	int getLNGPricePerMMBTu(IPortSlot slot);
 
+	long getNextVoyageRouteCosts(IPortSlot slot);
 }
