@@ -108,6 +108,16 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						failures.add(status);
 					}
 
+					if (slotActuals.getOperationsStart() != null && slotActuals.getOperationsEnd() != null) {
+						if (slotActuals.getOperationsStart().after(slotActuals.getOperationsEnd())) {
+							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+									(IConstraintStatus) ctx.createFailureStatus("Operations start date if adter operations end"));
+							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END);
+							failures.add(status);
+						}
+					}
+
 					// Sanity check cv and m3 -> mmbtu conversions
 					if (Math.abs((slotActuals.getCV() * slotActuals.getVolumeInM3()) - slotActuals.getVolumeInMMBtu()) > 1.0) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
