@@ -130,16 +130,6 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
 			} else {
-				int cargoCV = -1;
-				for (final IPortSlot sSlot : allocation.getSlots()) {
-					if (sSlot instanceof ILoadOption) {
-						cargoCV = ((ILoadOption) sSlot).getCargoCVValue();
-					}
-				}
-				if (cargoCV == -1) {
-					throw new IllegalStateException("Discharge Slot without a Load Slot");
-				}
-				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargePricePerM3(), allocation.getLoadOption().getCargoCVValue());
 				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
