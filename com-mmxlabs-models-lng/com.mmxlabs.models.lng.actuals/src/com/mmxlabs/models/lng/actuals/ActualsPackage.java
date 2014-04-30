@@ -225,13 +225,31 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS__DISTANCE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
+
+	/**
+	 * The feature id for the '<em><b>Route Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS__ROUTE_COSTS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 14;
+
+	/**
 	 * The number of structural features of the '<em>Slot Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
+	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 15;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -533,6 +551,24 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
 
 	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__DISTANCE = SLOT_ACTUALS__DISTANCE;
+
+	/**
+	 * The feature id for the '<em><b>Route Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__ROUTE_COSTS = SLOT_ACTUALS__ROUTE_COSTS;
+
+	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -732,6 +768,24 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
 
 	/**
+	 * The feature id for the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__DISTANCE = SLOT_ACTUALS__DISTANCE;
+
+	/**
+	 * The feature id for the '<em><b>Route Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__ROUTE_COSTS = SLOT_ACTUALS__ROUTE_COSTS;
+
+	/**
 	 * The feature id for the '<em><b>Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -888,6 +942,28 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotActuals_BaseFuelConsumption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Distance</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getDistance()
+	 * @see #getSlotActuals()
+	 * @generated
+	 */
+	EAttribute getSlotActuals_Distance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Route Costs</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts()
+	 * @see #getSlotActuals()
+	 * @generated
+	 */
+	EAttribute getSlotActuals_RouteCosts();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getLocalStart() <em>Get Local Start</em>}' operation.
@@ -1342,6 +1418,22 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = eINSTANCE.getSlotActuals_BaseFuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Distance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ACTUALS__DISTANCE = eINSTANCE.getSlotActuals_Distance();
+
+		/**
+		 * The meta object literal for the '<em><b>Route Costs</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ACTUALS__ROUTE_COSTS = eINSTANCE.getSlotActuals_RouteCosts();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.

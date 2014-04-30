@@ -41,6 +41,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRouteCosts <em>Route Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -288,6 +290,46 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected int baseFuelConsumption = BASE_FUEL_CONSUMPTION_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getDistance() <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DISTANCE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDistance() <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDistance()
+	 * @generated
+	 * @ordered
+	 */
+	protected int distance = DISTANCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getRouteCosts() <em>Route Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int ROUTE_COSTS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getRouteCosts() <em>Route Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRouteCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected int routeCosts = ROUTE_COSTS_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -373,6 +415,52 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		baseFuelConsumption = newBaseFuelConsumption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION, oldBaseFuelConsumption, baseFuelConsumption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getDistance() {
+		return distance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDistance(int newDistance) {
+		int oldDistance = distance;
+		distance = newDistance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__DISTANCE, oldDistance, distance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getRouteCosts() {
+		return routeCosts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRouteCosts(int newRouteCosts) {
+		int oldRouteCosts = routeCosts;
+		routeCosts = newRouteCosts;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS, oldRouteCosts, routeCosts));
 	}
 
 	/**
@@ -713,6 +801,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getPortCharges();
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return getBaseFuelConsumption();
+			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
+				return getDistance();
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
+				return getRouteCosts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -763,6 +855,12 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
+				setDistance((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
+				setRouteCosts((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -815,6 +913,12 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption(BASE_FUEL_CONSUMPTION_EDEFAULT);
 				return;
+			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
+				setDistance(DISTANCE_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
+				setRouteCosts(ROUTE_COSTS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -853,6 +957,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return portCharges != PORT_CHARGES_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
+				return distance != DISTANCE_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
+				return routeCosts != ROUTE_COSTS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -907,6 +1015,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		result.append(portCharges);
 		result.append(", baseFuelConsumption: ");
 		result.append(baseFuelConsumption);
+		result.append(", distance: ");
+		result.append(distance);
+		result.append(", routeCosts: ");
+		result.append(routeCosts);
 		result.append(')');
 		return result.toString();
 	}

@@ -29,6 +29,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -110,11 +114,11 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 			this.cargo = cargo;
 		}
 
-		private int getFuelUse(FuelUsage fuelUsage, Fuel fuel, FuelUnit fuelUnit) {
+		private int getFuelUse(final FuelUsage fuelUsage, final Fuel fuel, final FuelUnit fuelUnit) {
 			int total = 0;
-			for (FuelQuantity fq : fuelUsage.getFuels()) {
+			for (final FuelQuantity fq : fuelUsage.getFuels()) {
 				if (fq.getFuel().equals(fuel)) {
-					for (FuelAmount amount : fq.getAmounts()) {
+					for (final FuelAmount amount : fq.getAmounts()) {
 						if (amount.getUnit().equals(fuelUnit)) {
 							total += amount.getQuantity();
 						}
@@ -133,6 +137,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
+				final PortModel portModel = lngScenarioModel.getPortModel();
 				if (portfolioModel != null) {
 
 					final CompoundCommand cmd = new CompoundCommand();
@@ -173,13 +178,22 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 					final Map<Slot, SlotActuals> slotActualMap = new HashMap<>();
 
+					// True if DES and divertible -- need to look up distances!
+					boolean isDivertableDESPurchase = false;
+
+					Port loadPort = null;
+					Port dischargePort = null;
+
 					for (final Slot slot : cargo.getSlots()) {
 
 						SlotActuals slotActuals = null;
 						if (slot instanceof LoadSlot) {
 							final LoadSlot loadSlot = (LoadSlot) slot;
+							loadPort = loadSlot.getPort();
 							slotActuals = ActualsFactory.eINSTANCE.createLoadActuals();
 							if (loadSlot.isDESPurchase()) {
+								isDivertableDESPurchase = loadSlot.isDivertible();
+
 								if (slot.getAssignment() instanceof Vessel) {
 									cargoActuals.setVessel((Vessel) slot.getAssignment());
 								}
@@ -187,6 +201,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 							slotActuals.setCV(((LoadSlot) slot).getCargoCV());
 						} else if (slot instanceof DischargeSlot) {
 							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+							dischargePort = dischargeSlot.getPort();
 							slotActuals = ActualsFactory.eINSTANCE.createDischargeActuals();
 							if (dischargeSlot.isFOBSale()) {
 								if (slot.getAssignment() instanceof Vessel) {
@@ -197,7 +212,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 						if (slotActuals != null) {
 							slotActuals.setSlot(slot);
 							slotActuals.setNotes(slot.getNotes());
-							Contract c = slot.getContract();
+							final Contract c = slot.getContract();
 							if (c != null) {
 								slotActuals.setCounterparty(c.getName());
 							}
@@ -219,7 +234,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									// Find cargo cv
 									for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
 										if (slotAllocation.getSlot() instanceof LoadSlot) {
-											LoadSlot loadSlot = (LoadSlot) slotAllocation.getSlot();
+											final LoadSlot loadSlot = (LoadSlot) slotAllocation.getSlot();
 											cargoCV = loadSlot.getSlotOrDelegatedCV();
 											break;
 										}
@@ -228,28 +243,40 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									int ladenBaseFuelConsumptionInMT = 0;
 									int ballastBaseFuelConsumptionInMT = 0;
 
+									int ballastRouteCosts = 0;
+									int ladenRouteCosts = 0;
+
+									int ladenDistance = 0;
+									int ballastDistance = 0;
+
 									boolean isLaden = false;
-									for (Event event : cargoAllocation.getEvents()) {
+									for (final Event event : cargoAllocation.getEvents()) {
 
 										if (event instanceof SlotVisit) {
-											SlotVisit slotVisit = (SlotVisit) event;
+											final SlotVisit slotVisit = (SlotVisit) event;
 											isLaden = slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot;
 
 											// All port fuel use is part of laden allocation
 											ladenBaseFuelConsumptionInMT += getFuelUse(slotVisit, Fuel.BASE_FUEL, FuelUnit.MT);
 											ladenBaseFuelConsumptionInMT += getFuelUse(slotVisit, Fuel.PILOT_LIGHT, FuelUnit.MT);
 										} else if (event instanceof Journey) {
-											Journey journey = (Journey) event;
+											final Journey journey = (Journey) event;
 											if (isLaden) {
 												ladenBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.BASE_FUEL, FuelUnit.MT);
 												ladenBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.PILOT_LIGHT, FuelUnit.MT);
+
+												ladenDistance += journey.getDistance();
+												ladenRouteCosts += journey.getToll();
 											} else {
 												ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.BASE_FUEL, FuelUnit.MT);
 												ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.PILOT_LIGHT, FuelUnit.MT);
+
+												ballastDistance += journey.getDistance();
+												ballastRouteCosts += journey.getToll();
 											}
 
 										} else if (event instanceof Idle) {
-											Idle idle = (Idle) event;
+											final Idle idle = (Idle) event;
 											if (isLaden) {
 												ladenBaseFuelConsumptionInMT += getFuelUse(idle, Fuel.BASE_FUEL, FuelUnit.MT);
 												ladenBaseFuelConsumptionInMT += getFuelUse(idle, Fuel.PILOT_LIGHT, FuelUnit.MT);
@@ -260,6 +287,24 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 										}
 
+									}
+
+									if (isDivertableDESPurchase && portModel != null && loadPort != null && dischargePort != null) {
+
+										// Take direct route
+										for (final Route route : portModel.getRoutes()) {
+											if (route.isCanal()) {
+												continue;
+											}
+											for (final RouteLine rl : route.getLines()) {
+												if (rl.getFrom() == loadPort && rl.getTo() == dischargePort) {
+													ladenDistance = rl.getDistance();
+												}
+												if (rl.getTo() == loadPort && rl.getFrom() == dischargePort) {
+													ballastDistance = rl.getDistance();
+												}
+											}
+										}
 									}
 
 									for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
@@ -274,21 +319,45 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										slotActuals.setPriceDOL(slotAllocation.getPrice());
 										slotActuals.setPortCharges(slotAllocation.getSlotVisit().getPortCost());
 										if (slotActuals instanceof LoadActuals) {
-											((LoadActuals) slotActuals).setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
-											((LoadActuals) slotActuals).setStartingHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
+											if (isDivertableDESPurchase) {
+												Vessel vessel = cargoActuals.getVessel();
+												if (vessel != null) {
+													((LoadActuals) slotActuals).setStartingHeelM3(vessel.getVesselClass().getMinHeel());
+													((LoadActuals) slotActuals).setStartingHeelMMBTu((int) Math.round(vessel.getVesselClass().getMinHeel() * cargoCV));
+												}
+											} else {
+												((LoadActuals) slotActuals).setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
+												((LoadActuals) slotActuals).setStartingHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
+											}
 											slotActuals.setBaseFuelConsumption(ladenBaseFuelConsumptionInMT);
+											slotActuals.setRouteCosts(ladenRouteCosts);
+											slotActuals.setDistance(ladenDistance);
 											// Reset in case of multiple loads/discharges!
 											ladenBaseFuelConsumptionInMT = 0;
+											ladenRouteCosts = 0;
+											ladenDistance = 0;
 										} else if (slotActuals instanceof DischargeActuals) {
-											((DischargeActuals) slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
-											((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
+											if (isDivertableDESPurchase) {
+												Vessel vessel = cargoActuals.getVessel();
+												if (vessel != null) {
+													((DischargeActuals) slotActuals).setEndHeelM3(vessel.getVesselClass().getMinHeel());
+													((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(vessel.getVesselClass().getMinHeel() * cargoCV));
+												}
+											} else {
+												((DischargeActuals) slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
+												((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
+											}
 											slotActuals.setBaseFuelConsumption(ballastBaseFuelConsumptionInMT);
+											slotActuals.setRouteCosts(ballastRouteCosts);
+											slotActuals.setDistance(ballastDistance);
 											// Reset in case of multiple loads/discharges!
 											ballastBaseFuelConsumptionInMT = 0;
+											ballastRouteCosts = 0;
+											ballastDistance = 0;
 										}
 
 										// set a base fuel price.
-										for (FuelQuantity fq : slotAllocation.getSlotVisit().getFuels()) {
+										for (final FuelQuantity fq : slotAllocation.getSlotVisit().getFuels()) {
 											if (fq.getFuel() == Fuel.BASE_FUEL) {
 												if (fq.getAmounts().size() > 0) {
 													cargoActuals.setBaseFuelPrice(fq.getAmounts().get(0).getUnitPrice());

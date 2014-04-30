@@ -29,6 +29,8 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,6 +116,58 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setBaseFuelConsumption(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Distance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Distance</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Distance</em>' attribute.
+	 * @see #setDistance(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Distance()
+	 * @model
+	 * @generated
+	 */
+	int getDistance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Distance</em>' attribute.
+	 * @see #getDistance()
+	 * @generated
+	 */
+	void setDistance(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Route Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Route Costs</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route Costs</em>' attribute.
+	 * @see #setRouteCosts(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_RouteCosts()
+	 * @model
+	 * @generated
+	 */
+	int getRouteCosts();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Route Costs</em>' attribute.
+	 * @see #getRouteCosts()
+	 * @generated
+	 */
+	void setRouteCosts(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

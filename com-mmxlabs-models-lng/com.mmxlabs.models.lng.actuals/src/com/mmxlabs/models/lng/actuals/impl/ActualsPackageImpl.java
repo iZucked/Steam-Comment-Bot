@@ -212,6 +212,26 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSlotActuals_Distance() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_RouteCosts() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getSlotActuals__GetLocalStart() {
 		return slotActualsEClass.getEOperations().get(0);
 	}
@@ -602,6 +622,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CV);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__PORT_CHARGES);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__BASE_FUEL_CONSUMPTION);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__DISTANCE);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__ROUTE_COSTS);
 		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_LOCAL_START);
 		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_LOCAL_END);
 
@@ -692,6 +714,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getSlotActuals_CV(), ecorePackage.getEDouble(), "CV", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_PortCharges(), ecorePackage.getEInt(), "portCharges", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_BaseFuelConsumption(), ecorePackage.getEInt(), "baseFuelConsumption", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_RouteCosts(), ecorePackage.getEInt(), "routeCosts", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotActuals__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 

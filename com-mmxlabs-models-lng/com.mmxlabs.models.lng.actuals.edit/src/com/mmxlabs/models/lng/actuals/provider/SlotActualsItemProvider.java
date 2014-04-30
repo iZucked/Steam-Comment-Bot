@@ -74,6 +74,8 @@ public class SlotActualsItemProvider
 			addCVPropertyDescriptor(object);
 			addPortChargesPropertyDescriptor(object);
 			addBaseFuelConsumptionPropertyDescriptor(object);
+			addDistancePropertyDescriptor(object);
+			addRouteCostsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -136,6 +138,50 @@ public class SlotActualsItemProvider
 				 getString("_UI_SlotActuals_baseFuelConsumption_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_baseFuelConsumption_feature", "_UI_SlotActuals_type"),
 				 ActualsPackage.Literals.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Distance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDistancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_distance_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_distance_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__DISTANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Route Costs feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRouteCostsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_routeCosts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_routeCosts_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__ROUTE_COSTS,
 				 true,
 				 false,
 				 false,
@@ -431,6 +477,8 @@ public class SlotActualsItemProvider
 			case ActualsPackage.SLOT_ACTUALS__CV:
 			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
+			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
+			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
