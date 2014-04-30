@@ -104,13 +104,6 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 			output.getMarketAllocations().add(eAllocation);
 			eAllocation.setSlotAllocation(slotAllocation);
 
-			final int cargoCV;
-			if (slot instanceof ILoadOption) {
-				cargoCV = ((ILoadOption) slot).getCargoCVValue();
-			} else {
-				cargoCV = market.getCVValue();
-			}
-
 			if (slot instanceof ILoadOption) {
 				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
 				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
