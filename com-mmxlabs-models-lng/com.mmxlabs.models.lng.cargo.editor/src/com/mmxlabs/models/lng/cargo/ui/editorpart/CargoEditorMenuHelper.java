@@ -929,11 +929,14 @@ public class CargoEditorMenuHelper {
 							cal.add(Calendar.HOUR_OF_DAY, travelTime);
 							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
 						} else if (!loadSlot.isDESPurchase()) {
+
+							AVesselSet<? extends Vessel> assignedVessel = null;
 							if (loadSlot.getCargo() != null) {
-								final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getCargo().getAssignment());
-								cal.add(Calendar.HOUR_OF_DAY, travelTime);
-								cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
+								assignedVessel = loadSlot.getCargo().getAssignment();
 							}
+							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), assignedVessel);
+							cal.add(Calendar.HOUR_OF_DAY, travelTime);
+							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
 						}
 
 						cal.set(Calendar.DAY_OF_MONTH, 1);
