@@ -57,10 +57,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		final AllocationAnnotation annotation = new AllocationAnnotation();
 
-		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
-		// Assuming a single cargo CV!
-		final int cargoCVValue = loadSlot.getCargoCVValue();
-
 		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.resourceVessel;
 		if (allocationRecord.allocationMode == AllocationMode.Actuals) {
 
@@ -114,7 +110,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
 			return annotation;
-		} else if (allocationRecord.allocationMode == AllocationMode.Transfer) {
+		}
+
+		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
+		// Assuming a single cargo CV!
+		final int cargoCVValue = loadSlot.getCargoCVValue();
+
+		if (allocationRecord.allocationMode == AllocationMode.Transfer) {
 			// Transfer, just find the common max and replicate
 			final long availableCargoSpace = vessel.getCargoCapacity() - allocationRecord.startVolumeInM3;
 			long transferVolume = availableCargoSpace;
