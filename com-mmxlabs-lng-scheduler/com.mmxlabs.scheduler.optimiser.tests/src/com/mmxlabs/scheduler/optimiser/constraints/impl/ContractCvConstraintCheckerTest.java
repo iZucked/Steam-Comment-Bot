@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -42,8 +43,9 @@ public class ContractCvConstraintCheckerTest {
 		//
 		final IPortSlotProviderEditor portSlotProvider = new HashMapPortSlotEditor();
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor();
+		final IActualsDataProvider actualsDataProvider = Mockito.mock(IActualsDataProvider.class);
 
-		final ContractCvConstraintChecker checker = createChecker("name", portTypeProvider, portSlotProvider);
+		final ContractCvConstraintChecker checker = createChecker("name", portTypeProvider, portSlotProvider, actualsDataProvider);
 
 		// check empty behaviour
 		final ISequenceElement o1 = Mockito.mock(ISequenceElement.class, "1");
@@ -79,6 +81,12 @@ public class ContractCvConstraintCheckerTest {
 		Mockito.when(s4.getMinCvValue()).thenReturn(0l);
 		Mockito.when(s4.getMaxCvValue()).thenReturn(50l);
 
+		
+		Mockito.when(actualsDataProvider.hasActuals(s1)).thenReturn(false);
+		Mockito.when(actualsDataProvider.hasActuals(s2)).thenReturn(false);
+		Mockito.when(actualsDataProvider.hasActuals(s3)).thenReturn(false);
+		Mockito.when(actualsDataProvider.hasActuals(s4)).thenReturn(false);
+		
 		// OK pairing
 		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
 		final ISequence okSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2));
@@ -97,15 +105,24 @@ public class ContractCvConstraintCheckerTest {
 		// combined sequence of all cases should fail
 		final ISequence combinedSequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o1, o3, o1, o4));
 		Assert.assertFalse(checker.checkSequence(combinedSequence, resource));
+		
+		// Actuals test case - should now pass as actualised CV are ignored
+		// CV too high
+		Mockito.when(actualsDataProvider.hasActuals(s1)).thenReturn(true);
+		Mockito.when(actualsDataProvider.hasActuals(s4)).thenReturn(true);
+		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o4, resource));
+		Assert.assertTrue(checker.checkSequence(tooHighSequence, resource));
 	}
 
-	private ContractCvConstraintChecker createChecker(final String name, final IPortTypeProviderEditor portTypeProvider, final IPortSlotProviderEditor portSlotProvider) {
+	private ContractCvConstraintChecker createChecker(final String name, final IPortTypeProviderEditor portTypeProvider, final IPortSlotProviderEditor portSlotProvider,
+			final IActualsDataProvider actualsDataProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {
 
 			@Override
 			protected void configure() {
 				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
 			}
 
 			@Provides

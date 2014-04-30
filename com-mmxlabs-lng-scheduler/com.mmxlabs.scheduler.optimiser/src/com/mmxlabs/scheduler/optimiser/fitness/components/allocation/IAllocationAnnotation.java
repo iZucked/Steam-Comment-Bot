@@ -27,6 +27,8 @@ public interface IAllocationAnnotation extends IElementAnnotation {
 	 */
 	long getFuelVolumeInM3();
 
+	long getStartHeelVolumeInM3();
+
 	/**
 	 * Returns the quantity of LNG left as heel in m3 with no where to go (i.e. lost).
 	 * 
@@ -49,8 +51,6 @@ public interface IAllocationAnnotation extends IElementAnnotation {
 	int getSlotTime(IPortSlot slot);
 
 	int getSlotPricePerMMBTu(IPortSlot slot);
-
-	long getStartHeelVolumeInM3();
 
 	long getSlotVolumeInMMBTu(IPortSlot slot);
 

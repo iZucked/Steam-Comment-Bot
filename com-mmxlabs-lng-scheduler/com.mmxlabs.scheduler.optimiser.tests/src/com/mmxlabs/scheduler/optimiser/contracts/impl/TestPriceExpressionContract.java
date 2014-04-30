@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -55,7 +56,7 @@ public class TestPriceExpressionContract {
 
 		IPort port = mock(IPort.class);
 		when(port.getTimeZoneId()).thenReturn("UTC");
-		
+
 		// tell the ICurve mock to return specified values at given points
 		when(curve.getValueAtPoint(t1)).thenReturn(p1);
 		when(curve.getValueAtPoint(t2)).thenReturn(p2);
@@ -106,11 +107,21 @@ public class TestPriceExpressionContract {
 		final IVessel vessel = mock(IVessel.class);
 		final VoyagePlan plan = new VoyagePlan();
 		final IDetailTree annotations = mock(IDetailTree.class);
-		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3,
-				dischargeVolumeInM3, vessel, vesselStartTime, plan, annotations);
 
-		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3,
-				dischargeVolumeInM3, vessel, vesselStartTime, plan, annotations);
+		final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
+		when(allocationAnnotation.getSlotTime(loadSlotNoPricingDate)).thenReturn(loadTime);
+		when(allocationAnnotation.getSlotTime(loadSlotWithPricingDate)).thenReturn(loadTime);
+		when(allocationAnnotation.getSlotTime(dischargeSlot)).thenReturn(dischargeTime);
+
+		when(allocationAnnotation.getSlotVolumeInM3(loadSlotNoPricingDate)).thenReturn(loadVolumeInM3);
+		when(allocationAnnotation.getSlotVolumeInM3(loadSlotWithPricingDate)).thenReturn(loadVolumeInM3);
+		when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
+
+		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel, vesselStartTime, plan,
+				annotations);
+
+		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel, vesselStartTime, plan,
+				annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);
 		verify(curve).getValueAtPoint(loadTime);
@@ -170,16 +181,15 @@ public class TestPriceExpressionContract {
 
 	private PriceExpressionContract createPriceExpressionContract(final ICurve curve) {
 		PriceExpressionContract contract = new PriceExpressionContract(curve);
-		
+
 		Injector injector = Guice.createInjector(new AbstractModule() {
-			
+
 			@Override
 			protected void configure() {
 				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 			}
 		});
-		
-		
+
 		injector.injectMembers(contract);
 		return contract;
 	}

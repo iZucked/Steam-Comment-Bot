@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Random;
 
 import junit.framework.Assert;
@@ -15,6 +18,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 
@@ -35,7 +39,11 @@ public class TestMarketPriceContract {
 		createInjector().injectMembers(mpc);
 		for (int i = 0; i < 1000; i++) {
 			final int date = random.nextInt();
-			Assert.assertEquals(mpc.calculateFOBPricePerMMBTu(null, null, date, date, 0, 0, 0, null, 0, null, null), market.getValueAtPoint(date));
+
+			final IAllocationAnnotation allocationAnnotation = mock(IAllocationAnnotation.class);
+			when(allocationAnnotation.getSlotTime(null)).thenReturn(date);
+
+			Assert.assertEquals(mpc.calculateFOBPricePerMMBTu(null, null, 0, allocationAnnotation, null, 0, null, null), market.getValueAtPoint(date));
 		}
 	}
 

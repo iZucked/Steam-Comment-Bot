@@ -230,24 +230,24 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
 						final ILoadSlot loadSlot = (ILoadSlot) loadOption;
 						final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeOption;
-						pricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargePricePerMMBTu, loadVolumeInM3,
-								dischargeVolumeInM3, vessel, vesselStartTime, plan, portSlotDetails);
+						pricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateFOBPricePerMMBTu(loadSlot, dischargeSlot, dischargePricePerMMBTu, currentAllocation, vessel, vesselStartTime, plan,
+								portSlotDetails);
 					} else if (loadOption instanceof ILoadSlot) {
 						// FOB Sale
-						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculatePriceForFOBSalePerMMBTu((ILoadSlot) loadOption, dischargeOption, transferTime, dischargePricePerMMBTu,
-								transferVolumeInM3, portSlotDetails);
+						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculatePriceForFOBSalePerMMBTu((ILoadSlot) loadOption, dischargeOption, dischargePricePerMMBTu, currentAllocation,
+								portSlotDetails);
 					} else {
 						// DES Purchase
 						assert dischargeOption instanceof IDischargeSlot;
-						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculateDESPurchasePricePerMMBTu(loadOption, (IDischargeSlot) dischargeOption, transferTime, dischargePricePerMMBTu,
-								transferVolumeInM3, portSlotDetails);
+						pricePerMMBTu = loadOption.getLoadPriceCalculator().calculateDESPurchasePricePerMMBTu(loadOption, (IDischargeSlot) dischargeOption, dischargePricePerMMBTu, currentAllocation,
+								portSlotDetails);
 					}
 				}
 				cargoPNLData.slotPricePerMMBTu[idx] = pricePerMMBTu;
 				// TODO: Split into a third loop
 				{
-					additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, slots, cargoPNLData.arrivalTimes, cargoPNLData.slotVolumeInM3,
-							cargoPNLData.slotPricePerMMBTu, vessel, vesselStartTime, plan, portSlotDetails);
+					additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, currentAllocation, cargoPNLData.slotPricePerMMBTu, vessel,
+							vesselStartTime, plan, portSlotDetails);
 					cargoPNLData.slotAdditionalPNL[idx] = additionProfitAndLoss;
 				}
 				// Tmp hack until we sort out the API around this - AllocationAnnotation is an input to this method!
