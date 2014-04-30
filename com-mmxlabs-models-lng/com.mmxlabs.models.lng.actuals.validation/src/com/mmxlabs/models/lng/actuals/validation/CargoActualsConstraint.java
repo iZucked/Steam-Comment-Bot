@@ -23,6 +23,8 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
+import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -69,6 +71,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						failures.add(status);
 					}
 				} else {
+
 					for (final Slot slot : cargo.getSlots()) {
 						if (slot instanceof LoadSlot) {
 							final LoadSlot loadSlot = (LoadSlot) slot;
@@ -93,6 +96,19 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 							}
 						}
 					}
+				}
+
+				boolean distanceNeeded = true;
+
+				for (final Slot slot : cargo.getSlots()) {
+					final SlotType slotClassification = SlotClassifier.classify(slot);
+					if (slotClassification == SlotType.FOB_Sale) {
+						distanceNeeded = false;
+					}
+					if (slotClassification == SlotType.DES_Buy) {
+						distanceNeeded = false;
+					}
+
 				}
 
 				for (final SlotActuals slotActuals : cargoActuals.getActuals()) {
@@ -148,6 +164,12 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 							failures.add(status);
 						}
 
+					}
+
+					if (distanceNeeded && slotActuals.getDistance() == 0) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs a distance"));
+						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__DISTANCE);
+						failures.add(status);
 					}
 
 				}
