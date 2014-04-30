@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
@@ -89,8 +90,11 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
-			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final int vesselStartTime, final VoyagePlan originalPlan, final IDetailTree annotation) {
+	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation,
+			final IVessel vessel, final int vesselStartTime, final VoyagePlan originalPlan, final IDetailTree annotation) {
+
+		final int loadTime = allocationAnnotation.getSlotTime(loadSlot);
+		final int dischargeTime = allocationAnnotation.getSlotTime(dischargeSlot);
 
 		final int marketPurchasePricePerMMBTu = purchasePriceCurve.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(loadTime, loadSlot));
 		final int cargoCVValue = loadSlot.getCargoCVValue();
@@ -182,7 +186,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 			// Clamp to [0, infinity)
 			final long diff = incrementalShipping;
 			if (diff > 0) {
-				profitSharePerMMBTu = Calculator.getPerMMBTuFromTotalAndVolumeInM3(diff, dischargeVolumeInM3, cargoCVValue);
+				profitSharePerMMBTu = Calculator.getPerMMBTuFromTotalAndVolumeInMMBTu(diff, allocationAnnotation.getSlotVolumeInMMBTu(dischargeSlot));
 			}
 
 			if (annotation != null) {
@@ -318,21 +322,25 @@ public class RedirectionContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final List<IPortSlot> slots, final int[] arrivalTimes, final long[] volumes, final int[] dischargePricesPerMMBTu,
-			final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
+	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu, final IVessel vessel,
+			final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int transferTime, final int dischargePricePerMMBTu,
-			final long transferVolumeInM3, final IDetailTree annotations) {
+	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
+			final IDetailTree annotations) {
+		final int transferTime = allocationAnnotation.getSlotTime(dischargeSlot);
+		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(dischargeSlot);
 		return calculateLoadPricePerMMBTu(loadOption, dischargeSlot, transferTime, dischargeSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
 
 	@Override
-	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu,
-			final long transferVolumeInM3, final IDetailTree annotations) {
+	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
+			final IDetailTree annotations) {
+		final int transferTime = allocationAnnotation.getSlotTime(loadSlot);
+		final long transferVolumeInM3 = allocationAnnotation.getSlotVolumeInM3(loadSlot);
 		return calculateLoadPricePerMMBTu(loadSlot, dischargeOption, transferTime, loadSlot.getPort(), dischargePricePerMMBTu, transferVolumeInM3, annotations);
 	}
 }
