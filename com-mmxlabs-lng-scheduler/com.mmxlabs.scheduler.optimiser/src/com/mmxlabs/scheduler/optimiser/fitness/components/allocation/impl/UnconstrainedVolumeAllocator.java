@@ -83,6 +83,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				// Actuals mode, take values directly
 				annotation.setSlotVolumeInM3(slot, actualsDataProvider.getVolumeInM3(slot));
 				annotation.setSlotVolumeInMMBTu(slot, actualsDataProvider.getVolumeInMMBtu(slot));
+				annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));
 
 				// First slot
 				if (i == 0) {
@@ -126,6 +127,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			}
 			for (int i = 0; i < slots.size(); ++i) {
 				annotation.setSlotVolumeInM3(slots.get(i), transferVolume);
+				annotation.setSlotCargoCV(slots.get(i), cargoCVValue);
 			}
 		} else {
 			assert allocationRecord.allocationMode == AllocationMode.Shipped;

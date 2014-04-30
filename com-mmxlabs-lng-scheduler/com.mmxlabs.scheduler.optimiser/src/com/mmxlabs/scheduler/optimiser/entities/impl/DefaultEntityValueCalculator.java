@@ -100,6 +100,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		public final int[] slotPricePerMMBTu;
 		public final long[] slotVolumeInM3;
 		public final long[] slotVolumeInMMBTu;
+		public final int[] slotCargoCV;
 		public final long[] slotAdditionalPNL;
 		public final IEntity[] slotEntity;
 		public final int[] arrivalTimes;
@@ -110,6 +111,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			this.slotPricePerMMBTu = new int[slots.size()];
 			this.slotVolumeInM3 = new long[slots.size()];
 			this.slotVolumeInMMBTu = new long[slots.size()];
+			this.slotCargoCV = new int[slots.size()];
 			this.slotAdditionalPNL = new long[slots.size()];
 			this.slotEntity = new IEntity[slots.size()];
 			this.arrivalTimes = new int[slots.size()];
@@ -180,6 +182,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			taxTime = cargoPNLData.arrivalTimes[idx] = currentAllocation.getSlotTime(slot);
 			cargoPNLData.slotVolumeInM3[idx] = currentAllocation.getSlotVolumeInM3(slot);
 			cargoPNLData.slotVolumeInMMBTu[idx] = currentAllocation.getSlotVolumeInMMBTu(slot);
+			cargoPNLData.slotCargoCV[idx] = currentAllocation.getSlotCargoCV(slot);
 
 			idx++;
 		}
@@ -255,6 +258,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// Sanity checks for actuals DCP
 			if (actualsDataProvider.hasActuals(slot)) {
 				assert cargoPNLData.arrivalTimes[idx] == actualsDataProvider.getArrivalTime(slot);
+				assert cargoPNLData.slotCargoCV[idx] == actualsDataProvider.getCVValue(slot);
 				assert cargoPNLData.slotVolumeInM3[idx] == actualsDataProvider.getVolumeInM3(slot);
 				assert cargoPNLData.slotVolumeInMMBTu[idx] == actualsDataProvider.getVolumeInMMBtu(slot);
 				assert cargoPNLData.slotPricePerMMBTu[idx] == actualsDataProvider.getLNGPricePerMMBTu(slot);
