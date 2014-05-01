@@ -45,8 +45,8 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	
 	public static class VolumeData {
 		public final Contract contract;
-		public final Map<Integer, Integer> volumes;
-		public VolumeData(Contract contract, Map<Integer, Integer> volumes) {
+		public final Map<Integer, Long> volumes;
+		public VolumeData(Contract contract, Map<Integer, Long> volumes) {
 			this.contract = contract;
 			this.volumes = volumes;
 		}		
@@ -66,13 +66,13 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 	}
 	
 	@SuppressWarnings("serial")
-	private static class CumulativeMap<K> extends AutoInitialisingMap<K, Integer> {
+	private static class CumulativeMap<K> extends AutoInitialisingMap<K, Long> {
 		@Override
-		protected Integer autoValue() {
-			return 0;
+		protected Long autoValue() {
+			return 0l;
 		}
 		
-		public void plusEquals(K key, Integer value) {
+		public void plusEquals(K key, Long value) {
 			put(key, get(key) + value);
 		}
 		
@@ -112,7 +112,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				
 				for (CargoAllocation ca: schedule.getCargoAllocations()) {
 					for (SlotAllocation sa: ca.getSlotAllocations()) {
-						final int volume = sa.getVolumeTransferred();
+						final long volume = sa.getVolumeTransferred();
 						Contract contract = sa.getContract();
 						if (contract == null) {
 							Slot slot = sa.getSlot();
@@ -145,7 +145,7 @@ public class VolumeTrackingReportView extends SimpleTabularReportView<VolumeTrac
 				Integer earliest = null;
 				Integer latest = null;
 
-				for (Map<Integer, Integer> volumes : overallVolumes.values()) {
+				for (Map<Integer, Long> volumes : overallVolumes.values()) {
 					for (Integer key : volumes.keySet()) {
 						if (earliest == null || earliest > key) {
 							earliest = key;
