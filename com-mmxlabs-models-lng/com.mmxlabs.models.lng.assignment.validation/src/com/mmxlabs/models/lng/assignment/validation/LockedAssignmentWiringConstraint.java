@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 
 public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstraint {
 	@Override

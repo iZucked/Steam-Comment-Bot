@@ -1390,21 +1390,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter() {
-		return (EReference)profitAndLossContainerEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public EReference getProfitAndLossContainer_GeneralPNLDetails() {
-		return (EReference)profitAndLossContainerEClass.getEStructuralFeatures().get(2);
+		return (EReference)profitAndLossContainerEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1808,7 +1798,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		profitAndLossContainerEClass = createEClass(PROFIT_AND_LOSS_CONTAINER);
 		createEReference(profitAndLossContainerEClass, PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS);
-		createEReference(profitAndLossContainerEClass, PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER);
 		createEReference(profitAndLossContainerEClass, PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS);
 
 		groupProfitAndLossEClass = createEClass(GROUP_PROFIT_AND_LOSS);
@@ -2075,7 +2064,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(profitAndLossContainerEClass, ProfitAndLossContainer.class, "ProfitAndLossContainer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getProfitAndLossContainer_GroupProfitAndLoss(), this.getGroupProfitAndLoss(), null, "groupProfitAndLoss", null, 0, 1, ProfitAndLossContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter(), this.getGroupProfitAndLoss(), null, "groupProfitAndLossNoTimeCharter", null, 0, 1, ProfitAndLossContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProfitAndLossContainer_GeneralPNLDetails(), this.getGeneralPNLDetails(), null, "generalPNLDetails", null, 0, -1, ProfitAndLossContainer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(groupProfitAndLossEClass, GroupProfitAndLoss.class, "GroupProfitAndLoss", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

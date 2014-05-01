@@ -186,8 +186,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="ProfitAndLossContainer" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLoss" eType="#//GroupProfitAndLoss"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="groupProfitAndLossNoTimeCharter"
-        eType="#//GroupProfitAndLoss" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="generalPNLDetails" upperBound="-1"
         eType="#//GeneralPNLDetails" containment="true"/>
   </eClassifiers>
