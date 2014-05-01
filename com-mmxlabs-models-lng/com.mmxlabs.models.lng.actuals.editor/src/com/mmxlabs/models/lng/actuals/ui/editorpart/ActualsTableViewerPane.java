@@ -569,7 +569,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		addActualsColumn(dischargeColumns, "D-Price", new NumericAttributeManipulator(pkg.getSlotActuals_PriceDOL(), editingDomain), new RowDataEMFPath(false, Type.DISCHARGE));
 
 		addActualsColumn(cargoColumns, "Base Fuel Price", new NumericAttributeManipulator(pkg.getCargoActuals_BaseFuelPrice(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
-		addActualsColumn(cargoColumns, "Crew Bonus", new NumericAttributeManipulator(pkg.getCargoActuals_CrewBonus(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
+//		addActualsColumn(cargoColumns, "Crew Bonus", new NumericAttributeManipulator(pkg.getCargoActuals_CrewBonus(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
 		addActualsColumn(cargoColumns, "Insurance Premium", new NumericAttributeManipulator(pkg.getCargoActuals_InsurancePremium(), editingDomain), new RowDataEMFPath(false, Type.CARGO));
 	}
 

@@ -31,6 +31,7 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCrewBonus <em>Crew Bonus</em>}</li>
  * </ul>
  * </p>
  *
@@ -168,6 +169,32 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setRouteCosts(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Crew Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Crew Bonus</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Crew Bonus</em>' attribute.
+	 * @see #setCrewBonus(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_CrewBonus()
+	 * @model
+	 * @generated
+	 */
+	int getCrewBonus();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCrewBonus <em>Crew Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Crew Bonus</em>' attribute.
+	 * @see #getCrewBonus()
+	 * @generated
+	 */
+	void setCrewBonus(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

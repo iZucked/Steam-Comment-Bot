@@ -71,7 +71,6 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 		add_cargoEditor(detailComposite, topClass);
 		add_baseFuelPriceEditor(detailComposite, topClass);
 		add_insurancePremiumEditor(detailComposite, topClass);
-		add_crewBonusEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseFuelPrice feature on CargoActuals
@@ -88,14 +87,6 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_insurancePremiumEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__INSURANCE_PREMIUM));
-	}
-	/**
-	 * Create the editor for the crewBonus feature on CargoActuals
-	 *
-	 * @generated
-	 */
-	protected void add_crewBonusEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CREW_BONUS));
 	}
 	/**
 	 * Create the editor for the actuals feature on CargoActuals

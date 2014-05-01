@@ -42,7 +42,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getInsurancePremium <em>Insurance Premium</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getCrewBonus <em>Crew Bonus</em>}</li>
  * </ul>
  * </p>
  *
@@ -240,26 +239,6 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	protected int insurancePremium = INSURANCE_PREMIUM_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getCrewBonus() <em>Crew Bonus</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCrewBonus()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int CREW_BONUS_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getCrewBonus() <em>Crew Bonus</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCrewBonus()
-	 * @generated
-	 * @ordered
-	 */
-	protected int crewBonus = CREW_BONUS_EDEFAULT;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -322,29 +301,6 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 		insurancePremium = newInsurancePremium;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM, oldInsurancePremium, insurancePremium));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getCrewBonus() {
-		return crewBonus;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setCrewBonus(int newCrewBonus) {
-		int oldCrewBonus = crewBonus;
-		crewBonus = newCrewBonus;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.CARGO_ACTUALS__CREW_BONUS, oldCrewBonus, crewBonus));
 	}
 
 	/**
@@ -624,8 +580,6 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 				return getBaseFuelPrice();
 			case ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM:
 				return getInsurancePremium();
-			case ActualsPackage.CARGO_ACTUALS__CREW_BONUS:
-				return getCrewBonus();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -673,9 +627,6 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 			case ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM:
 				setInsurancePremium((Integer)newValue);
 				return;
-			case ActualsPackage.CARGO_ACTUALS__CREW_BONUS:
-				setCrewBonus((Integer)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -721,9 +672,6 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 			case ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM:
 				setInsurancePremium(INSURANCE_PREMIUM_EDEFAULT);
 				return;
-			case ActualsPackage.CARGO_ACTUALS__CREW_BONUS:
-				setCrewBonus(CREW_BONUS_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -758,8 +706,6 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 				return baseFuelPrice != BASE_FUEL_PRICE_EDEFAULT;
 			case ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM:
 				return insurancePremium != INSURANCE_PREMIUM_EDEFAULT;
-			case ActualsPackage.CARGO_ACTUALS__CREW_BONUS:
-				return crewBonus != CREW_BONUS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -790,8 +736,6 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 		result.append(baseFuelPrice);
 		result.append(", insurancePremium: ");
 		result.append(insurancePremium);
-		result.append(", crewBonus: ");
-		result.append(crewBonus);
 		result.append(')');
 		return result.toString();
 	}

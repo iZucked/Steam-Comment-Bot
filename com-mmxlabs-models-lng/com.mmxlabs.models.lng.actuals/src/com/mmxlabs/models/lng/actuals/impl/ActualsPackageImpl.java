@@ -232,6 +232,16 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSlotActuals_CrewBonus() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EOperation getSlotActuals__GetLocalStart() {
 		return slotActualsEClass.getEOperations().get(0);
 	}
@@ -374,16 +384,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	@Override
 	public EAttribute getCargoActuals_InsurancePremium() {
 		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getCargoActuals_CrewBonus() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -624,6 +624,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__BASE_FUEL_CONSUMPTION);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__DISTANCE);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__ROUTE_COSTS);
+		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CREW_BONUS);
 		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_LOCAL_START);
 		createEOperation(slotActualsEClass, SLOT_ACTUALS___GET_LOCAL_END);
 
@@ -639,7 +640,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEReference(cargoActualsEClass, CARGO_ACTUALS__CARGO);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__BASE_FUEL_PRICE);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__INSURANCE_PREMIUM);
-		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__CREW_BONUS);
 
 		loadActualsEClass = createEClass(LOAD_ACTUALS);
 		createEAttribute(loadActualsEClass, LOAD_ACTUALS__CONTRACT_TYPE);
@@ -716,6 +716,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getSlotActuals_BaseFuelConsumption(), ecorePackage.getEInt(), "baseFuelConsumption", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_RouteCosts(), ecorePackage.getEInt(), "routeCosts", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_CrewBonus(), ecorePackage.getEInt(), "crewBonus", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotActuals__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -733,7 +734,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEReference(getCargoActuals_Cargo(), theCargoPackage.getCargo(), null, "cargo", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_InsurancePremium(), ecorePackage.getEInt(), "insurancePremium", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCargoActuals_CrewBonus(), ecorePackage.getEInt(), "crewBonus", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(loadActualsEClass, LoadActuals.class, "LoadActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadActuals_ContractType(), ecorePackage.getEString(), "contractType", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

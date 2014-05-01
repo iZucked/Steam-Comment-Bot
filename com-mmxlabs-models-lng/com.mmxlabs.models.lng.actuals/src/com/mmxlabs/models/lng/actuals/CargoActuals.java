@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getInsurancePremium <em>Insurance Premium</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCrewBonus <em>Crew Bonus</em>}</li>
  * </ul>
  * </p>
  *
@@ -87,32 +86,6 @@ public interface CargoActuals extends EObject {
 	 * @generated
 	 */
 	void setInsurancePremium(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Crew Bonus</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Crew Bonus</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Crew Bonus</em>' attribute.
-	 * @see #setCrewBonus(int)
-	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_CrewBonus()
-	 * @model
-	 * @generated
-	 */
-	int getCrewBonus();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCrewBonus <em>Crew Bonus</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Crew Bonus</em>' attribute.
-	 * @see #getCrewBonus()
-	 * @generated
-	 */
-	void setCrewBonus(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Actuals</b></em>' containment reference list.

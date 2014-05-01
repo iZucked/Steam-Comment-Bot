@@ -72,7 +72,6 @@ public class CargoActualsItemProvider
 			addCargoPropertyDescriptor(object);
 			addBaseFuelPricePropertyDescriptor(object);
 			addInsurancePremiumPropertyDescriptor(object);
-			addCrewBonusPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -298,28 +297,6 @@ public class CargoActualsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Crew Bonus feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCrewBonusPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CargoActuals_crewBonus_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_crewBonus_feature", "_UI_CargoActuals_type"),
-				 ActualsPackage.Literals.CARGO_ACTUALS__CREW_BONUS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -381,7 +358,6 @@ public class CargoActualsItemProvider
 			case ActualsPackage.CARGO_ACTUALS__CARGO_REFERENCE_SELLER:
 			case ActualsPackage.CARGO_ACTUALS__BASE_FUEL_PRICE:
 			case ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM:
-			case ActualsPackage.CARGO_ACTUALS__CREW_BONUS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ActualsPackage.CARGO_ACTUALS__ACTUALS:

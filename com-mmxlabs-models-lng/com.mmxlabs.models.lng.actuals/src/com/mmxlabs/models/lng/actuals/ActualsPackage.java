@@ -243,13 +243,22 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS__ROUTE_COSTS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 14;
 
 	/**
+	 * The feature id for the '<em><b>Crew Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS__CREW_BONUS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 15;
+
+	/**
 	 * The number of structural features of the '<em>Slot Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 15;
+	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 16;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -397,22 +406,13 @@ public interface ActualsPackage extends EPackage {
 	int CARGO_ACTUALS__INSURANCE_PREMIUM = 10;
 
 	/**
-	 * The feature id for the '<em><b>Crew Bonus</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ACTUALS__CREW_BONUS = 11;
-
-	/**
 	 * The number of structural features of the '<em>Cargo Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS_FEATURE_COUNT = 12;
+	int CARGO_ACTUALS_FEATURE_COUNT = 11;
 
 	/**
 	 * The number of operations of the '<em>Cargo Actuals</em>' class.
@@ -567,6 +567,15 @@ public interface ActualsPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_ACTUALS__ROUTE_COSTS = SLOT_ACTUALS__ROUTE_COSTS;
+
+	/**
+	 * The feature id for the '<em><b>Crew Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__CREW_BONUS = SLOT_ACTUALS__CREW_BONUS;
 
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
@@ -786,6 +795,15 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS__ROUTE_COSTS = SLOT_ACTUALS__ROUTE_COSTS;
 
 	/**
+	 * The feature id for the '<em><b>Crew Bonus</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__CREW_BONUS = SLOT_ACTUALS__CREW_BONUS;
+
+	/**
 	 * The feature id for the '<em><b>Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -966,6 +984,17 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getSlotActuals_RouteCosts();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCrewBonus <em>Crew Bonus</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Crew Bonus</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getCrewBonus()
+	 * @see #getSlotActuals()
+	 * @generated
+	 */
+	EAttribute getSlotActuals_CrewBonus();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getLocalStart() <em>Get Local Start</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1126,17 +1155,6 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getCargoActuals_InsurancePremium();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCrewBonus <em>Crew Bonus</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Crew Bonus</em>'.
-	 * @see com.mmxlabs.models.lng.actuals.CargoActuals#getCrewBonus()
-	 * @see #getCargoActuals()
-	 * @generated
-	 */
-	EAttribute getCargoActuals_CrewBonus();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getActuals <em>Actuals</em>}'.
@@ -1436,6 +1454,14 @@ public interface ActualsPackage extends EPackage {
 		EAttribute SLOT_ACTUALS__ROUTE_COSTS = eINSTANCE.getSlotActuals_RouteCosts();
 
 		/**
+		 * The meta object literal for the '<em><b>Crew Bonus</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ACTUALS__CREW_BONUS = eINSTANCE.getSlotActuals_CrewBonus();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1556,14 +1582,6 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CARGO_ACTUALS__INSURANCE_PREMIUM = eINSTANCE.getCargoActuals_InsurancePremium();
-
-		/**
-		 * The meta object literal for the '<em><b>Crew Bonus</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute CARGO_ACTUALS__CREW_BONUS = eINSTANCE.getCargoActuals_CrewBonus();
 
 		/**
 		 * The meta object literal for the '<em><b>Actuals</b></em>' containment reference list feature.

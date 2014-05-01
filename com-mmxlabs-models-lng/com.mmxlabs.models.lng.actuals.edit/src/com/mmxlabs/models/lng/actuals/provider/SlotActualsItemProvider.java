@@ -76,6 +76,7 @@ public class SlotActualsItemProvider
 			addBaseFuelConsumptionPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addRouteCostsPropertyDescriptor(object);
+			addCrewBonusPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -182,6 +183,28 @@ public class SlotActualsItemProvider
 				 getString("_UI_SlotActuals_routeCosts_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_routeCosts_feature", "_UI_SlotActuals_type"),
 				 ActualsPackage.Literals.SLOT_ACTUALS__ROUTE_COSTS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Crew Bonus feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCrewBonusPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_crewBonus_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_crewBonus_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__CREW_BONUS,
 				 true,
 				 false,
 				 false,
@@ -479,6 +502,7 @@ public class SlotActualsItemProvider
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
+			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

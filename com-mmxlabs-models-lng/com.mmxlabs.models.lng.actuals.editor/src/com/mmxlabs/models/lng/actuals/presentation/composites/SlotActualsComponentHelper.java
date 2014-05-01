@@ -77,6 +77,7 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 		add_baseFuelConsumptionEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
 		add_routeCostsEditor(detailComposite, topClass);
+		add_crewBonusEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the CV feature on SlotActuals
@@ -119,6 +120,15 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_routeCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__ROUTE_COSTS));
+	}
+
+	/**
+	 * Create the editor for the crewBonus feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_crewBonusEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__CREW_BONUS));
 	}
 
 	/**

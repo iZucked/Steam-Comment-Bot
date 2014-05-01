@@ -43,6 +43,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRouteCosts <em>Route Costs</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCrewBonus <em>Crew Bonus</em>}</li>
  * </ul>
  * </p>
  *
@@ -330,6 +331,26 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected int routeCosts = ROUTE_COSTS_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getCrewBonus() <em>Crew Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCrewBonus()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CREW_BONUS_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCrewBonus() <em>Crew Bonus</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCrewBonus()
+	 * @generated
+	 * @ordered
+	 */
+	protected int crewBonus = CREW_BONUS_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -461,6 +482,29 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		routeCosts = newRouteCosts;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS, oldRouteCosts, routeCosts));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getCrewBonus() {
+		return crewBonus;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCrewBonus(int newCrewBonus) {
+		int oldCrewBonus = crewBonus;
+		crewBonus = newCrewBonus;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__CREW_BONUS, oldCrewBonus, crewBonus));
 	}
 
 	/**
@@ -805,6 +849,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getDistance();
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 				return getRouteCosts();
+			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
+				return getCrewBonus();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -861,6 +907,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return;
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 				setRouteCosts((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
+				setCrewBonus((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -919,6 +968,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 				setRouteCosts(ROUTE_COSTS_EDEFAULT);
 				return;
+			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
+				setCrewBonus(CREW_BONUS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -961,6 +1013,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return distance != DISTANCE_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 				return routeCosts != ROUTE_COSTS_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
+				return crewBonus != CREW_BONUS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1019,6 +1073,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		result.append(distance);
 		result.append(", routeCosts: ");
 		result.append(routeCosts);
+		result.append(", crewBonus: ");
+		result.append(crewBonus);
 		result.append(')');
 		return result.toString();
 	}
