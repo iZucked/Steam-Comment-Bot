@@ -15,8 +15,10 @@ import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 
 public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstraint {
 	@Override
@@ -25,29 +27,31 @@ public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstrai
 
 		if (object instanceof AssignableElement) {
 			final AssignableElement elementAssignment = (AssignableElement) object;
-
 			if (elementAssignment instanceof Cargo) {
 				Cargo cargo = (Cargo) elementAssignment;
-				if (cargo.isAllowRewiring()) {
-					if (elementAssignment.isLocked()) {
+				// Locked only applies to fleet cargoes
+				if (cargo.getCargoType() == CargoType.FLEET) {
+					if (cargo.isAllowRewiring()) {
+						if (elementAssignment.isLocked()) {
 
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()
+									+ " is locked to a vessel, but permits re-wiring."));
+
+							failure.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring());
+							failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Locked());
+
+							failures.add(failure);
+						}
+					}
+					if (elementAssignment.getAssignment() == null && elementAssignment.isLocked()) {
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()
-								+ " is locked to a vessel, but permits re-wiring."));
+								+ " is locked to a vessel, but no vessel is assigned."));
 
-						failure.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring());
 						failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Locked());
+						failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
 
 						failures.add(failure);
 					}
-				}
-				if (elementAssignment.getAssignment() == null && elementAssignment.isLocked()) {
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()
-							+ " is locked to a vessel, but no vessel is assigned."));
-
-					failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Locked());
-					failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
-
-					failures.add(failure);
 				}
 			}
 		}
