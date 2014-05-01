@@ -278,6 +278,7 @@ public class VoyagePlanner {
 		// For spot charters, start with the safety heel.
 		if (vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
 			heelVolumeInM3 = vessel.getVesselClass().getMinHeel();
+			assert heelVolumeInM3 >= 0;
 		}
 
 		for (int idx = 0; itr.hasNext(); ++idx) {
@@ -339,6 +340,7 @@ public class VoyagePlanner {
 				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
 				if (actualsDataProvider.hasActuals(prevPortSlot)) {
 					heelVolumeInM3 = generateActualsVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, currentTimes, heelVolumeInM3);
+					assert heelVolumeInM3 >= 0;
 					// Reset VPO ready for next iteration - some data may have been added
 					voyagePlanOptimiser.reset();
 				} else {
@@ -355,6 +357,7 @@ public class VoyagePlanner {
 							return null;
 						}
 						heelVolumeInM3 = evaluateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
+						assert heelVolumeInM3 >= 0;
 					}
 
 					if (isShortsSequence) {
@@ -377,6 +380,7 @@ public class VoyagePlanner {
 			// TODO: Move (back?)into VPO code
 			if (thisPortSlot instanceof IHeelOptionsPortSlot) {
 				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
+				assert heelVolumeInM3 >= 0;
 			}
 
 			// Setup for next iteration
@@ -395,6 +399,7 @@ public class VoyagePlanner {
 		if (voyageOrPortOptions.size() > 1) {
 			if (actualsDataProvider.hasActuals(prevPrevPortSlot)) {
 				heelVolumeInM3 = generateActualsVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, voyageOrPortOptions, currentTimes, heelVolumeInM3);
+				assert heelVolumeInM3 >= 0;
 				// Reset VPO ready for next iteration - some data may have been added
 				voyagePlanOptimiser.reset();
 			} else {
@@ -405,6 +410,7 @@ public class VoyagePlanner {
 				}
 				plan.setIgnoreEnd(false);
 				heelVolumeInM3 = evaluateVoyagePlan(vessel, vesselStartTime, voyagePlansMap, voyagePlansList, currentTimes, heelVolumeInM3, plan);
+				assert heelVolumeInM3 >= 0;
 			}
 		}
 
