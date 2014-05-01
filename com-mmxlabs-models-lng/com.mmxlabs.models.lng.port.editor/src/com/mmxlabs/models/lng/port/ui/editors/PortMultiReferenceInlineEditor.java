@@ -33,6 +33,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.ui.editorpart.PortPickerDialog;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -146,83 +147,10 @@ public class PortMultiReferenceInlineEditor extends UnsettableInlineEditor {
 
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
-
-		final ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(), new LabelProvider() {
-
-			@Override
-			public String getText(final Object element) {
-				return ((Pair<String, ?>) element).getFirst();
-			}
-		});
-		dlg.setTitle("Value Selection");
-
-		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
-		final Collection<EObject> sel = (Collection<EObject>) getValue();
-		if (sel != null) {
-			for (final Pair<String, EObject> p : options) {
-				if (sel.contains(p.getSecond())) {
-					selectedOptions.add(p);
-				}
-			}
-		}
-
-		dlg.setInitialSelections(selectedOptions.toArray());
-		dlg.addColumn("Name", new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((Pair<String, ?>) element).getFirst();
-			}
-		});
-
-		if (((EReference) feature).getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort())) {
-
-			dlg.addColumn("Country", new ColumnLabelProvider() {
-				@Override
-				public String getText(final Object element) {
-					final Pair<?, EObject> p = (Pair<?, EObject>) element;
-					if (p.getSecond() instanceof Port) {
-						final Location location = ((Port) p.getSecond()).getLocation();
-						if (location != null) {
-							return location.getCountry();
-						}
-					}
-					return "";
-				}
-			});
-
-			for (final PortCapability pc : PortCapability.values()) {
-				dlg.addColumn(pc.getName(), new ColumnLabelProvider() {
-					@Override
-					public String getText(final Object element) {
-						final Pair<?, EObject> p = (Pair<?, EObject>) element;
-						if (p.getSecond() instanceof Port) {
-							return ((Port) p.getSecond()).getCapabilities().contains(pc) ? "Yes" : "No";
-						} else {
-							return "";
-						}
-					}
-				});
-			}
-		}
-
-		dlg.groupBy(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
-			}
-		});
-
-		if (dlg.open() == Window.OK) {
-			final Object[] result = dlg.getResult();
-
-			final ArrayList<EObject> resultList = new ArrayList<EObject>();
-			for (final Object o : result) {
-				resultList.add(((Pair<String, EObject>) o).getSecond());
-			}
-			return resultList;
-		}
-
-		return null;
+		
+		PortPickerDialog picker = new PortPickerDialog(cellEditorWindow.getShell(), options.toArray());
+		return picker.pick(cellEditorWindow, options, (List<EObject>) getValue(), (EReference) feature);
+		
 	}
 
 	@Override
