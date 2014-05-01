@@ -123,7 +123,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
-				ed.setFormatter(new DoubleFormatter());
+				ed.setFormatter(new DoubleFormatter("#.#"));
 				return ed;
 			}
 
@@ -136,14 +136,14 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		fuelColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return element == null ? "" : String.format("%.2f", ((FuelConsumption) element).getConsumption());
+				return element == null ? "" : String.format("%.3f", ((FuelConsumption) element).getConsumption());
 			}
 		});
 
 		speedColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				return element == null ? "" : String.format("%.2f", ((FuelConsumption) element).getSpeed());
+				return element == null ? "" : String.format("%.1f", ((FuelConsumption) element).getSpeed());
 			}
 		});
 
@@ -166,7 +166,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
-				ed.setFormatter(new DoubleFormatter());
+				ed.setFormatter(new DoubleFormatter("#.###"));
 				return ed;
 			}
 
