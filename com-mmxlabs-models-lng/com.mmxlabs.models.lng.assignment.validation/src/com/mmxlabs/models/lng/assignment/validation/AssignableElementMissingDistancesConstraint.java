@@ -250,6 +250,11 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 	}
 
 	private boolean hasDistance(final Map<Pair<Port, Port>, Boolean> map, final Port from, final Port to) {
+		
+		if (from == to) {
+			return true;
+		}
+		
 		final Pair<Port, Port> key = new Pair<>(from, to);
 		if (map.containsKey(key)) {
 			return map.get(key);
