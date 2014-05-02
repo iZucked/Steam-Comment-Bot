@@ -119,6 +119,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 						statuses.add(failure);
 					}
+					
+//					If current actuals is false, check the window!/port  matches
 
 					// Check previous return actuals data matches current data
 					if (currentActuals != null && prevActuals != null) {
@@ -140,31 +142,15 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 								statuses.add(failure);
 
 							}
-							if (returnActuals.getCV() != loadActuals.getCV()) {
-								final String message = String.format("Load actuals and previous return actuals %s does not match", "CV");
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);
-								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__CV);
-								statuses.add(failure);
-
-							}
 							if (returnActuals.getEndHeelM3() != loadActuals.getStartingHeelM3()) {
 								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in m3");
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
-								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
+								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
 								statuses.add(failure);
 
 							}
 
-							if (returnActuals.getEndHeelMMBTu() != loadActuals.getStartingHeelMMBTu()) {
-								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in mmBtu");
-								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_MMB_TU);
-								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
-								statuses.add(failure);
-
-							}
 							if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null || returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
 								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in mmBtu");
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));

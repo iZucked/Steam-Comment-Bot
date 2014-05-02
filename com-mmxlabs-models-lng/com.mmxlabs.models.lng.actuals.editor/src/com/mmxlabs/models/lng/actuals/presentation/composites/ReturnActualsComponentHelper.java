@@ -11,9 +11,16 @@ import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
@@ -66,8 +73,6 @@ public class ReturnActualsComponentHelper extends BaseComponentHelper {
 		add_titleTransferPointEditor(detailComposite, topClass);
 		add_operationsStartEditor(detailComposite, topClass);
 		add_endHeelM3Editor(detailComposite, topClass);
-		add_endHeelMMBTuEditor(detailComposite, topClass);
-		add_CVEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the titleTransferPoint feature on ReturnActuals
@@ -93,21 +98,5 @@ public class ReturnActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_endHeelM3Editor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3));
-	}
-	/**
-	 * Create the editor for the endHeelMMBTu feature on ReturnActuals
-	 *
-	 * @generated
-	 */
-	protected void add_endHeelMMBTuEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU));
-	}
-	/**
-	 * Create the editor for the CV feature on ReturnActuals
-	 *
-	 * @generated
-	 */
-	protected void add_CVEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.RETURN_ACTUALS__CV));
 	}
 }

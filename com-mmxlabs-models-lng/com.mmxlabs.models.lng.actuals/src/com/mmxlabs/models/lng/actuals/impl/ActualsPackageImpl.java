@@ -640,26 +640,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getReturnActuals_EndHeelMMBTu() {
-		return (EAttribute)returnActualsEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getReturnActuals_CV() {
-		return (EAttribute)returnActualsEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EOperation getReturnActuals__GetLocalStart() {
 		return returnActualsEClass.getEOperations().get(0);
 	}
@@ -766,8 +746,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEReference(returnActualsEClass, RETURN_ACTUALS__TITLE_TRANSFER_POINT);
 		createEAttribute(returnActualsEClass, RETURN_ACTUALS__OPERATIONS_START);
 		createEAttribute(returnActualsEClass, RETURN_ACTUALS__END_HEEL_M3);
-		createEAttribute(returnActualsEClass, RETURN_ACTUALS__END_HEEL_MMB_TU);
-		createEAttribute(returnActualsEClass, RETURN_ACTUALS__CV);
 		createEOperation(returnActualsEClass, RETURN_ACTUALS___GET_LOCAL_START);
 
 		// Create enums
@@ -872,8 +850,6 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEReference(getReturnActuals_TitleTransferPoint(), thePortPackage.getPort(), null, "titleTransferPoint", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getReturnActuals_OperationsStart(), ecorePackage.getEDate(), "operationsStart", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getReturnActuals_EndHeelM3(), ecorePackage.getEInt(), "endHeelM3", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getReturnActuals_EndHeelMMBTu(), ecorePackage.getEInt(), "endHeelMMBTu", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getReturnActuals_CV(), ecorePackage.getEDouble(), "CV", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getReturnActuals__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 

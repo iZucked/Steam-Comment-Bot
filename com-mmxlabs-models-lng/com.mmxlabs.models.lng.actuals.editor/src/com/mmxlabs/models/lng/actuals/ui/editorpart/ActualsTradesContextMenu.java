@@ -376,8 +376,6 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									final Event nextEvent = lastEvent.getNextEvent();
 									if (nextEvent != null) {
 										returnActuals.setEndHeelM3(nextEvent.getHeelAtStart());
-										returnActuals.setEndHeelMMBTu((int) Math.round(nextEvent.getHeelAtStart() * cargoCV));
-										returnActuals.setCV(cargoCV);
 										returnActuals.setTitleTransferPoint(nextEvent.getPort());
 										returnActuals.setOperationsStart(nextEvent.getLocalStart().getTime());
 									}

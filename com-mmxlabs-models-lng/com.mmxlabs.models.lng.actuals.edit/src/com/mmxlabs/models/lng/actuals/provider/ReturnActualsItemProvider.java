@@ -64,8 +64,6 @@ public class ReturnActualsItemProvider
 			addTitleTransferPointPropertyDescriptor(object);
 			addOperationsStartPropertyDescriptor(object);
 			addEndHeelM3PropertyDescriptor(object);
-			addEndHeelMMBTuPropertyDescriptor(object);
-			addCVPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -137,50 +135,6 @@ public class ReturnActualsItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the End Heel MMB Tu feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEndHeelMMBTuPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ReturnActuals_endHeelMMBTu_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ReturnActuals_endHeelMMBTu_feature", "_UI_ReturnActuals_type"),
-				 ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the CV feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCVPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ReturnActuals_CV_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ReturnActuals_CV_feature", "_UI_ReturnActuals_type"),
-				 ActualsPackage.Literals.RETURN_ACTUALS__CV,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns ReturnActuals.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -220,8 +174,6 @@ public class ReturnActualsItemProvider
 		switch (notification.getFeatureID(ReturnActuals.class)) {
 			case ActualsPackage.RETURN_ACTUALS__OPERATIONS_START:
 			case ActualsPackage.RETURN_ACTUALS__END_HEEL_M3:
-			case ActualsPackage.RETURN_ACTUALS__END_HEEL_MMB_TU:
-			case ActualsPackage.RETURN_ACTUALS__CV:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

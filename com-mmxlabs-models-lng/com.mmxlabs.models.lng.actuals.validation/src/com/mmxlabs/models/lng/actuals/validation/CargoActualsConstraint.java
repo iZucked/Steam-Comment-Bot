@@ -183,15 +183,15 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						failures.add(status);
 					}
 
-					// Sanity check cv and m3 -> mmbtu conversions
-					if (Math.abs((returnActuals.getCV() * returnActuals.getEndHeelM3()) - returnActuals.getEndHeelMMBTu()) > 1.0) {
-						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("Return actual CV, heel volume in m3 and volume in mmBtu do not match up"));
-						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__CV);
-						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
-						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
-						failures.add(status);
-					}
+//					// Sanity check cv and m3 -> mmbtu conversions
+//					if (Math.abs((returnActuals.getCV() * returnActuals.getEndHeelM3()) - returnActuals.getEndHeelMMBTu()) > 1.0) {
+//						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+//								(IConstraintStatus) ctx.createFailureStatus("Return actual CV, heel volume in m3 and volume in mmBtu do not match up"));
+//						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__CV);
+//						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
+//						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
+//						failures.add(status);
+//					}
 				}
 
 			}

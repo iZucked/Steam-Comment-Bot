@@ -29,8 +29,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl#getTitleTransferPoint <em>Title Transfer Point</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl#getOperationsStart <em>Operations Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl#getEndHeelM3 <em>End Heel M3</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl#getEndHeelMMBTu <em>End Heel MMB Tu</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl#getCV <em>CV</em>}</li>
  * </ul>
  * </p>
  *
@@ -86,46 +84,6 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @ordered
 	 */
 	protected int endHeelM3 = END_HEEL_M3_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getEndHeelMMBTu() <em>End Heel MMB Tu</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEndHeelMMBTu()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int END_HEEL_MMB_TU_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getEndHeelMMBTu() <em>End Heel MMB Tu</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEndHeelMMBTu()
-	 * @generated
-	 * @ordered
-	 */
-	protected int endHeelMMBTu = END_HEEL_MMB_TU_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getCV() <em>CV</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCV()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double CV_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getCV() <em>CV</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCV()
-	 * @generated
-	 * @ordered
-	 */
-	protected double cv = CV_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -235,52 +193,6 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int getEndHeelMMBTu() {
-		return endHeelMMBTu;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setEndHeelMMBTu(int newEndHeelMMBTu) {
-		int oldEndHeelMMBTu = endHeelMMBTu;
-		endHeelMMBTu = newEndHeelMMBTu;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.RETURN_ACTUALS__END_HEEL_MMB_TU, oldEndHeelMMBTu, endHeelMMBTu));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public double getCV() {
-		return cv;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setCV(double newCV) {
-		double oldCV = cv;
-		cv = newCV;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.RETURN_ACTUALS__CV, oldCV, cv));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	@Override
@@ -318,10 +230,6 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 				return getOperationsStart();
 			case ActualsPackage.RETURN_ACTUALS__END_HEEL_M3:
 				return getEndHeelM3();
-			case ActualsPackage.RETURN_ACTUALS__END_HEEL_MMB_TU:
-				return getEndHeelMMBTu();
-			case ActualsPackage.RETURN_ACTUALS__CV:
-				return getCV();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -342,12 +250,6 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 				return;
 			case ActualsPackage.RETURN_ACTUALS__END_HEEL_M3:
 				setEndHeelM3((Integer)newValue);
-				return;
-			case ActualsPackage.RETURN_ACTUALS__END_HEEL_MMB_TU:
-				setEndHeelMMBTu((Integer)newValue);
-				return;
-			case ActualsPackage.RETURN_ACTUALS__CV:
-				setCV((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -370,12 +272,6 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 			case ActualsPackage.RETURN_ACTUALS__END_HEEL_M3:
 				setEndHeelM3(END_HEEL_M3_EDEFAULT);
 				return;
-			case ActualsPackage.RETURN_ACTUALS__END_HEEL_MMB_TU:
-				setEndHeelMMBTu(END_HEEL_MMB_TU_EDEFAULT);
-				return;
-			case ActualsPackage.RETURN_ACTUALS__CV:
-				setCV(CV_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -394,10 +290,6 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 				return OPERATIONS_START_EDEFAULT == null ? operationsStart != null : !OPERATIONS_START_EDEFAULT.equals(operationsStart);
 			case ActualsPackage.RETURN_ACTUALS__END_HEEL_M3:
 				return endHeelM3 != END_HEEL_M3_EDEFAULT;
-			case ActualsPackage.RETURN_ACTUALS__END_HEEL_MMB_TU:
-				return endHeelMMBTu != END_HEEL_MMB_TU_EDEFAULT;
-			case ActualsPackage.RETURN_ACTUALS__CV:
-				return cv != CV_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -432,10 +324,6 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 		result.append(operationsStart);
 		result.append(", endHeelM3: ");
 		result.append(endHeelM3);
-		result.append(", endHeelMMBTu: ");
-		result.append(endHeelMMBTu);
-		result.append(", CV: ");
-		result.append(cv);
 		result.append(')');
 		return result.toString();
 	}

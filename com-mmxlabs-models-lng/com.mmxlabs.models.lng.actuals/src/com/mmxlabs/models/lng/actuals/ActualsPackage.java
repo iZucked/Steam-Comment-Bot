@@ -959,31 +959,13 @@ public interface ActualsPackage extends EPackage {
 	int RETURN_ACTUALS__END_HEEL_M3 = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>End Heel MMB Tu</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RETURN_ACTUALS__END_HEEL_MMB_TU = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>CV</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RETURN_ACTUALS__CV = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 4;
-
-	/**
 	 * The number of structural features of the '<em>Return Actuals</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RETURN_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 5;
+	int RETURN_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -1554,28 +1536,6 @@ public interface ActualsPackage extends EPackage {
 	EAttribute getReturnActuals_EndHeelM3();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelMMBTu <em>End Heel MMB Tu</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>End Heel MMB Tu</em>'.
-	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelMMBTu()
-	 * @see #getReturnActuals()
-	 * @generated
-	 */
-	EAttribute getReturnActuals_EndHeelMMBTu();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getCV <em>CV</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>CV</em>'.
-	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getCV()
-	 * @see #getReturnActuals()
-	 * @generated
-	 */
-	EAttribute getReturnActuals_CV();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getLocalStart() <em>Get Local Start</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2024,22 +1984,6 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute RETURN_ACTUALS__END_HEEL_M3 = eINSTANCE.getReturnActuals_EndHeelM3();
-
-		/**
-		 * The meta object literal for the '<em><b>End Heel MMB Tu</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute RETURN_ACTUALS__END_HEEL_MMB_TU = eINSTANCE.getReturnActuals_EndHeelMMBTu();
-
-		/**
-		 * The meta object literal for the '<em><b>CV</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute RETURN_ACTUALS__CV = eINSTANCE.getReturnActuals_CV();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.

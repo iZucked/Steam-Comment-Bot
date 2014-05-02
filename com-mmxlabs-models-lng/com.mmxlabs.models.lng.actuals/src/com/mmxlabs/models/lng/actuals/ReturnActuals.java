@@ -20,8 +20,6 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getTitleTransferPoint <em>Title Transfer Point</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getOperationsStart <em>Operations Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelM3 <em>End Heel M3</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelMMBTu <em>End Heel MMB Tu</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getCV <em>CV</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,58 +105,6 @@ public interface ReturnActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setEndHeelM3(int value);
-
-	/**
-	 * Returns the value of the '<em><b>End Heel MMB Tu</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>End Heel MMB Tu</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>End Heel MMB Tu</em>' attribute.
-	 * @see #setEndHeelMMBTu(int)
-	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getReturnActuals_EndHeelMMBTu()
-	 * @model
-	 * @generated
-	 */
-	int getEndHeelMMBTu();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelMMBTu <em>End Heel MMB Tu</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>End Heel MMB Tu</em>' attribute.
-	 * @see #getEndHeelMMBTu()
-	 * @generated
-	 */
-	void setEndHeelMMBTu(int value);
-
-	/**
-	 * Returns the value of the '<em><b>CV</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>CV</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>CV</em>' attribute.
-	 * @see #setCV(double)
-	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getReturnActuals_CV()
-	 * @model
-	 * @generated
-	 */
-	double getCV();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getCV <em>CV</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>CV</em>' attribute.
-	 * @see #getCV()
-	 * @generated
-	 */
-	void setCV(double value);
 
 	/**
 	 * <!-- begin-user-doc -->
