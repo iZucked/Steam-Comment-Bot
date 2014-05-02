@@ -165,7 +165,10 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	@Override
 	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
 		// re-evaluate everything and populate the IAnnotatedSolution
-		scheduler.schedule(sequences, solution);
+		if (scheduler.schedule(sequences, solution) == null) {
+			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
+		}
+		
 
 		// set up per-route fitness map, which components can put their fitness
 		// in
