@@ -68,6 +68,7 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 		add_cargoReferenceEditor(detailComposite, topClass);
 		add_cargoReferenceSellerEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
+		add_charterRatePerDayEditor(detailComposite, topClass);
 		add_cargoEditor(detailComposite, topClass);
 		add_baseFuelPriceEditor(detailComposite, topClass);
 		add_insurancePremiumEditor(detailComposite, topClass);
@@ -158,6 +159,15 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_vesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL));
+	}
+
+	/**
+	 * Create the editor for the charterRatePerDay feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_charterRatePerDayEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__CHARTER_RATE_PER_DAY));
 	}
 
 	/**

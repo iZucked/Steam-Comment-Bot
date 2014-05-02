@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargoReference <em>Cargo Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargoReferenceSeller <em>Cargo Reference Seller</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCharterRatePerDay <em>Charter Rate Per Day</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getInsurancePremium <em>Insurance Premium</em>}</li>
@@ -284,6 +285,32 @@ public interface CargoActuals extends EObject {
 	 * @generated
 	 */
 	void setVessel(Vessel value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter Rate Per Day</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Rate Per Day</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Rate Per Day</em>' attribute.
+	 * @see #setCharterRatePerDay(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_CharterRatePerDay()
+	 * @model
+	 * @generated
+	 */
+	int getCharterRatePerDay();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCharterRatePerDay <em>Charter Rate Per Day</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Charter Rate Per Day</em>' attribute.
+	 * @see #getCharterRatePerDay()
+	 * @generated
+	 */
+	void setCharterRatePerDay(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Cargo</b></em>' reference.

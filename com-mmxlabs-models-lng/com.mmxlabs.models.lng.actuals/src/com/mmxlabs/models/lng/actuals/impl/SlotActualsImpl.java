@@ -39,11 +39,12 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPenalty <em>Penalty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCV <em>CV</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCrewBonus <em>Crew Bonus</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortCharges <em>Port Charges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCapacityCharges <em>Capacity Charges</em>}</li>
  * </ul>
  * </p>
  *
@@ -251,26 +252,6 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected double cv = CV_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getPortCharges() <em>Port Charges</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortCharges()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int PORT_CHARGES_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getPortCharges() <em>Port Charges</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPortCharges()
-	 * @generated
-	 * @ordered
-	 */
-	protected int portCharges = PORT_CHARGES_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getBaseFuelConsumption() <em>Base Fuel Consumption</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -351,6 +332,46 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected int crewBonus = CREW_BONUS_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getPortCharges() <em>Port Charges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCharges()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PORT_CHARGES_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPortCharges() <em>Port Charges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCharges()
+	 * @generated
+	 * @ordered
+	 */
+	protected int portCharges = PORT_CHARGES_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCapacityCharges() <em>Capacity Charges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCapacityCharges()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CAPACITY_CHARGES_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCapacityCharges() <em>Capacity Charges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCapacityCharges()
+	 * @generated
+	 * @ordered
+	 */
+	protected int capacityCharges = CAPACITY_CHARGES_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -413,6 +434,27 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		portCharges = newPortCharges;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__PORT_CHARGES, oldPortCharges, portCharges));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getCapacityCharges() {
+		return capacityCharges;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCapacityCharges(int newCapacityCharges) {
+		int oldCapacityCharges = capacityCharges;
+		capacityCharges = newCapacityCharges;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__CAPACITY_CHARGES, oldCapacityCharges, capacityCharges));
 	}
 
 	/**
@@ -841,8 +883,6 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getNotes();
 			case ActualsPackage.SLOT_ACTUALS__CV:
 				return getCV();
-			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
-				return getPortCharges();
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return getBaseFuelConsumption();
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
@@ -851,6 +891,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getRouteCosts();
 			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
 				return getCrewBonus();
+			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
+				return getPortCharges();
+			case ActualsPackage.SLOT_ACTUALS__CAPACITY_CHARGES:
+				return getCapacityCharges();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -896,9 +940,6 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__CV:
 				setCV((Double)newValue);
 				return;
-			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
-				setPortCharges((Integer)newValue);
-				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption((Integer)newValue);
 				return;
@@ -910,6 +951,12 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return;
 			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
 				setCrewBonus((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
+				setPortCharges((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__CAPACITY_CHARGES:
+				setCapacityCharges((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -956,9 +1003,6 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__CV:
 				setCV(CV_EDEFAULT);
 				return;
-			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
-				setPortCharges(PORT_CHARGES_EDEFAULT);
-				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption(BASE_FUEL_CONSUMPTION_EDEFAULT);
 				return;
@@ -970,6 +1014,12 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return;
 			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
 				setCrewBonus(CREW_BONUS_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
+				setPortCharges(PORT_CHARGES_EDEFAULT);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__CAPACITY_CHARGES:
+				setCapacityCharges(CAPACITY_CHARGES_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -1005,8 +1055,6 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case ActualsPackage.SLOT_ACTUALS__CV:
 				return cv != CV_EDEFAULT;
-			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
-				return portCharges != PORT_CHARGES_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
@@ -1015,6 +1063,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return routeCosts != ROUTE_COSTS_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
 				return crewBonus != CREW_BONUS_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
+				return portCharges != PORT_CHARGES_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__CAPACITY_CHARGES:
+				return capacityCharges != CAPACITY_CHARGES_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1065,8 +1117,6 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		result.append(notes);
 		result.append(", CV: ");
 		result.append(cv);
-		result.append(", portCharges: ");
-		result.append(portCharges);
 		result.append(", baseFuelConsumption: ");
 		result.append(baseFuelConsumption);
 		result.append(", distance: ");
@@ -1075,6 +1125,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		result.append(routeCosts);
 		result.append(", crewBonus: ");
 		result.append(crewBonus);
+		result.append(", portCharges: ");
+		result.append(portCharges);
+		result.append(", capacityCharges: ");
+		result.append(capacityCharges);
 		result.append(')');
 		return result.toString();
 	}

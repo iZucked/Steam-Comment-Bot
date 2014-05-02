@@ -27,11 +27,12 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPenalty <em>Penalty</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCV <em>CV</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortCharges <em>Port Charges</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCrewBonus <em>Crew Bonus</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortCharges <em>Port Charges</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCapacityCharges <em>Capacity Charges</em>}</li>
  * </ul>
  * </p>
  *
@@ -91,6 +92,32 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setPortCharges(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Capacity Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Capacity Charges</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Capacity Charges</em>' attribute.
+	 * @see #setCapacityCharges(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_CapacityCharges()
+	 * @model
+	 * @generated
+	 */
+	int getCapacityCharges();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCapacityCharges <em>Capacity Charges</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Capacity Charges</em>' attribute.
+	 * @see #getCapacityCharges()
+	 * @generated
+	 */
+	void setCapacityCharges(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Base Fuel Consumption</b></em>' attribute.

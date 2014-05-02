@@ -69,6 +69,7 @@ public class CargoActualsItemProvider
 			addCargoReferencePropertyDescriptor(object);
 			addCargoReferenceSellerPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
+			addCharterRatePerDayPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
 			addBaseFuelPricePropertyDescriptor(object);
 			addInsurancePremiumPropertyDescriptor(object);
@@ -231,6 +232,28 @@ public class CargoActualsItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Charter Rate Per Day feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCharterRatePerDayPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CargoActuals_charterRatePerDay_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CargoActuals_charterRatePerDay_feature", "_UI_CargoActuals_type"),
+				 ActualsPackage.Literals.CARGO_ACTUALS__CHARTER_RATE_PER_DAY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Cargo feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -356,6 +379,7 @@ public class CargoActualsItemProvider
 			case ActualsPackage.CARGO_ACTUALS__SELLER_ID:
 			case ActualsPackage.CARGO_ACTUALS__CARGO_REFERENCE:
 			case ActualsPackage.CARGO_ACTUALS__CARGO_REFERENCE_SELLER:
+			case ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY:
 			case ActualsPackage.CARGO_ACTUALS__BASE_FUEL_PRICE:
 			case ActualsPackage.CARGO_ACTUALS__INSURANCE_PREMIUM:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

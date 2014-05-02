@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getCargoReference <em>Cargo Reference</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getCargoReferenceSeller <em>Cargo Reference Seller</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getCharterRatePerDay <em>Charter Rate Per Day</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getCargo <em>Cargo</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getInsurancePremium <em>Insurance Premium</em>}</li>
@@ -187,6 +188,26 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * @ordered
 	 */
 	protected Vessel vessel;
+
+	/**
+	 * The default value of the '{@link #getCharterRatePerDay() <em>Charter Rate Per Day</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterRatePerDay()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CHARTER_RATE_PER_DAY_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getCharterRatePerDay() <em>Charter Rate Per Day</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterRatePerDay()
+	 * @generated
+	 * @ordered
+	 */
+	protected int charterRatePerDay = CHARTER_RATE_PER_DAY_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
@@ -499,6 +520,27 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getCharterRatePerDay() {
+		return charterRatePerDay;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCharterRatePerDay(int newCharterRatePerDay) {
+		int oldCharterRatePerDay = charterRatePerDay;
+		charterRatePerDay = newCharterRatePerDay;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY, oldCharterRatePerDay, charterRatePerDay));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Cargo getCargo() {
 		if (cargo != null && cargo.eIsProxy()) {
@@ -573,6 +615,8 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 			case ActualsPackage.CARGO_ACTUALS__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
+			case ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY:
+				return getCharterRatePerDay();
 			case ActualsPackage.CARGO_ACTUALS__CARGO:
 				if (resolve) return getCargo();
 				return basicGetCargo();
@@ -617,6 +661,9 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 				return;
 			case ActualsPackage.CARGO_ACTUALS__VESSEL:
 				setVessel((Vessel)newValue);
+				return;
+			case ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY:
+				setCharterRatePerDay((Integer)newValue);
 				return;
 			case ActualsPackage.CARGO_ACTUALS__CARGO:
 				setCargo((Cargo)newValue);
@@ -663,6 +710,9 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 			case ActualsPackage.CARGO_ACTUALS__VESSEL:
 				setVessel((Vessel)null);
 				return;
+			case ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY:
+				setCharterRatePerDay(CHARTER_RATE_PER_DAY_EDEFAULT);
+				return;
 			case ActualsPackage.CARGO_ACTUALS__CARGO:
 				setCargo((Cargo)null);
 				return;
@@ -700,6 +750,8 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 				return CARGO_REFERENCE_SELLER_EDEFAULT == null ? cargoReferenceSeller != null : !CARGO_REFERENCE_SELLER_EDEFAULT.equals(cargoReferenceSeller);
 			case ActualsPackage.CARGO_ACTUALS__VESSEL:
 				return vessel != null;
+			case ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY:
+				return charterRatePerDay != CHARTER_RATE_PER_DAY_EDEFAULT;
 			case ActualsPackage.CARGO_ACTUALS__CARGO:
 				return cargo != null;
 			case ActualsPackage.CARGO_ACTUALS__BASE_FUEL_PRICE:
@@ -732,6 +784,8 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 		result.append(cargoReference);
 		result.append(", cargoReferenceSeller: ");
 		result.append(cargoReferenceSeller);
+		result.append(", charterRatePerDay: ");
+		result.append(charterRatePerDay);
 		result.append(", baseFuelPrice: ");
 		result.append(baseFuelPrice);
 		result.append(", insurancePremium: ");

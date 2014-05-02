@@ -73,11 +73,12 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 		add_penaltyEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 		add_CVEditor(detailComposite, topClass);
-		add_portChargesEditor(detailComposite, topClass);
 		add_baseFuelConsumptionEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
 		add_routeCostsEditor(detailComposite, topClass);
 		add_crewBonusEditor(detailComposite, topClass);
+		add_portChargesEditor(detailComposite, topClass);
+		add_capacityChargesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the CV feature on SlotActuals
@@ -95,6 +96,15 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	protected void add_portChargesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__PORT_CHARGES));
 	}
+	/**
+	 * Create the editor for the capacityCharges feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_capacityChargesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__CAPACITY_CHARGES));
+	}
+
 	/**
 	 * Create the editor for the baseFuelConsumption feature on SlotActuals
 	 *

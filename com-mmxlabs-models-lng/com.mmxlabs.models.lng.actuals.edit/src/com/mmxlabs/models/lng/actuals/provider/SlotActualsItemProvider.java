@@ -72,11 +72,12 @@ public class SlotActualsItemProvider
 			addPenaltyPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addCVPropertyDescriptor(object);
-			addPortChargesPropertyDescriptor(object);
 			addBaseFuelConsumptionPropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addRouteCostsPropertyDescriptor(object);
 			addCrewBonusPropertyDescriptor(object);
+			addPortChargesPropertyDescriptor(object);
+			addCapacityChargesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -117,6 +118,28 @@ public class SlotActualsItemProvider
 				 getString("_UI_SlotActuals_portCharges_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_portCharges_feature", "_UI_SlotActuals_type"),
 				 ActualsPackage.Literals.SLOT_ACTUALS__PORT_CHARGES,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Capacity Charges feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCapacityChargesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_capacityCharges_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_capacityCharges_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__CAPACITY_CHARGES,
 				 true,
 				 false,
 				 false,
@@ -498,11 +521,12 @@ public class SlotActualsItemProvider
 			case ActualsPackage.SLOT_ACTUALS__PENALTY:
 			case ActualsPackage.SLOT_ACTUALS__NOTES:
 			case ActualsPackage.SLOT_ACTUALS__CV:
-			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:
+			case ActualsPackage.SLOT_ACTUALS__PORT_CHARGES:
+			case ActualsPackage.SLOT_ACTUALS__CAPACITY_CHARGES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -207,22 +207,13 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS__CV = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 10;
 
 	/**
-	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT_ACTUALS__PORT_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 11;
-
-	/**
 	 * The feature id for the '<em><b>Base Fuel Consumption</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 12;
+	int SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Distance</b></em>' attribute.
@@ -231,7 +222,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__DISTANCE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
+	int SLOT_ACTUALS__DISTANCE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Route Costs</b></em>' attribute.
@@ -240,7 +231,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__ROUTE_COSTS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 14;
+	int SLOT_ACTUALS__ROUTE_COSTS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Crew Bonus</b></em>' attribute.
@@ -249,7 +240,25 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__CREW_BONUS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 15;
+	int SLOT_ACTUALS__CREW_BONUS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 14;
+
+	/**
+	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS__PORT_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 15;
+
+	/**
+	 * The feature id for the '<em><b>Capacity Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS__CAPACITY_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 16;
 
 	/**
 	 * The number of structural features of the '<em>Slot Actuals</em>' class.
@@ -258,7 +267,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 16;
+	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 17;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -379,13 +388,22 @@ public interface ActualsPackage extends EPackage {
 	int CARGO_ACTUALS__VESSEL = 7;
 
 	/**
+	 * The feature id for the '<em><b>Charter Rate Per Day</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ACTUALS__CHARTER_RATE_PER_DAY = 8;
+
+	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__CARGO = 8;
+	int CARGO_ACTUALS__CARGO = 9;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
@@ -394,7 +412,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__BASE_FUEL_PRICE = 9;
+	int CARGO_ACTUALS__BASE_FUEL_PRICE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Insurance Premium</b></em>' attribute.
@@ -403,7 +421,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__INSURANCE_PREMIUM = 10;
+	int CARGO_ACTUALS__INSURANCE_PREMIUM = 11;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Actuals</em>' class.
@@ -412,7 +430,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS_FEATURE_COUNT = 11;
+	int CARGO_ACTUALS_FEATURE_COUNT = 12;
 
 	/**
 	 * The number of operations of the '<em>Cargo Actuals</em>' class.
@@ -533,15 +551,6 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS__CV = SLOT_ACTUALS__CV;
 
 	/**
-	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_ACTUALS__PORT_CHARGES = SLOT_ACTUALS__PORT_CHARGES;
-
-	/**
 	 * The feature id for the '<em><b>Base Fuel Consumption</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -576,6 +585,24 @@ public interface ActualsPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_ACTUALS__CREW_BONUS = SLOT_ACTUALS__CREW_BONUS;
+
+	/**
+	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__PORT_CHARGES = SLOT_ACTUALS__PORT_CHARGES;
+
+	/**
+	 * The feature id for the '<em><b>Capacity Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__CAPACITY_CHARGES = SLOT_ACTUALS__CAPACITY_CHARGES;
 
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
@@ -759,15 +786,6 @@ public interface ActualsPackage extends EPackage {
 	int DISCHARGE_ACTUALS__CV = SLOT_ACTUALS__CV;
 
 	/**
-	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_ACTUALS__PORT_CHARGES = SLOT_ACTUALS__PORT_CHARGES;
-
-	/**
 	 * The feature id for the '<em><b>Base Fuel Consumption</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -802,6 +820,24 @@ public interface ActualsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_ACTUALS__CREW_BONUS = SLOT_ACTUALS__CREW_BONUS;
+
+	/**
+	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__PORT_CHARGES = SLOT_ACTUALS__PORT_CHARGES;
+
+	/**
+	 * The feature id for the '<em><b>Capacity Charges</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__CAPACITY_CHARGES = SLOT_ACTUALS__CAPACITY_CHARGES;
 
 	/**
 	 * The feature id for the '<em><b>Delivery Type</b></em>' attribute.
@@ -949,6 +985,17 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotActuals_PortCharges();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCapacityCharges <em>Capacity Charges</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Capacity Charges</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getCapacityCharges()
+	 * @see #getSlotActuals()
+	 * @generated
+	 */
+	EAttribute getSlotActuals_CapacityCharges();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}'.
@@ -1245,6 +1292,17 @@ public interface ActualsPackage extends EPackage {
 	EReference getCargoActuals_Vessel();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCharterRatePerDay <em>Charter Rate Per Day</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Charter Rate Per Day</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.CargoActuals#getCharterRatePerDay()
+	 * @see #getCargoActuals()
+	 * @generated
+	 */
+	EAttribute getCargoActuals_CharterRatePerDay();
+
+	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1428,6 +1486,14 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ACTUALS__PORT_CHARGES = eINSTANCE.getSlotActuals_PortCharges();
+
+		/**
+		 * The meta object literal for the '<em><b>Capacity Charges</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ACTUALS__CAPACITY_CHARGES = eINSTANCE.getSlotActuals_CapacityCharges();
 
 		/**
 		 * The meta object literal for the '<em><b>Base Fuel Consumption</b></em>' attribute feature.
@@ -1646,6 +1712,14 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO_ACTUALS__VESSEL = eINSTANCE.getCargoActuals_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Charter Rate Per Day</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CARGO_ACTUALS__CHARTER_RATE_PER_DAY = eINSTANCE.getCargoActuals_CharterRatePerDay();
 
 		/**
 		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
