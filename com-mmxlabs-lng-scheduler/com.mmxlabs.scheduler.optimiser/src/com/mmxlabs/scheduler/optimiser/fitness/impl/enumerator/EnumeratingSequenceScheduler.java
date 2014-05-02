@@ -509,7 +509,15 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 				}
 			} else {
 
-				if (actualsDataProvider.hasActuals(slot)) {
+				final IPortSlot prevSlot = prevElement == null ? null : portSlotProvider.getPortSlot(prevElement);
+				if (actualsDataProvider.hasReturnActuals(prevSlot)) {
+					windows = Collections.singletonList(actualsDataProvider.getReturnTimeAsTimeWindow(prevSlot));
+					if (actualsDataProvider.hasActuals(slot)) {
+						int a = actualsDataProvider.getArrivalTime(slot);
+						int b = actualsDataProvider.getReturnTime(prevSlot);
+						assert a == b;
+					}
+				} else if (actualsDataProvider.hasActuals(slot)) {
 					windows = Collections.singletonList(actualsDataProvider.getArrivalTimeWindow(slot));
 				} else {
 					// "windows" defaults to whatever windows are specified by the time window provider

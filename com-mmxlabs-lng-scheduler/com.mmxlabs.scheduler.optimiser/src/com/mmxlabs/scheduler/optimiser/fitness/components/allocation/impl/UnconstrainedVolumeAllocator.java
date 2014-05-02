@@ -68,6 +68,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// * Heel after discharge.
 			// * If the next load is actualised, take the heel before loading, otherwise assume safety heel.
 			long usedFuelVolume = 0;
+			IPortSlot lastSlot = null;
 			for (int i = 0; i < slots.size(); i++) {
 				final IPortSlot slot = allocationRecord.slots.get(i);
 				if (actualsDataProvider.hasActuals(slot) == false) {
@@ -96,13 +97,21 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 					usedFuelVolume += actualsDataProvider.getVolumeInM3(slot);
 				} else if (slot instanceof IDischargeOption) {
 					usedFuelVolume -= actualsDataProvider.getVolumeInM3(slot);
+					lastSlot = slot;
 				}
 			}
 
 			final IPortSlot returnSlot = allocationRecord.returnSlot;
 
-			// Use safety heel if not actualised
-			long returnSlotHeelInM3 = actualsDataProvider.hasActuals(returnSlot) ? actualsDataProvider.getStartHeelInM3(returnSlot) : vessel.getVesselClass().getMinHeel();
+			final long returnSlotHeelInM3;
+			if (lastSlot != null && actualsDataProvider.hasReturnActuals(lastSlot)) {
+				returnSlotHeelInM3 = actualsDataProvider.getReturnHeelInM3(lastSlot);
+			} else if (actualsDataProvider.hasActuals(returnSlot)) {
+				returnSlotHeelInM3 = actualsDataProvider.getStartHeelInM3(returnSlot);
+			} else {
+				// Use safety heel if not actualised
+				returnSlotHeelInM3 = vessel.getVesselClass().getMinHeel();
+			}
 
 			usedFuelVolume -= returnSlotHeelInM3;
 

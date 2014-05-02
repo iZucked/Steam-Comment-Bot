@@ -206,6 +206,10 @@ public class ScheduleCalculator {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;
 				}
+				// overwrite with actuals if need be
+				if (actualsDataProvider.hasReturnActuals(thisPortSlot)) {
+					currentPlan.setRemainingHeelInM3(actualsDataProvider.getReturnHeelInM3(thisPortSlot));
+				}
 			}
 
 			final PortOptions portOptions = new PortOptions();

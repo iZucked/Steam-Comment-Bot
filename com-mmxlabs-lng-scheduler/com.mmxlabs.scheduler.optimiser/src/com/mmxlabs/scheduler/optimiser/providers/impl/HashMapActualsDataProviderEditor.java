@@ -7,12 +7,14 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProviderEditor;
 
 public class HashMapActualsDataProviderEditor implements IActualsDataProviderEditor {
 
 	private final Map<IPortSlot, Boolean> actualsPresent = new HashMap<>();
+	private final Map<IPortSlot, Boolean> returnActualsPresent = new HashMap<>();
 
 	private final Map<IPortSlot, Integer> arrivalTime = new HashMap<>();
 	private final Map<IPortSlot, ITimeWindow> arrivalTimeWindow = new HashMap<>();
@@ -30,6 +32,11 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	private final Map<IPortSlot, Integer> charterRatePerDay = new HashMap<>();
 	private final Map<IPortSlot, Long> routeCosts = new HashMap<>();
 	private final Map<IPortSlot, Integer> distance = new HashMap<>();
+
+	private final Map<IPortSlot, Integer> returnTime = new HashMap<>();
+	private final Map<IPortSlot, ITimeWindow> returnTimeWindow = new HashMap<>();
+	private final Map<IPortSlot, Long> returnHeelInM3 = new HashMap<>();
+	private final Map<IPortSlot, IPort> returnPort = new HashMap<>();
 
 	@Override
 	public boolean hasActuals(final IPortSlot slot) {
@@ -156,5 +163,45 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.lngPricePerMMBTu.put(slot, salesPricePerMMBTu);
 		this.distance.put(slot, distance);
 		this.routeCosts.put(slot, routeCosts);
+	}
+
+	@Override
+	public boolean hasReturnActuals(final IPortSlot slot) {
+		if (returnActualsPresent.containsKey(slot)) {
+			return returnActualsPresent.get(slot);
+		}
+		return false;
+	}
+
+	@Override
+	public int getReturnTime(final IPortSlot slot) {
+		return returnTime.get(slot);
+
+	}
+
+	@Override
+	public ITimeWindow getReturnTimeAsTimeWindow(final IPortSlot slot) {
+		return returnTimeWindow.get(slot);
+	}
+
+	@Override
+	public long getReturnHeelInM3(final IPortSlot slot) {
+		return returnHeelInM3.get(slot);
+
+	}
+
+	@Override
+	public IPort getReturnPort(final IPortSlot slot) {
+		return returnPort.get(slot);
+	}
+
+	@Override
+	public void setNextDestinationActuals(final IPortSlot slot, final IPort returnPort, final int returnTime, final long endHeelInM3) {
+		this.returnActualsPresent.put(slot, true);
+
+		this.returnPort.put(slot, returnPort);
+		this.returnTime.put(slot, returnTime);
+		this.returnTimeWindow.put(slot, new TimeWindow(returnTime, returnTime));
+		this.returnHeelInM3.put(slot, endHeelInM3);
 	}
 }
