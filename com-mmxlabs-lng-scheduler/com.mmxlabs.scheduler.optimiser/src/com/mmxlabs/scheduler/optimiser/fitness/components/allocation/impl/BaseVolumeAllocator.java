@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import java.nio.file.AccessMode;
 import java.util.ArrayList;
 import java.util.List;
 
