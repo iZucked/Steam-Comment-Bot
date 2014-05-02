@@ -151,8 +151,8 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 							}
 
-							if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null || returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
-								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in mmBtu");
+							if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null || !returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
+								final String message = String.format("Load actuals and previous return actuals %s does not match", "operations start");
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
 								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
