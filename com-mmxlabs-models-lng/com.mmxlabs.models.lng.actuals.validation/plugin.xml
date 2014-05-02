@@ -37,6 +37,22 @@
                      class="CargoActuals">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.actuals.validation.ActualsSequencingConstraint"
+                  id="com.mmxlabs.models.lng.actuals.validation.ActualsSequencingConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Actuals Sequence Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ActualsModel">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
