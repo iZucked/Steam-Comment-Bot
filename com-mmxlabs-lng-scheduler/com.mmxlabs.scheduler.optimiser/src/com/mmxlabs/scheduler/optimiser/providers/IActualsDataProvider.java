@@ -2,6 +2,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
@@ -93,9 +94,14 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	long getEndHeelInM3(IPortSlot slot);
 
 	/**
-	 * Base fuel price per MT
+	 * Base fuel price per MT (from a {@link ILoadOption})
 	 */
-	int getBaseFuelPrice(IPortSlot slot);
+	int getBaseFuelPricePerMT(IPortSlot slot);
+
+	/**
+	 * Charter rate per day (from a {@link ILoadOption})
+	 */
+	int getCharterRatePerDay(IPortSlot slot);
 
 	/**
 	 * Returns the actual base fuel used in the next voyage. This includes and load and discharge port fuel consumptions.
@@ -104,7 +110,7 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	long getNextVoyageBaseFuelConsumptionInMT(IPortSlot slot);
-	
+
 	int getNextVoyageDistance(IPortSlot slot);
 
 	int getLNGPricePerMMBTu(IPortSlot slot);

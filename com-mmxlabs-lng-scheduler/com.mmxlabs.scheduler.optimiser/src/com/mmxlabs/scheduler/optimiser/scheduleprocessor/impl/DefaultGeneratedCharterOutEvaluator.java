@@ -73,7 +73,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// TODO: Extract out further for custom base fuel pricing logic?
 		// Use forecast BF, but check for actuals later
 		int baseFuelUnitPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		;
+		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, arrivalTimes.get(0));
 
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
@@ -99,7 +99,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					}
 
 					if (actualsDataProvider.hasActuals(details.getOptions().getPortSlot())) {
-						baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPrice(details.getOptions().getPortSlot());
+						baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(details.getOptions().getPortSlot());
+						vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(details.getOptions().getPortSlot());
 					}
 				}
 			} else if (obj instanceof VoyageDetails) {
@@ -182,7 +183,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		vpo.reset();
 
 		vpo.setVessel(vessel, baseFuelUnitPricePerMT);
-		vpo.setVesselCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, arrivalTimes.get(0)));
+		vpo.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 		vpo.setStartHeel(startingHeelInM3);
 		// Install our new alternative sequence
 		vpo.setBasicSequence(newRawSequence);

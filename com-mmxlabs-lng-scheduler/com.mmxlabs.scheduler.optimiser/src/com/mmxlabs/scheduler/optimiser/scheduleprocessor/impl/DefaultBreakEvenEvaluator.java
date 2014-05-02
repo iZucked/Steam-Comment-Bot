@@ -186,7 +186,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				// Use forecast BF, but check for actuals later
 				final int baseFuelUnitPricePerMT;
 				if (actualsDataProvider.hasActuals(originalLoad)) {
-					baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPrice(originalLoad);
+					baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(originalLoad);
 				} else {
 					baseFuelUnitPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
 				}

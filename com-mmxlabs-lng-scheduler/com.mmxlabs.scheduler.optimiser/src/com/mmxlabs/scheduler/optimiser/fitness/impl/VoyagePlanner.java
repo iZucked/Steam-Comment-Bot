@@ -290,7 +290,7 @@ public class VoyagePlanner {
 			voyagePlanOptimiser.setVessel(vessel, vessel.getVesselClass().getBaseFuelUnitPrice());
 			if (thisPortSlot instanceof ILoadOption) {
 				if (actualsDataProvider.hasActuals(thisPortSlot)) {
-					voyagePlanOptimiser.setVessel(vessel, actualsDataProvider.getBaseFuelPrice(thisPortSlot));
+					voyagePlanOptimiser.setVessel(vessel, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
 				}
 			}
 
@@ -427,9 +427,9 @@ public class VoyagePlanner {
 			List<VoyagePlan> voyagePlansList, List<IOptionsSequenceElement> voyageOrPortOptions, List<Integer> currentTimes, long startHeelVolumeInM3) {
 		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
 
-		final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0));
 		final VoyagePlan plan = new VoyagePlan();
-		plan.setCharterInRatePerDay(vesselCharterInRatePerDay);
+		// Replace with actuals later if needed
+		plan.setCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, currentTimes.get(0)));
 		plan.setStartingHeelInM3(startHeelVolumeInM3);
 		{
 
@@ -445,6 +445,7 @@ public class VoyagePlanner {
 
 						if (portOptions.getPortSlot() instanceof ILoadOption && idx != voyageOrPortOptions.size() - 1) {
 							cargoCV = actualsDataProvider.getCVValue(portOptions.getPortSlot());
+							plan.setCharterInRatePerDay(actualsDataProvider.getCharterRatePerDay(portOptions.getPortSlot()));
 						}
 
 						else if (portOptions.getPortSlot() instanceof IDischargeOption) {
@@ -505,7 +506,7 @@ public class VoyagePlanner {
 
 					// Base Fuel
 
-					int baseFuelPricePerMT = actualsDataProvider.getBaseFuelPrice(voyageOptions.getFromPortSlot());
+					int baseFuelPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(voyageOptions.getFromPortSlot());
 					voyageDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
 
 					long baseFuelConsumptionInMt = actualsDataProvider.getNextVoyageBaseFuelConsumptionInMT(voyageOptions.getFromPortSlot());
@@ -782,7 +783,7 @@ public class VoyagePlanner {
 			voyagePlanOptimiser.setVessel(vessel, vessel.getVesselClass().getBaseFuelUnitPrice());
 			if (thisPortSlot instanceof ILoadOption) {
 				if (actualsDataProvider.hasActuals(thisPortSlot)) {
-					voyagePlanOptimiser.setVessel(vessel, actualsDataProvider.getBaseFuelPrice(thisPortSlot));
+					voyagePlanOptimiser.setVessel(vessel, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
 				}
 			}
 			// If this is the first port, then this will be null and there will
