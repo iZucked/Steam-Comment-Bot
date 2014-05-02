@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.PenaltyType;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -67,6 +68,13 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	private EClass dischargeActualsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass returnActualsEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -201,6 +209,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotActuals_CapacityCharges() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(16);
 	}
@@ -382,7 +391,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getCargoActuals_BaseFuelPrice() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(10);
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(11);
 	}
 
 	/**
@@ -392,7 +401,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getCargoActuals_InsurancePremium() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(11);
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -411,8 +420,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCargoActuals_ContractYear() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(1);
+	public EReference getCargoActuals_ReturnActuals() {
+		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -421,7 +430,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCargoActuals_OperationNumber() {
+	public EAttribute getCargoActuals_ContractYear() {
 		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -431,7 +440,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCargoActuals_SubOperationNumber() {
+	public EAttribute getCargoActuals_OperationNumber() {
 		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -441,7 +450,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCargoActuals_SellerID() {
+	public EAttribute getCargoActuals_SubOperationNumber() {
 		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -451,7 +460,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCargoActuals_CargoReference() {
+	public EAttribute getCargoActuals_SellerID() {
 		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -461,7 +470,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getCargoActuals_CargoReferenceSeller() {
+	public EAttribute getCargoActuals_CargoReference() {
 		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -471,8 +480,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getCargoActuals_Vessel() {
-		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(7);
+	public EAttribute getCargoActuals_CargoReferenceSeller() {
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -480,8 +489,19 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EReference getCargoActuals_Vessel() {
+		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getCargoActuals_CharterRatePerDay() {
-		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)cargoActualsEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -491,7 +511,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EReference getCargoActuals_Cargo() {
-		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(9);
+		return (EReference)cargoActualsEClass.getEStructuralFeatures().get(10);
 	}
 
 	/**
@@ -580,6 +600,76 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getReturnActuals() {
+		return returnActualsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getReturnActuals_TitleTransferPoint() {
+		return (EReference)returnActualsEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getReturnActuals_OperationsStart() {
+		return (EAttribute)returnActualsEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getReturnActuals_EndHeelM3() {
+		return (EAttribute)returnActualsEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getReturnActuals_EndHeelMMBTu() {
+		return (EAttribute)returnActualsEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getReturnActuals_CV() {
+		return (EAttribute)returnActualsEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EOperation getReturnActuals__GetLocalStart() {
+		return returnActualsEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getPenaltyType() {
 		return penaltyTypeEEnum;
 	}
@@ -649,6 +739,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		cargoActualsEClass = createEClass(CARGO_ACTUALS);
 		createEReference(cargoActualsEClass, CARGO_ACTUALS__ACTUALS);
+		createEReference(cargoActualsEClass, CARGO_ACTUALS__RETURN_ACTUALS);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__CONTRACT_YEAR);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__OPERATION_NUMBER);
 		createEAttribute(cargoActualsEClass, CARGO_ACTUALS__SUB_OPERATION_NUMBER);
@@ -670,6 +761,14 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__DELIVERY_TYPE);
 		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__END_HEEL_M3);
 		createEAttribute(dischargeActualsEClass, DISCHARGE_ACTUALS__END_HEEL_MMB_TU);
+
+		returnActualsEClass = createEClass(RETURN_ACTUALS);
+		createEReference(returnActualsEClass, RETURN_ACTUALS__TITLE_TRANSFER_POINT);
+		createEAttribute(returnActualsEClass, RETURN_ACTUALS__OPERATIONS_START);
+		createEAttribute(returnActualsEClass, RETURN_ACTUALS__END_HEEL_M3);
+		createEAttribute(returnActualsEClass, RETURN_ACTUALS__END_HEEL_MMB_TU);
+		createEAttribute(returnActualsEClass, RETURN_ACTUALS__CV);
+		createEOperation(returnActualsEClass, RETURN_ACTUALS___GET_LOCAL_START);
 
 		// Create enums
 		penaltyTypeEEnum = createEEnum(PENALTY_TYPE);
@@ -715,6 +814,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		slotActualsEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 		loadActualsEClass.getESuperTypes().add(this.getSlotActuals());
 		dischargeActualsEClass.getESuperTypes().add(this.getSlotActuals());
+		returnActualsEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(actualsModelEClass, ActualsModel.class, "ActualsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -745,6 +845,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		initEClass(cargoActualsEClass, CargoActuals.class, "CargoActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoActuals_Actuals(), this.getSlotActuals(), null, "actuals", null, 0, -1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoActuals_ReturnActuals(), this.getReturnActuals(), null, "returnActuals", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_ContractYear(), ecorePackage.getEInt(), "contractYear", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_OperationNumber(), ecorePackage.getEInt(), "operationNumber", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_SubOperationNumber(), ecorePackage.getEInt(), "subOperationNumber", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -766,6 +867,15 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getDischargeActuals_DeliveryType(), ecorePackage.getEString(), "deliveryType", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDischargeActuals_EndHeelM3(), ecorePackage.getEInt(), "endHeelM3", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getDischargeActuals_EndHeelMMBTu(), ecorePackage.getEInt(), "endHeelMMBTu", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(returnActualsEClass, ReturnActuals.class, "ReturnActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getReturnActuals_TitleTransferPoint(), thePortPackage.getPort(), null, "titleTransferPoint", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getReturnActuals_OperationsStart(), ecorePackage.getEDate(), "operationsStart", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getReturnActuals_EndHeelM3(), ecorePackage.getEInt(), "endHeelM3", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getReturnActuals_EndHeelMMBTu(), ecorePackage.getEInt(), "endHeelMMBTu", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getReturnActuals_CV(), ecorePackage.getEDouble(), "CV", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getReturnActuals__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(penaltyTypeEEnum, PenaltyType.class, "PenaltyType");

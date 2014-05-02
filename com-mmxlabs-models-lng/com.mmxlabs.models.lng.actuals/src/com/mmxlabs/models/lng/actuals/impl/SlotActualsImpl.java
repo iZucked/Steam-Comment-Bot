@@ -441,6 +441,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCapacityCharges() {
 		return capacityCharges;
 	}
@@ -450,6 +451,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCapacityCharges(int newCapacityCharges) {
 		int oldCapacityCharges = capacityCharges;
 		capacityCharges = newCapacityCharges;

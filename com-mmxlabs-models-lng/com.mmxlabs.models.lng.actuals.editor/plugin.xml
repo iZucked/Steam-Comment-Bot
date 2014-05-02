@@ -53,6 +53,12 @@
             inheritable="true"
             modelClass="com.mmxlabs.models.lng.actuals.LoadActuals">
       </componentHelper>
+      <componentHelper
+            helperClass="com.mmxlabs.models.lng.actuals.presentation.composites.ReturnActualsComponentHelper"
+            id="com.mmxlabs.models.lng.actuals.presentation.composites.ReturnActualsComponentHelper"
+            inheritable="true"
+            modelClass="com.mmxlabs.models.lng.actuals.ReturnActuals">
+      </componentHelper>
    </extension>
    <extension
          point="com.mmxlabs.models.ui.modelfactories">

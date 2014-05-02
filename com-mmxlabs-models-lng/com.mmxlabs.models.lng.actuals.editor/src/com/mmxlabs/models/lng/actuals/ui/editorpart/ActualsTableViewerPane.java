@@ -71,6 +71,7 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RootData;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowData;
@@ -304,6 +305,8 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 					return source;
 				} else if (source instanceof CargoActuals) {
 					return source;
+				} else if (source instanceof ReturnActuals) {
+					return source.eContainer();
 				}
 
 				return super.getElementForNotificationTarget(source);

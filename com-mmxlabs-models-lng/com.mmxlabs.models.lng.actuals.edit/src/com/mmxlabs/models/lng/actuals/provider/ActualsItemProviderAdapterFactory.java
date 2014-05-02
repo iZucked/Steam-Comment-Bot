@@ -164,6 +164,29 @@ public class ActualsItemProviderAdapterFactory extends ActualsAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.actuals.ReturnActuals} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ReturnActualsItemProvider returnActualsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.actuals.ReturnActuals}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createReturnActualsAdapter() {
+		if (returnActualsItemProvider == null) {
+			returnActualsItemProvider = new ReturnActualsItemProvider(this);
+		}
+
+		return returnActualsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -272,6 +295,7 @@ public class ActualsItemProviderAdapterFactory extends ActualsAdapterFactory imp
 		if (cargoActualsItemProvider != null) cargoActualsItemProvider.dispose();
 		if (loadActualsItemProvider != null) loadActualsItemProvider.dispose();
 		if (dischargeActualsItemProvider != null) dischargeActualsItemProvider.dispose();
+		if (returnActualsItemProvider != null) returnActualsItemProvider.dispose();
 	}
 
 }

@@ -58,6 +58,15 @@ public interface ActualsFactory extends EFactory {
 	DischargeActuals createDischargeActuals();
 
 	/**
+	 * Returns a new object of class '<em>Return Actuals</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Return Actuals</em>'.
+	 * @generated
+	 */
+	ReturnActuals createReturnActuals();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

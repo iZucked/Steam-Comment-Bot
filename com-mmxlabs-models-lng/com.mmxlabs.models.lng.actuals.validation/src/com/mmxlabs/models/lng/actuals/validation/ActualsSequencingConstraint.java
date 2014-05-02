@@ -14,9 +14,11 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.actuals.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
@@ -49,7 +51,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 		final EObject target = ctx.getTarget();
 		final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
 		if (target instanceof ActualsModel) {
-			ActualsModel actualsModel = (ActualsModel) target;
+			final ActualsModel actualsModel = (ActualsModel) target;
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final FleetModel fleetModel = scenarioModel.getFleetModel();
 			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
@@ -90,12 +92,14 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 				// Assume vessel start is Actualised
 				boolean previousElementHasActuals = true;
 				AssignableElement prevObject = null;
-
+				CargoActuals prevActuals = null;
 				for (final AssignableElement assignment : collectedAssignment.getAssignedObjects()) {
 					boolean currentElementHasActuals = false;
+					CargoActuals currentActuals = null;
 					if (assignment instanceof Cargo) {
 						final Cargo cargo = (Cargo) assignment;
 						if (cargoActualsMap.containsKey(cargo)) {
+							currentActuals = cargoActualsMap.get(cargo);
 							currentElementHasActuals = true;
 						}
 					} else if (assignment instanceof VesselEvent) {
@@ -104,7 +108,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 					if (prevObject != null && previousElementHasActuals == false && currentElementHasActuals == true) {
 						// Only warn about previous missing actuals if an event.
-						int status = prevObject instanceof VesselEvent ? IStatus.WARNING : IStatus.ERROR;
+						final int status = prevObject instanceof VesselEvent ? IStatus.WARNING : IStatus.ERROR;
 
 						final String msg = String.format("Cargo %s is not preceeded by another actualised event.", getID(prevObject));
 
@@ -116,8 +120,66 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 						statuses.add(failure);
 					}
 
+					// Check previous return actuals data matches current data
+					if (currentActuals != null && prevActuals != null) {
+						final ReturnActuals returnActuals = prevActuals.getReturnActuals();
+
+						LoadActuals loadActuals = null;
+						{
+							final Slot slot = currentActuals.getCargo().getSortedSlots().get(0);
+							if (slot instanceof LoadSlot) {
+								loadActuals = loadActualsMap.get(slot);
+							}
+						}
+						if (returnActuals != null && loadActuals != null) {
+							if (returnActuals.getTitleTransferPoint() != loadActuals.getTitleTransferPoint()) {
+								final String message = String.format("Load actuals and previous return actuals %s does not match", "Port");
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
+								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
+								statuses.add(failure);
+
+							}
+							if (returnActuals.getCV() != loadActuals.getCV()) {
+								final String message = String.format("Load actuals and previous return actuals %s does not match", "CV");
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);
+								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__CV);
+								statuses.add(failure);
+
+							}
+							if (returnActuals.getEndHeelM3() != loadActuals.getStartingHeelM3()) {
+								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in m3");
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
+								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
+								statuses.add(failure);
+
+							}
+
+							if (returnActuals.getEndHeelMMBTu() != loadActuals.getStartingHeelMMBTu()) {
+								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in mmBtu");
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_MMB_TU);
+								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
+								statuses.add(failure);
+
+							}
+							if (returnActuals.getOperationsStart() == null || loadActuals.getOperationsStart() == null || returnActuals.getOperationsStart().equals(loadActuals.getOperationsStart())) {
+								final String message = String.format("Load actuals and previous return actuals %s does not match", "heel in mmBtu");
+								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+								failure.addEObjectAndFeature(loadActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+								failure.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
+								statuses.add(failure);
+
+							}
+						}
+
+					}
+
 					prevObject = assignment;
 					previousElementHasActuals = currentElementHasActuals;
+					prevActuals = currentActuals;
 				}
 			}
 

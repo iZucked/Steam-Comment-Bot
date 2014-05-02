@@ -102,6 +102,13 @@ public class ActualsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ActualsPackage.RETURN_ACTUALS: {
+				ReturnActuals returnActuals = (ReturnActuals)theEObject;
+				T result = caseReturnActuals(returnActuals);
+				if (result == null) result = caseITimezoneProvider(returnActuals);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -178,6 +185,21 @@ public class ActualsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseDischargeActuals(DischargeActuals object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Return Actuals</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Return Actuals</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseReturnActuals(ReturnActuals object) {
 		return null;
 	}
 

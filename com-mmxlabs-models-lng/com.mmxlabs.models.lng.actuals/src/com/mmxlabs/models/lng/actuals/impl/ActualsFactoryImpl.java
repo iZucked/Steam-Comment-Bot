@@ -62,6 +62,7 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 			case ActualsPackage.CARGO_ACTUALS: return createCargoActuals();
 			case ActualsPackage.LOAD_ACTUALS: return createLoadActuals();
 			case ActualsPackage.DISCHARGE_ACTUALS: return createDischargeActuals();
+			case ActualsPackage.RETURN_ACTUALS: return createReturnActuals();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -143,6 +144,17 @@ public class ActualsFactoryImpl extends EFactoryImpl implements ActualsFactory {
 	public DischargeActuals createDischargeActuals() {
 		DischargeActualsImpl dischargeActuals = new DischargeActualsImpl();
 		return dischargeActuals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ReturnActuals createReturnActuals() {
+		ReturnActualsImpl returnActuals = new ReturnActualsImpl();
+		return returnActuals;
 	}
 
 	/**

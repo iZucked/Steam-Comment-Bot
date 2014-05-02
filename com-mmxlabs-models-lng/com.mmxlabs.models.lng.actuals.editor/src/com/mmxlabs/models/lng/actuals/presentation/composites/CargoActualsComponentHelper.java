@@ -61,6 +61,7 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_actualsEditor(detailComposite, topClass);
+		add_returnActualsEditor(detailComposite, topClass);
 		add_contractYearEditor(detailComposite, topClass);
 		add_operationNumberEditor(detailComposite, topClass);
 		add_subOperationNumberEditor(detailComposite, topClass);
@@ -96,6 +97,15 @@ public class CargoActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_actualsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__ACTUALS));
+	}
+
+	/**
+	 * Create the editor for the returnActuals feature on CargoActuals
+	 *
+	 * @generated
+	 */
+	protected void add_returnActualsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.CARGO_ACTUALS__RETURN_ACTUALS));
 	}
 
 	/**

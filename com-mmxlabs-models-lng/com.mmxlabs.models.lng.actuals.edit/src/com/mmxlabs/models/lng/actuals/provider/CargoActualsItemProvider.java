@@ -332,6 +332,7 @@ public class CargoActualsItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ActualsPackage.Literals.CARGO_ACTUALS__ACTUALS);
+			childrenFeatures.add(ActualsPackage.Literals.CARGO_ACTUALS__RETURN_ACTUALS);
 		}
 		return childrenFeatures;
 	}
@@ -385,6 +386,7 @@ public class CargoActualsItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case ActualsPackage.CARGO_ACTUALS__ACTUALS:
+			case ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -411,6 +413,11 @@ public class CargoActualsItemProvider
 			(createChildParameter
 				(ActualsPackage.Literals.CARGO_ACTUALS__ACTUALS,
 				 ActualsFactory.eINSTANCE.createDischargeActuals()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(ActualsPackage.Literals.CARGO_ACTUALS__RETURN_ACTUALS,
+				 ActualsFactory.eINSTANCE.createReturnActuals()));
 	}
 
 	/**

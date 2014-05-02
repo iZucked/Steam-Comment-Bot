@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getActuals <em>Actuals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getReturnActuals <em>Return Actuals</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getContractYear <em>Contract Year</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getOperationNumber <em>Operation Number</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.CargoActuals#getSubOperationNumber <em>Sub Operation Number</em>}</li>
@@ -103,6 +104,32 @@ public interface CargoActuals extends EObject {
 	 * @generated
 	 */
 	EList<SlotActuals> getActuals();
+
+	/**
+	 * Returns the value of the '<em><b>Return Actuals</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Return Actuals</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Return Actuals</em>' containment reference.
+	 * @see #setReturnActuals(ReturnActuals)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_ReturnActuals()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	ReturnActuals getReturnActuals();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getReturnActuals <em>Return Actuals</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Return Actuals</em>' containment reference.
+	 * @see #getReturnActuals()
+	 * @generated
+	 */
+	void setReturnActuals(ReturnActuals value);
 
 	/**
 	 * Returns the value of the '<em><b>Contract Year</b></em>' attribute.

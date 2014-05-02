@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.actuals.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -172,6 +173,25 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						failures.add(status);
 					}
 
+				}
+				final ReturnActuals returnActuals = cargoActuals.getReturnActuals();
+				if (returnActuals != null) {
+
+					if (returnActuals.getOperationsStart() == null) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Return actual needs an operations start date"));
+						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
+						failures.add(status);
+					}
+
+					// Sanity check cv and m3 -> mmbtu conversions
+					if (Math.abs((returnActuals.getCV() * returnActuals.getEndHeelM3()) - returnActuals.getEndHeelMMBTu()) > 1.0) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Return actual CV, heel volume in m3 and volume in mmBtu do not match up"));
+						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__CV);
+						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
+						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
+						failures.add(status);
+					}
 				}
 
 			}

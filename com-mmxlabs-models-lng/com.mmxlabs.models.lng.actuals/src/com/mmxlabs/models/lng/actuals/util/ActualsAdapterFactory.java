@@ -89,6 +89,10 @@ public class ActualsAdapterFactory extends AdapterFactoryImpl {
 				return createDischargeActualsAdapter();
 			}
 			@Override
+			public Adapter caseReturnActuals(ReturnActuals object) {
+				return createReturnActualsAdapter();
+			}
+			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
 				return createITimezoneProviderAdapter();
 			}
@@ -179,6 +183,20 @@ public class ActualsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createDischargeActualsAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.actuals.ReturnActuals <em>Return Actuals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals
+	 * @generated
+	 */
+	public Adapter createReturnActualsAdapter() {
 		return null;
 	}
 

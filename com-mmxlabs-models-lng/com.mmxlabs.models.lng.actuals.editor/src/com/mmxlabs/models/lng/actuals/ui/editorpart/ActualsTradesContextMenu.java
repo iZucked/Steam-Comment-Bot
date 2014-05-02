@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -18,6 +19,7 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -364,6 +366,20 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 												}
 											}
 										}
+									}
+
+									final ReturnActuals returnActuals = ActualsFactory.eINSTANCE.createReturnActuals();
+									cargoActuals.setReturnActuals(returnActuals);
+
+									final EList<Event> events = cargoAllocation.getEvents();
+									final Event lastEvent = events.get(events.size() - 1);
+									final Event nextEvent = lastEvent.getNextEvent();
+									if (nextEvent != null) {
+										returnActuals.setEndHeelM3(nextEvent.getHeelAtStart());
+										returnActuals.setEndHeelMMBTu((int) Math.round(nextEvent.getHeelAtStart() * cargoCV));
+										returnActuals.setCV(cargoCV);
+										returnActuals.setTitleTransferPoint(nextEvent.getPort());
+										returnActuals.setOperationsStart(nextEvent.getLocalStart().getTime());
 									}
 								}
 							}

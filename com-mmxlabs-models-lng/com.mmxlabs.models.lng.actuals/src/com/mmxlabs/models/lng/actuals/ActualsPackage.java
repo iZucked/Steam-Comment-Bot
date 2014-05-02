@@ -325,13 +325,22 @@ public interface ActualsPackage extends EPackage {
 	int CARGO_ACTUALS__ACTUALS = 0;
 
 	/**
+	 * The feature id for the '<em><b>Return Actuals</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ACTUALS__RETURN_ACTUALS = 1;
+
+	/**
 	 * The feature id for the '<em><b>Contract Year</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__CONTRACT_YEAR = 1;
+	int CARGO_ACTUALS__CONTRACT_YEAR = 2;
 
 	/**
 	 * The feature id for the '<em><b>Operation Number</b></em>' attribute.
@@ -340,7 +349,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__OPERATION_NUMBER = 2;
+	int CARGO_ACTUALS__OPERATION_NUMBER = 3;
 
 	/**
 	 * The feature id for the '<em><b>Sub Operation Number</b></em>' attribute.
@@ -349,7 +358,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__SUB_OPERATION_NUMBER = 3;
+	int CARGO_ACTUALS__SUB_OPERATION_NUMBER = 4;
 
 	/**
 	 * The feature id for the '<em><b>Seller ID</b></em>' attribute.
@@ -358,7 +367,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__SELLER_ID = 4;
+	int CARGO_ACTUALS__SELLER_ID = 5;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Reference</b></em>' attribute.
@@ -367,7 +376,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__CARGO_REFERENCE = 5;
+	int CARGO_ACTUALS__CARGO_REFERENCE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Reference Seller</b></em>' attribute.
@@ -376,7 +385,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__CARGO_REFERENCE_SELLER = 6;
+	int CARGO_ACTUALS__CARGO_REFERENCE_SELLER = 7;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -385,7 +394,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__VESSEL = 7;
+	int CARGO_ACTUALS__VESSEL = 8;
 
 	/**
 	 * The feature id for the '<em><b>Charter Rate Per Day</b></em>' attribute.
@@ -394,7 +403,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__CHARTER_RATE_PER_DAY = 8;
+	int CARGO_ACTUALS__CHARTER_RATE_PER_DAY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -403,7 +412,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__CARGO = 9;
+	int CARGO_ACTUALS__CARGO = 10;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
@@ -412,7 +421,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__BASE_FUEL_PRICE = 10;
+	int CARGO_ACTUALS__BASE_FUEL_PRICE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Insurance Premium</b></em>' attribute.
@@ -421,7 +430,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS__INSURANCE_PREMIUM = 11;
+	int CARGO_ACTUALS__INSURANCE_PREMIUM = 12;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Actuals</em>' class.
@@ -430,7 +439,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ACTUALS_FEATURE_COUNT = 12;
+	int CARGO_ACTUALS_FEATURE_COUNT = 13;
 
 	/**
 	 * The number of operations of the '<em>Cargo Actuals</em>' class.
@@ -913,6 +922,97 @@ public interface ActualsPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl <em>Return Actuals</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl
+	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getReturnActuals()
+	 * @generated
+	 */
+	int RETURN_ACTUALS = 5;
+
+	/**
+	 * The feature id for the '<em><b>Title Transfer Point</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS__TITLE_TRANSFER_POINT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Operations Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS__OPERATIONS_START = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>End Heel M3</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS__END_HEEL_M3 = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>End Heel MMB Tu</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS__END_HEEL_MMB_TU = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>CV</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS__CV = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Return Actuals</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS___GET_TIME_ZONE__EATTRIBUTE = TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS___GET_LOCAL_START = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Return Actuals</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RETURN_ACTUALS_OPERATION_COUNT = TypesPackage.ITIMEZONE_PROVIDER_OPERATION_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -920,7 +1020,7 @@ public interface ActualsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getPenaltyType()
 	 * @generated
 	 */
-	int PENALTY_TYPE = 5;
+	int PENALTY_TYPE = 6;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -930,7 +1030,7 @@ public interface ActualsPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 6;
+	int CALENDAR = 7;
 
 
 	/**
@@ -1215,6 +1315,17 @@ public interface ActualsPackage extends EPackage {
 	EReference getCargoActuals_Actuals();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getReturnActuals <em>Return Actuals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Return Actuals</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.CargoActuals#getReturnActuals()
+	 * @see #getCargoActuals()
+	 * @generated
+	 */
+	EReference getCargoActuals_ReturnActuals();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getContractYear <em>Contract Year</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1398,6 +1509,81 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getDischargeActuals_EndHeelMMBTu();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.actuals.ReturnActuals <em>Return Actuals</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Return Actuals</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals
+	 * @generated
+	 */
+	EClass getReturnActuals();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getTitleTransferPoint <em>Title Transfer Point</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Title Transfer Point</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getTitleTransferPoint()
+	 * @see #getReturnActuals()
+	 * @generated
+	 */
+	EReference getReturnActuals_TitleTransferPoint();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getOperationsStart <em>Operations Start</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Operations Start</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getOperationsStart()
+	 * @see #getReturnActuals()
+	 * @generated
+	 */
+	EAttribute getReturnActuals_OperationsStart();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelM3 <em>End Heel M3</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Heel M3</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelM3()
+	 * @see #getReturnActuals()
+	 * @generated
+	 */
+	EAttribute getReturnActuals_EndHeelM3();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelMMBTu <em>End Heel MMB Tu</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>End Heel MMB Tu</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelMMBTu()
+	 * @see #getReturnActuals()
+	 * @generated
+	 */
+	EAttribute getReturnActuals_EndHeelMMBTu();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getCV <em>CV</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>CV</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getCV()
+	 * @see #getReturnActuals()
+	 * @generated
+	 */
+	EAttribute getReturnActuals_CV();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getLocalStart() <em>Get Local Start</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Local Start</em>' operation.
+	 * @see com.mmxlabs.models.lng.actuals.ReturnActuals#getLocalStart()
+	 * @generated
+	 */
+	EOperation getReturnActuals__GetLocalStart();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}'.
@@ -1658,6 +1844,14 @@ public interface ActualsPackage extends EPackage {
 		EReference CARGO_ACTUALS__ACTUALS = eINSTANCE.getCargoActuals_Actuals();
 
 		/**
+		 * The meta object literal for the '<em><b>Return Actuals</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CARGO_ACTUALS__RETURN_ACTUALS = eINSTANCE.getCargoActuals_ReturnActuals();
+
+		/**
 		 * The meta object literal for the '<em><b>Contract Year</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1796,6 +1990,64 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISCHARGE_ACTUALS__END_HEEL_MMB_TU = eINSTANCE.getDischargeActuals_EndHeelMMBTu();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl <em>Return Actuals</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.actuals.impl.ReturnActualsImpl
+		 * @see com.mmxlabs.models.lng.actuals.impl.ActualsPackageImpl#getReturnActuals()
+		 * @generated
+		 */
+		EClass RETURN_ACTUALS = eINSTANCE.getReturnActuals();
+
+		/**
+		 * The meta object literal for the '<em><b>Title Transfer Point</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference RETURN_ACTUALS__TITLE_TRANSFER_POINT = eINSTANCE.getReturnActuals_TitleTransferPoint();
+
+		/**
+		 * The meta object literal for the '<em><b>Operations Start</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RETURN_ACTUALS__OPERATIONS_START = eINSTANCE.getReturnActuals_OperationsStart();
+
+		/**
+		 * The meta object literal for the '<em><b>End Heel M3</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RETURN_ACTUALS__END_HEEL_M3 = eINSTANCE.getReturnActuals_EndHeelM3();
+
+		/**
+		 * The meta object literal for the '<em><b>End Heel MMB Tu</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RETURN_ACTUALS__END_HEEL_MMB_TU = eINSTANCE.getReturnActuals_EndHeelMMBTu();
+
+		/**
+		 * The meta object literal for the '<em><b>CV</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute RETURN_ACTUALS__CV = eINSTANCE.getReturnActuals_CV();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Local Start</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation RETURN_ACTUALS___GET_LOCAL_START = eINSTANCE.getReturnActuals__GetLocalStart();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.actuals.PenaltyType <em>Penalty Type</em>}' enum.

@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.actuals.impl;
 
 import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
+import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -32,6 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getActuals <em>Actuals</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getReturnActuals <em>Return Actuals</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getContractYear <em>Contract Year</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getOperationNumber <em>Operation Number</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.CargoActualsImpl#getSubOperationNumber <em>Sub Operation Number</em>}</li>
@@ -58,6 +60,16 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * @ordered
 	 */
 	protected EList<SlotActuals> actuals;
+
+	/**
+	 * The cached value of the '{@link #getReturnActuals() <em>Return Actuals</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReturnActuals()
+	 * @generated
+	 * @ordered
+	 */
+	protected ReturnActuals returnActuals;
 
 	/**
 	 * The default value of the '{@link #getContractYear() <em>Contract Year</em>}' attribute.
@@ -343,6 +355,74 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * @generated
 	 */
 	@Override
+	public ReturnActuals getReturnActuals() {
+		if (returnActuals != null && returnActuals.eIsProxy()) {
+			InternalEObject oldReturnActuals = (InternalEObject)returnActuals;
+			returnActuals = (ReturnActuals)eResolveProxy(oldReturnActuals);
+			if (returnActuals != oldReturnActuals) {
+				InternalEObject newReturnActuals = (InternalEObject)returnActuals;
+				NotificationChain msgs = oldReturnActuals.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS, null, null);
+				if (newReturnActuals.eInternalContainer() == null) {
+					msgs = newReturnActuals.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS, oldReturnActuals, returnActuals));
+			}
+		}
+		return returnActuals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ReturnActuals basicGetReturnActuals() {
+		return returnActuals;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetReturnActuals(ReturnActuals newReturnActuals, NotificationChain msgs) {
+		ReturnActuals oldReturnActuals = returnActuals;
+		returnActuals = newReturnActuals;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS, oldReturnActuals, newReturnActuals);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setReturnActuals(ReturnActuals newReturnActuals) {
+		if (newReturnActuals != returnActuals) {
+			NotificationChain msgs = null;
+			if (returnActuals != null)
+				msgs = ((InternalEObject)returnActuals).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS, null, msgs);
+			if (newReturnActuals != null)
+				msgs = ((InternalEObject)newReturnActuals).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS, null, msgs);
+			msgs = basicSetReturnActuals(newReturnActuals, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS, newReturnActuals, newReturnActuals));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public int getContractYear() {
 		return contractYear;
 	}
@@ -520,6 +600,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getCharterRatePerDay() {
 		return charterRatePerDay;
 	}
@@ -529,6 +610,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterRatePerDay(int newCharterRatePerDay) {
 		int oldCharterRatePerDay = charterRatePerDay;
 		charterRatePerDay = newCharterRatePerDay;
@@ -586,6 +668,8 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 		switch (featureID) {
 			case ActualsPackage.CARGO_ACTUALS__ACTUALS:
 				return ((InternalEList<?>)getActuals()).basicRemove(otherEnd, msgs);
+			case ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS:
+				return basicSetReturnActuals(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -600,6 +684,9 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 		switch (featureID) {
 			case ActualsPackage.CARGO_ACTUALS__ACTUALS:
 				return getActuals();
+			case ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS:
+				if (resolve) return getReturnActuals();
+				return basicGetReturnActuals();
 			case ActualsPackage.CARGO_ACTUALS__CONTRACT_YEAR:
 				return getContractYear();
 			case ActualsPackage.CARGO_ACTUALS__OPERATION_NUMBER:
@@ -640,6 +727,9 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 			case ActualsPackage.CARGO_ACTUALS__ACTUALS:
 				getActuals().clear();
 				getActuals().addAll((Collection<? extends SlotActuals>)newValue);
+				return;
+			case ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS:
+				setReturnActuals((ReturnActuals)newValue);
 				return;
 			case ActualsPackage.CARGO_ACTUALS__CONTRACT_YEAR:
 				setContractYear((Integer)newValue);
@@ -689,6 +779,9 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 			case ActualsPackage.CARGO_ACTUALS__ACTUALS:
 				getActuals().clear();
 				return;
+			case ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS:
+				setReturnActuals((ReturnActuals)null);
+				return;
 			case ActualsPackage.CARGO_ACTUALS__CONTRACT_YEAR:
 				setContractYear(CONTRACT_YEAR_EDEFAULT);
 				return;
@@ -736,6 +829,8 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 		switch (featureID) {
 			case ActualsPackage.CARGO_ACTUALS__ACTUALS:
 				return actuals != null && !actuals.isEmpty();
+			case ActualsPackage.CARGO_ACTUALS__RETURN_ACTUALS:
+				return returnActuals != null;
 			case ActualsPackage.CARGO_ACTUALS__CONTRACT_YEAR:
 				return contractYear != CONTRACT_YEAR_EDEFAULT;
 			case ActualsPackage.CARGO_ACTUALS__OPERATION_NUMBER:
