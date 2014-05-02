@@ -78,11 +78,11 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 
 				Port startPort = null;
 				Set<Port> endPorts = null;
+				VesselAvailability vesselAvailability = null;
 				if (collectedAssignment.getVesselOrClass() instanceof Vessel) {
 					// Find start port
 					final Vessel vessel = (Vessel) collectedAssignment.getVesselOrClass();
 
-					VesselAvailability vesselAvailability = null;
 					for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 						if (va.getVessel() == vessel) {
 							vesselAvailability = va;
@@ -156,6 +156,28 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 					}
 
 				}
+
+				// Check end port
+				if (prevPort != null && endPorts != null && !endPorts.isEmpty()) {
+					boolean foundDistance = false;
+					for (Port p : endPorts) {
+
+						if (hasDistance(hasDistanceMap, prevPort, p)) {
+							foundDistance = true;
+							break;
+						}
+					}
+					if (!foundDistance) {
+
+						final String msg = String.format("Missing distance between port (%s) and vessel (%s) end port(s) and (%s to %s).", getPortName(prevPort),
+								getVesselName(vesselAvailability), getID(prevObject, prevFeature), getID(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT));
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+						failure.addEObjectAndFeature(prevPort, prevFeature);
+						failure.addEObjectAndFeature(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT);
+
+						statuses.add(failure);
+					}
+				}
 			}
 
 		}
@@ -178,6 +200,18 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 			return "<Unspecified port>";
 		}
 		return port.getName();
+	}
+
+	private String getVesselName(final VesselAvailability vesselAvailability) {
+		if (vesselAvailability == null) {
+			return "<Unspecified vessel>";
+		}
+
+		Vessel vessel = vesselAvailability.getVessel();
+		if (vessel == null) {
+			return "<Unspecified vessel>";
+		}
+		return vessel.getName();
 	}
 
 	private String getID(final EObject target, final EStructuralFeature feature) {
