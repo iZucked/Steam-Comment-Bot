@@ -465,6 +465,7 @@ public class VoyagePlanner {
 			long lngCommitmentInM3 = 0;
 			long endHeelInM3 = 0;
 
+			int baseFuelPricePerMT = 0;
 			idx = -1;
 			IDetailsSequenceElement[] detailedSequence = new IDetailsSequenceElement[voyageOrPortOptions.size()];
 			for (IOptionsSequenceElement element : voyageOrPortOptions) {
@@ -488,6 +489,9 @@ public class VoyagePlanner {
 						if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
 							startHeelVolumeInM3 = actualsDataProvider.getStartHeelInM3(portOptions.getPortSlot());
 							plan.setStartingHeelInM3(startHeelVolumeInM3);
+
+							baseFuelPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(portOptions.getPortSlot());
+
 						}
 					}
 
@@ -506,7 +510,6 @@ public class VoyagePlanner {
 
 					// Base Fuel
 
-					int baseFuelPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(voyageOptions.getFromPortSlot());
 					voyageDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
 
 					long baseFuelConsumptionInMt = actualsDataProvider.getNextVoyageBaseFuelConsumptionInMT(voyageOptions.getFromPortSlot());
