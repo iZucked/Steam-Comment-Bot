@@ -247,9 +247,6 @@ public class VoyagePlanner {
 		final int vesselStartTime = arrivalTimes[0];
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		// TODO: Extract out further for custom base fuel pricing logic?
-		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		voyagePlanOptimiser.setVessel(vessel, baseFuelPricePerMT);
 
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
@@ -287,6 +284,15 @@ public class VoyagePlanner {
 			final IPort thisPort = portProvider.getPortForElement(element);
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 			final PortType portType = portTypeProvider.getPortType(element);
+
+			// TODO: Extract out further for custom base fuel pricing logic?
+			// Use forecast BF, but check for actuals later
+			voyagePlanOptimiser.setVessel(vessel, vessel.getVesselClass().getBaseFuelUnitPrice());
+			if (thisPortSlot instanceof ILoadOption) {
+				if (actualsDataProvider.hasActuals(thisPortSlot)) {
+					voyagePlanOptimiser.setVessel(vessel, actualsDataProvider.getBaseFuelPrice(thisPortSlot));
+				}
+			}
 
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
@@ -745,10 +751,6 @@ public class VoyagePlanner {
 			long heelVolumeInM3) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		// FIXME: Use actuals
-		final int baseFuelPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		voyagePlanOptimiser.setVessel(vessel, baseFuelPricePerMT);
-
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
 		final List<IOptionsSequenceElement> voyageOrPortOptions = new ArrayList<IOptionsSequenceElement>(5);
@@ -775,6 +777,14 @@ public class VoyagePlanner {
 				heelVolumeInM3 = ((IHeelOptionsPortSlot) thisPortSlot).getHeelOptions().getHeelLimit();
 			}
 
+			// TODO: Extract out further for custom base fuel pricing logic?
+			// Use forecast BF, but check for actuals later
+			voyagePlanOptimiser.setVessel(vessel, vessel.getVesselClass().getBaseFuelUnitPrice());
+			if (thisPortSlot instanceof ILoadOption) {
+				if (actualsDataProvider.hasActuals(thisPortSlot)) {
+					voyagePlanOptimiser.setVessel(vessel, actualsDataProvider.getBaseFuelPrice(thisPortSlot));
+				}
+			}
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
 			int shortCargoReturnArrivalTime = 0;

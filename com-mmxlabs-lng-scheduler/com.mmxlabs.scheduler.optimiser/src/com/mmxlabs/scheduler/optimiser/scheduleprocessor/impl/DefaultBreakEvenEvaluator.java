@@ -22,8 +22,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -61,24 +61,11 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 	@Inject
 	private ShippingCostHelper shippingCostHelper;
 
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
+
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
-		// public void processSchedule(final ScheduledSequences scheduledSequences) {
-		// // Charter Out Optimisation... Detect potential charter out opportunities.
-		// for (final ScheduledSequence seq : scheduledSequences) {
-		//
-		// final IVessel vessel = vesselProvider.getVessel(seq.getResource());
-		// if (vessel == null) {
-		// // Error?
-		// continue;
-		// }
-		//
-		// int currentTime = seq.getStartTime();
-		//
-		// for (int vpIdx = 0; vpIdx < seq.getVoyagePlans().size(); ++vpIdx) {
-		// // for (final VoyagePlan vp : seq.getVoyagePlans()) {
-		// VoyagePlan vp = seq.getVoyagePlans().get(vpIdx);
-		//
 		long startingHeelInM3 = vp.getStartingHeelInM3();
 
 		boolean isCargoPlan = false;
@@ -195,7 +182,16 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 			if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 				vp.setSequence(newSequence);
 			} else {
-				voyageCalculator.calculateVoyagePlan(vp, vessel, startingHeelInM3, vessel.getVesselClass().getBaseFuelUnitPrice(), arrivalTimes, newSequence);
+				// TODO: Extract out further for custom base fuel pricing logic?
+				// Use forecast BF, but check for actuals later
+				final int baseFuelUnitPricePerMT;
+				if (actualsDataProvider.hasActuals(originalLoad)) {
+					baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPrice(originalLoad);
+				} else {
+					baseFuelUnitPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
+				}
+
+				voyageCalculator.calculateVoyagePlan(vp, vessel, startingHeelInM3, baseFuelUnitPricePerMT, arrivalTimes, newSequence);
 			}
 			final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, vp, arrivalTimes);
 			return new Pair<>(vp, newAllocation);
