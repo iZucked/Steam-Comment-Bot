@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -43,6 +44,48 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_CARGO);
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_LOAD);
 		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);
+
+		
+		// Add a column to show the former wiring of the cargo
+		//TODO: This is exactly the same code as in SchedulePnLReport - should refactor		
+		pinDiffColumnManager
+			.addColumn("Former wiring", new BaseFormatter() {
+		    	 @Override
+		    	 public String format(final Object obj) {
+
+		    		 StringBuffer sb = new StringBuffer();
+		    		 
+		    		 if (obj instanceof EObject) {
+		    			 final EObject eObj = (EObject) obj;
+
+		    			 	if (eObj.eIsSet(cargoAllocationRef)) {
+		    			 		// TODO: Q: can any of these lookups return null?
+		    			 		// TODO: Q: can there be a chain with more than 2 ports?
+		    			 		try { 
+			    			 		final CargoAllocation ca = (CargoAllocation) eObj.eGet(cargoAllocationRef);
+			    			 		
+			    			 		EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
+			    			 				    			 		
+			    			 		SlotAllocation caAlloc0 = caSlotAllocations.get(0);
+			    			 		sb.append(caAlloc0.getPort().getName());
+			    			 		
+			    					for (int i = 1; i < caSlotAllocations.size(); ++i) {
+			    						SlotAllocation caAllocation = caSlotAllocations.get(i);
+			    							sb.append(" -> ").append(caAllocation.getPort().getName());
+			    					}	
+		    			 		} 
+		    			 		catch (Exception e) {
+		    			 			throw(e);
+		    			 		}
+		    			 		
+		    			 	}
+		    		 }
+
+		    		 return sb.toString();
+		    	 }
+			}
+	   );	
+			
 	}
 
 	@Override

@@ -80,6 +80,14 @@ import com.mmxlabs.shiplingo.platform.reports.properties.ScheduledEventPropertyS
  * @author hinton
  * 
  */
+/**
+ * @author berkan
+ *
+ */
+/**
+ * @author berkan
+ *
+ */
 public abstract class EMFReportView extends ViewPart implements ISelectionListener {
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
@@ -481,6 +489,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 							c.getColumn().setVisible(synchronizerOutput.getLNGPortfolioModels().size() > 1);
 						}
 					}
+		
+					// Add Difference/Change columns when in Pin/Diff mode
+					addDiffColumnsToTableIf(numberOfSchedules > 1 && currentlyPinned);
 				}
 			}
 
@@ -581,6 +592,102 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return handler;
 	}
 
+
+	/**
+	 * Instance of PinDiffColumnManager which all view subclasses inherit
+	 */
+	protected PinDiffColumnManager pinDiffColumnManager = new PinDiffColumnManager();	
+
+
+	/**
+	 * Helper method for conditionally adding or removing all registered columns 
+	 * 
+	 * @param add
+	 */
+	protected void addDiffColumnsToTableIf(final boolean add) {
+		pinDiffColumnManager.addAllColumnsToTableIf(add);
+	}	
+	
+	/**
+	 * Helper class for managing columns that appear when in Pin/Diff mode
+	 * 
+	 * @author berkan
+	 */
+	protected class PinDiffColumnManager {
+		private Map<String, IFormatter> map = new LinkedHashMap<String, IFormatter>();
+
+		/**
+		 * Register a column to be added to the table/view when in Pin/Diff mode
+		 * 
+		 * @param title
+		 * @param formatter
+		 * @return this, for chaining
+		 */
+		public PinDiffColumnManager addColumn(final String title, final IFormatter formatter) {
+			map.put(title, formatter); 
+			return this;
+		}
+				
+		/**
+		 * Conditionally add or remove all Pin/Diff mode columns to/from the table
+		 * 
+		 * @param add
+		 * @return this, for chaining
+		 */
+		public PinDiffColumnManager addAllColumnsToTableIf(boolean add) {
+			if (add) {
+				for (final String title : map.keySet()) {
+					addColumnToTable(title);
+				}
+			}
+			else {
+				for (final String title : map.keySet()) {
+					removeColumnFromTable(title);
+				}
+			}
+			
+			return this;
+		}
+
+		/**
+		 * Add to the table the column registered with title
+		 * 
+		 * @param title
+		 * @return this, for chaining
+		 */
+		public PinDiffColumnManager addColumnToTable(String title) {
+			IFormatter formatter = map.get(title);
+			if (title != null)
+				EMFReportView.this.addColumn(title, formatter);
+			return this;
+		}
+		
+		/**
+		 * Remove from the table the column registered with the title
+		 * 
+		 * @param title
+		 * @return this, for chaining
+		 */
+		public PinDiffColumnManager removeColumnFromTable(String title) {
+			 EMFReportView.this.removeColumn(title);
+			 return this;
+		}		
+
+		/**
+		 * Deregister, and remove from the table the column registered with the title
+		 * 
+		 * @param title
+		 * @return this, for chaining
+		 */
+		public PinDiffColumnManager removeColumn(String title) {
+			map.remove(title);
+			removeColumnFromTable(title);
+			return this;
+		}
+		
+	}
+	
+		
 	/**
 	 * Similar to {@link #addColumn(String, IFormatter, Object...)} but supports a column tooltip
 	 * 

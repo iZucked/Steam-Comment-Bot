@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -50,6 +51,7 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.shiplingo.platform.reports.views.EMFReportView.BaseFormatter;
 
 /**
  * @since 3.0
@@ -211,6 +213,47 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		}, targetObjectRef);
 
+
+		// Add a column to show the former wiring of the cargo		
+		//TODO: This is exactly the same code as in AbstractCargoReportView (for Cargo-based reports) - should refactor
+		pinDiffColumnManager
+			.addColumn("Former wiring", new BaseFormatter() {
+		    	 @Override
+		    	 public String format(final Object obj) {
+
+		    		 StringBuffer sb = new StringBuffer();
+		    		 
+		    		 if (obj instanceof EObject) {
+		    			 final EObject eObj = (EObject) obj;
+
+		    			 	if (eObj.eIsSet(cargoAllocationRef)) {
+		    			 		// TODO: Q: can any of these lookups return null?
+		    			 		// TODO: Q: can there be a chain with more than 2 ports?
+		    			 		try { 
+			    			 		final CargoAllocation ca = (CargoAllocation) eObj.eGet(cargoAllocationRef);
+			    			 		
+			    			 		EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
+			    			 				    			 		
+			    			 		SlotAllocation caAlloc0 = caSlotAllocations.get(0);
+			    			 		sb.append(caAlloc0.getPort().getName());
+			    			 		
+			    					for (int i = 1; i < caSlotAllocations.size(); ++i) {
+			    						SlotAllocation caAllocation = caSlotAllocations.get(i);
+			    							sb.append(" -> ").append(caAllocation.getPort().getName());
+			    					}	
+		    			 		} 
+		    			 		catch (Exception e) {
+		    			 			throw(e);
+		    			 		}
+		    			 		
+		    			 	}
+		    		 }
+
+		    		 return sb.toString();
+		    	 }
+			}
+	   );		
+		
 	}
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
