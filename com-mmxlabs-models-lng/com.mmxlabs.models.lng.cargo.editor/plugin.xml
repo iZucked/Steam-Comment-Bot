@@ -194,6 +194,12 @@
           id="com.mmxlabs.models.lng.cargo.editor.fleetValueProvider"
           referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotEntityValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotEntityValueProviderFactory"
+           ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+           referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
+     </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
