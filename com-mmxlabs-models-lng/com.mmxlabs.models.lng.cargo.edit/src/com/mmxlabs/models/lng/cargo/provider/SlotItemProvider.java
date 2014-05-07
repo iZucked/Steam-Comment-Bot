@@ -78,7 +78,7 @@ public class SlotItemProvider
 			addCargoPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
-			addDivertablePropertyDescriptor(object);
+			addDivertiblePropertyDescriptor(object);
 			addShippingDaysRestrictionPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
 			addRestrictedContractsPropertyDescriptor(object);
@@ -497,6 +497,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Divertible feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDivertiblePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_divertible_feature"),
+				 getString("_UI_Slot_divertible_description"),
+				 CargoPackage.Literals.SLOT__DIVERTIBLE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Shipping Days Restriction feature.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -678,28 +700,6 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Divertable feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addDivertablePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_divertable_feature"),
-				 getString("_UI_Slot_divertable_description"),
-				 CargoPackage.Literals.SLOT__DIVERTABLE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -750,7 +750,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
 			case CargoPackage.SLOT__PRICING_DATE:
 			case CargoPackage.SLOT__NOTES:
-			case CargoPackage.SLOT__DIVERTABLE:
+			case CargoPackage.SLOT__DIVERTIBLE:
 			case CargoPackage.SLOT__SHIPPING_DAYS_RESTRICTION:
 			case CargoPackage.SLOT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CargoPackage.SLOT__HEDGES:

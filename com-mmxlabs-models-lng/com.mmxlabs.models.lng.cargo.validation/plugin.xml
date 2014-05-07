@@ -591,7 +591,7 @@
                   lang="Java"
                   mode="Batch"
                   name="Time Charter Hire Cost"
-                  severity="WARNING"
+                  severity="ERROR"
                   statusCode="1">
                <message>
                   Vessel {0} has time charter set, but no cost set.
@@ -692,7 +692,7 @@
                   </target>
                </constraint>
                <constraint
-                     class="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
+                     class="com.mmxlabs.models.lng.cargo.validation.DivertibleSlotConstraint"
                      id="com.mmxlabs.models.lng.cargo.validation.DivertableSlotConstraint"
                      isEnabledByDefault="true"
                      lang="java"

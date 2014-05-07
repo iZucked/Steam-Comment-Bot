@@ -421,13 +421,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NOTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
-	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DIVERTABLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int SLOT__DIVERTIBLE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -861,13 +861,13 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__NOTES = SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT__DIVERTABLE = SLOT__DIVERTABLE;
+	int LOAD_SLOT__DIVERTIBLE = SLOT__DIVERTIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -1366,13 +1366,13 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__NOTES = SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT__DIVERTABLE = SLOT__DIVERTABLE;
+	int DISCHARGE_SLOT__DIVERTIBLE = SLOT__DIVERTIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -2094,13 +2094,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NOTES = LOAD_SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_LOAD_SLOT__DIVERTABLE = LOAD_SLOT__DIVERTABLE;
+	int SPOT_LOAD_SLOT__DIVERTIBLE = LOAD_SLOT__DIVERTIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -2608,13 +2608,13 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NOTES = DISCHARGE_SLOT__NOTES;
 
 	/**
-	 * The feature id for the '<em><b>Divertable</b></em>' attribute.
+	 * The feature id for the '<em><b>Divertible</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_DISCHARGE_SLOT__DIVERTABLE = DISCHARGE_SLOT__DIVERTABLE;
+	int SPOT_DISCHARGE_SLOT__DIVERTIBLE = DISCHARGE_SLOT__DIVERTIBLE;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
@@ -4326,6 +4326,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Notes();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Divertible</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isDivertible()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Divertible();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 8.0
@@ -4408,17 +4419,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_CancellationFee();
 
 	
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isDivertable <em>Divertable</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Divertable</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#isDivertable()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_Divertable();
-
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}'.
 	 * <!-- begin-user-doc -->
@@ -5432,6 +5432,14 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__NOTES = eINSTANCE.getSlot_Notes();
 
 		/**
+		 * The meta object literal for the '<em><b>Divertible</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__DIVERTIBLE = eINSTANCE.getSlot_Divertible();
+
+		/**
 		 * The meta object literal for the '<em><b>Shipping Days Restriction</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * @since 8.0
@@ -5499,14 +5507,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
-
-		/**
-		 * The meta object literal for the '<em><b>Divertable</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__DIVERTABLE = eINSTANCE.getSlot_Divertable();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.

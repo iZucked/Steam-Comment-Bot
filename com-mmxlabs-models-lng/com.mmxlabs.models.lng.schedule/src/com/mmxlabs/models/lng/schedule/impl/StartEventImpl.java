@@ -41,7 +41,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
@@ -101,17 +100,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLoss;
-
-	/**
-	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @see #getGroupProfitAndLossNoTimeCharter()
-	 * @generated
-	 * @ordered
-	 */
-	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
 
 	/**
 	 * The cached value of the '{@link #getGeneralPNLDetails() <em>General PNL Details</em>}' containment reference list.
@@ -246,52 +234,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public GroupProfitAndLoss getGroupProfitAndLossNoTimeCharter() {
-		return groupProfitAndLossNoTimeCharter;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter, NotificationChain msgs) {
-		GroupProfitAndLoss oldGroupProfitAndLossNoTimeCharter = groupProfitAndLossNoTimeCharter;
-		groupProfitAndLossNoTimeCharter = newGroupProfitAndLossNoTimeCharter;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, oldGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter) {
-		if (newGroupProfitAndLossNoTimeCharter != groupProfitAndLossNoTimeCharter) {
-			NotificationChain msgs = null;
-			if (groupProfitAndLossNoTimeCharter != null)
-				msgs = ((InternalEObject)groupProfitAndLossNoTimeCharter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
-			if (newGroupProfitAndLossNoTimeCharter != null)
-				msgs = ((InternalEObject)newGroupProfitAndLossNoTimeCharter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
-			msgs = basicSetGroupProfitAndLossNoTimeCharter(newGroupProfitAndLossNoTimeCharter, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, newGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -367,8 +309,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
-			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
 				return ((InternalEList<?>)getGeneralPNLDetails()).basicRemove(otherEnd, msgs);
 		}
@@ -392,8 +332,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return getPortCost();
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
-			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				return getGroupProfitAndLossNoTimeCharter();
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
 				return getGeneralPNLDetails();
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
@@ -424,9 +362,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
-				return;
-			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
 				return;
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
@@ -459,9 +394,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
-			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
-				return;
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
 				return;
@@ -488,8 +420,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
-			case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				return groupProfitAndLossNoTimeCharter != null;
 			case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS:
 				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
 			case SchedulePackage.START_EVENT__SLOT_ALLOCATION:
@@ -526,7 +456,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
-				case SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				case SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
@@ -562,7 +491,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS;
-				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.START_EVENT__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}

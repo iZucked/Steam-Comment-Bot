@@ -39,7 +39,6 @@ import java.util.Collection;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getViolations <em>Violations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGroupProfitAndLoss <em>Group Profit And Loss</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getGeneralPNLDetails <em>General PNL Details</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.VesselEventVisitImpl#getVesselEvent <em>Vessel Event</em>}</li>
  * </ul>
@@ -86,16 +85,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 	 * @ordered
 	 */
 	protected GroupProfitAndLoss groupProfitAndLoss;
-	/**
-	 * The cached value of the '{@link #getGroupProfitAndLossNoTimeCharter() <em>Group Profit And Loss No Time Charter</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @see #getGroupProfitAndLossNoTimeCharter()
-	 * @generated
-	 * @ordered
-	 */
-	protected GroupProfitAndLoss groupProfitAndLossNoTimeCharter;
 	/**
 	 * The cached value of the '{@link #getGeneralPNLDetails() <em>General PNL Details</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -216,52 +205,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public GroupProfitAndLoss getGroupProfitAndLossNoTimeCharter() {
-		return groupProfitAndLossNoTimeCharter;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter, NotificationChain msgs) {
-		GroupProfitAndLoss oldGroupProfitAndLossNoTimeCharter = groupProfitAndLossNoTimeCharter;
-		groupProfitAndLossNoTimeCharter = newGroupProfitAndLossNoTimeCharter;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, oldGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setGroupProfitAndLossNoTimeCharter(GroupProfitAndLoss newGroupProfitAndLossNoTimeCharter) {
-		if (newGroupProfitAndLossNoTimeCharter != groupProfitAndLossNoTimeCharter) {
-			NotificationChain msgs = null;
-			if (groupProfitAndLossNoTimeCharter != null)
-				msgs = ((InternalEObject)groupProfitAndLossNoTimeCharter).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
-			if (newGroupProfitAndLossNoTimeCharter != null)
-				msgs = ((InternalEObject)newGroupProfitAndLossNoTimeCharter).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, null, msgs);
-			msgs = basicSetGroupProfitAndLossNoTimeCharter(newGroupProfitAndLossNoTimeCharter, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER, newGroupProfitAndLossNoTimeCharter, newGroupProfitAndLossNoTimeCharter));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -322,8 +265,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return ((InternalEList<?>)getViolations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return basicSetGroupProfitAndLoss(null, msgs);
-			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				return basicSetGroupProfitAndLossNoTimeCharter(null, msgs);
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
 				return ((InternalEList<?>)getGeneralPNLDetails()).basicRemove(otherEnd, msgs);
 		}
@@ -345,8 +286,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return getPortCost();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return getGroupProfitAndLoss();
-			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				return getGroupProfitAndLossNoTimeCharter();
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
 				return getGeneralPNLDetails();
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
@@ -373,9 +312,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)newValue);
-				return;
-			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)newValue);
 				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
@@ -405,9 +341,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				setGroupProfitAndLoss((GroupProfitAndLoss)null);
 				return;
-			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				setGroupProfitAndLossNoTimeCharter((GroupProfitAndLoss)null);
-				return;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
 				getGeneralPNLDetails().clear();
 				return;
@@ -432,8 +365,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS:
 				return groupProfitAndLoss != null;
-			case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER:
-				return groupProfitAndLossNoTimeCharter != null;
 			case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS:
 				return generalPNLDetails != null && !generalPNLDetails.isEmpty();
 			case SchedulePackage.VESSEL_EVENT_VISIT__VESSEL_EVENT:
@@ -464,7 +395,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
-				case SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				case SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS: return SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}
@@ -494,7 +424,6 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		if (baseClass == ProfitAndLossContainer.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS: return SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS;
-				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER: return SchedulePackage.VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 				case SchedulePackage.PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS: return SchedulePackage.VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS;
 				default: return -1;
 			}

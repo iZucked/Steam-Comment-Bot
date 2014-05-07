@@ -515,23 +515,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_ALLOCATION__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
@@ -541,7 +531,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_ALLOCATION__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -550,7 +540,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
@@ -560,7 +550,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION__EVENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -569,7 +559,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -578,7 +568,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -709,23 +699,13 @@ public interface SchedulePackage extends EPackage {
 	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int PROFIT_AND_LOSS_CONTAINER__GENERAL_PNL_DETAILS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
@@ -735,7 +715,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int PROFIT_AND_LOSS_CONTAINER_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -807,16 +787,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
-
-	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MARKET_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -954,15 +924,6 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int OPEN_SLOT_ALLOCATION__GROUP_PROFIT_AND_LOSS = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS;
-
-	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPEN_SLOT_ALLOCATION__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER;
 
 	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
@@ -1658,23 +1619,13 @@ public interface SchedulePackage extends EPackage {
 	int START_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int START_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+	int START_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -1683,7 +1634,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
+	int START_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Start Event</em>' class.
@@ -1692,7 +1643,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
+	int START_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -1923,23 +1874,13 @@ public interface SchedulePackage extends EPackage {
 	int END_EVENT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_EVENT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 4;
-
-	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 5;
+	int END_EVENT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
@@ -1948,7 +1889,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 6;
+	int END_EVENT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>End Event</em>' class.
@@ -1957,7 +1898,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 7;
+	int END_EVENT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3106,23 +3047,13 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL_EVENT_VISIT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 4;
+	int VESSEL_EVENT_VISIT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
@@ -3131,7 +3062,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 5;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -3140,7 +3071,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 6;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -3341,23 +3272,13 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS = EVENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int GENERATED_CHARTER_OUT__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = EVENT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>General PNL Details</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 2;
+	int GENERATED_CHARTER_OUT__GENERAL_PNL_DETAILS = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
@@ -3367,7 +3288,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 3;
+	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
@@ -3377,7 +3298,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 4;
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -5485,18 +5406,6 @@ public interface SchedulePackage extends EPackage {
 	EReference getProfitAndLossContainer_GroupProfitAndLoss();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter <em>Group Profit And Loss No Time Charter</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 6.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Group Profit And Loss No Time Charter</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLossNoTimeCharter()
-	 * @see #getProfitAndLossContainer()
-	 * @generated
-	 */
-	EReference getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGeneralPNLDetails <em>General PNL Details</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6751,15 +6660,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLoss();
-
-		/**
-		 * The meta object literal for the '<em><b>Group Profit And Loss No Time Charter</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 6.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PROFIT_AND_LOSS_CONTAINER__GROUP_PROFIT_AND_LOSS_NO_TIME_CHARTER = eINSTANCE.getProfitAndLossContainer_GroupProfitAndLossNoTimeCharter();
 
 		/**
 		 * The meta object literal for the '<em><b>General PNL Details</b></em>' containment reference list feature.

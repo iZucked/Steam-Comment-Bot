@@ -117,7 +117,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels()});
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment()});
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertable(), CargoFeatures.getSlot_ShippingDaysRestriction()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction()});
 		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType()});
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
@@ -129,7 +129,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts()});
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels()});
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertable(), CargoFeatures.getSlot_ShippingDaysRestriction()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction()});
 		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
 
 		noteFeatures = new ArrayList<EStructuralFeature[]>();
