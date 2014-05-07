@@ -27,10 +27,13 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -262,135 +265,7 @@ public class ListSelectionDialog extends Dialog {
 		}
 
 		public ColumnLabelProvider wrapColumnLabelProvider(final ColumnLabelProvider clp, final boolean isFirstColumn) {
-			return new ColumnLabelProvider() {
-				private Object unwrap(final Object element) {
-					if (element instanceof E) {
-						return ((E) element).value;
-					} else if (element instanceof G) {
-						return null;
-					}
-					return element;
-				}
-
-				@Override
-				public Font getFont(final Object element) {
-					final Object a = unwrap(element);
-					return a == null ? null : clp.getFont(a);
-				}
-
-				@Override
-				public Color getBackground(final Object element) {
-					final Object a = unwrap(element);
-					return a == null ? null : clp.getBackground(a);
-				}
-
-				@Override
-				public Color getForeground(final Object element) {
-					final Object a = unwrap(element);
-					return a == null ? null : clp.getBackground(a);
-				}
-
-				@Override
-				public Image getImage(final Object element) {
-					final Object a = unwrap(element);
-					return a == null ? super.getImage(element) : clp.getImage(a);
-				}
-
-				@Override
-				public String getText(final Object element) {
-					if (element instanceof G) {
-						if (isFirstColumn) {
-							return ((G) element).name;
-						} else {
-							return "";
-						}
-					} else {
-						return clp.getText(unwrap(element));
-					}
-				}
-
-				@Override
-				public Image getToolTipImage(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipImage(object) : clp.getToolTipImage(a);
-				}
-
-				@Override
-				public String getToolTipText(final Object element) {
-					final Object a = unwrap(element);
-					return a == null ? super.getToolTipText(element) : clp.getToolTipText(a);
-				}
-
-				@Override
-				public Color getToolTipBackgroundColor(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipBackgroundColor(object) : clp.getToolTipBackgroundColor(a);
-				}
-
-				@Override
-				public Color getToolTipForegroundColor(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipForegroundColor(object) : clp.getToolTipForegroundColor(a);
-				}
-
-				@Override
-				public Font getToolTipFont(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipFont(object) : clp.getToolTipFont(a);
-				}
-
-				@Override
-				public Point getToolTipShift(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipShift(object) : clp.getToolTipShift(a);
-
-				}
-
-				@Override
-				public boolean useNativeToolTip(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.useNativeToolTip(object) : clp.useNativeToolTip(a);
-				}
-
-				@Override
-				public int getToolTipTimeDisplayed(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipTimeDisplayed(object) : clp.getToolTipTimeDisplayed(a);
-				}
-
-				@Override
-				public int getToolTipDisplayDelayTime(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipDisplayDelayTime(object) : clp.getToolTipDisplayDelayTime(a);
-				}
-
-				@Override
-				public int getToolTipStyle(final Object object) {
-					final Object a = unwrap(object);
-					return a == null ? super.getToolTipStyle(object) : clp.getToolTipStyle(a);
-				}
-
-				@Override
-				public void addListener(final ILabelProviderListener listener) {
-					clp.addListener(listener);
-				}
-
-				@Override
-				public void dispose() {
-					clp.dispose();
-				}
-
-				@Override
-				public boolean isLabelProperty(final Object element, final String property) {
-					final Object a = unwrap(element);
-					return a == null ? false : clp.isLabelProperty(a, property);
-				}
-
-				@Override
-				public void removeListener(final ILabelProviderListener listener) {
-					clp.removeListener(listener);
-				}
-			};
+			return new WrappedColumnLabelProvider(clp, isFirstColumn);
 		}
 
 		public Object[] getInputElements(final Object[] checkedElements) {
@@ -492,8 +367,30 @@ public class ListSelectionDialog extends Dialog {
 		if (columns.size() > 0) {
 			for (final Pair<String, CellLabelProvider> column : columns) {
 				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);
+				final ColumnLabelProvider provider = (ColumnLabelProvider) column.getSecond();
+				
+				final ReversibleViewerComparator sorter = new ReversibleViewerComparator(new ViewerComparator() {
+					@Override
+					public int compare(Viewer viewer, Object arg0, Object arg1) {
+						return provider.getText(arg0).compareTo(provider.getText(arg1));
+					}					
+				});
+				
 				tvc.getColumn().setText(column.getFirst());
 				tvc.setLabelProvider(column.getSecond());
+				tvc.getColumn().addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+						viewer.setComparator(sorter.select());
+						viewer.refresh();
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+					}
+					
+				});
 				// tvc.getColumn().pack();
 			}
 			viewer.getTree().setHeaderVisible(true);
@@ -509,7 +406,7 @@ public class ListSelectionDialog extends Dialog {
 				// propagate check marks
 			}
 		});
-
+				
 		viewer.expandAll();
 		for (final TreeColumn column : viewer.getTree().getColumns()) {
 			column.pack();
@@ -537,7 +434,7 @@ public class ListSelectionDialog extends Dialog {
 				final Pair<String, ?> p0 = (Pair<String, ?>) arg0;
 				final Pair<String, ?> p1 = (Pair<String, ?>) arg1;
 
-				return ((String) p0.getFirst()).compareTo((String) p1.getFirst());
+				return p0.getFirst().compareTo(p1.getFirst());
 			}
 		};
 		Arrays.sort(dialogResult, c);
@@ -648,4 +545,173 @@ public class ListSelectionDialog extends Dialog {
 			viewer.setSubtreeChecked(element, true);
 		}
 	}
+	
+	public class WrappedColumnLabelProvider extends ColumnLabelProvider {
+		final private ColumnLabelProvider clp;
+		final private boolean isFirstColumn;
+		
+		public WrappedColumnLabelProvider(ColumnLabelProvider clp, boolean isFirstColumn) {
+			this.clp = clp;
+			this.isFirstColumn = isFirstColumn;
+		}
+		
+		public ColumnLabelProvider getWrapped() {
+			return clp;
+		}
+
+		private Object unwrap(final Object element) {
+			if (element instanceof GroupedElementProvider.E) {
+				return ((GroupedElementProvider.E) element).value;
+			} else if (element instanceof GroupedElementProvider.G) {
+				return null;
+			}
+			return element;
+		}
+
+		@Override
+		public Font getFont(final Object element) {
+			final Object a = unwrap(element);
+			return a == null ? null : clp.getFont(a);
+		}
+
+		@Override
+		public Color getBackground(final Object element) {
+			final Object a = unwrap(element);
+			return a == null ? null : clp.getBackground(a);
+		}
+
+		@Override
+		public Color getForeground(final Object element) {
+			final Object a = unwrap(element);
+			return a == null ? null : clp.getBackground(a);
+		}
+
+		@Override
+		public Image getImage(final Object element) {
+			final Object a = unwrap(element);
+			return a == null ? super.getImage(element) : clp.getImage(a);
+		}
+
+		@Override
+		public String getText(final Object element) {
+			if (element instanceof GroupedElementProvider.G) {
+				if (isFirstColumn) {
+					return ((GroupedElementProvider.G) element).name;
+				} else {
+					return "";
+				}
+			} else {
+				return clp.getText(unwrap(element));
+			}
+		}
+
+		@Override
+		public Image getToolTipImage(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipImage(object) : clp.getToolTipImage(a);
+		}
+
+		@Override
+		public String getToolTipText(final Object element) {
+			final Object a = unwrap(element);
+			return a == null ? super.getToolTipText(element) : clp.getToolTipText(a);
+		}
+
+		@Override
+		public Color getToolTipBackgroundColor(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipBackgroundColor(object) : clp.getToolTipBackgroundColor(a);
+		}
+
+		@Override
+		public Color getToolTipForegroundColor(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipForegroundColor(object) : clp.getToolTipForegroundColor(a);
+		}
+
+		@Override
+		public Font getToolTipFont(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipFont(object) : clp.getToolTipFont(a);
+		}
+
+		@Override
+		public Point getToolTipShift(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipShift(object) : clp.getToolTipShift(a);
+
+		}
+
+		@Override
+		public boolean useNativeToolTip(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.useNativeToolTip(object) : clp.useNativeToolTip(a);
+		}
+
+		@Override
+		public int getToolTipTimeDisplayed(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipTimeDisplayed(object) : clp.getToolTipTimeDisplayed(a);
+		}
+
+		@Override
+		public int getToolTipDisplayDelayTime(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipDisplayDelayTime(object) : clp.getToolTipDisplayDelayTime(a);
+		}
+
+		@Override
+		public int getToolTipStyle(final Object object) {
+			final Object a = unwrap(object);
+			return a == null ? super.getToolTipStyle(object) : clp.getToolTipStyle(a);
+		}
+
+		@Override
+		public void addListener(final ILabelProviderListener listener) {
+			clp.addListener(listener);
+		}
+
+		@Override
+		public void dispose() {
+			clp.dispose();
+		}
+
+		@Override
+		public boolean isLabelProperty(final Object element, final String property) {
+			final Object a = unwrap(element);
+			return a == null ? false : clp.isLabelProperty(a, property);
+		}
+
+		@Override
+		public void removeListener(final ILabelProviderListener listener) {
+			clp.removeListener(listener);
+		}
+		
+	}
+	
+	public class ReversibleViewerComparator extends ViewerComparator {
+		int direction = 0;
+		
+		final ViewerComparator vc;
+		
+		public ReversibleViewerComparator(ViewerComparator vc) {
+			this.vc = vc;
+		}
+		
+		public ViewerComparator select() {
+			if (direction == 1) {
+				direction = -1;
+			}
+			else {
+				direction = 1;
+			}
+			return this;
+		}
+		
+		@Override
+		public int compare(Viewer viewer, Object a, Object b) {
+			return vc.compare(viewer, a, b) * direction;
+		}
+	}
+	
 }
