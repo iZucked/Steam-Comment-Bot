@@ -635,15 +635,20 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		 * @return this, for chaining
 		 */
 		public PinDiffColumnManager addAllColumnsToTableIf(boolean add) {
+			// BE: leaving the code in this form to be clear what it does
+			
 			if (add) {
+				// first reset the table to its "unpinned" state
+				removeAllColumnsFromTable();
+
+				// then add all registered pin/diff columns
 				for (final String title : map.keySet()) {
 					addColumnToTable(title);
 				}
 			}
 			else {
-				for (final String title : map.keySet()) {
-					removeColumnFromTable(title);
-				}
+				// reset the table to its "unpinned" state
+				removeAllColumnsFromTable();
 			}
 			
 			return this;
@@ -661,6 +666,19 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				EMFReportView.this.addColumn(title, formatter);
 			return this;
 		}
+		
+		/**
+		 * Remove all registered columns from the table
+		 * 
+		 * @return this, for chaining
+		 */
+		public PinDiffColumnManager removeAllColumnsFromTable() {
+			for (final String title : map.keySet()) {
+				removeColumnFromTable(title);
+			}			
+			return this;
+		}
+		
 		
 		/**
 		 * Remove from the table the column registered with the title
