@@ -98,7 +98,7 @@
   <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CooldownPriceComponentHelper"
         id="com.mmxlabs.models.lng.pricing.helpers.CooldownPrice"
-        inheritable="false"
+        inheritable="true"
         modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
   </componentHelper>
   <componentHelper
@@ -130,6 +130,12 @@
         id="com.mmxlabs.models.lng.pricing.presentation.composites.NamedIndexContainerComponentHelper"
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.pricing.NamedIndexContainer">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortsPriceMapComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortsPriceMapComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.PortsPriceMap">
   </componentHelper>
 		
 	</extension>
