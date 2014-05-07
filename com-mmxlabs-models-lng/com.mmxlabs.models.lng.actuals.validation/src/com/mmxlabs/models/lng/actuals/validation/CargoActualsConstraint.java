@@ -114,6 +114,13 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 
 				for (final SlotActuals slotActuals : cargoActuals.getActuals()) {
 
+					
+					if (slotActuals.getTitleTransferPoint() == null) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs a title transfer point"));
+						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
+						failures.add(status);
+					}
+					
 					if (slotActuals.getOperationsStart() == null) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs an operations start date"));
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
@@ -177,21 +184,27 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				final ReturnActuals returnActuals = cargoActuals.getReturnActuals();
 				if (returnActuals != null) {
 
+					if (returnActuals.getTitleTransferPoint() == null) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Return Actuals needs a title transfer point"));
+						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
+						failures.add(status);
+					}
+					
 					if (returnActuals.getOperationsStart() == null) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Return actual needs an operations start date"));
 						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
 						failures.add(status);
 					}
 
-//					// Sanity check cv and m3 -> mmbtu conversions
-//					if (Math.abs((returnActuals.getCV() * returnActuals.getEndHeelM3()) - returnActuals.getEndHeelMMBTu()) > 1.0) {
-//						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
-//								(IConstraintStatus) ctx.createFailureStatus("Return actual CV, heel volume in m3 and volume in mmBtu do not match up"));
-//						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__CV);
-//						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
-//						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
-//						failures.add(status);
-//					}
+					// // Sanity check cv and m3 -> mmbtu conversions
+					// if (Math.abs((returnActuals.getCV() * returnActuals.getEndHeelM3()) - returnActuals.getEndHeelMMBTu()) > 1.0) {
+					// final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+					// (IConstraintStatus) ctx.createFailureStatus("Return actual CV, heel volume in m3 and volume in mmBtu do not match up"));
+					// status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__CV);
+					// status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_M3);
+					// status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__END_HEEL_MMB_TU);
+					// failures.add(status);
+					// }
 				}
 
 			}
