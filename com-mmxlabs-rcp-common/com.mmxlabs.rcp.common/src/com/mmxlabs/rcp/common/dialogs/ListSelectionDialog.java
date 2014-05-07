@@ -366,7 +366,7 @@ public class ListSelectionDialog extends Dialog {
 
 		if (columns.size() > 0) {
 			for (final Pair<String, CellLabelProvider> column : columns) {
-				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);
+				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);				
 				final ColumnLabelProvider provider = (ColumnLabelProvider) column.getSecond();
 				
 				final ReversibleViewerComparator sorter = new ReversibleViewerComparator(new ViewerComparator() {
