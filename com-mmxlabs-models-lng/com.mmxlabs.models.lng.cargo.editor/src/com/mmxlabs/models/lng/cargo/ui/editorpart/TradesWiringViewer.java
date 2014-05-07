@@ -472,20 +472,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		scenarioViewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
 
 			private Menu menu;
-
-			@Override
-			public void menuDetected(final MenuDetectEvent e) {
-
-				if (locked) {
-					return;
-				}
-				final Point mousePoint = getScenarioViewer().getGrid().toControl(new Point(e.x, e.y));
-				final GridColumn column = getScenarioViewer().getGrid().getColumn(mousePoint);
-
-				final GridItem item = getScenarioViewer().getGrid().getItem(mousePoint);
+			
+			private void populateSingleSelectionMenu(final GridItem item, final GridColumn column) {
 				if (item == null) {
 					return;
 				}
+				
+				
 				final Object data = item.getData();
 				if (data instanceof RowData) {
 
@@ -541,7 +534,48 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 					menu.setVisible(true);
+				}				
+			}
+
+			@Override
+			public void menuDetected(final MenuDetectEvent e) {
+
+				if (locked) {
+					return;
 				}
+				
+				final Grid grid = getScenarioViewer().getGrid();
+				
+				final Point mousePoint = grid.toControl(new Point(e.x, e.y));
+				final GridColumn column = grid.getColumn(mousePoint);
+				
+				IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
+				GridItem[] items = grid.getSelection();
+				
+				if (selection.size() <= 1) {
+					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
+				}
+				else {
+					Set<Cargo> cargoes = new HashSet<Cargo>();
+					for (Object item: selection.toList()) {
+						Cargo cargo = ((RowData) item).cargo;
+						if (cargo != null) {
+							cargoes.add(cargo);
+						}
+					}
+					populateMultipleSelectionMenu(cargoes);
+				}				
+			}
+
+			private void populateMultipleSelectionMenu(Set<Cargo> cargoes) {
+				if (menu == null) {
+					menu = mgr.createContextMenu(scenarioViewer.getGrid());
+				}
+				mgr.removeAll();
+								
+				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
+				listener.menuAboutToShow(mgr);
+				menu.setVisible(true);
 			}
 		});
 

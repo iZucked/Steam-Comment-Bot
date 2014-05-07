@@ -34,6 +34,7 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
@@ -42,6 +43,7 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -326,6 +328,9 @@ public class CargoEditorMenuHelper {
 							public void run() {
 								final CompoundCommand cc = new CompoundCommand("Unlock assignment");
 								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
+								if (assignableElement instanceof Cargo) {
+									cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), assignableElement, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
+								}
 								scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 							}
 						};
@@ -362,6 +367,61 @@ public class CargoEditorMenuHelper {
 
 	}
 
+	public IMenuListener createMultipleSelectionMenuListener(final Set<Cargo> cargoes) {
+		
+		final IMenuListener l = new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(final IMenuManager manager) {
+				boolean anyLocked = false;
+				boolean anyUnlocked = false;
+				
+				for (Cargo cargo: cargoes) {
+					if (cargo.getCargoType() == CargoType.FLEET) {
+						if (cargo.isLocked()) {
+							anyLocked = true;
+						}
+						else {
+							anyUnlocked = true;
+						}
+					}
+				}
+				
+				if (anyLocked) {
+					final Action action = new Action("Unlock") {
+						@Override
+						public void run() {
+							final CompoundCommand cc = new CompoundCommand("Unlock assignments");
+							for (Cargo cargo: cargoes) {
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
+							}
+							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+						}
+					};
+					manager.add(action);					
+				}
+				
+				if (anyUnlocked) {
+					final Action action = new Action("Lock") {
+						@Override
+						public void run() {
+							final CompoundCommand cc = new CompoundCommand("Lock assignments");
+							for (Cargo cargo: cargoes) {
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE));
+								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
+							}
+							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
+						}
+					};
+					manager.add(action);					
+				}
+			}
+
+		};
+		return l;
+	}	
+	
 	public IMenuListener createLoadSlotMenuListener(final List<LoadSlot> loadSlots, final int index) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		final IMenuListener l = new IMenuListener() {
@@ -1283,4 +1343,6 @@ public class CargoEditorMenuHelper {
 
 		return travelTime;
 	}
+
+
 }
