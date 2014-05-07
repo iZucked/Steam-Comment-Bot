@@ -904,27 +904,26 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				// +1 to to make loop simpler
 				final int heights[] = new int[rootData.getRows().size() + 1];
-				int idx = 0;
 				heights[0] = getScenarioViewer().getGrid().getHeaderHeight();
 
 				// Pass one, get heights
-				for (final GridItem item : getScenarioViewer().getGrid().getItems()) {
-					idx++;
+				final GridItem[] items = getScenarioViewer().getGrid().getItems();
+				for (int idx = 1; idx < Math.min(heights.length, 1 + items.length); ++idx) {
+					final GridItem item = items[idx - 1];
 					heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 				}
 				// Find the row at the top of the table and get it's "height" so we can adjust it later
 				final int vPod = getScenarioViewer().getGrid().getVerticalBar().getSelection();
 				final int hOffset = (heights[vPod]) - getScenarioViewer().getGrid().getHeaderHeight();
 				// Pass 2 get mid-points
-				idx = -1;
-				for (final GridItem item : getScenarioViewer().getGrid().getItems()) {
-					heights[++idx] += item.getHeight() / 2;
+				for (int idx = 0; idx < Math.min(heights.length, items.length); ++idx) {
+					final GridItem item = items[idx];
+					heights[idx] += item.getHeight() / 2;
 				}
 
 				// Pass 3, offset to so top visible row in table is at height "0"
-				idx = -1;
-				for (final GridItem item : getScenarioViewer().getGrid().getItems()) {
-					heights[++idx] -= hOffset;
+				for (int idx = 0; idx < Math.min(heights.length, items.length); ++idx) {
+					heights[idx] -= hOffset;
 				}
 
 				// Convert to
