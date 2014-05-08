@@ -14,8 +14,14 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.jdt.annotation.Nullable;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.models.migration.PackageData;
+import com.mmxlabs.scenario.service.util.EncryptingXMIResourceFactory;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
  * A class to manage loading a set of ecore models into {@link EPackage} instances.
@@ -34,7 +40,7 @@ public class MetamodelLoader {
 		factoryRegistry = new ResourceFactoryRegistryImpl();
 
 		factoryRegistry.getExtensionToFactoryMap().put("ecore", ecoreResourceFactory);
-		factoryRegistry.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		factoryRegistry.getExtensionToFactoryMap().put("*", new EncryptingXMIResourceFactory(getScenarioCipherProvider().getSharedCipher()));
 
 		// Create empty package registry to manipulate and register default ecore package
 		resourceSet = new ResourceSetImpl();
@@ -136,5 +142,15 @@ public class MetamodelLoader {
 	@Deprecated
 	public EPackage loadEPackage(final URI location, final String nsURI, final String resourceURI) {
 		return loadEPackage(location, resourceURI);
+	}
+	
+	@Nullable
+	private static IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(MetamodelLoader.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
 	}
 }
