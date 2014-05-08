@@ -4,15 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
-import javax.inject.Inject;
-
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
@@ -23,12 +17,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
  */
 public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent {
 
-	@Inject
-	private IPortCostProvider portCostProvider;
-	@Inject
-	private IVesselProvider vesselProvider;
-
-	private IVessel currentVessel;
 	private long sequenceAccumulator = 0;
 
 	public PortCostFitnessComponent(final String name, final IFitnessCore core) {
@@ -37,7 +25,6 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 
 	@Override
 	protected boolean reallyStartSequence(final IResource resource) {
-		currentVessel = vesselProvider.getVessel(resource);
 		sequenceAccumulator = 0;
 		return true;
 	}
@@ -46,9 +33,7 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails details = (PortDetails) object;
-			final IPortSlot slot = details.getOptions().getPortSlot();
-			final long portCost = portCostProvider.getPortCost(slot.getPort(), currentVessel, slot.getPortType());
-			sequenceAccumulator += portCost;
+			sequenceAccumulator += details.getPortCosts();
 		}
 
 		return true;
@@ -56,7 +41,6 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 
 	@Override
 	protected long endSequenceAndGetCost() {
-		currentVessel = null;
 		return sequenceAccumulator / Calculator.ScaleFactor;
 	}
 }

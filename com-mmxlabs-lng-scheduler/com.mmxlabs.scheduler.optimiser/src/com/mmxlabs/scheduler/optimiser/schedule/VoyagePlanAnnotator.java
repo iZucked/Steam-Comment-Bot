@@ -29,7 +29,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
-import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -57,10 +56,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	private IVesselProvider vesselProvider;
 
 	@Inject
-	private IPortCostProvider portCostProvider;
-
-	@Inject
 	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
+
 
 	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
@@ -136,8 +133,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				// TODO: Set on the port details object
 				// Port Costs
 				{
-					final long cost = portCostProvider.getPortCost(currentPortSlot.getPort(), vessel, currentPortSlot.getPortType());
-
+					final long cost = details.getPortCosts();
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
 
 				}

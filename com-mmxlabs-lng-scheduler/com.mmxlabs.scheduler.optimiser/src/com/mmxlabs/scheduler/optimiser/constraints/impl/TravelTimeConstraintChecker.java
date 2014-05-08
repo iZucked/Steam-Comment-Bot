@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -59,6 +60,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 	@Inject
 	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
+
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
 
 	public TravelTimeConstraintChecker(final String name) {
 		this.name = name;
@@ -130,6 +134,11 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 
+		// If data is actualised, we do not care
+		if (actualsDataProvider.hasActuals(slot1) && actualsDataProvider.hasActuals(slot2)) {
+			return true;
+		}
+
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
@@ -145,7 +154,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 				if (secondType == PortType.Discharge) {
 
 					// See ShippingHoursRestrictions otherwise
-//					if (slot1.getPort() == slot2.getPort()) {
+					// if (slot1.getPort() == slot2.getPort()) {
 					if (!shippingHoursRestrictionProvider.isDivertable(first)) {
 						if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
 							return true;

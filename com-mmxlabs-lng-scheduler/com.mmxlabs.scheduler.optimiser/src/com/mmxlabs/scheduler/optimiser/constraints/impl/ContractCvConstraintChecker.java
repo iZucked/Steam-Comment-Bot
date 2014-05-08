@@ -9,6 +9,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -24,6 +25,9 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
+
 	public ContractCvConstraintChecker(String name) {
 		super(name);
 	}
@@ -38,6 +42,11 @@ public class ContractCvConstraintChecker extends AbstractPairwiseConstraintCheck
 		if (firstType == PortType.Load && secondType == PortType.Discharge) {
 			final ILoadOption loadSlot = (ILoadOption) portSlotProvider.getPortSlot(first);
 			final IDischargeOption dischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(second);
+
+			// If data is actualised, we do not care
+			if (actualsDataProvider.hasActuals(loadSlot) && actualsDataProvider.hasActuals(dischargeSlot)) {
+				return true;
+			}
 
 			final int cv = loadSlot.getCargoCVValue();
 

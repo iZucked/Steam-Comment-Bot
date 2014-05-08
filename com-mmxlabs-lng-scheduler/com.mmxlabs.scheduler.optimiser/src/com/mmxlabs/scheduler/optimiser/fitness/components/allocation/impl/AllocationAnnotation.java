@@ -15,17 +15,14 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 
 /**
  * @author hinton
- * @since 5.0
  * 
  */
 public class AllocationAnnotation implements IAllocationAnnotation {
-	/**
-	 * @since 5.0
-	 */
+
 	public class SlotAllocationAnnotation {
 		public long volumeInM3;
 		public long volumeInMMBTu;
-//		public int pricePerM3;
+		public int cargoCV;
 		public int pricePerMMBTu;
 		public int startTime;
 	}
@@ -46,10 +43,6 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	public void setFuelVolumeInM3(final long fuelVolume) {
 		this.fuelVolumeInM3 = fuelVolume;
 	}
-
-	/*
-	 * @Override public long getLoadVolumeInM3() { return getFuelVolumeInM3() + getDischargeVolumeInM3() + getRemainingHeelVolumeInM3(); }
-	 */
 
 	@Override
 	public String toString() {
@@ -84,9 +77,6 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		this.remainingHeelVolumeInM3 = remainingHeelVolumeInM3;
 	}
 
-	/**
-	 * @since 5.0
-	 */
 	@Override
 	public List<IPortSlot> getSlots() {
 		return slots;
@@ -101,9 +91,6 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return allocation;
 	}
 
-	/**
-	 * @since 5.0
-	 */
 	@Override
 	public int getSlotTime(final IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
@@ -114,29 +101,10 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return -1;
 	}
 
-	/**
-	 * @since 5.0
-	 */
 	public void setSlotTime(final IPortSlot slot, final int time) {
 		getOrCreateSlotAllocation(slot).startTime = time;
 	}
 
-//	/**
-//	 * @since 5.0
-//	 */
-//	@Override
-//	public int getSlotPricePerM3(final IPortSlot slot) {
-//		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
-//		if (allocation != null) {
-//			return allocation.pricePerM3;
-//		}
-//		// TODO: throw an exception instead of returning magic value
-//		return -1;
-//	}
-
-	/**
-	 * @since 8.0
-	 */
 	@Override
 	public int getSlotPricePerMMBTu(final IPortSlot slot) {
 		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
@@ -147,16 +115,6 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		return -1;
 	}
 
-//	/**
-//	 * @since 5.0
-//	 */
-//	public void setSlotPricePerM3(final IPortSlot slot, final int price) {
-//		getOrCreateSlotAllocation(slot).pricePerM3 = price;
-//	}
-
-	/**
-	 * @since 8.0
-	 */
 	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
 		getOrCreateSlotAllocation(slot).pricePerMMBTu = price;
 	}
@@ -189,6 +147,21 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	public void setSlotVolumeInMMBTu(final IPortSlot slot, final long volumeInMMBTu) {
 		getOrCreateSlotAllocation(slot).volumeInMMBTu = volumeInMMBTu;
+	}
+
+	@Override
+	public int getSlotCargoCV(final IPortSlot slot) {
+
+		final SlotAllocationAnnotation allocation = getOrCreateSlotAllocation(slot);
+		if (allocation != null) {
+			return allocation.cargoCV;
+		}
+
+		return 0;
+	}
+
+	public void setSlotCargoCV(final IPortSlot slot, final int cargoCV) {
+		getOrCreateSlotAllocation(slot).cargoCV = cargoCV;
 	}
 
 	@Override

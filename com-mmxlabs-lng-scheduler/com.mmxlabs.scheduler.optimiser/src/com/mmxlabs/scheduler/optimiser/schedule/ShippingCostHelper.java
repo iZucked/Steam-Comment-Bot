@@ -3,11 +3,9 @@ package com.mmxlabs.scheduler.optimiser.schedule;
 import javax.inject.Inject;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -48,10 +46,7 @@ public class ShippingCostHelper {
 			if (obj instanceof PortDetails) {
 
 				final PortDetails portDetails = (PortDetails) obj;
-
-				final IPort port = portDetails.getOptions().getPortSlot().getPort();
-				final PortType portType = portDetails.getOptions().getPortSlot().getPortType();
-				portCosts += portCostProvider.getPortCost(port, vessel, portType);
+				portCosts += portDetails.getPortCosts();
 			}
 
 		}
@@ -119,7 +114,7 @@ public class ShippingCostHelper {
 		}
 		return false;
 	}
-	
+
 	public long getGeneratedCharterOutCosts(final VoyagePlan plan) {
 
 		int planDuration = 0;

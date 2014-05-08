@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -24,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
  */
 public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
+	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
 	/**
@@ -54,10 +57,6 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		final AllocationAnnotation annotation = new AllocationAnnotation();
 
-		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
-		// Assuming a single cargo CV!
-		final int cargoCVValue = loadSlot.getCargoCVValue();
-
 		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.resourceVessel;
 		if (allocationRecord.allocationMode == AllocationMode.Actuals) {
 
@@ -69,6 +68,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			// * Heel after discharge.
 			// * If the next load is actualised, take the heel before loading, otherwise assume safety heel.
 			long usedFuelVolume = 0;
+			IPortSlot lastSlot = null;
 			for (int i = 0; i < slots.size(); i++) {
 				final IPortSlot slot = allocationRecord.slots.get(i);
 				if (actualsDataProvider.hasActuals(slot) == false) {
@@ -84,6 +84,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				// Actuals mode, take values directly
 				annotation.setSlotVolumeInM3(slot, actualsDataProvider.getVolumeInM3(slot));
 				annotation.setSlotVolumeInMMBTu(slot, actualsDataProvider.getVolumeInMMBtu(slot));
+				annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));
 
 				// First slot
 				if (i == 0) {
@@ -96,13 +97,21 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 					usedFuelVolume += actualsDataProvider.getVolumeInM3(slot);
 				} else if (slot instanceof IDischargeOption) {
 					usedFuelVolume -= actualsDataProvider.getVolumeInM3(slot);
+					lastSlot = slot;
 				}
 			}
 
 			final IPortSlot returnSlot = allocationRecord.returnSlot;
 
-			// Use safety heel if not actualised
-			long returnSlotHeelInM3 = actualsDataProvider.hasActuals(returnSlot) ? actualsDataProvider.getStartHeelInM3(returnSlot) : vessel.getVesselClass().getMinHeel();
+			final long returnSlotHeelInM3;
+			if (lastSlot != null && actualsDataProvider.hasReturnActuals(lastSlot)) {
+				returnSlotHeelInM3 = actualsDataProvider.getReturnHeelInM3(lastSlot);
+			} else if (actualsDataProvider.hasActuals(returnSlot)) {
+				returnSlotHeelInM3 = actualsDataProvider.getStartHeelInM3(returnSlot);
+			} else {
+				// Use safety heel if not actualised
+				returnSlotHeelInM3 = vessel.getVesselClass().getMinHeel();
+			}
 
 			usedFuelVolume -= returnSlotHeelInM3;
 
@@ -111,7 +120,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
 			return annotation;
-		} else if (allocationRecord.allocationMode == AllocationMode.Transfer) {
+		}
+
+		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
+		// Assuming a single cargo CV!
+		final int cargoCVValue = loadSlot.getCargoCVValue();
+
+		if (allocationRecord.allocationMode == AllocationMode.Transfer) {
 			// Transfer, just find the common max and replicate
 			final long availableCargoSpace = vessel.getCargoCapacity() - allocationRecord.startVolumeInM3;
 			long transferVolume = availableCargoSpace;
@@ -121,6 +136,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			}
 			for (int i = 0; i < slots.size(); ++i) {
 				annotation.setSlotVolumeInM3(slots.get(i), transferVolume);
+				annotation.setSlotCargoCV(slots.get(i), cargoCVValue);
 			}
 		} else {
 			assert allocationRecord.allocationMode == AllocationMode.Shipped;

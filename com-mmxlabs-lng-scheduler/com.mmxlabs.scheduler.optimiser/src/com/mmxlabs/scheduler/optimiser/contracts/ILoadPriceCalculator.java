@@ -4,17 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
-import java.util.List;
-
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -49,8 +47,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 * @since 8.0
 	 */
-	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePricePerMMBTu, long loadVolumeInM3, long dischargeVolumeInM3,
-			IVessel vessel, int vesselStartTime, VoyagePlan plan, IDetailTree annotations);
+	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation, IVessel vessel, int vesselStartTime,
+			VoyagePlan plan, IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when the cargo is a DES Purchase
@@ -66,7 +64,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 * @since 8.0
 	 */
-	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
+	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation,
 			IDetailTree annotations);
 
 	/**
@@ -82,7 +80,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 * @since 8.0
 	 */
-	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
+	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			IDetailTree annotations);
 
 	/**
@@ -93,8 +91,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
 	 * @since 8.0
 	 */
-	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, List<IPortSlot> slots, int[] arrivalTimes, long[] volumesInM3, int[] dischargePricesPerMMBTu, IVessel vessel,
-			int vesselStartTime, VoyagePlan plan, IDetailTree annotations);
+	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, IAllocationAnnotation allocationAnnotation, int[] dischargePricesPerMMBTu, IVessel vessel, int vesselStartTime,
+			VoyagePlan plan, IDetailTree annotations);
 
 	/**
 	 * Invoked before final P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to

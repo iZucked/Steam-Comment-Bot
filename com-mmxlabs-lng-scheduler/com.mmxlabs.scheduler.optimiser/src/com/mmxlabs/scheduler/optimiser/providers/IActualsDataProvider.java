@@ -2,6 +2,8 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 
 /**
@@ -93,9 +95,14 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	long getEndHeelInM3(IPortSlot slot);
 
 	/**
-	 * Base fuel price per MT
+	 * Base fuel price per MT (from a {@link ILoadOption})
 	 */
-	int getBaseFuelPrice(IPortSlot slot);
+	int getBaseFuelPricePerMT(IPortSlot slot);
+
+	/**
+	 * Charter rate per day (from a {@link ILoadOption})
+	 */
+	int getCharterRatePerDay(IPortSlot slot);
 
 	/**
 	 * Returns the actual base fuel used in the next voyage. This includes and load and discharge port fuel consumptions.
@@ -105,6 +112,16 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 */
 	long getNextVoyageBaseFuelConsumptionInMT(IPortSlot slot);
 
+	int getNextVoyageDistance(IPortSlot slot);
+
 	int getLNGPricePerMMBTu(IPortSlot slot);
 
+	long getNextVoyageRouteCosts(IPortSlot slot);
+	
+	// Values for return - should be used as actuals esp for DES, and validation when overlapping with another set of actuals
+	boolean hasReturnActuals(IPortSlot slot);
+	int getReturnTime(IPortSlot slot);
+	ITimeWindow getReturnTimeAsTimeWindow(IPortSlot slot);
+	long getReturnHeelInM3(IPortSlot slot);
+	IPort getReturnPort(IPortSlot slot);
 }

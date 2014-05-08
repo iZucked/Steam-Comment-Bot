@@ -21,12 +21,12 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.FBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IdleNBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.RouteVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -60,12 +60,20 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	private ICharterRateCalculator charterRateCalculator;
 
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
+
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
 
 		if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null; // continue;
 		}
+
+		// TODO: Extract out further for custom base fuel pricing logic?
+		// Use forecast BF, but check for actuals later
+		int baseFuelUnitPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
+		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, arrivalTimes.get(0));
 
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
@@ -88,6 +96,11 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 					if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 						isCargoPlan = true;
+					}
+
+					if (actualsDataProvider.hasActuals(details.getOptions().getPortSlot())) {
+						baseFuelUnitPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(details.getOptions().getPortSlot());
+						vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(details.getOptions().getPortSlot());
 					}
 				}
 			} else if (obj instanceof VoyageDetails) {
@@ -168,8 +181,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// final VoyagePlanOptimiser vpo = new VoyagePlanOptimiser(voyageCalculator);
 
 		vpo.reset();
-		vpo.setVessel(vessel, vessel.getVesselClass().getBaseFuelUnitPrice());
-		vpo.setVesselCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, arrivalTimes.get(0)));
+
+		vpo.setVessel(vessel, baseFuelUnitPricePerMT);
+		vpo.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 		vpo.setStartHeel(startingHeelInM3);
 		// Install our new alternative sequence
 		vpo.setBasicSequence(newRawSequence);
@@ -208,9 +222,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		if (isCargoPlan) {
 			// Get the new cargo allocation.
 
-			final IAllocationAnnotation currentAllocation =  cargoAllocator.allocate(vessel, vesselStartTime, vp, arrivalTimes);
+			final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vesselStartTime, vp, arrivalTimes);
 			newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
-
 
 			originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, vesselStartTime, null);
 			newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, vesselStartTime, null);

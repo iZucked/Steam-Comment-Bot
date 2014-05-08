@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
@@ -50,6 +51,9 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
 
 	@Override
 	public String getName() {
@@ -97,6 +101,11 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 
 			final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 			final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
+
+			// If data is actualised, we do not care
+			if (actualsDataProvider.hasActuals(firstSlot) && actualsDataProvider.hasActuals(secondSlot)) {
+				return true;
+			}
 
 			// Check if FOB/DES
 			// Check if ports are different

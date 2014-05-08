@@ -18,9 +18,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * 
  */
 public interface IAllocationAnnotation extends IElementAnnotation {
-	/**
-	 * @since 5.0
-	 */
 	List<IPortSlot> getSlots();
 
 	/**
@@ -29,6 +26,8 @@ public interface IAllocationAnnotation extends IElementAnnotation {
 	 * @return
 	 */
 	long getFuelVolumeInM3();
+
+	long getStartHeelVolumeInM3();
 
 	/**
 	 * Returns the quantity of LNG left as heel in m3 with no where to go (i.e. lost).
@@ -41,34 +40,25 @@ public interface IAllocationAnnotation extends IElementAnnotation {
 	 * Returns the quantity of LNG in m3 that has been discharged.
 	 * 
 	 * @return
-	 * @since 6.0
 	 */
 	long getSlotVolumeInM3(IPortSlot slot);
-	
+
 	/**
 	 * Returns the time a load or discharge began
 	 * 
 	 * @return
-	 * @since 5.0
 	 */
 	int getSlotTime(IPortSlot slot);
-//
-//	/**
-//	 * Returns the price per M3 for LNG bought or sold at this slot
-//	 * 
-//	 * @param slot
-//	 * @return
-//	 * @since 5.0
-//	 */
-//	int getSlotPricePerM3(IPortSlot slot);
-//	
-//	
-//	/**
-//	 * @since 8.0
-//	 */
+
 	int getSlotPricePerMMBTu(IPortSlot slot);
 
-	long getStartHeelVolumeInM3();
-
 	long getSlotVolumeInMMBTu(IPortSlot slot);
+
+	/**
+	 * Returns the CV valid for this slot. Typically this will be the load CV, but for actualised cargoes discharge CV may be different to load CV
+	 * 
+	 * @param slot
+	 * @return
+	 */
+	int getSlotCargoCV(IPortSlot slot);
 }

@@ -51,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanner;
+import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
@@ -105,6 +106,9 @@ public class ScheduleCalculator {
 	@Inject
 	private VoyagePlanner voyagePlanner;
 
+	@Inject
+	private IActualsDataProvider actualsDataProvider;
+
 	@Inject(optional = true)
 	private ICustomNonShippedScheduler customNonShippedScheduler;
 
@@ -129,7 +133,6 @@ public class ScheduleCalculator {
 			// but contracts need this kind of information to make up numbers with.
 			return desOrFobSchedule(resource, sequence);
 		}
-
 
 		// If this is the cargo shorts sequence, but we have no data (i.e. there are no short cargoes), return the basic data structure to avoid any exceptions
 		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
@@ -175,6 +178,7 @@ public class ScheduleCalculator {
 		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (nominatedVessel != null) {
 			// Set a start and end heel for BOG estimations
+
 			currentPlan.setStartingHeelInM3(nominatedVessel.getVesselClass().getMinHeel());
 			currentPlan.setRemainingHeelInM3(nominatedVessel.getVesselClass().getMinHeel());
 		}
@@ -192,9 +196,19 @@ public class ScheduleCalculator {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;
 				}
+				if (thisPortSlot instanceof ILoadOption) {
+					// overwrite with actuals if need be
+					if (actualsDataProvider.hasActuals(thisPortSlot)) {
+						currentPlan.setStartingHeelInM3(actualsDataProvider.getStartHeelInM3(thisPortSlot));
+					}
+				}
 				if (thisPortSlot instanceof IDischargeSlot) {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;
+				}
+				// overwrite with actuals if need be
+				if (actualsDataProvider.hasReturnActuals(thisPortSlot)) {
+					currentPlan.setRemainingHeelInM3(actualsDataProvider.getReturnHeelInM3(thisPortSlot));
 				}
 			}
 
@@ -235,7 +249,7 @@ public class ScheduleCalculator {
 		}
 
 		// Prime the load price calculators with the scheduled result
-		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()	) {
+		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
 			calculator.prepareEvaluation(sequences);
 		}
 
