@@ -39,7 +39,7 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
-public class MigrateToV3Test {
+public class MigrateToV3Test extends AbstractMigrationTestClass {
 
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
@@ -413,7 +413,6 @@ public class MigrateToV3Test {
 
 				final EReference reference_PricingModel_fleetCost = MetamodelUtils.getReference(class_PricingModel, "fleetCost");
 				final EReference reference_FleetCostModel_baseFuelPrices = MetamodelUtils.getReference(class_FleetCostModel, "baseFuelPrices");
-
 
 				final EAttribute attribute_BaseFuelCost_price = MetamodelUtils.getAttribute(class_BaseFuelCost, "price");
 				final EReference reference_BaseFuelCost_fuel = MetamodelUtils.getReference(class_BaseFuelCost, "fuel");
