@@ -37,7 +37,7 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
-public class MigrateToV2Test {
+public class MigrateToV2Test extends AbstractMigrationTestClass {
 
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.

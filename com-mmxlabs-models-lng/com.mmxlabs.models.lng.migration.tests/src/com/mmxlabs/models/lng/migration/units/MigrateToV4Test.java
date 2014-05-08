@@ -36,7 +36,7 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
-public class MigrateToV4Test {
+public class MigrateToV4Test extends AbstractMigrationTestClass {
 
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
@@ -96,7 +96,7 @@ public class MigrateToV4Test {
 
 				EObject sequence = factory_ScheduleModel.create(class_Sequence);
 				sequence.eSet(attribute_Sequence_dailyHireRate, 100000);
-				
+
 				schedule.eSet(reference_Schedule_sequences, Collections.singletonList(sequence));
 
 				// Save to tmp file
@@ -156,19 +156,19 @@ public class MigrateToV4Test {
 				final EObject portfolioModel = (EObject) scenarioModel.eGet(reference_LNGScenarioModel_portfolioModel);
 				Assert.assertNotNull(portfolioModel);
 
-				final EObject scheduleModel = (EObject)portfolioModel.eGet(reference_LNGPortfolio_scheduleModel);
+				final EObject scheduleModel = (EObject) portfolioModel.eGet(reference_LNGPortfolio_scheduleModel);
 				Assert.assertNotNull(scheduleModel);
 
-				final EObject schedule= (EObject) scheduleModel.eGet(reference_LNGScheduleModel_schedule);
+				final EObject schedule = (EObject) scheduleModel.eGet(reference_LNGScheduleModel_schedule);
 				Assert.assertNotNull(schedule);
 
 				List<EObject> sequences = MetamodelUtils.getValueAsTypedList(schedule, reference_Schedule_sequences);
 				Assert.assertNotNull(sequences);
 				Assert.assertEquals(1, sequences.size());
-				
+
 				EObject sequence = sequences.get(0);
 				Assert.assertNotNull(sequence);
-				
+
 				Assert.assertFalse(sequence.eIsSet(attribute_Sequence_dailyHireRate));
 			}
 		} finally {
