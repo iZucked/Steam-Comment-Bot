@@ -100,7 +100,6 @@ public final class KeyFileLoader {
 				if (dialog.open() == Window.OK) {
 					password[0] = dialog.getPassword();
 				}
-
 			}
 		});
 
