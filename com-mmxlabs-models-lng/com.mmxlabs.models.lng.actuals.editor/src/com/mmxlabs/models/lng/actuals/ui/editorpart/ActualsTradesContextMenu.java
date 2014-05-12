@@ -1,8 +1,10 @@
 package com.mmxlabs.models.lng.actuals.ui.editorpart;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
@@ -322,7 +324,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										slotActuals.setPortCharges(slotAllocation.getSlotVisit().getPortCost());
 										if (slotActuals instanceof LoadActuals) {
 											if (isDivertableDESPurchase) {
-												Vessel vessel = cargoActuals.getVessel();
+												final Vessel vessel = cargoActuals.getVessel();
 												if (vessel != null) {
 													((LoadActuals) slotActuals).setStartingHeelM3(vessel.getVesselClass().getMinHeel());
 													((LoadActuals) slotActuals).setStartingHeelMMBTu((int) Math.round(vessel.getVesselClass().getMinHeel() * cargoCV));
@@ -340,7 +342,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 											ladenDistance = 0;
 										} else if (slotActuals instanceof DischargeActuals) {
 											if (isDivertableDESPurchase) {
-												Vessel vessel = cargoActuals.getVessel();
+												final Vessel vessel = cargoActuals.getVessel();
 												if (vessel != null) {
 													((DischargeActuals) slotActuals).setEndHeelM3(vessel.getVesselClass().getMinHeel());
 													((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(vessel.getVesselClass().getMinHeel() * cargoCV));
@@ -369,15 +371,21 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									}
 
 									final ReturnActuals returnActuals = ActualsFactory.eINSTANCE.createReturnActuals();
+
 									cargoActuals.setReturnActuals(returnActuals);
 
 									final EList<Event> events = cargoAllocation.getEvents();
 									final Event lastEvent = events.get(events.size() - 1);
 									final Event nextEvent = lastEvent.getNextEvent();
-									if (nextEvent != null) {
+									if (lastEvent.getSequence().isFleetVessel() && nextEvent != null) {
 										returnActuals.setEndHeelM3(nextEvent.getHeelAtStart());
 										returnActuals.setTitleTransferPoint(nextEvent.getPort());
 										returnActuals.setOperationsStart(nextEvent.getLocalStart().getTime());
+									} else {
+										final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+										cal.clear();
+										cal.set(Calendar.YEAR, 2014);
+										returnActuals.setOperationsStart(cal.getTime());
 									}
 								}
 							}

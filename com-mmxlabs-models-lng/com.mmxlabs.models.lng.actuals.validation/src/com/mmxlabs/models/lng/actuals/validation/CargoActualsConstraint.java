@@ -113,14 +113,29 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				}
 
 				for (final SlotActuals slotActuals : cargoActuals.getActuals()) {
+					Slot slot = slotActuals.getSlot();
 
-					
+					if (slot != null) {
+						if (!cargoActuals.getCargo().getSlots().contains(slot)) {
+							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actuals slot is not part of Cargo"));
+							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__SLOT);
+							status.addEObjectAndFeature(cargo, CargoPackage.Literals.CARGO__SLOTS);
+							failures.add(status);
+						}
+					}
+
 					if (slotActuals.getTitleTransferPoint() == null) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs a title transfer point"));
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
 						failures.add(status);
+					} else if (slot != null && slotActuals.getTitleTransferPoint() != slot.getPort()) {
+						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+								(IConstraintStatus) ctx.createFailureStatus("Slot actuals title transfer point and slot port must match"));
+						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__TITLE_TRANSFER_POINT);
+						status.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PORT);
+						failures.add(status);
 					}
-					
+
 					if (slotActuals.getOperationsStart() == null) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs an operations start date"));
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
@@ -189,7 +204,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__TITLE_TRANSFER_POINT);
 						failures.add(status);
 					}
-					
+
 					if (returnActuals.getOperationsStart() == null) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Return actual needs an operations start date"));
 						status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);

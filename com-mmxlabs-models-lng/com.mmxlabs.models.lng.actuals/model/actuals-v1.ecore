@@ -27,6 +27,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="CargoActuals">
     <eStructuralFeatures xsi:type="ecore:EReference" name="actuals" upperBound="-1"
         eType="#//SlotActuals" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnActuals" eType="#//ReturnActuals"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractYear" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="subOperationNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -48,6 +50,12 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="deliveryType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endHeelM3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endHeelMMBTu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnActuals" eSuperTypes="../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
+    <eOperations name="getLocalStart" lowerBound="1" eType="#//Calendar"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="titleTransferPoint" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationsStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endHeelM3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Calendar" instanceClassName="java.util.Calendar"/>
   <eClassifiers xsi:type="ecore:EEnum" name="PenaltyType">
