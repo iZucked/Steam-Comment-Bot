@@ -56,12 +56,14 @@
             isHighlighter="true"
             name="Shipping Risk">
       </ColourScheme>
+      <!--
       <ColourScheme
             class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.StatoilColourScheme"
             id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.LoadProgColourScheme"
             isHighlighter="false"
             name="Loading Prog">
       </ColourScheme>
+      -->
    </extension>
 
 </plugin>
