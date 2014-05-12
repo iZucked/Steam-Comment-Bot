@@ -22,6 +22,7 @@ import org.osgi.framework.ServiceReference;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.scenario.service.util.EncryptingXMIResourceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
+import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
 
 /**
  * A class to manage loading a set of ecore models into {@link EPackage} instances.
@@ -151,6 +152,9 @@ public class MetamodelLoader {
 		if (serviceReference != null) {
 			return bundleContext.getService(serviceReference);
 		}
-		return null;
+		
+		return new PassthroughCipherProvider();
+		
+//		return null;
 	}
 }
