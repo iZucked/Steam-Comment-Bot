@@ -8,4 +8,14 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="FeatureEnablement" name="FeatureEnablement" schema="schema/FeatureEnablement.exsd"/>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.mmxlabs.license.features.properties.FeatureEnablementPropertyTester"
+            id="com.mmxlabs.license.features.enablement"
+            namespace="com.mmxlabs.license.features"
+            properties="enablement"
+            type="java.lang.Object">
+      </propertyTester>
+   </extension>
 </plugin>
