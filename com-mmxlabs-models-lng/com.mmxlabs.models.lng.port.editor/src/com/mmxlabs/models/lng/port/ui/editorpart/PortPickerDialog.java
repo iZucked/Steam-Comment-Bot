@@ -24,8 +24,8 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 public class PortPickerDialog extends ListSelectionDialog {
 	List<CellLabelProvider> searchedColumns = new ArrayList<>();
-	
-	public PortPickerDialog(Shell parentShell, Object input) {
+
+	public PortPickerDialog(final Shell parentShell, final Object input) {
 		this(parentShell, input, new ArrayContentProvider(), new LabelProvider() {
 
 			@SuppressWarnings("unchecked")
@@ -36,12 +36,10 @@ public class PortPickerDialog extends ListSelectionDialog {
 		});
 	}
 
-	public PortPickerDialog(Shell parentShell, Object input,
-			IStructuredContentProvider contentProvider,
-			LabelProvider labelProvider) {
+	public PortPickerDialog(final Shell parentShell, final Object input, final IStructuredContentProvider contentProvider, final LabelProvider labelProvider) {
 		super(parentShell, input, contentProvider, labelProvider);
 	}
-	
+
 	public List<EObject> pick(final Control cellEditorWindow, final List<Pair<String, EObject>> options, final Collection<EObject> currentValue, final EReference feature) {
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
@@ -59,22 +57,22 @@ public class PortPickerDialog extends ListSelectionDialog {
 		}
 
 		setInitialSelections(selectedOptions.toArray());
-		
+
 		searchedColumns.clear();
 
-		ColumnLabelProvider nameLabelProvider = new ColumnLabelProvider() {
+		final ColumnLabelProvider nameLabelProvider = new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
 				return ((Pair<String, ?>) element).getFirst();
 			}
 		};
-		
-		CellLabelProvider nameColumn = addColumn("Name", nameLabelProvider);
+
+		final CellLabelProvider nameColumn = addColumn("Name", nameLabelProvider);
 		searchedColumns.add(nameColumn);
 
 		if (feature.getEReferenceType().isSuperTypeOf(PortPackage.eINSTANCE.getPort())) {
 
-			ColumnLabelProvider countryLabelProvider = new ColumnLabelProvider() {
+			final ColumnLabelProvider countryLabelProvider = new ColumnLabelProvider() {
 				@Override
 				public String getText(final Object element) {
 					final Pair<?, EObject> p = (Pair<?, EObject>) element;
@@ -86,10 +84,9 @@ public class PortPickerDialog extends ListSelectionDialog {
 					}
 					return "";
 				}
-			}; 
-			
-			
-			CellLabelProvider countryColumn = addColumn("Country", countryLabelProvider);
+			};
+
+			final CellLabelProvider countryColumn = addColumn("Country", countryLabelProvider);
 			searchedColumns.add(countryColumn);
 
 			for (final PortCapability pc : PortCapability.values()) {
@@ -124,15 +121,18 @@ public class PortPickerDialog extends ListSelectionDialog {
 			return resultList;
 		}
 
-		return null;		
+		return null;
 	}
 
 	@Override
 	protected String getFilterableText(final Object element) {
 		String result = "";
-		for (CellLabelProvider provider: searchedColumns) {
-			result = result + ((ColumnLabelProvider) provider).getText(element).toLowerCase() + " ";
+		for (final CellLabelProvider provider : searchedColumns) {
+			final String text = ((ColumnLabelProvider) provider).getText(element);
+			if (text != null) {
+				result = result + text.toLowerCase() + " ";
+			}
 		}
 		return result;
-	}	
+	}
 }
