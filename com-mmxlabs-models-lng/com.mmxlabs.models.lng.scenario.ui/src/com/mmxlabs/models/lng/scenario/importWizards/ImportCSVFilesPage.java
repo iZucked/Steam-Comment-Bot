@@ -126,9 +126,9 @@ public class ImportCSVFilesPage extends WizardPage {
 	private final ScenarioServiceNewScenarioPage mainPage;
 
 	private ScenarioInstance scenarioInstance;
-	private int CHOICE_COMMA = 0;
-	private int CHOICE_SEMICOLON = 1;
-	private int CHOICE_PERIOD = 1;
+	private final int CHOICE_COMMA = 0;
+	private final int CHOICE_SEMICOLON = 1;
+	private final int CHOICE_PERIOD = 1;
 	private RadioSelectionGroup csvSelectionGroup;
 	private RadioSelectionGroup decimalSelectionGroup;
 
@@ -150,18 +150,17 @@ public class ImportCSVFilesPage extends WizardPage {
 
 		top.setLayout(new GridLayout(1, false));
 
-		Composite holder = new Composite(top, SWT.NONE);
-		GridLayout gl = new GridLayout(3, false);
+		final Composite holder = new Composite(top, SWT.NONE);
+		final GridLayout gl = new GridLayout(3, false);
 		gl.marginLeft = 0;
 		gl.marginWidth = 0;
 		holder.setLayout(gl);
-		
-//		GridData gd = new GridData();
-//		gd.verticalIndent = 0;
-//		gd.horizontalIndent = 0;
-////		gd.grabExcessHorizontalSpace = true;
-//		holder.setLayoutData(gd);
 
+		// GridData gd = new GridData();
+		// gd.verticalIndent = 0;
+		// gd.horizontalIndent = 0;
+		// // gd.grabExcessHorizontalSpace = true;
+		// holder.setLayoutData(gd);
 
 		final Button auto = new Button(holder, SWT.NONE);
 		auto.setText("Choose &Directory...");
@@ -298,7 +297,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
 		scenarioModel.setPortfolioModel(portfolioModel);
 
-		char delimiter = csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
+		final char delimiter = csvSelectionGroup.getSelectedValue() == CHOICE_COMMA ? ',' : ';';
 
 		context.setRootObject(scenarioModel);
 
@@ -425,15 +424,25 @@ public class ImportCSVFilesPage extends WizardPage {
 								final ScenarioInstance instance = scenarioService.insert(container, scenarioModel);
 
 								try {
-									final String versionContext = migrationRegistry.getDefaultMigrationContext();
-									if (versionContext != null) {
-										instance.setVersionContext(versionContext);
-										int latestContextVersion = migrationRegistry.getLatestContextVersion(versionContext);
+									final String scenarioVersionContext = migrationRegistry.getDefaultMigrationContext();
+									final String clientVersionContext = migrationRegistry.getDefaultClientMigrationContext();
+									if (scenarioVersionContext != null) {
+										instance.setVersionContext(scenarioVersionContext);
+										int latestContextVersion = migrationRegistry.getLatestContextVersion(scenarioVersionContext);
 										// Snapshot version - so find last good version number
 										if (latestContextVersion < 0) {
-											latestContextVersion = migrationRegistry.getLastReleaseVersion(versionContext);
+											latestContextVersion = migrationRegistry.getLastReleaseVersion(scenarioVersionContext);
 										}
 										instance.setScenarioVersion(latestContextVersion);
+									}
+									if (clientVersionContext != null) {
+										instance.setClientVersionContext(clientVersionContext);
+										int latestClientContextVersion = migrationRegistry.getLatestClientContextVersion(clientVersionContext);
+										// Snapshot version - so find last good version number
+										if (latestClientContextVersion < 0) {
+											latestClientContextVersion = migrationRegistry.getLastReleaseClientVersion(clientVersionContext);
+										}
+										instance.setClientScenarioVersion(latestClientContextVersion);
 									}
 								} catch (final IllegalArgumentException e) {
 									log.error(e.getMessage(), e);
@@ -483,7 +492,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		section.put(DELIMITER_KEY, csvSelectionGroup.getSelectedValue());
 		section.put(DECIMAL_SEPARATOR_KEY, decimalSelectionGroup.getSelectedValue());
 	}
-	
+
 	@Override
 	public boolean canFlipToNextPage() {
 		return isPageComplete();
