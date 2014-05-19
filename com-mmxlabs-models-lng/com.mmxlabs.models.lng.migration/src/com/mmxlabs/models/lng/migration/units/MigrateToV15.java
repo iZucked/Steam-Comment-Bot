@@ -20,17 +20,17 @@ public class MigrateToV15 extends AbstractMigrationUnit {
 	private MetamodelLoader sourceLoader;
 
 	@Override
-	public String getContext() {
+	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
 	}
 
 	@Override
-	public int getSourceVersion() {
+	public int getScenarioSourceVersion() {
 		return 14;
 	}
 
 	@Override
-	public int getDestinationVersion() {
+	public int getScenarioDestinationVersion() {
 		return 15;
 	}
 
