@@ -15,7 +15,7 @@ import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
 
 /**
- * A proxy class to wrap around a {@link IMigrationUnit} and laxy instantiate the class when required.
+ * A proxy class to wrap around a {@link IMigrationUnit} and lazy instantiate the class when required.
  * 
  * @author Simon Goodall
  * 
