@@ -494,7 +494,11 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				scenarioInstance.setName(scenarioname);
 				scenarioInstance.setVersionContext(manifest.getVersionContext());
 				scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
+				
+				scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
+				scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
 
+				
 				final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
 				scenarioInstance.setMetadata(meta);
 				meta.setContentType(manifest.getScenarioType());

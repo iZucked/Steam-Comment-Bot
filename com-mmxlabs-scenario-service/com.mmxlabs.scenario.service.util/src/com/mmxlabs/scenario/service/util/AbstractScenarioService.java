@@ -309,6 +309,9 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			// Copy version context information
 			dup.setVersionContext(cpy.getVersionContext());
 			dup.setScenarioVersion(cpy.getScenarioVersion());
+			
+			dup.setClientVersionContext(cpy.getClientVersionContext());
+			dup.setClientScenarioVersion(cpy.getClientScenarioVersion());
 
 			// Clean up
 			if (unloadScenario) {

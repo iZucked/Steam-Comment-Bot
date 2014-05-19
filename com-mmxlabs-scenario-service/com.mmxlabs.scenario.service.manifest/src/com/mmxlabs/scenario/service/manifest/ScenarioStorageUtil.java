@@ -183,6 +183,9 @@ public class ScenarioStorageUtil {
 
 					result.setVersionContext(manifest.getVersionContext());
 					result.setScenarioVersion(manifest.getScenarioVersion());
+					
+					result.setClientVersionContext(manifest.getClientVersionContext());
+					result.setClientScenarioVersion(manifest.getClientScenarioVersion());
 
 					meta.setContentType(manifest.getScenarioType());
 
