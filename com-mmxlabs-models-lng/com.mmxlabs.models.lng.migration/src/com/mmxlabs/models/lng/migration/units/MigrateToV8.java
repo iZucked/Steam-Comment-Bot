@@ -78,7 +78,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		migrateScenarioFleetModel(loader, model);
 	}
 
-	protected void migrateEntities(MetamodelLoader loader, EObject model) {
+	protected void migrateEntities(final MetamodelLoader loader, final EObject model) {
 
 		final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 		final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
@@ -101,29 +101,31 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 		final EReference reference_BaseLegalEntity_taxRates = MetamodelUtils.getReference(class_BaseLegalEntity, "taxRates");
 
-		EObject commercialModel = (EObject) model.eGet(reference_LNGScenarioModel_commercialModel);
-		List<EObject> entities = MetamodelUtils.getValueAsTypedList(commercialModel, reference_CommercialModel_entities);
+		final EObject commercialModel = (EObject) model.eGet(reference_LNGScenarioModel_commercialModel);
+		final List<EObject> entities = MetamodelUtils.getValueAsTypedList(commercialModel, reference_CommercialModel_entities);
 
-		Map<EObject, EObject> originalToNew = new HashMap<>();
-		for (EObject entity : entities) {
+		final Map<EObject, EObject> originalToNew = new HashMap<>();
+		if (entities != null) {
+			for (final EObject entity : entities) {
 
-			if (class_BaseLegalEntity.isInstance(entity)) {
-				if (!class_LegalEntity.isInstance(entity)) {
-					// Create new entity
-					EObject newEntity = package_CommercialModel.getEFactoryInstance().create(class_LegalEntity);
-					// Copy base attributes
-					newEntity.eSet(attribute_NamedObject_name, entity.eGet(attribute_NamedObject_name));
-					newEntity.eSet(attribute_UUIDObject_uuid, entity.eGet(attribute_UUIDObject_uuid));
-					// Move tax data
-					newEntity.eSet(reference_BaseLegalEntity_taxRates, entity.eGet(reference_BaseLegalEntity_taxRates));
+				if (class_BaseLegalEntity.isInstance(entity)) {
+					if (!class_LegalEntity.isInstance(entity)) {
+						// Create new entity
+						final EObject newEntity = package_CommercialModel.getEFactoryInstance().create(class_LegalEntity);
+						// Copy base attributes
+						newEntity.eSet(attribute_NamedObject_name, entity.eGet(attribute_NamedObject_name));
+						newEntity.eSet(attribute_UUIDObject_uuid, entity.eGet(attribute_UUIDObject_uuid));
+						// Move tax data
+						newEntity.eSet(reference_BaseLegalEntity_taxRates, entity.eGet(reference_BaseLegalEntity_taxRates));
 
-					// Create map for reference update
-					originalToNew.put(entity, newEntity);
+						// Create map for reference update
+						originalToNew.put(entity, newEntity);
+					}
 				}
 			}
 		}
 
-		Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);
+		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);
 
 		for (final Map.Entry<EObject, EObject> entry : originalToNew.entrySet()) {
 			final EObject originalEntity = entry.getKey();
@@ -139,7 +141,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		}
 	}
 
-	protected void migrateScenarioFleetModel(MetamodelLoader loader, EObject model) {
+	protected void migrateScenarioFleetModel(final MetamodelLoader loader, final EObject model) {
 
 		final EPackage mmxCorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 		final EClass uuidObject_Class = MetamodelUtils.getEClass(mmxCorePackage, "UUIDObject");
@@ -199,15 +201,15 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		final EClass class_CommercialModel = MetamodelUtils.getEClass(package_CommercialModel, "CommercialModel");
 		final EReference reference_commercialModel_shippingEntity = MetamodelUtils.getReference(class_CommercialModel, "shippingEntity");
 
-		EObject fleetModel = (EObject) model.eGet(reference_LNGScenarioModel_fleetModel);
-		EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
-		EObject scenarioFleetModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_scenarioFleetModel);
-		EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
-		EObject commercialModel = (EObject) model.eGet(reference_LNGScenarioModel_commercialModel);
+		final EObject fleetModel = (EObject) model.eGet(reference_LNGScenarioModel_fleetModel);
+		final EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
+		final EObject scenarioFleetModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_scenarioFleetModel);
+		final EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
+		final EObject commercialModel = (EObject) model.eGet(reference_LNGScenarioModel_commercialModel);
 
 		// map for cross reference update
-		Map<EObject, EObject> originalToNew = new HashMap<>();
-		EObject shippingEntity = (EObject) commercialModel.eGet(reference_commercialModel_shippingEntity);
+		final Map<EObject, EObject> originalToNew = new HashMap<>();
+		final EObject shippingEntity = (EObject) commercialModel.eGet(reference_commercialModel_shippingEntity);
 		commercialModel.eUnset(reference_commercialModel_shippingEntity);
 
 		if (scenarioFleetModel != null) {
@@ -215,36 +217,38 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 			// Phase 1 - Move vessel availabilities and set default shipping entity
 			{
 
-				List<EObject> fleetModelAvailabilities = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselAvailabilies);
-				List<EObject> cargo_VA = new ArrayList<>(fleetModelAvailabilities.size());
-				for (EObject fleet_VA : fleetModelAvailabilities) {
+				final List<EObject> fleetModelAvailabilities = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselAvailabilies);
+				if (fleetModelAvailabilities != null) {
+					final List<EObject> cargo_VA = new ArrayList<>(fleetModelAvailabilities.size());
+					for (final EObject fleet_VA : fleetModelAvailabilities) {
 
-					// Construct new VA - copy data over
-					EObject newVA = package_CargoModel.getEFactoryInstance().create(class_cargo_VesselAvailability);
-					for (EStructuralFeature f : fleet_VA.eClass().getEAllStructuralFeatures()) {
-						if (fleet_VA.eIsSet(f)) {
-							newVA.eSet(newVA.eClass().getEStructuralFeature(f.getName()), fleet_VA.eGet(f));
+						// Construct new VA - copy data over
+						final EObject newVA = package_CargoModel.getEFactoryInstance().create(class_cargo_VesselAvailability);
+						for (final EStructuralFeature f : fleet_VA.eClass().getEAllStructuralFeatures()) {
+							if (fleet_VA.eIsSet(f)) {
+								newVA.eSet(newVA.eClass().getEStructuralFeature(f.getName()), fleet_VA.eGet(f));
+							}
 						}
+						// set shipping entity
+						newVA.eSet(reference_cargo_VesselAvailability_entity, shippingEntity);
+
+						// Add to list
+						cargo_VA.add(newVA);
+
+						// Replace cross references
+						originalToNew.put(fleet_VA, newVA);
 					}
-					// set shipping entity
-					newVA.eSet(reference_cargo_VesselAvailability_entity, shippingEntity);
-
-					// Add to list
-					cargo_VA.add(newVA);
-
-					// Replace cross references
-					originalToNew.put(fleet_VA, newVA);
+					scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselAvailabilies);
+					cargoModel.eSet(reference_CargoModel_vesselAvailabilies, cargo_VA);
 				}
-				scenarioFleetModel.eUnset(reference_ScenarioFleetModel_vesselAvailabilies);
-				cargoModel.eSet(reference_CargoModel_vesselAvailabilies, cargo_VA);
 			}
 
 			// Phase 2 - Move vessel events
 			{
-				List<EObject> fleetModelEvents = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselEvents);
+				final List<EObject> fleetModelEvents = MetamodelUtils.getValueAsTypedList(scenarioFleetModel, reference_ScenarioFleetModel_vesselEvents);
 				if (fleetModelEvents != null) {
-					List<EObject> cargo_Events = new ArrayList<>(fleetModelEvents.size());
-					for (EObject fleet_Event : fleetModelEvents) {
+					final List<EObject> cargo_Events = new ArrayList<>(fleetModelEvents.size());
+					for (final EObject fleet_Event : fleetModelEvents) {
 						EObject newEvent = null;
 						if (class_fleet_MaintenanceEvent.isInstance(fleet_Event)) {
 							newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_MaintenanceEvent);
@@ -254,7 +258,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 							newEvent = package_CargoModel.getEFactoryInstance().create(class_cargo_DryDockEvent);
 						}
 						if (newEvent != null) {
-							for (EStructuralFeature f : fleet_Event.eClass().getEAllStructuralFeatures()) {
+							for (final EStructuralFeature f : fleet_Event.eClass().getEAllStructuralFeatures()) {
 								if (fleet_Event.eIsSet(f)) {
 									newEvent.eSet(newEvent.eClass().getEStructuralFeature(f.getName()), fleet_Event.eGet(f));
 								}
@@ -276,18 +280,18 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 		// Phase 3 - move vessel type groups
 		{
 
-			List<EObject> specialVesselGroups = MetamodelUtils.getValueAsTypedList(fleetModel, reference_FleetModel_specialVesselGroups);
+			final List<EObject> specialVesselGroups = MetamodelUtils.getValueAsTypedList(fleetModel, reference_FleetModel_specialVesselGroups);
 			if (specialVesselGroups != null) {
-				List<EObject> vesselTypeGroups = new ArrayList<>(specialVesselGroups.size());
-				for (EObject specialGroup : specialVesselGroups) {
+				final List<EObject> vesselTypeGroups = new ArrayList<>(specialVesselGroups.size());
+				for (final EObject specialGroup : specialVesselGroups) {
 
 					// Construct new VA - copy data over
-					EObject typeGroup = package_CargoModel.getEFactoryInstance().create(class_cargo_VesselTypeGroup);
+					final EObject typeGroup = package_CargoModel.getEFactoryInstance().create(class_cargo_VesselTypeGroup);
 
-					EEnumLiteral vesselType = (EEnumLiteral) specialGroup.eGet(attribute_fleet_VesselTypeGroup_vesselType);
-					EEnumLiteral newVesselType = MetamodelUtils.getEEnum_Literal(enum_cargo_VesselType, vesselType.toString());
+					final EEnumLiteral vesselType = (EEnumLiteral) specialGroup.eGet(attribute_fleet_VesselTypeGroup_vesselType);
+					final EEnumLiteral newVesselType = MetamodelUtils.getEEnum_Literal(enum_cargo_VesselType, vesselType.toString());
 					typeGroup.eSet(attribute_cargo_VesselTypeGroup_vesselType, newVesselType);
-					
+
 					typeGroup.eSet(attribute_UUIDObject_uuid, specialGroup.eGet(attribute_UUIDObject_uuid));
 					typeGroup.eSet(attribute_NamedObject_name, specialGroup.eGet(attribute_NamedObject_name));
 
@@ -307,7 +311,7 @@ public class MigrateToV8 extends AbstractMigrationUnit {
 
 		// Phase 5 - update cross references
 
-		Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);
+		final Map<EObject, Collection<EStructuralFeature.Setting>> usagesByOriginal = UsageCrossReferencer.findAll(originalToNew.keySet(), model);
 
 		final EReference reference_LNGPortfolioModel_scheduleModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "scheduleModel");
 		final EPackage package_ScheduleModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
