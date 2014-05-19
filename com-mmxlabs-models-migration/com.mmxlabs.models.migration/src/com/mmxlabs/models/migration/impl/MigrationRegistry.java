@@ -14,12 +14,17 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnitExtension;
+import com.mmxlabs.models.migration.extensions.ClientMigrationContextExtensionPoint;
+import com.mmxlabs.models.migration.extensions.ClientMigrationUnitExtensionPoint;
+import com.mmxlabs.models.migration.extensions.DefaultClientMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
@@ -36,14 +41,16 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 	private static final Logger log = LoggerFactory.getLogger(MigrationRegistry.class);
 
-	private final Map<String, Integer> contexts = new HashMap<String, Integer>();
-
-	private final Map<String, Map<Integer, IMigrationUnit>> fromVersionMap = new HashMap<String, Map<Integer, IMigrationUnit>>();
-
-	private final Map<IMigrationUnit, String> migrationExtPointIDMap = new HashMap<IMigrationUnit, String>();
-	private final Map<String, List<IMigrationUnitExtension>> migrationUnitExtensionsMap = new HashMap<String, List<IMigrationUnitExtension>>();
-
+	private final Map<String, Integer> contexts = new HashMap<>();
+	private final Map<String, Map<Integer, IMigrationUnit>> fromVersionMap = new HashMap<>();
+	private final Map<IMigrationUnit, String> migrationExtPointIDMap = new HashMap<>();
+	private final Map<String, List<IMigrationUnitExtension>> migrationUnitExtensionsMap = new HashMap<>();
 	private String defaultContext;
+
+	private final Map<String, Integer> clientContexts = new HashMap<>();
+	private final Map<String, Map<Integer, IClientMigrationUnit>> clientFromVersionMap = new HashMap<>();
+	private final Map<IClientMigrationUnit, String> clientMigrationExtPointIDMap = new HashMap<>();
+	private String defaultClientContext;
 
 	/**
 	 * Initialise the registry with the initial set of migration units and contexts. There should be a single defaultMigrationContext
@@ -55,7 +62,9 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 */
 	@Inject
 	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, final Iterable<MigrationUnitExtensionPoint> migrationUnits,
-			final Iterable<MigrationUnitExtensionExtensionPoint> migrationUnitExtensions, final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts) {
+			final Iterable<MigrationUnitExtensionExtensionPoint> migrationUnitExtensions, final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts,
+			final Iterable<ClientMigrationContextExtensionPoint> clientMigrationContexts, final Iterable<ClientMigrationUnitExtensionPoint> clientMigrationUnits,
+			final Iterable<DefaultClientMigrationContextExtensionPoint> defaultClientMigrationContexts) {
 
 		for (final MigrationContextExtensionPoint ext : migrationContexts) {
 			final String contextName = ext.getContextName();
@@ -96,9 +105,38 @@ public class MigrationRegistry implements IMigrationRegistry {
 				log.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
 			}
 		}
+
+		for (final ClientMigrationContextExtensionPoint ext : clientMigrationContexts) {
+			final String contextName = ext.getClientContextName();
+			try {
+				if (contextName != null) {
+					registerClientContext(contextName, Integer.parseInt(ext.getLatestClientVersion()));
+				}
+			} catch (final NumberFormatException e) {
+				log.error("Unable to register client context: " + contextName, e);
+			}
+		}
+		for (final ClientMigrationUnitExtensionPoint ext : clientMigrationUnits) {
+			try {
+				if (ext != null) {
+					final ClientMigrationUnitProxy proxy = new ClientMigrationUnitProxy(ext);
+					registerClientMigrationUnit(ext.getID(), proxy);
+
+				}
+			} catch (final Exception e) {
+				log.error("Unable to register client migration unit for context: " + (ext == null ? "unknown" : ext.getClientContext()), e);
+			}
+		}
+
+		for (final DefaultClientMigrationContextExtensionPoint ext : defaultClientMigrationContexts) {
+			if (defaultClientContext == null) {
+				defaultClientContext = ext.getClientContext();
+			} else {
+				log.error("There is already a default client migration context set. " + ext.getClientContext() + " will not be set as the default.");
+			}
+		}
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getMigrationContexts() {
@@ -122,42 +160,74 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 	@Override
 	@NonNull
-	public List<IMigrationUnit> getMigrationChain(@NonNull final String context, final int fromVersion, final int toVersion) {
+	public List<IMigrationUnit> getMigrationChain(@NonNull final String scenarioContext, final int fromScenarioVersion, final int toScenarioVersion, @Nullable final String clientContext,
+			final int fromClientVersion, final int toClientVersion) {
 
-		if (!contexts.containsKey(context)) {
-			throw new IllegalArgumentException("Context not registered: " + context);
+		if (!contexts.containsKey(scenarioContext)) {
+			throw new IllegalArgumentException("Context not registered: " + scenarioContext);
 		}
 
 		// Search through the map finding a set of IMigrationUnits to transform between the desired versions.
-		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(Math.min(1, Math.abs(toVersion - fromVersion)));
-		final Map<Integer, IMigrationUnit> froms = fromVersionMap.get(context);
+		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(Math.min(1, Math.abs(toScenarioVersion - fromScenarioVersion) + Math.abs(toClientVersion - fromClientVersion)));
+		final Map<Integer, IMigrationUnit> scenarioFroms = fromVersionMap.get(scenarioContext);
+		final Map<Integer, IClientMigrationUnit> clientFroms = clientFromVersionMap.get(clientContext);
 
-		int currentVersion = fromVersion;
-		while (currentVersion != toVersion) {
-			IMigrationUnit nextUnit = froms.get(currentVersion);
-			// Is there another unit?
-			if (nextUnit == null) {
-				throw new RuntimeException(String.format("Unable to find migration chain between verions %d and %d for context %s.", fromVersion, toVersion, context));
+		final boolean needClientMigration = clientContext != null && toClientVersion != fromClientVersion;
+		int currentScenarioVersion = fromScenarioVersion;
+		int currentClientVersion = fromClientVersion;
+
+		while (currentScenarioVersion != toScenarioVersion || currentClientVersion != toClientVersion) {
+
+			// Phase one, get client migration units for current scenario version.
+			if (needClientMigration) {
+				while (currentClientVersion != toClientVersion) {
+
+					final IClientMigrationUnit nextUnit = clientFroms.get(currentClientVersion);
+					// Is there another unit?
+					if (nextUnit == null) {
+						throw new RuntimeException(String.format("Unable to find migration chain between verions %d and %d for client context %s.", fromClientVersion, toClientVersion, clientContext));
+					}
+
+					if (nextUnit.getScenarioDestinationVersion() != currentScenarioVersion) {
+						// Assume we need to perform a new scenario migration, thus break out of this loop and head on to the scenario migration code path.
+						break;
+					}
+
+					// Add unit to chain
+					chain.add(nextUnit);
+					// Next version to find!
+					currentClientVersion = nextUnit.getClientDestinationVersion();
+				}
+
 			}
 
-			// Wrap the migration unit in any extension points found.
-			if (migrationExtPointIDMap.containsKey(nextUnit)) {
-				final String unitID = migrationExtPointIDMap.get(nextUnit);
-				if (migrationUnitExtensionsMap.containsKey(unitID)) {
-					final List<IMigrationUnitExtension> extensions = migrationUnitExtensionsMap.get(unitID);
-					for (final IMigrationUnitExtension ext : extensions) {
-						ext.setMigrationUnit(nextUnit);
-						nextUnit = ext;
+			// Phase two, get scenario migration units
+			{
+
+				IMigrationUnit nextUnit = scenarioFroms.get(currentScenarioVersion);
+				// Is there another unit?
+				if (nextUnit == null) {
+					throw new RuntimeException(String.format("Unable to find migration chain between verions %d and %d for context %s.", fromScenarioVersion, toScenarioVersion, scenarioContext));
+				}
+
+				// Wrap the migration unit in any extension points found.
+				if (migrationExtPointIDMap.containsKey(nextUnit)) {
+					final String unitID = migrationExtPointIDMap.get(nextUnit);
+					if (migrationUnitExtensionsMap.containsKey(unitID)) {
+						final List<IMigrationUnitExtension> extensions = migrationUnitExtensionsMap.get(unitID);
+						for (final IMigrationUnitExtension ext : extensions) {
+							ext.setMigrationUnit(nextUnit);
+							nextUnit = ext;
+						}
 					}
 				}
+
+				// Add unit to chain
+				chain.add(nextUnit);
+				// Next version to find!
+				currentScenarioVersion = nextUnit.getScenarioDestinationVersion();
 			}
-
-			// Add unit to chain
-			chain.add(nextUnit);
-			// Next version to find!
-			currentVersion = nextUnit.getDestinationVersion();
 		}
-
 		return chain;
 	}
 
@@ -182,8 +252,8 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * @param unit
 	 */
 	public void registerMigrationUnit(@NonNull final IMigrationUnit unit) {
-		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(unit.getContext());
-		map.put(unit.getSourceVersion(), unit);
+		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(unit.getScenarioContext());
+		map.put(unit.getScenarioSourceVersion(), unit);
 	}
 
 	/**
@@ -217,6 +287,84 @@ public class MigrationRegistry implements IMigrationRegistry {
 	public int getLastReleaseVersion(@NonNull final String context) {
 
 		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(context);
+		int lastNumber = -1;
+		for (final Integer v : map.keySet()) {
+			if (v.intValue() > lastNumber) {
+				lastNumber = v.intValue();
+			}
+		}
+		return lastNumber;
+	}
+
+	/**
+	 * Register a migration context and the latest version of the context.
+	 * 
+	 * @param context
+	 * @param latestVersion
+	 */
+	public void registerClientContext(@NonNull final String context, final int latestVersion) {
+
+		if (clientContexts.containsKey(context)) {
+			throw new IllegalStateException("Client Context already registered: " + context);
+		}
+		clientContexts.put(context, latestVersion);
+		clientFromVersionMap.put(context, new HashMap<Integer, IClientMigrationUnit>());
+	}
+
+	/**
+	 * Register an {@link IMigrationUnit} with this registry
+	 * 
+	 * @param unit
+	 */
+	public void registerClientMigrationUnit(@NonNull final IClientMigrationUnit unit) {
+		final Map<Integer, IClientMigrationUnit> map = clientFromVersionMap.get(unit.getClientContext());
+		map.put(unit.getClientSourceVersion(), unit);
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public void registerClientMigrationUnit(final String id, @NonNull final IClientMigrationUnit unit) {
+		registerClientMigrationUnit(unit);
+		clientMigrationExtPointIDMap.put(unit, id);
+	}
+
+	@Override
+	public boolean isClientContextRegistered(@NonNull final String context) {
+		return clientContexts.containsKey(context);
+	}
+
+	@Override
+	@NonNull
+	public Collection<String> getClientMigrationContexts() {
+		return clientContexts.keySet();
+
+	}
+
+	@Override
+	public int getLatestClientContextVersion(@NonNull final String context) {
+		// Scenarios may not have a context, so return 0 here rather than throw exception later.
+		if (context == null || context.isEmpty()) {
+			return 0;
+		}
+
+		if (clientContexts.containsKey(context)) {
+			return clientContexts.get(context);
+		}
+
+		throw new IllegalArgumentException("Unknown client context: " + context);
+	}
+
+	@Override
+	@Nullable
+	public String getDefaultClientMigrationContext() {
+		return defaultClientContext;
+	}
+
+	@Override
+	public int getLastReleaseClientVersion(@NonNull final String context) {
+
+		final Map<Integer, IClientMigrationUnit> map = clientFromVersionMap.get(context);
 		int lastNumber = -1;
 		for (final Integer v : map.keySet()) {
 			if (v.intValue() > lastNumber) {

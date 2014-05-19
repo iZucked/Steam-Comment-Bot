@@ -32,26 +32,30 @@ public class ScenarioInstanceMigratorTest {
 
 		final URI tmpURI = URI.createURI("migration");
 
-		final String context = "Context";
+		final String scenarioContext = "ScenarioContext";
 		final int scenarioVersion = 1;
-		final int latestVersion = 3;
+		final int latestScenarioVersion = 3;
+		
+		final String clientContext = "ClientContext";
+		final int clientVersion = 0;
+		final int latestClientVersion = 0;
 
 		final IMigrationUnit unit1 = Mockito.mock(IMigrationUnit.class);
-		when(unit1.getContext()).thenReturn(context);
-		when(unit1.getSourceVersion()).thenReturn(1);
-		when(unit1.getDestinationVersion()).thenReturn(2);
+		when(unit1.getScenarioContext()).thenReturn(scenarioContext);
+		when(unit1.getScenarioSourceVersion()).thenReturn(1);
+		when(unit1.getScenarioDestinationVersion()).thenReturn(2);
 
 		final IMigrationUnit unit2 = Mockito.mock(IMigrationUnit.class);
-		when(unit2.getContext()).thenReturn(context);
-		when(unit2.getSourceVersion()).thenReturn(2);
-		when(unit2.getDestinationVersion()).thenReturn(3);
+		when(unit2.getScenarioContext()).thenReturn(scenarioContext);
+		when(unit2.getScenarioSourceVersion()).thenReturn(2);
+		when(unit2.getScenarioDestinationVersion()).thenReturn(3);
 
 		final List<IMigrationUnit> units = Lists.newArrayList(unit1, unit2);
 
-		when(migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion)).thenReturn(units);
+		when(migrationRegistry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion)).thenReturn(units);
 
 		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry, scenarioCipherProvider);
-		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURI);
+		migrator.applyMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion, tmpURI);
 
 		final InOrder order = inOrder(unit1, unit2);
 		order.verify(unit1).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());

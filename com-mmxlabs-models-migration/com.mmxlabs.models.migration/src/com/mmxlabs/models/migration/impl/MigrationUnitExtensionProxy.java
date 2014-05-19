@@ -53,17 +53,17 @@ class MigrationUnitExtensionProxy implements IMigrationUnitExtension {
 	}
 
 	@Override
-	public String getContext() {
-		return migrationUnit.getContext();
+	public String getScenarioContext() {
+		return migrationUnit.getScenarioContext();
 	}
 
 	@Override
-	public int getSourceVersion() {
-		return migrationUnit.getSourceVersion();
+	public int getScenarioSourceVersion() {
+		return migrationUnit.getScenarioSourceVersion();
 	}
 
 	@Override
-	public int getDestinationVersion() {
-		return migrationUnit.getDestinationVersion();
+	public int getScenarioDestinationVersion() {
+		return migrationUnit.getScenarioDestinationVersion();
 	}
 }

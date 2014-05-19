@@ -23,6 +23,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.common.io.FileDeleter;
+import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
@@ -42,22 +43,26 @@ public class ScenarioInstanceMigrator {
 	private final IMigrationRegistry migrationRegistry;
 	private final IScenarioCipherProvider scenarioCipherProvider;
 
-	public ScenarioInstanceMigrator(final IMigrationRegistry migrationRegistry, IScenarioCipherProvider scenarioCipherProvider) {
+	public ScenarioInstanceMigrator(final IMigrationRegistry migrationRegistry, final IScenarioCipherProvider scenarioCipherProvider) {
 		this.migrationRegistry = migrationRegistry;
 		this.scenarioCipherProvider = scenarioCipherProvider;
 	}
 
 	public void performMigration(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
 		// Check inputs
-		final String context = scenarioInstance.getVersionContext();
+		final String scenarioContext = scenarioInstance.getVersionContext();
+		final String clientContext = scenarioInstance.getClientVersionContext();
 
-		checkArgument(context != null, "Scenario has no version context. Unable to migrate");
+		checkArgument(scenarioContext != null, "Scenario has no version context. Unable to migrate");
 		checkArgument(scenarioInstance.getInstance() == null, "Scenario already loaded. Unable to migrate");
 
-		assert context != null;
+		assert scenarioContext != null;
 
-		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
-		int scenarioVersion = scenarioInstance.getScenarioVersion();
+		final int latestScenarioVersion = migrationRegistry.getLatestContextVersion(scenarioContext);
+		final int latestClientVersion = migrationRegistry.getLatestClientContextVersion(clientContext);
+		int currentScenarioVersion = scenarioInstance.getScenarioVersion();
+		int currentClientVersion = scenarioInstance.getClientScenarioVersion();
+
 		final String subModelURI = scenarioInstance.getRootObjectURI();
 
 		final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
@@ -76,12 +81,16 @@ public class ScenarioInstanceMigrator {
 			assert tmpURI != null;
 			copyURIData(uc, originalURI, tmpURI);
 
-			if (scenarioVersion < 0) {
-				int lastReleaseVersion = migrationRegistry.getLastReleaseVersion(context);
-				scenarioVersion = lastReleaseVersion;
+			if (currentScenarioVersion < 0) {
+				final int lastReleaseVersion = migrationRegistry.getLastReleaseVersion(scenarioContext);
+				currentScenarioVersion = lastReleaseVersion;
+			}
+			if (currentClientVersion < 0) {
+				final int lastReleaseVersion = migrationRegistry.getLastReleaseClientVersion(clientContext);
+				currentClientVersion = lastReleaseVersion;
 			}
 			// Apply Migration Chain
-			final int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURI);
+			final int[] migratedVersion = applyMigrationChain(scenarioContext, currentClientVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion, tmpURI);
 
 			// Sanity check - can we load the new scenario without error?
 			{
@@ -110,7 +119,8 @@ public class ScenarioInstanceMigrator {
 				copyURIData(new ExtensibleURIConverterImpl(), tmpURI, uri);
 			}
 
-			scenarioInstance.setScenarioVersion(migratedVersion);
+			scenarioInstance.setScenarioVersion(migratedVersion[0]);
+			scenarioInstance.setClientScenarioVersion(migratedVersion[1]);
 
 		} finally {
 			// Done! Clean up
@@ -133,21 +143,32 @@ public class ScenarioInstanceMigrator {
 	 * @throws Exception
 	 * @since 3.0
 	 */
-	public int applyMigrationChain(@NonNull final String context, final int scenarioVersion, final int latestVersion, @NonNull final URI tmpURI) throws Exception {
+	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @NonNull final String clientContext,
+			final int currentClientVersion, final int latestClientVersion, @NonNull final URI tmpURI) throws Exception {
 
-		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion);
+		final List<IMigrationUnit> chain = migrationRegistry
+				.getMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion);
 
-		int version = scenarioVersion;
+		int scenarioVersion = currentScenarioVersion;
+		int clientVersion = currentScenarioVersion;
 		for (final IMigrationUnit unit : chain) {
 
 			unit.migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
 
+			if (unit instanceof IClientMigrationUnit) {
+				final IClientMigrationUnit clientMigrationUnit = (IClientMigrationUnit) unit;
+				// Only return real version numbers - ignore snapshot versions
+				if (clientMigrationUnit.getClientDestinationVersion() >= 0) {
+					clientVersion = clientMigrationUnit.getClientDestinationVersion();
+				}
+			}
+
 			// Only return real version numbers - ignore snapshot versions
-			if (unit.getDestinationVersion() >= 0) {
-				version = unit.getDestinationVersion();
+			if (unit.getScenarioDestinationVersion() >= 0) {
+				scenarioVersion = unit.getScenarioDestinationVersion();
 			}
 		}
-		return version;
+		return new int[] { scenarioVersion, clientVersion };
 	}
 
 	@SuppressWarnings("resource")

@@ -38,7 +38,7 @@ public class MigrationRegistryTests {
 		final String context = "context";
 
 		Assert.assertFalse(registry.isContextRegistered(context));
-		registry.getMigrationChain(context, -1, -1);
+		registry.getMigrationChain(context, -1, -1, null, 0, 0);
 	}
 
 	@Test
@@ -54,7 +54,7 @@ public class MigrationRegistryTests {
 		Assert.assertTrue(registry.isContextRegistered(context));
 
 		Assert.assertEquals(latestVersion, registry.getLatestContextVersion(context));
-		Assert.assertNotNull(registry.getMigrationChain(context, -1, -1));
+		Assert.assertNotNull(registry.getMigrationChain(context, -1, -1, null, 0, 0));
 	}
 
 	@Test
@@ -68,32 +68,32 @@ public class MigrationRegistryTests {
 		registry.registerContext(context, latestVersion);
 
 		final IMigrationUnit unit1 = mock(IMigrationUnit.class);
-		when(unit1.getContext()).thenReturn(context);
-		when(unit1.getSourceVersion()).thenReturn(1);
-		when(unit1.getDestinationVersion()).thenReturn(2);
+		when(unit1.getScenarioContext()).thenReturn(context);
+		when(unit1.getScenarioSourceVersion()).thenReturn(1);
+		when(unit1.getScenarioDestinationVersion()).thenReturn(2);
 
 		final IMigrationUnit unit2 = mock(IMigrationUnit.class);
-		when(unit2.getContext()).thenReturn(context);
-		when(unit2.getSourceVersion()).thenReturn(2);
-		when(unit2.getDestinationVersion()).thenReturn(3);
+		when(unit2.getScenarioContext()).thenReturn(context);
+		when(unit2.getScenarioSourceVersion()).thenReturn(2);
+		when(unit2.getScenarioDestinationVersion()).thenReturn(3);
 
 		final IMigrationUnit unit3 = mock(IMigrationUnit.class);
-		when(unit3.getContext()).thenReturn(context);
-		when(unit3.getSourceVersion()).thenReturn(3);
-		when(unit3.getDestinationVersion()).thenReturn(10);
+		when(unit3.getScenarioContext()).thenReturn(context);
+		when(unit3.getScenarioSourceVersion()).thenReturn(3);
+		when(unit3.getScenarioDestinationVersion()).thenReturn(10);
 
 		registry.registerMigrationUnit(unit3);
 		registry.registerMigrationUnit(unit2);
 		registry.registerMigrationUnit(unit1);
 
-		final List<IMigrationUnit> chain0 = registry.getMigrationChain(context, 1, 1);
+		final List<IMigrationUnit> chain0 = registry.getMigrationChain(context, 1, 1, null, 0, 0);
 		Assert.assertTrue(chain0.isEmpty());
 
-		final List<IMigrationUnit> chain1 = registry.getMigrationChain(context, 1, 2);
+		final List<IMigrationUnit> chain1 = registry.getMigrationChain(context, 1, 2, null, 0, 0);
 		Assert.assertEquals(1, chain1.size());
 		Assert.assertSame(unit1, chain1.get(0));
 
-		final List<IMigrationUnit> chain2 = registry.getMigrationChain(context, 1, 10);
+		final List<IMigrationUnit> chain2 = registry.getMigrationChain(context, 1, 10, null, 0, 0);
 		Assert.assertEquals(3, chain2.size());
 		Assert.assertSame(unit1, chain2.get(0));
 		Assert.assertSame(unit2, chain2.get(1));
@@ -115,19 +115,19 @@ public class MigrationRegistryTests {
 		registry.registerContext(context, latestVersion);
 
 		final IMigrationUnit unit1 = mock(IMigrationUnit.class);
-		when(unit1.getContext()).thenReturn(context);
-		when(unit1.getSourceVersion()).thenReturn(1);
-		when(unit1.getDestinationVersion()).thenReturn(2);
+		when(unit1.getScenarioContext()).thenReturn(context);
+		when(unit1.getScenarioSourceVersion()).thenReturn(1);
+		when(unit1.getScenarioDestinationVersion()).thenReturn(2);
 
 		final IMigrationUnit unit2 = mock(IMigrationUnit.class);
-		when(unit2.getContext()).thenReturn(context);
-		when(unit2.getSourceVersion()).thenReturn(2);
-		when(unit2.getDestinationVersion()).thenReturn(3);
+		when(unit2.getScenarioContext()).thenReturn(context);
+		when(unit2.getScenarioSourceVersion()).thenReturn(2);
+		when(unit2.getScenarioDestinationVersion()).thenReturn(3);
 
 		final IMigrationUnit unit3 = mock(IMigrationUnit.class);
-		when(unit3.getContext()).thenReturn(context);
-		when(unit3.getSourceVersion()).thenReturn(3);
-		when(unit3.getDestinationVersion()).thenReturn(10);
+		when(unit3.getScenarioContext()).thenReturn(context);
+		when(unit3.getScenarioSourceVersion()).thenReturn(3);
+		when(unit3.getScenarioDestinationVersion()).thenReturn(10);
 
 		registry.registerMigrationUnit(unit3ID, unit3);
 		registry.registerMigrationUnit(unit2ID, unit2);
@@ -142,14 +142,14 @@ public class MigrationRegistryTests {
 		};
 		registry.registerMigrationUnitExtension(unit1ID, ext1);
 
-		final List<IMigrationUnit> chain0 = registry.getMigrationChain(context, 1, 1);
+		final List<IMigrationUnit> chain0 = registry.getMigrationChain(context, 1, 1, null, 0, 0);
 		Assert.assertTrue(chain0.isEmpty());
 
-		final List<IMigrationUnit> chain1 = registry.getMigrationChain(context, 1, 2);
+		final List<IMigrationUnit> chain1 = registry.getMigrationChain(context, 1, 2, null, 0, 0);
 		Assert.assertEquals(1, chain1.size());
 		Assert.assertSame(ext1, chain1.get(0));
 
-		final List<IMigrationUnit> chain2 = registry.getMigrationChain(context, 1, 10);
+		final List<IMigrationUnit> chain2 = registry.getMigrationChain(context, 1, 10, null, 0, 0);
 		Assert.assertEquals(3, chain2.size());
 		Assert.assertSame(ext1, chain2.get(0));
 		Assert.assertSame(unit2, chain2.get(1));
