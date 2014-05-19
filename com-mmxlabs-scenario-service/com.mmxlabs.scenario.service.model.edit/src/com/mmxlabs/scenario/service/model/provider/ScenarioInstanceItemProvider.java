@@ -65,6 +65,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 			addScenarioVersionPropertyDescriptor(object);
 			addVersionContextPropertyDescriptor(object);
 			addReadonlyPropertyDescriptor(object);
+			addClientScenarioVersionPropertyDescriptor(object);
+			addClientVersionContextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -155,6 +157,32 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
 				getString("_UI_ScenarioInstance_readonly_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_readonly_feature", "_UI_ScenarioInstance_type"),
 				ScenarioServicePackage.eINSTANCE.getScenarioInstance_Readonly(), true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Client Scenario Version feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addClientScenarioVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_clientScenarioVersion_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_clientScenarioVersion_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientScenarioVersion(), true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Client Version Context feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addClientVersionContextPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_clientVersionContext_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_clientVersionContext_feature", "_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.eINSTANCE.getScenarioInstance_ClientVersionContext(), true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -277,6 +305,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:

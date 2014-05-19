@@ -123,13 +123,31 @@ public interface ManifestPackage extends EPackage {
 	int MANIFEST__VERSION_CONTEXT = 5;
 
 	/**
+	 * The feature id for the '<em><b>Client Scenario Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANIFEST__CLIENT_SCENARIO_VERSION = 6;
+
+	/**
+	 * The feature id for the '<em><b>Client Version Context</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANIFEST__CLIENT_VERSION_CONTEXT = 7;
+
+	/**
 	 * The number of structural features of the '<em>Manifest</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MANIFEST_FEATURE_COUNT = 6;
+	int MANIFEST_FEATURE_COUNT = 8;
 
 
 	/**
@@ -209,6 +227,28 @@ public interface ManifestPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getManifest_VersionContext();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.manifest.Manifest#getClientScenarioVersion <em>Client Scenario Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Client Scenario Version</em>'.
+	 * @see com.mmxlabs.scenario.service.manifest.Manifest#getClientScenarioVersion()
+	 * @see #getManifest()
+	 * @generated
+	 */
+	EAttribute getManifest_ClientScenarioVersion();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.manifest.Manifest#getClientVersionContext <em>Client Version Context</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Client Version Context</em>'.
+	 * @see com.mmxlabs.scenario.service.manifest.Manifest#getClientVersionContext()
+	 * @see #getManifest()
+	 * @generated
+	 */
+	EAttribute getManifest_ClientVersionContext();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -291,6 +331,22 @@ public interface ManifestPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MANIFEST__VERSION_CONTEXT = eINSTANCE.getManifest_VersionContext();
+
+		/**
+		 * The meta object literal for the '<em><b>Client Scenario Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MANIFEST__CLIENT_SCENARIO_VERSION = eINSTANCE.getManifest_ClientScenarioVersion();
+
+		/**
+		 * The meta object literal for the '<em><b>Client Version Context</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MANIFEST__CLIENT_VERSION_CONTEXT = eINSTANCE.getManifest_ClientVersionContext();
 
 	}
 

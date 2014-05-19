@@ -29,6 +29,8 @@ import com.mmxlabs.scenario.service.manifest.ManifestPackage;
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getScenarioType <em>Scenario Type</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getVersionContext <em>Version Context</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getClientVersionContext <em>Client Version Context</em>}</li>
  * </ul>
  * </p>
  *
@@ -138,6 +140,46 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * @ordered
 	 */
 	protected String versionContext = VERSION_CONTEXT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getClientScenarioVersion() <em>Client Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getClientScenarioVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int CLIENT_SCENARIO_VERSION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getClientScenarioVersion() <em>Client Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getClientScenarioVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected int clientScenarioVersion = CLIENT_SCENARIO_VERSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getClientVersionContext() <em>Client Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getClientVersionContext()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String CLIENT_VERSION_CONTEXT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getClientVersionContext() <em>Client Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getClientVersionContext()
+	 * @generated
+	 * @ordered
+	 */
+	protected String clientVersionContext = CLIENT_VERSION_CONTEXT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -286,6 +328,52 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * @generated
 	 */
 	@Override
+	public int getClientScenarioVersion() {
+		return clientScenarioVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setClientScenarioVersion(int newClientScenarioVersion) {
+		int oldClientScenarioVersion = clientScenarioVersion;
+		clientScenarioVersion = newClientScenarioVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManifestPackage.MANIFEST__CLIENT_SCENARIO_VERSION, oldClientScenarioVersion, clientScenarioVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getClientVersionContext() {
+		return clientVersionContext;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setClientVersionContext(String newClientVersionContext) {
+		String oldClientVersionContext = clientVersionContext;
+		clientVersionContext = newClientVersionContext;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT, oldClientVersionContext, clientVersionContext));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ManifestPackage.MANIFEST__MODEL_UR_IS:
@@ -300,6 +388,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return getScenarioVersion();
 			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
 				return getVersionContext();
+			case ManifestPackage.MANIFEST__CLIENT_SCENARIO_VERSION:
+				return getClientScenarioVersion();
+			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
+				return getClientVersionContext();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -333,6 +425,12 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
 				setVersionContext((String)newValue);
 				return;
+			case ManifestPackage.MANIFEST__CLIENT_SCENARIO_VERSION:
+				setClientScenarioVersion((Integer)newValue);
+				return;
+			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
+				setClientVersionContext((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -363,6 +461,12 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
 				setVersionContext(VERSION_CONTEXT_EDEFAULT);
 				return;
+			case ManifestPackage.MANIFEST__CLIENT_SCENARIO_VERSION:
+				setClientScenarioVersion(CLIENT_SCENARIO_VERSION_EDEFAULT);
+				return;
+			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
+				setClientVersionContext(CLIENT_VERSION_CONTEXT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -387,6 +491,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return scenarioVersion != SCENARIO_VERSION_EDEFAULT;
 			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
 				return VERSION_CONTEXT_EDEFAULT == null ? versionContext != null : !VERSION_CONTEXT_EDEFAULT.equals(versionContext);
+			case ManifestPackage.MANIFEST__CLIENT_SCENARIO_VERSION:
+				return clientScenarioVersion != CLIENT_SCENARIO_VERSION_EDEFAULT;
+			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
+				return CLIENT_VERSION_CONTEXT_EDEFAULT == null ? clientVersionContext != null : !CLIENT_VERSION_CONTEXT_EDEFAULT.equals(clientVersionContext);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -413,6 +521,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 		result.append(scenarioVersion);
 		result.append(", versionContext: ");
 		result.append(versionContext);
+		result.append(", clientScenarioVersion: ");
+		result.append(clientScenarioVersion);
+		result.append(", clientVersionContext: ");
+		result.append(clientVersionContext);
 		result.append(')');
 		return result.toString();
 	}

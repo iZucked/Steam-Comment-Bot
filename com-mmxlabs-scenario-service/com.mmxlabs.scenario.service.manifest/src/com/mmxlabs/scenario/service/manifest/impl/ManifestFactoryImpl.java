@@ -29,7 +29,7 @@ public class ManifestFactoryImpl extends EFactoryImpl implements ManifestFactory
 	 */
 	public static ManifestFactory init() {
 		try {
-			ManifestFactory theManifestFactory = (ManifestFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/scenario/manifest/1/"); 
+			ManifestFactory theManifestFactory = (ManifestFactory)EPackage.Registry.INSTANCE.getEFactory(ManifestPackage.eNS_URI);
 			if (theManifestFactory != null) {
 				return theManifestFactory;
 			}
