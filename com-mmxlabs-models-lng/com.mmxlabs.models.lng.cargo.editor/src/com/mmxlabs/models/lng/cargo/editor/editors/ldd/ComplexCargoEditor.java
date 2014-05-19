@@ -88,7 +88,6 @@ public class ComplexCargoEditor extends Dialog {
 
 	private DialogValidationSupport validationSupport;
 
-	// private final IScenarioEditingLocation scenarioEditingLocation;
 	private final ObservablesManager observablesManager = new ObservablesManager();
 	private final EMFDataBindingContext dbc = new EMFDataBindingContext();
 
@@ -105,19 +104,15 @@ public class ComplexCargoEditor extends Dialog {
 
 	private IDialogEditingContext dialogContext;
 
-	private IScenarioEditingLocation scenarioEditingLocation;
 
 	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
 		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
-		this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
 	public ComplexCargoEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
 		super(parentShell);
 		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
-
-		// this.scenarioEditingLocation = scenarioEditingLocation;
 	}
 
 	@Override
@@ -292,7 +287,7 @@ public class ComplexCargoEditor extends Dialog {
 				private final LNGScenarioModel scenarioModel = (LNGScenarioModel) sel.getRootObject();
 
 				private Menu menu;
-				private final CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), scenarioEditingLocation, scenarioModel, scenarioModel.getPortfolioModel());
+				private final CargoEditorMenuHelper menuHelper = new CargoEditorMenuHelper(viewer.getGrid().getShell(), dialogContext.getScenarioEditingLocation(), scenarioModel, scenarioModel.getPortfolioModel());
 
 				@Override
 				public void menuDetected(final MenuDetectEvent e) {
