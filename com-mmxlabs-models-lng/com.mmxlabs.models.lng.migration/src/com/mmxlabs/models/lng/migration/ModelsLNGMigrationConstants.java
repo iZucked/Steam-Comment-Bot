@@ -13,7 +13,7 @@ public final class ModelsLNGMigrationConstants {
 
 	// Context under which migration units
 	// DO NOT CHANGE
-	public static final String Context = "com.mmxlabs.models.lng";
+	public static final String Context = "com.mmxlabs.lingo";
 
 	// The namespace URI's
 	public static final String NSURI_MMXCore = "http://www.mmxlabs.com/models/mmxcore/1/";
