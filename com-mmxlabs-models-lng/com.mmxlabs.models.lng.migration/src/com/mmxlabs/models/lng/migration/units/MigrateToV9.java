@@ -29,17 +29,17 @@ public class MigrateToV9 extends AbstractMigrationUnit {
 	private MetamodelLoader sourceLoader;
 
 	@Override
-	public String getContext() {
+	public String getScenarioContext() {
 		return ModelsLNGMigrationConstants.Context;
 	}
 
 	@Override
-	public int getSourceVersion() {
+	public int getScenarioSourceVersion() {
 		return 8;
 	}
 
 	@Override
-	public int getDestinationVersion() {
+	public int getScenarioDestinationVersion() {
 		return 9;
 	}
 
