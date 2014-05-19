@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
@@ -112,7 +113,10 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_capabilitiesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final PortCapability capability : PortCapability.values()) {
-			detailComposite.addInlineEditor(new EnumCheckboxEditor(PortPackage.Literals.PORT__CAPABILITIES, capability, "Can "));
+
+			if (capability != PortCapability.TRANSFER || SecurityUtils.getSubject().isPermitted("features:shiptoship")) {
+				detailComposite.addInlineEditor(new EnumCheckboxEditor(PortPackage.Literals.PORT__CAPABILITIES, capability, "Can "));
+			}
 		}
 	}
 

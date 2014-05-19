@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -107,104 +108,108 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 
 		// add an inline editor for each port capability
 		for (final PortCapability capability : PortCapability.values()) {
-			final NumberInlineEditor numberEditor = new NumberInlineEditor(PricingPackage.eINSTANCE.getPortCostEntry_Cost());
-			detailComposite.addInlineEditor(new IInlineEditor() {
 
-				@Override
-				public void setLabel(Label label) {
-					label.setText(capability.getName() + " cost");
-				}
+			if (capability != PortCapability.TRANSFER || SecurityUtils.getSubject().isPermitted("features:shiptoship")) {
 
-				@Override
-				public void setCommandHandler(ICommandHandler handler) {
-					numberEditor.setCommandHandler(handler);
-				}
+				final NumberInlineEditor numberEditor = new NumberInlineEditor(PricingPackage.eINSTANCE.getPortCostEntry_Cost());
+				detailComposite.addInlineEditor(new IInlineEditor() {
 
-				@Override
-				public void processValidation(IStatus status) {
-					numberEditor.processValidation(status);
-				}
-
-				@Override
-				public EStructuralFeature getFeature() {
-					return numberEditor.getFeature();
-				}
-
-				@Override
-				public void display(final IDialogEditingContext dialogContext, MMXRootObject scenario, EObject object, final Collection<EObject> range) {
-					// mangle
-					if (object instanceof PortCost) {
-						final PortCost pc = (PortCost) object;
-						for (final PortCostEntry entry : pc.getEntries()) {
-							if (entry.getActivity() == capability) {
-								numberEditor.display(dialogContext, scenario, entry, range);
-								return;
-							}
-						}
-						final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
-						entry.setActivity(capability);
-						pc.getEntries().add(entry);
-						numberEditor.display(dialogContext, scenario, entry, range);
+					@Override
+					public void setLabel(Label label) {
+						label.setText(capability.getName() + " cost");
 					}
-				}
 
-				@Override
-				public Control createControl(Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
-					return numberEditor.createControl(parent, dbc, toolkit);
-				}
+					@Override
+					public void setCommandHandler(ICommandHandler handler) {
+						numberEditor.setCommandHandler(handler);
+					}
 
-				@Override
-				public void setEditorLocked(boolean locked) {
-					numberEditor.setEditorLocked(locked);
-				}
+					@Override
+					public void processValidation(IStatus status) {
+						numberEditor.processValidation(status);
+					}
 
-				@Override
-				public boolean isEditorLocked() {
-					return numberEditor.isEditorLocked();
-				}
+					@Override
+					public EStructuralFeature getFeature() {
+						return numberEditor.getFeature();
+					}
 
-				@Override
-				public void setEditorEnabled(boolean enabled) {
-					numberEditor.setEditorEnabled(enabled);
-				}
+					@Override
+					public void display(final IDialogEditingContext dialogContext, MMXRootObject scenario, EObject object, final Collection<EObject> range) {
+						// mangle
+						if (object instanceof PortCost) {
+							final PortCost pc = (PortCost) object;
+							for (final PortCostEntry entry : pc.getEntries()) {
+								if (entry.getActivity() == capability) {
+									numberEditor.display(dialogContext, scenario, entry, range);
+									return;
+								}
+							}
+							final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
+							entry.setActivity(capability);
+							pc.getEntries().add(entry);
+							numberEditor.display(dialogContext, scenario, entry, range);
+						}
+					}
 
-				@Override
-				public boolean isEditorEnabled() {
-					return numberEditor.isEditorEnabled();
-				}
+					@Override
+					public Control createControl(Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
+						return numberEditor.createControl(parent, dbc, toolkit);
+					}
 
-				@Override
-				public void setEditorVisible(boolean visible) {
-					numberEditor.setEditorVisible(visible);
-				}
+					@Override
+					public void setEditorLocked(boolean locked) {
+						numberEditor.setEditorLocked(locked);
+					}
 
-				@Override
-				public boolean isEditorVisible() {
-					return numberEditor.isEditorVisible();
-				}
+					@Override
+					public boolean isEditorLocked() {
+						return numberEditor.isEditorLocked();
+					}
 
-				@Override
-				public EObject getEditorTarget() {
-					return numberEditor.getEditorTarget();
-				}
+					@Override
+					public void setEditorEnabled(boolean enabled) {
+						numberEditor.setEditorEnabled(enabled);
+					}
 
-				@Override
-				public Label getLabel() {
-					return numberEditor.getLabel();
-				}
+					@Override
+					public boolean isEditorEnabled() {
+						return numberEditor.isEditorEnabled();
+					}
 
-				@Override
-				public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
-					// TODO Auto-generated method stub
-					
-				}
+					@Override
+					public void setEditorVisible(boolean visible) {
+						numberEditor.setEditorVisible(visible);
+					}
 
-				@Override
-				public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
-					// TODO Auto-generated method stub
-					
-				}
-			});
+					@Override
+					public boolean isEditorVisible() {
+						return numberEditor.isEditorVisible();
+					}
+
+					@Override
+					public EObject getEditorTarget() {
+						return numberEditor.getEditorTarget();
+					}
+
+					@Override
+					public Label getLabel() {
+						return numberEditor.getLabel();
+					}
+
+					@Override
+					public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+			}
 		}
 	}
 
