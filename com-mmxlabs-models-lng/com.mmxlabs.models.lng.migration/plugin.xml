@@ -11,7 +11,7 @@
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
             latestVersion="17"
-            name="com.mmxlabs.models.lng">
+            name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
    <extension
@@ -19,118 +19,118 @@
       <MigrationUnit
             id="com.mmxlabs.models.lng.migration.units.MigrateToV1"
             class="com.mmxlabs.models.lng.migration.units.MigrateToV1"
-            context="com.mmxlabs.models.lng"
+            context="com.mmxlabs.lingo"
             from="0"
             to="1">
       </MigrationUnit>
       <MigrationUnit
             class="com.mmxlabs.models.lng.migration.units.MigrateToV2"
-            context="com.mmxlabs.models.lng"
+            context="com.mmxlabs.lingo"
             from="1"
             id="com.mmxlabs.models.lng.migration.units.MigrateToV2"
             to="2">
       </MigrationUnit>
       <MigrationUnit
             class="com.mmxlabs.models.lng.migration.units.MigrateToV3"
-            context="com.mmxlabs.models.lng"
+            context="com.mmxlabs.lingo"
             from="2"
             id="com.mmxlabs.models.lng.migration.units.MigrateToV3"
             to="3">
       </MigrationUnit>
       <MigrationUnit
             class="com.mmxlabs.models.lng.migration.units.MigrateToV4"
-            context="com.mmxlabs.models.lng"
+            context="com.mmxlabs.lingo"
             from="3"
             id="com.mmxlabs.models.lng.migration.units.MigrateToV4"
             to="4">
       </MigrationUnit>
       <MigrationUnit
             class="com.mmxlabs.models.lng.migration.units.MigrateToV5"
-            context="com.mmxlabs.models.lng"
+            context="com.mmxlabs.lingo"
             from="4"
             id="com.mmxlabs.models.lng.migration.units.MigrateToV5"
             to="5">
       </MigrationUnit>
        <MigrationUnit
             class="com.mmxlabs.models.lng.migration.units.MigrateToV6"
-            context="com.mmxlabs.models.lng"
+            context="com.mmxlabs.lingo"
             from="5"
             id="com.mmxlabs.models.lng.migration.units.MigrateToV6"
             to="6">
       </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV7"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="6"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV7"
              to="7">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV8"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="7"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV8"
              to="8">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV9"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="8"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV9"
              to="9">
        </MigrationUnit>
         <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV10"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="9"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV10"
              to="10">
        </MigrationUnit>
         <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV11"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="10"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV11"
              to="11">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV12"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="11"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV12"
              to="12">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV13"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="12"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV13"
              to="13">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV14"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="13"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV14"
              to="14">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV15"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="14"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV15"
              to="15">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV16"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="15"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV16"
              to="16">
        </MigrationUnit>
        <MigrationUnit
              class="com.mmxlabs.models.lng.migration.units.MigrateToV17"
-             context="com.mmxlabs.models.lng"
+             context="com.mmxlabs.lingo"
              from="16"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV17"
              to="17">
