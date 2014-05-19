@@ -83,6 +83,7 @@ public class ListSelectionDialog extends Dialog {
 		private G lastTop;
 		private Object lastInput;
 
+		// Row element??
 		private class E {
 			public final Object value;
 			public final G parent;
@@ -93,6 +94,7 @@ public class ListSelectionDialog extends Dialog {
 			}
 		}
 
+		// Tree node grouping?
 		private class G {
 			public final String name;
 			public final Object[] children;
