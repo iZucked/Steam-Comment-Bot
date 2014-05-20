@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="com.mmxlabs.shiplingo.platform.scheduleview" xmlns="http://www.w3.org/2001/XMLSchema">
+<schema targetNamespace="com.mmxlabs.lingo.reports.scheduleview" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.mmxlabs.shiplingo.platform.scheduleview" id="schedulerViewColourScheme" name="Scheduler View Colour Scheme"/>
+         <meta.schema plugin="com.mmxlabs.lingo.reports.scheduleview" id="schedulerViewColourScheme" name="Scheduler View Colour Scheme"/>
       </appinfo>
       <documentation>
          Extension point to register colour schemes for the Scheduler View
@@ -69,7 +69,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme"/>
+                  <meta.attribute kind="java" basedOn=":com.mmxlabs.ingo.reports.scheduleview.views.IScheduleViewColourScheme"/>
                </appinfo>
             </annotation>
          </attribute>

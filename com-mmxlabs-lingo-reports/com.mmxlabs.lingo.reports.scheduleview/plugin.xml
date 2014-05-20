@@ -19,7 +19,7 @@
             name="Schedule"
             icon="icons/schedule_view.gif"
             category="com.mmxlabs.scheduleview"
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView"
+            class="com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView"
             id="com.mmxlabs.scheduleview.views.SchedulerView">
       </view>
    </extension>
@@ -37,28 +37,28 @@
       </toc>
    </extension>
    <extension
-         point="com.mmxlabs.shiplingo.platform.scheduleview.schedulerViewColourScheme">
+         point="com.mmxlabs.lingo.reports.scheduleview.schedulerViewColourScheme">
             <ColourScheme
-                  class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownHighlighter"
+                  class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.CooldownHighlighter"
                   id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownHighlighter"
                   isHighlighter="true"
                   name="Cooldown">
       </ColourScheme>
       <ColourScheme
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
+            class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.VesselStateColourScheme"
             id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
             isHighlighter="false"
             name="Vessel State">
       </ColourScheme>
       <ColourScheme
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ShippingRiskHighlighter"
+            class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ShippingRiskHighlighter"
             id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ShippingRiskHighlighter"
             isHighlighter="true"
             name="Shipping Risk">
       </ColourScheme>
       <!--
       <ColourScheme
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.StatoilColourScheme"
+            class="com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.StatoilColourScheme"
             id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.LoadProgColourScheme"
             isHighlighter="false"
             name="Loading Prog">
