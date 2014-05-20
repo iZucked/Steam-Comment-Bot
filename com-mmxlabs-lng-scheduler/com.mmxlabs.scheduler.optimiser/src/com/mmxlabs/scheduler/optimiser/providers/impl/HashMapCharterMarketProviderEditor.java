@@ -21,7 +21,6 @@ import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
 
 /**
- * @since 2.0
  */
 public class HashMapCharterMarketProviderEditor implements ICharterMarketProviderEditor {
 

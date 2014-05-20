@@ -33,7 +33,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * Base class for allocating load/discharge volumes; doesn't implement the solve() method, but does do various book-keeping tasks.
  * 
  * @author hinton
- * @since 6.0
  * 
  */
 public abstract class BaseVolumeAllocator implements IVolumeAllocator {

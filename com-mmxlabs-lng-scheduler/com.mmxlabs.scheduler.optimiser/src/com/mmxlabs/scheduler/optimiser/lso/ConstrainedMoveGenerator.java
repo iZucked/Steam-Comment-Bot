@@ -299,21 +299,18 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public Map<ISequenceElement, Followers<ISequenceElement>> getValidFollowers() {
 		return validFollowers;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public Map<ISequenceElement, Followers<ISequenceElement>> getValidPreceeders() {
 		return validPreceeders;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public Map<ISequenceElement, Pair<Integer, Integer>> getReverseLookup() {
 		return reverseLookup;

@@ -23,7 +23,6 @@ public interface ICooldownPriceCalculator extends ICalculator {
 	 * 
 	 * @param sequences
 	 * @param scheduledSequences
-	 * @since 8.0
 	 */
 	public void prepareEvaluation(ISequences sequences);
 

@@ -8,7 +8,6 @@ package com.mmxlabs.scheduler.optimiser.entities;
  * Simple interface describing a contractual entity.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public interface IEntity {

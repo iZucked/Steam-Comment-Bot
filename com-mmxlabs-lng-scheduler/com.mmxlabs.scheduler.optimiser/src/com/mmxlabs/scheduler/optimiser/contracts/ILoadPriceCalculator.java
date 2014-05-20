@@ -27,7 +27,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * {@link #calculateLoadUnitPrice(ILoadSlot, IDischargeSlot, int, int, int)} method.
 	 * 
 	 * @param sequences
-	 * @since 8.0
 	 */
 	public void prepareEvaluation(ISequences sequences);
 
@@ -45,7 +44,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargeVolumeInM3
 	 * 
 	 * @return
-	 * @since 8.0
 	 */
 	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation, IVessel vessel, int vesselStartTime,
 			VoyagePlan plan, IDetailTree annotations);
@@ -62,7 +60,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
 	 * @return
-	 * @since 8.0
 	 */
 	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation,
 			IDetailTree annotations);
@@ -78,7 +75,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param annotations
 	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
 	 * @return
-	 * @since 8.0
 	 */
 	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
 			IDetailTree annotations);
@@ -89,7 +85,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * TODO: Could break out into Cargo, FOB, DES API's TODO: Check array/list in API pass through for least amount of conversions (see base volume allocator & default enitiy value calculator)
 	 * 
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
-	 * @since 8.0
 	 */
 	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, IAllocationAnnotation allocationAnnotation, int[] dischargePricesPerMMBTu, IVessel vessel, int vesselStartTime,
 			VoyagePlan plan, IDetailTree annotations);

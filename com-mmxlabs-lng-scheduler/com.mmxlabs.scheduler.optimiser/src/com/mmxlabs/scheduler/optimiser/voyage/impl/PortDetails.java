@@ -54,7 +54,6 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public final int getFuelUnitPrice(final FuelComponent fuel) {
 		if (!fuelPrice.containsKey(fuel)) {
@@ -68,7 +67,6 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public final void setFuelUnitPrice(final FuelComponent fuel, final int price) {
 		fuelPrice.put(fuel, price);
@@ -83,14 +81,12 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public PortOptions getOptions() {
 		return options;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setOptions(final PortOptions options) {
 		this.options = options;

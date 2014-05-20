@@ -21,7 +21,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
  * Hash map based entity provider / editor.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class HashMapEntityProviderEditor implements IEntityProvider {

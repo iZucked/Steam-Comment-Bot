@@ -250,7 +250,6 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	}
 
 	/**
-	 * @since 2.0
 	 * @return
 	 */
 	public boolean isCharterOutIdleTime() {
@@ -258,7 +257,6 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 	}
 
 	/**
-	 * @since 2.0
 	 * @param charterOutIdleTime
 	 */
 	public void setCharterOutIdleTime(final boolean charterOutIdleTime) {

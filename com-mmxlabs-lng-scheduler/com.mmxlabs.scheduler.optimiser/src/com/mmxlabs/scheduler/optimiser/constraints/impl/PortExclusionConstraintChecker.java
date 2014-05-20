@@ -45,7 +45,6 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 	private INominatedVesselProvider nominatedVesselProvider;
 
 	/**
-	 * @since 2.0
 	 */
 	public PortExclusionConstraintChecker(final String name) {
 		super();

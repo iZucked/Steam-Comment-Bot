@@ -30,7 +30,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvid
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
- * @since 8.0
  */
 public class ShippingHoursRestrictionChecker implements IPairwiseConstraintChecker {
 

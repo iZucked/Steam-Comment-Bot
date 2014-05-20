@@ -41,7 +41,6 @@ public enum CapacityViolationType {
 	MAX_HEEL("Heel Breach"),
 	/**
 	 * Heel lost at the end of the {@link VoyagePlan}. Typically the min heel. This is the heel which cannot be rolled over to the next voyage plan (once heel tracking is merged in)
-	 * @since 8.0
 	 */
 	LOST_HEEL("Lost Heel");
 

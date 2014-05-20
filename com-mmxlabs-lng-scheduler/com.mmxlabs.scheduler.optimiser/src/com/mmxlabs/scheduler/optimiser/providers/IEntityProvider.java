@@ -17,7 +17,6 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
  * TODO: think about this; the fixed price override could be implemented in the calculator with a suitable DCP for checking it. Not sure which is better.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public interface IEntityProvider extends IDataComponentProvider {

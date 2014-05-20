@@ -15,7 +15,6 @@ import com.mmxlabs.optimiser.core.impl.ChainedSequencesManipulator;
 /**
  * A {@link Module} implementation intended for use in a single optimisation/evaluation process. Data structures are singletons. A new {@link Module} instance should be created for each process.
  * 
- * @since 2.0
  */
 public class SequencesManipulatorModule extends AbstractModule {
 

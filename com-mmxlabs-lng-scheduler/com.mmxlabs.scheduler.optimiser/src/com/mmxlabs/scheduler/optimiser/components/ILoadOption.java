@@ -38,7 +38,6 @@ public interface ILoadOption extends IPortSlot {
 	 * Returns the date on which the slot pricing should be based.
 	 * 
 	 * @return
-	 * @since 6.0
 	 */
 	int getPricingDate();
 

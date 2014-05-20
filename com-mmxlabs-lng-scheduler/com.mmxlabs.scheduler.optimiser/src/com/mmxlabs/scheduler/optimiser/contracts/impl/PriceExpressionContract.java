@@ -11,7 +11,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
 /**
- * @since 2.0
  */
 public class PriceExpressionContract extends SimpleContract {
 

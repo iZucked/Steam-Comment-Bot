@@ -21,7 +21,6 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param vesselClass
 	 * @param vesselState
 	 * @param price
-	 * @since 2.0
 	 */
 	public void setRouteCost(String route, IVesselClass vesselClass, VesselState vesselState, long price);
 
@@ -33,7 +32,6 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 *            the route name
 	 * @param price
 	 *            price in dollars
-	 * @since 2.0
 	 */
 	public void setDefaultRouteCost(String route, long price);
 

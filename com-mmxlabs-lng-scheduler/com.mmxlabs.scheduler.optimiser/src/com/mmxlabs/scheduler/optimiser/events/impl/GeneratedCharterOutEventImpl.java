@@ -12,7 +12,6 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
  * Implementation of {@link IIdleEvent}.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public final class GeneratedCharterOutEventImpl extends AbstractScheduledEventImpl implements IGeneratedCharterOutEvent {
 

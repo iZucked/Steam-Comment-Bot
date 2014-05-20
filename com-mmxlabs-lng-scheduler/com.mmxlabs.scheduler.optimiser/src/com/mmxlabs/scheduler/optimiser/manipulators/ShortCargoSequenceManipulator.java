@@ -26,7 +26,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 /**
  * A {@link ISequencesManipulator} to insert return elements into a sequence of Load and Discharge slots on {@link VesselInstanceType#CARGO_SHORTS} sequences.
  * 
- * @since 2.0
  */
 public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 

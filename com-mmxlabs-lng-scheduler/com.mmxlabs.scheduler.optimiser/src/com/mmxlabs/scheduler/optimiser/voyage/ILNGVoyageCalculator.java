@@ -49,7 +49,6 @@ public interface ILNGVoyageCalculator {
 	 * </pre>
 	 * @param sequence
 	 * @return Returns zero for a feasible journey, or a positive integer indicating a relative ranking of problems due to e.g. capacity violations. Returns a negative for a infeasible journey.
-	 * @since 8.0
 	 */
 	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, long startHeelInM3, int baseFuelPricePerMT, List<Integer> arrivalTimes, IDetailsSequenceElement... sequence);
 
@@ -60,7 +59,6 @@ public interface ILNGVoyageCalculator {
 	 * @author Simon McGregor
 	 * @param sequence
 	 * @return Returns a new sequence of appropriate Details objects with fuel cost information attached
-	 * @since 8.0
 	 */
 	List<IDetailsSequenceElement> generateFuelCostCalculatedSequence(IOptionsSequenceElement... sequence);
 }

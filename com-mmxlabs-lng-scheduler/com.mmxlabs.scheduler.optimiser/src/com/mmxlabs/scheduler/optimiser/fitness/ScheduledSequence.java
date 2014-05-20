@@ -35,7 +35,6 @@ public final class ScheduledSequence {
 	private Map<VoyagePlan, IAllocationAnnotation> allocations = new HashMap<>();
 
 	/**
-	 * @since 2.0
 	 */
 	public ScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, final int[] arrivalTimes) {
 		super();
@@ -63,7 +62,6 @@ public final class ScheduledSequence {
 
 	/**
 	 * @return
-	 * @since 2.0
 	 */
 	public int[] getArrivalTimes() {
 		return arrivalTimes;

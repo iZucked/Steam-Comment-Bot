@@ -15,7 +15,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 
 /**
- * @since 6.0
  */
 public class MarkToMarketVessel implements IVessel {
 	private final IMarkToMarket markToMarket;

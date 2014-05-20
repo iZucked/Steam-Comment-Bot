@@ -35,7 +35,6 @@ public interface IFuelUsingEvent {
 	 * 
 	 * @param fuel
 	 * @return
-	 * @since 5.0
 	 */
 	int getFuelUnitPrice(FuelComponent fuel);
 
@@ -44,7 +43,6 @@ public interface IFuelUsingEvent {
 	 * 
 	 * @param fuel
 	 * @return
-	 * @since 5.0
 	 */
 	FuelUnit getFuelPriceUnit(FuelComponent fuel);
 }

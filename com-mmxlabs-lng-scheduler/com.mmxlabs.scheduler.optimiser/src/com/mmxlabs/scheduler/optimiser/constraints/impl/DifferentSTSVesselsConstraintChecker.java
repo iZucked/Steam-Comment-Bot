@@ -24,7 +24,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProvider;
  * Constraint checker to ensure that a pair of STS slots are on different routes.
  * 
  * @author Simon Goodall
- * @since 5.0
  */
 public class DifferentSTSVesselsConstraintChecker implements IConstraintChecker {
 

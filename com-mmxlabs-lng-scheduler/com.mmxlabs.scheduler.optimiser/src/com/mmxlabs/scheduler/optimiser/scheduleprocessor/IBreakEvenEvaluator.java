@@ -12,7 +12,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * @since 2.0
  */
 public interface IBreakEvenEvaluator {
 

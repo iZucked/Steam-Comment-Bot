@@ -11,7 +11,6 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
  * A single P&L entry.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public interface IProfitAndLossEntry {
@@ -29,7 +28,6 @@ public interface IProfitAndLossEntry {
 
 	/**
 	 * @return The final contribution to pre-tax group profit from this entry.
-	 * @since 8.0
 	 */
 	public long getFinalGroupValuePreTax();
 

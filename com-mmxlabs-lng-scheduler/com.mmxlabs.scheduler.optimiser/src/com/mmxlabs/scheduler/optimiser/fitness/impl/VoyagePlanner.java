@@ -58,7 +58,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * @since 7.1
  */
 public class VoyagePlanner {
 	@Inject

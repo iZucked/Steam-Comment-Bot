@@ -32,7 +32,6 @@ public class VoyagePlanIterator {
 	private int arrivalTimes[];
 
 	/**
-	 * @since 2.0
 	 */
 	public final void setVoyagePlans(final IResource resource, final List<VoyagePlan> plans, int arrivalTimes[]) {
 		this.plans = plans;

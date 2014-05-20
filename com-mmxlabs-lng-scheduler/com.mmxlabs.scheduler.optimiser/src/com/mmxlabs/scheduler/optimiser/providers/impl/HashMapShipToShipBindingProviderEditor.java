@@ -11,7 +11,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IShipToShipBindingProviderEditor;
 
 /**
- * @since 5.0
  */
 public class HashMapShipToShipBindingProviderEditor implements IShipToShipBindingProviderEditor {
 

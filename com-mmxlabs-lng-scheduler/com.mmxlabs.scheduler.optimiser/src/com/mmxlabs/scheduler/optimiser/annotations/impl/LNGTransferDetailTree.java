@@ -15,7 +15,6 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  * Adds leaf node for volume, price/m3, /mmbtu, total mmbtu and cv value.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class LNGTransferDetailTree extends DetailTree {

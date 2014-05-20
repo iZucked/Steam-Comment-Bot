@@ -13,7 +13,6 @@ import com.mmxlabs.optimiser.core.IElementAnnotation;
  * A P&L annotation which goes in an {@link IAnnotatedSolution}. Each of these guys corresponds to a single P&L entry.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public interface IProfitAndLossAnnotation extends IElementAnnotation {

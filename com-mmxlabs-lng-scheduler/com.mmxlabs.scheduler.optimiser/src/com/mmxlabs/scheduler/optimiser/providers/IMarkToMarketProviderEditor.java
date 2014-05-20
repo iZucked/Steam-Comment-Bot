@@ -10,7 +10,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 
 /**
- * @since 6.0
  */
 public interface IMarkToMarketProviderEditor extends IMarkToMarketProvider {
 

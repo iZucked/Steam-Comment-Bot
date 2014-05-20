@@ -8,7 +8,6 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
 /**
- * @since 8.0
  */
 public class ShippingHoursRestrictionCheckerFactory implements IConstraintCheckerFactory {
 

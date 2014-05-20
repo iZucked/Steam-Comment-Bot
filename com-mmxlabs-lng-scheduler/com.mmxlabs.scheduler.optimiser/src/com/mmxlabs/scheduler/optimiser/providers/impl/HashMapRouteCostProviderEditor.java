@@ -29,7 +29,6 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> nboRateByRouteAndClass = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public long getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
@@ -49,7 +48,6 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState, final long price) {
@@ -57,7 +55,6 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setDefaultRouteCost(final String route, final long price) {

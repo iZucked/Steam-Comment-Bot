@@ -45,7 +45,6 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	private IVesselProvider vesselProvider;
 
 	/**
-	 * @since 2.0
 	 */
 	public TimeSortConstraintChecker(final String name) {
 		this.name = name;

@@ -33,7 +33,6 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	public DischargeOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final int pricingDate) {
 		super(id, port, timeWindow);
@@ -96,7 +95,6 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public long getMinCvValue() {
@@ -104,14 +102,12 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setMinCvValue(final long value) {
 		minCvValue = value;
 	}
 	
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public long getMaxCvValue() {
@@ -119,14 +115,12 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setMaxCvValue(final long value) {
 		maxCvValue = value;
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public int getPricingDate() {
@@ -134,7 +128,6 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	}
 	
 	/**
-	 * @since 6.0
 	 */
 	public void setPricingDate(final int value) {
 		pricingDate = value;

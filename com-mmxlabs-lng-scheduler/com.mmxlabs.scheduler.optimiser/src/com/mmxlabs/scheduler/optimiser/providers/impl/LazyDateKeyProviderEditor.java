@@ -19,7 +19,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
  * {@link #setTimeZero(long)} to indicate when time zero in hours will be. It is expected that a {@link ISchedulerBuilder} implementation will invoke this method when this value is known. This
  * implementation will return date keys for the start of the month (in UTC timezone) for which the hours is contained.
  * 
- * @since 2.0
  */
 public class LazyDateKeyProviderEditor implements IDateKeyProviderEditor {
 

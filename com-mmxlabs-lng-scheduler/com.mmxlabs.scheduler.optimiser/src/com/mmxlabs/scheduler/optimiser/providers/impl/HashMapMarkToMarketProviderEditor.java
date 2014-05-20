@@ -18,7 +18,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
  * Simple implementation of {@link IMarkToMarketProviderEditor}.
  * 
  * @auther Simon Goodall
- * @since 6.0
  */
 public class HashMapMarkToMarketProviderEditor implements IMarkToMarketProviderEditor {
 

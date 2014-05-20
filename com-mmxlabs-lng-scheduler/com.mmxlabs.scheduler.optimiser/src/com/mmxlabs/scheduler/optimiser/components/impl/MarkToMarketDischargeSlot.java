@@ -18,7 +18,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * This is a {@link IDischargeSlot} implementation for use with an {@link IMarkToMarket} instance.
  * 
  * @author Simon Goodall
- * @since 6.0
  */
 public class MarkToMarketDischargeSlot implements IDischargeSlot, IMarkToMarketOption {
 

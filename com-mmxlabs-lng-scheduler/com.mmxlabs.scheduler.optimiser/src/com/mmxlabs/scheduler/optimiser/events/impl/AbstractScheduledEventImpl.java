@@ -77,7 +77,6 @@ public abstract class AbstractScheduledEventImpl implements IScheduledEvent {
 	}
 
 	/**
-	 * @since 7.0
 	 */
 	@Override
 	public long getCharterCost() {
@@ -85,7 +84,6 @@ public abstract class AbstractScheduledEventImpl implements IScheduledEvent {
 	}
 
 	/**
-	 * @since 7.0
 	 */
 	public void setHireCost(final long hireCost) {
 		this.hireCost = hireCost;

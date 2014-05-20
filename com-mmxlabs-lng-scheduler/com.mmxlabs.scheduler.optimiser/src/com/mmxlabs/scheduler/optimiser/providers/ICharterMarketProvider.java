@@ -10,7 +10,6 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 
 /**
- * @since 2.0
  */
 public interface ICharterMarketProvider extends IDataComponentProvider {
 

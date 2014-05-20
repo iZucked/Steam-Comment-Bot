@@ -13,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 /**
  * An object representing a Mark-to-Market market representing either a DES Purchase and/or FOB Sale. This holds the pricing calculators and CV value for the market.
  * 
- * @since 6.0
  */
 public interface IMarkToMarket {
 

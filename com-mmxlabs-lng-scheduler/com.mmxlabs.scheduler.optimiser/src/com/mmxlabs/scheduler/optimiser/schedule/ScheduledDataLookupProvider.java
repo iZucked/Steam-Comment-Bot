@@ -31,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * TODO: Build cache into the {@link ScheduledSequences} API
  * 
  * @author Simon Goodall
- * @since 8.0
  * 
  */
 public class ScheduledDataLookupProvider {

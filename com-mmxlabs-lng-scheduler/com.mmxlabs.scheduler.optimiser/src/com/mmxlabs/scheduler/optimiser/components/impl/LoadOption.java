@@ -139,7 +139,6 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public int getPricingDate() {
@@ -147,7 +146,6 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	public void setPricingDate(final int value) {
 		pricingDate = value;

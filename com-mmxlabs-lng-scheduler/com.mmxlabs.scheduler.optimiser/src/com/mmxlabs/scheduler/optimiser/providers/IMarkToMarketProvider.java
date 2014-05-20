@@ -13,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 
 /**
  * 
- * @since 6.0
  */
 public interface IMarkToMarketProvider extends IDataComponentProvider {
 

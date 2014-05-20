@@ -8,7 +8,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 
 /**
- * @since 2.0
  */
 public interface IShortCargoReturnElementProviderEditor extends IShortCargoReturnElementProvider {
 	public void setReturnElement(ISequenceElement loadElement, ILoadOption loadOption, ISequenceElement returnElement);

@@ -74,7 +74,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final IAnnotatedSolution solution, final int[] arrivalTimes) {

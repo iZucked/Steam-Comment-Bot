@@ -12,7 +12,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvide
 
 /**
  * 
- * @since 2.0
  * 
  */
 public class HashMapShortCargoReturnElementProviderEditor implements IShortCargoReturnElementProviderEditor {

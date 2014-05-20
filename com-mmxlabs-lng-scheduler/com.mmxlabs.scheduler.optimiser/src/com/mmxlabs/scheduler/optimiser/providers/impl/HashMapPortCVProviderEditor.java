@@ -14,7 +14,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
  * Implementation of {@link IPortCVProviderEditor} using a {@link HashMap} as the backing implementation.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public final class HashMapPortCVProviderEditor implements IPortCVProviderEditor {
 

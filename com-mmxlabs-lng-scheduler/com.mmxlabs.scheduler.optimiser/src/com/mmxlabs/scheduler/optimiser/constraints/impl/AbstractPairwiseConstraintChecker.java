@@ -16,7 +16,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 /**
  * An implementation of {@link IPairwiseConstraintChecker} to forbid certain {@link ISequenceElement} pairings
  * 
- * @since 3.0
  */
 public abstract class AbstractPairwiseConstraintChecker implements IPairwiseConstraintChecker {
 

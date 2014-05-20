@@ -23,7 +23,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
- * @since 8.0
  * 
  */
 public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
@@ -37,12 +36,10 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected abstract int calculateSimpleUnitPrice(final int time, final IPort port);
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
@@ -92,7 +89,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public int calculateCooldownUnitPrice(final int time, final IPort port) {
@@ -100,7 +96,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu, final IVessel vessel,
@@ -109,7 +104,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
@@ -123,7 +117,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,

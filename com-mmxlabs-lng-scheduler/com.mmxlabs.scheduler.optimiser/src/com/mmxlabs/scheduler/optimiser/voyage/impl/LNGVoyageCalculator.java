@@ -32,7 +32,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
  * Implementation of {@link ILNGVoyageCalculator}.
  * 
  * @author Simon Goodall
- * @since 5.0
  * 
  */
 public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
@@ -391,7 +390,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @return
 	 * 
 	 * @author Simon McGregor
-	 * @since 8.0
 	 */
 	public long[] calculateVoyagePlanFuelConsumptions(final IVessel vessel, final IDetailsSequenceElement... sequence) {
 		final long[] fuelConsumptions = new long[FuelComponent.values().length];
@@ -447,7 +445,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return
-	 * @since 8.0
 	 */
 	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
 		int cooldownM3Price = 0;
@@ -505,7 +502,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
-	 * @since 8.0
 	 */
 	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
 		// TODO: does not need to be this long
@@ -576,7 +572,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param dischargeTime
 	 * @param loadTime
 	 * @return Number of capacity constraints which had to be violated in the allocation
-	 * @since 8.0
 	 */
 	@Override
 	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final long startHeelInM3, final int baseFuelPricePerMT, final List<Integer> arrivalTimes,
@@ -870,7 +865,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 8.0
 	 * 
 	 */
 	@Override
@@ -926,7 +920,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 *            The PortOptions to use, specifying vessel class, vessel state and port visit duration.
 	 * @param details
 	 *            The PortDetails to set the correct fuel consumption for.
-	 * @since 2.0
 	 */
 	public final void calculatePortFuelRequirements(final PortOptions options, final PortDetails details) {
 		details.setOptions(options);
@@ -972,14 +965,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setPortCVProvider(final IPortCVProvider portCVProvider) {
 		this.portCVProvider = portCVProvider;
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	final public int findFirstLoadIndex(final IDetailsSequenceElement... sequence) {
 		// ignore the last element in the sequence, to avoid double-counting (it will be included in the next sequence)
@@ -998,7 +989,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	final public int findFirstDischargeIndex(final IDetailsSequenceElement... sequence) {
 		for (int i = 0; i < sequence.length; ++i) {
@@ -1016,7 +1006,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	final public List<Integer> findLoadIndices(final IDetailsSequenceElement... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();
@@ -1036,7 +1025,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	final public List<Integer> findDischargeIndices(final IDetailsSequenceElement... sequence) {
 		final List<Integer> storage = new ArrayList<Integer>();

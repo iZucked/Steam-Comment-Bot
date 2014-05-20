@@ -11,14 +11,12 @@ import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 
 /**
  * @author hinton
- * @since 2.0
  * 
  */
 public class ProfitAndLossAnnotation implements IProfitAndLossAnnotation {
 	private final Collection<IProfitAndLossEntry> entries;
 
 	/**
-	 * @since 7.0
 	 */
 	public ProfitAndLossAnnotation(final Collection<IProfitAndLossEntry> entries) {
 		this.entries = entries;

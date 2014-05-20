@@ -116,9 +116,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * Implementation of {@link ISchedulerBuilder}
  * 
  * @author Simon Goodall
- * @since 8.0
- * 
- */
+ */ 
 public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * For debug & timing purposes. Switches the indexing DCPs on or off.
@@ -292,7 +290,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * Constant used during end date of scenario calculations - {@link #minDaysFromLastEventToEnd} days extra after last date. See code in {@link SchedulerBuilder#getOptimisationData()}
 	 * 
-	 * @since 5.1
 	 */
 	public static int minDaysFromLastEventToEnd = 10;
 
@@ -344,7 +341,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	@NonNull
@@ -370,7 +366,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	@NonNull
@@ -433,7 +428,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	@NonNull
@@ -496,7 +490,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	@NonNull
@@ -520,7 +513,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	@NonNull
@@ -529,7 +521,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	@NonNull
@@ -669,7 +660,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	@NonNull
@@ -685,7 +675,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param vesselClass
 	 * @param count
 	 * @return
-	 * @since 2.0
 	 */
 	@Override
 	public List<IVessel> createSpotVessels(final String namePrefix, @NonNull final IVesselClass vesselClass, final int count, final ICurve dailyCharterInPrice) {
@@ -702,7 +691,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param name
 	 * @param vesselClass
 	 * @return the spot vessel
-	 * @since 2.0
 	 */
 	@Override
 	@NonNull
@@ -714,7 +702,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	@NonNull
@@ -880,7 +867,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setVesselClassRouteCost(final String route, @NonNull final IVesselClass vesselClass, final VesselState state, final long tollPrice) {
@@ -888,7 +874,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setDefaultRouteCost(final String route, final long defaultPrice) {
@@ -1142,7 +1127,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	@NonNull
@@ -1173,7 +1157,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
@@ -1208,7 +1191,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param idleNBORateInM3PerDay
 	 * @param idleConsumptionRateInMTPerDay
 	 * @param consumptionCalculatorInMTPerDay
-	 * @since 2.0
 	 */
 
 	@Override
@@ -1224,7 +1206,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setVesselClassPortTypeParameters(@NonNull final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerDay) {
@@ -1238,7 +1219,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public void setVesselInaccessiblePorts(@NonNull final IVessel vessel, final Set<IPort> inaccessiblePorts) {
@@ -1246,10 +1226,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
-	@NonNull
 	public IVesselEventPortSlot createCharterOutEvent(final String id, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours, final long maxHeelOut,
 			final int heelCVValue, final int heelUnitPrice, final long hireCost, final long repositioning) {
 		return createVesselEvent(id, PortType.CharterOut, arrival, fromPort, toPort, durationHours, maxHeelOut, heelCVValue, heelUnitPrice, hireCost, repositioning);
@@ -1268,7 +1246,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@NonNull
 	public IVesselEventPortSlot createVesselEvent(final String id, final PortType portType, final ITimeWindow arrival, final IPort fromPort, final IPort toPort, final int durationHours,
@@ -1661,7 +1638,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public void bindLoadSlotsToFOBSale(@NonNull final IDischargeOption fobSale, final Collection<IPort> loadPorts) {
@@ -1764,7 +1740,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setEarliestDate(@NonNull final Date earliestTime) {
@@ -1772,7 +1747,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void createCharterOutCurve(@NonNull final IVesselClass vesselClass, final ICurve charterOutCurve, final int minDuration) {
@@ -1786,7 +1760,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	/**
 	 * @param slot
-	 * @since 2.0
 	 */
 	@Override
 	public void setSoftRequired(@NonNull final IPortSlot slot) {
@@ -1795,7 +1768,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setPortCV(@NonNull final IPort port, final int cv) {
@@ -1803,7 +1775,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	@NonNull
@@ -1817,7 +1788,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	@NonNull
@@ -1833,7 +1803,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	@NonNull
@@ -1847,7 +1816,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	@NonNull
@@ -1893,7 +1861,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public void setNominatedVessel(@NonNull final IPortSlot slot, @NonNull final IVessel vessel) {
@@ -1907,7 +1874,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public void setShippingHoursRestriction(@NonNull final IPortSlot slot, @NonNull final ITimeWindow baseTime, final int hours) {

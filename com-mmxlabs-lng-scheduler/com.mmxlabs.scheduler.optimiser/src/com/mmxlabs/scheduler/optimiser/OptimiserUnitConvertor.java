@@ -9,7 +9,6 @@ package com.mmxlabs.scheduler.optimiser;
  * within the optimiser and values being extracted back out will need the reverse conversion.
  * 
  * @author Simon Goodall
- * @since 2.0
  * @noinstantiate This class is not intended to be instantiated by clients.
  */
 public final class OptimiserUnitConvertor {

@@ -8,7 +8,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * @since 2.0
  */
 public class CargoShortEnd extends PortSlot {
 

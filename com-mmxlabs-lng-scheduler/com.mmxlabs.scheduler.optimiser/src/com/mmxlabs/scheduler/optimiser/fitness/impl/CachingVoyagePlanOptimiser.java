@@ -230,7 +230,6 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public void setVessel(final IVessel vessel, final int baseFuelPricePerMT) {

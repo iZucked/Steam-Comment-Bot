@@ -35,26 +35,22 @@ public enum VesselInstanceType {
 	/**
 	 * Sequence represents a FOB Sale
 	 * 
-	 * @since 2.0
 	 */
 	FOB_SALE,
 
 	/**
 	 * Sequence represents a DES Purchase
 	 * 
-	 * @since 2.0
 	 */
 	DES_PURCHASE,
 
 	/**
 	 * Sequence to store "short" cargoes.
 	 * 
-	 * @since 2.0
 	 */
 	CARGO_SHORTS,
 	
 	/**
-	 * @since 8.0
 	 */
 	REFERENCE
 }

@@ -10,7 +10,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 
 /**
- * @since 8.0
  */
 public class CargoTypeUtil {
 

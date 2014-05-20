@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 
 /**
- * @since 8.0
  */
 public abstract class AbstractLoggingSequenceScheduler implements ISequenceScheduler {
 
