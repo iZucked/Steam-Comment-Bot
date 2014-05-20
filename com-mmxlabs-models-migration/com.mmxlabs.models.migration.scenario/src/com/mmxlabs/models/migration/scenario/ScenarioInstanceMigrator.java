@@ -90,7 +90,7 @@ public class ScenarioInstanceMigrator {
 				currentClientVersion = lastReleaseVersion;
 			}
 			// Apply Migration Chain
-			final int[] migratedVersion = applyMigrationChain(scenarioContext, currentClientVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion, tmpURI);
+			final int[] migratedVersion = applyMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion, tmpURI);
 
 			// Sanity check - can we load the new scenario without error?
 			{
