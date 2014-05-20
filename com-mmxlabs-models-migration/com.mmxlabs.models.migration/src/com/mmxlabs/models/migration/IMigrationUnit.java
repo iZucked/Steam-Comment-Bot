@@ -23,21 +23,21 @@ public interface IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	String getContext();
+	String getScenarioContext();
 
 	/**
 	 * Version number to upgrade the scenario from
 	 * 
 	 * @return
 	 */
-	int getSourceVersion();
+	int getScenarioSourceVersion();
 
 	/**
 	 * Version number the scenario will be upgraded to
 	 * 
 	 * @return
 	 */
-	int getDestinationVersion();
+	int getScenarioDestinationVersion();
 
 	/**
 	 * Perform the migration. The {@link URI} specifies the ecore model instance for the scenario. Extra packages can be passed into the process. This is intended for situations where the migration

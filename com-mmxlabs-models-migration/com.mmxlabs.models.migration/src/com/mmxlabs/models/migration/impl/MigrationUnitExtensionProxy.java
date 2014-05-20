@@ -16,7 +16,7 @@ import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionExtensionPoint;
 
 /**
- * A proxy class to wrap around a {@link IMigrationUnitExtension} and laxy instantiate the class when required.
+ * A proxy class to wrap around a {@link IMigrationUnitExtension} and lazy instantiate the class when required.
  * 
  * @author Simon Goodall
  * 
@@ -53,17 +53,17 @@ class MigrationUnitExtensionProxy implements IMigrationUnitExtension {
 	}
 
 	@Override
-	public String getContext() {
-		return migrationUnit.getContext();
+	public String getScenarioContext() {
+		return migrationUnit.getScenarioContext();
 	}
 
 	@Override
-	public int getSourceVersion() {
-		return migrationUnit.getSourceVersion();
+	public int getScenarioSourceVersion() {
+		return migrationUnit.getScenarioSourceVersion();
 	}
 
 	@Override
-	public int getDestinationVersion() {
-		return migrationUnit.getDestinationVersion();
+	public int getScenarioDestinationVersion() {
+		return migrationUnit.getScenarioDestinationVersion();
 	}
 }

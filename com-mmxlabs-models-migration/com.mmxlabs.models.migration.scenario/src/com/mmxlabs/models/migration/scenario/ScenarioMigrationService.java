@@ -23,24 +23,37 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 	@Override
 	public void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
 
-		String context = scenarioInstance.getVersionContext();
-
-		if (context == null || context.isEmpty()) {
-			context = migrationRegistry.getDefaultMigrationContext();
-			scenarioInstance.setVersionContext(context);
-			scenarioInstance.setScenarioVersion(0);
+		{
+			String context = scenarioInstance.getVersionContext();
+			if (context == null || context.isEmpty()) {
+				context = migrationRegistry.getDefaultMigrationContext();
+				scenarioInstance.setVersionContext(context);
+				scenarioInstance.setScenarioVersion(0);
+			}
 		}
+		{
+			String context = scenarioInstance.getClientVersionContext();
 
-		if (context != null && getMigrationRegistry().getMigrationContexts().contains(context)) {
+			if (context == null || context.isEmpty()) {
+				context = migrationRegistry.getDefaultClientMigrationContext();
+				scenarioInstance.setClientVersionContext(context);
+				scenarioInstance.setClientScenarioVersion(0);
+			}
+		}
+		final String scenarioContext = scenarioInstance.getVersionContext();
+		final String clientContext = scenarioInstance.getClientVersionContext();
 
-			final int latestVersion = getMigrationRegistry().getLatestContextVersion(context);
+		if (scenarioContext != null && getMigrationRegistry().getMigrationContexts().contains(scenarioContext)) {
+
+			final int latestScenarioVersion = getMigrationRegistry().getLatestContextVersion(scenarioContext);
+			final int latestClientVersion = getMigrationRegistry().getLatestClientContextVersion(clientContext);
 
 			final int scenarioVersion = scenarioInstance.getScenarioVersion();
+			final int clientVersion = scenarioInstance.getClientScenarioVersion();
 
-			if (latestVersion < 0 || scenarioVersion < latestVersion) {
+			if (latestScenarioVersion < 0 || scenarioVersion < latestScenarioVersion || latestClientVersion < 0 || clientVersion < latestClientVersion) {
 
 				final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry(), getScenarioCipherProvider());
-				// Disable for now, fix up later
 				migrator.performMigration(scenarioService, scenarioInstance);
 			}
 		}
@@ -58,7 +71,7 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 		return scenarioCipherProvider;
 	}
 
-	public void setScenarioCipherProvider(IScenarioCipherProvider scenarioCipherProvider) {
+	public void setScenarioCipherProvider(final IScenarioCipherProvider scenarioCipherProvider) {
 		this.scenarioCipherProvider = scenarioCipherProvider;
 	}
 }

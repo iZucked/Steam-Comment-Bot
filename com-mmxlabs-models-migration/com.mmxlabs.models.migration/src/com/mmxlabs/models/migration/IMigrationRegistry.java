@@ -27,6 +27,14 @@ public interface IMigrationRegistry {
 	boolean isContextRegistered(@NonNull String context);
 
 	/**
+	 * Returns true of the given string is a known cient migration context
+	 * 
+	 * @param context
+	 * @return
+	 */
+	boolean isClientContextRegistered(@NonNull String context);
+
+	/**
 	 * Returns a {@link Collection} of all registered migration contexts
 	 * 
 	 * @return
@@ -35,7 +43,23 @@ public interface IMigrationRegistry {
 	Collection<String> getMigrationContexts();
 
 	/**
-	 * Returns the latest version registered againt the given context.
+	 * Returns a {@link Collection} of all registered migration contexts
+	 * 
+	 * @return
+	 */
+	@NonNull
+	Collection<String> getClientMigrationContexts();
+
+	/**
+	 * Returns the latest version registered against the given client context.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	int getLatestClientContextVersion(@NonNull String context);
+
+	/**
+	 * Returns the latest version registered against the given context.
 	 * 
 	 * @param context
 	 * @return
@@ -51,7 +75,7 @@ public interface IMigrationRegistry {
 	 * @return
 	 */
 	@NonNull
-	List<IMigrationUnit> getMigrationChain(@NonNull String context, int fromVersion, int toVersion);
+	List<IMigrationUnit> getMigrationChain(@NonNull String scenarioContext, int fromScenarioVersion, int toScenarioVersion, @Nullable String clientContext, int fromClientVersion, int toClientVersion);
 
 	/**
 	 * Returns the default migration context for this application instance.
@@ -62,6 +86,14 @@ public interface IMigrationRegistry {
 	String getDefaultMigrationContext();
 
 	/**
+	 * Returns the default migration context for this application instance.
+	 * 
+	 * @return
+	 */
+	@Nullable
+	String getDefaultClientMigrationContext();
+
+	/**
 	 * Returns the greatest version number known for the context. This should be used when {@link #getLatestContextVersion(String)} is equals to {@link #SNAPSHOT_VERSION} to get the current release
 	 * version number.
 	 * 
@@ -69,5 +101,14 @@ public interface IMigrationRegistry {
 	 * @return
 	 */
 	int getLastReleaseVersion(@NonNull String context);
+
+	/**
+	 * Returns the greatest version number known for the context. This should be used when {@link #getLatestContextVersion(String)} is equals to {@link #SNAPSHOT_VERSION} to get the current release
+	 * version number.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	int getLastReleaseClientVersion(@NonNull String context);
 
 }

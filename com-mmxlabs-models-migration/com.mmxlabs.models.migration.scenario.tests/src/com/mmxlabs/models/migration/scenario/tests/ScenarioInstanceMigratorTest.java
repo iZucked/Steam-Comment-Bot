@@ -16,6 +16,7 @@ import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
@@ -32,29 +33,63 @@ public class ScenarioInstanceMigratorTest {
 
 		final URI tmpURI = URI.createURI("migration");
 
-		final String context = "Context";
+		final String scenarioContext = "ScenarioContext";
 		final int scenarioVersion = 1;
-		final int latestVersion = 3;
+		final int latestScenarioVersion = 3;
+
+		final String clientContext = "ClientContext";
+		final int clientVersion = 1;
+		final int latestClientVersion = 4;
+
+		// Expect this to kick in on current version
+		final IClientMigrationUnit clientUnit1 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit1.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit1.getScenarioSourceVersion()).thenReturn(1);
+		when(clientUnit1.getScenarioDestinationVersion()).thenReturn(1);
+		when(clientUnit1.getClientContext()).thenReturn(clientContext);
+		when(clientUnit1.getClientSourceVersion()).thenReturn(1);
+		when(clientUnit1.getClientDestinationVersion()).thenReturn(2);
 
 		final IMigrationUnit unit1 = Mockito.mock(IMigrationUnit.class);
-		when(unit1.getContext()).thenReturn(context);
-		when(unit1.getSourceVersion()).thenReturn(1);
-		when(unit1.getDestinationVersion()).thenReturn(2);
+		when(unit1.getScenarioContext()).thenReturn(scenarioContext);
+		when(unit1.getScenarioSourceVersion()).thenReturn(1);
+		when(unit1.getScenarioDestinationVersion()).thenReturn(2);
+
+		// Expect this to kick in on second version
+		final IClientMigrationUnit clientUnit2 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit2.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit2.getScenarioSourceVersion()).thenReturn(2);
+		when(clientUnit2.getScenarioDestinationVersion()).thenReturn(2);
+		when(clientUnit2.getClientContext()).thenReturn(clientContext);
+		when(clientUnit2.getClientSourceVersion()).thenReturn(2);
+		when(clientUnit2.getClientDestinationVersion()).thenReturn(3);
+
+		// Expect this to kick in on second version
+		final IClientMigrationUnit clientUnit3 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit3.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit3.getScenarioSourceVersion()).thenReturn(2);
+		when(clientUnit3.getScenarioDestinationVersion()).thenReturn(2);
+		when(clientUnit3.getClientContext()).thenReturn(clientContext);
+		when(clientUnit3.getClientSourceVersion()).thenReturn(3);
+		when(clientUnit3.getClientDestinationVersion()).thenReturn(4);
 
 		final IMigrationUnit unit2 = Mockito.mock(IMigrationUnit.class);
-		when(unit2.getContext()).thenReturn(context);
-		when(unit2.getSourceVersion()).thenReturn(2);
-		when(unit2.getDestinationVersion()).thenReturn(3);
+		when(unit2.getScenarioContext()).thenReturn(scenarioContext);
+		when(unit2.getScenarioSourceVersion()).thenReturn(2);
+		when(unit2.getScenarioDestinationVersion()).thenReturn(3);
 
-		final List<IMigrationUnit> units = Lists.newArrayList(unit1, unit2);
+		final List<IMigrationUnit> units = Lists.newArrayList(clientUnit1, unit1, clientUnit2, clientUnit3, unit2);
 
-		when(migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion)).thenReturn(units);
+		when(migrationRegistry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion)).thenReturn(units);
 
 		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry, scenarioCipherProvider);
-		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURI);
+		migrator.applyMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion, tmpURI);
 
-		final InOrder order = inOrder(unit1, unit2);
+		final InOrder order = inOrder(clientUnit1, unit1, clientUnit2, clientUnit3, unit2);
+		order.verify(clientUnit1).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
 		order.verify(unit1).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+		order.verify(clientUnit2).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
+		order.verify(clientUnit3).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
 		order.verify(unit2).migrate(tmpURI, Collections.<URI, PackageData> emptyMap());
 
 	}

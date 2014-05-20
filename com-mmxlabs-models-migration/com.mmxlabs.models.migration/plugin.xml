@@ -12,4 +12,8 @@
    <extension-point id="MigrationUnit" name="MigrationUnit" schema="schema/MigrationUnit.exsd"/>
    <extension-point id="MigrationUnitExtension" name="MigrationUnitExtension" schema="schema/MigrationUnitExtension.exsd"/>
 
+   <extension-point id="DefaultClientMigrationContext" name="DefaultClientMigrationContext" schema="schema/DefaultClientMigrationContext.exsd"/>
+   <extension-point id="ClientMigrationContext" name="ClientMigrationContext" schema="schema/ClientMigrationContext.exsd"/>
+   <extension-point id="ClientMigrationUnit" name="ClientMigrationUnit" schema="schema/ClientMigrationUnit.exsd"/>
+
 </plugin>
