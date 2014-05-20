@@ -41,7 +41,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * @since 2.0
  */
 public class PricingModelImporter implements ISubmodelImporter {
 	private static final HashMap<String, String> inputs = new HashMap<String, String>();
@@ -49,7 +48,6 @@ public class PricingModelImporter implements ISubmodelImporter {
 	public static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
 	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
 	/**
-	 * @since 5.0
 	 */
 	public static final String BASEFUEL_PRICING_KEY = "BF_PRICING";
 	public static final String PORT_COSTS_KEY = "PORT_COSTS";
@@ -74,7 +72,6 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private IClassImporter portCostImporter;
 
 	/**
-	 * @since 2.0
 	 */
 	public PricingModelImporter() {
 		final Activator activator = Activator.getDefault();

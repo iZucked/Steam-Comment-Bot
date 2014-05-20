@@ -43,7 +43,6 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * Contains modified cut&paste code from ImportAction and SimpleImportAction (class was written in a hurry). TODO: Move duplicated code into a common code object.
  * 
  * @author Simon McGregor
- * @since 3.0
  * 
  */
 public abstract class BulkImportCSVHandler extends AbstractHandler {

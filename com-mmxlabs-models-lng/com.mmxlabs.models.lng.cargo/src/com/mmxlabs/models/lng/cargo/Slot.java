@@ -86,7 +86,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetContract()
 	 * @see #getContract()
@@ -98,7 +97,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference is set.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Contract</em>' reference is set.
 	 * @see #unsetContract()
@@ -286,7 +284,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Contract</em>' reference.
 	 * @see #getContract()
@@ -487,7 +484,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Price Expression</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Price Expression</em>' attribute.
 	 * @see #isSetPriceExpression()
@@ -502,7 +498,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Price Expression</em>' attribute.
 	 * @see #isSetPriceExpression()
@@ -515,7 +510,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetPriceExpression()
 	 * @see #getPriceExpression()
@@ -527,7 +521,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Price Expression</em>' attribute is set.
 	 * @see #unsetPriceExpression()
@@ -545,7 +538,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Cargo</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargo</em>' reference.
 	 * @see #setCargo(Cargo)
@@ -559,7 +551,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Cargo</em>' reference.
 	 * @see #getCargo()
@@ -574,7 +565,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Pricing Date</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Pricing Date</em>' attribute.
 	 * @see #isSetPricingDate()
@@ -589,7 +579,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
  	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Pricing Date</em>' attribute.
 	 * @see #isSetPricingDate()
@@ -602,7 +591,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetPricingDate()
 	 * @see #getPricingDate()
@@ -614,7 +602,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Pricing Date</em>' attribute is set.
 	 * @see #unsetPricingDate()
@@ -631,7 +618,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Notes</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Notes</em>' attribute.
 	 * @see #setNotes(String)
@@ -644,7 +630,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Notes</em>' attribute.
 	 * @see #getNotes()
@@ -685,7 +670,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Shipping Days Restriction</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Shipping Days Restriction</em>' attribute.
 	 * @see #setShippingDaysRestriction(int)
@@ -698,7 +682,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Shipping Days Restriction</em>' attribute.
 	 * @see #getShippingDaysRestriction()
@@ -713,7 +696,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Entity</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Entity</em>' reference.
 	 * @see #isSetEntity()
@@ -740,7 +722,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetEntity()
 	 * @see #getEntity()
@@ -752,7 +733,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}' reference is set.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Entity</em>' reference is set.
 	 * @see #unsetEntity()
@@ -770,7 +750,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Restricted Contracts</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Contracts</em>' reference list.
 	 * @see #isSetRestrictedContracts()
@@ -784,7 +763,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetRestrictedContracts()
 	 * @see #getRestrictedContracts()
@@ -795,7 +773,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}' reference list is set.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Restricted Contracts</em>' reference list is set.
 	 * @see #unsetRestrictedContracts()
@@ -812,7 +789,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Restricted Ports</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Ports</em>' reference list.
 	 * @see #isSetRestrictedPorts()
@@ -826,7 +802,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetRestrictedPorts()
 	 * @see #getRestrictedPorts()
@@ -837,7 +812,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}' reference list is set.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Restricted Ports</em>' reference list is set.
 	 * @see #unsetRestrictedPorts()
@@ -853,7 +827,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
 	 * @see #isSetRestrictedListsArePermissive()
@@ -868,7 +841,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
 	 * @see #isSetRestrictedListsArePermissive()
@@ -881,7 +853,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetRestrictedListsArePermissive()
 	 * @see #isRestrictedListsArePermissive()
@@ -893,7 +864,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Restricted Lists Are Permissive</em>' attribute is set.
 	 * @see #unsetRestrictedListsArePermissive()
@@ -1049,7 +1019,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
@@ -1058,7 +1027,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
@@ -1067,7 +1035,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
@@ -1076,7 +1043,6 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated

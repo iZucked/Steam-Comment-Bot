@@ -300,7 +300,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -463,7 +462,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -545,7 +543,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -555,7 +552,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -565,7 +561,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -575,7 +570,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -585,7 +579,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

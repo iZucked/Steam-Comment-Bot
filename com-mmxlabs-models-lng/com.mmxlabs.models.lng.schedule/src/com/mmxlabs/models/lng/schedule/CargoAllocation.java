@@ -37,7 +37,6 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer {
 	 * If the meaning of the '<em>Slot Allocations</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Slot Allocations</em>' reference list.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_SlotAllocations()
@@ -108,7 +107,6 @@ public interface CargoAllocation extends MMXObject, ProfitAndLossContainer {
 	 * If the meaning of the '<em>Events</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Events</em>' reference list.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCargoAllocation_Events()

@@ -59,7 +59,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -147,7 +146,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -157,7 +155,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -167,7 +164,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

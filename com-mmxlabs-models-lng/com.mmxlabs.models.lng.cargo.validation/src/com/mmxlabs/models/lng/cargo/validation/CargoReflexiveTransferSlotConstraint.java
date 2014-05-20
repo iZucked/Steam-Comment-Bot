@@ -20,7 +20,6 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
- * @since 2.0
  */
 public class CargoReflexiveTransferSlotConstraint extends AbstractModelMultiConstraint {
 	@Override

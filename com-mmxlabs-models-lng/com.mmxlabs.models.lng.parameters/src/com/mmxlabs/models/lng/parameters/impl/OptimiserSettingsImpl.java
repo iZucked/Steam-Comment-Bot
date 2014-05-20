@@ -140,7 +140,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	/**
 	 * The default value of the '{@link #isGenerateCharterOuts() <em>Generate Charter Outs</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isGenerateCharterOuts()
 	 * @generated
@@ -151,7 +150,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	/**
 	 * The cached value of the '{@link #isGenerateCharterOuts() <em>Generate Charter Outs</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isGenerateCharterOuts()
 	 * @generated
@@ -162,7 +160,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	/**
 	 * The default value of the '{@link #isShippingOnly() <em>Shipping Only</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isShippingOnly()
 	 * @generated
@@ -173,7 +170,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 	/**
 	 * The cached value of the '{@link #isShippingOnly() <em>Shipping Only</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #isShippingOnly()
 	 * @generated
@@ -377,7 +373,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -388,7 +383,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -402,7 +396,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -413,7 +406,6 @@ public class OptimiserSettingsImpl extends UUIDObjectImpl implements OptimiserSe
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

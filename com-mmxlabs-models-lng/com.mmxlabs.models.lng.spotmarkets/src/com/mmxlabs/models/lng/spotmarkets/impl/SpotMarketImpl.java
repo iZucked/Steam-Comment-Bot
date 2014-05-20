@@ -39,7 +39,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -50,7 +49,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -121,7 +119,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getEntity()
 	 * @generated
@@ -150,7 +147,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -160,7 +156,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -301,7 +296,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -319,7 +313,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

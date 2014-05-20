@@ -32,7 +32,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	/**
 	 * The cached value of the '{@link #getSchedule() <em>Schedule</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getSchedule()
 	 * @generated
@@ -81,7 +80,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -91,7 +89,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -107,7 +104,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

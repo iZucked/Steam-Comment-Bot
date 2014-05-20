@@ -53,7 +53,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -64,7 +63,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -144,7 +142,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #isRestrictedListsArePermissive()
 	 * @generated
@@ -155,7 +152,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #isRestrictedListsArePermissive()
 	 * @generated
@@ -166,7 +162,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getRestrictedContracts()
 	 * @generated
@@ -177,7 +172,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getRestrictedPorts()
 	 * @generated
@@ -188,7 +182,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getPriceInfo() <em>Price Info</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getPriceInfo()
 	 * @generated
@@ -199,7 +192,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
@@ -210,7 +202,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
@@ -221,7 +212,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The default value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getContractType()
 	 * @generated
@@ -232,7 +222,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	/**
 	 * The cached value of the '{@link #getContractType() <em>Contract Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getContractType()
 	 * @generated
@@ -281,7 +270,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -291,7 +279,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -434,7 +421,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -444,7 +430,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -457,7 +442,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -470,7 +454,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -483,7 +466,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -493,7 +475,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -509,7 +490,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -529,7 +509,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -539,7 +518,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -552,7 +530,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -562,7 +539,6 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -162,7 +162,6 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -181,7 +180,6 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -191,7 +189,6 @@ public class VoyageImpl extends CostComponentImpl implements Voyage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

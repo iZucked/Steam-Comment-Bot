@@ -77,7 +77,6 @@ public interface AnalyticsModel extends UUIDObject {
 	 * If the meaning of the '<em>Shipping Cost Plans</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Shipping Cost Plans</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_ShippingCostPlans()
@@ -94,7 +93,6 @@ public interface AnalyticsModel extends UUIDObject {
 	 * If the meaning of the '<em>Cargo Sandboxes</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargo Sandboxes</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_CargoSandboxes()

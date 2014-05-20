@@ -59,7 +59,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -274,7 +273,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ShippingCostPlan} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -283,7 +281,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ShippingCostPlan}.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -299,7 +296,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ShippingCostRow} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -323,7 +319,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CargoSandbox} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -347,7 +342,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ProvisionalCargo} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -371,7 +365,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BuyOpportunity} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -395,7 +388,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SellOpportunity} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -478,7 +470,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -488,7 +479,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -499,7 +489,6 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

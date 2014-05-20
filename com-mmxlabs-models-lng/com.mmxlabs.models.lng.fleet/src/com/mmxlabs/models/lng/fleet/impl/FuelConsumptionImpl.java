@@ -108,7 +108,6 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -118,7 +117,6 @@ public class FuelConsumptionImpl extends EObjectImpl implements FuelConsumption 
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

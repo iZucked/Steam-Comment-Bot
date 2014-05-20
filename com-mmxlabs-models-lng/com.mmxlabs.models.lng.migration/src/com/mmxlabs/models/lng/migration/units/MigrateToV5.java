@@ -15,7 +15,6 @@ import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
 /**
- * @since 7.0
  */
 public class MigrateToV5 extends AbstractMigrationUnit {
 

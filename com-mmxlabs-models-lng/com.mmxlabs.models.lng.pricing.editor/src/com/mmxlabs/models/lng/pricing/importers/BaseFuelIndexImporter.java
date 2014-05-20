@@ -23,7 +23,6 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  * Custom import logic for loading a base fuel index.
  * 
  * @author Simon McGregor
- * @since 5.0
  * 
  */
 public class BaseFuelIndexImporter extends GenericIndexImporter<BaseFuelIndex> {

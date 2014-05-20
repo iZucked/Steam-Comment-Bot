@@ -289,7 +289,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan
@@ -304,7 +303,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow
@@ -319,7 +317,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.analytics.CargoSandbox
@@ -334,7 +331,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo
@@ -349,7 +345,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity
@@ -364,7 +359,6 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity

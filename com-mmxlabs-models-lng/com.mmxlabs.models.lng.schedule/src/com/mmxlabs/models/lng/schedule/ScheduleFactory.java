@@ -98,7 +98,6 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Generated Charter Out</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Generated Charter Out</em>'.
 	 * @generated
@@ -144,7 +143,6 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Market Allocation</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Market Allocation</em>'.
 	 * @generated
@@ -217,7 +215,6 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Capacity Violations Holder</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Capacity Violations Holder</em>'.
 	 * @generated
@@ -227,7 +224,6 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Profit And Loss Container</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Profit And Loss Container</em>'.
 	 * @generated
@@ -237,7 +233,6 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Group Profit And Loss</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Group Profit And Loss</em>'.
 	 * @generated
@@ -247,7 +242,6 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Entity Profit And Loss</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Entity Profit And Loss</em>'.
 	 * @generated

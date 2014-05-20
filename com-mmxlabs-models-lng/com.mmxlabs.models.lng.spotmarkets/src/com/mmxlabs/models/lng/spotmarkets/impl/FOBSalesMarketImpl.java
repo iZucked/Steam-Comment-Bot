@@ -29,7 +29,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	/**
 	 * The cached value of the '{@link #getOriginPorts() <em>Origin Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getOriginPorts()
 	 * @generated
@@ -58,7 +57,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

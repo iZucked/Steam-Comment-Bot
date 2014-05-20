@@ -112,7 +112,6 @@ public class FOBPurchasesMarketItemProvider
 	/**
 	 * This adds a property descriptor for the Market Ports feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

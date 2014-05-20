@@ -259,7 +259,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	/**
 	 * The default value of the '{@link #getProfit() <em>Profit</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfit()
 	 * @generated
@@ -270,7 +269,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	/**
 	 * The cached value of the '{@link #getProfit() <em>Profit</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfit()
 	 * @generated
@@ -596,7 +594,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -610,7 +607,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -621,7 +617,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

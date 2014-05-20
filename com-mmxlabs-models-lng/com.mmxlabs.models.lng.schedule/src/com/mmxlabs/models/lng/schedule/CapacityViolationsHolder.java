@@ -10,7 +10,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Capacity Violations Holder</b></em>'.
- * @since 3.0
  * <!-- end-user-doc -->
  *
  * <p>

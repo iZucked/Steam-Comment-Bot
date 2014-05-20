@@ -139,7 +139,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -158,7 +157,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -168,7 +166,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -181,7 +178,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -200,7 +196,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -210,7 +205,6 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -28,7 +28,6 @@ import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.ShippingCostRow} object.
  * <!-- begin-user-doc -->
- * @since 2.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -207,7 +206,6 @@ public class ShippingCostRowItemProvider
 	/**
 	 * This adds a property descriptor for the Include Port Costs feature.
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

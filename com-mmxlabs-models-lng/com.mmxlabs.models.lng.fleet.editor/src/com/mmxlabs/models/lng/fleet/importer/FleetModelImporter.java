@@ -35,7 +35,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * @since 2.0
  */
 public class FleetModelImporter implements ISubmodelImporter {
 	public static final String VESSELS_KEY = "VESSELS";
@@ -64,7 +63,6 @@ public class FleetModelImporter implements ISubmodelImporter {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public FleetModelImporter() {
 		final Activator activator = Activator.getDefault();

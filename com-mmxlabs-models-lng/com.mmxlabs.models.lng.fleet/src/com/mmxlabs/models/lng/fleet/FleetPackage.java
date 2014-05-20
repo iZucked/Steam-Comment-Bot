@@ -256,7 +256,6 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -266,7 +265,6 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fill Capacity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -533,7 +531,6 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Vessel Group</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -643,7 +640,6 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Service Speed</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -793,7 +789,6 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Capacity</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.Vessel#getCapacity()
@@ -805,7 +800,6 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Fill Capacity</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity()
@@ -1164,7 +1158,6 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed <em>Service Speed</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Service Speed</em>'.
 	 * @see com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed()
@@ -1353,7 +1346,6 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Capacity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1362,7 +1354,6 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Fill Capacity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1637,7 +1628,6 @@ public interface FleetPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Service Speed</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

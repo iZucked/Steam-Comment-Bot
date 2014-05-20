@@ -113,7 +113,6 @@ public interface RouteLine extends MMXObject {
 	 * If the meaning of the '<em>Vias</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vias</em>' reference list.
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getRouteLine_Vias()
@@ -124,7 +123,6 @@ public interface RouteLine extends MMXObject {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated

@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
  * @author Simon McGregor
  * 
  *         Utility class to provide methods for evaluating index curves
- * @since 5.0
  * 
  */
 public class PriceIndexUtils {
@@ -36,7 +35,6 @@ public class PriceIndexUtils {
 	 * Provides a {@link SeriesParser} object based on the default activator (the one returned by {@link Activator.getDefault()}).
 	 * 
 	 * @return A {@link SeriesParser} object for use in validating price expressions.
-	 * @since 5.0
 	 */
 	@SuppressWarnings("rawtypes")
 	public static SeriesParser getParserForCommodityIndices(final PricingModel pricingModel, final Date dateZero) {
@@ -65,7 +63,6 @@ public class PriceIndexUtils {
 	 *            Internally, dates are represented for the SeriesParser in offsets from a "date zero" value.
 	 * @param index
 	 *            The index data to use.
-	 * @since 5.0
 	 */
 	public static void addSeriesDataFromDataIndex(final SeriesParser parser, final String name, final Date dateZero, final DataIndex<? extends Number> index) {
 		final int[] times;
@@ -106,7 +103,6 @@ public class PriceIndexUtils {
 	 * @param earliest
 	 * @param windowStart
 	 * @return
-	 * @since 5.0
 	 */
 	public static int convertTime(final Date earliest, final Date windowStart) {
 		final TimeZone timezone = TimeZone.getTimeZone("UTC");

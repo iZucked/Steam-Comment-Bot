@@ -43,7 +43,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	/**
 	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUuid()
 	 * @generated
@@ -54,7 +53,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 	/**
 	 * The cached value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUuid()
 	 * @generated
@@ -123,7 +121,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -133,7 +130,6 @@ public class RouteImpl extends NamedObjectImpl implements Route {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

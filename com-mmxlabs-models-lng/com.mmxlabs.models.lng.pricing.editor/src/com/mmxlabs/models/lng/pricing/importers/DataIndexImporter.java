@@ -36,7 +36,6 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  * Custom import logic for loading a data index.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class DataIndexImporter extends AbstractClassImporter {
@@ -61,7 +60,6 @@ public class DataIndexImporter extends AbstractClassImporter {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context) {

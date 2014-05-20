@@ -102,7 +102,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -112,7 +111,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -122,7 +120,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -132,7 +129,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -151,7 +147,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slots</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -206,7 +201,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Sorted Slots</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -262,7 +256,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -272,7 +265,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -282,7 +274,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -292,7 +283,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -383,7 +373,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -393,7 +382,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -403,7 +391,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -413,7 +400,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -432,7 +418,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -442,7 +427,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -452,7 +436,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -462,7 +445,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -472,7 +454,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -608,7 +589,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -618,7 +598,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -628,7 +607,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -638,7 +616,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -703,7 +680,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -713,7 +689,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -723,7 +698,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -733,7 +707,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -824,7 +797,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -843,7 +815,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -853,7 +824,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -872,7 +842,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -882,7 +851,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -892,7 +860,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -902,7 +869,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -912,7 +878,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -976,7 +941,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer From</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1094,7 +1058,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1104,7 +1067,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1114,7 +1076,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1124,7 +1085,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1143,7 +1103,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1208,7 +1167,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1218,7 +1176,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1228,7 +1185,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1238,7 +1194,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1329,7 +1284,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1348,7 +1302,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1358,7 +1311,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1377,7 +1329,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1387,7 +1338,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1397,7 +1347,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1407,7 +1356,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1417,7 +1365,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1463,7 +1410,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1473,7 +1419,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer To</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1483,7 +1428,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1493,7 +1437,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1602,7 +1545,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1612,7 +1554,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1622,7 +1563,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1632,7 +1572,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1651,7 +1590,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1661,7 +1599,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Max Cv</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1671,7 +1608,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1936,7 +1872,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1946,7 +1881,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1956,7 +1890,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1966,7 +1899,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2057,7 +1989,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2076,7 +2007,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2086,7 +2016,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2105,7 +2034,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2115,7 +2043,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2125,7 +2052,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2135,7 +2061,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2145,7 +2070,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2209,7 +2133,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer From</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2336,7 +2259,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2346,7 +2268,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2356,7 +2277,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2366,7 +2286,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2385,7 +2304,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2450,7 +2368,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Assignment</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2460,7 +2377,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2470,7 +2386,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Hint</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2480,7 +2395,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2571,7 +2485,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2590,7 +2503,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Pricing Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2600,7 +2512,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2619,7 +2530,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Shipping Days Restriction</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2629,7 +2539,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2639,7 +2548,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2649,7 +2557,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2659,7 +2566,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2705,7 +2611,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2715,7 +2620,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Transfer To</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2725,7 +2629,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2735,7 +2638,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2854,7 +2756,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2864,7 +2765,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2874,7 +2774,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2884,7 +2783,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2903,7 +2801,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2913,7 +2810,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Max Cv</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2923,7 +2819,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4127,7 +4022,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getSlots <em>Slots</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Slots</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSlots()
@@ -4149,8 +4043,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots() <em>Get Sorted Slots</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Sorted Slots</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.Cargo#getSortedSlots()
 	 * @generated
@@ -4280,7 +4172,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Expression</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getPriceExpression()
@@ -4292,7 +4183,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Cargo</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getCargo()
@@ -4304,7 +4194,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Pricing Date</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getPricingDate()
@@ -4316,7 +4205,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Notes</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getNotes()
@@ -4339,7 +4227,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction <em>Shipping Days Restriction</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Shipping Days Restriction</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getShippingDaysRestriction()
@@ -4351,7 +4238,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Entity</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getEntity()
@@ -4363,7 +4249,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts <em>Restricted Contracts</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Restricted Contracts</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedContracts()
@@ -4375,7 +4260,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts <em>Restricted Ports</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Restricted Ports</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getRestrictedPorts()
@@ -4387,7 +4271,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Restricted Lists Are Permissive</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#isRestrictedListsArePermissive()
@@ -4494,7 +4377,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedEntity() <em>Get Slot Or Delegated Entity</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Delegated Entity</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedEntity()
@@ -4505,7 +4387,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedContracts() <em>Get Slot Or Contract Restricted Contracts</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Contracts</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedContracts()
@@ -4516,7 +4397,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedPorts() <em>Get Slot Or Contract Restricted Ports</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Ports</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedPorts()
@@ -4527,7 +4407,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedListsArePermissive() <em>Get Slot Or Contract Restricted Lists Are Permissive</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Restricted Lists Are Permissive</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrContractRestrictedListsArePermissive()
@@ -4591,7 +4470,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Transfer From</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom()
@@ -4614,7 +4492,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV() <em>Get Slot Or Delegated CV</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#getSlotOrDelegatedCV()
@@ -4656,7 +4533,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Purchase Delivery Type</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getPurchaseDeliveryType()
@@ -4668,7 +4544,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo <em>Transfer To</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Transfer To</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getTransferTo()
@@ -4680,7 +4555,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue <em>Min Cv Value</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Min Cv Value</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getMinCvValue()
@@ -4692,7 +4566,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue <em>Max Cv Value</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Max Cv Value</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getMaxCvValue()
@@ -4704,7 +4577,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMinCv() <em>Get Slot Or Contract Min Cv</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Min Cv</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMinCv()
@@ -4715,7 +4587,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMaxCv() <em>Get Slot Or Contract Max Cv</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Max Cv</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractMaxCv()
@@ -4726,7 +4597,6 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractDeliveryType() <em>Get Slot Or Contract Delivery Type</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Slot Or Contract Delivery Type</em>' operation.
 	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getSlotOrContractDeliveryType()
@@ -5290,7 +5160,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slots</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5307,7 +5176,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Sorted Slots</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5398,7 +5266,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5407,7 +5274,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Cargo</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5416,7 +5282,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Pricing Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5425,7 +5290,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5442,7 +5306,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Shipping Days Restriction</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5451,7 +5314,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5460,7 +5322,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Restricted Contracts</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5469,7 +5330,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Restricted Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5478,7 +5338,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5559,7 +5418,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegated Entity</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5568,7 +5426,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Contracts</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5577,7 +5434,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Ports</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5586,7 +5442,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Restricted Lists Are Permissive</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5637,7 +5492,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Transfer From</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5654,7 +5508,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Delegated CV</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5689,7 +5542,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Purchase Delivery Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5698,7 +5550,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Transfer To</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5707,7 +5558,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Min Cv Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5716,7 +5566,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Max Cv Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5725,7 +5574,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Min Cv</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5734,7 +5582,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Max Cv</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5743,7 +5590,6 @@ public interface CargoPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Contract Delivery Type</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

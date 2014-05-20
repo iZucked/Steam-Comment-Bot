@@ -49,7 +49,6 @@ import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
- * @since 2.0
  */
 public class CargoImporter extends DefaultClassImporter {
 	private static final String KEY_LOADSLOT = "buy";
@@ -219,7 +218,6 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	protected void exportSlot(final IExportContext context, final Map<String, String> result, final Slot slot, final String referenceName) {
 		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());
@@ -466,7 +464,6 @@ public class CargoImporter extends DefaultClassImporter {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	public Collection<EObject> importRawObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final List<EObject> objects = new LinkedList<EObject>();

@@ -93,7 +93,6 @@ public class StartEventItemProvider
 	/**
 	 * This adds a property descriptor for the Group Profit And Loss feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

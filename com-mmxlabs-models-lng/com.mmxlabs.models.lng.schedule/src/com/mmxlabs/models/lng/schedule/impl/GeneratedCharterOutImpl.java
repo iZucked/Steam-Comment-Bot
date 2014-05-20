@@ -22,7 +22,6 @@ import java.util.Collection;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Generated Charter Out</b></em>'.
- * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -39,7 +38,6 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLoss()
 	 * @generated
@@ -98,7 +96,6 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -108,7 +105,6 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -124,7 +120,6 @@ public class GeneratedCharterOutImpl extends EventImpl implements GeneratedChart
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

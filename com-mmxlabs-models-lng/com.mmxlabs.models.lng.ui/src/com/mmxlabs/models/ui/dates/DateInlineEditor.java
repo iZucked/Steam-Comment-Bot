@@ -94,7 +94,6 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	 * Change the format string after creation. String will be passed into a {@link DateTimeFormatter}.
 	 * 
 	 * @param format
-	 * @since 2.0
 	 */
 	public void setDateFormat(final String format) {
 

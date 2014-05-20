@@ -31,7 +31,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 
 /**
- * @since 2.0
  */
 
 public class DestinationTypeValueListInlineEditor extends BasicAttributeInlineEditor {

@@ -51,7 +51,6 @@ public enum Fuel implements Enumerator {
 	NBO(2, "NBO", "NBO"), /**
 	 * The '<em><b>Pilot Light</b></em>' literal object.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #PILOT_LIGHT_VALUE
 	 * @generated
@@ -111,7 +110,6 @@ public enum Fuel implements Enumerator {
 	 * If the meaning of '<em><b>Pilot Light</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #PILOT_LIGHT
 	 * @model name="PilotLight"

@@ -20,7 +20,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Provisional Cargo</b></em>'.
- * @since 3.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -68,7 +67,6 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 	/**
 	 * The cached value of the '{@link #getPortfolioModel() <em>Portfolio Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getPortfolioModel()
 	 * @generated
@@ -227,7 +225,6 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -238,7 +235,6 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -254,7 +250,6 @@ public class ProvisionalCargoImpl extends MMXObjectImpl implements ProvisionalCa
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

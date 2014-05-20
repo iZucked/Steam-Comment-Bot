@@ -22,7 +22,6 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Discharge Slot</b></em>'.
- * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -60,7 +59,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	/**
 	 * The default value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPurchaseDeliveryType()
 	 * @generated
@@ -71,7 +69,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	/**
 	 * The cached value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPurchaseDeliveryType()
 	 * @generated
@@ -82,7 +79,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	/**
 	 * This is true if the Purchase Delivery Type attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -92,7 +88,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	/**
 	 * The cached value of the '{@link #getTransferTo() <em>Transfer To</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getTransferTo()
 	 * @generated
@@ -195,7 +190,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -205,7 +199,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -220,7 +213,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -235,7 +227,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -245,7 +236,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -263,7 +253,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -273,7 +262,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -289,7 +277,6 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

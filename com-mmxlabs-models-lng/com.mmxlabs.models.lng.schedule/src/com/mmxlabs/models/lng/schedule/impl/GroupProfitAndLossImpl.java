@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Group Profit And Loss</b></em>'.
- * @since 4.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -62,7 +61,6 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	/**
 	 * The default value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfitAndLossPreTax()
 	 * @generated
@@ -73,7 +71,6 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 	/**
 	 * The cached value of the '{@link #getProfitAndLossPreTax() <em>Profit And Loss Pre Tax</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getProfitAndLossPreTax()
 	 * @generated
@@ -133,7 +130,6 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -143,7 +139,6 @@ public class GroupProfitAndLossImpl extends EObjectImpl implements GroupProfitAn
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

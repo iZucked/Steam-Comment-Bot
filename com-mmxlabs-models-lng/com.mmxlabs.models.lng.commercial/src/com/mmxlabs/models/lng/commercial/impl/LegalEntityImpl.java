@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 public class LegalEntityImpl extends BaseLegalEntityImpl implements LegalEntity {
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

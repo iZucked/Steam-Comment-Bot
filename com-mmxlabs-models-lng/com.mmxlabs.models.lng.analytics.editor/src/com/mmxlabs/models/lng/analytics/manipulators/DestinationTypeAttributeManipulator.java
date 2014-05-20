@@ -22,7 +22,6 @@ import com.mmxlabs.models.ui.tabular.manipulators.ValueListAttributeManipulator;
  * A subclass of {@link ValueListAttributeManipulator} to handle the restricted set of {@link DestinationType} enums
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class DestinationTypeAttributeManipulator extends ValueListAttributeManipulator {

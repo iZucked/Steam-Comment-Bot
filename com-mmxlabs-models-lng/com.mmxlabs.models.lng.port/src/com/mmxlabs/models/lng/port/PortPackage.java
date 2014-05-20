@@ -145,7 +145,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Berths</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -200,7 +199,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Atobviac Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -210,7 +208,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Dataloy Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -220,7 +217,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Veson Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -230,7 +226,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>External Code</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -240,7 +235,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>UN Locode</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -433,7 +427,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vias</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -681,7 +674,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getBerths <em>Berths</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Berths</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getBerths()
@@ -748,7 +740,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getAtobviacCode <em>Atobviac Code</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Atobviac Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getAtobviacCode()
@@ -760,7 +751,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getDataloyCode <em>Dataloy Code</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Dataloy Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getDataloyCode()
@@ -772,7 +762,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getVesonCode <em>Veson Code</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Veson Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getVesonCode()
@@ -784,7 +773,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getExternalCode <em>External Code</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>External Code</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getExternalCode()
@@ -796,7 +784,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getUNLocode <em>UN Locode</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>UN Locode</em>'.
 	 * @see com.mmxlabs.models.lng.port.Port#getUNLocode()
@@ -915,7 +902,6 @@ public interface PortPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.port.RouteLine#getVias <em>Vias</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Vias</em>'.
 	 * @see com.mmxlabs.models.lng.port.RouteLine#getVias()
@@ -1109,7 +1095,6 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Berths</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1158,7 +1143,6 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Atobviac Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1167,7 +1151,6 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Dataloy Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1176,7 +1159,6 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Veson Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 7.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1185,7 +1167,6 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>External Code</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 7.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1194,7 +1175,6 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>UN Locode</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 7.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1289,7 +1269,6 @@ public interface PortPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vias</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

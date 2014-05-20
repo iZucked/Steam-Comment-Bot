@@ -48,7 +48,6 @@ import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelRowTransformer.WireD
  * 
  * @author Simon Goodall (original work by Tom Hinton)
  * 
- * @since 3.0
  */
 public abstract class TradesWiringDiagram implements PaintListener, MouseListener, MouseMoveListener, KeyListener {
 
@@ -480,7 +479,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * A> (representing the disconnected discharge on A) and <B, null> (representing the disconnected load on B).
 	 * 
 	 * @param ctrlPressed
-	 * @since 4.0
 	 */
 	protected abstract void wiringChanged(final Map<RowData, RowData> newWiring, boolean ctrlPressed);
 
@@ -517,7 +515,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * 
 	 * @param e
 	 *            an event containing information about the key press
-	 * @since 4.0
 	 */
 	public void keyPressed(final KeyEvent e) {
 
@@ -528,7 +525,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 * 
 	 * @param e
 	 *            an event containing information about the key release
-	 * @since 4.0
 	 */
 	public void keyReleased(final KeyEvent e) {
 		// Cancel any drag in effect

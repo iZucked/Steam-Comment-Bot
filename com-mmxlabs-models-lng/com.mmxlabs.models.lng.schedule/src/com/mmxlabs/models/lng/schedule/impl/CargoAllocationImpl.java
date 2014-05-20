@@ -50,8 +50,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLoss()
 	 * @generated
 	 * @ordered
@@ -71,7 +69,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	/**
 	 * The cached value of the '{@link #getSlotAllocations() <em>Slot Allocations</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getSlotAllocations()
 	 * @generated
@@ -101,7 +98,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	/**
 	 * The cached value of the '{@link #getEvents() <em>Events</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getEvents()
 	 * @generated
@@ -149,7 +145,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -159,7 +154,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -175,7 +169,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -270,7 +263,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -346,7 +338,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

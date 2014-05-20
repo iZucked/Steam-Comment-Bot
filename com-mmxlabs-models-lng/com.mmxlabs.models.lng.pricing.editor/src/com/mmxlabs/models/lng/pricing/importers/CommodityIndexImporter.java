@@ -23,7 +23,6 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  * Custom import logic for loading a commodity index.
  * 
  * @author Simon Goodall
- * @since 5.0
  * 
  */
 public class CommodityIndexImporter extends GenericIndexImporter<CommodityIndex> {

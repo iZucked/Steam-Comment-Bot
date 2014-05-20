@@ -23,7 +23,6 @@ import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Shipping Cost Plan</b></em>'.
- * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

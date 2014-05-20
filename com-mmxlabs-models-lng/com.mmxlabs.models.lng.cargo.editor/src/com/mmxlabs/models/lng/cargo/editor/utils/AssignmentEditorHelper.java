@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 
 /**
- * @since 8.0
  */
 public class AssignmentEditorHelper {
 	public static Date getStartDate(final AssignableElement task) {

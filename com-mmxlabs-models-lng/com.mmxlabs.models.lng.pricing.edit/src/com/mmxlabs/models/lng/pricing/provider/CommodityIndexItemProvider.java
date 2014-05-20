@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.pricing.CommodityIndex;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.CommodityIndex} object.
  * <!-- begin-user-doc -->
- * @since 5.0
  * <!-- end-user-doc -->
  * @generated
  */

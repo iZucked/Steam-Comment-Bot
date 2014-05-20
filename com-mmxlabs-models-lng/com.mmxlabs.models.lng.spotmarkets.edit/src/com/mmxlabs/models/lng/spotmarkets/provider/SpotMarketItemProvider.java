@@ -74,7 +74,6 @@ public class SpotMarketItemProvider
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -141,7 +140,6 @@ public class SpotMarketItemProvider
 	/**
 	 * This adds a property descriptor for the Entity feature.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -78,7 +78,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * If the meaning of the '<em>Capacity</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Capacity</em>' attribute.
 	 * @see #isSetCapacity()
@@ -94,7 +93,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Capacity</em>' attribute.
 	 * @see #isSetCapacity()
@@ -107,7 +105,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetCapacity()
 	 * @see #getCapacity()
@@ -119,7 +116,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getCapacity <em>Capacity</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Capacity</em>' attribute is set.
 	 * @see #unsetCapacity()
@@ -137,7 +133,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * If the meaning of the '<em>Fill Capacity</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fill Capacity</em>' attribute.
 	 * @see #isSetFillCapacity()
@@ -153,7 +148,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Fill Capacity</em>' attribute.
 	 * @see #isSetFillCapacity()
@@ -166,7 +160,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	/**
 	 * Unsets the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #isSetFillCapacity()
 	 * @see #getFillCapacity()
@@ -178,7 +171,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 	/**
 	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.fleet.Vessel#getFillCapacity <em>Fill Capacity</em>}' attribute is set.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return whether the value of the '<em>Fill Capacity</em>' attribute is set.
 	 * @see #unsetFillCapacity()
@@ -190,7 +182,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
@@ -199,7 +190,6 @@ public interface Vessel extends AVesselSet<Vessel> {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated

@@ -29,7 +29,6 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 /**
- * @since 5.0
  */
 public class MigrateToV3 extends AbstractMigrationUnit {
 

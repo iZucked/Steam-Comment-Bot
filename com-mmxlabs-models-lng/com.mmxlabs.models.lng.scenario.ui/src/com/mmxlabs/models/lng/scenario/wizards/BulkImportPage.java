@@ -44,7 +44,6 @@ import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 
 /**
- * @since 3.0
  */
 public class BulkImportPage extends WizardPage {
 

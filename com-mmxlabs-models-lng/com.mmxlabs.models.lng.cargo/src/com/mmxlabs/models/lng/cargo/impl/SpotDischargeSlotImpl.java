@@ -61,7 +61,6 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -79,7 +78,6 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -89,7 +87,6 @@ public class SpotDischargeSlotImpl extends DischargeSlotImpl implements SpotDisc
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

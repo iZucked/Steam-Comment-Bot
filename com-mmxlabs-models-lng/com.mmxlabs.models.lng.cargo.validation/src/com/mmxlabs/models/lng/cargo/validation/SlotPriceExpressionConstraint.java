@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 
 /**
- * @since 2.0
  */
 public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint {
 	private static double minExpressionValue = 0.0;

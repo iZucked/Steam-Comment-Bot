@@ -98,7 +98,6 @@ public interface AnalyticsFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Shipping Cost Plan</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Shipping Cost Plan</em>'.
 	 * @generated
@@ -108,7 +107,6 @@ public interface AnalyticsFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Shipping Cost Row</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Shipping Cost Row</em>'.
 	 * @generated
@@ -118,7 +116,6 @@ public interface AnalyticsFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Cargo Sandbox</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Cargo Sandbox</em>'.
 	 * @generated
@@ -128,7 +125,6 @@ public interface AnalyticsFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Provisional Cargo</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Provisional Cargo</em>'.
 	 * @generated
@@ -138,7 +134,6 @@ public interface AnalyticsFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Buy Opportunity</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Buy Opportunity</em>'.
 	 * @generated
@@ -148,7 +143,6 @@ public interface AnalyticsFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Sell Opportunity</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Sell Opportunity</em>'.
 	 * @generated

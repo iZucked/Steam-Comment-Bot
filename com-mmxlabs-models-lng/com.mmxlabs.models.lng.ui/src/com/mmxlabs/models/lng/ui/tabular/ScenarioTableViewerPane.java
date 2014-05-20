@@ -91,35 +91,28 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected static final String ADD_REMOVE_GROUP = "addremove";
 	protected static final String EDIT_GROUP = "edit";
 	/**
-	 * @since 2.0
 	 */
 	protected ScenarioTableViewer scenarioViewer;
 	/**
-	 * @since 4.0
 	 */
 	protected final IScenarioEditingLocation scenarioEditingLocation;
 
 	/**
-	 * @since 2.0
 	 */
 	protected FilterField filterField;
 	/**
-	 * @since 2.0
 	 */
 	protected ToolBarManager externalToolbarManager;
 	protected MenuManager externalMenuManager;
 
 	/**
-	 * @since 2.0
 	 */
 	protected final IActionBars actionBars;
 	/**
-	 * @since 2.0
 	 */
 	protected Action deleteAction;
 
 	/**
-	 * @since 5.0
 	 */
 	protected Action addAction;
 
@@ -286,7 +279,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected void enableOpenListener() {
 		scenarioViewer.addOpenListener(new IOpenListener() {
@@ -354,21 +346,18 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	/**
-	 * @since 7.0
 	 */
 	protected GridViewerColumn addNameManipulator(final String nameName) {
 		return addTypicalColumn(nameName, new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), getEditingDomain()));
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	protected void defaultSetTitle(final String string) {
 		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	protected Action createAddAction(final EReference containment) {
 		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment));
@@ -376,7 +365,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	protected IAddContext getAddContext(final EReference containment) {
 		return new IAddContext() {
@@ -413,7 +401,6 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		scenarioViewer.init(adapterFactory, commandStack, path.toArray(new EReference[path.size()]));

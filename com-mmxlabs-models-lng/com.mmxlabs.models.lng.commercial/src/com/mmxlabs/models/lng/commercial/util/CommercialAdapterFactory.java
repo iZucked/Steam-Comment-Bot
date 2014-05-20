@@ -256,7 +256,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.TaxRate
@@ -271,7 +270,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters
@@ -286,7 +284,6 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters

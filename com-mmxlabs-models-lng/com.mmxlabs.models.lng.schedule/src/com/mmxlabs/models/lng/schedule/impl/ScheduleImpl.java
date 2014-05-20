@@ -77,7 +77,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	/**
 	 * The cached value of the '{@link #getMarketAllocations() <em>Market Allocations</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getMarketAllocations()
 	 * @generated
@@ -172,7 +171,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

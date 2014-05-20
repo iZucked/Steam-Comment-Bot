@@ -75,7 +75,6 @@ public class CargoItemProvider
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -98,7 +97,6 @@ public class CargoItemProvider
 	/**
 	 * This adds a property descriptor for the Assignment feature.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -121,7 +119,6 @@ public class CargoItemProvider
 	/**
 	 * This adds a property descriptor for the Spot Index feature.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -144,7 +141,6 @@ public class CargoItemProvider
 	/**
 	 * This adds a property descriptor for the Sequence Hint feature.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -167,7 +163,6 @@ public class CargoItemProvider
 	/**
 	 * This adds a property descriptor for the Locked feature.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -212,7 +207,6 @@ public class CargoItemProvider
 	/**
 	 * This adds a property descriptor for the Slots feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

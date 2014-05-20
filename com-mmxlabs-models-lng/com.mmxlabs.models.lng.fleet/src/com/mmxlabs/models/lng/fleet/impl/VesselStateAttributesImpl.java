@@ -199,7 +199,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -212,7 +211,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -222,7 +220,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -235,7 +232,6 @@ public class VesselStateAttributesImpl extends MMXObjectImpl implements VesselSt
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

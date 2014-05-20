@@ -37,7 +37,6 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstraint {
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public String validate(final IValidationContext ctx, final List<IStatus> statuses) {

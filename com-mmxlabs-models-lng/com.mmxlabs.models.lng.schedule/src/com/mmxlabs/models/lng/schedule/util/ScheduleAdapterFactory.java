@@ -372,7 +372,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut
@@ -443,7 +442,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation
@@ -556,7 +554,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder
@@ -571,7 +568,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see java.util.Map.Entry
@@ -586,7 +582,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer
@@ -601,7 +596,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss
@@ -616,7 +610,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss

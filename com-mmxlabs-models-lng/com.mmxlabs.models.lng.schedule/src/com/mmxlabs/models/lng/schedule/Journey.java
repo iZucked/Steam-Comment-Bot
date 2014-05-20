@@ -87,7 +87,6 @@ public interface Journey extends Event, FuelUsage {
 	 * If the meaning of the '<em>Route</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Route</em>' reference.
 	 * @see #setRoute(Route)
@@ -100,7 +99,6 @@ public interface Journey extends Event, FuelUsage {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Route</em>' reference.
 	 * @see #getRoute()

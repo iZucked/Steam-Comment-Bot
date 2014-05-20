@@ -23,7 +23,6 @@ import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters} object.
  * <!-- begin-user-doc -->
- * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */

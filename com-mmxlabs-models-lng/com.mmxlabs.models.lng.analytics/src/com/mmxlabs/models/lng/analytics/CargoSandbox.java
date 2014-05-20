@@ -10,7 +10,6 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Cargo Sandbox</b></em>'.
- * @since 3.0
  * <!-- end-user-doc -->
  *
  * <p>

@@ -30,8 +30,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * The default value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
 	 * @see #getMinCvValue()
 	 * @generated
 	 * @ordered
@@ -40,7 +38,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * The cached value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getMinCvValue()
 	 * @generated
@@ -50,7 +47,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * This is true if the Min Cv Value attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -59,7 +55,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * The default value of the '{@link #getMaxCvValue() <em>Max Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getMaxCvValue()
 	 * @generated
@@ -69,7 +64,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * The cached value of the '{@link #getMaxCvValue() <em>Max Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getMaxCvValue()
 	 * @generated
@@ -80,7 +74,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * This is true if the Max Cv Value attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -90,7 +83,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * The default value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPurchaseDeliveryType()
 	 * @generated
@@ -100,7 +92,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * The cached value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPurchaseDeliveryType()
 	 * @generated
@@ -128,7 +119,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -138,7 +128,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -153,7 +142,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -168,7 +156,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -178,7 +165,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -188,7 +174,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -203,7 +188,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -218,7 +202,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -228,7 +211,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -238,7 +220,6 @@ public class SalesContractImpl extends ContractImpl implements SalesContract {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

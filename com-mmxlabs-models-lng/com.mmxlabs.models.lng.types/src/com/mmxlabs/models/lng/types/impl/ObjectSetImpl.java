@@ -20,7 +20,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Object Set</b></em>'.
- * @since 5.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

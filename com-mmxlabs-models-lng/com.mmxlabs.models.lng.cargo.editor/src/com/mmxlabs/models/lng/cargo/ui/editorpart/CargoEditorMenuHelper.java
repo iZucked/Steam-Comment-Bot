@@ -80,7 +80,6 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
- * @since 3.0
  */
 public class CargoEditorMenuHelper {
 
@@ -97,7 +96,6 @@ public class CargoEditorMenuHelper {
 	private static final boolean enableSTSMenus = SecurityUtils.getSubject().isPermitted("features:shiptoship");
 
 	/**
-	 * @since 4.0
 	 */
 	public CargoEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel, final LNGPortfolioModel portfolioModel) {
 		this.shell = shell;
@@ -459,7 +457,6 @@ public class CargoEditorMenuHelper {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
@@ -1264,7 +1261,6 @@ public class CargoEditorMenuHelper {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public void editLDDCargo(final Cargo cargo) {
 		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();

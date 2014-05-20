@@ -12,7 +12,6 @@ import org.eclipse.emf.common.util.EList;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Profit And Loss Container</b></em>'.
- * @since 4.0
  * <!-- end-user-doc -->
  *
  * <p>

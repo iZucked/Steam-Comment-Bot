@@ -81,7 +81,6 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -214,7 +213,6 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Restricted Lists Are Permissive feature.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -237,7 +235,6 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Restricted Contracts feature.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -260,7 +257,6 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Restricted Ports feature.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -283,7 +279,6 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Notes feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -306,7 +301,6 @@ public class ContractItemProvider
 	/**
 	 * This adds a property descriptor for the Contract Type feature.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

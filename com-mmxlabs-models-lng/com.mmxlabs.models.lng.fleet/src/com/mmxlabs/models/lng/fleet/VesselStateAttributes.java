@@ -36,7 +36,6 @@ public interface VesselStateAttributes extends MMXObject {
 	 * If the meaning of the '<em>Nbo Rate</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Nbo Rate</em>' attribute.
 	 * @see #setNboRate(double)
@@ -50,7 +49,6 @@ public interface VesselStateAttributes extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getNboRate <em>Nbo Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Nbo Rate</em>' attribute.
 	 * @see #getNboRate()
@@ -65,7 +63,6 @@ public interface VesselStateAttributes extends MMXObject {
 	 * If the meaning of the '<em>Idle NBO Rate</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Idle NBO Rate</em>' attribute.
 	 * @see #setIdleNBORate(double)
@@ -79,7 +76,6 @@ public interface VesselStateAttributes extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleNBORate <em>Idle NBO Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Idle NBO Rate</em>' attribute.
 	 * @see #getIdleNBORate()
@@ -94,7 +90,6 @@ public interface VesselStateAttributes extends MMXObject {
 	 * If the meaning of the '<em>Idle Base Rate</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Idle Base Rate</em>' attribute.
 	 * @see #setIdleBaseRate(double)
@@ -108,7 +103,6 @@ public interface VesselStateAttributes extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getIdleBaseRate <em>Idle Base Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Idle Base Rate</em>' attribute.
 	 * @see #getIdleBaseRate()
@@ -123,7 +117,6 @@ public interface VesselStateAttributes extends MMXObject {
 	 * If the meaning of the '<em>In Port Base Rate</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>In Port Base Rate</em>' attribute.
 	 * @see #setInPortBaseRate(double)
@@ -137,7 +130,6 @@ public interface VesselStateAttributes extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getInPortBaseRate <em>In Port Base Rate</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>In Port Base Rate</em>' attribute.
 	 * @see #getInPortBaseRate()
@@ -168,7 +160,6 @@ public interface VesselStateAttributes extends MMXObject {
 	 * If the meaning of the '<em>Service Speed</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Service Speed</em>' attribute.
 	 * @see #setServiceSpeed(double)
@@ -182,7 +173,6 @@ public interface VesselStateAttributes extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.fleet.VesselStateAttributes#getServiceSpeed <em>Service Speed</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Service Speed</em>' attribute.
 	 * @see #getServiceSpeed()

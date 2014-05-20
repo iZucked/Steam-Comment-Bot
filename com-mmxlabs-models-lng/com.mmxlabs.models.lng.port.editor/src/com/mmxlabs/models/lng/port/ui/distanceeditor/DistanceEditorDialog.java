@@ -305,7 +305,6 @@ public class DistanceEditorDialog extends Dialog {
 	/**
 	 * Return the current {@link EditingDomain} or null if not available.
 	 * 
-	 * @since 4.0
 	 */
 	@Nullable
 	public static EditingDomain getEditingDomain() {

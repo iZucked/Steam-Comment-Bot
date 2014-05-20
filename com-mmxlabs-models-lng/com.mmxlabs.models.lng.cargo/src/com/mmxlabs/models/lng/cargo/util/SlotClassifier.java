@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
  * 
  * @author proshun
  * @noinstantiate This class is not intended to be instantiated by clients.
- * @since 8.0
  */
 public final class SlotClassifier {
 

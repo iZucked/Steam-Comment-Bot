@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Vessel Type Group</b></em>'.
- * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

@@ -53,7 +53,6 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Sales Contract</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Sales Contract</em>'.
 	 * @generated
@@ -63,7 +62,6 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Purchase Contract</em>'.
 	 * @generated
@@ -73,7 +71,6 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Tax Rate</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Tax Rate</em>'.
 	 * @generated
@@ -83,7 +80,6 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Expression Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Expression Price Parameters</em>'.
 	 * @generated

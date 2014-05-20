@@ -26,7 +26,6 @@ public class SetUtils {
 	 * 
 	 * @param vesselSets
 	 * @param vessel
-	 * @since 5.0
 	 * @return
 	 */
 	public <T extends ObjectSet<T, U>, U> boolean contains(final Iterable<T> vesselSets, final U vessel) {
@@ -37,7 +36,6 @@ public class SetUtils {
 	 * Return a set containing each vessel in the given vessel sets
 	 * 
 	 * @param portSets
-	 * @since 5.0
 	 * @return
 	 */
 	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final Iterable<T> portSets) {
@@ -51,7 +49,6 @@ public class SetUtils {
 	 * 
 	 * @param portSet
 	 * @return
-	 * @since 5.0
 	 */
 	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final T portSet) {
 		final HashSet<U> result = new HashSet<U>();
@@ -60,14 +57,12 @@ public class SetUtils {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> portSets, Collection<U> output) {
 		addObjects(portSets, output, new UniqueEList<T>());
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> portSets, Collection<U> output, EList<T> marks) {
 		for (final T set : portSets)
@@ -75,14 +70,12 @@ public class SetUtils {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public static <T extends ObjectSet<T, U>, U> void addObjects(final T portSet, Collection<U> output, EList<T> marks) {
 		output.addAll(portSet.collect(marks));
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public static <T extends ObjectSet<T, U>, U> void addObjects(final T portSet, Collection<U> output) {
 		addObjects(portSet, output, new UniqueEList<T>());

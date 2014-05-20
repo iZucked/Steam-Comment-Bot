@@ -190,7 +190,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -245,7 +244,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -255,7 +253,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -265,7 +262,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -275,7 +271,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -285,7 +280,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -385,7 +379,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

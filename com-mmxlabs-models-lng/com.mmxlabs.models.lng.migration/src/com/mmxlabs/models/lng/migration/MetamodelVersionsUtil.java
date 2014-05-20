@@ -27,15 +27,12 @@ public class MetamodelVersionsUtil {
 	 */
 	public enum ModelsLNGSet_v1 {
 		/**
-		 * @since 4.0
 		 */
 		Scenario, Analytics, Cargo, Commercial, Fleet,
 		/**
-		 * @since 4.0
 		 */
 		Assignment,
 		/**
-		 * @since 4.0
 		 */
 		Parameters, Port, Pricing, Schedule, SpotMarkets
 	}
@@ -124,9 +121,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
-	 */
-	public static MetamodelLoader createV1_V2_IntermediateLoader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v1.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
@@ -153,7 +147,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public static MetamodelLoader createV2Loader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
@@ -182,7 +175,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public static MetamodelLoader createV2_V3Loader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
@@ -211,7 +203,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
 	 * @param extraPackages
 	 * @return
 	 */
@@ -242,7 +233,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 5.0
 	 * @param extraPackages
 	 * @return
 	 */
@@ -273,7 +263,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 7.0
 	 * @param extraPackages
 	 * @return
 	 */
@@ -304,7 +293,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	public static MetamodelLoader createV6Loader(final Map<URI, PackageData> extraPackages) {
 		final MetamodelLoader loader = new MetamodelLoader();
@@ -588,7 +576,6 @@ public class MetamodelVersionsUtil {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public static MetamodelLoader createCurrentLoader(final Map<URI, PackageData> extraPackages) {
 
