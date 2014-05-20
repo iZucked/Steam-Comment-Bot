@@ -36,7 +36,6 @@ import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
  * The {@link ScenarioInstanceMigrator} controls the migration process for a {@link ScenarioInstance}. It will attempt to migrate a scenario if required. It will create a copy of the scenario data to
  * migrate and only overwrite the original when the migration process completes without an {@link Exception}. Note, incorrectly coded migration steps could still corrupt a scenario.
  * 
- * @since 2.0
  */
 public class ScenarioInstanceMigrator {
 
@@ -141,7 +140,6 @@ public class ScenarioInstanceMigrator {
 	 * @param uc
 	 * @return
 	 * @throws Exception
-	 * @since 3.0
 	 */
 	public int[] applyMigrationChain(@NonNull final String scenarioContext, final int currentScenarioVersion, final int latestScenarioVersion, @NonNull final String clientContext,
 			final int currentClientVersion, final int latestClientVersion, @NonNull final URI tmpURI) throws Exception {

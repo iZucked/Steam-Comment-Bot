@@ -13,7 +13,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
- * @since 2.0
  */
 public class ScenarioMigrationService implements IScenarioMigrationService {
 

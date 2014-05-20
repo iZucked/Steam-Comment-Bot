@@ -11,13 +11,11 @@ import org.ops4j.peaberry.eclipse.MapName;
 import com.mmxlabs.models.migration.IClientMigrationUnit;
 
 /**
- * @since 2.0
  */
 @ExtensionBean("com.mmxlabs.models.migration.ClientMigrationUnit")
 public interface ClientMigrationUnitExtensionPoint {
 
 	/**
-	 * @since 3.0
 	 */
 	@MapName("id")
 	@Nullable
