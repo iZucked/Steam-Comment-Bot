@@ -108,7 +108,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	/**
 	 * The cached value of the '{@link #getBaseFuelPrices() <em>Base Fuel Prices</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getBaseFuelPrices()
 	 * @generated
@@ -240,7 +239,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

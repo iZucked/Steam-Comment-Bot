@@ -30,7 +30,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -40,7 +39,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -87,7 +85,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -97,7 +94,6 @@ public class BaseFuelImpl extends UUIDObjectImpl implements BaseFuel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

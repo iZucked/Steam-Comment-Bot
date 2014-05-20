@@ -20,7 +20,6 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListe
 /**
  * Implementation of {@link IInlineEditorExternalNotificationListener} to disable editors depending upon FOB/DES status
  * 
- * @since 2.0
  * @author Simon Goodall
  * 
  */

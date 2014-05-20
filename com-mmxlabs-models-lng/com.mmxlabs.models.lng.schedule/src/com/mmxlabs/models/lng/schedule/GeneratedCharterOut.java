@@ -8,7 +8,6 @@ package com.mmxlabs.models.lng.schedule;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Generated Charter Out</b></em>'.
- * @since 2.0
  * <!-- end-user-doc -->
  *
  * <p>

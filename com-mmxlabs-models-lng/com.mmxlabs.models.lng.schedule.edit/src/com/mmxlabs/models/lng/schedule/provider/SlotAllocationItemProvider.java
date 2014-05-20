@@ -141,7 +141,6 @@ public class SlotAllocationItemProvider
 	/**
 	 * This adds a property descriptor for the Market Allocation feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -208,7 +207,6 @@ public class SlotAllocationItemProvider
 	/**
 	 * This adds a property descriptor for the Volume Transferred feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

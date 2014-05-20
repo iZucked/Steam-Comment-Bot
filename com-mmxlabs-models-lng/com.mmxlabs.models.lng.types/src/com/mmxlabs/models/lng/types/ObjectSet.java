@@ -12,7 +12,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Object Set</b></em>'.
- * @since 5.0
  * <!-- end-user-doc -->
  *
  *

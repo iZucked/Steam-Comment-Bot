@@ -31,7 +31,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * @since 2.0
  */
 public class PortModelImporter implements ISubmodelImporter {
 	/**
@@ -62,7 +61,6 @@ public class PortModelImporter implements ISubmodelImporter {
 	private final RouteImporter routeImporter = new RouteImporter();
 
 	/**
-	 * @since 2.0
 	 */
 	public PortModelImporter() {
 		final Activator activator = Activator.getDefault();

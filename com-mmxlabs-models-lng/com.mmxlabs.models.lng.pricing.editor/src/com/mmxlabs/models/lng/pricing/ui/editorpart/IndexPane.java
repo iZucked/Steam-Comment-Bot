@@ -591,7 +591,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	protected void enableOpenListener() {

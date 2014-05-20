@@ -60,7 +60,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * The default value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getCapacity()
 	 * @generated
@@ -71,7 +70,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * The cached value of the '{@link #getCapacity() <em>Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getCapacity()
 	 * @generated
@@ -82,7 +80,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * This is true if the Capacity attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -92,7 +89,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * The default value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0 
 	 * <!-- end-user-doc -->
 	 * @see #getFillCapacity()
 	 * @generated
@@ -103,7 +99,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * The cached value of the '{@link #getFillCapacity() <em>Fill Capacity</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getFillCapacity()
 	 * @generated
@@ -114,7 +109,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 	/**
 	 * This is true if the Fill Capacity attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -186,7 +180,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -196,7 +189,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -211,7 +203,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -226,7 +217,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -236,7 +226,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -246,7 +235,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -261,7 +249,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -276,7 +263,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -301,7 +287,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -312,7 +297,6 @@ public class VesselImpl extends AVesselSetImpl<Vessel> implements Vessel {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */

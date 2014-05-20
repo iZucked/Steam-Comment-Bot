@@ -33,42 +33,22 @@ import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 public final class CargoEditorPlugin extends EMFPlugin {
 
 	/**
-	 * @since 2.0
 	 */
 	public static final String COLOR_CARGO_DES = "cargo.des";
 	/**
-	 * @since 2.0
 	 */
 	public static final String COLOR_CARGO_FOB = "cargo.fob";
 
 	/**
-	 * @since 2.0
 	 */
 	public static final String IMAGE_CARGO_LINK = "cargo.link";
-	/**
-	 * @since 2.0
-	 */
 	public static final String IMAGE_CARGO_LOCK = "cargo.lock";
-	
 	public static final String IMAGE_CARGO_NOTES = "cargo.notes";
 	
-	/**
-	 * @since 2.0
-	 */
 	public static final String IMAGE_CARGO_SWAP = "cargo.swap";
-	/**
-	 * @since 2.0
-	 */
 	public static final String IMAGE_CARGO_SWAP_DISABLED = "cargo.swap.disabled";
 
-	/**
-	 * @since 5.0
-	 */
 	public static final String IMAGE_CARGO_WIRING = "cargo.wiring";
-
-	/**
-	 * @since 5.0
-	 */
 	public static final String IMAGE_CARGO_WIRING_DISABLED = "cargo.wiring.disabled";
 
 	/**
@@ -158,7 +138,6 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 		 */
 		/**
-		 * @since 2.0
 		 */
 		@Override
 		public void stop(final BundleContext context) throws Exception {
@@ -169,7 +148,6 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		/**
 		 * Get an image from the registry. The first call needs to be from a UI thread.
 		 * 
-		 * @since 2.0
 		 */
 		public synchronized Image getImage(final String key) {
 
@@ -184,7 +162,6 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		/**
 		 * Get an image from the registry. The first call needs to be from a UI thread.
 		 * 
-		 * @since 2.0
 		 */
 		public synchronized ImageDescriptor getImageDescriptor(final String key) {
 
@@ -215,7 +192,6 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		}
 
 		/**
-		 * @since 2.0
 		 */
 		public synchronized Color getColor(final String key) {
 			if (colorRegistry == null) {

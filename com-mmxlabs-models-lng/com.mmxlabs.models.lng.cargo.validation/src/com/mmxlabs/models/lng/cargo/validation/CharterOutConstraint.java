@@ -19,7 +19,6 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class CharterOutConstraint extends AbstractModelMultiConstraint {

@@ -61,7 +61,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	/**
 	 * The cached value of the '{@link #getShippingCostPlans() <em>Shipping Cost Plans</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getShippingCostPlans()
 	 * @generated
@@ -72,7 +71,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	/**
 	 * The cached value of the '{@link #getCargoSandboxes() <em>Cargo Sandboxes</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getCargoSandboxes()
 	 * @generated
@@ -154,7 +152,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -168,7 +165,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

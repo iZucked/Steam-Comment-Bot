@@ -31,7 +31,6 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	/**
 	 * The default value of the '{@link #getUnit() <em>Unit</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUnit()
 	 * @generated
@@ -72,7 +71,6 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	/**
 	 * The default value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUnitPrice()
 	 * @generated
@@ -83,7 +81,6 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	/**
 	 * The cached value of the '{@link #getUnitPrice() <em>Unit Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getUnitPrice()
 	 * @generated
@@ -154,7 +151,6 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -164,7 +160,6 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

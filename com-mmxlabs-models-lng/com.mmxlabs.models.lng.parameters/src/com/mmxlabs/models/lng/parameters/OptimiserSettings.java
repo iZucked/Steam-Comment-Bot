@@ -165,7 +165,6 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Generate Charter Outs</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Generate Charter Outs</em>' attribute.
 	 * @see #setGenerateCharterOuts(boolean)
@@ -178,7 +177,6 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isGenerateCharterOuts <em>Generate Charter Outs</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Generate Charter Outs</em>' attribute.
 	 * @see #isGenerateCharterOuts()
@@ -193,7 +191,6 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Shipping Only</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Shipping Only</em>' attribute.
 	 * @see #setShippingOnly(boolean)
@@ -206,7 +203,6 @@ public interface OptimiserSettings extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.parameters.OptimiserSettings#isShippingOnly <em>Shipping Only</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Shipping Only</em>' attribute.
 	 * @see #isShippingOnly()

@@ -11,7 +11,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Shipping Cost Row</b></em>'.
- * @since 2.0
  * @noimplement This interface is not intended to be implemented by clients.
  * <!-- end-user-doc -->
  *
@@ -200,7 +199,6 @@ public interface ShippingCostRow extends MMXObject {
 	 * If the meaning of the '<em>Include Port Costs</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Include Port Costs</em>' attribute.
 	 * @see #setIncludePortCosts(boolean)
@@ -213,7 +211,6 @@ public interface ShippingCostRow extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts <em>Include Port Costs</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Include Port Costs</em>' attribute.
 	 * @see #isIncludePortCosts()

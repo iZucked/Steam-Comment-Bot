@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * <!-- begin-user-doc -->
  * A representation of the literals of the enumeration '<em><b>Destination Type</b></em>',
  * and utility methods for working with them.
- * @since 2.0
  * <!-- end-user-doc -->
  * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getDestinationType()
  * @model

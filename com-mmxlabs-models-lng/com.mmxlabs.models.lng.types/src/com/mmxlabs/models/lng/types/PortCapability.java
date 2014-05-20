@@ -61,7 +61,6 @@ public enum PortCapability implements Enumerator {
 	MAINTENANCE(3, "MAINTENANCE", "MAINTENANCE"), /**
 													 * The '<em><b>TRANSFER</b></em>' literal object.
 													 * <!-- begin-user-doc -->
-													 * @since 5.0
 													 * <!-- end-user-doc -->
 													 * @see #TRANSFER_VALUE
 													 * @generated
@@ -136,7 +135,6 @@ public enum PortCapability implements Enumerator {
 	 * If the meaning of '<em><b>TRANSFER</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #TRANSFER
 	 * @model

@@ -270,7 +270,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -321,7 +320,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -402,7 +400,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -413,7 +410,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -424,7 +420,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -435,7 +430,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -446,7 +440,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -527,7 +520,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -539,7 +531,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -549,7 +540,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -561,7 +551,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

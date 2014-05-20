@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.pricing.BaseFuelIndex;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex} object.
  * <!-- begin-user-doc -->
- * @since 5.0
  * <!-- end-user-doc -->
  * @generated
  */

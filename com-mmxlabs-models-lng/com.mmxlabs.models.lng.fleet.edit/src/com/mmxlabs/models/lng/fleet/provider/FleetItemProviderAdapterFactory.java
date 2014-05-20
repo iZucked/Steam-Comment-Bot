@@ -59,7 +59,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -354,7 +353,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -364,7 +362,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -374,7 +371,6 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

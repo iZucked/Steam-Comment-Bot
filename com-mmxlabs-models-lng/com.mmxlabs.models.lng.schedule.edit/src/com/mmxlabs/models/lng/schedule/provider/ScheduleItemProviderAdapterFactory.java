@@ -59,7 +59,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -274,7 +273,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -390,7 +388,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.MarketAllocation} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -575,7 +572,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -599,7 +595,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link java.util.Map.Entry} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -623,7 +618,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -647,7 +641,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -671,7 +664,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -821,7 +813,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -831,7 +822,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -841,7 +831,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

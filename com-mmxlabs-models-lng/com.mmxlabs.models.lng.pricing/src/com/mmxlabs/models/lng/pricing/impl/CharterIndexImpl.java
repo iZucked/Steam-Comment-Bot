@@ -13,7 +13,6 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Charter Index</b></em>'.
- * @since 5.0
  * <!-- end-user-doc -->
  * <p>
  * </p>

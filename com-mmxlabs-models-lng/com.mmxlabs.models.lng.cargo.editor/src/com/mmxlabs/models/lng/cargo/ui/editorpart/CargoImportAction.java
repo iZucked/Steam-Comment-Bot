@@ -42,7 +42,6 @@ import com.mmxlabs.models.ui.merge.IMappingDescriptor;
  * normally the newly imported objects replace their original counterpart.
  * 
  * @author Simon Goodall
- * @since 3.0
  * 
  */
 public final class CargoImportAction extends SimpleImportAction {

@@ -39,7 +39,6 @@ public class APortSetItemProvider extends ObjectSetItemProvider implements IEdit
 	/**
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -55,7 +54,6 @@ public class APortSetItemProvider extends ObjectSetItemProvider implements IEdit
 	/**
 	 * This returns APortSet.gif.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -67,7 +65,6 @@ public class APortSetItemProvider extends ObjectSetItemProvider implements IEdit
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

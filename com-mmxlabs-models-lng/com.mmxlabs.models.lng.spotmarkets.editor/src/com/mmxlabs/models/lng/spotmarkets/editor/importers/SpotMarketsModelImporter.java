@@ -38,7 +38,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * @since 2.0
  */
 public class SpotMarketsModelImporter implements ISubmodelImporter {
 	private static final HashMap<String, String> inputs = new HashMap<String, String>();
@@ -62,7 +61,6 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	// private IClassImporter spotCargoMarketAvailabilityImporter;
 
 	/**
-	 * @since 2.0
 	 */
 	public SpotMarketsModelImporter() {
 		final Activator activator = Activator.getDefault();

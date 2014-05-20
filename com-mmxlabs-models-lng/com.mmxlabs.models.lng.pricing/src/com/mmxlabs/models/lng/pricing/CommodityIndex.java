@@ -9,7 +9,6 @@ package com.mmxlabs.models.lng.pricing;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Commodity Index</b></em>'.
- * @since 5.0
  * <!-- end-user-doc -->
  *
  *

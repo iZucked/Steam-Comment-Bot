@@ -39,7 +39,6 @@ import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 
 /**
- * @since 3.0
  */
 public class CargoEditingCommands {
 
@@ -50,7 +49,6 @@ public class CargoEditingCommands {
 	private final LNGScenarioModel rootObject;
 
 	/**
-	 * @since 4.0
 	 */
 	public CargoEditingCommands(final EditingDomain editingDomain, final LNGScenarioModel rootObject, final LNGPortfolioModel portfolioModel) {
 		this.editingDomain = editingDomain;
@@ -110,7 +108,6 @@ public class CargoEditingCommands {
 
 	/**
 	 * @param transferPort
-	 * @since 4.0
 	 */
 	public void insertShipToShipSlots(final List<Command> setCommands, final Slot sourceSlot, final CargoModel cargoModel, final Port transferPort) {
 

@@ -25,7 +25,6 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * Checks for duplicate speed fuel curve entries
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class VesselClassSpeedCurveConstraint extends AbstractModelMultiConstraint {

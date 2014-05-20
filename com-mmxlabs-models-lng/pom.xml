@@ -5,14 +5,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.lng</groupId>
 	<artifactId>com.mmxlabs.models.lng.parent</artifactId>
-	<version>8.0.3-SNAPSHOT</version>
+	<version>3.3.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>23</version>
+		<version>26</version>
 	</parent>
 
 	<scm>

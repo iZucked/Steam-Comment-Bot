@@ -11,7 +11,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Provisional Cargo</b></em>'.
- * @since 3.0
  * <!-- end-user-doc -->
  *
  * <p>
@@ -114,7 +113,6 @@ public interface ProvisionalCargo extends MMXObject {
 	 * If the meaning of the '<em>Portfolio Model</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Portfolio Model</em>' containment reference.
 	 * @see #setPortfolioModel(EObject)
@@ -127,7 +125,6 @@ public interface ProvisionalCargo extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Portfolio Model</em>' containment reference.
 	 * @see #getPortfolioModel()

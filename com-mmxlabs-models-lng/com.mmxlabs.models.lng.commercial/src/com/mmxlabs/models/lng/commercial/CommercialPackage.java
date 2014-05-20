@@ -337,7 +337,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -347,7 +346,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -357,7 +355,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -367,7 +364,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -377,7 +373,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -387,7 +382,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -497,7 +491,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -507,7 +500,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -517,7 +509,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -527,7 +518,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -537,7 +527,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -547,7 +536,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -566,7 +554,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -576,7 +563,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -586,7 +572,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -687,7 +672,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -697,7 +681,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -707,7 +690,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -717,7 +699,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -727,7 +708,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notes</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -737,7 +717,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -756,7 +735,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -784,7 +762,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.TaxRateImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getTaxRate()
@@ -795,7 +772,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -805,7 +781,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -815,7 +790,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Tax Rate</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -825,7 +799,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl <em>LNG Price Calculator Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLNGPriceCalculatorParameters()
@@ -836,7 +809,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -846,7 +818,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -856,7 +827,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>LNG Price Calculator Parameters</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -866,7 +836,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
@@ -877,7 +846,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -887,7 +855,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -897,7 +864,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -907,7 +873,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Expression Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -917,7 +882,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
@@ -928,7 +892,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -938,7 +901,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -948,7 +910,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Slot Contract Params</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1106,7 +1067,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.ContractType
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()
@@ -1267,7 +1227,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Restricted Lists Are Permissive</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive()
@@ -1279,7 +1238,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Restricted Contracts</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts()
@@ -1291,7 +1249,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Restricted Ports</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts()
@@ -1303,7 +1260,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Price Info</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.Contract#getPriceInfo()
@@ -1315,7 +1271,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Notes</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.Contract#getNotes()
@@ -1327,7 +1282,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Contract Type</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.Contract#getContractType()
@@ -1360,7 +1314,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue <em>Min Cv Value</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Min Cv Value</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue()
@@ -1372,7 +1325,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue <em>Max Cv Value</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Max Cv Value</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue()
@@ -1384,7 +1336,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Purchase Delivery Type</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType()
@@ -1406,7 +1357,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV <em>Cargo CV</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Cargo CV</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getCargoCV()
@@ -1429,7 +1379,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.TaxRate <em>Tax Rate</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Tax Rate</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.TaxRate
@@ -1440,7 +1389,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.TaxRate#getDate <em>Date</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Date</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.TaxRate#getDate()
@@ -1452,7 +1400,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.TaxRate#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.TaxRate#getValue()
@@ -1464,7 +1411,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters <em>LNG Price Calculator Parameters</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>LNG Price Calculator Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters
@@ -1475,7 +1421,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters <em>Expression Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Expression Price Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters
@@ -1486,7 +1431,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Expression</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression()
@@ -1498,8 +1442,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SlotContractParams <em>Slot Contract Params</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Slot Contract Params</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.SlotContractParams
@@ -1583,7 +1525,6 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Contract Type</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.ContractType
@@ -1736,7 +1677,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1745,7 +1685,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Restricted Contracts</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1754,7 +1693,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Restricted Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1763,7 +1701,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Info</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1772,7 +1709,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Notes</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1781,7 +1717,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Contract Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1808,7 +1743,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Min Cv Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1817,7 +1751,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Max Cv Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1826,7 +1759,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Purchase Delivery Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1845,7 +1777,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Cargo CV</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1862,7 +1793,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.TaxRateImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getTaxRate()
@@ -1873,7 +1803,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1882,7 +1811,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1891,7 +1819,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl <em>LNG Price Calculator Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLNGPriceCalculatorParameters()
@@ -1902,7 +1829,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
@@ -1913,7 +1839,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1922,7 +1847,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl <em>Slot Contract Params</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.SlotContractParamsImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getSlotContractParams()
@@ -1997,7 +1921,6 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.ContractType <em>Contract Type</em>}' enum.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.ContractType
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getContractType()

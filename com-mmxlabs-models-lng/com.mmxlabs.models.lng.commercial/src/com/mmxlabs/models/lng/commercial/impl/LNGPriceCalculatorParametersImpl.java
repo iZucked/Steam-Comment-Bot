@@ -12,7 +12,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>LNG Price Calculator Parameters</b></em>'.
- * @since 3.0
  * <!-- end-user-doc -->
  * <p>
  * </p>

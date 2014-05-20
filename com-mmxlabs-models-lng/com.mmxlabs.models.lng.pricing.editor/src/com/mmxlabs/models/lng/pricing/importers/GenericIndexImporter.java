@@ -40,7 +40,6 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
  * Generic import logic for loading index data. Currently implemented by BaseFuelIndexImporter. TODO: change CharterIndexImporter and CommodityIndexImporter to implement this class.
  * 
  * @author Simon McGregor
- * @since 5.0
  * 
  */
 abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImporter {
@@ -134,7 +133,6 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);

@@ -32,7 +32,6 @@ public interface FOBSalesMarket extends SpotMarket {
 	 * If the meaning of the '<em>Origin Ports</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Origin Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getFOBSalesMarket_OriginPorts()

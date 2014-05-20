@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Capacity Map Entry</b></em>'.
- * @since 3.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

@@ -73,7 +73,6 @@ public class CargoAllocationItemProvider
 	/**
 	 * This adds a property descriptor for the Group Profit And Loss feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -96,7 +95,6 @@ public class CargoAllocationItemProvider
 	/**
 	 * This adds a property descriptor for the Slot Allocations feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -141,7 +139,6 @@ public class CargoAllocationItemProvider
 	/**
 	 * This adds a property descriptor for the Events feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

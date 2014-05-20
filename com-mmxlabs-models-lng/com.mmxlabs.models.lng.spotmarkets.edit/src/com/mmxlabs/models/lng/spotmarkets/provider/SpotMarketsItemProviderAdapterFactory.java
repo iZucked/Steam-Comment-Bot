@@ -59,7 +59,6 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -356,7 +355,6 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -366,7 +364,6 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -377,7 +374,6 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

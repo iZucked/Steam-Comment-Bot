@@ -30,7 +30,6 @@ import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer} object.
  * <!-- begin-user-doc -->
- * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */

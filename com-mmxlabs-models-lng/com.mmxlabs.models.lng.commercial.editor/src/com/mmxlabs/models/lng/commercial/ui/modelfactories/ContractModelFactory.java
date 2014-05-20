@@ -12,7 +12,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
 
 /**
- * @since 3.0
  */
 public class ContractModelFactory extends DefaultModelFactory {
 	protected String priceInfoClassName;

@@ -117,7 +117,6 @@ public class OptimiserSettingsItemProvider
 	/**
 	 * This adds a property descriptor for the Generate Charter Outs feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -140,7 +139,6 @@ public class OptimiserSettingsItemProvider
 	/**
 	 * This adds a property descriptor for the Shipping Only feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

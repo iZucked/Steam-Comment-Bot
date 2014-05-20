@@ -11,7 +11,6 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Shipping Cost Plan</b></em>'.
- * @since 2.0
  * <!-- end-user-doc -->
  *
  * <p>

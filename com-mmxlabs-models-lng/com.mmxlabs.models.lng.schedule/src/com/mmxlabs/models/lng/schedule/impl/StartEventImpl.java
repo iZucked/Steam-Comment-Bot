@@ -62,7 +62,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	/**
 	 * The cached value of the '{@link #getViolations() <em>Violations</em>}' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getViolations()
 	 * @generated
@@ -93,7 +92,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 	/**
 	 * The cached value of the '{@link #getGroupProfitAndLoss() <em>Group Profit And Loss</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getGroupProfitAndLoss()
 	 * @generated
@@ -154,7 +152,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -188,7 +185,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -198,7 +194,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -214,7 +209,6 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

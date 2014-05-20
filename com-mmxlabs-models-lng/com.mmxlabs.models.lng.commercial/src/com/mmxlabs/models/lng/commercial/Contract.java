@@ -166,7 +166,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
 	 * @see #setRestrictedListsArePermissive(boolean)
@@ -179,7 +178,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
 	 * @see #isRestrictedListsArePermissive()
@@ -195,7 +193,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Restricted Contracts</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Contracts</em>' reference list.
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedContracts()
@@ -212,7 +209,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Restricted Ports</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Restricted Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedPorts()
@@ -228,7 +224,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Price Info</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Price Info</em>' containment reference.
 	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
@@ -241,7 +236,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Price Info</em>' containment reference.
 	 * @see #getPriceInfo()
@@ -256,7 +250,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Notes</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Notes</em>' attribute.
 	 * @see #setNotes(String)
@@ -269,7 +262,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Notes</em>' attribute.
 	 * @see #getNotes()
@@ -285,7 +277,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Contract Type</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Contract Type</em>' attribute.
 	 * @see com.mmxlabs.models.lng.commercial.ContractType
@@ -299,7 +290,6 @@ public interface Contract extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Contract Type</em>' attribute.
 	 * @see com.mmxlabs.models.lng.commercial.ContractType

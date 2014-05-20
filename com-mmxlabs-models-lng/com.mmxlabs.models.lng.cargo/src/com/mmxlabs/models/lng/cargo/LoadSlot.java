@@ -167,7 +167,6 @@ public interface LoadSlot extends Slot {
 	 * If the meaning of the '<em>Transfer From</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Transfer From</em>' reference.
 	 * @see #setTransferFrom(DischargeSlot)
@@ -181,7 +180,6 @@ public interface LoadSlot extends Slot {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#getTransferFrom <em>Transfer From</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Transfer From</em>' reference.
 	 * @see #getTransferFrom()

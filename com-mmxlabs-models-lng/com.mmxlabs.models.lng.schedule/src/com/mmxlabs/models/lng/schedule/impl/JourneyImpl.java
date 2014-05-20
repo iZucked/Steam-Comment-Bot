@@ -249,7 +249,6 @@ public class JourneyImpl extends EventImpl implements Journey {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -267,7 +266,6 @@ public class JourneyImpl extends EventImpl implements Journey {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -277,7 +275,6 @@ public class JourneyImpl extends EventImpl implements Journey {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

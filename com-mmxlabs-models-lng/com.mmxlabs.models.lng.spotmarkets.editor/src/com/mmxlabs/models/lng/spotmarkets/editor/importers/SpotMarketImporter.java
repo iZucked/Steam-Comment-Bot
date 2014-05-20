@@ -15,7 +15,6 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 /**
  * Extended version of {@link DefaultClassImporter} for use with import and export of {@link SpotMarket} and {@link SpotMarketGroup} objects. This are distinct objects but share similar contents. The
  * {@link #getTrueOutputClass(EClass, String)} method needs to be overridden to allow non-direct sub-classes of the input class to be used.
- * @since 2.0
  */
 public class SpotMarketImporter extends DefaultClassImporter {
 

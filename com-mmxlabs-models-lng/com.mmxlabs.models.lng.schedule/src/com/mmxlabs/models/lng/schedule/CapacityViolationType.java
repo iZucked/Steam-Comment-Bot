@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * <!-- begin-user-doc -->
  * A representation of the literals of the enumeration '<em><b>Capacity Violation Type</b></em>',
  * and utility methods for working with them.
- * @since 3.0
  * <!-- end-user-doc -->
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getCapacityViolationType()
  * @model
@@ -82,7 +81,6 @@ public enum CapacityViolationType implements Enumerator {
 	FORCED_COOLDOWN(5, "FORCED_COOLDOWN", "FORCED_COOLDOWN"), /**
 	 * The '<em><b>VESSEL CAPACITY</b></em>' literal object.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #VESSEL_CAPACITY_VALUE
 	 * @generated
@@ -91,7 +89,6 @@ public enum CapacityViolationType implements Enumerator {
 	VESSEL_CAPACITY(6, "VESSEL_CAPACITY", "VESSEL_CAPACITY"), /**
 	 * The '<em><b>LOST HEEL</b></em>' literal object.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #LOST_HEEL_VALUE
 	 * @generated
@@ -196,7 +193,6 @@ public enum CapacityViolationType implements Enumerator {
 	 * If the meaning of '<em><b>VESSEL CAPACITY</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #VESSEL_CAPACITY
 	 * @model
@@ -212,7 +208,6 @@ public enum CapacityViolationType implements Enumerator {
 	 * If the meaning of '<em><b>LOST HEEL</b></em>' literal object isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #LOST_HEEL
 	 * @model

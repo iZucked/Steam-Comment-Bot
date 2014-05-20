@@ -33,7 +33,6 @@ import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
  * Special case for fuel curve data
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class FuelCurveImporter {

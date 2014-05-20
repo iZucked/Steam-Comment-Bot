@@ -20,7 +20,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 /**
  * @author hinton
- * @since 2.0
  * 
  */
 public class AnalyticsModelImporter implements ISubmodelImporter {

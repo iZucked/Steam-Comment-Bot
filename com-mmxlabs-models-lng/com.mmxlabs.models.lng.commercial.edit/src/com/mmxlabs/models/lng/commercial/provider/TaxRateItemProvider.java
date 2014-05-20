@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.commercial.TaxRate;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.TaxRate} object.
  * <!-- begin-user-doc --> 
- * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */

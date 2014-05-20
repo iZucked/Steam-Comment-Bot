@@ -39,7 +39,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * wiring, colour information for terminal and wiring colouring.
  * 
  * @author Simon Goodall
- * @since 3.0
  * 
  */
 public class CargoModelRowTransformer {
@@ -52,7 +51,6 @@ public class CargoModelRowTransformer {
 	private final Color FixedWireColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	/**
-	 * @since 8.0
 	 */
 	public RootData transform(final CargoModel cargoModel, final ScheduleModel scheduleModel, final Map<Object, IStatus> validationInfo, final RootData existingData) {
 		return transform(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), scheduleModel.getSchedule(), validationInfo, existingData);
@@ -67,7 +65,6 @@ public class CargoModelRowTransformer {
 	 * @param allDischargeSlots
 	 * @param validationInfo
 	 * @return
-	 * @since 8.0
 	 */
 	public RootData transform(final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, final Schedule schedule,
 			final Map<Object, IStatus> validationInfo, final RootData existingWiring) {
@@ -417,7 +414,6 @@ public class CargoModelRowTransformer {
 	// * @param allDischargeSlots
 	// * @param validationInfo
 	// * @return
-	// * @since 4.0
 	// */
 	// public RootData transform(final AssignmentModel assignmentModel, final List<Cargo> cargoes, final List<LoadSlot> allLoadSlots, final List<DischargeSlot> allDischargeSlots, Schedule schedule,
 	// final Map<Object, IStatus> validationInfo) {
@@ -552,14 +548,12 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 4.0
 		 */
 		public boolean isPrimaryRecord() {
 			return primaryRecord;
 		}
 
 		/**
-		 * @since 4.0
 		 */
 		public void setPrimaryRecord(final boolean primaryRecord) {
 			this.primaryRecord = primaryRecord;
@@ -599,7 +593,6 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 4.0
 		 */
 		public void addLoneSlot(final Slot slot) {
 			if (slot.getCargo() == null) {
@@ -636,7 +629,6 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 5.0
 		 */
 		public WireData addShipToShipWire(final Slot slot) {
 			// and add a wire to the group, showing the ship-to-ship transfer
@@ -662,7 +654,6 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 8.0
 		 */
 		public void addCargo(final Cargo cargo) {
 			getObjects().add(cargo);
@@ -727,7 +718,6 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 4.0
 		 */
 		public void patchWires() {
 			for (final RowData row : getRows()) {
@@ -803,7 +793,6 @@ public class CargoModelRowTransformer {
 		private final boolean primaryRecordOnly;
 
 		/**
-		 * @since 4.0
 		 */
 		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Iterable<?> path) {
 			super(true, path);
@@ -812,7 +801,6 @@ public class CargoModelRowTransformer {
 		}
 
 		/**
-		 * @since 4.0
 		 */
 		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Object... path) {
 			super(true, path);
@@ -885,25 +873,20 @@ public class CargoModelRowTransformer {
 	public enum Type {
 		CARGO, LOAD, DISCHARGE, CARGO_ALLOCATION, LOAD_ALLOCATION, DISCHARGE_ALLOCATION,
 		/**
-		 * @since 4.0
 		 */
 		DISCHARGE_OR_LOAD,
 		/**
-		 * @since 4.0
 		 */
 		LOAD_OR_DISCHARGE,
 
 		/**
-		 * @since 5.0
 		 */
 		MARKET_ALLOCATION,
 		/**
-		 * @since 5.0
 		 */
 		CARGO_OR_MARKET_ALLOCATION,
 
 		/**
-		 * @since 8.0
 		 */
 		SLOT_OR_CARGO
 	}

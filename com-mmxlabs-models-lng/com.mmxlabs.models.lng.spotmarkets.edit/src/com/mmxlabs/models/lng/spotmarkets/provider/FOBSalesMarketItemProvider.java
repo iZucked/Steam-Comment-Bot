@@ -64,7 +64,6 @@ public class FOBSalesMarketItemProvider
 	/**
 	 * This adds a property descriptor for the Origin Ports feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

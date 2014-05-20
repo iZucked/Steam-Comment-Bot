@@ -19,8 +19,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Capacity Violations Holder</b></em>'.
- * @since 3.0
- * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>

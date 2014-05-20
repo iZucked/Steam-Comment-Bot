@@ -57,7 +57,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getOtherNames()
 	 * @generated
@@ -237,7 +236,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The default value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getAtobviacCode()
 	 * @generated
@@ -248,7 +246,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getAtobviacCode() <em>Atobviac Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getAtobviacCode()
 	 * @generated
@@ -259,7 +256,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The default value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getDataloyCode()
 	 * @generated
@@ -270,7 +266,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getDataloyCode() <em>Dataloy Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getDataloyCode()
 	 * @generated
@@ -281,7 +276,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The default value of the '{@link #getVesonCode() <em>Veson Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #getVesonCode()
 	 * @generated
@@ -292,7 +286,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getVesonCode() <em>Veson Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #getVesonCode()
 	 * @generated
@@ -303,7 +296,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The default value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #getExternalCode()
 	 * @generated
@@ -314,7 +306,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getExternalCode() <em>External Code</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #getExternalCode()
 	 * @generated
@@ -325,7 +316,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The default value of the '{@link #getUNLocode() <em>UN Locode</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #getUNLocode()
 	 * @generated
@@ -336,7 +326,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	/**
 	 * The cached value of the '{@link #getUNLocode() <em>UN Locode</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @see #getUNLocode()
 	 * @generated
@@ -365,7 +354,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -601,7 +589,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -611,7 +598,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -624,7 +610,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -634,7 +619,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -647,7 +631,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -657,7 +640,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -670,7 +652,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -680,7 +661,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -693,7 +673,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -703,7 +682,6 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 7.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

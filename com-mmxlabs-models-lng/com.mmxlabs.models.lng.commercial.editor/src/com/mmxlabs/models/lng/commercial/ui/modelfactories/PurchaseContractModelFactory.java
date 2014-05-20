@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.commercial.ui.modelfactories;
 
 
 /**
- * @since 3.0
  */
 public class PurchaseContractModelFactory extends ContractModelFactory {
 	@Override

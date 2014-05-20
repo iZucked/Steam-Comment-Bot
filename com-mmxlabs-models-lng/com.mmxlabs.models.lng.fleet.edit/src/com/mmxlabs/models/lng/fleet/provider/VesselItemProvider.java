@@ -114,7 +114,6 @@ public class VesselItemProvider
 	/**
 	 * This adds a property descriptor for the Capacity feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -137,7 +136,6 @@ public class VesselItemProvider
 	/**
 	 * This adds a property descriptor for the Fill Capacity feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

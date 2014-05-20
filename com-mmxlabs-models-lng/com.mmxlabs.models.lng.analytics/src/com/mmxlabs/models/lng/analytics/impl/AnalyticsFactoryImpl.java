@@ -212,7 +212,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -224,7 +223,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -236,7 +234,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -248,7 +245,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -260,7 +256,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -272,7 +267,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -284,7 +278,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -296,7 +289,6 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

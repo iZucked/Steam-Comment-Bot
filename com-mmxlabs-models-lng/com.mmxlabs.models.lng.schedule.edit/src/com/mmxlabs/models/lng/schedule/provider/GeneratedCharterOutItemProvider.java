@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut} object.
  * <!-- begin-user-doc -->
- * @since 2.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -71,7 +70,6 @@ public class GeneratedCharterOutItemProvider
 	/**
 	 * This adds a property descriptor for the Group Profit And Loss feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

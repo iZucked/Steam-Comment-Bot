@@ -60,7 +60,6 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	/**
 	 * The cached value of the '{@link #getViolations() <em>Violations</em>}' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getViolations()
 	 * @generated
@@ -70,7 +69,6 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	/**
 	 * The default value of the '{@link #getPortCost() <em>Port Cost</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getPortCost()
 	 * @generated
@@ -128,7 +126,6 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

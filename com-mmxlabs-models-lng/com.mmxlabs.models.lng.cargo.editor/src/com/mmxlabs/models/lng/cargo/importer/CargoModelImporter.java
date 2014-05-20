@@ -34,7 +34,6 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
- * @since 2.0
  */
 public class CargoModelImporter implements ISubmodelImporter {
 	public static final String CARGO_KEY = "CARGO";
@@ -59,7 +58,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public CargoModelImporter() {
 		final Activator activator = Activator.getDefault();

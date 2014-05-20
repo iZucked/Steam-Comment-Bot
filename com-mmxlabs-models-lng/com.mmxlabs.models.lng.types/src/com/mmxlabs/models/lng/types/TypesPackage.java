@@ -64,7 +64,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.impl.ObjectSetImpl
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getObjectSet()
@@ -75,7 +74,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -85,7 +83,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -95,7 +92,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -105,7 +101,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Object Set</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -115,7 +110,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -125,7 +119,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -135,7 +128,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -145,7 +137,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -155,7 +146,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Object Set</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -229,7 +219,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -321,7 +310,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -396,7 +384,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
@@ -407,7 +394,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see java.lang.Iterable
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
@@ -458,7 +444,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ObjectSet <em>Object Set</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Object Set</em>'.
 	 * @see com.mmxlabs.models.lng.types.ObjectSet
@@ -469,7 +454,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ObjectSet#collect(org.eclipse.emf.common.util.EList) <em>Collect</em>}' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Collect</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ObjectSet#collect(org.eclipse.emf.common.util.EList)
@@ -490,7 +474,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Cargo Delivery Type</em>'.
 	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
@@ -501,7 +484,6 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Iterable</em>'.
 	 * @see java.lang.Iterable
@@ -574,7 +556,6 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.impl.ObjectSetImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getObjectSet()
@@ -585,7 +566,6 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Collect</b></em>' operation.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -604,7 +584,6 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
@@ -615,7 +594,6 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>Iterable</em>' data type.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see java.lang.Iterable
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()

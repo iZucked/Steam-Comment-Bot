@@ -27,7 +27,6 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  * Base fuel importer which also handles importing the pricing model info
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class BaseFuelImporter extends DefaultClassImporter {

@@ -8,7 +8,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>LNG Price Calculator Parameters</b></em>'.
- * @since 3.0
  * <!-- end-user-doc -->
  *
  *

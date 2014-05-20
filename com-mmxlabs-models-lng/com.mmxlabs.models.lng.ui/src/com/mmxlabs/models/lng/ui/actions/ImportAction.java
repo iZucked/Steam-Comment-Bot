@@ -51,7 +51,6 @@ public abstract class ImportAction extends LockableAction {
 	 * Encapsulation of the data required to perform the import action. Typically pulled from an IScenarioEditingLocation, but can also be pulled from elsewhere, e.g. in a bulk import.
 	 * 
 	 * @author Simon McGregor
-	 * @since 3.1
 	 * 
 	 */
 	public interface ImportHooksProvider {
@@ -73,12 +72,10 @@ public abstract class ImportAction extends LockableAction {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	protected final ImportHooksProvider importHooksProvider;
 
 	/**
-	 * @since 3.1
 	 */
 	public ImportAction(final ImportHooksProvider ihp) {
 		super("Import", AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
@@ -151,7 +148,6 @@ public abstract class ImportAction extends LockableAction {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	public DefaultImportContext safelyImport() {
 		DefaultImportContext context = null;

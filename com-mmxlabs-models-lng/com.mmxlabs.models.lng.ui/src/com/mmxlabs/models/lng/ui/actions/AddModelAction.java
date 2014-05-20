@@ -69,7 +69,6 @@ public final class AddModelAction {
 	}
 
 	/**
-	 * @since 7.0
 	 */
 	public final static Action create(final List<Pair<EClass, IAddContext>> items, final Action[] additionalActions) {
 
@@ -84,7 +83,6 @@ public final class AddModelAction {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public final static Action create(final EClass eClass, final IAddContext context, final Action[] additionalActions) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(eClass);

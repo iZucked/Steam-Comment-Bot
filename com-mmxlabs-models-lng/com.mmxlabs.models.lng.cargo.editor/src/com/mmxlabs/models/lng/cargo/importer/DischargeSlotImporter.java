@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
- * @since 2.0
  */
 public class DischargeSlotImporter extends DefaultClassImporter {
 	@Override

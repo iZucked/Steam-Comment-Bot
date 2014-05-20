@@ -15,7 +15,6 @@ import org.eclipse.emf.ecore.EClass;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Slot Contract Params</b></em>'.
- * @since 8.0
  * <!-- end-user-doc -->
  * <p>
  * </p>

@@ -30,7 +30,6 @@ public interface ScheduleModel extends UUIDObject {
 	 * If the meaning of the '<em>Schedule</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Schedule</em>' containment reference.
 	 * @see #setSchedule(Schedule)
@@ -43,7 +42,6 @@ public interface ScheduleModel extends UUIDObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getSchedule <em>Schedule</em>}' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Schedule</em>' containment reference.
 	 * @see #getSchedule()

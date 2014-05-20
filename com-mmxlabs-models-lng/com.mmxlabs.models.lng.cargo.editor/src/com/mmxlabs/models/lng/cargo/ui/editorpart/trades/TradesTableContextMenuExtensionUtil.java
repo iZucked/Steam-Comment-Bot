@@ -21,7 +21,6 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 
 /**
- * @since 8.0
  */
 public class TradesTableContextMenuExtensionUtil {
 

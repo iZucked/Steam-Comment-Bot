@@ -196,7 +196,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -207,7 +206,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -218,7 +216,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -229,7 +226,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -121,7 +121,6 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	/**
 	 * The cached value of the '{@link #getTransferFrom() <em>Transfer From</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getTransferFrom()
 	 * @generated
@@ -292,7 +291,6 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -310,7 +308,6 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -320,7 +317,6 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -336,7 +332,6 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

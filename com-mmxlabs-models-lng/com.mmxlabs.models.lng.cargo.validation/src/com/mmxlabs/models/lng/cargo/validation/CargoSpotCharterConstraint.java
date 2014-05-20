@@ -27,7 +27,6 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class CargoSpotCharterConstraint extends AbstractModelMultiConstraint {

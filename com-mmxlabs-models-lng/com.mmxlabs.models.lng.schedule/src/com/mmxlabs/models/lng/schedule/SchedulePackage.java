@@ -93,7 +93,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Schedule</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -203,7 +202,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market Allocations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -345,7 +343,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
@@ -507,7 +504,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -526,7 +522,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -545,7 +540,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Events</b></em>' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -648,7 +642,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
@@ -659,7 +652,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
@@ -670,7 +662,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
@@ -681,7 +672,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -691,7 +681,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -710,7 +699,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Profit And Loss Container</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -720,7 +708,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -730,7 +717,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -740,7 +726,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -750,7 +735,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Profit And Loss Container</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -760,7 +744,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl <em>Market Allocation</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getMarketAllocation()
@@ -771,7 +754,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -781,7 +763,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -800,7 +781,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -810,7 +790,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -820,7 +799,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -830,7 +808,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -840,7 +817,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Slot Visit</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -850,7 +826,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Market Allocation</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -860,7 +835,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -870,7 +844,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -880,7 +853,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -890,7 +862,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Market Allocation</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1027,7 +998,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Market Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1055,7 +1025,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Volume Transferred</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1173,7 +1142,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vessel Availability</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1210,7 +1178,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1346,7 +1313,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1365,7 +1331,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1555,7 +1520,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1592,7 +1556,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1611,7 +1574,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1810,7 +1772,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1847,7 +1808,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1866,7 +1826,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2065,7 +2024,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2093,7 +2051,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2328,7 +2285,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2491,7 +2447,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2546,7 +2501,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2574,7 +2528,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2593,7 +2546,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Port Visit</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2756,7 +2708,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2793,7 +2744,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2992,7 +2942,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3020,7 +2969,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3039,7 +2987,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3166,7 +3113,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3176,7 +3122,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3186,7 +3131,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3196,7 +3140,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
- 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3206,7 +3149,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3216,7 +3158,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3226,7 +3167,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3236,7 +3176,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3264,7 +3203,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Group Profit And Loss</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3283,7 +3221,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3293,7 +3230,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3357,7 +3293,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3457,7 +3392,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Charter Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3485,7 +3419,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3603,7 +3536,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Fuel Cost</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3721,7 +3653,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Unit Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3749,7 +3680,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3759,7 +3689,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Violations</b></em>' map.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3769,7 +3698,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Capacity Violations Holder</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3779,7 +3707,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3789,7 +3716,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3799,7 +3725,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3809,7 +3734,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Capacity Violations Holder</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3819,7 +3743,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3829,7 +3752,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3839,7 +3761,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Capacity Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3849,7 +3770,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Capacity Map Entry</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3859,7 +3779,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
@@ -3870,7 +3789,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3880,7 +3798,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3890,7 +3807,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity Profit And Losses</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3900,7 +3816,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Group Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3910,7 +3825,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Group Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3920,7 +3834,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
@@ -3931,7 +3844,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3950,7 +3862,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3960,7 +3871,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3970,7 +3880,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Entity Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3980,7 +3889,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Entity Profit And Loss</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4177,7 +4085,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.SequenceType
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
@@ -4188,7 +4095,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()
@@ -4242,7 +4148,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getSchedule <em>Schedule</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Schedule</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.ScheduleModel#getSchedule()
@@ -4308,7 +4213,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getMarketAllocations <em>Market Allocations</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Market Allocations</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Schedule#getMarketAllocations()
@@ -4374,7 +4278,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel Availability</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability()
@@ -4419,7 +4322,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Sequence#getSequenceType <em>Sequence Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Sequence Type</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Sequence#getSequenceType()
@@ -4547,7 +4449,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Event#getCharterCost <em>Charter Cost</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 6.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Charter Cost</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Event#getCharterCost()
@@ -4705,7 +4606,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Journey#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.Journey#getRoute()
@@ -4771,7 +4671,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut <em>Generated Charter Out</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Generated Charter Out</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut
@@ -4782,7 +4681,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getRevenue <em>Revenue</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Revenue</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getRevenue()
@@ -4910,7 +4808,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations <em>Slot Allocations</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Slot Allocations</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getSlotAllocations()
@@ -4933,7 +4830,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents <em>Events</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Events</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CargoAllocation#getEvents()
@@ -4966,7 +4862,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.MarketAllocation <em>Market Allocation</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Market Allocation</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation
@@ -4977,7 +4872,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlot <em>Slot</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Slot</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlot()
@@ -4989,7 +4883,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getMarket <em>Market</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Market</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getMarket()
@@ -5001,7 +4894,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation <em>Slot Allocation</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Slot Allocation</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotAllocation()
@@ -5013,7 +4905,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice <em>Price</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getPrice()
@@ -5025,7 +4916,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit <em>Slot Visit</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Slot Visit</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.MarketAllocation#getSlotVisit()
@@ -5101,7 +4991,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getMarketAllocation <em>Market Allocation</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Market Allocation</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getMarketAllocation()
@@ -5135,7 +5024,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Volume Transferred</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred()
@@ -5229,7 +5117,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice <em>Unit Price</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Unit Price</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.FuelAmount#getUnitPrice()
@@ -5325,7 +5212,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder <em>Capacity Violations Holder</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Capacity Violations Holder</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder
@@ -5336,7 +5222,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the map '{@link com.mmxlabs.models.lng.schedule.CapacityViolationsHolder#getViolations <em>Violations</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the map '<em>Violations</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationsHolder#getViolations()
@@ -5348,7 +5233,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Capacity Map Entry</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Capacity Map Entry</em>'.
 	 * @see java.util.Map.Entry
@@ -5361,7 +5245,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see java.util.Map.Entry
@@ -5373,7 +5256,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see java.util.Map.Entry
@@ -5385,7 +5267,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer <em>Profit And Loss Container</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Profit And Loss Container</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer
@@ -5396,7 +5277,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss <em>Group Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Group Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.ProfitAndLossContainer#getGroupProfitAndLoss()
@@ -5419,7 +5299,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss <em>Group Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Group Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss
@@ -5430,7 +5309,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLoss()
@@ -5442,7 +5320,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getProfitAndLossPreTax()
@@ -5454,7 +5331,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses <em>Entity Profit And Losses</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Entity Profit And Losses</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GroupProfitAndLoss#getEntityProfitAndLosses()
@@ -5466,7 +5342,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss <em>Entity Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Entity Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss
@@ -5477,7 +5352,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity <em>Entity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Entity</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getEntity()
@@ -5500,7 +5374,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss <em>Profit And Loss</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLoss()
@@ -5512,7 +5385,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax <em>Profit And Loss Pre Tax</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit And Loss Pre Tax</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.EntityProfitAndLoss#getProfitAndLossPreTax()
@@ -5650,7 +5522,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Sequence Type</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.SequenceType
@@ -5661,7 +5532,6 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Capacity Violation Type</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
@@ -5737,7 +5607,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Schedule</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5788,7 +5657,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market Allocations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5839,7 +5707,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vessel Availability</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5872,7 +5739,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Sequence Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -5971,7 +5837,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Charter Cost</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 6.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6148,7 +6013,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
@@ -6159,7 +6023,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Revenue</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6264,7 +6127,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot Allocations</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6281,7 +6143,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Events</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6306,7 +6167,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl <em>Market Allocation</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.MarketAllocationImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getMarketAllocation()
@@ -6317,7 +6177,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6326,7 +6185,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6335,7 +6193,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot Allocation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6344,7 +6201,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6353,7 +6209,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Slot Visit</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6414,7 +6269,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Market Allocation</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 5.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6439,7 +6293,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Volume Transferred</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6514,7 +6367,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Unit Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6595,7 +6447,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl <em>Capacity Violations Holder</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.CapacityViolationsHolderImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationsHolder()
@@ -6606,7 +6457,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Violations</b></em>' map feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6615,7 +6465,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl <em>Capacity Map Entry</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.CapacityMapEntryImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityMapEntry()
@@ -6626,7 +6475,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6635,7 +6483,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6644,7 +6491,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl <em>Profit And Loss Container</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.ProfitAndLossContainerImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getProfitAndLossContainer()
@@ -6655,7 +6501,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Group Profit And Loss</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6672,7 +6517,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl <em>Group Profit And Loss</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.GroupProfitAndLossImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGroupProfitAndLoss()
@@ -6683,7 +6527,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6692,7 +6535,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6701,7 +6543,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Entity Profit And Losses</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6710,7 +6551,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl <em>Entity Profit And Loss</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.EntityProfitAndLossImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEntityProfitAndLoss()
@@ -6721,7 +6561,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Entity</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6738,7 +6577,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6747,7 +6585,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit And Loss Pre Tax</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 8.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -6864,7 +6701,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.SequenceType
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
@@ -6875,7 +6711,6 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.CapacityViolationType <em>Capacity Violation Type</em>}' enum.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.CapacityViolationType
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCapacityViolationType()

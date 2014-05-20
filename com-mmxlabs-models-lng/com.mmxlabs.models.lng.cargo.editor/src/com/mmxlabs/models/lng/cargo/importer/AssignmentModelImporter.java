@@ -15,7 +15,6 @@ import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 /**
- * @since 8.0
  */
 public class AssignmentModelImporter implements IExtraModelImporter {
 

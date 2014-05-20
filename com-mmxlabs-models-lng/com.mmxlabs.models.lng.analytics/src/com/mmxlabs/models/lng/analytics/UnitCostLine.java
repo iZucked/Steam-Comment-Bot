@@ -359,7 +359,6 @@ public interface UnitCostLine extends MMXObject {
 	 * If the meaning of the '<em>Profit</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Profit</em>' attribute.
 	 * @see #setProfit(int)
@@ -372,7 +371,6 @@ public interface UnitCostLine extends MMXObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit <em>Profit</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Profit</em>' attribute.
 	 * @see #getProfit()

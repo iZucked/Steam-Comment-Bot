@@ -31,7 +31,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
  * Utility class to calculate schedule exposure to market indices. Provides static methods
  * 
  * @author Simon McGregor
- * @since 3.0
  */
 public class Exposures {
 
@@ -293,7 +292,6 @@ public class Exposures {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public static double getExposureCoefficient(final String priceExpression, final CommodityIndex index) {
 		final RawTreeParser parser = new RawTreeParser();
@@ -311,7 +309,6 @@ public class Exposures {
 	 * @param contract
 	 * @param index
 	 * @return
-	 * @since 5.0
 	 */
 	public static double getExposureCoefficient(final Slot slot, final CommodityIndex index) {
 		String priceExpression = null;
@@ -346,7 +343,6 @@ public class Exposures {
 	 * @param schedule
 	 * @param index
 	 * @return
-	 * @since 5.0
 	 */
 	public static Map<MonthYear, Double> getExposuresByMonth(final Schedule schedule, final CommodityIndex index) {
 		final CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();

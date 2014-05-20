@@ -33,7 +33,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.GroupProfitAndLoss} object.
  * <!-- begin-user-doc -->
- * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */

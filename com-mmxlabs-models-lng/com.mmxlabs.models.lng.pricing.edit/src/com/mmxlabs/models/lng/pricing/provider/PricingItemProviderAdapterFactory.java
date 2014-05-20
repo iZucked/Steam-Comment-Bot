@@ -59,7 +59,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -320,7 +319,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CommodityIndex} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -344,7 +342,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.CharterIndex} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -368,7 +365,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.BaseFuelIndex} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -392,7 +388,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.NamedIndexContainer} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -542,7 +537,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -552,7 +546,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -562,7 +555,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

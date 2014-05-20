@@ -19,7 +19,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Shipping Cost Row</b></em>'.
- * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -150,7 +149,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	/**
 	 * The default value of the '{@link #isIncludePortCosts() <em>Include Port Costs</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @see #isIncludePortCosts()
 	 * @generated
@@ -161,7 +159,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	/**
 	 * The cached value of the '{@link #isIncludePortCosts() <em>Include Port Costs</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @see #isIncludePortCosts()
 	 * @generated
@@ -345,7 +342,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -356,7 +352,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

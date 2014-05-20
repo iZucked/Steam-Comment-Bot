@@ -59,7 +59,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This helps manage the child creation extenders.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -159,7 +158,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SalesContract} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -183,7 +181,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -207,7 +204,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.TaxRate} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -231,7 +227,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -358,7 +353,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -368,7 +362,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -378,7 +371,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -31,7 +31,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 /**
  * This is the item provider adapter for a {@link java.util.Map.Entry} object.
  * <!-- begin-user-doc -->
- * @since 4.0
  * <!-- end-user-doc -->
  * @generated
  */

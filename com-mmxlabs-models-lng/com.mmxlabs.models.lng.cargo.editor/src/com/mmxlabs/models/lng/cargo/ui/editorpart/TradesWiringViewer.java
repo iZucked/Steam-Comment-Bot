@@ -166,7 +166,6 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  * 
  * 
  * @author Simon Goodall
- * @since 3.0
  * 
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
@@ -180,7 +179,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * A reference {@link RootData} object. This is used by a {@link CargoModelRowTransformer} to retain load/discharge row pairings but allow wires to cross rows. Initially null until the first
 	 * rootData object is created. May be "nulled" again to reset state by an action.
 	 * 
-	 * @since 5.0
 	 */
 	protected RootData referenceRootData;
 
@@ -1098,7 +1096,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
 	 * @param newCargoes
-	 * @since 8.0
 	 */
 	public RootData setCargoes(final CargoModel cargoModel, final ScheduleModel scheduleModel, final RootData existingData) {
 		final CargoModelRowTransformer transformer = new CargoModelRowTransformer();
@@ -1171,7 +1168,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	protected void doWiringChanged(final Map<RowData, RowData> newWiring, final boolean ctrlPressed) {
 
@@ -1286,7 +1282,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	protected LNGPortfolioModel getPortfolioModel() {
 		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getPortfolioModel();

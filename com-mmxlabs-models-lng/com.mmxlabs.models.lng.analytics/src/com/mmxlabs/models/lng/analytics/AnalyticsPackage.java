@@ -110,7 +110,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Shipping Cost Plans</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -120,7 +119,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Cargo Sandboxes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -483,7 +481,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -798,7 +795,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl <em>Shipping Cost Plan</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostPlan()
@@ -809,7 +805,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -819,7 +814,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -829,7 +823,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -839,7 +832,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Notional Day Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -849,7 +841,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -859,7 +850,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -869,7 +859,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Shipping Cost Plan</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -879,7 +868,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl <em>Shipping Cost Row</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostRow()
@@ -890,7 +878,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -900,7 +887,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -910,7 +896,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -920,7 +905,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Cargo Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -930,7 +914,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -940,7 +923,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Destination Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -950,7 +932,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Heel Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -960,7 +941,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Include Port Costs</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -970,7 +950,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Shipping Cost Row</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -981,7 +960,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl <em>Cargo Sandbox</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoSandbox()
@@ -992,7 +970,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1002,7 +979,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1012,7 +988,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Cargoes</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1022,7 +997,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Cargo Sandbox</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1032,7 +1006,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl <em>Provisional Cargo</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProvisionalCargo()
@@ -1043,7 +1016,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1053,7 +1025,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Buy</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1063,7 +1034,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sell</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1073,7 +1043,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1083,7 +1052,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Portfolio Model</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1093,7 +1061,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Provisional Cargo</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1103,8 +1070,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl <em>Buy Opportunity</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
+s	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyOpportunity()
 	 * @generated
@@ -1114,7 +1080,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1124,7 +1089,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1134,7 +1098,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1144,7 +1107,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1154,7 +1116,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1164,7 +1125,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Buy Opportunity</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1174,7 +1134,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellOpportunity()
@@ -1185,7 +1144,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1195,7 +1153,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1205,7 +1162,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1215,7 +1171,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1225,7 +1180,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1235,7 +1189,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Sell Opportunity</em>' class.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1245,7 +1198,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.analytics.DestinationType
 	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
@@ -1289,7 +1241,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans <em>Shipping Cost Plans</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Shipping Cost Plans</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans()
@@ -1301,7 +1252,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getCargoSandboxes <em>Cargo Sandboxes</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Cargo Sandboxes</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getCargoSandboxes()
@@ -1674,7 +1624,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit <em>Profit</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit()
@@ -1696,7 +1645,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Voyage#getRoute <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Route</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.Voyage#getRoute()
@@ -1913,7 +1861,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan <em>Shipping Cost Plan</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Shipping Cost Plan</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan
@@ -1924,7 +1871,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getVessel()
@@ -1936,7 +1882,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getNotionalDayRate <em>Notional Day Rate</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Notional Day Rate</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getNotionalDayRate()
@@ -1948,7 +1893,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getBaseFuelPrice <em>Base Fuel Price</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Base Fuel Price</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getBaseFuelPrice()
@@ -1960,7 +1904,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows <em>Rows</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Rows</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows()
@@ -1972,7 +1915,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow <em>Shipping Cost Row</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Shipping Cost Row</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow
@@ -1983,7 +1925,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Port</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort()
@@ -1995,7 +1936,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate <em>Date</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Date</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate()
@@ -2007,7 +1947,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice <em>Cargo Price</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Cargo Price</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice()
@@ -2019,7 +1958,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue <em>Cv Value</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Cv Value</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue()
@@ -2031,7 +1969,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType <em>Destination Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Destination Type</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType()
@@ -2043,7 +1980,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Heel Volume</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume()
@@ -2056,7 +1992,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts <em>Include Port Costs</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Include Port Costs</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts()
@@ -2069,7 +2004,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CargoSandbox <em>Cargo Sandbox</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Cargo Sandbox</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.CargoSandbox
@@ -2080,7 +2014,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.CargoSandbox#getCargoes <em>Cargoes</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Cargoes</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.CargoSandbox#getCargoes()
@@ -2092,7 +2025,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo <em>Provisional Cargo</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Provisional Cargo</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo
@@ -2103,7 +2035,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getBuy <em>Buy</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Buy</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getBuy()
@@ -2115,7 +2046,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getSell <em>Sell</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Sell</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getSell()
@@ -2127,7 +2057,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getVessel()
@@ -2139,7 +2068,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel <em>Portfolio Model</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Portfolio Model</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo#getPortfolioModel()
@@ -2151,7 +2079,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity <em>Buy Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Buy Opportunity</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity
@@ -2162,7 +2089,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Port</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getPort()
@@ -2174,7 +2100,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getContract <em>Contract</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Contract</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getContract()
@@ -2186,7 +2111,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getDate <em>Date</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Date</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getDate()
@@ -2198,7 +2122,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Expression</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity#getPriceExpression()
@@ -2210,7 +2133,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.SellOpportunity <em>Sell Opportunity</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Sell Opportunity</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity
@@ -2221,7 +2143,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Port</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getPort()
@@ -2233,7 +2154,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getContract <em>Contract</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Contract</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getContract()
@@ -2245,7 +2165,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getDate <em>Date</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Date</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getDate()
@@ -2257,7 +2176,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.SellOpportunity#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Expression</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity#getPriceExpression()
@@ -2269,7 +2187,6 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Destination Type</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.DestinationType
@@ -2329,7 +2246,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Shipping Cost Plans</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2338,7 +2254,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Cargo Sandboxes</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2615,7 +2530,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2802,7 +2716,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl <em>Shipping Cost Plan</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl
 		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostPlan()
@@ -2813,7 +2726,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2822,7 +2734,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Notional Day Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2831,7 +2742,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Base Fuel Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2840,7 +2750,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2849,7 +2758,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl <em>Shipping Cost Row</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl
 		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostRow()
@@ -2860,7 +2768,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2869,7 +2776,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2878,7 +2784,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Cargo Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2887,7 +2792,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2896,7 +2800,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Destination Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2905,7 +2808,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Heel Volume</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2914,7 +2816,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Include Port Costs</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 2.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2924,7 +2825,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl <em>Cargo Sandbox</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl
 		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getCargoSandbox()
@@ -2935,7 +2835,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Cargoes</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2944,7 +2843,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl <em>Provisional Cargo</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.analytics.impl.ProvisionalCargoImpl
 		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getProvisionalCargo()
@@ -2955,7 +2853,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Buy</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2964,7 +2861,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Sell</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2973,7 +2869,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2982,7 +2877,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Portfolio Model</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 4.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -2991,7 +2885,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl <em>Buy Opportunity</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.analytics.impl.BuyOpportunityImpl
 		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getBuyOpportunity()
@@ -3002,7 +2895,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3011,7 +2903,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3020,7 +2911,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3029,7 +2919,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3038,7 +2927,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl <em>Sell Opportunity</em>}' class.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.analytics.impl.SellOpportunityImpl
 		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getSellOpportunity()
@@ -3049,7 +2937,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3058,7 +2945,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3067,7 +2953,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3076,7 +2961,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3085,7 +2969,6 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
 		 * <!-- begin-user-doc -->
-		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.analytics.DestinationType
 		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()

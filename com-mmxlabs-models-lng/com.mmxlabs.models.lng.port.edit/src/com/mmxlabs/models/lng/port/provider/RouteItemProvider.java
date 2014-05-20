@@ -72,7 +72,6 @@ public class RouteItemProvider
 	/**
 	 * This adds a property descriptor for the Uuid feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

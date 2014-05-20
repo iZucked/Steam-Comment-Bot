@@ -14,7 +14,6 @@ import org.eclipse.emf.common.util.Enumerator;
  * <!-- begin-user-doc -->
  * A representation of the literals of the enumeration '<em><b>Cargo Delivery Type</b></em>',
  * and utility methods for working with them.
- * @since 3.1
  * <!-- end-user-doc -->
  * @see com.mmxlabs.models.lng.types.TypesPackage#getCargoDeliveryType()
  * @model
@@ -44,7 +43,6 @@ public enum CargoDeliveryType implements Enumerator {
 	/**
 	 * The '<em><b>Not Shipped</b></em>' literal object.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #NOT_SHIPPED_VALUE
 	 * @generated

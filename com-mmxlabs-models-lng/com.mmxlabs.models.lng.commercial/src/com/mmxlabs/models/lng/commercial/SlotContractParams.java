@@ -11,7 +11,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Slot Contract Params</b></em>'.
- * @since 8.0
  * <!-- end-user-doc -->
  *
  *

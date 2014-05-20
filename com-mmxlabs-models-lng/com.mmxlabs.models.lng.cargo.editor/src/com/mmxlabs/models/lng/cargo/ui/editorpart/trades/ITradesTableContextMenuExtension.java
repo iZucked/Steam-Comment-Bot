@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 /**
- * @since 8.0
  */
 public interface ITradesTableContextMenuExtension {
 

@@ -140,7 +140,6 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Entity</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Entity</em>' reference.
 	 * @see #setEntity(BaseLegalEntity)

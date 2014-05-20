@@ -23,7 +23,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
  * time)
  * 
  * @author Simon Goodall
- * @since 4.0
  * 
  */
 public class CargoSlotSorter {

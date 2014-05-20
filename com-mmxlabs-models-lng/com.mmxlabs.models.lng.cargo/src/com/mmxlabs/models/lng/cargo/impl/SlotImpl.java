@@ -81,7 +81,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -92,7 +91,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getName()
 	 * @generated
@@ -103,7 +101,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getAssignment() <em>Assignment</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getAssignment()
 	 * @generated
@@ -114,7 +111,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSpotIndex()
 	 * @generated
@@ -125,7 +121,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSpotIndex()
 	 * @generated
@@ -145,7 +140,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSequenceHint()
 	 * @generated
@@ -156,7 +150,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getSequenceHint()
 	 * @generated
@@ -167,7 +160,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isLocked()
 	 * @generated
@@ -178,7 +170,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #isLocked() <em>Locked</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isLocked()
 	 * @generated
@@ -198,7 +189,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * This is true if the Contract reference has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -385,7 +375,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPriceExpression()
 	 * @generated
@@ -396,7 +385,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPriceExpression()
 	 * @generated
@@ -407,7 +395,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * This is true if the Price Expression attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -417,7 +404,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @see #getCargo()
 	 * @generated
@@ -428,7 +414,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getPricingDate() <em>Pricing Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getPricingDate()
 	 * @generated
@@ -439,7 +424,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getPricingDate() <em>Pricing Date</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getPricingDate()
 	 * @generated
@@ -450,7 +434,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * This is true if the Pricing Date attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -460,7 +443,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getNotes() <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
@@ -471,7 +453,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getNotes() <em>Notes</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @see #getNotes()
 	 * @generated
@@ -502,7 +483,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getShippingDaysRestriction()
 	 * @generated
@@ -513,7 +493,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getShippingDaysRestriction() <em>Shipping Days Restriction</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getShippingDaysRestriction()
 	 * @generated
@@ -524,7 +503,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getEntity()
 	 * @generated
@@ -535,7 +513,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * This is true if the Entity reference has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -545,7 +522,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getRestrictedContracts()
 	 * @generated
@@ -556,7 +532,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #getRestrictedPorts()
 	 * @generated
@@ -567,7 +542,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isRestrictedListsArePermissive()
 	 * @generated
@@ -578,7 +552,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @see #isRestrictedListsArePermissive()
 	 * @generated
@@ -589,7 +562,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	/**
 	 * This is true if the Restricted Lists Are Permissive attribute has been set.
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -674,7 +646,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -684,7 +655,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -697,7 +667,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -716,7 +685,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -726,7 +694,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -739,7 +706,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -749,7 +715,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -787,7 +752,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -797,7 +761,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -810,7 +773,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -820,7 +782,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1008,7 +969,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1023,7 +983,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1180,7 +1139,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1190,7 +1148,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1205,7 +1162,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1220,7 +1176,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1230,7 +1185,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1248,7 +1202,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1258,7 +1211,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1274,7 +1226,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1294,7 +1245,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1304,7 +1254,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1319,7 +1268,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1334,7 +1282,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1344,7 +1291,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1354,7 +1300,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1388,7 +1333,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1398,7 +1342,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1411,7 +1354,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1429,7 +1371,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1453,7 +1394,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1468,7 +1408,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1478,7 +1417,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1491,7 +1429,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1501,7 +1438,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1511,7 +1447,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1524,7 +1459,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1534,7 +1468,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1544,7 +1477,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1554,7 +1486,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1569,7 +1500,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1584,7 +1514,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1742,7 +1671,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -1752,7 +1680,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -1763,7 +1690,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -1774,7 +1700,6 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 8.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
