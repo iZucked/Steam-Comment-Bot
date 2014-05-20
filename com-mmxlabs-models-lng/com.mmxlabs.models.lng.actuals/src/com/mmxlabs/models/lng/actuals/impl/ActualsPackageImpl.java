@@ -201,7 +201,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getSlotActuals_PortCharges() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(15);
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(16);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 */
 	@Override
 	public EAttribute getSlotActuals_CapacityCharges() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(16);
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -230,8 +230,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlotActuals_Distance() {
-		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(12);
+	public EReference getSlotActuals_Route() {
+		return (EReference)slotActualsEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlotActuals_RouteCosts() {
+	public EAttribute getSlotActuals_Distance() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -250,8 +250,18 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSlotActuals_CrewBonus() {
+	public EAttribute getSlotActuals_RouteCosts() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSlotActuals_CrewBonus() {
+		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(15);
 	}
 
 	/**
@@ -709,6 +719,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__NOTES);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CV);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__BASE_FUEL_CONSUMPTION);
+		createEReference(slotActualsEClass, SLOT_ACTUALS__ROUTE);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__DISTANCE);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__ROUTE_COSTS);
 		createEAttribute(slotActualsEClass, SLOT_ACTUALS__CREW_BONUS);
@@ -811,6 +822,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getSlotActuals_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_CV(), ecorePackage.getEDouble(), "CV", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_BaseFuelConsumption(), ecorePackage.getEInt(), "baseFuelConsumption", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSlotActuals_Route(), thePortPackage.getRoute(), null, "route", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_Distance(), ecorePackage.getEInt(), "distance", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_RouteCosts(), ecorePackage.getEInt(), "routeCosts", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_CrewBonus(), ecorePackage.getEInt(), "crewBonus", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

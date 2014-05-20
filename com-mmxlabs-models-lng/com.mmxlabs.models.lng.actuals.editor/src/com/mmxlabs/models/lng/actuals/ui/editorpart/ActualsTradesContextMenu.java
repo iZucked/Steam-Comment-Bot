@@ -252,7 +252,8 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 									int ladenDistance = 0;
 									int ballastDistance = 0;
-
+									Route ladenRoute = null;
+									Route ballastRoute = null;
 									boolean isLaden = false;
 									for (final Event event : cargoAllocation.getEvents()) {
 
@@ -271,12 +272,16 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 												ladenDistance += journey.getDistance();
 												ladenRouteCosts += journey.getToll();
+
+												ladenRoute = journey.getRoute();
 											} else {
 												ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.BASE_FUEL, FuelUnit.MT);
 												ballastBaseFuelConsumptionInMT += getFuelUse(journey, Fuel.PILOT_LIGHT, FuelUnit.MT);
 
 												ballastDistance += journey.getDistance();
 												ballastRouteCosts += journey.getToll();
+
+												ballastRoute = journey.getRoute();
 											}
 
 										} else if (event instanceof Idle) {
@@ -336,10 +341,12 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 											slotActuals.setBaseFuelConsumption(ladenBaseFuelConsumptionInMT);
 											slotActuals.setRouteCosts(ladenRouteCosts);
 											slotActuals.setDistance(ladenDistance);
+											slotActuals.setRoute(ladenRoute);
 											// Reset in case of multiple loads/discharges!
 											ladenBaseFuelConsumptionInMT = 0;
 											ladenRouteCosts = 0;
 											ladenDistance = 0;
+											ladenRoute = null;
 										} else if (slotActuals instanceof DischargeActuals) {
 											if (isDivertableDESPurchase) {
 												final Vessel vessel = cargoActuals.getVessel();
@@ -354,10 +361,12 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 											slotActuals.setBaseFuelConsumption(ballastBaseFuelConsumptionInMT);
 											slotActuals.setRouteCosts(ballastRouteCosts);
 											slotActuals.setDistance(ballastDistance);
+											slotActuals.setRoute(ballastRoute);
 											// Reset in case of multiple loads/discharges!
 											ballastBaseFuelConsumptionInMT = 0;
 											ballastRouteCosts = 0;
 											ballastDistance = 0;
+											ballastRoute = null;
 										}
 
 										// set a base fuel price.
