@@ -17,12 +17,10 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRat
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * @since 2.0
  */
 public class TransformerHelper {
 
 	/**
-	 * @since 6.0
 	 */
 	public static IVesselClass buildIVesselClass(final ISchedulerBuilder builder, final VesselClass eVc, final int baseFuelPriceInInternalUnits) {
 		final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),

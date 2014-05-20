@@ -492,7 +492,6 @@ public class CustomScenarioCreator {
 	 * Finish making the scenario by adding the canals to the vessel classes.
 	 * 
 	 * @return The finished scenario.
-	 * @since 3.0
 	 */
 	public LNGScenarioModel buildScenario() {
 
@@ -544,7 +543,6 @@ public class CustomScenarioCreator {
 	 * @param canalTransitTime
 	 *            Transit time in hours
 	 * @return
-	 * @since 3.0
 	 */
 	public static void createCanalAndCost(final LNGScenarioModel scenario, final String canalName, final Port A, final Port B, final int distanceAToB, final int distanceBToA,
 			final int canalLadenCost, final int canalUnladenCost, final int canalTransitFuelDays, final int canalNBORateDays, final int canalTransitTime) {
@@ -684,7 +682,6 @@ public class CustomScenarioCreator {
 	 * @param name
 	 * @param dischargePrice
 	 * @return
-	 * @since 3.0
 	 */
 	public PurchaseContract addPurchaseContract(final String name) {
 		final PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();

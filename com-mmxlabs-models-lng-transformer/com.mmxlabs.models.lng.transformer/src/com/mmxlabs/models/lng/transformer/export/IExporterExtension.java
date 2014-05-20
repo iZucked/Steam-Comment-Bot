@@ -21,7 +21,6 @@ public interface IExporterExtension {
 	 * @param output
 	 * @param modelEntityMap
 	 * @param annotatedSolution
-	 * @since 3.0
 	 */
 	void startExporting(Schedule output, final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution);
 

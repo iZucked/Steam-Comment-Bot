@@ -236,7 +236,6 @@ public class LNGScenarioTransformer {
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
 	 * @param scenario
-	 * @since 5.0
 	 */
 	@Inject
 	public LNGScenarioTransformer(final LNGScenarioModel rootObject, final OptimiserSettings optimiserParameters) {
@@ -245,7 +244,6 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	protected void init(final LNGScenarioModel rootObject, final OptimiserSettings optimiserParameters) {
 
@@ -282,7 +280,6 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void addContractTransformer(final IContractTransformer transformer) {
 		contractTransformers.add(transformer);
@@ -297,7 +294,6 @@ public class LNGScenarioTransformer {
 	 * 
 	 * @return
 	 * @throws IncompleteScenarioException
-	 * @since 3.0
 	 */
 	public IOptimisationData createOptimisationData(final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
 		/*

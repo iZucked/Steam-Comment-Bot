@@ -50,7 +50,6 @@ public class ModelEntityMap {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public <T extends EObject> Collection<T> getAllModelObjects(final Class<? extends T> clz) {
 
@@ -65,7 +64,6 @@ public class ModelEntityMap {
 
 	/**
 	 * @return the earliestDate
-	 * @since 2.0
 	 */
 	public Date getEarliestDate() {
 		return earliestDate;
@@ -77,7 +75,6 @@ public class ModelEntityMap {
 	/**
 	 * @param earliestDate
 	 *            the earliestDate to set
-	 * @since 2.0
 	 */
 	public void setEarliestDate(Date earliestDate) {
 		this.earliestDate = earliestDate;

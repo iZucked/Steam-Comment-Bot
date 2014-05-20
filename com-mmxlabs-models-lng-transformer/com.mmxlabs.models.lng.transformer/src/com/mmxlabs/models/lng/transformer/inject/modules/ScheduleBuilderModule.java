@@ -31,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
  * Simple {@link Module} implementation to manage {@link ISchedulerBuilder} and {@link ContractTransformer} based extensions.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public class ScheduleBuilderModule extends AbstractModule {
 

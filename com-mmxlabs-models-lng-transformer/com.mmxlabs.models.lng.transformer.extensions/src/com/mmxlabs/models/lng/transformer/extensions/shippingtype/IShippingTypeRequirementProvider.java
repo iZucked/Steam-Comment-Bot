@@ -9,7 +9,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
 /**
- * @since 2.0
  */
 public interface IShippingTypeRequirementProvider extends IDataComponentProvider {
 	CargoDeliveryType getPurchaseSlotDeliveryType(ISequenceElement element);

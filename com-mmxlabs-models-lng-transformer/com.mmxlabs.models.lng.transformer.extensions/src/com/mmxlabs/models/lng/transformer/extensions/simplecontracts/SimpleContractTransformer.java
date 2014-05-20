@@ -42,7 +42,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  * 
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class SimpleContractTransformer implements IContractTransformer {
@@ -58,7 +57,6 @@ public class SimpleContractTransformer implements IContractTransformer {
 	private SeriesParser indices;
 
 	/**
-	 * @since 4.0
 	 */
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
@@ -78,7 +76,6 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	@Override
 	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable final SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
@@ -86,7 +83,6 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	@Override
 	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable final PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
@@ -100,7 +96,6 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 	/**
 	 * @return
-	 * @since 3.0
 	 */
 	public Collection<EClass> getContractEClasses() {
 		return handledClasses;

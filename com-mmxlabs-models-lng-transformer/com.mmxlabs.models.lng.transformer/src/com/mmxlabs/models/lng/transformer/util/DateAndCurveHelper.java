@@ -24,7 +24,6 @@ import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
  * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
  * for creating {@link ICurve}s
  * 
- * @since 2.0
  */
 public class DateAndCurveHelper {
 

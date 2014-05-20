@@ -11,12 +11,10 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * @since 2.0
  */
 public interface IPostExportProcessor {
 
 	/**
-	 * @since 4.0
 	 */
 	void postProcess(EditingDomain ed, MMXRootObject rootObject, Schedule scheduleModel, CompoundCommand commands);
 }

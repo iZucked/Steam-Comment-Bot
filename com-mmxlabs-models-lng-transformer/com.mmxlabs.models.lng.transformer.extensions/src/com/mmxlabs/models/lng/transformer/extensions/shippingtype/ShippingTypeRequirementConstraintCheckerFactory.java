@@ -11,7 +11,6 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
  * {@link IConstraintCheckerFactory} implementation to create {@link ShippingTypeRequirementConstraintChecker} instances.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public final class ShippingTypeRequirementConstraintCheckerFactory implements IConstraintCheckerFactory {
 

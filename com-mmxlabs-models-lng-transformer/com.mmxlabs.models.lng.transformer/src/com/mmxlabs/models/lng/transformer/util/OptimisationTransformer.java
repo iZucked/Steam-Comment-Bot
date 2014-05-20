@@ -83,7 +83,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	 * com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
 	 */
 	/**
-	 * @since 3.0
 	 */
 	@Override
 	public ISequences createInitialSequences(final IOptimisationData data, final ModelEntityMap mem) {
@@ -278,7 +277,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected ISequenceElement[] getElements(final AssignableElement modelObject, final IPortSlotProvider psp, final ModelEntityMap modelEntityMap) {
 		if (modelObject instanceof VesselEvent) {

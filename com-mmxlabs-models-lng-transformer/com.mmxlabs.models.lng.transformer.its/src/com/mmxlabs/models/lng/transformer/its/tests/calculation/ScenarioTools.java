@@ -141,7 +141,6 @@ public class ScenarioTools {
 	 * @param useDryDock
 	 * @param pilotLightRate
 	 * @return
-	 * @since 3.0
 	 */
 	public static LNGScenarioModel createScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
@@ -160,7 +159,6 @@ public class ScenarioTools {
 	 * {@link #createScenarioWithCanal(int[], float, float, float, int, float, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, int, boolean, int, int, VesselClassCost)}
 	 * but only has argument for one distance between the two ports.
 	 * 
-	 * @since 3.0
 	 */
 	public static LNGScenarioModel createScenarioWithCanal(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
@@ -207,7 +205,6 @@ public class ScenarioTools {
 	 * @param canalCost
 	 *            If this is not null a canal is added. If it is null no canal is added.
 	 * @return
-	 * @since 3.0
 	 */
 	public static LNGScenarioModel createScenarioWithCanals(final int[] distancesBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
@@ -480,7 +477,6 @@ public class ScenarioTools {
 	/**
 	 * Creates a scenario with a charter out.
 	 * 
-	 * @since 3.0
 	 */
 	public static LNGScenarioModel createCharterOutScenario(final int distanceBetweenPorts, final float baseFuelUnitPrice, final float dischargePrice, final float cvValue, final int travelTime,
 			final float equivalenceFactor, final int minSpeed, final int maxSpeed, final int capacity, final int ballastMinSpeed, final int ballastMinConsumption, final int ballastMaxSpeed,
@@ -692,7 +688,6 @@ public class ScenarioTools {
 	 * 
 	 * @param scenario
 	 * @return the evaluated schedule
-	 * @since 3.0
 	 */
 	public static Schedule evaluate(final LNGScenarioModel scenario) {
 

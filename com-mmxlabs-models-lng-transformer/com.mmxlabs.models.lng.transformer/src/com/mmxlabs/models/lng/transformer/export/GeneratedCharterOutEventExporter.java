@@ -19,7 +19,6 @@ import com.mmxlabs.scheduler.optimiser.events.IGeneratedCharterOutEvent;
  * Exports idleevent annotations.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {

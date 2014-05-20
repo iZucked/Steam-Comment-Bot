@@ -10,7 +10,6 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 
 /**
  * A {@link IParameterModeCustomiser} custo
- * @since 5.0
  */
 public interface IParameterModeCustomiser {
 

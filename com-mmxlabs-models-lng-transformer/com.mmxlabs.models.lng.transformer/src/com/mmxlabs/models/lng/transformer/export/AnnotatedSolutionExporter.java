@@ -108,7 +108,6 @@ public class AnnotatedSolutionExporter {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public Schedule exportAnnotatedSolution(final ModelEntityMap modelEntityMap, final IAnnotatedSolution annotatedSolution) {
 		final IElementAnnotationsMap elementAnnotations = annotatedSolution.getElementAnnotations();

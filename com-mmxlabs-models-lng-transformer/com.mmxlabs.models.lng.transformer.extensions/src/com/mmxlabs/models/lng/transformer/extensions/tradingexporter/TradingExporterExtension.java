@@ -55,7 +55,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * 
  * @author hinton
  * 
- * @since 3.0
  */
 public class TradingExporterExtension implements IExporterExtension {
 	private ModelEntityMap modelEntityMap;

@@ -8,7 +8,6 @@ import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 
 /**
- * @since 3.0
  */
 public class EntityTransformerExtensionFactory implements ITransformerExtensionFactory {
 

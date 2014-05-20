@@ -39,7 +39,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * Utility class for doing things to scenarios.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class TransformerUtils {

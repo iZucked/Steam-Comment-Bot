@@ -74,7 +74,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSeque
 /**
  * @author Simon Goodall
  * @noextend This class is not intended to be subclassed by clients.
- * @since 3.0
  * 
  */
 public class LNGSchedulerJobUtils {
@@ -96,7 +95,6 @@ public class LNGSchedulerJobUtils {
 	 * @param solutionCurrentProgress
 	 * @param LABEL_PREFIX
 	 * @return
-	 * @since 5.0
 	 */
 	public static Schedule exportSolution(final Injector injector, final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final EditingDomain editingDomain,
 			final ModelEntityMap modelEntityMap, final IAnnotatedSolution solution, final int solutionCurrentProgress) {
@@ -191,7 +189,6 @@ public class LNGSchedulerJobUtils {
 	 * @param cargoModel
 	 * @param postExportProcessors
 	 * @return
-	 * @since 4.0
 	 */
 	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {

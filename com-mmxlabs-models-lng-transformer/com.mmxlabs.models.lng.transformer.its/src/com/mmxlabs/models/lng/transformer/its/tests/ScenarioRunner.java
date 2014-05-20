@@ -49,7 +49,6 @@ public class ScenarioRunner {
 	private LNGTransformer transformer;
 
 	/**
-	 * @since 3.0
 	 */
 	public ScenarioRunner(final LNGScenarioModel scenario) {
 		this.scenario = scenario;
@@ -64,7 +63,6 @@ public class ScenarioRunner {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public final LNGScenarioModel getScenario() {
 		return scenario;

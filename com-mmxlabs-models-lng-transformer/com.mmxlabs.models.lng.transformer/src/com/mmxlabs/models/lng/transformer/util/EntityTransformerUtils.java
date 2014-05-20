@@ -12,7 +12,6 @@ import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
- * @since 3.0
  */
 public class EntityTransformerUtils {
 

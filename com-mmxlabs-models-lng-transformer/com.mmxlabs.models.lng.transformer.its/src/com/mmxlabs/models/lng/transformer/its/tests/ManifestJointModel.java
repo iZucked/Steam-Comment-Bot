@@ -78,7 +78,6 @@ public class ManifestJointModel {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public static LNGScenarioModel createEmptyInstance(final List<EObject> models) {
 		final LNGScenarioModel rootObject = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();

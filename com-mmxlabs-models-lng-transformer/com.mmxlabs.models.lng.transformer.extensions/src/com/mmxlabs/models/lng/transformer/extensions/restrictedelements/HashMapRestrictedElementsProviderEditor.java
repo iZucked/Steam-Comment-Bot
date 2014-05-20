@@ -16,7 +16,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * Implementation of {@link IRestrictedElementsProviderEditor} using a {@link HashMap} as backing data store.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public class HashMapRestrictedElementsProviderEditor implements IRestrictedElementsProviderEditor {
 

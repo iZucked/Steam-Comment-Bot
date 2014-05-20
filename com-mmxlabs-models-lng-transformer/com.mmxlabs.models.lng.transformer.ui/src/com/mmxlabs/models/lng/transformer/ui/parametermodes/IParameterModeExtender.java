@@ -9,7 +9,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 
 /**
- * @since 6.2
  */
 public interface IParameterModeExtender {
 
