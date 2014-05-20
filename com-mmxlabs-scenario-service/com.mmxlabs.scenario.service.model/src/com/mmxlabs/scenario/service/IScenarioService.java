@@ -56,7 +56,6 @@ public interface IScenarioService {
 	 *            the new models which this scenario will own; these ought not be in any resources at this point. New resources and storage will be sorted out for them by this scenario service.
 	 * @return a new scenario instance, which will contain a new root object as its instance attribute
 	 * @throws IOException
-	 * @since 4.0
 	 */
 	ScenarioInstance insert(final Container container, final EObject rootObject) throws IOException;
 
@@ -112,7 +111,6 @@ public interface IScenarioService {
 	void removeScenarioServiceListener(IScenarioServiceListener listener);
 
 	/**
-	 * @since 2.0
 	 */
 	void unload(ScenarioInstance model);
 
@@ -121,12 +119,10 @@ public interface IScenarioService {
 	 * 
 	 * @param containers
 	 * @param container
-	 * @since 5.0
 	 */
 	void moveInto(List<Container> elements, Container destination);
 
 	/**
-	 * @since 5.0
 	 */
 	void makeFolder(Container parent, String name);
 }

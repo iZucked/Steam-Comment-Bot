@@ -174,7 +174,6 @@ public interface ScenarioInstance extends Container {
 	 * <p>
 	 * Returns the {@link ScenarioService} relative URI to the underlying data.
 	 * </p>
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Root Object URI</em>' attribute.
 	 * @see #setRootObjectURI(String)
@@ -187,7 +186,6 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getRootObjectURI <em>Root Object URI</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Root Object URI</em>' attribute.
 	 * @see #getRootObjectURI()
@@ -202,7 +200,6 @@ public interface ScenarioInstance extends Container {
 	 * If the meaning of the '<em>Scenario Version</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Scenario Version</em>' attribute.
 	 * @see #setScenarioVersion(int)
@@ -215,7 +212,6 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Scenario Version</em>' attribute.
 	 * @see #getScenarioVersion()
@@ -230,7 +226,6 @@ public interface ScenarioInstance extends Container {
 	 * If the meaning of the '<em>Version Context</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Version Context</em>' attribute.
 	 * @see #setVersionContext(String)
@@ -243,7 +238,6 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Version Context</em>' attribute.
 	 * @see #getVersionContext()
@@ -260,7 +254,6 @@ public interface ScenarioInstance extends Container {
 	 * If the meaning of the '<em>Fragments</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fragments</em>' containment reference list.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Fragments()
@@ -277,7 +270,6 @@ public interface ScenarioInstance extends Container {
 	 * If the meaning of the '<em>Readonly</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Readonly</em>' attribute.
 	 * @see #setReadonly(boolean)
@@ -290,7 +282,6 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Readonly</em>' attribute.
 	 * @see #isReadonly()

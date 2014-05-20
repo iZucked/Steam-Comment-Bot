@@ -125,21 +125,18 @@ public class ScenarioServiceSelectionGroup extends Composite {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public ScenarioServiceContentProvider getContentProvider() {
 		return contentProvider; 
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public boolean isSetShowOnlyCapsImport() {
 		return setShowOnlyCapsImport;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public void setSetShowOnlyCapsImport(final boolean setShowOnlyCapsImport) {
 		this.setShowOnlyCapsImport = setShowOnlyCapsImport;

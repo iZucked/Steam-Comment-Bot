@@ -275,7 +275,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -285,7 +284,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -295,7 +293,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -359,7 +356,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -369,7 +365,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -379,7 +374,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -389,7 +383,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -399,7 +392,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -562,7 +554,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -572,7 +563,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -582,7 +572,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -592,7 +581,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -602,7 +590,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

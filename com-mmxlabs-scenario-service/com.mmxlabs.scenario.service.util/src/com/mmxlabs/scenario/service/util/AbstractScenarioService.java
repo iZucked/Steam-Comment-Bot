@@ -169,7 +169,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	/**
 	 * Create a {@link ResourceSet} for loading and saving
 	 * 
-	 * @since 4.0
 	 */
 	protected ResourceSet createResourceSet() {
 		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
@@ -327,7 +326,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void unload(final ScenarioInstance instance) {
@@ -351,14 +349,12 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	public IScenarioMigrationService getScenarioMigrationService() {
 		return scenarioMigrationService;
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	public void setScenarioMigrationService(final IScenarioMigrationService scenarioMigrationHandler) {
 		this.scenarioMigrationService = scenarioMigrationHandler;
@@ -373,7 +369,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@SuppressWarnings("resource")
 	protected void copyURIData(@NonNull final URIConverter uc, @NonNull final URI src, @NonNull final URI dest) throws IOException {

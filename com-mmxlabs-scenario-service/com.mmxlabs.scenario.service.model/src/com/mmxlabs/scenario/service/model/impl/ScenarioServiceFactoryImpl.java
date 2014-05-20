@@ -171,7 +171,6 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

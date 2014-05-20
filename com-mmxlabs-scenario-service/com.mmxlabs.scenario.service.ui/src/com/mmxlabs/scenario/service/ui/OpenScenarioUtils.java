@@ -28,7 +28,6 @@ import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 /**
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class OpenScenarioUtils {
@@ -48,7 +47,6 @@ public class OpenScenarioUtils {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public static IEditorPart openAndReturnEditorPart(final IWorkbenchPage activePage, final ScenarioInstance model) throws PartInitException {
 		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
@@ -56,7 +54,6 @@ public class OpenScenarioUtils {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public static IEditorPart openAndReturnEditorPart(final IWorkbenchPage activePage, final IScenarioServiceEditorInput editorInput) throws PartInitException {
 
