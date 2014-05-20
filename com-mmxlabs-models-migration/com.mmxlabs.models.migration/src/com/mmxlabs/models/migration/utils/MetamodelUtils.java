@@ -65,7 +65,6 @@ public class MetamodelUtils {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public static EEnumLiteral getEEnum_Literal(final EEnum eEnum, final String literal) {
 
@@ -81,7 +80,6 @@ public class MetamodelUtils {
 	 * @param dataTypeName
 	 *            The name of an {@link EDataType}
 	 * @return
-	 * @since 2.0
 	 */
 	public static EDataType getEDataType(final EPackage ePackage, final String dataTypeName) {
 		final EDataType eClassifier = (EDataType) ePackage.getEClassifier(dataTypeName);

@@ -112,7 +112,6 @@ public class EcoreHelper {
 	 * When an EClass has been moved between metamodels, this method will perform a deep copy of the given feature from the source EObject reference to the destination eobject. It is assumed both the
 	 * source and the destination eobjects are the same EClass, but in different metamodels. Perform a deep copy of the
 	 * 
-	 * @since 2.0
 	 */
 	public static void copyEObjectFeature(@NonNull final EObject sourceContainer, @NonNull final EObject destinationContainer, @NonNull final EStructuralFeature sourceFeature) {
 
@@ -166,7 +165,6 @@ public class EcoreHelper {
 	/**
 	 * This method will copy the EObject instance from one metamodel to another metamodel, if present, otherwise it will return the original object reference.
 	 * 
-	 * @since 2.0
 	 */
 	public static EObject copyIfRequired(@NonNull final EObject sourceContainer, @NonNull final EPackage destPackage, @NonNull final EObject subRef) {
 		EObject newSubRef = subRef;
@@ -191,7 +189,6 @@ public class EcoreHelper {
 	 * 
 	 * @param source
 	 * @param destination
-	 * @since 2.0
 	 */
 	public static void copyEObject(@NonNull final EObject source, @NonNull final EObject destination) {
 		// Copy feature data

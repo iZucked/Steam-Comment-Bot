@@ -34,7 +34,6 @@ import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
  * An implementation of {@link IMigrationRegistry} populated by extensions points.
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class MigrationRegistry implements IMigrationRegistry {
@@ -58,7 +57,6 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * @param defaultMigrationContexts
 	 * @param migrationContexts
 	 * @param migrationUnits
-	 * @since 3.0
 	 */
 	@Inject
 	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, final Iterable<MigrationUnitExtensionPoint> migrationUnits,
@@ -259,7 +257,6 @@ public class MigrationRegistry implements IMigrationRegistry {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public void registerMigrationUnit(final String id, @NonNull final IMigrationUnit unit) {
 		registerMigrationUnit(unit);
@@ -267,7 +264,6 @@ public class MigrationRegistry implements IMigrationRegistry {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public void registerMigrationUnitExtension(final String unitID, @NonNull final IMigrationUnitExtension unitExtension) {
 		final List<IMigrationUnitExtension> extensions;
@@ -324,7 +320,6 @@ public class MigrationRegistry implements IMigrationRegistry {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public void registerClientMigrationUnit(final String id, @NonNull final IClientMigrationUnit unit) {
 		registerClientMigrationUnit(unit);

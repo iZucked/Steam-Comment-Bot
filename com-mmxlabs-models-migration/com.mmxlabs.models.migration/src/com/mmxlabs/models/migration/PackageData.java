@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 /**
  * Helper class for loading and registering EPackages.
  * 
- * @since 3.0
  */
 public class PackageData {
 	private final String nsURI;

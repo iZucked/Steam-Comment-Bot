@@ -9,7 +9,6 @@ import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
 /**
- * @since 2.0
  */
 @ExtensionBean("com.mmxlabs.models.migration.DefaultClientMigrationContext")
 public interface DefaultClientMigrationContextExtensionPoint {

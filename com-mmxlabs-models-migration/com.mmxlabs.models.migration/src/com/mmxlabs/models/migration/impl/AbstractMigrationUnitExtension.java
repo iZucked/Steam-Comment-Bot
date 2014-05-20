@@ -19,7 +19,6 @@ import com.mmxlabs.models.migration.PackageData;
  * implemented.
  * 
  * @author Simon Goodall
- * @since 3.0
  * 
  */
 public abstract class AbstractMigrationUnitExtension implements IMigrationUnitExtension {
