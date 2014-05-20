@@ -39,7 +39,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)",
  com.mmxlabs.optimiser.optimiser-common;bundle-version="2.0.0",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="2.0.0",
- com.mmxlabs.optimiser.optimiser-lso;bundle-version="2.0.0"
+ com.mmxlabs.optimiser.optimiser-lso;bundle-version="2.0.0",
+ org.apache.shiro.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
