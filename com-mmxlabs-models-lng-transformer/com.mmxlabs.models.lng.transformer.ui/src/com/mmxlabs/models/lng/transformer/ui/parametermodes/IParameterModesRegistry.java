@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.transformer.ui.parametermodes;
 import java.util.Collection;
 
 /**
- * @since 5.0
  * @noimplement This interface is not intended to be implemented by clients.
  */
 public interface IParameterModesRegistry {
@@ -17,7 +16,6 @@ public interface IParameterModesRegistry {
 	Collection<String> getParameterModes();
 
 	/**
-	 * @since 6.2
 	 */
 	Collection<IParameterModeExtender> getExtenders();
 }

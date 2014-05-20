@@ -10,7 +10,6 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * @since 2.0
  */
 public class HashMapShippingTypeRequirementProvider implements IShippingTypeRequirementProviderEditor {
 

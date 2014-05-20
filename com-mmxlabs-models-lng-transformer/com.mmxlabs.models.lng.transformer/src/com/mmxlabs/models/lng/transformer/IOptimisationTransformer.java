@@ -9,7 +9,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 
 /**
- * @since 2.0
  */
 public interface IOptimisationTransformer {
 	/**
@@ -17,7 +16,6 @@ public interface IOptimisationTransformer {
 	 * 
 	 * @param data
 	 * @return
-	 * @since 3.0
 	 */
 	ISequences createInitialSequences(IOptimisationData data, ModelEntityMap mem);
 

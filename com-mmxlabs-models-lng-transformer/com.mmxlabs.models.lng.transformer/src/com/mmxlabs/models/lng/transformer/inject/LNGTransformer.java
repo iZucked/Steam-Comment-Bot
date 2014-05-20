@@ -49,11 +49,9 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
 public class LNGTransformer {
 
 	/**
-	 * @since 3.0
 	 */
 	public static final String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
 	/**
-	 * @since 5.0
 	 */
 	public static final String HINT_GENERATE_CHARTER_OUTS = "hint-lngtransformer-generate-charter-outs";
 
@@ -68,14 +66,12 @@ public class LNGTransformer {
 	/**
 	 * @param scenario
 	 * @param hints
-	 * @since 5.0
 	 */
 	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final String... hints) {
 		this(scenario, optimiserSettings, null, null, hints);
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides,
 			final String... hints) {
@@ -87,14 +83,12 @@ public class LNGTransformer {
 	 * @param scenario
 	 * @param module
 	 * @param hints
-	 * @since 5.0
 	 */
 	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Module module, final String... hints) {
 		this(scenario, optimiserSettings, module, null, hints);
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public LNGTransformer(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings, final Module module,
 			final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, final String... initialHints) {
@@ -230,7 +224,6 @@ public class LNGTransformer {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public IOptimisationTransformer getOptimisationTransformer() {
 		return injector.getInstance(IOptimisationTransformer.class);
@@ -241,7 +234,6 @@ public class LNGTransformer {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public ModelEntityMap getModelEntityMap() {
 		return injector.getInstance(ModelEntityMap.class);
@@ -256,28 +248,24 @@ public class LNGTransformer {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public IOptimisationContext getOptimisationContext() {
 		return injector.getInstance(IOptimisationContext.class);
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public LocalSearchOptimiser getOptimiser() {
 		return injector.getInstance(LocalSearchOptimiser.class);
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public Injector getInjector() {
 		return injector;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public OptimiserSettings getOptimiserSettings() {
 		return optimiserSettings;

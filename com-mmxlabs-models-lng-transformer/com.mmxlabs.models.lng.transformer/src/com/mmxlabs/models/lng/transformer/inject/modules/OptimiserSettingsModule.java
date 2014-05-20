@@ -28,7 +28,6 @@ import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 /**
  * The {@link OptimiserSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
  * 
- * @since 2.0
  */
 public class OptimiserSettingsModule extends AbstractModule {
 

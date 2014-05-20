@@ -22,7 +22,6 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultGeneratedCh
 /**
  * This {@link Module} configures the default schedule optimisation classes.
  * 
- * @since 3.0
  */
 public class EvaluationModule extends AbstractModule {
 

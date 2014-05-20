@@ -31,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 
 /**
- * @since 2.0
  */
 public class ShippingTypeRequirementTransformer implements IContractTransformer {
 
@@ -42,14 +41,12 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	private IPortSlotProvider portSlotProvider;
 
 	/**
-	 * @since 4.0
 	 */
 	@Override
 	public void startTransforming(final LNGScenarioModel rootObject, final ModelEntityMap modelEntityMap, final ISchedulerBuilder builder) {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	@Override
 	public ISalesPriceCalculator transformSalesPriceParameters(@Nullable final SalesContract salesContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {
@@ -57,7 +54,6 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	@Override
 	public ILoadPriceCalculator transformPurchasePriceParameters(@Nullable final PurchaseContract purchaseContract, @NonNull final LNGPriceCalculatorParameters priceParameters) {

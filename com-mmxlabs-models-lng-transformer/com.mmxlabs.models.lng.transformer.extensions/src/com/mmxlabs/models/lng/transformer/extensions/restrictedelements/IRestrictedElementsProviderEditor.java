@@ -12,7 +12,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * An editor interface for {@link IRestrictedElementsProvider}
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public interface IRestrictedElementsProviderEditor extends IRestrictedElementsProvider {
 

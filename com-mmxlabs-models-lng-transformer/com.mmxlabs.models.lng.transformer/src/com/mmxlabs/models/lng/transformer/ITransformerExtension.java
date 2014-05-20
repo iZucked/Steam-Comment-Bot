@@ -24,7 +24,6 @@ public interface ITransformerExtension {
 	 * @param scenario
 	 * @param modelEntityMap
 	 * @param builder
-	 * @since 4.0
 	 */
 	public void startTransforming(LNGScenarioModel rootObject, ModelEntityMap modelEntityMap, ISchedulerBuilder builder);
 

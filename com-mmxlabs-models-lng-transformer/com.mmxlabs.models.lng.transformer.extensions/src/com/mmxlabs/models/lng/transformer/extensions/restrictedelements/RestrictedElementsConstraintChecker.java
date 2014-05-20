@@ -22,7 +22,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 /**
  * An implementation of {@link IPairwiseConstraintChecker} to forbid certain {@link ISequenceElement} pairings
  * 
- * @since 2.0
  */
 public class RestrictedElementsConstraintChecker implements IPairwiseConstraintChecker {
 

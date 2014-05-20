@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
  * 
  * A wrapper around a {@link CargoAllocation} to restore the old API in the case of a two slot cargo - as most of the test cases work on this assumption.
  * 
- * @since 4.0
  */
 public class SimpleCargoAllocation {
 

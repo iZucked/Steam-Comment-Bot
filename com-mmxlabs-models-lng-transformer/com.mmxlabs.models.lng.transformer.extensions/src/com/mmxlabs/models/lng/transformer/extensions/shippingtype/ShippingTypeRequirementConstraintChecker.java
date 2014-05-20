@@ -17,7 +17,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  * FIXME: Properly handle multiple loads and discharges within the {@link VoyagePlan}
  * 
- * @since 2.0
  */
 public class ShippingTypeRequirementConstraintChecker extends AbstractPairwiseConstraintChecker {
 

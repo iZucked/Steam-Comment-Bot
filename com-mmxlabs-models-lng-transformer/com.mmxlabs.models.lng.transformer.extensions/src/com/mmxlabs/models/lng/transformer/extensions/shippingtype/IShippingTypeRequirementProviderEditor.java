@@ -11,7 +11,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * An editor interface for {@link IShippingTypeRequirementProvider}
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public interface IShippingTypeRequirementProviderEditor extends IShippingTypeRequirementProvider {
 	/**

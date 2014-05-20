@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.transformer.inject.IPostExportProcessorFactory;
  * A {@link Module} implementation to instantiate {@link IExporterExtension}s from {@link IExporterExtensionFactory}
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class PostExportProcessorModule extends AbstractModule {

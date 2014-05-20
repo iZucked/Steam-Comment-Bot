@@ -18,7 +18,6 @@ import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExpo
  * Module to register Transformer extension factories as a service
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class TransformerExtensionsActivatorModule extends PeaberryActivationModule {

@@ -21,7 +21,6 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  * @link{TransformerActivatorModule
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class RestrictedElementsModule extends PeaberryActivationModule {

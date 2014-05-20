@@ -9,7 +9,6 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * @since 3.0
  * 
  * 
  */

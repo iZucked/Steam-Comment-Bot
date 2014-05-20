@@ -32,7 +32,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
  * Utility class for handling scenarios.
  * 
  * @author hinton
- * @since 2.0
  * 
  */
 public class ScenarioUtils {
@@ -54,7 +53,6 @@ public class ScenarioUtils {
 
 	/**
 	 * @return
-	 * @since 4.0
 	 */
 	public static OptimiserSettings createDefaultSettings() {
 		final ParametersFactory parametersFactory = ParametersFactory.eINSTANCE;

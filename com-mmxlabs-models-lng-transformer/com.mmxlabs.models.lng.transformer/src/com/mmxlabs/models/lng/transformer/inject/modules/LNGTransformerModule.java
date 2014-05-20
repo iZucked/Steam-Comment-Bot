@@ -42,20 +42,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
  * 
- * @since 2.0
  */
 public class LNGTransformerModule extends AbstractModule {
 
 	/**
-	 * @since 6.0
 	 */
 	public static final String Parser_Commodity = "Commodity";
 	/**
-	 * @since 6.0
 	 */
 	public static final String Parser_BaseFuel = "BaseFuel";
 	/**
-	 * @since 6.0
 	 */
 	public static final String Parser_Charter = "Charter";
 
@@ -66,7 +62,6 @@ public class LNGTransformerModule extends AbstractModule {
 	private final OptimiserSettings optimiserSettings;
 
 	/**
-	 * @since 5.0
 	 */
 	public LNGTransformerModule(final LNGScenarioModel scenario, final OptimiserSettings optimiserSettings) {
 		this.scenario = scenario;

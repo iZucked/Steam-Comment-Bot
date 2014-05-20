@@ -89,7 +89,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The scenario then needs to be finalised using {@link #buildScenario()} before it can be used.
  * 
  * @author Simon McGregor
- * @since 3.0
  * 
  */
 public class DefaultScenarioCreator {
@@ -128,7 +127,6 @@ public class DefaultScenarioCreator {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public LegalEntity addEntity(final String name) {
 		final CommercialModel commercialModel = scenario.getCommercialModel();
@@ -140,7 +138,6 @@ public class DefaultScenarioCreator {
 	}
 
 	/**
-	 * @since 3.0
 	 */
 	public Route addRoute(final String name) {
 		final PortModel portModel = scenario.getPortModel();
@@ -1066,7 +1063,6 @@ public class DefaultScenarioCreator {
 	 * @param name
 	 * @param purchasePrice
 	 * @return
-	 * @since 3.0
 	 */
 	public PurchaseContract addPurchaseContract(final String name, final double purchasePrice) {
 		final CommercialModel commercialModel = scenario.getCommercialModel();

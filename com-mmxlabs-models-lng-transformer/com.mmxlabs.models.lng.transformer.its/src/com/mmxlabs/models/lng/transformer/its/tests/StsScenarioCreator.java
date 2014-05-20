@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 
 /**
- * @since 3.0
  */
 public class StsScenarioCreator extends DefaultScenarioCreator {
 	/**

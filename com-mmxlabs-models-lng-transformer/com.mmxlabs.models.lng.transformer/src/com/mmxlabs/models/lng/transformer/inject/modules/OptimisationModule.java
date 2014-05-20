@@ -30,7 +30,6 @@ import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 /**
  * This {@link Module} configures the default schedule optimisation classes.
  * 
- * @since 3.0
  */
 public class OptimisationModule extends AbstractModule {
 

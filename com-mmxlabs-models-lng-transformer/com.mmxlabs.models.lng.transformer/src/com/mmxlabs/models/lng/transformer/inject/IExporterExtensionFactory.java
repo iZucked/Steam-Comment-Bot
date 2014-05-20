@@ -9,7 +9,6 @@ import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 /**
  * Factory method to create {@link IExporterExtension} instances.
  * 
- * @since 2.0
  */
 public interface IExporterExtensionFactory {
 
