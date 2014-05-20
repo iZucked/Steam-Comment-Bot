@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.transformer.ui;
 
 import javax.management.timer.Timer;
 
+import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -69,6 +70,13 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.scenario = (LNGScenarioModel) scenarioInstance.getInstance();
 		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
+
+		// Disable optimisation in P&L testing phase
+		if (SecurityUtils.getSubject().isPermitted("features:phase-pnl-testing")) {
+			// Note escaped &!
+			throw new RuntimeException("Optimisation is disabled during the P&&L testing phase.");
+		}
+
 	}
 
 	@Override

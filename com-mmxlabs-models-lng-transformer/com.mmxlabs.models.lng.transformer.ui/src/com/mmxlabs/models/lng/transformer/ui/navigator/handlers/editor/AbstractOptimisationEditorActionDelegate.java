@@ -75,13 +75,16 @@ public abstract class AbstractOptimisationEditorActionDelegate extends Parameter
 
 		@Override
 		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-			control.addListener(jobListener);
+			if (control != null) {
+				control.addListener(jobListener);
+			}
 		}
 
 		@Override
 		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-			control.removeListener(jobListener);
+			if (control != null) {
+				control.removeListener(jobListener);
+			}
 		}
 	};
 
@@ -114,6 +117,5 @@ public abstract class AbstractOptimisationEditorActionDelegate extends Parameter
 		}
 		super.dispose();
 	}
-
 
 }
