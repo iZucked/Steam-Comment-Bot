@@ -332,7 +332,7 @@ public class VoyagePlanner {
 			portOptions.setVessel(vessel);
 
 			// Sequence scheduler should be using the actuals time
-			assert actualsDataProvider.hasActuals(thisPortSlot) == false ||  actualsDataProvider.getArrivalTime(thisPortSlot) == arrivalTimes[idx];
+			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getArrivalTime(thisPortSlot) == arrivalTimes[idx];
 
 			if (isShortsSequence && portType == PortType.Short_Cargo_End) {
 				currentTimes.add(shortCargoReturnArrivalTime);
@@ -486,10 +486,10 @@ public class VoyagePlanner {
 
 					if (idx == 0) {
 						if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
-							
+
 							// This should not be required in future as preceeding voyages should also be actualised!
 							assert startHeelVolumeInM3 == actualsDataProvider.getStartHeelInM3(portOptions.getPortSlot());
-//							plan.setStartingHeelInM3(startHeelVolumeInM3);
+							// plan.setStartingHeelInM3(startHeelVolumeInM3);
 
 							baseFuelPricePerMT = actualsDataProvider.getBaseFuelPricePerMT(portOptions.getPortSlot());
 
@@ -577,6 +577,8 @@ public class VoyagePlanner {
 
 					// Consumption rolled into normal fuel consumption
 					// Route costs
+					voyageOptions.setRoute(actualsDataProvider.getNextVoyageRoute(voyageOptions.getFromPortSlot()));
+
 					final long routeCosts = actualsDataProvider.getNextVoyageRouteCosts(voyageOptions.getFromPortSlot());
 					// voyageDetails.setRouteAdditionalConsumption(fuel, fuelUnit, consumption);
 					voyageDetails.setRouteCost(routeCosts);

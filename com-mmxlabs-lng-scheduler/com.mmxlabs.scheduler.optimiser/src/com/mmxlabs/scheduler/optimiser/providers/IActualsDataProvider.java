@@ -117,11 +117,17 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	int getLNGPricePerMMBTu(IPortSlot slot);
 
 	long getNextVoyageRouteCosts(IPortSlot slot);
-	
+
+	String getNextVoyageRoute(IPortSlot slot);
+
 	// Values for return - should be used as actuals esp for DES, and validation when overlapping with another set of actuals
 	boolean hasReturnActuals(IPortSlot slot);
+
 	int getReturnTime(IPortSlot slot);
+
 	ITimeWindow getReturnTimeAsTimeWindow(IPortSlot slot);
+
 	long getReturnHeelInM3(IPortSlot slot);
+
 	IPort getReturnPort(IPortSlot slot);
 }
