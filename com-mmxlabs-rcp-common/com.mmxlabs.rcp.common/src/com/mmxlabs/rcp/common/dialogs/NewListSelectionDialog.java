@@ -52,7 +52,6 @@ import com.mmxlabs.common.Pair;
  * TODO selection management, filtering, sensible size on opening, collapse unneeded groups.
  * 
  * @author Simon McGregor
- * @since 3.0
  * 
  */
 public class NewListSelectionDialog extends Dialog {
@@ -479,7 +478,6 @@ public class NewListSelectionDialog extends Dialog {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setComparator(final ViewerComparator vc) {
 		comparator = vc;

@@ -10,7 +10,6 @@ import org.eclipse.nebula.widgets.ganttchart.GanttChart;
 import com.mmxlabs.ganttviewer.internal.Activator;
 
 /**
- * @since 2.0
  */
 public class ZoomInAction extends Action {
 

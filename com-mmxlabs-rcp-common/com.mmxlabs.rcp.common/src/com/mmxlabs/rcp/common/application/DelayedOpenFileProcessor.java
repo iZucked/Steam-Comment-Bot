@@ -28,7 +28,6 @@ import com.mmxlabs.rcp.common.internal.Activator;
  * Based on org.eclipse.ui.internal.ide.application.DelayedEventsProcessor
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public class DelayedOpenFileProcessor implements Listener {

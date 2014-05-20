@@ -14,7 +14,6 @@ import org.osgi.util.tracker.ServiceTracker;
  * Extended implementation of {@link AbstractUIPlugin} added API to access the {@link LogService}
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public class LoggingActivator extends AbstractUIPlugin {
 

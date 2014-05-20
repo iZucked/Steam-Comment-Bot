@@ -23,7 +23,6 @@ public class PackTableColumnsAction extends Action {
 	/**
 	 * Create the Action, specifying whether to pack() all {@link TableColumn}s or only those where {@link TableColumn#getResizable()} returns true.
 	 * 
-	 * @since 2.0
 	 */
 	public PackTableColumnsAction(final TableViewer viewer, final boolean onlyResizable) {
 		super("Pack Columns");

@@ -26,14 +26,12 @@ public interface IGanttChartContentProvider extends ITreeContentProvider {
 	Calendar getElementPlannedEndTime(Object element);
 
 	/**
-	 * @since 2.0
 	 */
 	String getGroupIdentifier(Object element);
 
 	/**
 	 * Returns another element on the gantt view the given element depends upon.
 	 * 
-	 * @since 3.0
 	 */
 	Object getElementDependency(Object element);
 }

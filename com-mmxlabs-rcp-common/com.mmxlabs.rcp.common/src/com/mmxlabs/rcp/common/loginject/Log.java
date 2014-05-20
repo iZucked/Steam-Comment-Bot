@@ -15,7 +15,6 @@ import javax.inject.Scope;
 /**
  * An annotation to use in inject logger implementation.
  * 
- * @since 2.0
  */
 @Scope
 @Documented
