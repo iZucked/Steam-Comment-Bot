@@ -195,7 +195,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-			control.removeListener(jobControlListener);
+			if (control != null) {
+				control.removeListener(jobControlListener);
+			}
 			tryRefresh();
 		}
 
