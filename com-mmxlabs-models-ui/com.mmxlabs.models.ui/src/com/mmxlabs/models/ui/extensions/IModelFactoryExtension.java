@@ -19,12 +19,10 @@ public interface IModelFactoryExtension {
 	public String getOutputEClass();
 
 	/**
-	 * @since 6.0
 	 */
 	@MapName("replacementEReference")
 	public String getReplacementEReference();
 	/**
-	 * @since 6.0
 	 */
 	@MapName("replacementEClass")
 	public String getReplacementEClass();

@@ -39,7 +39,6 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	private final boolean validatingClone;
 
 	/**
-	 * @since 4.0
 	 */
 	public DefaultExtraValidationContext(final MMXRootObject rootObject, boolean validatingClone) {
 		this.rootObject = rootObject;
@@ -47,7 +46,6 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public DefaultExtraValidationContext(final IExtraValidationContext outerContext, boolean validatingClone) {
 		this.outerContext = outerContext;
@@ -179,7 +177,6 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	@Override
 	public boolean isValidatingClone() {

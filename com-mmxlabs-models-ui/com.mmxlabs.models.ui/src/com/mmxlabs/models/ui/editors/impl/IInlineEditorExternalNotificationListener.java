@@ -14,7 +14,6 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 
 /**
- * @since 2.0
  */
 public interface IInlineEditorExternalNotificationListener {
 

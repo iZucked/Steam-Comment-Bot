@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EAttribute;
 import com.mmxlabs.common.Pair;
 
 /**
- * @since 7.0
  */
 public class YesNoInlineEditor extends ValueListInlineEditor {
 	static private List<Pair<String, Object>> values = getValues();	

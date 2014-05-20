@@ -38,7 +38,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
  * An abstract class providing a {@link FormDialog} with support for EMF Validation and EMF Data Bindings
  * 
  * @author Simon Goodall
- * @since 6.0
  * 
  */
 public abstract class AbstractDataBindingFormDialog extends FormDialog {

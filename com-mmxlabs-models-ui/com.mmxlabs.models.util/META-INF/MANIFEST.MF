@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model Utils
 Bundle-SymbolicName: com.mmxlabs.models.util;singleton:=true
-Bundle-Version: 9.0.0.qualifier
+Bundle-Version: 3.3.1.qualifier
 Bundle-Activator: com.mmxlabs.models.util.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
@@ -17,7 +17,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.google.guava;bundle-version="13.0.1",
  com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)",
  com.mmxlabs.models.mmxcore;bundle-version="[5.0.0,6.0.0)",
- com.mmxlabs.models.migration;bundle-version="[3.3.0,4.0.0)"
+ com.mmxlabs.models.migration;bundle-version="[3.3.1,4.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.util,

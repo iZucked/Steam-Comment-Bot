@@ -28,7 +28,6 @@ import org.eclipse.jface.viewers.ViewerComparator;
  * {@link ViewerComparator} for the table to provide the group binding. The {@link EPackage} created by this class is not "frozen" and can be modified or extended as required.
  * 
  * @author Simon Goodall
- * @since 4.0
  * 
  */
 
@@ -130,7 +129,6 @@ public class GenericEMFTableDataModel {
 	 * 
 	 * @param value
 	 * @return
-	 * @since 6.0
 	 */
 	public static EAttribute createRowAttribute(final EClass owner, final EClassifier type, final String value) {
 		final EAttribute valueRef = EcoreFactory.eINSTANCE.createEAttribute();
@@ -292,7 +290,6 @@ public class GenericEMFTableDataModel {
 	/**
 	 * Return the EClass instance representing the row
 	 * 
-	 * @since 6.0
 	 */
 	public static EClass getRowClass(final EPackage dataModel) {
 		return (EClass) dataModel.getEClassifier(CLASS_NAME_ROW);

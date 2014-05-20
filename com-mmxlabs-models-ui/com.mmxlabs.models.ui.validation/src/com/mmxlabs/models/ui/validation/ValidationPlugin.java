@@ -26,7 +26,6 @@ public abstract class ValidationPlugin extends AbstractUIPlugin {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public IValidationService getValidationService() {
 		return validationServiceTracker.getService();

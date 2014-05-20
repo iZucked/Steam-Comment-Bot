@@ -24,7 +24,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory {
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public IDisplayComposite createToplevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
@@ -32,7 +31,6 @@ public class DefaultDisplayCompositeFactory implements IDisplayCompositeFactory 
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public IDisplayComposite createSublevelComposite(final Composite parent, final EClass eClass, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {

@@ -10,7 +10,6 @@ import org.ops4j.peaberry.eclipse.MapName;
 import com.mmxlabs.models.util.importer.IPostModelImporter;
 
 /**
- * @since 8.0
  */
 @ExtensionBean("com.mmxlabs.models.util.import.postmodelimporters")
 public interface IPostModelImporterExtension {

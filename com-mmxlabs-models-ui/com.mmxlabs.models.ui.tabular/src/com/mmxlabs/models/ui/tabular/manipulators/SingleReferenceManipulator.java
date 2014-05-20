@@ -30,7 +30,6 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * Uses {@link ComboBoxCellEditor} for its edit control, and takes the values from an {@link IReferenceValueProvider}.
  * 
  * @author hinton
- * @since 3.1
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {

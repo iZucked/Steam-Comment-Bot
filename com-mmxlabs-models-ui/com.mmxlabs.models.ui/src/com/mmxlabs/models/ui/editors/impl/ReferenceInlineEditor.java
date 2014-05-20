@@ -39,25 +39,20 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	private static final Logger log = LoggerFactory.getLogger(ReferenceInlineEditor.class);
 	/**
-	 * @since 2.0
 	 */
 	protected Combo combo;
 	/**
-	 * @since 2.0
 	 */
 	protected IReferenceValueProvider valueProvider;
 
 	/**
-	 * @since 2.0
 	 */
 	protected final ArrayList<String> nameList = new ArrayList<String>();
 	/**
-	 * @since 2.0
 	 */
 	protected final ArrayList<EObject> valueList = new ArrayList<EObject>();
 
 	/**
-	 * @since 8.0
 	 */
 	protected IItemPropertyDescriptor propertyDescriptor = null;
 	
@@ -130,7 +125,6 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	protected void updateDisplay(final Object target) {

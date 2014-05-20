@@ -14,7 +14,6 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 /**
  * Simple implementation of {@link CommandStack} wrapping a {@link ICommandHandler} which performs the real command execution. This class does not implement all methods on {@link CommandStack}
  * 
- * @since 6.0
  */
 public class CommandHandlerCommandStack implements CommandStack {
 

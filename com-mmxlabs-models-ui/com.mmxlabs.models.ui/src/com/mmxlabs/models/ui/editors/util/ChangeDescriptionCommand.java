@@ -22,7 +22,6 @@ import com.mmxlabs.common.Pair;
 /**
  * Class to wrap a {@link ChangeDescription} in a {@link Command}
  * 
- * @since 3.1
  * 
  */
 public class ChangeDescriptionCommand extends CompoundCommand {

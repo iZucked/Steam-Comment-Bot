@@ -30,7 +30,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
  * {@link MMXAdapterImpl#reallyNotifyChanged(org.eclipse.emf.common.notify.Notification)} and call {@link #setEnabled(boolean)}
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl implements IInlineEditor {
@@ -41,11 +40,9 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	protected final IInlineEditor wrapped;
 
 	/**
-	 * @since 2.0
 	 */
 	protected abstract boolean respondToNotification(final Notification notification);
 	/**
-	 * @since 2.0
 	 */
 	protected abstract boolean isEnabled();
 
@@ -122,7 +119,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public Control createControl(final Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
@@ -134,7 +130,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setEditorEnabled(final boolean enabled) {
@@ -142,7 +137,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setEditorVisible(final boolean visible) {
@@ -150,7 +144,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setEditorLocked(final boolean locked) {
@@ -158,7 +151,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isEditorEnabled() {
@@ -166,7 +158,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isEditorVisible() {
@@ -174,7 +165,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isEditorLocked() {
@@ -182,7 +172,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public EObject getEditorTarget() {
@@ -190,7 +179,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public Label getLabel() {
@@ -198,7 +186,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
@@ -207,7 +194,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}	
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
@@ -215,7 +201,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	protected void missedNotifications(final List<Notification> missed) {
@@ -228,7 +213,6 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	/**
 	 * Return the wrapped editor instance.
 	 * 
-	 * @since 2.0
 	 * @return
 	 */
 	public IInlineEditor getWrapped() {

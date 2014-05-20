@@ -12,7 +12,6 @@ public interface IFieldMap extends Map<String, String> {
 	public Set<String> getUnreadKeys();
 	public String getLastAccessedKey();
 	/**
-	 * @since 8.0
 	 */
 	public boolean containsPrefix(final String keyPrefix);
 }

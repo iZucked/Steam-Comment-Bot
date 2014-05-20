@@ -20,7 +20,6 @@ import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
  * Validation related code for the {@link EObjectTableViewer}
  * 
  * @author Simon Goodall
- * @since 4.0
  * 
  */
 public class EObjectTableViewerValidationSupport {
@@ -48,7 +47,6 @@ public class EObjectTableViewerValidationSupport {
 	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
 	/**
-	 * @since 7.0
 	 */
 	public EObjectTableViewerValidationSupport(ColumnViewer viewer) {
 		this.viewer = viewer;
@@ -93,7 +91,6 @@ public class EObjectTableViewerValidationSupport {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setStatus(final Object e, final IStatus s) {
 		final IStatus existing = validationErrors.get(e);
@@ -108,7 +105,6 @@ public class EObjectTableViewerValidationSupport {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected void updateObject(final EObject object, final IStatus status, final boolean update) {
 		if (object != null) {

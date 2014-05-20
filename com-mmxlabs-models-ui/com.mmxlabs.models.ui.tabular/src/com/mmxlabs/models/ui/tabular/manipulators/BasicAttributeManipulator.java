@@ -28,7 +28,6 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
  * Displays a textbox for editing an EAttribute.
  * 
  * @author hinton
- * @since 4.0
  */
 public class BasicAttributeManipulator implements ICellManipulator, ICellRenderer {
 	protected final EStructuralFeature field;

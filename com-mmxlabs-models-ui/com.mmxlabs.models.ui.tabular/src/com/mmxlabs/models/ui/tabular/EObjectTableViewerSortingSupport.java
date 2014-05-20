@@ -25,7 +25,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * Sorting related code for the {@link EObjectTableViewer}
  * 
  * @author Simon Goodall
- * @since 4.0
  * 
  */
 public class EObjectTableViewerSortingSupport {
@@ -48,7 +47,6 @@ public class EObjectTableViewerSortingSupport {
 	 * @param viewer
 	 * @param column
 	 * @param tColumn
-	 * @since 7.0
 	 */
 	public void addSortableColumn(final ColumnViewer viewer, final GridViewerColumn column, final GridColumn tColumn) {
 		columnSortOrder.add(tColumn);
@@ -81,14 +79,12 @@ public class EObjectTableViewerSortingSupport {
 	/**
 	 * Set a predefined sort order to override current column sort order. This will be overridden if the column sort order changes.
 	 * 
-	 * @since 2.0
 	 */
 	public void setFixedSortOrder(final List<Object> fixedSortOrder) {
 		this.fixedSortOrder = fixedSortOrder;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public List<Object> getFixedSortOrder() {
 		return fixedSortOrder;

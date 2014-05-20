@@ -36,7 +36,6 @@ import com.mmxlabs.models.ui.editors.util.EditorUtils;
 
 /**
  * 
- * @since 6.0
  * 
  */
 public abstract class DBCAttributeInlineEditor implements IInlineEditor {
@@ -411,7 +410,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public Label getLabel() {
@@ -419,7 +417,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setEditorEnabled(final boolean enabled) {
@@ -428,7 +425,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isEditorEnabled() {
@@ -436,7 +432,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setEditorLocked(final boolean locked) {
@@ -445,7 +440,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isEditorLocked() {
@@ -453,7 +447,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setEditorVisible(final boolean visible) {
@@ -462,7 +455,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public boolean isEditorVisible() {
@@ -475,7 +467,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected void setControlsEnabled(final boolean enabled) {
 		if (label != null && !label.isDisposed()) {
@@ -484,7 +475,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected void setControlsVisible(final boolean visible) {
 		if (label != null && !label.isDisposed()) {
@@ -493,7 +483,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void addNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
@@ -501,7 +490,6 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void removeNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {

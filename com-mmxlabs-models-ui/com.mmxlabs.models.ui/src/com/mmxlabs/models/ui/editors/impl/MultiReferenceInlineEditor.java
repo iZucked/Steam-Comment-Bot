@@ -176,7 +176,6 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	protected void createColumns(final ListSelectionDialog dlg) {
 		dlg.addColumn("Name", new ColumnLabelProvider() {

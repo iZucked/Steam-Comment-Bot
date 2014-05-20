@@ -16,7 +16,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
  * An implementation of {@link EditingDomain} wrapping another instance and delegating all methods to the wrapped instance. It is intended that clients sub-class this class and override methods as
  * required.
  * 
- * @since 6.0
  */
 public class WrappedEditingDomain implements EditingDomain {
 

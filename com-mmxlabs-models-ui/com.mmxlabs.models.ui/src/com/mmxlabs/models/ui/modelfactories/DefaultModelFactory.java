@@ -36,16 +36,13 @@ public class DefaultModelFactory implements IModelFactory {
 	private String label;
 	protected String prototypeClass;
 	/**
-	 * @since 6.0
 	 */
 	protected String referenceToUseGivenClass;
 	/**
-	 * @since 6.0
 	 */
 	protected String classToUseForGivenReference;
 	
 	/**
-	 * @since 2.1
 	 */
 	protected EClass findEClassInClassifiers(String name, EList<EClassifier> eclassifiers) {
 		for (final EClassifier e : eclassifiers) {
@@ -57,7 +54,6 @@ public class DefaultModelFactory implements IModelFactory {
 	}
 
 	/**
-	 * @since 2.1
 	 */
 	protected EClass getEClassFromName(String name, final EReference containment) {
 		if (name != null) {
@@ -212,7 +208,6 @@ public class DefaultModelFactory implements IModelFactory {
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public void initFromExtension(final String ID, final String label, final String prototype, final String replacementEReference, final String replacementEClass) {

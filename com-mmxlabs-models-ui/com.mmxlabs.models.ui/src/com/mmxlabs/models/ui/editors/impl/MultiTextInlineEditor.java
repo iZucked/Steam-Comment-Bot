@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.Text;
 /**
  * Sub class of {@link TextInlineEditor} to display a *single* string across multiple lines. This class also enforces a minimum control height.
  * 
- * @since 6.0
  */
 public class MultiTextInlineEditor extends TextInlineEditor {
 	private final String newLine;

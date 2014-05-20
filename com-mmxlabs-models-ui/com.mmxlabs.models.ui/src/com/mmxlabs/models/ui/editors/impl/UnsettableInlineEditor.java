@@ -28,11 +28,9 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	private Control inner;
 	private boolean controlEnabled;
 	/**
-	 * @since 6.0
 	 */
 	protected FormToolkit toolkit;
 	/**
-	 * @since 6.0
 	 */
 	protected EMFDataBindingContext dbc;
 
@@ -67,7 +65,6 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit) {

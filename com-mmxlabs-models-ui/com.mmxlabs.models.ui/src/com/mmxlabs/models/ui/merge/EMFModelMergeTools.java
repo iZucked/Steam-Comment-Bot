@@ -33,7 +33,6 @@ import com.google.common.base.Preconditions;
  * Utility class to help with merging data between different model instances.
  * 
  * @author Simon Goodall
- * @since 5.0
  * 
  */
 public class EMFModelMergeTools {

@@ -42,7 +42,6 @@ public class SubmodelImporterRegistry extends AbstractRegistry<EClass, ISubmodel
 
 	/**
 	 * Return all the submodel importer instances.
-	 * @since 2.0
 	 */
 	public Collection<ISubmodelImporter> getAllSubModelImporters() {
 		final List<ISubmodelImporter> l = new ArrayList<ISubmodelImporter>();

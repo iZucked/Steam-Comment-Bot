@@ -41,7 +41,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected List<EReference> childReferences = new LinkedList<EReference>();
 	protected List<IDisplayComposite> childComposites = new LinkedList<IDisplayComposite>();
 	/**
-	 * @since 3.1
 	 */
 	protected List<EObject> childObjects = new LinkedList<EObject>();
 	protected ICommandHandler commandHandler;
@@ -50,12 +49,10 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	//protected IScenarioEditingLocation location;
 	protected IDialogEditingContext dialogContext;
 	/**
-	 * @since 6.0
 	 */
 	protected FormToolkit toolkit;
 
 	/**
-	 * @since 6.0
 	 */
 	public DefaultTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style);
@@ -66,7 +63,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
@@ -95,7 +91,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
 		for (final EReference ref : eClass.getEAllReferences()) {
@@ -117,7 +112,6 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {

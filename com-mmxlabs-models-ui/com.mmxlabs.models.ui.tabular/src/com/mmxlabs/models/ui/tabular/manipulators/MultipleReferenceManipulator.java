@@ -31,7 +31,6 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 
 /**
  * @author hinton
- * @since 3.1
  * 
  */
 public class MultipleReferenceManipulator extends DialogFeatureManipulator {

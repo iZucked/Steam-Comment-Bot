@@ -29,7 +29,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
  * A {@link IReferenceValueProvider} implementation that combines references from all {@link MMXSubModel}s in a {@link MMXRootObject} implementation. Given a target {@link EClass} super type, examine
  * all the top level containment multiple references in each {@link MMXSubModel} and combine into a single list.
  * 
- * @since 2.0
  * 
  */
 public class MergedMultiModelReferenceValueProvider extends BaseReferenceValueProvider {
