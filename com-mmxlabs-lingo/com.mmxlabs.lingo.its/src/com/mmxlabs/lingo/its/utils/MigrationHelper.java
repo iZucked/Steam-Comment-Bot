@@ -59,12 +59,12 @@ public class MigrationHelper {
 
 		@Override
 		public void moveInto(final List<Container> elements, final Container destination) {
-			
+
 		}
 
 		@Override
 		public void makeFolder(final Container parent, final String name) {
-			
+
 		}
 
 	}
@@ -79,11 +79,23 @@ public class MigrationHelper {
 
 		// ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry);
 		final TestScenarioService scenarioService = new TestScenarioService("Test");
-		String context = instance.getVersionContext();
-		if (context == null || context.isEmpty()) {
-			context = migrationRegistry.getDefaultMigrationContext();
-			instance.setVersionContext(context);
-			instance.setScenarioVersion(0);
+		// Scenario context
+		{
+			String context = instance.getVersionContext();
+			if (context == null || context.isEmpty()) {
+				context = migrationRegistry.getDefaultMigrationContext();
+				instance.setVersionContext(context);
+				instance.setScenarioVersion(0);
+			}
+		}
+		// Client context
+		{
+			String context = instance.getClientVersionContext();
+			if (context == null || context.isEmpty()) {
+				context = migrationRegistry.getDefaultClientMigrationContext();
+				instance.setClientVersionContext(context);
+				instance.setClientScenarioVersion(0);
+			}
 		}
 
 		// migrator.performMigration(ss, instance);
@@ -117,7 +129,7 @@ public class MigrationHelper {
 		}
 
 		scenarioService.load(instance);
-		
+
 		return f;
 	}
 
@@ -149,7 +161,7 @@ public class MigrationHelper {
 			}
 		}
 	}
-	
+
 	@Nullable
 	private static IScenarioCipherProvider getScenarioCipherProvider() {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(MigrationHelper.class).getBundleContext();

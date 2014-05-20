@@ -37,8 +37,6 @@
 
 		<module>com.mmxlabs.lingo.extensions</module>
 
-		<module>com.mmxlabs.lingo.models.migration</module>
-
 		<module>com.mmxlabs.lingo.product</module>
 
 		<module>com.mmxlabs.lingo.doc</module>
