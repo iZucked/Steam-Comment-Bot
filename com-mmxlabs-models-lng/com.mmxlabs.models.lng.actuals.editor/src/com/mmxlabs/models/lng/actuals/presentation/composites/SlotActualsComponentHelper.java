@@ -10,16 +10,9 @@ import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IComponentHelper;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
@@ -81,6 +74,7 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 		add_notesEditor(detailComposite, topClass);
 		add_CVEditor(detailComposite, topClass);
 		add_baseFuelConsumptionEditor(detailComposite, topClass);
+		add_routeEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
 		add_routeCostsEditor(detailComposite, topClass);
 		add_crewBonusEditor(detailComposite, topClass);
@@ -119,6 +113,15 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseFuelConsumptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION));
+	}
+
+	/**
+	 * Create the editor for the route feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_routeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__ROUTE));
 	}
 
 	/**

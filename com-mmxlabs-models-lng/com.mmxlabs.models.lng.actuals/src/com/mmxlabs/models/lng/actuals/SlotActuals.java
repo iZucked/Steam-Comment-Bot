@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.actuals;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,6 +29,7 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCrewBonus <em>Crew Bonus</em>}</li>
@@ -144,6 +146,32 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setBaseFuelConsumption(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Route</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Route</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Route</em>' reference.
+	 * @see #setRoute(Route)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_Route()
+	 * @model
+	 * @generated
+	 */
+	Route getRoute();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRoute <em>Route</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Route</em>' reference.
+	 * @see #getRoute()
+	 * @generated
+	 */
+	void setRoute(Route value);
 
 	/**
 	 * Returns the value of the '<em><b>Distance</b></em>' attribute.

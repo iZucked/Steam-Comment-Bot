@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
 
+import com.mmxlabs.models.lng.port.Route;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,6 +41,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCrewBonus <em>Crew Bonus</em>}</li>
@@ -272,6 +274,16 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected int baseFuelConsumption = BASE_FUEL_CONSUMPTION_EDEFAULT;
 
 	/**
+	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRoute()
+	 * @generated
+	 * @ordered
+	 */
+	protected Route route;
+
+	/**
 	 * The default value of the '{@link #getDistance() <em>Distance</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -480,6 +492,46 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		baseFuelConsumption = newBaseFuelConsumption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION, oldBaseFuelConsumption, baseFuelConsumption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Route getRoute() {
+		if (route != null && route.eIsProxy()) {
+			InternalEObject oldRoute = (InternalEObject)route;
+			route = (Route)eResolveProxy(oldRoute);
+			if (route != oldRoute) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ActualsPackage.SLOT_ACTUALS__ROUTE, oldRoute, route));
+			}
+		}
+		return route;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Route basicGetRoute() {
+		return route;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRoute(Route newRoute) {
+		Route oldRoute = route;
+		route = newRoute;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__ROUTE, oldRoute, route));
 	}
 
 	/**
@@ -887,6 +939,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getCV();
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return getBaseFuelConsumption();
+			case ActualsPackage.SLOT_ACTUALS__ROUTE:
+				if (resolve) return getRoute();
+				return basicGetRoute();
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				return getDistance();
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
@@ -944,6 +999,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__ROUTE:
+				setRoute((Route)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				setDistance((Integer)newValue);
@@ -1008,6 +1066,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption(BASE_FUEL_CONSUMPTION_EDEFAULT);
 				return;
+			case ActualsPackage.SLOT_ACTUALS__ROUTE:
+				setRoute((Route)null);
+				return;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				setDistance(DISTANCE_EDEFAULT);
 				return;
@@ -1059,6 +1120,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return cv != CV_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__ROUTE:
+				return route != null;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 				return distance != DISTANCE_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:

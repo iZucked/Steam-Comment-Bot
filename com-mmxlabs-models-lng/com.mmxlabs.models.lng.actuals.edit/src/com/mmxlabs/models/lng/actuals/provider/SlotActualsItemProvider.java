@@ -73,6 +73,7 @@ public class SlotActualsItemProvider
 			addNotesPropertyDescriptor(object);
 			addCVPropertyDescriptor(object);
 			addBaseFuelConsumptionPropertyDescriptor(object);
+			addRoutePropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addRouteCostsPropertyDescriptor(object);
 			addCrewBonusPropertyDescriptor(object);
@@ -166,6 +167,28 @@ public class SlotActualsItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Route feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRoutePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_route_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_route_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__ROUTE,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
