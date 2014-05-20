@@ -33,7 +33,6 @@ import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
- * @since 2.0
  */
 public class ActualsModelImporter extends DefaultClassImporter {
 	private static final String KEY_LOADACTUAL = "buy";
@@ -91,7 +90,6 @@ public class ActualsModelImporter extends DefaultClassImporter {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	protected void exportSlot(final IExportContext context, final Map<String, String> result, final SlotActuals slot, final String referenceName) {
 		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(slot.eClass());

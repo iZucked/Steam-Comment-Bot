@@ -181,14 +181,12 @@ public class ActualsModelRowTransformer {
 		}
 
 		/**
-		 * @since 4.0
 		 */
 		public boolean isPrimaryRecord() {
 			return primaryRecord;
 		}
 
 		/**
-		 * @since 4.0
 		 */
 		public void setPrimaryRecord(final boolean primaryRecord) {
 			this.primaryRecord = primaryRecord;

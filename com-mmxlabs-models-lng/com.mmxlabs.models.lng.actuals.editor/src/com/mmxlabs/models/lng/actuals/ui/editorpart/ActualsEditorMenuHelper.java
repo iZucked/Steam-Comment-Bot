@@ -26,7 +26,6 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
- * @since 3.0
  */
 public class ActualsEditorMenuHelper {
 
@@ -37,7 +36,6 @@ public class ActualsEditorMenuHelper {
 	private final ActualsEditingCommands cec;
 
 	/**
-	 * @since 4.0
 	 */
 	public ActualsEditorMenuHelper(final Shell shell, final IScenarioEditingLocation scenarioEditingLocation, final LNGScenarioModel scenarioModel) {
 		this.shell = shell;

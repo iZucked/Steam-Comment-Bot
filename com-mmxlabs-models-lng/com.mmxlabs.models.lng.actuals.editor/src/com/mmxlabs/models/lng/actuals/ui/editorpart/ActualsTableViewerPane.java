@@ -111,7 +111,6 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  * 
  * 
  * @author Simon Goodall
- * @since 3.0
  * 
  */
 public class ActualsTableViewerPane extends ScenarioTableViewerPane {
@@ -121,7 +120,6 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 	 * A reference {@link RootData} object. This is used by a {@link ActualsModelRowTransformer} to retain load/discharge row pairings but allow wires to cross rows. Initially null until the first
 	 * rootData object is created. May be "nulled" again to reset state by an action.
 	 * 
-	 * @since 5.0
 	 */
 	protected RootData referenceRootData;
 

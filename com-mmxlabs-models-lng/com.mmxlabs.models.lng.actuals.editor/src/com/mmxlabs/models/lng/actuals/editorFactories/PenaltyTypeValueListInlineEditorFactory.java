@@ -16,7 +16,6 @@ import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
 import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 
 /**
- * @since 8.0
  */
 public class PenaltyTypeValueListInlineEditorFactory implements IInlineEditorFactory {
 	@Override
