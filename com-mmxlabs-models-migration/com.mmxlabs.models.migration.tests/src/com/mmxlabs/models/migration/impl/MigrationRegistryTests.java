@@ -166,6 +166,10 @@ public class MigrationRegistryTests {
 		Assert.assertSame(unit3, chain2.get(2));
 	}
 
+	/**
+	 * Combined test of scenario, client and extension wrappers.
+	 * 
+	 */
 	@Test
 	public void testGetMigrationChain3() {
 
@@ -242,6 +246,104 @@ public class MigrationRegistryTests {
 		Assert.assertSame(clientUnit2, chain.get(2));
 		Assert.assertSame(clientUnit3, chain.get(3));
 		Assert.assertSame(unit2, chain.get(4));
+
+	}
+
+	/**
+	 * Client migration only
+	 * 
+	 */
+
+	@Test
+	public void testGetMigrationChain4() {
+
+		final MigrationRegistry registry = new MigrationRegistry();
+
+		final String scenarioContext = "ScenarioContext";
+		final int scenarioVersion = 1;
+		final int latestScenarioVersion = 1;
+
+		final String clientContext = "ClientContext";
+		final int clientVersion = 1;
+		final int latestClientVersion = 3;
+
+		// Expect this to kick in on current version
+		final IClientMigrationUnit clientUnit1 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit1.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit1.getScenarioSourceVersion()).thenReturn(1);
+		when(clientUnit1.getScenarioDestinationVersion()).thenReturn(1);
+		when(clientUnit1.getClientContext()).thenReturn(clientContext);
+		when(clientUnit1.getClientSourceVersion()).thenReturn(1);
+		when(clientUnit1.getClientDestinationVersion()).thenReturn(2);
+
+		// Expect this to kick in on second version
+		final IClientMigrationUnit clientUnit2 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit2.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit2.getScenarioSourceVersion()).thenReturn(1);
+		when(clientUnit2.getScenarioDestinationVersion()).thenReturn(1);
+		when(clientUnit2.getClientContext()).thenReturn(clientContext);
+		when(clientUnit2.getClientSourceVersion()).thenReturn(2);
+		when(clientUnit2.getClientDestinationVersion()).thenReturn(3);
+
+		registry.registerContext(scenarioContext, latestScenarioVersion);
+		registry.registerClientContext(clientContext, latestClientVersion);
+
+		registry.registerClientMigrationUnit("client1", clientUnit1);
+		registry.registerClientMigrationUnit("client2", clientUnit2);
+
+		final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion);
+		Assert.assertEquals(2, chain.size());
+		Assert.assertSame(clientUnit1, chain.get(0));
+		Assert.assertSame(clientUnit2, chain.get(1));
+
+	}
+
+	/**
+	 * Client migration only. Same as {@link #testGetMigrationChain4()} but this client unit 2 requires a different scenario version (not registered) and thus cannot be used to migrate up to target
+	 * version.
+	 * 
+	 */
+
+	@Test
+	public void testGetMigrationChain5() {
+
+		final MigrationRegistry registry = new MigrationRegistry();
+
+		final String scenarioContext = "ScenarioContext";
+		final int scenarioVersion = 1;
+		final int latestScenarioVersion = 1;
+
+		final String clientContext = "ClientContext";
+		final int clientVersion = 1;
+		final int latestClientVersion = 3;
+
+		// Expect this to kick in on current version
+		final IClientMigrationUnit clientUnit1 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit1.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit1.getScenarioSourceVersion()).thenReturn(1);
+		when(clientUnit1.getScenarioDestinationVersion()).thenReturn(1);
+		when(clientUnit1.getClientContext()).thenReturn(clientContext);
+		when(clientUnit1.getClientSourceVersion()).thenReturn(1);
+		when(clientUnit1.getClientDestinationVersion()).thenReturn(2);
+
+		// Expect this to kick in on second version
+		final IClientMigrationUnit clientUnit2 = Mockito.mock(IClientMigrationUnit.class);
+		when(clientUnit2.getScenarioContext()).thenReturn(scenarioContext);
+		when(clientUnit2.getScenarioSourceVersion()).thenReturn(2);
+		when(clientUnit2.getScenarioDestinationVersion()).thenReturn(2);
+		when(clientUnit2.getClientContext()).thenReturn(clientContext);
+		when(clientUnit2.getClientSourceVersion()).thenReturn(2);
+		when(clientUnit2.getClientDestinationVersion()).thenReturn(3);
+
+		registry.registerContext(scenarioContext, latestScenarioVersion);
+		registry.registerClientContext(clientContext, latestClientVersion);
+
+		registry.registerClientMigrationUnit("client1", clientUnit1);
+		registry.registerClientMigrationUnit("client2", clientUnit2);
+
+		final List<IMigrationUnit> chain = registry.getMigrationChain(scenarioContext, scenarioVersion, latestScenarioVersion, clientContext, clientVersion, latestClientVersion);
+		Assert.assertEquals(1, chain.size());
+		Assert.assertSame(clientUnit1, chain.get(0));
 
 	}
 }

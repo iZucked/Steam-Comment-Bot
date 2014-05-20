@@ -226,6 +226,8 @@ public class MigrationRegistry implements IMigrationRegistry {
 				chain.add(nextUnit);
 				// Next version to find!
 				currentScenarioVersion = nextUnit.getScenarioDestinationVersion();
+			} else {
+				break;
 			}
 		}
 		return chain;
