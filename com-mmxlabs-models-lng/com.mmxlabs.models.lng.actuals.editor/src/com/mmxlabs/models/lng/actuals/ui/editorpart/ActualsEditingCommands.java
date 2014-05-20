@@ -26,7 +26,6 @@ import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 
 /**
- * @since 3.0
  */
 public class ActualsEditingCommands {
 
@@ -35,7 +34,6 @@ public class ActualsEditingCommands {
 	private final LNGScenarioModel rootObject;
 
 	/**
-	 * @since 4.0
 	 */
 	public ActualsEditingCommands(final EditingDomain editingDomain, final LNGScenarioModel rootObject) {
 		this.editingDomain = editingDomain;
