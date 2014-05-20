@@ -2,14 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.mmxlabs.shiplingo.platform</groupId>
-		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
+		<groupId>com.mmxlabs.lingo.reports</groupId>
+		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
 		<version>3.1.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>com.mmxlabs.shiplingo.platform.p2</artifactId>
+	<artifactId>com.mmxlabs.lingo.reports.p2</artifactId>
 	<version>3.1.1-SNAPSHOT</version>
 	<packaging>eclipse-repository</packaging>
-	<name>ShipLingo Platform: p2 Repository</name>
+	<name>Lingo Reports: p2 Repository</name>
 </project>

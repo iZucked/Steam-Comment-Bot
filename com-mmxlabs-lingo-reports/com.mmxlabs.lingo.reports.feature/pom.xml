@@ -4,13 +4,13 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>com.mmxlabs.shiplingo.platform</groupId>
-		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
+		<groupId>com.mmxlabs.lingo.reports</groupId>
+		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
 		<version>3.1.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.mmxlabs.shiplingo.platform.feature</groupId>
-	<artifactId>com.mmxlabs.shiplingo.platform.feature</artifactId>
+	<groupId>com.mmxlabs.lingo.reports.feature</groupId>
+	<artifactId>com.mmxlabs.lingo.reports.feature</artifactId>
 	<version>3.1.1-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
@@ -33,7 +33,7 @@
 
 				<configuration>
 					<excludes>
-						<plugin id="com.mmxlabs.shiplingo.platform.doc" />
+						<plugin id="com.mmxlabs.lingo.reports.doc" />
 					</excludes>
 				</configuration>
 			</plugin>

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Reports
-Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.reports;singleton:=true
+Bundle-SymbolicName: com.mmxlabs.lingo.reports;singleton:=true
 Bundle-Version: 3.1.1.qualifier
-Bundle-Activator: com.mmxlabs.shiplingo.platform.reports.internal.Activator
+Bundle-Activator: com.mmxlabs.lingo.reports.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.google.guava;bundle-version="11.0.1",
@@ -20,8 +20,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scheduler.optimiser;bundle-version="[3.3.1,4.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: com.mmxlabs.shiplingo.platform.reports,
- com.mmxlabs.shiplingo.platform.reports.properties,
- com.mmxlabs.shiplingo.platform.reports.utils,
- com.mmxlabs.shiplingo.platform.reports.views
+Export-Package: com.mmxlabs.lingo.reports,
+ com.mmxlabs.lingo.reports.properties,
+ com.mmxlabs.lingo.reports.utils,
+ com.mmxlabs.lingo.reports.views
 Import-Package: com.mmxlabs.models.lng.commercial.parseutils
