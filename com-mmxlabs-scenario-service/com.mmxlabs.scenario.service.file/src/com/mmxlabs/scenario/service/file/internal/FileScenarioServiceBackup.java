@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -18,7 +17,6 @@ import java.util.zip.ZipOutputStream;
 import com.google.common.io.ByteStreams;
 
 public class FileScenarioServiceBackup {
-	private final static int BUFFER = 4096;
 
 	public void backup(final File target, final File source) throws IOException {
 

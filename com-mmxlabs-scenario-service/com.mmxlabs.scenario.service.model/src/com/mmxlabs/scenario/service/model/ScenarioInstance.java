@@ -31,6 +31,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientVersionContext <em>Client Version Context</em>}</li>
  * </ul>
  * </p>
  *
@@ -43,8 +45,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Uuid</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns a unique identifier for the scenario. This is used to reference the scenario externally.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Uuid</em>' attribute.
@@ -95,8 +96,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Locked</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Locked</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns true if the scenario is locked for changes. See {@link #getLock(String)} and {@link #getLocks()} determine how the scenario is locked.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Locked</em>' attribute.
@@ -121,8 +121,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Instance</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Instance</em>' reference isn't clear,
-	 * there really should be more of a description here...
+	 * Returns the scenario model instance if loaded.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Instance</em>' reference.
@@ -173,8 +172,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Root Object URI</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Root Object URI</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns the {@link ScenarioService} relative URI to the underlying data.
 	 * </p>
 	 * @since 4.0
 	 * <!-- end-user-doc -->
@@ -299,6 +297,58 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setReadonly(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Client Scenario Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Client Scenario Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Client Scenario Version</em>' attribute.
+	 * @see #setClientScenarioVersion(int)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ClientScenarioVersion()
+	 * @model
+	 * @generated
+	 */
+	int getClientScenarioVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientScenarioVersion <em>Client Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Client Scenario Version</em>' attribute.
+	 * @see #getClientScenarioVersion()
+	 * @generated
+	 */
+	void setClientScenarioVersion(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Client Version Context</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Client Version Context</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Client Version Context</em>' attribute.
+	 * @see #setClientVersionContext(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ClientVersionContext()
+	 * @model
+	 * @generated
+	 */
+	String getClientVersionContext();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientVersionContext <em>Client Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Client Version Context</em>' attribute.
+	 * @see #getClientVersionContext()
+	 * @generated
+	 */
+	void setClientVersionContext(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Dirty</b></em>' attribute.

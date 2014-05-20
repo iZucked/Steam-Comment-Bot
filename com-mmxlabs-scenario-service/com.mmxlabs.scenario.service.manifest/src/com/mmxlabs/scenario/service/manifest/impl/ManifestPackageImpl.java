@@ -166,6 +166,26 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 	 * @generated
 	 */
 	@Override
+	public EAttribute getManifest_ClientScenarioVersion() {
+		return (EAttribute)manifestEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getManifest_ClientVersionContext() {
+		return (EAttribute)manifestEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ManifestFactory getManifestFactory() {
 		return (ManifestFactory)getEFactoryInstance();
 	}
@@ -196,6 +216,8 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		createEAttribute(manifestEClass, MANIFEST__SCENARIO_TYPE);
 		createEAttribute(manifestEClass, MANIFEST__SCENARIO_VERSION);
 		createEAttribute(manifestEClass, MANIFEST__VERSION_CONTEXT);
+		createEAttribute(manifestEClass, MANIFEST__CLIENT_SCENARIO_VERSION);
+		createEAttribute(manifestEClass, MANIFEST__CLIENT_VERSION_CONTEXT);
 	}
 
 	/**
@@ -235,6 +257,8 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 		initEAttribute(getManifest_ScenarioType(), ecorePackage.getEString(), "scenarioType", null, 1, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_ScenarioVersion(), ecorePackage.getEInt(), "scenarioVersion", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getManifest_VersionContext(), ecorePackage.getEString(), "versionContext", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getManifest_ClientScenarioVersion(), ecorePackage.getEInt(), "clientScenarioVersion", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getManifest_ClientVersionContext(), ecorePackage.getEString(), "clientVersionContext", null, 0, 1, Manifest.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -412,6 +412,24 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenarioInstance_ClientScenarioVersion() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(13);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioInstance_ClientVersionContext() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(14);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getScenarioInstance_Dirty() {
 		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(6);
 	}
@@ -664,6 +682,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VERSION_CONTEXT);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__FRAGMENTS);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__READONLY);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT);
 
 		metadataEClass = createEClass(METADATA);
 		createEAttribute(metadataEClass, METADATA__CREATOR);
@@ -793,6 +813,10 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_Readonly(), ecorePackage.getEBoolean(), "readonly", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_ClientScenarioVersion(), ecorePackage.getEInt(), "clientScenarioVersion", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_ClientVersionContext(), ecorePackage.getEString(), "clientVersionContext", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
 

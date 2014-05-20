@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
-import com.mmxlabs.scenario.service.util.encryption.impl.PassthoughCipher;
 import com.mmxlabs.scenario.service.util.encryption.impl.PassthroughCipherProvider;
 
 public final class ResourceHelper {

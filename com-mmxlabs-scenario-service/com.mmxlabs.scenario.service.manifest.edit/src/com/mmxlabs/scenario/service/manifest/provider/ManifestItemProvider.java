@@ -66,6 +66,8 @@ public class ManifestItemProvider
 			addScenarioTypePropertyDescriptor(object);
 			addScenarioVersionPropertyDescriptor(object);
 			addVersionContextPropertyDescriptor(object);
+			addClientScenarioVersionPropertyDescriptor(object);
+			addClientVersionContextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -205,6 +207,50 @@ public class ManifestItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Client Scenario Version feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addClientScenarioVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Manifest_clientScenarioVersion_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Manifest_clientScenarioVersion_feature", "_UI_Manifest_type"),
+				 ManifestPackage.Literals.MANIFEST__CLIENT_SCENARIO_VERSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Client Version Context feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addClientVersionContextPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Manifest_clientVersionContext_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Manifest_clientVersionContext_feature", "_UI_Manifest_type"),
+				 ManifestPackage.Literals.MANIFEST__CLIENT_VERSION_CONTEXT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Manifest.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -247,6 +293,8 @@ public class ManifestItemProvider
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
 			case ManifestPackage.MANIFEST__SCENARIO_VERSION:
 			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
+			case ManifestPackage.MANIFEST__CLIENT_SCENARIO_VERSION:
+			case ManifestPackage.MANIFEST__CLIENT_VERSION_CONTEXT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
