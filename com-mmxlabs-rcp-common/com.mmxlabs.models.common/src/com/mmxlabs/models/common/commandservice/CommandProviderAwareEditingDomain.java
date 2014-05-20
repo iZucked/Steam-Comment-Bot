@@ -38,7 +38,6 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	private boolean enabled = true;
 
 	/**
-	 * @since 3.0
 	 */
 	public CommandProviderAwareEditingDomain(final AdapterFactory adapterFactory, final CommandStack commandStack, final MMXRootObject rootObject, final ResourceSet resourceSet) {
 		super(adapterFactory, commandStack, resourceSet);
@@ -105,7 +104,6 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	 * {@link #endBatchCommand()}. External clients can manually invoked this pair of methods when multiple related commands are being created. The {@link BaseModelCommandProvider} keeps track of the
 	 * depth of these calls and will clear caches when the depth returns to zero. Clients can call this pair of method to avoid early cache clearing.
 	 * 
-	 * @since 3.1
 	 * 
 	 */
 	public void startBatchCommand() {
@@ -118,7 +116,6 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	/**
 	 * To be called after command creation as part of a pair of calls with {@link #startBatchCommand()}
 	 * 
-	 * @since 3.1
 	 */
 	public void endBatchCommand() {
 		final List<IModelCommandProvider> providers = Activator.getPlugin().getModelCommandProviders();
@@ -176,7 +173,6 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	 * Add an {@link EObject} to the current {@link Set} of edited objects.
 	 * 
 	 * @param object
-	 * @since 2.0
 	 */
 	public void addEditObject(final EObject object) {
 		editSet.add(object);
@@ -186,7 +182,6 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	 * Remove and {@link EObject} from the current {@link Set} of edited objects.
 	 * 
 	 * @param object
-	 * @since 2.0
 	 */
 	public void removeEditObject(final EObject object) {
 		editSet.remove(object);

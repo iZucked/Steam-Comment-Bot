@@ -17,7 +17,6 @@ import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 
 /**
- * @since 2.0
  */
 public class CopyPropertySheetToClipboardActionDelegate implements IViewActionDelegate {
 

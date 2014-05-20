@@ -15,7 +15,6 @@ import com.mmxlabs.rcp.common.loginject.impl.SLF4JTypeListener;
  * A Guice {@link Module} entry point to bind {@link Logger}s annotated with {@link Log}.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public class SLF4JLoggerModule extends AbstractModule {
 

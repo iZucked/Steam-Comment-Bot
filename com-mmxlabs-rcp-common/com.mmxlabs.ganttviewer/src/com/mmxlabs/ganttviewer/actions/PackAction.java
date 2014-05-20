@@ -19,7 +19,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import com.mmxlabs.ganttviewer.internal.Activator;
 
 /**
- * @since 2.0
  */
 public class PackAction extends Action {
 	private final GanttChart ganttChart;

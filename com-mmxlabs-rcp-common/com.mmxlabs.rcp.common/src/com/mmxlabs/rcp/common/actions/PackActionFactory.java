@@ -15,7 +15,6 @@ import org.eclipse.nebula.jface.gridviewer.GridTreeViewer;
  * 
  * @noinstantiate This class is not intended to be instantiated by clients.
  * @author Simon Goodall
- * @since 4.2
  * 
  */
 public final class PackActionFactory {

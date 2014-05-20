@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Abstract implementation of {@link IModelCommandProvider} tracking per-thread provision depths and custom data structures.
  * 
- * @since 2.0
  */
 public abstract class AbstractModelCommandProvider<T> implements IModelCommandProvider {
 

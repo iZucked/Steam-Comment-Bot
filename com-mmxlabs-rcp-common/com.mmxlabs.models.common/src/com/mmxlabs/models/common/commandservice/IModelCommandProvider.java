@@ -25,7 +25,6 @@ public interface IModelCommandProvider {
 	 * Given the input command, return an extra command which should happen after the input has executed.
 	 * @param input
 	 * @return
-	 * @since 2.0
 	 */
 	public Command provideAdditionalCommand(
 			final EditingDomain editingDomain, 
