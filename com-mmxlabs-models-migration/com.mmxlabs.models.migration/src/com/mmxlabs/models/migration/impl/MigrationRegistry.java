@@ -202,7 +202,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			}
 
 			// Phase two, get scenario migration units
-			{
+			if (currentScenarioVersion != toScenarioVersion) {
 
 				IMigrationUnit nextUnit = scenarioFroms.get(currentScenarioVersion);
 				// Is there another unit?
