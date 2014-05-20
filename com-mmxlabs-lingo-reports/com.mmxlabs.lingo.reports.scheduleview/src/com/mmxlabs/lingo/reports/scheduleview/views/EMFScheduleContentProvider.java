@@ -169,7 +169,6 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public String getGroupIdentifier(final Object element) {
@@ -217,7 +216,6 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	@Override
 	public Object getElementDependency(final Object element) {

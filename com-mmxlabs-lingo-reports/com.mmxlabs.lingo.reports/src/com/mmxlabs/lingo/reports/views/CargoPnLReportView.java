@@ -14,7 +14,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
- * @since 3.0
  */
 public class CargoPnLReportView extends AbstractCargoReportView {
 	/**

@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
  * Generic content provider for simple table views.
  * 
  * @author Simon McGregor
- * @since 2.0
  * 
  */
 public abstract class SimpleContentAndColumnProvider<T> implements ITreeContentProvider {
@@ -76,7 +75,6 @@ public abstract class SimpleContentAndColumnProvider<T> implements ITreeContentP
 	abstract public List<ColumnManager<T>> getColumnManagers();
 
 	/**
-	 * @since 4.0
 	 */
 	abstract protected List<T> createData(final Schedule schedule, LNGScenarioModel rootObject, LNGPortfolioModel portfolioModel);
 

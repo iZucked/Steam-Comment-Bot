@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 
 /**
  * @author hinton
- * @since 3.0
  * 
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })

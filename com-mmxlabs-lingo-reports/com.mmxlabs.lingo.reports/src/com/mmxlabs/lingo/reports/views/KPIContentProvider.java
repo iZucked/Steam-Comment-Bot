@@ -39,7 +39,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * Content provider for the {@link CargoReportView}.
  * 
  * @author Simon Goodall
- * @since 3.0
  * 
  */
 public class KPIContentProvider implements IStructuredContentProvider {

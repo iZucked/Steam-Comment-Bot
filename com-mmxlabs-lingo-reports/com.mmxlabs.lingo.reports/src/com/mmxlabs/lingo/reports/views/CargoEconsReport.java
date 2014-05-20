@@ -74,7 +74,6 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * pre-defined.
  * 
  * @author Simon Goodall
- * @since 4.0
  * 
  */
 public class CargoEconsReport extends ViewPart {
@@ -832,7 +831,6 @@ public class CargoEconsReport extends ViewPart {
 //	 * @param container
 //	 * @param entity
 //	 * @return
-//	 * @since 4.4
 //	 */
 //	private static Integer getPNLValueNoTC(final ProfitAndLossContainer container) {
 //		if (container == null) {

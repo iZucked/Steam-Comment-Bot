@@ -36,7 +36,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPathPropertyDescriptor;
 
 /**
- * @since 3.0
  */
 public class EventPropertySource implements IPropertySource {
 

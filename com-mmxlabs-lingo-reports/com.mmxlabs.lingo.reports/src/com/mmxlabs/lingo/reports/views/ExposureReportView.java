@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 
 /**
- * @since 2.0
  */
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> {
 	public final Map<String, Map<MonthYear, Double>> overallExposures = new HashMap<String, Map<MonthYear, Double>>();

@@ -51,7 +51,6 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTreeColumnsAction;
 
 /**
- * @since 2.0
  */
 public abstract class SimpleTabularReportView<T> extends ViewPart {
 	private final ArrayList<ColumnManager<T>> sortColumns = new ArrayList<ColumnManager<T>>();

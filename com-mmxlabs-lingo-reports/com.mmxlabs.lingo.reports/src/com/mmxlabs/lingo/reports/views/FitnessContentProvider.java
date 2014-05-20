@@ -31,7 +31,6 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 
 	public static class RowData {
 		/**
-		 * @since 2.0
 		 */
 		public RowData(final String scenario, final String component, final Long raw, final Double weight, final Long fitness) {
 			super();
@@ -45,11 +44,9 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 		public final String scenario;
 		public final String component;
 		/**
-		 * @since 2.0
 		 */
 		public final Long raw;
 		/**
-		 * @since 2.0
 		 */
 		public final Double weight;
 		public final Long fitness;

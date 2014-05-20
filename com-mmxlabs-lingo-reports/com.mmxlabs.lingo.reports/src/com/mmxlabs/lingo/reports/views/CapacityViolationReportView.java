@@ -38,7 +38,6 @@ import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
  * @author Simon Goodall
- * @since 4.2
  * 
  */
 public class CapacityViolationReportView extends EMFReportView {
@@ -178,7 +177,6 @@ public class CapacityViolationReportView extends EMFReportView {
 	 * 
 	 * @param element
 	 * @return
-	 * @since 1.1
 	 */
 	@Override
 	protected String getElementKey(EObject element) {

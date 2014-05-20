@@ -29,7 +29,6 @@ public interface IScenarioInstanceElementCollector {
 	/**
 	 * Notify the implementor of each scenario under consideration. Passes in a flag to indicate that the given scenario is pinned. Up to one pinned scenario is expected to be presented at one time.
 	 * 
-	 * @since 4.0
 	 */
 	public Collection<? extends Object> collectElements(final LNGScenarioModel rootObject, final boolean isPinned);
 }

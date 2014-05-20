@@ -180,7 +180,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public interface IFormatter {
 		public String format(final Object object);
@@ -259,7 +258,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * Formatter to format a floating point number to a given number of decimal places.
 	 * 
 	 * @author Simon Goodall
-	 * @since 5.1
 	 * 
 	 */
 	public class NumberOfDPFormatter implements IFormatter {
@@ -306,7 +304,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public class CostFormatter implements IFormatter {
 
@@ -351,7 +348,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public class PriceFormatter implements IFormatter {
 
@@ -451,7 +447,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	// };
 
 	/**
-	 * @since 4.0
 	 */
 	protected EObjectTableViewer viewer;
 
@@ -466,7 +461,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private ColumnHandler scheduleColumnHandler;
 
 	/**
-	 * @since 5.0
 	 */
 	protected ITreeContentProvider getContentProvider() {
 		return new ITreeContentProvider() {
@@ -589,7 +583,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @param formatter
 	 * @param path
 	 * @return
-	 * @since 4.0
 	 */
 	protected ColumnHandler addColumn(final String title, final String tooltip, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title, tooltip);
@@ -821,7 +814,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	/**
-	 * @since 1.0
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
@@ -839,7 +831,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	/**
 	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
 	 * 
-	 * @since 2.0
 	 */
 	protected void clearPinModeData() {
 		clearInputEquivalents();
@@ -854,7 +845,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * 
 	 * @param objects
 	 * @param isPinned
-	 * @since 2.0
 	 */
 	protected void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
 		currentlyPinned |= isPinned;
@@ -881,7 +871,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	/**
 	 * Compare an element to the pinned object and return true if different.
 	 * 
-	 * @since 2.0
 	 */
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 		return true;
@@ -892,7 +881,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * 
 	 * @param element
 	 * @return
-	 * @since 2.0
 	 */
 	protected String getElementKey(final EObject element) {
 		if (element instanceof NamedObject) {
@@ -904,7 +892,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	/**
 	 * Process the array of elements before they are returned to e.g. map input equivalents
 	 * 
-	 * @since 2.0
 	 * @param result
 	 */
 	protected void processInputs(final Object[] result) {
@@ -915,7 +902,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * 
 	 * Callback to convert the raw data coming out of the table into something usable externally. This is useful when the table data model is custom for the table rather from the real data model.
 	 * 
-	 * @since 4.0
 	 */
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return selection;

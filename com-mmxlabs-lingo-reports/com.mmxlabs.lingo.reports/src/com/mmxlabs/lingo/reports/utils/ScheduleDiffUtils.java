@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 /**
- * @since 3.0
  * @noinstantiate This class is not intended to be instantiated by clients.
  */
 public class ScheduleDiffUtils {

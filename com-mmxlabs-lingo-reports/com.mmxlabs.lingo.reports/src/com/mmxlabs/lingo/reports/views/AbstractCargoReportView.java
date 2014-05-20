@@ -28,7 +28,6 @@ import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
  * CargoAllocation, and SlotAllocations for the load and discharge. For cargoes with more that one load or discharge, there will be multiple Node elements created - with the same CargoAllocation and
  * "Group" reference
  * 
- * @since 4.0
  */
 public abstract class AbstractCargoReportView extends EMFReportView {
 	protected EPackage tableDataModel;
@@ -116,7 +115,6 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 	 * 
 	 * @param element
 	 * @return
-	 * @since 1.1
 	 */
 	@Override
 	protected String getElementKey(EObject element) {

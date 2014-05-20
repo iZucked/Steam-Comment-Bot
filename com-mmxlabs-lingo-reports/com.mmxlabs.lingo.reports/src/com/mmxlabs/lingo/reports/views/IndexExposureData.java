@@ -9,7 +9,6 @@ import java.util.Map;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.MonthYear;
 
 /**
- * @since 2.0
  */
 public class IndexExposureData {
 	public final String indexName;

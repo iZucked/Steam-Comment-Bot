@@ -140,7 +140,6 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 	};
 
 	/**
-	 * @since 3.1
 	 */
 	public void refreshViewer() {
 		synchronized (this) {
@@ -249,7 +248,6 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 	/**
 	 * Command stack listener method, cause the linked viewer to refresh on command execution
 	 * 
-	 * @since 3.0
 	 */
 	@Override
 	public void commandStackChanged(final EventObject event) {

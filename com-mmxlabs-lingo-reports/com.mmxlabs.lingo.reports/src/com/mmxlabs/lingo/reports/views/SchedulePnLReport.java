@@ -52,7 +52,6 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
- * @since 3.0
  */
 public class SchedulePnLReport extends EMFReportView {
 	/**
@@ -454,7 +453,6 @@ public class SchedulePnLReport extends EMFReportView {
 	 * 
 	 * @param element
 	 * @return
-	 * @since 1.1
 	 */
 	@Override
 	protected String getElementKey(EObject element) {
@@ -560,7 +558,6 @@ public class SchedulePnLReport extends EMFReportView {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	@Override
 	protected boolean handleSelections() {

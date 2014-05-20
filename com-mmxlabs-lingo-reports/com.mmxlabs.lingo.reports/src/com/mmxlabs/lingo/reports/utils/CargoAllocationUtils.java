@@ -17,7 +17,6 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
- * @since 4.0
  */
 public class CargoAllocationUtils {
 

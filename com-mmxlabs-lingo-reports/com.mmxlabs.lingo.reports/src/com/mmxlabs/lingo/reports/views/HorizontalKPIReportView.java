@@ -40,7 +40,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
- * @since 3.0
  */
 public class HorizontalKPIReportView extends ViewPart {
 
