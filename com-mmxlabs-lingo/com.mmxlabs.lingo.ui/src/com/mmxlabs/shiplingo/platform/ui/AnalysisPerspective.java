@@ -8,20 +8,20 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-import com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.CapacityViolationReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.CargoReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.HorizontalKPIReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.KPIReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView;
-import com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport;
-import com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView;
-import com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView;
+import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
+import com.mmxlabs.lingo.reports.views.BasicCargoReportView;
+import com.mmxlabs.lingo.reports.views.CapacityViolationReportView;
+import com.mmxlabs.lingo.reports.views.CargoPnLReportView;
+import com.mmxlabs.lingo.reports.views.CargoReportView;
+import com.mmxlabs.lingo.reports.views.CooldownReportView;
+import com.mmxlabs.lingo.reports.views.FitnessReportView;
+import com.mmxlabs.lingo.reports.views.HorizontalKPIReportView;
+import com.mmxlabs.lingo.reports.views.KPIReportView;
+import com.mmxlabs.lingo.reports.views.LatenessReportView;
+import com.mmxlabs.lingo.reports.views.PortRotationReportView;
+import com.mmxlabs.lingo.reports.views.SchedulePnLReport;
+import com.mmxlabs.lingo.reports.views.TotalsHierarchyView;
+import com.mmxlabs.lingo.reports.views.TotalsReportView;
 
 public class AnalysisPerspective implements IPerspectiveFactory {
 

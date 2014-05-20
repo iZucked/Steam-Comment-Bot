@@ -65,7 +65,7 @@
          version="0.0.0"/>
 
    <includes
-         id="com.mmxlabs.shiplingo.platform.feature"
+         id="com.mmxlabs.lingo.reports.feature"
          version="0.0.0"/>
 
    <includes
