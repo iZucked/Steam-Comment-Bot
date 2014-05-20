@@ -46,26 +46,21 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
  * 
  * Copy of {@link WorkbenchActionBuilder}. Need to build our own version at some point (rebase on version in history?)
  * 
- * @since 3.0
  * 
  */
 @SuppressWarnings("restriction")
 public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	/**
-	 * @since 3.0
 	 */
 	public static final String DATA_MESSAGE = "Data";
 	/**
-	 * @since 3.0
 	 */
 	public static final String M_DATA = "data";
 	/**
-	 * @since 3.0
 	 */
 	public static final String DATA_START = "dataStart";
 	/**
-	 * @since 3.0
 	 */
 	public static final String DATA_END = "dataEnd";
 
@@ -224,7 +219,6 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	/**
 	 * The coolbar context menu manager.
 	 * 
-	 * @since 3.3
 	 */
 	// private MenuManager coolbarPopupMenuManager;
 
