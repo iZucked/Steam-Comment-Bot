@@ -12,7 +12,6 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 
 /**
- * @since 2.0
  */
 public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> extends
 		FilteredReferenceValueProvider {

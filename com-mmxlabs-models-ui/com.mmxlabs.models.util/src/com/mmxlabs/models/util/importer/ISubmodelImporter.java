@@ -23,7 +23,6 @@ public interface ISubmodelImporter {
 	 * Return the {@link EClass} this {@link ISubmodelImporter} is for.
 	 * 
 	 * @return
-	 * @since 2.0
 	 */
 	EClass getEClass();
 

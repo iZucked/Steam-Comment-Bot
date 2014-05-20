@@ -52,7 +52,6 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	 * @author Simon McGregor
 	 * 
 	 * @param <T>
-	 * @since 8.0
 	 */
 	public static class ImportResults {
 		final public EObject importedObject;
@@ -81,13 +80,11 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Inject
 	protected IImporterRegistry importerRegistry;
 
 	/**
-	 * @since 2.0
 	 */
 	public DefaultClassImporter() {
 		final Activator activator = Activator.getDefault();
@@ -161,7 +158,6 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public ImportResults importObject(final EObject parent, final EClass eClass, final Map<String, String> row, final IImportContext context) {
@@ -193,7 +189,6 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
@@ -287,14 +282,12 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	protected boolean shouldImportReference(final EReference reference) {
 		return true;
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	protected void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IImportContext context) {
 		if (blank == null) {
@@ -543,7 +536,6 @@ public class DefaultClassImporter extends AbstractClassImporter {
 	}
 
 	/**
-	 * @since 2.0
 	 * @param importerRegistry
 	 */
 	public void setImporterRegistry(final IImporterRegistry importerRegistry) {

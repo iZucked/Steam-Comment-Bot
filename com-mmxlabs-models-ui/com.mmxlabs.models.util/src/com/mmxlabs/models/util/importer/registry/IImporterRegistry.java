@@ -23,19 +23,16 @@ public interface IImporterRegistry {
 	public IClassImporter getClassImporter(final EClass eClass);
 
 	/**
-	 * @since 8.0
 	 */
 	public Collection<IExtraModelImporter> getExtraModelImporters();
 
 	/**
-	 * @since 8.0
 	 */
 	public Collection<IPostModelImporter> getPostModelImporters();
 
 	/**
 	 * 
 	 * @return
-	 * @since 2.0
 	 */
 	public Collection<ISubmodelImporter> getAllSubModelImporters();
 }

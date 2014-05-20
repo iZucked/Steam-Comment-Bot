@@ -26,7 +26,6 @@ import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
  * A utility class used for a simple "copy to clipboard" action for the {@link DetailCompositeDialog}. It is implemented as an {@link IInlineEditorWrapper} as a simple way to get access to all the
  * {@link IInlineEditor}s. However we loose the "context" we see with child {@link IDisplayComposite}s created from {@link DefaultTopLevelComposite}s.
  * 
- * @since 2.0
  */
 public class CopyDialogToClipboard implements IInlineEditorWrapper {
 

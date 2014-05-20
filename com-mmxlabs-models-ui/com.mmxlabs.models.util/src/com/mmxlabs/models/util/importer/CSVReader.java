@@ -42,7 +42,6 @@ public class CSVReader implements Closeable {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	public CSVReader(final File file, final char separator) throws IOException {
 		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString(), separator);
@@ -55,7 +54,6 @@ public class CSVReader implements Closeable {
 	/**
 	 * @param inputFileName
 	 * @throws IOException
-	 * @since 3.1
 	 */
 	public CSVReader(final String base, final String inputFileName, final char separator) throws IOException {
 		this.separator = separator;
@@ -152,7 +150,6 @@ public class CSVReader implements Closeable {
 	/**
 	 * @return
 	 * @throws IOException
-	 * @since 8.0
 	 */
 	public Map<String, String> readRowFields() throws IOException {
 		final Map<String, String> row = new HashMap<String, String>() {
@@ -180,7 +177,6 @@ public class CSVReader implements Closeable {
 	 * @param ignoreBlank Whether or not to ignore blank rows when selecting the next row
 	 * @return An IFieldMap representing the contents of the row.
 	 * @throws IOException
-	 * @since 8.0
 	 */
 	public IFieldMap readRow(final boolean ignoreBlankRows) throws IOException {
 		Map<String, String> result;

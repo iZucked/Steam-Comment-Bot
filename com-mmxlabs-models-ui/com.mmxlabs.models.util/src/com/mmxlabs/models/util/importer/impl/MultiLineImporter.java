@@ -52,7 +52,6 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * This class is intended as an eventual replacement for the DefaultClassImporter
  * 
  * @author Simon McGregor
- * @since 8.0
  * 
  */
 public class MultiLineImporter extends DefaultClassImporter {

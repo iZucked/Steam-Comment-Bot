@@ -17,7 +17,6 @@ import org.eclipse.emf.validation.IValidationContext;
  * An abstract implementation of {@link AbstractModelConstraint} designed to allow multiple status messages to be reported.
  * 
  * @author Simon Goodall
- * @since 2.0
  * 
  */
 public abstract class AbstractModelMultiConstraint extends AbstractModelConstraint {

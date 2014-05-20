@@ -272,7 +272,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	 * 
 	 * @param style
 	 *            - turns style bits on or off (since "&"ed with current); e.g. "~SWT.MAX" removes min/max button.
-	 * @since 6.0
 	 */
 	public DetailCompositeDialog(final Shell parentShell, final ICommandHandler commandHandler, final int style) {
 		this(parentShell, commandHandler);
@@ -360,7 +359,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * Create an editor view for the selected object and display it.
 	 * 
-	 * @since 5.0
 	 */
 	@Override
 	protected void doCreateFormContent() {
@@ -470,7 +468,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	protected void createFormContent(final IManagedForm managedForm) {

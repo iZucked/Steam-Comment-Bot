@@ -20,7 +20,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * Flattened {@link ITreeContentProvider} for {@link IStatus} object hierarchies.
  * 
  * @author Simon Goodall
- * @since 8.0
  * 
  */
 public class FlatValidationStatusContentProvider implements ITreeContentProvider {

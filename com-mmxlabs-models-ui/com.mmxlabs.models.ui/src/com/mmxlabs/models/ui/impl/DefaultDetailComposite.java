@@ -44,12 +44,10 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	protected IDisplayCompositeLayoutProvider layoutProvider = createLayoutProvider();
 	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
 	/**
-	 * @since 6.0
 	 */
 	protected final FormToolkit toolkit;
 
 	/**
-	 * @since 6.0
 	 */
 	public DefaultDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
 		super(parent, style);
@@ -64,7 +62,6 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	
 	/**
-	 * @since 7.0
 	 */
 	@Override
 	public IInlineEditor addInlineEditor(IInlineEditor editor) {
@@ -79,7 +76,6 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	public void createControls(final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
 		
@@ -106,7 +102,6 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	 * Recreates the controls if the object's eClass is different to what we had before.
 	 * 
 	 * @param object
-	 * @since 6.0
 	 */
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {

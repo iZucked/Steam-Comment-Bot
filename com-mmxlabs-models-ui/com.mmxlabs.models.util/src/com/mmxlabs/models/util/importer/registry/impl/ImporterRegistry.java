@@ -50,7 +50,6 @@ public class ImporterRegistry implements IImporterRegistry {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public Collection<ISubmodelImporter> getAllSubModelImporters() {
@@ -58,7 +57,6 @@ public class ImporterRegistry implements IImporterRegistry {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public Collection<IPostModelImporter> getPostModelImporters() {
@@ -66,7 +64,6 @@ public class ImporterRegistry implements IImporterRegistry {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public Collection<IExtraModelImporter> getExtraModelImporters() {

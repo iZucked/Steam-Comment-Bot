@@ -27,7 +27,6 @@ public interface IDisplayCompositeFactory {
 	 * @param eClass
 	 * @param toolkit
 	 * @return
-	 * @since 6.0
 	 */
 	IDisplayComposite createToplevelComposite(Composite composite, EClass eClass, IDialogEditingContext context, FormToolkit toolkit);
 
@@ -36,7 +35,6 @@ public interface IDisplayCompositeFactory {
 	 * 
 	 * @param eClass
 	 * @return
-	 * @since 6.0
 	 */
 	IDisplayComposite createSublevelComposite(Composite composite, EClass eClass, IDialogEditingContext context, FormToolkit toolkit);
 

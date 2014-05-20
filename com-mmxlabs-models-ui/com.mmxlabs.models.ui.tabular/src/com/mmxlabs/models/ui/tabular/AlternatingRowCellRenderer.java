@@ -27,7 +27,6 @@ import org.eclipse.swt.graphics.TextLayout;
  * The renderer for a cell in Grid.
  * 
  * @author chris.gross@us.ibm.com
- * @since 2.0.0
  */
 @SuppressWarnings("restriction")
 public class AlternatingRowCellRenderer extends GridCellRenderer {

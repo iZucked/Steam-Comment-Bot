@@ -13,7 +13,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * after import.
  * 
  * @author Simon Goodall
- * @since 8.0
  * 
  */
 public interface IPostModelImporter {

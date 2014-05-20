@@ -19,7 +19,6 @@ import org.eclipse.swt.graphics.TextLayout;
  * The row header renderer.
  *
  * @author chris.gross@us.ibm.com
- * @since 2.0.0
  */
 public class NoIndexRowHeaderRenderer extends AbstractRenderer
 {

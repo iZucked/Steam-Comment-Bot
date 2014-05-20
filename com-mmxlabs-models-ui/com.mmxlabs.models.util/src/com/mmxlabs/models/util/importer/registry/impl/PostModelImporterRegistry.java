@@ -14,7 +14,6 @@ import com.mmxlabs.models.util.importer.IPostModelImporter;
 import com.mmxlabs.models.util.importer.registry.IPostModelImporterExtension;
 
 /**
- * @since 8.0
  */
 public class PostModelImporterRegistry {
 

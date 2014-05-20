@@ -25,7 +25,6 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 import static com.mmxlabs.models.ui.editors.IDisplayComposite.LABEL_CONTROL_KEY;;
 
 /**
- * @since 7.0
  */
 public class EditorControlFactory {
 
@@ -61,7 +60,6 @@ public class EditorControlFactory {
 	}
 
 	/**
-	 * @since 6.1
 	 */
 	 	public static Control createLabelledEditorControl(MMXRootObject root, EObject object, Composite c, IInlineEditor editor, EMFDataBindingContext dbc, IDisplayCompositeLayoutProvider layoutProvider, FormToolkit toolkit) {
 		final Label label = layoutProvider.showLabelFor(root, object, editor) ? new Label(c, SWT.NONE) : null;

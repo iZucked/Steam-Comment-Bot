@@ -79,7 +79,6 @@ public interface IExtraValidationContext {
 	 * Returns true if we are validating a cloned copy of the object rather than the original. This can happen when running validation in a dialog box.
 	 * 
 	 * @return
-	 * @since 4.0
 	 */
 	boolean isValidatingClone();
 }

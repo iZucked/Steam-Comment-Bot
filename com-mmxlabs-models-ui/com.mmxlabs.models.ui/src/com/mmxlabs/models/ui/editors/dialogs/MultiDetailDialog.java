@@ -156,7 +156,6 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	/**
 	 * Create an editor view for the selected object and display it.
 	 * 
-	 * @since 5.0
 	 */
 	@Override
 	protected void doCreateFormContent() {
@@ -196,7 +195,6 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	protected void createFormContent(final IManagedForm managedForm) {

@@ -140,7 +140,6 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public IValidationService getValidationService() {
 		return validationServiceTracker.getService();

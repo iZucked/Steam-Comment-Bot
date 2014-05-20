@@ -12,7 +12,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 /**
  * The {@link IExtraModelImporter} imports additional data models into a scenario *after* the core set has been imported. Such additional imports could be attached anywhere in the model tree, thus we
  * pass in the {@link MMXRootObject} with the main submodels attached into the API here.
- * @since 8.0
  * 
  */
 public interface IExtraModelImporter {

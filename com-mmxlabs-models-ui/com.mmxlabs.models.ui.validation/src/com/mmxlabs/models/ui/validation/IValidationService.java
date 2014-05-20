@@ -11,7 +11,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.service.IValidator;
 
 /**
- * @since 5.0
  */
 public interface IValidationService {
 	IStatus runValidation(final IValidator<EObject> validator, final IExtraValidationContext extraContext, final Collection<? extends EObject> targets);

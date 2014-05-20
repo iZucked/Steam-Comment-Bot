@@ -26,7 +26,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * Filtering related code for the {@link EObjectTableViewer}
  * 
  * @author Simon Goodall
- * @since 4.0
  * 
  */
 public class EObjectTableViewerFilterSupport {

@@ -49,7 +49,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * without import/export buttons.
  * 
  * @author Tom Hinton
- * @since 4.0
  * 
  */
 public class EObjectTableViewer extends GridTreeViewer {
@@ -62,7 +61,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
 	/**
-	 * @since 4.0
 	 */
 	public static final String COLUMN_SORT_PATH = "COLUMN_SORT_PATH";
 
@@ -90,7 +88,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	protected IToolTipProvider delegateToolTipProvider;
 
 	/**
-	 * @since 4.0
 	 */
 	protected final Set<String> allMnemonics = new HashSet<String>();
 
@@ -115,7 +112,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	};
 
 	/**
-	 * @since 3.1
 	 */
 	protected void doCommandStackChanged() {
 		refresh();
@@ -143,7 +139,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	/**
 	 * Call this method if {@link #init(AdapterFactory, CommandStack, EReference...)} is overridden
 	 * 
-	 * @since 7.0
 	 */
 	public void setCurrentContainerAndContainment(final EObject currentContainer, final EReference currentReference) {
 		this.currentContainer = currentContainer;
@@ -196,7 +191,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	protected EObjectTableViewerValidationSupport createValidationSupport() {
 		return new EObjectTableViewerValidationSupport(this) {
@@ -214,7 +208,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public void setColumnMnemonics(final GridColumn column, final List<String> mnemonics) {
 		column.setData(EObjectTableViewer.COLUMN_MNEMONICS, mnemonics);
@@ -224,7 +217,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	protected String uniqueMnemonic(final String mnemonic) {
 		String result = mnemonic;
@@ -236,7 +228,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	protected List<String> makeMnemonics(final String columnName) {
 		final LinkedList<String> result = new LinkedList<String>();
@@ -352,7 +343,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected GridCellRenderer createCellRenderer() {
 		return new AlternatingRowCellRenderer();
@@ -386,7 +376,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 7.0
 	 */
 	public void init(final ITreeContentProvider contentProvider, final CommandStack commandStack) {
 		final GridTreeViewer viewer = this;
@@ -505,7 +494,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	private EReference currentReference;
 
 	/**
-	 * @since 3.1
 	 */
 	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
 		init(new ITreeContentProvider() {
@@ -588,7 +576,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public EObjectTableViewerValidationSupport getValidationSupport() {
 		return validationSupport;
@@ -603,14 +590,12 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public HashSet<EObject> getCurrentElements() {
 		return currentElements;
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public EObjectTableViewerFilterSupport getFilterSupport() {
 		return filterSupport;
@@ -621,7 +606,6 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public EObjectTableViewerSortingSupport getSortingSupport() {
 		return sortingSupport;

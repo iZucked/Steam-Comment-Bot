@@ -31,7 +31,6 @@ import com.mmxlabs.models.ui.validation.IValidationService;
  * 
  * @author Simon Goodall
  * 
- * @since 4.0
  */
 public class DialogValidationSupport {
 

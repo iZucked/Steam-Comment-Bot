@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Shell;
  * 
  * Simon McGregor 24/10/2012
  * 
- * @since 2.0
  */
 public class MessageDialogWithCheckbox extends MessageDialog {
 

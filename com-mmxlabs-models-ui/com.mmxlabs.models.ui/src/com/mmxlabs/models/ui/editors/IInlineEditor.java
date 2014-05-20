@@ -37,7 +37,6 @@ public interface IInlineEditor {
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
 
 	/**
-	 * @since 6.0
 	 */
 	public Control createControl(final Composite parent, EMFDataBindingContext dbc, final FormToolkit toolkit);
 
@@ -51,47 +50,38 @@ public interface IInlineEditor {
 
 	/**
 	 * @return
-	 * @since 2.0
 	 */
 	Label getLabel();
 
 	/**
-	 * @since 2.0
 	 */
 	void setEditorLocked(boolean locked);
 
 	/**
-	 * @since 2.0
 	 */
 	boolean isEditorLocked();
 
 	/**
-	 * @since 2.0
 	 */
 	void setEditorEnabled(boolean enabled);
 
 	/**
-	 * @since 2.0
 	 */
 	boolean isEditorEnabled();
 
 	/**
-	 * @since 2.0
 	 */
 	void setEditorVisible(boolean visible);
 
 	/**
-	 * @since 2.0
 	 */
 	boolean isEditorVisible();
 
 	/**
-	 * @since 2.0
 	 */
 	void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener);
 
 	/**
-	 * @since 2.0
 	 */
 	void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener);
 

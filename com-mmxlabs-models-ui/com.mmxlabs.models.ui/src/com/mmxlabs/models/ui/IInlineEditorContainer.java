@@ -20,7 +20,6 @@ public interface IInlineEditorContainer {
 	 * 
 	 * @param editor
 	 *            the editor to add
-	 * @since 7.0
 	 */
 	@Nullable
 	IInlineEditor addInlineEditor(final IInlineEditor editor);

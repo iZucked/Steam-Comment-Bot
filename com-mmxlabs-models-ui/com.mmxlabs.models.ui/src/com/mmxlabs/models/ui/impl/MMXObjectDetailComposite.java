@@ -23,7 +23,6 @@ import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
  */
 public class MMXObjectDetailComposite extends DefaultDetailComposite {
 	/**
-	 * @since 6.0
 	 */
 	public MMXObjectDetailComposite(Composite parent, int style, final FormToolkit toolkit) {
 		super(parent, style, toolkit);

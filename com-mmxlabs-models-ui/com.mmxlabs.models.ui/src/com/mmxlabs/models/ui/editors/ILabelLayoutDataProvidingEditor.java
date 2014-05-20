@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Label;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * @since 2.1
  */
 public interface ILabelLayoutDataProvidingEditor {
 	public Object createLabelLayoutData(MMXRootObject root, EObject value, Control control, final Label label);

@@ -99,14 +99,12 @@ public class FilterProposalProvider implements IContentProposalProvider {
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public EObjectTableViewerFilterSupport getFilterSupport() {
 		return filterSupport;
 	}
 
 	/**
-	 * @since 4.0
 	 */
 	public void setFilterSupport(EObjectTableViewerFilterSupport filterSupport) {
 		this.filterSupport = filterSupport;

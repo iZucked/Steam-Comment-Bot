@@ -41,7 +41,6 @@ public interface IDisplayComposite {
 	 * 
 	 * @param root
 	 * @param value
-	 * @since 6.0
 	 */
 	public void display(IDialogEditingContext dialogContext, MMXRootObject root, EObject value, Collection<EObject> range, EMFDataBindingContext dbc);
 

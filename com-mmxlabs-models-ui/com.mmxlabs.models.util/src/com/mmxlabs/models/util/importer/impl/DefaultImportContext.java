@@ -318,7 +318,6 @@ public class DefaultImportContext implements IImportContext {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	public void registerNamedObjectsFromSubModels() {
 		// first set up all existing named objects
