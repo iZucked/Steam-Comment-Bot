@@ -33,7 +33,6 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public Set<IPort> getExcludedPorts(final IVessel vessel) {
@@ -62,7 +61,6 @@ public class HashMapPortExclusionProvider implements IPortExclusionProviderEdito
 	}
 
 	/**
-	 * @since 6.0
 	 */
 	@Override
 	public void setExcludedPorts(final IVessel vessel, final Set<IPort> excludedPorts) {

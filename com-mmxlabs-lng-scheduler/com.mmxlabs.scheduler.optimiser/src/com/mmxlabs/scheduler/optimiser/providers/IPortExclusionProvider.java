@@ -18,7 +18,6 @@ public interface IPortExclusionProvider extends IDataComponentProvider {
 	 * 
 	 * @param vesselClass
 	 * @return
-	 * @since 6.0
 	 */
 	public Set<IPort> getExcludedPorts(IVessel vessel);
 

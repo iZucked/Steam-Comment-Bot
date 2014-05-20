@@ -13,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * @since 8.0
  */
 public final class VesselClass implements IVesselClass {
 
@@ -98,14 +97,12 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	public void setServiceSpeed(final VesselState vesselState, final int serviceSpeed) {
 		this.serviceSpeed.put(vesselState, serviceSpeed);
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public int getServiceSpeed(final VesselState vesselState) {
@@ -119,7 +116,6 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public long getInPortConsumptionRateInMTPerDay(final PortType portType) {
@@ -167,7 +163,6 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setInPortConsumptionRateInMTPerDay(final PortType portType, final long rate) {
 		this.inPortConsumptionRateInMTPerDay.put(portType, rate);

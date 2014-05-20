@@ -15,7 +15,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
- * @since 2.0
  */
 public class ContractCvConstraintChecker extends AbstractPairwiseConstraintChecker {
 

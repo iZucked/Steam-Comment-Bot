@@ -38,7 +38,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * @since 2.0
  */
 public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOutEvaluator {
 

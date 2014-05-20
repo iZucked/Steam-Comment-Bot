@@ -8,7 +8,6 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.annotations.ILatenessAnnotation;
 
 /**
- * @since 2.0
  */
 public class LatenessAnnotation implements ILatenessAnnotation {
 

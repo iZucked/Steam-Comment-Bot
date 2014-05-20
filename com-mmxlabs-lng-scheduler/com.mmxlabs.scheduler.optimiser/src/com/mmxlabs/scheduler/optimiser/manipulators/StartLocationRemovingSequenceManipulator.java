@@ -71,7 +71,6 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void init(final IOptimisationData data) {

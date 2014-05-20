@@ -13,7 +13,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
  * TODO has no handling of load lower bounds; need to do a first pass allocating LB to every cargo first.
  * 
  * @author hinton
- * @since 6.0
  * 
  */
 public abstract class FastVolumeAllocator extends BaseVolumeAllocator {

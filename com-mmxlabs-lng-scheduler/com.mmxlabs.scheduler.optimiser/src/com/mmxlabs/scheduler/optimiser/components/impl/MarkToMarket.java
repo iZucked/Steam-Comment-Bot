@@ -17,7 +17,6 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
  * Default implementation of {@link IMarkToMarket}
  * 
  * @author Simon Goodall
- * @since 6.0
  */
 public class MarkToMarket implements IMarkToMarket {
 

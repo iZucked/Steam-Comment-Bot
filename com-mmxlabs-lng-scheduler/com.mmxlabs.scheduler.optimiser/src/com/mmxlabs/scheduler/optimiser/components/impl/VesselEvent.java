@@ -106,7 +106,6 @@ public class VesselEvent implements IVesselEvent {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public long getHireCost() {
@@ -114,7 +113,6 @@ public class VesselEvent implements IVesselEvent {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public long getRepositioning() {
@@ -122,7 +120,6 @@ public class VesselEvent implements IVesselEvent {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setHireCost(final long hireCost) {
@@ -130,7 +127,6 @@ public class VesselEvent implements IVesselEvent {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void setRepositioning(final long repositioning) {

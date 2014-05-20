@@ -10,7 +10,6 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
 /**
- * @since 8.0
  */
 public interface IShippingHoursRestrictionProviderEditor extends IShippingHoursRestrictionProvider {
 

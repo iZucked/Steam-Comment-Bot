@@ -66,7 +66,6 @@ public final class Vessel extends IndexedObject implements IVessel {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public ICurve getDailyCharterInPrice() {
@@ -74,14 +73,12 @@ public final class Vessel extends IndexedObject implements IVessel {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setDailyCharterInPrice(final ICurve dailyCharterInRate) {
 		this.dailyCharterInRate = dailyCharterInRate;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	public long getCargoCapacity() {
@@ -89,7 +86,6 @@ public final class Vessel extends IndexedObject implements IVessel {
 	}
 	
 	/**
-	 * @since 5.0
 	 */
 	public void setCargoCapacity(long value) {
 		cargoCapacity = value;

@@ -41,7 +41,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	 * An enum of the different end location rules that can be applied.
 	 * 
 	 * @author Simon Goodall
-	 * @since 2.0
 	 * 
 	 */
 	public static enum EndLocationRule {
@@ -62,7 +61,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 		
 		
 		/**
-		 * @since 2.0
 		 */
 		REMOVE,
 	}
@@ -92,7 +90,6 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public void init(final IOptimisationData data) {

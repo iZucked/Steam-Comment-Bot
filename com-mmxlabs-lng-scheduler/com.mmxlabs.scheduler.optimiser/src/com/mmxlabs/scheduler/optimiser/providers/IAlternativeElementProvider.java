@@ -14,7 +14,6 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * {@link ISequenceElement} may have at most one alternative element that can be used instead of it.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public interface IAlternativeElementProvider extends IDataComponentProvider {
 

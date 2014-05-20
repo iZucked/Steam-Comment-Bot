@@ -69,14 +69,12 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public Iterable<ICargoFitnessComponentProvider> getExternalComponentProviders() {
 		return externalComponentProviders;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public void setExternalComponentProviders(final Iterable<ICargoFitnessComponentProvider> externalComponentProviders) {
 		this.externalComponentProviders = externalComponentProviders;

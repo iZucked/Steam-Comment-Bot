@@ -11,7 +11,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * A {@link IDataComponentProvider} providing default port CV values.
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public interface IPortCVProvider extends IDataComponentProvider {
 

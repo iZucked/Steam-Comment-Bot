@@ -437,7 +437,6 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * Set the {@link IVessel} to evaluate voyages against.
 	 * 
 	 * @param vessel
-	 * @since 8.0
 	 */
 	@Override
 	public void setVessel(final IVessel vessel, int baseFuelPricePerMT) {

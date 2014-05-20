@@ -33,7 +33,6 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	private long accumulator = 0;
 
 	/**
-	 * @since 2.0
 	 */
 	public ProfitAndLossAllocationComponent(final String name, final CargoSchedulerFitnessCore core) {
 		super(name, core);

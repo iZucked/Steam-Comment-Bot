@@ -10,7 +10,6 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 /**
  * Factory for the {@link DifferentSTSVesselsConstraintChecker}
  * 
- * @since 5.0
  */
 public class DifferentSTSVesselsConstraintCheckerFactory implements IConstraintCheckerFactory {
 

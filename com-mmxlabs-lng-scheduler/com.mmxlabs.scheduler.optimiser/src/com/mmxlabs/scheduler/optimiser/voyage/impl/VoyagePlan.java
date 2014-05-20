@@ -81,28 +81,24 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public final int getViolationsCount() {
 		return violationsCount;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public final void setViolationsCount(final int violationsCount) {
 		this.violationsCount = violationsCount;
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	public final IDetailsSequenceElement[] getSequence() {
 		return sequence;
 	}
 
 	/**
-	 * @since 8.0
 	 */
 	public final void setSequence(final IDetailsSequenceElement[] sequence) {
 		this.sequence = sequence;
@@ -185,7 +181,6 @@ public final class VoyagePlan implements Cloneable {
 	 * Returns true if the last element is a marker element and should be ignored in terms of it's time, fuel consumption, costs etc.
 	 * 
 	 * @return
-	 * @since 2.0
 	 */
 	public boolean isIgnoreEnd() {
 		return ignoreEnd;
@@ -196,7 +191,6 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	/**
-	 * @since 3.1
 	 */
 	public long getRemainingHeelInM3() {
 		return remainingHeelInM3;

@@ -118,7 +118,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 * 
 	 * N.B. The implementation assumes relatively few ship-to-ship bindings, since the time complexity of the algorithm increases linearly with the number of such bindings.
 	 * 
-	 * @since 5.0
 	 */
 	protected ArrayList<Integer> bindings = new ArrayList<Integer>();
 
@@ -783,7 +782,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public int[][] getArrivalTimes() {
 		return arrivalTimes;

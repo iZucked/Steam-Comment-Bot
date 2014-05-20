@@ -24,7 +24,6 @@ public interface IVoyagePlanAnnotator {
 	 * @param resource
 	 * @param plans
 	 * @param annotatedSequence
-	 * @since 2.0
 	 */
 	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans, IAnnotatedSolution annotatedSolution, int[] arrivalTimes);
 

@@ -53,7 +53,6 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	private IOrderedSequenceElementsDataComponentProvider orderedSequenceProvider;
 
 	/**
-	 * @since 2.0
 	 */
 	public PortTypeConstraintChecker(final String name) {
 		this.name = name;

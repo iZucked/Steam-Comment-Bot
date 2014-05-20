@@ -36,7 +36,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * @since 2.0
  */
 public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 

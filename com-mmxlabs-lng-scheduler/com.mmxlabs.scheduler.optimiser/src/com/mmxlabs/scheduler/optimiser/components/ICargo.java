@@ -21,7 +21,6 @@ public interface ICargo {
 	 * Returns the {@link IPortSlot}s initially bound to this cargo.
 	 * 
 	 * @return
-	 * @since 5.0
 	 */
 	List<IPortSlot> getPortSlots();
 

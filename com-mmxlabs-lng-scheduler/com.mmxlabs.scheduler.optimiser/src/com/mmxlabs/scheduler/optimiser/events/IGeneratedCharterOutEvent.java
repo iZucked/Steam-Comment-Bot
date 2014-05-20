@@ -10,7 +10,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * {@link IScheduledEvent} defining a generated charter out opportunity starting and ending at a {@link IPort}
  * 
  * l@author Simon Goodall
- * @since 2.0
  * 
  */
 public interface IGeneratedCharterOutEvent extends IScheduledEvent {

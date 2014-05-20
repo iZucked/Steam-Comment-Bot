@@ -20,14 +20,12 @@ public final class Cargo implements ICargo {
 	private final List<IPortSlot> portSlots;
 
 	/**
-	 * @since 5.0
 	 */
 	public Cargo(final List<IPortSlot> portSlots) {
 		this.portSlots = portSlots;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	@Override
 	public List<IPortSlot> getPortSlots() {

@@ -12,14 +12,12 @@ import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
- * @since 2.0
  */
 public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBreakEvenPriceCalculator {
 
 	private int price;
 
 	/**
-	 * @since 8.0
 	 */
 	@Override
 	public void prepareEvaluation(final ISequences sequences) {

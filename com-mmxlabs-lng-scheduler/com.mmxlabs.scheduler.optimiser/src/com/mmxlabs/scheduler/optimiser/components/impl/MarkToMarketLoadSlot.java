@@ -18,7 +18,6 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * This is an {@link ILoadSlot} implementation for use with an {@link IMarkToMarket} instance.
  * 
  * @author Simon Goodall
- * @since 6.0
  * 
  */
 public class MarkToMarketLoadSlot implements ILoadSlot, IMarkToMarketOption {

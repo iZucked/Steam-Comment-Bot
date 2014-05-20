@@ -13,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 public interface IPortExclusionProviderEditor extends IPortExclusionProvider {
 
 	/**
-	 * @since 6.0
 	 */
 	public void setExcludedPorts(IVessel vessel, Set<IPort> excludedPorts);
 

@@ -23,7 +23,6 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 * pre-computation.
 	 * 
 	 * @param sequences
-	 * @since 8.0
 	 */
 	public void prepareEvaluation(ISequences sequences);
 

@@ -26,7 +26,6 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 * @param vesselState
 	 *            vessel state during travel`
 	 * @return toll in dollars
-	 * @since 2.0
 	 */
 	public long getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState);
 

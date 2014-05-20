@@ -18,16 +18,13 @@ public class TradingConstants {
 	public static final String ExtraData_shipped = "__shipped";
 
 	/**
-	 * @since 2.0
 	 */
 	public static final String ExtraData_GroupValue = "GroupValue";
 	/**
-	 * @since 2.0
 	 */
 	public static final String ExtraData_ShippingCost = "ShippingCost";
 
 	/**
-	 * @since 2.0
 	 */
 	public static final String ExtraData_ShippingCostIncBoilOff = "ShippingCostWithBoilOff";
 

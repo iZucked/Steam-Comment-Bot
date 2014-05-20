@@ -9,7 +9,6 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 
 /**
- * @since 2.0
  */
 public interface IShortCargoReturnElementProvider extends IDataComponentProvider {
 	public ISequenceElement getReturnElement(ILoadOption loadOption);

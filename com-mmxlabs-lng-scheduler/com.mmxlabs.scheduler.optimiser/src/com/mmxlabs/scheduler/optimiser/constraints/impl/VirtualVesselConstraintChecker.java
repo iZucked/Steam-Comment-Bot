@@ -46,7 +46,6 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
 	/**
-	 * @since 2.0
 	 */
 	public VirtualVesselConstraintChecker(final String name) {
 		super();

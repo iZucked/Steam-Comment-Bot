@@ -26,7 +26,6 @@ public class AXPlusBCurve implements ICurve {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public int getValueAtPoint(final int point) {

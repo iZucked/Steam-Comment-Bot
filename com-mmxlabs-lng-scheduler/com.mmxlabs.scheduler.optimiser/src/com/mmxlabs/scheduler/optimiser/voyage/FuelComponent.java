@@ -100,7 +100,6 @@ public enum FuelComponent {
 	private static final FuelComponent[] baseNoPilotFuelComponents = new FuelComponent[] { Base, Base_Supplemental, IdleBase };
 
 	/**
-	 * @since 2.0
 	 */
 	public static FuelComponent[] getBaseFuelComponentsNoPilot() {
 		return baseNoPilotFuelComponents;
@@ -109,7 +108,6 @@ public enum FuelComponent {
 	private static final FuelComponent[] pilotLightFuelComponents = new FuelComponent[] { PilotLight, IdlePilotLight };
 
 	/**
-	 * @since 2.0
 	 */
 	public static FuelComponent[] getPilotLightFuelComponents() {
 		return pilotLightFuelComponents;
@@ -118,7 +116,6 @@ public enum FuelComponent {
 	/**
 	 * Returns true of the given {@link FuelComponent} is a type of LNG
 	 * 
-	 * @since 3.1
 	 */
 	public static boolean isLNGFuelComponent(final FuelComponent fc) {
 		if (fc == FuelComponent.NBO || fc == FuelComponent.FBO || fc == FuelComponent.IdleNBO) {
@@ -128,7 +125,6 @@ public enum FuelComponent {
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public FuelUnit getPricingFuelUnit() {
 		return pricingFuelUnit;

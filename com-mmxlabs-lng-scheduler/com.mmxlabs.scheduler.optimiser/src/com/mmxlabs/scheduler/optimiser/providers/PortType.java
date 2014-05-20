@@ -73,7 +73,6 @@ public enum PortType {
 	/**
 	 * Represents a type which is an end element for a cargo short. This will typically not be part of the normal sequence but added in. Such elements are not counted as must use.
 	 * 
-	 * @since 2.0
 	 */
 	Short_Cargo_End;
 }

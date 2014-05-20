@@ -10,7 +10,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
  * The Editor interface for {@link IAlternativeElementProvider}
  * 
  * @author Simon Goodall
- * @since 2.0
  */
 public interface IAlternativeElementProviderEditor extends IAlternativeElementProvider {
 

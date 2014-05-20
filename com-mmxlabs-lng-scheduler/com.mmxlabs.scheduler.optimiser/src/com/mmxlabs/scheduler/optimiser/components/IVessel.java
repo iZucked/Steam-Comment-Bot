@@ -41,7 +41,6 @@ public interface IVessel extends IResource {
 	/**
 	 * Returns the capacity of this vessel 
 	 * @return
-	 * @since 5.0
 	 */
 	long getCargoCapacity();
 	
@@ -49,7 +48,6 @@ public interface IVessel extends IResource {
 	 * Returns the hourly rate at which this vessel can be chartered in.
 	 * 
 	 * @return hourly charter in price
-	 * @since 2.0
 	 */
 	ICurve getDailyCharterInPrice();
 }

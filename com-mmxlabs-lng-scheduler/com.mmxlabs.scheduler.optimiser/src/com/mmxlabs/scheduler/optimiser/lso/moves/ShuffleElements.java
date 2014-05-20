@@ -68,7 +68,6 @@ public class ShuffleElements implements IMove {
 		 * 
 		 * @param resource
 		 * @param index
-		 * @since 2.0
 		 */
 		public void addFrom(final IResource resource, final int index, final ISequenceElement element, final ISequenceElement alternative) {
 			froms.add(new From(resource, index, element, alternative));
@@ -104,7 +103,6 @@ public class ShuffleElements implements IMove {
 		public final int index;
 		public final ISequenceElement element;
 		/**
-		 * @since 2.0
 		 */
 		public final ISequenceElement alternativeElement;
 
@@ -123,7 +121,6 @@ public class ShuffleElements implements IMove {
 		}
 
 		/**
-		 * @since 2.0
 		 */
 		public From(final IResource resource, final int index, final ISequenceElement element, final ISequenceElement alternativeElement) {
 			this.resource = resource;

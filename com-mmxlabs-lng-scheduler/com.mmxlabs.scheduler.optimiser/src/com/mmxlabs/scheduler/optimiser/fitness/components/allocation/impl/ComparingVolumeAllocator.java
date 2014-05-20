@@ -8,7 +8,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllo
 
 /**
  * @author hinton
- * @since 6.0
  * 
  */
 public abstract class ComparingVolumeAllocator implements IVolumeAllocator {
@@ -78,7 +77,6 @@ public abstract class ComparingVolumeAllocator implements IVolumeAllocator {
 //	}
 //
 //	/**
-//	 * @since 2.0
 //	 */
 //	@Override
 //	public IAllocationAnnotation allocate(IVessel vessel, VoyagePlan plan, int[] arrivalTimes) {

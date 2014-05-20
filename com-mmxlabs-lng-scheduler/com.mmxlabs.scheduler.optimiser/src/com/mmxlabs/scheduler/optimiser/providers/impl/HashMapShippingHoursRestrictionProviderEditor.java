@@ -14,7 +14,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProviderEditor;
 
 /**
- * @since 8.0
  */
 public class HashMapShippingHoursRestrictionProviderEditor implements IShippingHoursRestrictionProviderEditor {
 

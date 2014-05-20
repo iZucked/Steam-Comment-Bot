@@ -11,7 +11,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * Record class for allocation constraints per
  * 
  * @author Simon McGregor
- * @since 8.0
  */
 public final class AllocationRecord {
 

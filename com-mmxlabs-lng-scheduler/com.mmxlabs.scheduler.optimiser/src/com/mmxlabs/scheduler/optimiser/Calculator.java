@@ -15,7 +15,6 @@ public final class Calculator {
 	// on AllocatedVessel in the ECore model.
 	public static final int ScaleFactor = 1000;
 	/**
-	 * @since 2.0
 	 */
 	public static final long HighScaleFactor = 1000000;
 
@@ -53,7 +52,6 @@ public final class Calculator {
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	public static long convertM3ToM3Price(final long m3, final int pricePerM3) {
 		return (m3 * (long) pricePerM3) / HighScaleFactor;
@@ -74,7 +72,6 @@ public final class Calculator {
 	/**
 	 * Convert a $/MMBTu price to a $/m3 price
 	 * 
-	 * @since 2.0
 	 */
 	public static int costPerM3FromMMBTu(final int costPerMMBTu, final int cvValue) {
 		return (int) (((long) costPerMMBTu * (long) cvValue) / HighScaleFactor);
@@ -83,7 +80,6 @@ public final class Calculator {
 	/**
 	 * Convert a $/m3 price to a $/MMBTu price
 	 * 
-	 * @since 2.0
 	 */
 	public static int costPerMMBTuFromM3(final int costPerM3, final int cvValue) {
 
@@ -92,7 +88,6 @@ public final class Calculator {
 
 	/**
 	 * 
-	 * @since 2.0
 	 */
 	public static int getPerMMBTuFromTotalAndVolumeInMMBTu(final long totalCost, final long volumeInMMBTu) {
 		// TODO: Be careful of overflows here
@@ -101,7 +96,6 @@ public final class Calculator {
 
 	/**
 	 * 
-	 * @since 2.0
 	 */
 	public static int getPerMMBTuFromTotalAndVolumeInM3(final long totalCost, final long volumeInM3, final int cvValue) {
 
@@ -111,7 +105,6 @@ public final class Calculator {
 
 	/**
 	 * 
-	 * @since 2.0
 	 */
 	public static int getPerM3FromTotalAndVolumeInMMBTu(final long totalCost, final long volumeInMMBTu, final int cvValue) {
 		// TODO: Be careful of overflows here
@@ -121,7 +114,6 @@ public final class Calculator {
 
 	/**
 	 * 
-	 * @since 2.0
 	 */
 	public static int getPerM3FromTotalAndVolumeInM3(final long totalCost, final long volumeInM3) {
 
@@ -132,7 +124,6 @@ public final class Calculator {
 	/**
 	 * Convert a $/m3 price to a $/MMBTu price
 	 * 
-	 * @since 2.0
 	 */
 	public static int getShareOfPrice(final int share, final int price) {
 		return (int) (((long) share * (long) price) / HighScaleFactor);

@@ -11,7 +11,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 
 /**
- * @since 2.0
  */
 public class HashMapAlternativeElementProviderEditor implements IAlternativeElementProviderEditor {
 

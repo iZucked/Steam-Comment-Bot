@@ -18,7 +18,6 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  * Implementations of {@link IOptimiserInjectorService} provide additional objects to be injected into {@link IConstraintChecker}s and {@link IFitnessComponent}s. Implementations are expected to be
  * registered as an OSGi Service and provides a {@link Module} which will be added to the {@link Injector} created to instantiate the {@link IConstraintChecker}s and {@link IFitnessComponent}s.
  * 
- * @since 2.0
  */
 public interface IOptimiserInjectorService {
 
@@ -36,27 +35,23 @@ public interface IOptimiserInjectorService {
 		/**
 		 * Enum to specify evaluation only related modules
 		 * 
-		 * @since 5.0
 		 */
 		Module_Components,
 
 		/**
 		 * Enum to specify evaluation only related modules
 		 * 
-		 * @since 5.0
 		 */
 		Module_Evaluation,
 
 		/**
 		 * Enum to specify optimisation only related modules
 		 * 
-		 * @since 3.0
 		 */
 		Module_Optimisation,
 		/**
 		 * Enum to specify modules to override the Module providing parameters (e.g. Seed or number of iterations) to the scenario.
 		 * 
-		 * @since 3.0
 		 */
 		Module_ParametersModule
 
