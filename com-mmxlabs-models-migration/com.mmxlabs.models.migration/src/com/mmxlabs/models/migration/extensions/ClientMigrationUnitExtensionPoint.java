@@ -23,11 +23,11 @@ public interface ClientMigrationUnitExtensionPoint {
 	@Nullable
 	String getID();
 
-	@MapName("context")
+	@MapName("scenarioContext")
 	@Nullable
 	String getScenarioContext();
 	
-	@MapName("clientcontext")
+	@MapName("clientContext")
 	@Nullable
 	String getClientContext();
 

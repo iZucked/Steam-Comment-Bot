@@ -55,7 +55,7 @@
                   The default migration context for the application. Only a single default context should be registered with the application.
                </documentation>
                <appinfo>
-                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.ClientMigrationContext/@id"/>
+                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.ClientMigrationContext/ClientMigrationContext/@name"/>
                </appinfo>
             </annotation>
          </attribute>

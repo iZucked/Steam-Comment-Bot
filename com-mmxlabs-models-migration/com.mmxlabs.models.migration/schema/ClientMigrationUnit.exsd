@@ -55,7 +55,7 @@
                   The Client Migration Context this Migration Unit applies to
                </documentation>
                <appinfo>
-                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.ClientMigrationContext/@id"/>
+                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.ClientMigrationContext/ClientMigrationContext/@name"/>
                </appinfo>
             </annotation>
          </attribute>
