@@ -24,10 +24,8 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 	protected enum ScenarioServiceEvent {
 		PRE_LOAD, POST_LOAD, PRE_SAVE, POST_SAVE, PRE_DELETE, POST_DELETE,
 		/**
-		 * @since 2.0
 		 */
 		PRE_UNLOAD, /**
-		 * @since 2.0
 		 */
 		POST_UNLOAD
 

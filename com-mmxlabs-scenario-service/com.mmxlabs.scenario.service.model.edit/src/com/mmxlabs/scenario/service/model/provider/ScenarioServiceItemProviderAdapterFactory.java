@@ -213,7 +213,6 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioFragment} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -222,7 +221,6 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	/**
 	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioFragment}.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

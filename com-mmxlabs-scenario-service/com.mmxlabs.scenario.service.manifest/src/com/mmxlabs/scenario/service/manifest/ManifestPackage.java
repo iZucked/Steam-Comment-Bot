@@ -105,7 +105,6 @@ public interface ManifestPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Scenario Version</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -115,7 +114,6 @@ public interface ManifestPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Version Context</b></em>' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -207,7 +205,6 @@ public interface ManifestPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion <em>Scenario Version</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Scenario Version</em>'.
 	 * @see com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion()
@@ -219,7 +216,6 @@ public interface ManifestPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext <em>Version Context</em>}'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Version Context</em>'.
 	 * @see com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext()
@@ -317,7 +313,6 @@ public interface ManifestPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Scenario Version</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -326,7 +321,6 @@ public interface ManifestPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Version Context</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
-		 * @since 3.1
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

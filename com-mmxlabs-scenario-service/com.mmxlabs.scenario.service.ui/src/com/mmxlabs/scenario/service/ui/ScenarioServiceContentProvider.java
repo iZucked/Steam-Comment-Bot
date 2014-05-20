@@ -387,7 +387,6 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	}
 
 	/**
-	 * @since 4.1
 	 */
 	@Override
 	public Object getAdapter(final Class adapter) {
@@ -404,42 +403,36 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public boolean isShowReadOnlyElements() {
 		return showReadOnlyElements;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public void setShowReadOnlyElements(final boolean showReadOnlyElements) {
 		this.showReadOnlyElements = showReadOnlyElements;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public boolean isShowOnlyCapsImport() {
 		return showOnlyCapsImport;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public void setShowOnlyCapsImport(final boolean showCapsImport) {
 		this.showOnlyCapsImport = showCapsImport;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public boolean isShowOnlyCapsForking() {
 		return showOnlyCapsForking;
 	}
 
 	/**
-	 * @since 5.0
 	 */
 	public void setShowOnlyCapsForking(final boolean showCapsForking) {
 		this.showOnlyCapsForking = showCapsForking;

@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EObject;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Scenario Fragment</b></em>'.
  * A {@link ScenarioFragment} is a representation of part of the parent {@link ScenarioInstance} which is to be displayed in the scenario navigator.
- * @since 3.1
  * <!-- end-user-doc -->
  *
  * <p>

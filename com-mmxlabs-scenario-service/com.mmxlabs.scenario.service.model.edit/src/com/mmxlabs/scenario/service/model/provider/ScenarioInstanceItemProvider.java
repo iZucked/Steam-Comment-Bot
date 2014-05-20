@@ -110,7 +110,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	/**
 	 * This adds a property descriptor for the Root Object URI feature.
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -123,7 +122,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	/**
 	 * This adds a property descriptor for the Scenario Version feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -136,7 +134,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	/**
 	 * This adds a property descriptor for the Version Context feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -149,7 +146,6 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	/**
 	 * This adds a property descriptor for the Readonly feature.
 	 * <!-- begin-user-doc -->
-	 * @since 5.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

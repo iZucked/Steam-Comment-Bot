@@ -28,7 +28,6 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioFragment} object.
  * <!-- begin-user-doc -->
- * @since 3.1
  * <!-- end-user-doc -->
  * @generated
  */

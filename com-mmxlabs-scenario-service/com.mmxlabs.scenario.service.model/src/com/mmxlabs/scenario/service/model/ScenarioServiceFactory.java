@@ -81,7 +81,6 @@ public interface ScenarioServiceFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Scenario Fragment</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Scenario Fragment</em>'.
 	 * @generated

@@ -100,7 +100,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	/**
 	 * The default value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getScenarioVersion()
 	 * @generated
@@ -111,7 +110,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	/**
 	 * The cached value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getScenarioVersion()
 	 * @generated
@@ -122,7 +120,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	/**
 	 * The default value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getVersionContext()
 	 * @generated
@@ -133,7 +130,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	/**
 	 * The cached value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getVersionContext()
 	 * @generated
@@ -274,7 +270,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -285,7 +280,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -299,7 +293,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -310,7 +303,6 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
