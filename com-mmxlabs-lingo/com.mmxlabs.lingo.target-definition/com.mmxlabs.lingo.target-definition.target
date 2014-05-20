@@ -96,6 +96,10 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre.p2/7.25.2/jre.p2-7.25.2.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="jre-jce.feature.feature.group" version="0.0.0"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/jre/jre-jce.p2/7.25.2/jre-jce.p2-7.25.2.zip-unzip/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.common.util.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.common.util.feature.source.feature.group" version="0.0.0"/>
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/releases-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.4.0.RELEASE/com.mmxlabs.common.util.p2-2.4.0.RELEASE.zip-unzip/" id="mmxlabs-releases"/>
@@ -158,9 +162,9 @@
 <repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/models/lng/transformer/com.mmxlabs.models.lng.transformer.p2/3.3.1-SNAPSHOT/com.mmxlabs.models.lng.transformer.p2-3.3.1-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.shiplingo.platform.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.shiplingo.platform.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/shiplingo/platform/com.mmxlabs.shiplingo.platform.p2/3.3.1-SNAPSHOT/com.mmxlabs.shiplingo.platform.p2-3.3.1-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
+<unit id="com.mmxlabs.lingo.reports.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.lingo.reports.feature.source.feature.group" version="0.0.0"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/lingo/reports/com.mmxlabs.shiplingo.platform.p2/3.3.1-SNAPSHOT/com.mmxlabs.lingo.reports.p2-3.3.1-SNAPSHOT.zip-unzip/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature.feature.group" version="0.0.0"/>
