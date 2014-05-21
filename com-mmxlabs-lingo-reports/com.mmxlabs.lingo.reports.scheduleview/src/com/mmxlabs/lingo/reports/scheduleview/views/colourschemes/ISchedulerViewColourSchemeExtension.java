@@ -9,7 +9,7 @@ import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.lingo.reports.scheduleview.views.IScheduleViewColourScheme;
 
-@ExtensionBean("com.mmxlabs.shiplingo.platform.scheduleview.schedulerViewColourScheme")
+@ExtensionBean("com.mmxlabs.lingo.reports.scheduleview.schedulerViewColourScheme")
 public interface ISchedulerViewColourSchemeExtension {
 
 	@MapName("id")
