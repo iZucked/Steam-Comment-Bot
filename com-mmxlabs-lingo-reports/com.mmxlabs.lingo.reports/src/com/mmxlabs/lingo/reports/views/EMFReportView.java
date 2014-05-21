@@ -17,15 +17,16 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.notify.Notifier;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -37,6 +38,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -59,6 +61,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.mmxlabs.common.CollectionsUtil.ASet;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -110,7 +113,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	
 	protected EMFReportView() {
-		this.helpContextId = null;
+		this(null);
 	}
 
 	protected EMFReportView(final String helpContextId) {
@@ -467,8 +470,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected EObjectTableViewer viewer;
 
 	private Action packColumnsAction;
-
 	private Action copyTableAction;
+//BE	private Action sortModeAction; //BE
+	
+	
 	private final String helpContextId;
 	private ScenarioViewerSynchronizer jobManagerListener;
 
@@ -611,29 +616,29 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return new BaseFormatter() {
 	    	 @Override
 	    	 public String format(final Object obj) {
-
-	    		 StringBuffer sb = new StringBuffer();
+	    		 
+	    		 String wiringAsString = "";
 	    		 
 	    		 if (obj instanceof EObject) {
 	    			 final EObject eObj = (EObject) obj;
 
 	    			 	if (eObj.eIsSet(cargoAllocationRef)) {
 
-	    			 		// if this object is not from the pinned scenario, return the difference between this object and the pinned counterpart 
+	    			 		final CargoAllocation thisCargoAllocation = (CargoAllocation) eObj.eGet(cargoAllocationRef);
+	    			 		updateRelatedSlotAllocationSets(thisCargoAllocation);
+	    			 		
+	    			 		// for objects not coming from the pinned scenario, 
+	    			 		// return the pinned counterpart's wiring to display as the previous wiring 
 	    			 		if (! pinDiffModeManager.pinnedObjectsContains(eObj)) {
+	    			 			
 	    			 			try { 
 	    			 				EObject pinnedObject = pinDiffModeManager.getPinnedObjectWithTheSameKeyAsThisObject(eObj);	    			 				
-	    			 				final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+	    			 				final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
 
-	    			 				EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
-
-	    			 				SlotAllocation caAlloc0 = caSlotAllocations.get(0);
-	    			 				sb.append(caAlloc0.getName());
-
-	    			 				for (int i = 1; i < caSlotAllocations.size(); ++i) {
-	    			 					SlotAllocation caAllocation = caSlotAllocations.get(i);
-	    			 					sb.append(" -- ").append(caAllocation.getName());
-	    			 				}	
+	    			 				updateRelatedSlotAllocationSets(pinnedCargoAllocation);
+	    			 				
+	    			 				// convert this cargo's wiring of slot allocations to a string
+	    			 				wiringAsString = pinnedCargoAllocation.getWiringAsString();
 	    			 			} 
 	    			 			catch (Exception e) {
 	    			 				log.warn("Error formatting previous wiring", e);
@@ -643,11 +648,43 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	    			 	}
 	    		 }
 
-	    		 return sb.toString();
+	    		 return wiringAsString;
 	    	 }
 		};
 	}
 
+	
+	protected Map<String, Set<String>> slotsAndTheirRelatedSets = new HashMap<String, Set<String>>();
+	
+	private void updateRelatedSlotAllocationSets(CargoAllocation cargoAllocation) {
+		List<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
+		
+		for (int i = 1; i < slotAllocations.size(); ++i) {
+
+			// get the names of the slots at either end	of this wiring		
+			String sA = slotAllocations.get(i-1).getName();
+			String sB = slotAllocations.get(i).getName();
+			
+			// get/create the sets of slots these wired slots are related to
+			Set<String> setA = slotsAndTheirRelatedSets.containsKey(sA) ? 
+						slotsAndTheirRelatedSets.get(sA)
+						: ASet.of(sA);
+						
+			Set<String> setB = slotsAndTheirRelatedSets.containsKey(sB) ? 
+						slotsAndTheirRelatedSets.get(sB)
+						: ASet.of(sB);
+			
+			// merge the two sets
+			setA.addAll(setB);
+			Set<String> mergedSet = setA;
+
+			// make sure all slots in the mergedSet are related to the new mergedSet
+			for (final String slotName : mergedSet) {
+				slotsAndTheirRelatedSets.put(slotName, mergedSet);
+			}
+			
+		}
+	}
 	
 	/**
 	 * Generate a new formatter for the previous-vessel-assignment column
@@ -668,7 +705,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	    			 	if (eObj.eIsSet(cargoAllocationRef)) {
 	    			 		
-	    			 		// if this object is not from the pinned scenario, return the difference between this object and the pinned counterpart 
+	    			 		// for objects not coming from the pinned scenario,  
+	    			 		// return and display the vessel used by the pinned counterpart
 	    			 		if (! pinDiffModeManager.pinnedObjectsContains(eObj)) {
 	    			 		
 	    			 			// TODO: Q: can any of these lookups return null?
@@ -912,6 +950,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		// this is very slow on refresh
 		viewer.setDisplayValidationErrors(false);
 
+		//BE
+//		
+//		viewer.setComparator(new ViewerComparator() {			
+//			@Override
+//			public int category(Object obj) { log.error("comparing"); return 0; }
+//		});
+		//BE
+		
 		if (handleSelections()) {
 			viewer.setComparer(new IElementComparer() {
 				@Override
@@ -989,6 +1035,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(new GroupMarker("filter"));
+//BE		manager.add(new GroupMarker("sortmode")); //BE		
 		manager.add(new GroupMarker("pack"));
 		manager.add(new GroupMarker("additions"));
 		manager.add(new GroupMarker("edit"));
@@ -997,6 +1044,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		manager.add(new GroupMarker("exporters"));
 
 		manager.appendToGroup("filter", filterField.getContribution());
+//BE		manager.appendToGroup("sortmode", sortModeAction); //BE
 		manager.appendToGroup("pack", packColumnsAction);
 		manager.appendToGroup("copy", copyTableAction);
 	}
@@ -1005,6 +1053,17 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		packColumnsAction = PackActionFactory.createPackColumnsAction(viewer);
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
+
+		//BE
+//		sortModeAction = new Action("S", IAction.AS_CHECK_BOX) {
+//			@Override
+//			public void run() {
+//				log.error("hello");
+//				viewer.setInput(viewer.getInput());
+//				viewer.refresh();
+//			}
+//		};
+		//BE
 	}
 
 	@Override
@@ -1082,6 +1141,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		allObjectsByKey.clear();
 		pinDiffModeManager.getPinnedObjects().clear();
 		numberOfSchedules = 0;
+		slotsAndTheirRelatedSets.clear();
 	}
 
 	/**
