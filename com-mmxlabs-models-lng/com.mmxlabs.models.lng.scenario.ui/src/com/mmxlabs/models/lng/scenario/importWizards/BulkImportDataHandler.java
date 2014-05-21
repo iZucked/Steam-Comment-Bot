@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.scenario.importWizards;
 
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
+import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 
 public class BulkImportDataHandler extends BulkImportCSVHandler {
 
 	@Override
-	public int getFieldToImport() {
-		return BulkImportPage.CHOICE_COMMODITY_INDICES;
+	public FieldChoice getFieldToImport() {
+		return FieldChoice.CHOICE_COMMODITY_INDICES;
 	}
 
 }
