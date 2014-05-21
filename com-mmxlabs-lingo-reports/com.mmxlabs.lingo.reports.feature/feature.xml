@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<feature
+      id="com.mmxlabs.lingo.reports.feature"
+      label="Lingo Reports Feature"
+      version="3.4.0.qualifier"
+      provider-name="Minimax Labs Ltd.">
+
+   <description url="http://www.minimaxlabs.com/">
+      LiNGO Reporting plug-ins
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      Copyright (C) Minimax Labs Ltd., 2010 - 2014
+All rights reserved.
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="com.mmxlabs.lingo.reports"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.lingo.reports.scheduleview"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

@@ -1,0 +1,15 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mmxlabs.lingo.reports</groupId>
+		<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
+		<version>3.4.0-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<artifactId>com.mmxlabs.lingo.reports.p2</artifactId>
+	<version>3.4.0-SNAPSHOT</version>
+	<packaging>eclipse-repository</packaging>
+	<name>Lingo Reports: p2 Repository</name>
+</project>
