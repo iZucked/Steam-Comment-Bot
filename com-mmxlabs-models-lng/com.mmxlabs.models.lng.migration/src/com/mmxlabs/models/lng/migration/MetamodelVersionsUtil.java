@@ -120,7 +120,8 @@ public class MetamodelVersionsUtil {
 		return loader;
 	}
 
-	/**
+	public static MetamodelLoader createV1_V2_IntermediateLoader(final Map<URI, PackageData> extraPackages) {
+
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore-v1.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_MMXCore);
