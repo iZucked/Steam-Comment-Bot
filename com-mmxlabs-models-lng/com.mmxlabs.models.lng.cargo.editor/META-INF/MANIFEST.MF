@@ -49,8 +49,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.ops4j.peaberry;bundle-version="1.3.0",
  org.ops4j.peaberry.eclipse;bundle-version="1.3.0",
  com.google.inject;bundle-version="3.0.0",
- javax.inject;bundle-version="1.0.0",
- com.mmxlabs.models.lng.port.editor
+ javax.inject;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"

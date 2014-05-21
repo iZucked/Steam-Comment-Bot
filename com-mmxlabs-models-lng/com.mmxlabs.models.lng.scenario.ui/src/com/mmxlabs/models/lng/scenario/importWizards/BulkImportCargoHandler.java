@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.scenario.importWizards;
 
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
+import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
 
 public class BulkImportCargoHandler extends BulkImportCSVHandler {
 
 	@Override
-	public FieldChoice getFieldToImport() {
-		return FieldChoice.CHOICE_CARGOES;
+	public int getFieldToImport() {
+		return BulkImportPage.CHOICE_CARGOES;
 	}
 
 }

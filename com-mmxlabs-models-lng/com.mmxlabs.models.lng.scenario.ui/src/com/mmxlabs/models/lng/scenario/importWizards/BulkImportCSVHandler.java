@@ -13,6 +13,8 @@ import java.util.Set;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -25,7 +27,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.CargoImportAction;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
+import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -44,23 +46,38 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * 
  */
 public abstract class BulkImportCSVHandler extends AbstractHandler {
-	public ImportAction getImportAction(final FieldChoice importTarget, final ImportAction.ImportHooksProvider ihp) {
+	public ImportAction getImportAction(final int importTarget, final ImportAction.ImportHooksProvider ihp) {
 		final MMXRootObject root = ihp.getRootObject();
 		if (root instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
-			switch (importTarget) {
-				case CHOICE_COMMODITY_INDICES: {
-					return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);				
-				}
-				case CHOICE_CARGOES: {
-					return new CargoImportAction(ihp, scenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES);					
-				}
-				case CHOICE_CHARTER_INDICES: {
-					return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
-				}
-				case CHOICE_BASE_FUEL_CURVES: {
-					return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
-				}			
+			if (importTarget == BulkImportPage.CHOICE_COMMODITY_INDICES) {
+				return new SimpleImportAction(ihp, new SimpleImportAction.FieldInfoProvider() {
+					@Override
+					public EObject getContainer() {
+						return scenarioModel.getPricingModel();
+					}
+
+					@Override
+					public EReference getContainment() {
+						return PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES;
+					}
+
+				});
+			}
+
+			if (importTarget == BulkImportPage.CHOICE_CARGOES) {
+				return new CargoImportAction(ihp, new SimpleImportAction.FieldInfoProvider() {
+
+					@Override
+					public EReference getContainment() {
+						return CargoPackage.Literals.CARGO_MODEL__CARGOES;
+					}
+
+					@Override
+					public EObject getContainer() {
+						return scenarioModel.getPortfolioModel().getCargoModel();
+					}
+				});
 			}
 		}
 
@@ -140,7 +157,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		final List<ScenarioInstance> scenarios = wizard.getSelectedScenarios();
 		final String importFilename = wizard.getImportFilename();
 
-		final FieldChoice importTarget = wizard.getImportedField();
+		final int importTarget = wizard.getImportedField();
 
 		if (scenarios != null && importFilename != null && !"".equals(importFilename)) {
 			final char separator = wizard.getCsvSeparator();
@@ -151,7 +168,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		return null;
 	}
 
-	void bulkImport(final FieldChoice importTarget, final Shell shell, final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator) {
+	void bulkImport(final int importTarget, final Shell shell, final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator) {
 		final List<ScenarioInstance> badInstances = new LinkedList<ScenarioInstance>();
 
 		for (final ScenarioInstance instance : instances) {
@@ -205,7 +222,6 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 
 	}
 
-	// TODO: replace this by subclass implementations of the getImportAction handler?
-	public abstract FieldChoice getFieldToImport();
+	public abstract int getFieldToImport();
 
 }

@@ -13,7 +13,6 @@ import org.eclipse.ui.IImportWizard;
 import org.eclipse.ui.IWorkbench;
 
 import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage;
-import com.mmxlabs.models.lng.scenario.wizards.BulkImportPage.FieldChoice;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -26,11 +25,11 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 	private char csvSeparator;
 	private char decimalSeparator;
 	final private ScenarioInstance currentScenario;
-	private FieldChoice importedField;
+	private int importedField;
 
-	public BulkImportWizard(ScenarioInstance scenarioInstance, FieldChoice fieldChoice) {
+	public BulkImportWizard(ScenarioInstance scenarioInstance, int fieldToImport) {
 		currentScenario = scenarioInstance;
-		importedField = fieldChoice;
+		importedField = fieldToImport;
 		setWindowTitle("Bulk data import");
 	}
 
@@ -74,7 +73,7 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		return decimalSeparator;
 	}
 
-	public FieldChoice getImportedField() {
+	public int getImportedField() {
 		return importedField;
 	}
 

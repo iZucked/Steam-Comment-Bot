@@ -51,9 +51,9 @@ public final class CargoImportAction extends SimpleImportAction {
 	public CargoImportAction(final IScenarioEditingLocation part, final ScenarioTableViewer viewer) {
 		super(part, viewer);
 	}
-	
-	public CargoImportAction(final ImportHooksProvider iph, final EObject container, final EReference containment) {
-		super(iph, container, containment);
+
+	public CargoImportAction(final ImportHooksProvider iph, final FieldInfoProvider fip) {
+		super(iph, fip);
 	}
 
 	/**
