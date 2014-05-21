@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -50,6 +51,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
+import com.mmxlabs.shiplingo.platform.reports.views.EMFReportView.BaseFormatter;
 
 /**
  */
@@ -210,6 +212,11 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		}, targetObjectRef);
 
+
+		// Register columns that will be displayed when in Pin/Diff mode 
+		pinDiffModeManager
+			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef));
+		
 	}
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {

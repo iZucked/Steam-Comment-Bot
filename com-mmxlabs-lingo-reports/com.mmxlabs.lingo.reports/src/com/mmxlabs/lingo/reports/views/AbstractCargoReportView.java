@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -33,15 +34,20 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 	protected EPackage tableDataModel;
 	protected EStructuralFeature cargoAllocationRef;
 	protected EStructuralFeature loadAllocationRef;
-	protected EStructuralFeature dischargeAllocationRef;
-
+	protected EStructuralFeature dischargeAllocationRef;	
+	
 	public AbstractCargoReportView(String id) {
 		super(id);
 
 		tableDataModel = GenericEMFTableDataModel.createEPackage(CargoAllocationUtils.NODE_FEATURE_CARGO, CargoAllocationUtils.NODE_FEATURE_LOAD, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_CARGO);
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_LOAD);
-		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);
+		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);		
+		
+		// Register columns that will be displayed when in Pin/Diff mode
+		pinDiffModeManager
+			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef))
+			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));		
 	}
 
 	@Override
