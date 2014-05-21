@@ -3,40 +3,39 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.mmxlabs.shiplingo.platform</groupId>
-	<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-	<version>6.0.2-SNAPSHOT</version>
+	<groupId>com.mmxlabs.lingo.reports</groupId>
+	<artifactId>com.mmxlabs.lingo.reports.parent</artifactId>
+	<version>3.3.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>23</version>
+		<version>26</version>
 	</parent>
 
 	<scm>
-		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-platform.hg</connection>
-		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-shiplingo-platform.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-shiplingo-platform</url>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lingo.reports.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lingo.reports.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-lingo.reports</url>
 	</scm>
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.shiplingo.platform/</url>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.lingo.reports/</url>
 	</ciManagement>
 
 	<modules>
-		<module>com.mmxlabs.shiplingo.platform.target-definition</module>
+		<module>com.mmxlabs.lingo.reports.target-definition</module>
 
-		<module>com.mmxlabs.shiplingo.platform.scheduleview</module>
-
-		<module>com.mmxlabs.shiplingo.platform.reports</module>
-		<module>com.mmxlabs.shiplingo.platform.reports.tests</module>
+		<module>com.mmxlabs.lingo.reports</module>
+		<module>com.mmxlabs.lingo.reports.tests</module>
+		<module>com.mmxlabs.lingo.reports.scheduleview</module>
 
 		<!-- Features -->
-		<module>com.mmxlabs.shiplingo.platform.feature</module>
+		<module>com.mmxlabs.lingo.reports.feature</module>
 
-		<module>com.mmxlabs.shiplingo.platform.p2</module>
+		<module>com.mmxlabs.lingo.reports.p2</module>
 
 	</modules>
 
@@ -62,8 +61,8 @@
 
 					<target>
 						<artifact>
-							<groupId>com.mmxlabs.shiplingo.platform</groupId>
-							<artifactId>com.mmxlabs.shiplingo.platform.target-definition</artifactId>
+							<groupId>com.mmxlabs.lingo.reports</groupId>
+							<artifactId>com.mmxlabs.lingo.reports.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
