@@ -5,6 +5,7 @@
 package com.mmxlabs.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -183,4 +184,24 @@ public final class CollectionsUtil {
 		}
 		return defaultValue;
 	}
+
+
+	public static class Sets {
+		public static <T> Set<T> merge(Set<T>... sets) {
+			Set<T> merged = new HashSet<T>();
+			for (Set<T> set : sets) {
+				merged.addAll(set);
+			}			
+			return merged;			
+		}
+	}
+	
+	public static class ASet {
+		public static <T> Set<T> of(T ... items) {
+			Set<T> set = new HashSet<T>();
+			set.addAll(Arrays.asList(items));
+			return set;
+		}
+	}	
+
 }
