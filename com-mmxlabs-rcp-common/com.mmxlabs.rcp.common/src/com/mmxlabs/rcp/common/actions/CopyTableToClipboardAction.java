@@ -51,6 +51,23 @@ public class CopyTableToClipboardAction extends Action {
 	@Override
 	public void run() {
 
+		final StringWriter sw = parseTableIntoStringWriter();
+		
+		// Create a new clipboard instance
+		final Display display = Display.getDefault();
+		final Clipboard cb = new Clipboard(display);
+		try {
+			// Create the text transfer and set the contents
+			final TextTransfer textTransfer = TextTransfer.getInstance();
+			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+		} finally {
+			// Clean up our local resources - system clipboard now has the data
+			cb.dispose();
+		}
+	}
+
+	public final StringWriter parseTableIntoStringWriter() {
+
 		final StringWriter sw = new StringWriter();
 		final CSVWriter cw = new CSVWriter(sw, separator);
 
@@ -76,20 +93,11 @@ public class CopyTableToClipboardAction extends Action {
 		catch (IOException e) {
 			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
-
-		// Create a new clipboard instance
-		final Display display = Display.getDefault();
-		final Clipboard cb = new Clipboard(display);
-		try {
-			// Create the text transfer and set the contents
-			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
-		} finally {
-			// Clean up our local resources - system clipboard now has the data
-			cb.dispose();
-		}
+		
+		return sw;
+		
 	}
-
+	
 	private void processTableItem(final CSVWriter cw, final int numColumns, final TableItem item) throws IOException {
 		for (int i = 0; i < numColumns; ++i) {
 

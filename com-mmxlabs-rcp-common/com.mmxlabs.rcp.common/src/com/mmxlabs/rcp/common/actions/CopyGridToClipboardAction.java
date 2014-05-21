@@ -53,6 +53,22 @@ public class CopyGridToClipboardAction extends Action {
 	@Override
 	public void run() {
 
+		final StringWriter sw = parseGridIntoStringWriter();
+
+		// Create a new clipboard instance
+		final Display display = Display.getDefault();
+		final Clipboard cb = new Clipboard(display);
+		try {
+			// Create the text transfer and set the contents
+			final TextTransfer textTransfer = TextTransfer.getInstance();
+			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
+		} finally {
+			// Clean up our local resources - system clipboard now has the data
+			cb.dispose();
+		}
+	}
+
+	public StringWriter parseGridIntoStringWriter() {
 		final StringWriter sw = new StringWriter();
 		final CSVWriter cw = new CSVWriter(sw, separator);
 
@@ -86,19 +102,9 @@ public class CopyGridToClipboardAction extends Action {
 			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
 
-		// Create a new clipboard instance
-		final Display display = Display.getDefault();
-		final Clipboard cb = new Clipboard(display);
-		try {
-			// Create the text transfer and set the contents
-			final TextTransfer textTransfer = TextTransfer.getInstance();
-			cb.setContents(new Object[] { sw.toString() }, new Transfer[] { textTransfer });
-		} finally {
-			// Clean up our local resources - system clipboard now has the data
-			cb.dispose();
-		}
+		return sw;
 	}
-
+	
 	private void processTableItem(final CSVWriter cw, final int numColumns, final GridItem item) throws IOException {
 		if (rowHeadersIncluded) {
 			cw.addValue(item.getHeaderText());
