@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.reports.views;
+package com.mmxlabs.lingo.reports.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
