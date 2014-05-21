@@ -453,7 +453,6 @@ public class GanttChartViewer extends StructuredViewer {
 	 * @param element
 	 * @return String. Return the emptyString if the labelProvider returns null for the text.
 	 * 
-	 * @since 3.1
 	 */
 	private String getLabelProviderText(final ILabelProvider labelProvider, final Object element) {
 		final String text = labelProvider.getText(element);

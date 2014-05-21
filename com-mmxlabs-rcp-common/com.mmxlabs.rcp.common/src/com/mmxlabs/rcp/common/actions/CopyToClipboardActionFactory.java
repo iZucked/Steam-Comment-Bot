@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Tree;
  * 
  * @noinstantiate This class is not intended to be instantiated by clients.
  * @author Simon Goodall
- * @since 4.2
  * 
  */
 public final class CopyToClipboardActionFactory {

@@ -36,7 +36,6 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandProvider<T> {
 
 	/**
-	 * @since 2.0
 	 */
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
@@ -71,9 +70,6 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 		return result;
 	}
 
-	/**
-	 * @since 2.0
-	 */
 	protected Command handleAddition(final EditingDomain domain, final MMXRootObject root, final Collection<Object> added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		final CompoundCommand compound = new CompoundCommand();
 
@@ -89,7 +85,6 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected Command handleDeletion(final EditingDomain editingDomain, final MMXRootObject rootObject, final Collection<Object> deleted, final Map<EObject, EObject> overrides,
 			final Set<EObject> editSet) {
@@ -107,28 +102,24 @@ public abstract class BaseModelCommandProvider<T> extends AbstractModelCommandPr
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return false;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return false;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return null;
 	}
 
 	/**
-	 * @since 2.0
 	 */
 	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return null;

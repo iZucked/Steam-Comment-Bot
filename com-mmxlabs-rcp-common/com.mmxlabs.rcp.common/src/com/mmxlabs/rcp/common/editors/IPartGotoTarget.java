@@ -14,7 +14,6 @@ import org.eclipse.ui.IViewPart;
  * tab is selected.
  * 
  * @author Simon Goodall
- * @since 2.1
  * 
  */
 public interface IPartGotoTarget {

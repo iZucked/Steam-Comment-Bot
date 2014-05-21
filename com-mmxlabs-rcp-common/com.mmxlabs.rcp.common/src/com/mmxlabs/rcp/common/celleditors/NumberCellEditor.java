@@ -156,7 +156,6 @@ public class NumberCellEditor extends CellEditor {
 	 * @param event
 	 *            the selection event
 	 * 
-	 * @since 3.0
 	 */
 	protected void handleDefaultSelection(final SelectionEvent event) {
 		// same with enter-key handling code in keyReleaseOccured(e);

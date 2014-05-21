@@ -371,7 +371,6 @@ public abstract class PopupComposite extends Composite {
 	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
 	 *                </ul>
 	 * 
-	 * @since 3.3
 	 */
 	public void copy() {
 		checkWidget();
@@ -423,7 +422,6 @@ public abstract class PopupComposite extends Composite {
 	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
 	 *                </ul>
 	 * 
-	 * @since 3.3
 	 */
 	public void cut() {
 		checkWidget();
@@ -535,7 +533,6 @@ public abstract class PopupComposite extends Composite {
 	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
 	 *                </ul>
 	 * 
-	 * @since 3.0
 	 */
 	public boolean getEditable() {
 		checkWidget();
@@ -558,7 +555,6 @@ public abstract class PopupComposite extends Composite {
 	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
 	 *                </ul>
 	 * 
-	 * @since 3.4
 	 */
 	public boolean getListVisible() {
 		checkWidget();
@@ -819,7 +815,6 @@ public abstract class PopupComposite extends Composite {
 	 * @see VerifyListener
 	 * @see #addVerifyListener
 	 * 
-	 * @since 3.3
 	 */
 	public void removeVerifyListener(final VerifyListener listener) {
 		checkWidget();
@@ -956,7 +951,6 @@ public abstract class PopupComposite extends Composite {
 	 *                <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
 	 *                </ul>
 	 * 
-	 * @since 3.0
 	 */
 	public void setVisibleItemCount(final int count) {
 		checkWidget();
