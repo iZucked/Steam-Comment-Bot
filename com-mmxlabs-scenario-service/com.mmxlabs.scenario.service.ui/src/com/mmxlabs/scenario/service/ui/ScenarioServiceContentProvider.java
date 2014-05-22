@@ -40,6 +40,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 		@Override
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			// Remove possible 
+			filteredElements.remove(scenarioInstance.getInstance());
 			cleanUp(scenarioInstance);
 		}
 
