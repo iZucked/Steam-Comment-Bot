@@ -166,7 +166,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
-				ed.setFormatter(new DoubleFormatter("#.###"));
+				ed.setFormatter(new DoubleFormatter("####0.###"));
 				return ed;
 			}
 
