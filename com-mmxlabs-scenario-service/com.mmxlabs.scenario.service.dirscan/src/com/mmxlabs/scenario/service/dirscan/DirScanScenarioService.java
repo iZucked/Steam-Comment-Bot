@@ -38,14 +38,15 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,6 +64,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.util.AbstractScenarioService;
 import com.mmxlabs.scenario.service.util.ResourceHelper;
+import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 public class DirScanScenarioService extends AbstractScenarioService {
 
@@ -200,13 +202,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		final URI fileURI = URI.createFileURI(scenario.toString());
 
 		final URI manifestURI = URI.createURI("archive:" + fileURI.toString() + "!/MANIFEST.xmi");
-		final ResourceSetImpl resourceSet = new ResourceSetImpl();
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
 
-		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-
-		final Resource resource = resourceSet.createResource(manifestURI);
 		try {
-			resource.load(null);
+			final Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
 			if (resource.getContents().size() == 1) {
 				final EObject top = resource.getContents().get(0);
 				if (top instanceof Manifest) {
@@ -787,4 +786,18 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			lock.readLock().unlock();
 		}
 	}
+	
+	/**
+	 * Override the normal method as we register the {@link DirScanScenarioService} is a different way. Thus we can avoid keeping a service tracker active.
+	 */
+	@Override
+	public IScenarioCipherProvider getScenarioCipherProvider() {
+		final BundleContext bundleContext = FrameworkUtil.getBundle(DirScanScenarioService.class).getBundleContext();
+		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
+		if (serviceReference != null) {
+			return bundleContext.getService(serviceReference);
+		}
+		return null;
+	}
+
 }
