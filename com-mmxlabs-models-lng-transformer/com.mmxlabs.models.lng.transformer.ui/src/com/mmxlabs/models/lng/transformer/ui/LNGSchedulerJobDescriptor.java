@@ -23,7 +23,7 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 
 	private ScenarioInstance scenarioInstance;
 
-	private final OptimiserSettings optimiserSettings;
+	private OptimiserSettings optimiserSettings;
 
 	private final boolean optimise;
 
@@ -37,6 +37,7 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 	@Override
 	public void dispose() {
 		scenarioInstance = null;
+		optimiserSettings = null;
 	}
 
 	@Override
