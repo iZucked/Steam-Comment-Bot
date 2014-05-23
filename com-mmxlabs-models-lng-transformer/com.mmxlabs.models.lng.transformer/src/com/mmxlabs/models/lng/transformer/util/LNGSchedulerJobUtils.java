@@ -194,10 +194,6 @@ public class LNGSchedulerJobUtils {
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
-		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();
-
-		final HashSet<UUIDObject> reassigned = new HashSet<UUIDObject>();
-
 		// The ElementAssignment needs a cargo linked to a slot. Not all slots will have a cargo until after the command generated here is executed. Therefore build up a map to perform the link. Fall
 		// back to slot.getCargo() is there is no mapping.
 		final Map<LoadSlot, Cargo> slotToCargoMap = new HashMap<LoadSlot, Cargo>();
