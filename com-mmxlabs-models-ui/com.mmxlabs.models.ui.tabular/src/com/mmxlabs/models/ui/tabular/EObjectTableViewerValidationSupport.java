@@ -30,11 +30,11 @@ public class EObjectTableViewerValidationSupport {
 
 		@Override
 		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-			final HashSet<Object> updates = new HashSet<Object>();
-			for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
-				if (!entry.getValue().isOK())
-					updates.add(entry.getKey());
-			}
+//			final HashSet<Object> updates = new HashSet<Object>();
+//			for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
+//				if (!entry.getValue().isOK())
+//					updates.add(entry.getKey());
+//			}
 
 			validationErrors.clear();
 
