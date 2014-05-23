@@ -56,6 +56,8 @@ public class HorizontalKPIReportView extends ViewPart {
 
 	private ScenarioViewerSynchronizer viewerSynchronizer;
 
+	private IEditorPart currentActiveEditor;
+
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
 		private final Font boldFont;
@@ -266,7 +268,12 @@ public class HorizontalKPIReportView extends ViewPart {
 
 			@Override
 			public void partClosed(final IWorkbenchPart part) {
-
+				
+				if (currentActiveEditor == part) {
+					currentActiveEditor =null;
+					scheduleModel = null;
+				}
+				viewerSynchronizer.refreshViewer();
 			}
 
 			@Override
@@ -349,6 +356,7 @@ public class HorizontalKPIReportView extends ViewPart {
 	}
 
 	private void activeEditorChange(final IEditorPart activeEditor) {
+		this.currentActiveEditor = activeEditor;
 		ScheduleModel scheduleModel = null;
 		if (activeEditor != null) {
 			final IEditorInput editorInput = activeEditor.getEditorInput();
