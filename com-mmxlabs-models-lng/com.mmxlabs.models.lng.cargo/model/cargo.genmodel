@@ -112,15 +112,15 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/timeCharterRate"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The vessel must start at one of these ports"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startAt"/>
-      <genFeatures createChild="false" propertyDescription="The vessel is not available before this date"
+      <genFeatures createChild="false" propertyDescription="The vessel is not available before this date (UTC)"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/startAfter"/>
-      <genFeatures createChild="false" propertyDescription="The vessel must be in use from this date"
+      <genFeatures createChild="false" propertyDescription="The vessel must be in use from this date (UTC)"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/startBy"/>
       <genFeatures notify="false" createChild="false" propertyDescription="The vessel must be returned to one of these ports"
           propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/endAt"/>
-      <genFeatures createChild="false" propertyDescription="The vessel must not end before this date"
+      <genFeatures createChild="false" propertyDescription="The vessel must not end before this date (UTC)"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/endAfter"/>
-      <genFeatures createChild="false" propertyDescription="The vessel must have finished use by this date"
+      <genFeatures createChild="false" propertyDescription="The vessel must have finished use by this date (UTC)"
           ecoreFeature="ecore:EAttribute cargo.ecore#//VesselAvailability/endBy"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/startHeel"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference cargo.ecore#//VesselAvailability/entity"/>
