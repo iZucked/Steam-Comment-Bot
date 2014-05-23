@@ -10,7 +10,7 @@
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category
-            id="com.mmxlabs.models.lng.schedule.validation.base"
+            id="com.mmxlabs.models.lng.schedule.validation.backgroundonly"
             mandatory="true"
             name="Schedule Validation">
       </category>
@@ -20,7 +20,7 @@
                namespaceUri="http://www.mmxlabs.com/models/lng/schedule/1/">
          </package>
          <constraints
-               categories=" com.mmxlabs.models.lng.schedule.validation.base">
+               categories=" com.mmxlabs.models.lng.schedule.validation.backgroundonly">
                
                 <constraint
                       class="com.mmxlabs.models.lng.schedule.validation.SequenceNoGapsConstraint"
