@@ -124,6 +124,7 @@ public class EObjectTableViewerValidationSupport {
 	}
 
 	public void dispose() {
+		validationErrors.clear();
 		if (statusProvider != null) {
 			statusProvider.removeStatusChangedListener(statusChangedListener);
 		}

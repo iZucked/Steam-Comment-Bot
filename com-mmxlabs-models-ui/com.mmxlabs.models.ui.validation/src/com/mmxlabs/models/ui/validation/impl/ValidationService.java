@@ -7,9 +7,10 @@ package com.mmxlabs.models.ui.validation.impl;
 import java.util.Collection;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
@@ -32,12 +33,21 @@ public class ValidationService implements IValidationService {
 
 	private ValidationInputService validationInputService = new ValidationInputService();
 
-	private ExecutorService executor;
+	private ThreadPoolExecutor executor;
 
 	public ValidationService() {
-		executor = Executors.newSingleThreadExecutor();
+
+		// Previously we used Executors.newSingleThreadExecutor() to create our pool. However this tended to result in a memory leak with the ThreadLocals pool resulting out of EMF Validation. This
+		// implementation instead is permitted to kill off the thread when inactive thus freeing up the thread local pool, but still maintain the maximum of one thread.
+		executor = new ThreadPoolExecutor(1, 1, 1000L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>()) {
+			@Override
+			protected void finalize() {
+				shutdown();
+			};
+		};
+		executor.allowCoreThreadTimeOut(true);
 	}
-	
+
 	public void shutdown() {
 		executor.shutdown();
 	}
@@ -70,7 +80,7 @@ public class ValidationService implements IValidationService {
 			return null;
 		} finally {
 			// Force executor shutdown
-//			executor.shutdownNow();
+			// executor.shutdownNow();
 		}
 	}
 

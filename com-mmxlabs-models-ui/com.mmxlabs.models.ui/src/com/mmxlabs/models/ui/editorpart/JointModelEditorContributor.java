@@ -145,6 +145,9 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 		}
 		undoAction.setActiveWorkbenchPart(null);
 		redoAction.setActiveWorkbenchPart(null);
+		// While setActiveWorkbenchPart(editor) will set the editing domain, it does not clear it.
+		undoAction.setEditingDomain(null);
+		redoAction.setEditingDomain(null);
 
 	}
 
