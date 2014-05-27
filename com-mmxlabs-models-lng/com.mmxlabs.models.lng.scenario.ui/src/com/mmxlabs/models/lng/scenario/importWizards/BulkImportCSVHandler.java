@@ -96,6 +96,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 			public void lock() {
 				((CommandProviderAwareEditingDomain) getEditingDomain()).setCommandProvidersDisabled(true);
 				lock = instance.getLock(ScenarioLock.EDITORS);
+				lock.awaitClaim();
 			}
 
 			@Override
