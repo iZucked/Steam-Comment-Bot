@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -140,17 +141,18 @@ public class LiveEvaluator extends MMXAdapterImpl {
 										if (instance.getValidationStatusCode() == IStatus.ERROR) {
 											return null;
 										}
-										final LNGScenarioModel root = (LNGScenarioModel) instance.getScenarioService().load(instance);
-										if (root == null) {
-											return null;
+										try (ModelReference modelReference = instance.getReference()) {
+											final LNGScenarioModel root = (LNGScenarioModel) modelReference.getInstance();
+											if (root == null) {
+												return null;
+											}
+											final ScheduleModel scheduleModel = root.getPortfolioModel().getScheduleModel();
+											if (!scheduleModel.isDirty()) {
+												return null;
+											}
+											log.debug("About to evaluate " + instance.getName());
+											scenarioInstanceEvaluator.evaluate(instance);
 										}
-										final ScheduleModel subModel = root.getPortfolioModel().getScheduleModel();
-										if (!subModel.isDirty()) {
-											return null;
-										}
-										log.debug("About to evaluate " + instance.getName());
-										scenarioInstanceEvaluator.evaluate(instance);
-
 										return null;
 									}
 								});
@@ -187,8 +189,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			// We we re-enable check the dirty status and queue an evaluation if it is dirty
 			final LNGScenarioModel root = (LNGScenarioModel) instance.getInstance();
 			if (root != null) {
-				final ScheduleModel subModel = root.getPortfolioModel().getScheduleModel();
-				if (subModel.isDirty()) {
+				final ScheduleModel scheduleModel = root.getPortfolioModel().getScheduleModel();
+				if (scheduleModel.isDirty()) {
 					queueEvaluate();
 				}
 			}

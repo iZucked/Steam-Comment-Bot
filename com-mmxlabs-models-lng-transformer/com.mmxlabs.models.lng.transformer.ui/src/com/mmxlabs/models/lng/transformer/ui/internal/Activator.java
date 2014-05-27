@@ -66,7 +66,6 @@ public class Activator extends ValidationPlugin {
 				for (final ScenarioInstance instance : selected) {
 					final Object object = instance.getInstance();
 					if (object instanceof MMXRootObject) {
-						final MMXRootObject root = (MMXRootObject) object;
 
 						final String uuid = instance.getUuid();
 

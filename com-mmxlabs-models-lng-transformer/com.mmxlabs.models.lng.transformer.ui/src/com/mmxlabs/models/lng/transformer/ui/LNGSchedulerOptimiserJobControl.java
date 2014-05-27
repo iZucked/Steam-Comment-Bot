@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
 
@@ -42,6 +43,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	private final LNGSchedulerJobDescriptor jobDescriptor;
 
 	private final ScenarioInstance scenarioInstance;
+
+	private final ModelReference modelReference;
 
 	private final LNGScenarioModel scenario;
 
@@ -67,7 +70,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
-		this.scenario = (LNGScenarioModel) scenarioInstance.getInstance();
+		this.modelReference = scenarioInstance.getReference();
+		this.scenario = (LNGScenarioModel) modelReference.getInstance();
 		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 
@@ -159,6 +163,11 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 		// TODO: this.scenario = null;
 		this.optimiser = null;
+
+		injector = null;
+		if (this.modelReference != null) {
+			this.modelReference.close();
+		}
 
 		super.dispose();
 	}

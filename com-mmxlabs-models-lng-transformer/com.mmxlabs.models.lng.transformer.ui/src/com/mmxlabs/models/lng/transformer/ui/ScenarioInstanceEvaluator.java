@@ -4,14 +4,13 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.IOException;
-
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -21,16 +20,13 @@ public class ScenarioInstanceEvaluator implements IScenarioInstanceEvaluator {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
-			try {
-				final EObject object = service.load(instance);
-
+			try (final ModelReference modelRefence = instance.getReference()) {
+				final EObject object = modelRefence.getInstance();
 				if (object instanceof LNGScenarioModel) {
-					final LNGScenarioModel root = (LNGScenarioModel) object;
-
 					OptimisationHelper.evaluateScenarioInstance(Activator.getDefault().getJobManager(), instance, null, false, false, ScenarioLock.EVALUATOR);
 				}
-			} catch (final IOException e) {
-
+			} catch (final Exception e) {
+				// Swallo exceptions??
 			}
 		}
 	}

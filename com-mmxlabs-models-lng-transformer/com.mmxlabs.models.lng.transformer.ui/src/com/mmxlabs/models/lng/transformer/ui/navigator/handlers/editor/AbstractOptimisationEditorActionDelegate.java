@@ -18,6 +18,7 @@ import com.mmxlabs.jobmanager.manager.IJobManagerListener;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.ui.parametermodes.actions.ParameterModesActionDelegate;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -43,22 +44,24 @@ public abstract class AbstractOptimisationEditorActionDelegate extends Parameter
 				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
 
 				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-				final Object object = instance.getInstance();
-				if (object instanceof MMXRootObject) {
-					final String uuid = instance.getUuid();
+				try (final ModelReference modelReference = instance.getReference()) {
+					final Object object = modelReference.getInstance();
+					if (object instanceof MMXRootObject) {
+						final String uuid = instance.getUuid();
 
-					final IJobDescriptor job = jobManager.findJobForResource(uuid);
-					if (job == null) {
-						action.setEnabled(true);
-						return true;
-					}
+						final IJobDescriptor job = jobManager.findJobForResource(uuid);
+						if (job == null) {
+							action.setEnabled(true);
+							return true;
+						}
 
-					final IJobControl actionControl = jobManager.getControlForJob(job);
+						final IJobControl actionControl = jobManager.getControlForJob(job);
 
-					if (actionControl == control) {
+						if (actionControl == control) {
 
-						// Fire the event
-						stateChanged(control, oldState, newState);
+							// Fire the event
+							stateChanged(control, oldState, newState);
+						}
 					}
 				}
 			}

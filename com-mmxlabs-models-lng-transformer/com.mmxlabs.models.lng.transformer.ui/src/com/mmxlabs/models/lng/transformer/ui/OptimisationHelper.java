@@ -52,6 +52,7 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -68,92 +69,88 @@ public final class OptimisationHelper {
 		if (service == null) {
 			return null;
 		}
-		final EObject object;
-		try {
-			object = service.load(instance);
 
-		} catch (final IOException e) {
-			log.error(e.getMessage(), e);
-			return null;
-		}
+		try (final ModelReference modelRefence = instance.getReference()) {
+			final EObject object = modelRefence.getInstance();
 
-		if (object instanceof LNGScenarioModel) {
-			final LNGScenarioModel root = (LNGScenarioModel) object;
+			if (object instanceof LNGScenarioModel) {
+				final LNGScenarioModel root = (LNGScenarioModel) object;
 
-			final String uuid = instance.getUuid();
-			// Check for existing job and return if there is one.
-			{
-				final IJobDescriptor job = jobManager.findJobForResource(uuid);
-				if (job != null) {
-					return null;
-				}
-			}
-			final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
-			if (optimiserSettings == null) {
-				return null;
-			}
-
-			final ScenarioLock scenarioLock = instance.getLock(k);
-			if (scenarioLock.awaitClaim()) {
-				IJobControl control = null;
-				IJobDescriptor job = null;
-				try {
-					// create a new job
-					job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings, optimising);
-
-					// New optimisation, so check there are no validation errors.
-					if (!validateScenario(root, optimising)) {
-						scenarioLock.release();
+				final String uuid = instance.getUuid();
+				// Check for existing job and return if there is one.
+				{
+					final IJobDescriptor job = jobManager.findJobForResource(uuid);
+					if (job != null) {
 						return null;
 					}
+				}
+				final OptimiserSettings optimiserSettings = getOptimiserSettings(root, !optimising, parameterMode, promptForOptimiserSettings);
+				if (optimiserSettings == null) {
+					return null;
+				}
 
-					// Automatically clean up job when removed from manager
-					jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-					control = jobManager.submitJob(job, uuid);
-					// Add listener to clean up job when it finishes or has an exception.
-					final IJobDescriptor finalJob = job;
-					control.addListener(new IJobControlListener() {
+				final ScenarioLock scenarioLock = instance.getLock(k);
+				if (scenarioLock.awaitClaim()) {
+					IJobControl control = null;
+					IJobDescriptor job = null;
+					try {
+						// create a new job
+						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimiserSettings, optimising);
 
-						@Override
-						public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
-
-							if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-								scenarioLock.release();
-								jobManager.removeJob(finalJob);
-								return false;
-							}
-							return true;
+						// New optimisation, so check there are no validation errors.
+						if (!validateScenario(root, optimising)) {
+							scenarioLock.release();
+							return null;
 						}
 
-						@Override
-						public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
-							return true;
-						}
-					});
-					// Start the job!
-					control.prepare();
-					control.start();
-				} catch (final Throwable ex) {
-					log.error(ex.getMessage(), ex);
-					if (control != null) {
-						control.cancel();
-					}
-					// Manual clean up incase the control listener doesn't fire
-					if (job != null) {
-						jobManager.removeJob(job);
-					}
-					// instance.setLocked(false);
-					scenarioLock.release();
-
-					final Display display = Display.getDefault();
-					if (display != null) {
-						display.asyncExec(new Runnable() {
+						// Automatically clean up job when removed from manager
+						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+						control = jobManager.submitJob(job, uuid);
+						// Add listener to clean up job when it finishes or has an exception.
+						final IJobDescriptor finalJob = job;
+						control.addListener(new IJobControlListener() {
 
 							@Override
-							public void run() {
-								MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + ex.getMessage());
+							public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
+
+								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
+									scenarioLock.release();
+									jobManager.removeJob(finalJob);
+									return false;
+								}
+								return true;
+							}
+
+							@Override
+							public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
+								return true;
 							}
 						});
+						// Start the job!
+						control.prepare();
+						control.start();
+					} catch (final Throwable ex) {
+						log.error(ex.getMessage(), ex);
+						if (control != null) {
+							control.cancel();
+						}
+						// Manual clean up incase the control listener doesn't fire
+						if (job != null) {
+							jobManager.removeJob(job);
+						}
+						// instance.setLocked(false);
+						scenarioLock.release();
+
+						final Display display = Display.getDefault();
+						if (display != null) {
+							display.asyncExec(new Runnable() {
+
+								@Override
+								public void run() {
+									MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", "An error occured. See Error Log for more details.\n" + ex.getMessage());
+								}
+							});
+						}
 					}
 				}
 			}

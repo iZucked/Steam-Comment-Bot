@@ -13,6 +13,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -29,7 +30,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 	}
 
 	@Override
-	public void run(IAction action) {
+	public void run(final IAction action) {
 
 		if (editor != null) {
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
@@ -40,7 +41,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 					action.setEnabled(false);
 					return;
 				}
-				
+
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 				final IJobControl control = jobManager.getControlForJob(job);
@@ -98,7 +99,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 	}
 
 	@Override
-	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
 		this.editor = targetEditor;
 		this.action = action;
 
@@ -108,20 +109,22 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
 
 			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
-			final Object object = instance.getInstance();
-			if (object instanceof MMXRootObject) {
-				final String uuid = instance.getUuid();
+			try (final ModelReference modelReference = instance.getReference()) {
+				final Object object = modelReference.getInstance();
+				if (object instanceof MMXRootObject) {
+					final String uuid = instance.getUuid();
 
-				final IJobDescriptor job = jobManager.findJobForResource(uuid);
-				if (job != null) {
-					final IJobControl control = jobManager.getControlForJob(job);
-					final EJobState jobState = control.getJobState();
-					if (!((jobState == EJobState.CANCELLED) || (jobState == EJobState.CANCELLING) || (jobState == EJobState.COMPLETED))) {
-						action.setEnabled(true);
-						return;
+					final IJobDescriptor job = jobManager.findJobForResource(uuid);
+					if (job != null) {
+						final IJobControl control = jobManager.getControlForJob(job);
+						final EJobState jobState = control.getJobState();
+						if (!((jobState == EJobState.CANCELLED) || (jobState == EJobState.CANCELLING) || (jobState == EJobState.COMPLETED))) {
+							action.setEnabled(true);
+							return;
+						}
 					}
-				}
 
+				}
 			}
 		}
 		if (action != null) {
@@ -135,7 +138,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 	}
 
 	@Override
-	protected void runWithMode(String mode) {
+	protected void runWithMode(final String mode) {
 		throw new UnsupportedOperationException();
 	}
 

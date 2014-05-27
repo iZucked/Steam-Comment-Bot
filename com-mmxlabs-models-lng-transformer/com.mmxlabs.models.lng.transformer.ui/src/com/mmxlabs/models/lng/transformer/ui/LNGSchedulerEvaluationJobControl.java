@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -54,8 +55,8 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 		setJobState(EJobState.RUNNING);
 		final ScenarioInstance scenarioInstance = jobDescriptor.getJobContext();
 
-		try {
-			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioInstance.getInstance();
+		try (final ModelReference modelReference = scenarioInstance.getReference()) {
+			final LNGScenarioModel scenario = (LNGScenarioModel) modelReference.getInstance();
 			final EditingDomain editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 
 			// Create the transformer and object reference to the data objects
@@ -106,7 +107,9 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
 	@Override
 	public Object getJobOutput() {
-		return jobDescriptor.getJobContext().getInstance();
+		// Method not actually used and it would require hanging on to the model reference longer...
+		//return jobDescriptor.getJobContext().getInstance();
+		return null;
 	}
 
 	@Override

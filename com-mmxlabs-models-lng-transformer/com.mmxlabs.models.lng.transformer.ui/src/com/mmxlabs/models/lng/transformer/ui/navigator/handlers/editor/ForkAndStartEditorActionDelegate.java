@@ -28,6 +28,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
@@ -117,7 +118,7 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 					c = c.getParent();
 				}
 				if (c instanceof ScenarioService) {
-					ScenarioService scenarioService = (ScenarioService) c;
+					final ScenarioService scenarioService = (ScenarioService) c;
 					if (!scenarioService.isSupportsForking()) {
 						action.setEnabled(false);
 						return;
@@ -128,31 +129,32 @@ public class ForkAndStartEditorActionDelegate extends StartOptimisationEditorAct
 				}
 			}
 
-			final Object object = instance.getInstance();
-			if (object instanceof MMXRootObject) {
-				final MMXRootObject root = (MMXRootObject) object;
-				final String uuid = instance.getUuid();
+			try (final ModelReference modelReference = instance.getReference()) {
+				final Object object = modelReference.getInstance();
+				if (object instanceof MMXRootObject) {
+					final MMXRootObject root = (MMXRootObject) object;
+					final String uuid = instance.getUuid();
 
-				final IJobDescriptor job = jobManager.findJobForResource(uuid);
-				if (job == null) {
-					action.setEnabled(true);
-					return;
-				}
-
-				final IJobControl control = jobManager.getControlForJob(job);
-				if (control != null) {
-					stateChanged(control, EJobState.UNKNOWN, control.getJobState());
-					return;
-				} else {
-
-					// New optimisation, so check there are no validation errors.
-					if (!OptimisationHelper.validateScenario(root, optimising)) {
-						action.setEnabled(false);
+					final IJobDescriptor job = jobManager.findJobForResource(uuid);
+					if (job == null) {
+						action.setEnabled(true);
 						return;
 					}
 
-				}
+					final IJobControl control = jobManager.getControlForJob(job);
+					if (control != null) {
+						stateChanged(control, EJobState.UNKNOWN, control.getJobState());
+						return;
+					} else {
 
+						// New optimisation, so check there are no validation errors.
+						if (!OptimisationHelper.validateScenario(root, optimising)) {
+							action.setEnabled(false);
+							return;
+						}
+
+					}
+				}
 			}
 		}
 		if (action != null) {
