@@ -88,6 +88,15 @@ public interface ScenarioServiceFactory extends EFactory {
 	ScenarioFragment createScenarioFragment();
 
 	/**
+	 * Returns a new object of class '<em>Model Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Model Reference</em>'.
+	 * @generated
+	 */
+	ModelReference createModelReference();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

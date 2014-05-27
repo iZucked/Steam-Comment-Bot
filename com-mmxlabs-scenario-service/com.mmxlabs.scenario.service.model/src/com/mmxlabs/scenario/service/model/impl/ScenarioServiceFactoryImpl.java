@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import com.mmxlabs.scenario.service.model.*;
+import java.io.IOException;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -78,6 +80,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 			return createScenarioLock();
 		case ScenarioServicePackage.SCENARIO_FRAGMENT:
 			return createScenarioFragment();
+		case ScenarioServicePackage.MODEL_REFERENCE:
+			return createModelReference();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -91,6 +95,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
+		case ScenarioServicePackage.IO_EXCEPTION:
+			return createIOExceptionFromString(eDataType, initialValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -104,6 +110,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
+		case ScenarioServicePackage.IO_EXCEPTION:
+			return convertIOExceptionToString(eDataType, instanceValue);
 		default:
 			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -177,6 +185,34 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	public ScenarioFragment createScenarioFragment() {
 		ScenarioFragmentImpl scenarioFragment = new ScenarioFragmentImpl();
 		return scenarioFragment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ModelReference createModelReference() {
+		ModelReferenceImpl modelReference = new ModelReferenceImpl();
+		return modelReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IOException createIOExceptionFromString(EDataType eDataType, String initialValue) {
+		return (IOException) super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertIOExceptionToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**

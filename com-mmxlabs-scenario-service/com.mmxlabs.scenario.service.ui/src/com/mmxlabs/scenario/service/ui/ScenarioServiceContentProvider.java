@@ -26,6 +26,7 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
@@ -40,7 +41,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 		@Override
 		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-			// Remove possible 
+			// Remove possible reference to loaded data model
 			filteredElements.remove(scenarioInstance.getInstance());
 			cleanUp(scenarioInstance);
 		}
@@ -309,6 +310,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else {
 				filtered = true;
 			}
+			if (e instanceof ModelReference) {
+				// Ignore!
+			} else 
 			if (filtered) {
 				filteredElements.put(e, true);
 			} else {

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.model.impl;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -18,10 +19,13 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -33,26 +37,35 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getUuid <em>Uuid</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getMetadata <em>Metadata</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isLocked <em>Locked</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getInstance <em>Instance</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getAdapters <em>Adapters</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getRootObjectURI <em>Root Object URI</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isDirty <em>Dirty</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getLocks <em>Locks</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getMetadata <em>Metadata</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getVersionContext <em>Version Context</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getFragments <em>Fragments</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getClientVersionContext <em>Client Version Context</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getInstance <em>Instance</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getFragments <em>Fragments</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getModelReferences <em>Model References</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getAdapters <em>Adapters</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isLocked <em>Locked</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getLocks <em>Locks</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isDirty <em>Dirty</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInstance {
+
+	
+	/**
+	 * Object used as a lock when performing IO operations {@link #load()}, {@link #save()} and {@link #unload()};
+	 * @generated NOT
+	 */
+	private Object ioLock = new Object();
+	
 	/**
 	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -72,56 +85,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected String uuid = UUID_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getMetadata() <em>Metadata</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMetadata()
-	 * @generated
-	 * @ordered
-	 */
-	protected Metadata metadata;
-
-	/**
-	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isLocked()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean LOCKED_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isLocked() <em>Locked</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isLocked()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean locked = LOCKED_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getInstance() <em>Instance</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getInstance()
-	 * @generated
-	 * @ordered
-	 */
-	protected EObject instance;
-
-	/**
-	 * The cached value of the '{@link #getAdapters() <em>Adapters</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAdapters()
-	 * @generated
-	 * @ordered
-	 */
-	protected Map<Class<?>, Object> adapters;
 
 	/**
 	 * The default value of the '{@link #getRootObjectURI() <em>Root Object URI</em>}' attribute.
@@ -144,54 +107,14 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	protected String rootObjectURI = ROOT_OBJECT_URI_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
+	 * The cached value of the '{@link #getMetadata() <em>Metadata</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isDirty()
+	 * @see #getMetadata()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean DIRTY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isDirty()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean dirty = DIRTY_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getLocks() <em>Locks</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getLocks()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ScenarioLock> locks;
-
-	/**
-	 * The default value of the '{@link #getValidationStatusCode() <em>Validation Status Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValidationStatusCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int VALIDATION_STATUS_CODE_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getValidationStatusCode() <em>Validation Status Code</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getValidationStatusCode()
-	 * @generated
-	 * @ordered
-	 */
-	protected int validationStatusCode = VALIDATION_STATUS_CODE_EDEFAULT;
+	protected Metadata metadata;
 
 	/**
 	 * The default value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
@@ -234,36 +157,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	protected String versionContext = VERSION_CONTEXT_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getFragments() <em>Fragments</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFragments()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ScenarioFragment> fragments;
-
-	/**
-	 * The default value of the '{@link #isReadonly() <em>Readonly</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isReadonly()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean READONLY_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isReadonly() <em>Readonly</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isReadonly()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean readonly = READONLY_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getClientScenarioVersion() <em>Client Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -302,6 +195,139 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected String clientVersionContext = CLIENT_VERSION_CONTEXT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getInstance() <em>Instance</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInstance()
+	 * @generated
+	 * @ordered
+	 */
+	protected EObject instance;
+
+	/**
+	 * The cached value of the '{@link #getFragments() <em>Fragments</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see #getFragments()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ScenarioFragment> fragments;
+
+	/**
+	 * The cached value of the '{@link #getModelReferences() <em>Model References</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getModelReferences()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ModelReference> modelReferences;
+
+	/**
+	 * The cached value of the '{@link #getAdapters() <em>Adapters</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdapters()
+	 * @generated
+	 * @ordered
+	 */
+	protected Map<Class<?>, Object> adapters;
+
+	/**
+	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocked()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LOCKED_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLocked() <em>Locked</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLocked()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean locked = LOCKED_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getLocks() <em>Locks</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLocks()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ScenarioLock> locks;
+
+	/**
+	 * The default value of the '{@link #isReadonly() <em>Readonly</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #isReadonly()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean READONLY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isReadonly() <em>Readonly</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 5.0
+	 * <!-- end-user-doc -->
+	 * @see #isReadonly()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean readonly = READONLY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDirty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DIRTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDirty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dirty = DIRTY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getValidationStatusCode() <em>Validation Status Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValidationStatusCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int VALIDATION_STATUS_CODE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getValidationStatusCode() <em>Validation Status Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getValidationStatusCode()
+	 * @generated
+	 * @ordered
+	 */
+	protected int validationStatusCode = VALIDATION_STATUS_CODE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -550,6 +576,19 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<ModelReference> getModelReferences() {
+		if (modelReferences == null) {
+			modelReferences = new EObjectContainmentWithInverseEList<ModelReference>(ModelReference.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES,
+					ScenarioServicePackage.MODEL_REFERENCE__SCENARIO_INSTANCE);
+		}
+		return modelReferences;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public boolean isReadonly() {
 		return readonly;
 	}
@@ -696,16 +735,101 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public synchronized ModelReference getReference() {
+
+		ModelReference modelReference = ScenarioServiceFactory.eINSTANCE.createModelReference();
+		modelReference.setScenarioInstance(this);
+
+		return modelReference;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Load (or return existing) model instance. This should not be called directly, but rather as a result of a call to {@link ModelReference#getInstance()}.
+	 * Requires the {@link ScenarioInstance} to be hooked into a {@link ScenarioService}.
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public EObject load() throws IOException {
+		final IScenarioService scenarioService = getScenarioService();
+		if (scenarioService == null) {
+			throw new RuntimeException("Request #load() on a ScenarioInstance with no ScenarioService");
+		}
+		synchronized (ioLock) {
+			// Already unloaded?
+			if (getInstance() != null) {
+				return getInstance();
+			}
+	
+			return scenarioService.load(this);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Unload the model instance. This should not be called directly, but rather as a result of all {@link ModelReference}s being released.
+	 * Requires the {@link ScenarioInstance} to be hooked into a {@link ScenarioService}.
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void unload() {
+		
+		final IScenarioService scenarioService = getScenarioService();
+		if (scenarioService == null) {
+			throw new RuntimeException("Request #unload() on a ScenarioInstance with no ScenarioService");
+		}
+		synchronized (ioLock) {
+			// Already unloaded?
+			if (getInstance() == null) {
+				return;
+			}
+			// Model references are still present! (note revert command will now break!)
+			if (!getModelReferences().isEmpty()) {
+				return;
+			}
+			scenarioService.unload(this);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 *  Save the model instance if loaded.
+	 * Requires the {@link ScenarioInstance} to be hooked into a {@link ScenarioService}.
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public void save() throws IOException {
+		final IScenarioService scenarioService = getScenarioService();
+		if (scenarioService == null) {
+			throw new RuntimeException("Request #save() on a ScenarioInstance with no ScenarioService");
+		}
+		synchronized (ioLock) {
+			// Already unloaded?
+			if (getInstance() == null) {
+				return;
+			}
+	
+			scenarioService.save(this);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
-			return ((InternalEList<InternalEObject>) (InternalEList<?>) getLocks()).basicAdd(otherEnd, msgs);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getFragments()).basicAdd(otherEnd, msgs);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getModelReferences()).basicAdd(otherEnd, msgs);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getLocks()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -720,10 +844,12 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 			return basicSetMetadata(null, msgs);
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
-			return ((InternalEList<?>) getLocks()).basicRemove(otherEnd, msgs);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
 			return ((InternalEList<?>) getFragments()).basicRemove(otherEnd, msgs);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
+			return ((InternalEList<?>) getModelReferences()).basicRemove(otherEnd, msgs);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
+			return ((InternalEList<?>) getLocks()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -738,36 +864,38 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			return getUuid();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
-			return getMetadata();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
-			return isLocked();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
-			if (resolve)
-				return getInstance();
-			return basicGetInstance();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
-			return getAdapters();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
 			return getRootObjectURI();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
-			return isDirty();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
-			return getLocks();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
-			return getValidationStatusCode();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
+			return getMetadata();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
 			return getScenarioVersion();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			return getVersionContext();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
-			return getFragments();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
-			return isReadonly();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
 			return getClientScenarioVersion();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
 			return getClientVersionContext();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			if (resolve)
+				return getInstance();
+			return basicGetInstance();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			return getFragments();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
+			return getModelReferences();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			return getAdapters();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
+			return isLocked();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
+			return getLocks();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			return isReadonly();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			return isDirty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
+			return getValidationStatusCode();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -784,30 +912,11 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			setUuid((String) newValue);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
-			setMetadata((Metadata) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
-			setLocked((Boolean) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
-			setInstance((EObject) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
-			setAdapters((Map<Class<?>, Object>) newValue);
-			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
 			setRootObjectURI((String) newValue);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
-			setDirty((Boolean) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
-			getLocks().clear();
-			getLocks().addAll((Collection<? extends ScenarioLock>) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
-			setValidationStatusCode((Integer) newValue);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
+			setMetadata((Metadata) newValue);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
 			setScenarioVersion((Integer) newValue);
@@ -815,18 +924,41 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			setVersionContext((String) newValue);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
-			getFragments().clear();
-			getFragments().addAll((Collection<? extends ScenarioFragment>) newValue);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
-			setReadonly((Boolean) newValue);
-			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
 			setClientScenarioVersion((Integer) newValue);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
 			setClientVersionContext((String) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			setInstance((EObject) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			getFragments().clear();
+			getFragments().addAll((Collection<? extends ScenarioFragment>) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
+			getModelReferences().clear();
+			getModelReferences().addAll((Collection<? extends ModelReference>) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			setAdapters((Map<Class<?>, Object>) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
+			setLocked((Boolean) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
+			getLocks().clear();
+			getLocks().addAll((Collection<? extends ScenarioLock>) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			setReadonly((Boolean) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			setDirty((Boolean) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
+			setValidationStatusCode((Integer) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -843,29 +975,11 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			setUuid(UUID_EDEFAULT);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
-			setMetadata((Metadata) null);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
-			setLocked(LOCKED_EDEFAULT);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
-			setInstance((EObject) null);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
-			setAdapters((Map<Class<?>, Object>) null);
-			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
 			setRootObjectURI(ROOT_OBJECT_URI_EDEFAULT);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
-			setDirty(DIRTY_EDEFAULT);
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
-			getLocks().clear();
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
-			setValidationStatusCode(VALIDATION_STATUS_CODE_EDEFAULT);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
+			setMetadata((Metadata) null);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
 			setScenarioVersion(SCENARIO_VERSION_EDEFAULT);
@@ -873,17 +987,38 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			setVersionContext(VERSION_CONTEXT_EDEFAULT);
 			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
-			getFragments().clear();
-			return;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
-			setReadonly(READONLY_EDEFAULT);
-			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
 			setClientScenarioVersion(CLIENT_SCENARIO_VERSION_EDEFAULT);
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
 			setClientVersionContext(CLIENT_VERSION_CONTEXT_EDEFAULT);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			setInstance((EObject) null);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			getFragments().clear();
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
+			getModelReferences().clear();
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			setAdapters((Map<Class<?>, Object>) null);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
+			setLocked(LOCKED_EDEFAULT);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
+			getLocks().clear();
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			setReadonly(READONLY_EDEFAULT);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			setDirty(DIRTY_EDEFAULT);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
+			setValidationStatusCode(VALIDATION_STATUS_CODE_EDEFAULT);
 			return;
 		}
 		super.eUnset(featureID);
@@ -899,34 +1034,36 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
 			return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
-		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
-			return metadata != null;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
-			return locked != LOCKED_EDEFAULT;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
-			return instance != null;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
-			return adapters != null;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
 			return ROOT_OBJECT_URI_EDEFAULT == null ? rootObjectURI != null : !ROOT_OBJECT_URI_EDEFAULT.equals(rootObjectURI);
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
-			return dirty != DIRTY_EDEFAULT;
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
-			return locks != null && !locks.isEmpty();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
-			return validationStatusCode != VALIDATION_STATUS_CODE_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
+			return metadata != null;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
 			return scenarioVersion != SCENARIO_VERSION_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			return VERSION_CONTEXT_EDEFAULT == null ? versionContext != null : !VERSION_CONTEXT_EDEFAULT.equals(versionContext);
-		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
-			return fragments != null && !fragments.isEmpty();
-		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
-			return readonly != READONLY_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
 			return clientScenarioVersion != CLIENT_SCENARIO_VERSION_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
 			return CLIENT_VERSION_CONTEXT_EDEFAULT == null ? clientVersionContext != null : !CLIENT_VERSION_CONTEXT_EDEFAULT.equals(clientVersionContext);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+			return instance != null;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			return fragments != null && !fragments.isEmpty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
+			return modelReferences != null && !modelReferences.isEmpty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+			return adapters != null;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
+			return locked != LOCKED_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
+			return locks != null && !locks.isEmpty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+			return readonly != READONLY_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			return dirty != DIRTY_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
+			return validationStatusCode != VALIDATION_STATUS_CODE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -944,28 +1081,49 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (uuid: ");
 		result.append(uuid);
-		result.append(", locked: ");
-		result.append(locked);
-		result.append(", adapters: ");
-		result.append(adapters);
 		result.append(", rootObjectURI: ");
 		result.append(rootObjectURI);
-		result.append(", dirty: ");
-		result.append(dirty);
-		result.append(", validationStatusCode: ");
-		result.append(validationStatusCode);
 		result.append(", scenarioVersion: ");
 		result.append(scenarioVersion);
 		result.append(", versionContext: ");
 		result.append(versionContext);
-		result.append(", readonly: ");
-		result.append(readonly);
 		result.append(", clientScenarioVersion: ");
 		result.append(clientScenarioVersion);
 		result.append(", clientVersionContext: ");
 		result.append(clientVersionContext);
+		result.append(", adapters: ");
+		result.append(adapters);
+		result.append(", locked: ");
+		result.append(locked);
+		result.append(", readonly: ");
+		result.append(readonly);
+		result.append(", dirty: ");
+		result.append(dirty);
+		result.append(", validationStatusCode: ");
+		result.append(validationStatusCode);
 		result.append(')');
 		return result.toString();
 	}
 
+	@Override
+	public void eNotify(Notification notification) {
+		super.eNotify(notification);
+
+		// Trigger model unload when reference count reaches zero AND the scenario is clean. Saving should alutomatically trigger a reference count increase/decrease
+		if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ModelReferences()) {
+
+			if (notification.getEventType() == Notification.REMOVE || notification.getEventType() == Notification.REMOVE_MANY) {
+				if (getModelReferences().isEmpty()) {
+					if (!isDirty()) {
+						// TODO: Delay unloading
+						unload();
+					}
+				}
+			}
+			if (notification.getEventType() == Notification.ADD || notification.getEventType() == Notification.ADD_MANY) {
+				// TODO: cancel unload request
+			}
+		}
+
+	}
 } //ScenarioInstanceImpl

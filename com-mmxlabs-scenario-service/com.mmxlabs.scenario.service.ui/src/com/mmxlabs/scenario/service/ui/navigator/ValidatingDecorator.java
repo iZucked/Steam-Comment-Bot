@@ -17,7 +17,6 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
@@ -65,11 +64,6 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 	}
 
 	private void addContentAdapter(final ScenarioInstance scenarioInstance) {
-
-		final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
-		if (rootObject == null) {
-			return;
-		}
 
 		final EContentAdapter validationAdapter = new EContentAdapter() {
 			@Override

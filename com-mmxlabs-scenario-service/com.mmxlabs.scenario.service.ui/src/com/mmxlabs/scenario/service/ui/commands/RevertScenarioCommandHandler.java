@@ -9,6 +9,7 @@ import java.util.Iterator;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -68,7 +69,23 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 										activePage.closeEditors(editorReferences, false);
 									}
 
-									scenarioInstance.getScenarioService().unload(scenarioInstance);
+									if (!scenarioInstance.getModelReferences().isEmpty()) {
+										log.error("Attempting to unload a scenario which still has open model references");
+										final CommandStack commandStack = (CommandStack) scenarioInstance.getAdapters().get(CommandStack.class);
+										if (commandStack != null) {
+											while (commandStack.canUndo()) {
+												commandStack.getUndoCommand().undo();
+											}
+										}
+										scenarioInstance.setDirty(false);
+									} else {
+
+										// Set to false
+										scenarioInstance.setDirty(false);
+										// Trigger unload.
+										scenarioInstance.unload();
+									}
+									// Set to false
 									scenarioInstance.setDirty(false);
 
 									if (editorReferences != null && editorReferences.length > 0) {

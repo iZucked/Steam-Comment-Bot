@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.ResourceHelper;
@@ -91,14 +92,16 @@ public class ScenarioStorageUtil {
 
 		final URI rootObjectURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/rootObject.xmi");
 
-		final EObject model = instance.getInstance();
 		// Already loaded?
-		if (model != null) {
-			final EObject rootObject = EcoreUtil.copy(model);
+		if (instance.getInstance() != null) {
+			try (final ModelReference modelReference = instance.getReference()) {
+				final EObject rootObject = EcoreUtil.copy(modelReference.getInstance());
 
-			final Resource r = ResourceHelper.createResource(resourceSet, rootObjectURI);
-			r.getContents().add(rootObject);
-			ResourceHelper.saveResource(r);
+				final Resource r = ResourceHelper.createResource(resourceSet, rootObjectURI);
+				r.getContents().add(rootObject);
+
+				ResourceHelper.saveResource(r);
+			}
 		} else {
 			// Store data into scenario archive
 			final URIConverter conv = resourceSet.getURIConverter();
@@ -129,7 +132,6 @@ public class ScenarioStorageUtil {
 				}
 			}
 		}
-
 		// Now store the metadata
 		{
 			final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
@@ -183,7 +185,7 @@ public class ScenarioStorageUtil {
 
 					result.setVersionContext(manifest.getVersionContext());
 					result.setScenarioVersion(manifest.getScenarioVersion());
-					
+
 					result.setClientVersionContext(manifest.getClientVersionContext());
 					result.setClientScenarioVersion(manifest.getClientScenarioVersion());
 

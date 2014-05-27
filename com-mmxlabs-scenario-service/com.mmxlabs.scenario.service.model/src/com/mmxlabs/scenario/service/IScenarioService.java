@@ -94,6 +94,11 @@ public interface IScenarioService {
 	 */
 	void save(ScenarioInstance instance) throws IOException;
 
+	/**
+	 * Resolves the relative uri stored in a {@link ScenarioInstance} owned by this {@link IScenarioService} into a fully qualified {@link URI}
+	 * @param uriString
+	 * @return
+	 */
 	public URI resolveURI(final String uriString);
 
 	/**

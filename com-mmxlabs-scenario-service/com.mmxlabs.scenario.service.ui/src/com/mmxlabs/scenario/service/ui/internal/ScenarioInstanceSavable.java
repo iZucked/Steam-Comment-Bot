@@ -17,7 +17,6 @@ import org.eclipse.ui.navigator.SaveablesProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceContentProvider;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
@@ -58,12 +57,6 @@ public class ScenarioInstanceSavable extends Saveable {
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) throws CoreException {
-		final IScenarioService scenarioService = scenarioInstance.getScenarioService();
-		if (scenarioService == null) {
-			// Unable to save
-			log.error("No scenario service, unable to save " + scenarioInstance.getName());
-			return;
-		}
 		try {
 			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 				@Override
@@ -72,7 +65,7 @@ public class ScenarioInstanceSavable extends Saveable {
 					try {
 						// saving = true;
 						monitor.beginTask("Saving", 1);
-						scenarioService.save(scenarioInstance);
+						scenarioInstance.save();
 						monitor.worked(1);
 					} catch (final IOException e) {
 						log.error("IO Error during save", e);

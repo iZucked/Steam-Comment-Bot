@@ -15,6 +15,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IDiffEditHandler;
 
@@ -22,12 +23,16 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 
 	private final ScenarioInstance parent;
 	private final ScenarioInstance child;
+	private final ModelReference parentModelReference;
+	private final ModelReference childModelReference;
 
 	private boolean cleanUpOnDispose = true;
 
 	public DefaultDiffEditHandler(final ScenarioInstance child, final ScenarioInstance parent) {
 		this.child = child;
+		this.childModelReference = child.getReference();
 		this.parent = parent;
+		this.parentModelReference = parent.getReference();
 	}
 
 	@Override
@@ -62,8 +67,8 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 	public void onEditorApply() {
 
 		// FIXME: Note tested after API Changes
-		final MMXRootObject leftRoot = (MMXRootObject) child.getInstance();
-		final MMXRootObject rightRoot = (MMXRootObject) parent.getInstance();
+		final MMXRootObject leftRoot = (MMXRootObject) childModelReference.getInstance();
+		final MMXRootObject rightRoot = (MMXRootObject) parentModelReference.getInstance();
 
 		final CommandProviderAwareEditingDomain editingDomain = (CommandProviderAwareEditingDomain) parent.getAdapters().get(EditingDomain.class);
 
@@ -92,6 +97,10 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 	}
 
 	private void cleanUp() {
+		
+		childModelReference.close();
+		parentModelReference.close();
+		
 		final IScenarioService scenarioService = child.getScenarioService();
 		scenarioService.delete(child);
 

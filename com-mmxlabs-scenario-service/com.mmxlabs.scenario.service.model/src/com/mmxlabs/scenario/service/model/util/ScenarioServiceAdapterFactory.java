@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scenario.service.model.util;
 
+import com.mmxlabs.scenario.service.model.*;
+import java.io.Closeable;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -112,6 +114,16 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseScenarioFragment(ScenarioFragment object) {
 			return createScenarioFragmentAdapter();
+		}
+
+		@Override
+		public Adapter caseModelReference(ModelReference object) {
+			return createModelReferenceAdapter();
+		}
+
+		@Override
+		public Adapter caseCloseable(Closeable object) {
+			return createCloseableAdapter();
 		}
 
 		@Override
@@ -242,6 +254,34 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createScenarioFragmentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.ModelReference <em>Model Reference</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.scenario.service.model.ModelReference
+	 * @generated
+	 */
+	public Adapter createModelReferenceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.io.Closeable <em>Closeable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see java.io.Closeable
+	 * @generated
+	 */
+	public Adapter createCloseableAdapter() {
 		return null;
 	}
 

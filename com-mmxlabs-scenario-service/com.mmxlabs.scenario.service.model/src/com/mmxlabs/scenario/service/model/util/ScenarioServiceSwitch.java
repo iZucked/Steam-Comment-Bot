@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scenario.service.model.util;
 
+import com.mmxlabs.scenario.service.model.*;
+import java.io.Closeable;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -137,6 +139,22 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case ScenarioServicePackage.MODEL_REFERENCE: {
+			ModelReference modelReference = (ModelReference) theEObject;
+			T result = caseModelReference(modelReference);
+			if (result == null)
+				result = caseCloseable(modelReference);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case ScenarioServicePackage.CLOSEABLE: {
+			Closeable closeable = (Closeable) theEObject;
+			T result = caseCloseable(closeable);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -259,6 +277,36 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseScenarioFragment(ScenarioFragment object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Model Reference</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Model Reference</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseModelReference(ModelReference object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Closeable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Closeable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCloseable(Closeable object) {
 		return null;
 	}
 

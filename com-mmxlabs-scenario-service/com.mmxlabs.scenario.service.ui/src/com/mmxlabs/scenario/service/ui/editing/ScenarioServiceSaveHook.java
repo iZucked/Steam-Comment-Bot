@@ -196,7 +196,7 @@ public class ScenarioServiceSaveHook {
 						for (final Object instance : scenariosToSave) {
 							ScenarioInstance scenario = (ScenarioInstance) instance;
 							monitor.setTaskName("Saving: " + scenario.getName());
-							scenario.getScenarioService().save(scenario);
+							scenario.save();
 							monitor.worked(1);
 						}
 						success[0] = true;

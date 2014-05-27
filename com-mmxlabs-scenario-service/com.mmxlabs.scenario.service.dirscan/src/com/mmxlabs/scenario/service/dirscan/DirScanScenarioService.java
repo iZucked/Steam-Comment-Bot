@@ -743,16 +743,21 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
 
+		// Make read-only...
+		instance.setReadonly(true);
+		
 		if (instance.getInstance() == null) {
 			try {
-				final EObject object = super.load(instance);
+				final EObject eObj = super.load(instance);
 
-				if (object != null) {
+				if (eObj != null) {
+					// Forces editor lock to disallow users from editing the scenario.
+					// TODO: This is not a very clean way to do it! 
 					final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
 					lock.claim();
 				}
 
-				return object;
+				return eObj;
 			} catch (final IOException e) {
 				throw new IOException("Error loading scenario. Copy to local scenarios and try again.", e);
 			}

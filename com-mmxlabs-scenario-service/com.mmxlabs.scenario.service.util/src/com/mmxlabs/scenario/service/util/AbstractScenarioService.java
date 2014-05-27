@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
+
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -46,6 +47,7 @@ import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -122,48 +124,50 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			// log.debug("Instance " + instance.getUuid() + " already loaded");
 			return instance.getInstance();
 		}
-
-		if (scenarioMigrationService != null) {
-			try {
-				scenarioMigrationService.migrateScenario(this, instance);
-			} catch (final Exception e) {
-				throw new RuntimeException("Error migrating scenario", e);
+		// Wrap in try-with-resources block on model reference to ensure there is no unload attempt while we are still loading. Do not call ModelReference#getInstance() otherwise we will likely end up
+		// looping.
+		try (final ModelReference modelReference = instance.getReference()) {
+			if (scenarioMigrationService != null) {
+				try {
+					scenarioMigrationService.migrateScenario(this, instance);
+				} catch (final Exception e) {
+					throw new RuntimeException("Error migrating scenario", e);
+				}
 			}
+
+			fireEvent(ScenarioServiceEvent.PRE_LOAD, instance);
+
+			log.debug("Instance " + instance.getName() + " (" + instance.getUuid() + ") needs loading");
+
+			// create MMXRootObject and connect submodel instances into it.
+			final ResourceSet resourceSet = createResourceSet();
+
+			final String rooObjectURI = instance.getRootObjectURI();
+			// acquire sub models
+			log.debug("Loading rootObject from " + rooObjectURI);
+			final URI uri = resolveURI(rooObjectURI);
+
+			final Resource resource = ResourceHelper.loadResource(resourceSet, uri);
+			final EObject implementation = resource.getContents().get(0);
+
+			if (implementation == null) {
+				throw new IOException("Null value for model instance " + rooObjectURI);
+			}
+			instance.setInstance(implementation);
+
+			instance.setAdapters(new HashMap<Class<?>, Object>());
+			instance.getAdapters().put(ResourceSet.class, resourceSet);
+
+			final EditingDomain domain = initEditingDomain(resourceSet, implementation, instance);
+			instance.getAdapters().put(EditingDomain.class, domain);
+
+			// Register under both interfaces
+			instance.getAdapters().put(CommandStack.class, domain.getCommandStack());
+			instance.getAdapters().put(BasicCommandStack.class, domain.getCommandStack());
+
+			fireEvent(ScenarioServiceEvent.POST_LOAD, instance);
 		}
-
-		fireEvent(ScenarioServiceEvent.PRE_LOAD, instance);
-
-		log.debug("Instance " + instance.getName() + " (" + instance.getUuid() + ") needs loading");
-
-		// create MMXRootObject and connect submodel instances into it.
-		final ResourceSet resourceSet = createResourceSet();
-
-		final String rooObjectURI = instance.getRootObjectURI();
-		// acquire sub models
-		log.debug("Loading rootObject from " + rooObjectURI);
-		final URI uri = resolveURI(rooObjectURI);
-
-		final Resource resource = ResourceHelper.loadResource(resourceSet, uri);
-		final EObject implementation = resource.getContents().get(0);
-
-		if (implementation == null) {
-			throw new IOException("Null value for model instance " + rooObjectURI);
-		}
-		instance.setInstance(implementation);
-
-		instance.setAdapters(new HashMap<Class<?>, Object>());
-		instance.getAdapters().put(ResourceSet.class, resourceSet);
-
-		final EditingDomain domain = initEditingDomain(resourceSet, implementation, instance);
-		instance.getAdapters().put(EditingDomain.class, domain);
-
-		// Register under both interfaces
-		instance.getAdapters().put(CommandStack.class, domain.getCommandStack());
-		instance.getAdapters().put(BasicCommandStack.class, domain.getCommandStack());
-
-		fireEvent(ScenarioServiceEvent.POST_LOAD, instance);
-
-		return implementation;
+		return instance.getInstance();
 	}
 
 	/**
@@ -212,21 +216,23 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				if (instance == null) {
 					return;
 				}
+				try (final ModelReference modelReference = scenarioInstance.getReference()) {
 
-				fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
+					fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
 
-				final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
-				final Resource eResource = rootObject.eResource();
-				ResourceHelper.saveResource(eResource);
+					final MMXRootObject rootObject = (MMXRootObject) modelReference.getInstance();
+					final Resource eResource = rootObject.eResource();
+					ResourceHelper.saveResource(eResource);
 
-				// Update last modified date
-				final Metadata metadata = scenarioInstance.getMetadata();
-				if (metadata != null) {
-					metadata.setLastModified(new Date());
+					// Update last modified date
+					final Metadata metadata = scenarioInstance.getMetadata();
+					if (metadata != null) {
+						metadata.setLastModified(new Date());
+					}
+					scenarioInstance.setDirty(false);
+
+					fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
 				}
-				scenarioInstance.setDirty(false);
-
-				fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
 			} finally {
 				lock.release();
 			}
@@ -308,7 +314,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			// Copy version context information
 			dup.setVersionContext(cpy.getVersionContext());
 			dup.setScenarioVersion(cpy.getScenarioVersion());
-			
+
 			dup.setClientVersionContext(cpy.getClientVersionContext());
 			dup.setClientScenarioVersion(cpy.getClientScenarioVersion());
 

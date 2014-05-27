@@ -57,16 +57,16 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 			super.getPropertyDescriptors(object);
 
 			addUuidPropertyDescriptor(object);
-			addLockedPropertyDescriptor(object);
-			addAdaptersPropertyDescriptor(object);
 			addRootObjectURIPropertyDescriptor(object);
-			addDirtyPropertyDescriptor(object);
-			addValidationStatusCodePropertyDescriptor(object);
 			addScenarioVersionPropertyDescriptor(object);
 			addVersionContextPropertyDescriptor(object);
-			addReadonlyPropertyDescriptor(object);
 			addClientScenarioVersionPropertyDescriptor(object);
 			addClientVersionContextPropertyDescriptor(object);
+			addAdaptersPropertyDescriptor(object);
+			addLockedPropertyDescriptor(object);
+			addReadonlyPropertyDescriptor(object);
+			addDirtyPropertyDescriptor(object);
+			addValidationStatusCodePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -219,8 +219,9 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Metadata());
 			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Instance());
-			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locks());
 			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Fragments());
+			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ModelReferences());
+			childrenFeatures.add(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locks());
 		}
 		return childrenFeatures;
 	}
@@ -293,22 +294,23 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 
 		switch (notification.getFeatureID(ScenarioInstance.class)) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ROOT_OBJECT_URI:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_SCENARIO_VERSION:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__CLIENT_VERSION_CONTEXT:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__READONLY:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
-		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__MODEL_REFERENCES:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -328,9 +330,11 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 
 		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Metadata(), ScenarioServiceFactory.eINSTANCE.createMetadata()));
 
-		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locks(), ScenarioServiceFactory.eINSTANCE.createScenarioLock()));
-
 		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Fragments(), ScenarioServiceFactory.eINSTANCE.createScenarioFragment()));
+
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_ModelReferences(), ScenarioServiceFactory.eINSTANCE.createModelReference()));
+
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locks(), ScenarioServiceFactory.eINSTANCE.createScenarioLock()));
 	}
 
 }

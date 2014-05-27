@@ -49,14 +49,27 @@
       </eAnnotations>
       <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
+    <eOperations name="getReference" eType="#//ModelReference"/>
+    <eOperations name="load" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        eExceptions="#//IOException"/>
+    <eOperations name="unload"/>
+    <eOperations name="save" eExceptions="#//IOException"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="uuid" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootObjectURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="metadata" eType="#//Metadata"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionContext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientScenarioVersion"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientVersionContext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="instance" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
         transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fragments" upperBound="-1"
+        eType="#//ScenarioFragment" transient="true" containment="true" eOpposite="#//ScenarioFragment/scenarioInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelReferences" upperBound="-1"
+        eType="#//ModelReference" transient="true" containment="true" eOpposite="#//ModelReference/scenarioInstance"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="adapters" transient="true">
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
@@ -65,20 +78,14 @@
         <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
       </eGenericType>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootObjectURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dirty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
-        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="locks" upperBound="-1"
         eType="#//ScenarioLock" transient="true" containment="true" eOpposite="#//ScenarioLock/instance"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationStatusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionContext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fragments" upperBound="-1"
-        eType="#//ScenarioFragment" transient="true" containment="true" eOpposite="#//ScenarioFragment/scenarioInstance"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="readonly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientScenarioVersion"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientVersionContext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dirty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationStatusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metadata">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" lowerBound="1"
@@ -112,4 +119,14 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IScenarioService" instanceClassName="com.mmxlabs.scenario.service.IScenarioService"
       serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelReference" eSuperTypes="#//Closeable">
+    <eOperations name="getInstance" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioInstance" eType="#//ScenarioInstance"
+        transient="true" eOpposite="#//ScenarioInstance/modelReferences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Closeable" instanceClassName="java.io.Closeable"
+      abstract="true" interface="true">
+    <eOperations name="close"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IOException" instanceClassName="java.io.IOException"/>
 </ecore:EPackage>

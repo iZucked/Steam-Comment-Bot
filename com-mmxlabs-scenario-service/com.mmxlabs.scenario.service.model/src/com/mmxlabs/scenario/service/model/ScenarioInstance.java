@@ -4,8 +4,11 @@
  */
 package com.mmxlabs.scenario.service.model;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.Map;
 
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
@@ -19,20 +22,21 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getUuid <em>Uuid</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getMetadata <em>Metadata</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getRootObjectURI <em>Root Object URI</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks <em>Locks</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getMetadata <em>Metadata</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
- *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientScenarioVersion <em>Client Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientVersionContext <em>Client Version Context</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getModelReferences <em>Model References</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks <em>Locks</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
  * </ul>
  * </p>
  *
@@ -110,6 +114,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLocked <em>Locked</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * Set the locked status of the Scenario. This should not be called directly, rather it should be set as a result of obtaining a {@link ScenarioLock}.
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Locked</em>' attribute.
 	 * @see #isLocked()
@@ -121,7 +126,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Instance</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * Returns the scenario model instance if loaded.
+	 * Returns the scenario model instance if loaded, otherwise null.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Instance</em>' reference.
@@ -135,6 +140,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getInstance <em>Instance</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * Set the model instance. This should not be called directly, but rather as a result of {@link #unload()}.
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Instance</em>' reference.
 	 * @see #getInstance()
@@ -146,8 +152,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Adapters</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Adapters</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns a {@link Map} of runtime related objects for the loaded scenario. For example this will store {@link EditingDomain} and {@link CommandStack} keyed by {@link Class}. 
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Adapters</em>' attribute.
@@ -161,6 +166,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getAdapters <em>Adapters</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * Sets the adapter map. Do not call directl, this will be set as a result of a {@link #load()}.
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Adapters</em>' attribute.
 	 * @see #getAdapters()
@@ -197,8 +203,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Scenario Version</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Scenario Version</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns the core scenario data-model version. Used for scenario migration.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Scenario Version</em>' attribute.
@@ -212,6 +217,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * Set the core scenario data-model version. Used for scenario migration.
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Scenario Version</em>' attribute.
 	 * @see #getScenarioVersion()
@@ -223,8 +229,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Version Context</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Version Context</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns the core scenario data-model version context string. Used for scenario migration.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Version Context</em>' attribute.
@@ -238,6 +243,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * Sets the core scenario data-model version context string. Used for scenario migration.
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Version Context</em>' attribute.
 	 * @see #getVersionContext()
@@ -262,6 +268,23 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	EList<ScenarioFragment> getFragments();
+
+	/**
+	 * Returns the value of the '<em><b>Model References</b></em>' containment reference list. The list contents are of type {@link com.mmxlabs.scenario.service.model.ModelReference}. It is
+	 * bidirectional and its opposite is '{@link com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance <em>Scenario Instance</em>}'. <!-- begin-user-doc -->
+	 * <p>
+	 * Returns the list of active {@link ModelReference}s. A {@link ModelReference} should be obtained from a call to {@link #getReference()} and then released called {@link ModelReference#close()}
+	 * rather than manipulating this list directly. When this list is empty, scenarios may be unloaded.
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * 
+	 * @return the value of the '<em>Model References</em>' containment reference list.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ModelReferences()
+	 * @see com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance
+	 * @model opposite="scenarioInstance" containment="true" transient="true"
+	 * @generated
+	 */
+	EList<ModelReference> getModelReferences();
 
 	/**
 	 * Returns the value of the '<em><b>Readonly</b></em>' attribute.
@@ -293,8 +316,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Client Scenario Version</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Client Scenario Version</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns the client specific add-on data-model version. Used for scenario migration.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Client Scenario Version</em>' attribute.
@@ -308,6 +330,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientScenarioVersion <em>Client Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * Sets the client specific add-on data-model version. Used for scenario migration.
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Client Scenario Version</em>' attribute.
 	 * @see #getClientScenarioVersion()
@@ -319,8 +342,7 @@ public interface ScenarioInstance extends Container {
 	 * Returns the value of the '<em><b>Client Version Context</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Client Version Context</em>' attribute isn't clear,
-	 * there really should be more of a description here...
+	 * Returns the client specific add-on version context string. Used for scenario migration.
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Client Version Context</em>' attribute.
@@ -334,6 +356,7 @@ public interface ScenarioInstance extends Container {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getClientVersionContext <em>Client Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * Sets the client specific add-on version context string. Used for scenario migration.
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Client Version Context</em>' attribute.
 	 * @see #getClientVersionContext()
@@ -429,5 +452,49 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	ScenarioLock getLock(String key);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Obtain a reference to the loaded scenario data. Once obtained, the reference should be released by a call to {@link ModelReference#close}. {@link ModelReference} implements {@link Closeable} allowing use in a try-with-resource block such as;
+	 * <pre>
+	 * try (final ModelReference modelReference = scenarioInstance.getReference()) {
+	 * 	EObject modelInstance = modelReference.getInstance();
+	 * 	if (modelInstance != null) {
+	 * 		// ... do something with loaded model data
+	 * 	} 
+	 * }
+	 * </pre>
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	ModelReference getReference();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Load a scenario instance. Do not call directly. This should be invoked when requesting {@link ModelReference#getInstance()}.
+	 * <!-- end-user-doc -->
+	 * @model exceptions="com.mmxlabs.scenario.service.model.IOException"
+	 * @generated
+	 */
+	EObject load() throws IOException;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Unload a loaded scenario instance. Do not call directly. This should be invoked when all {@link ModelReference}s have been {@link ModelReference#close()}d.
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void unload();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Save the scenario. This requires a {@link #getScenarioService()} to be set.
+	 * <!-- end-user-doc -->
+	 * @model exceptions="com.mmxlabs.scenario.service.model.IOException"
+	 * @generated
+	 */
+	void save() throws IOException;
 
 } // ScenarioInstance
