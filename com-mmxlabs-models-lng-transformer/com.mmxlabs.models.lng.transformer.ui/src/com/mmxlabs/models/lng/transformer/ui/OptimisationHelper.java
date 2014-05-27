@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -70,6 +69,7 @@ public final class OptimisationHelper {
 			return null;
 		}
 
+		// While we only keep the reference for the duration of this method call, the two current concrete implementations of IJobControl will obtain a ModelReference 
 		try (final ModelReference modelRefence = instance.getReference()) {
 			final EObject object = modelRefence.getInstance();
 

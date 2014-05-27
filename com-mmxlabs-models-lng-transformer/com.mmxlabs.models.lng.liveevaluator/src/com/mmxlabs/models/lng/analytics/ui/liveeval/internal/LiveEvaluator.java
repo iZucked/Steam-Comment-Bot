@@ -126,8 +126,13 @@ public class LiveEvaluator extends MMXAdapterImpl {
 						}
 
 						final ScenarioLock evaluatorLock = instance.getLock(ScenarioLock.EVALUATOR);
-						if (evaluatorLock.claim()) {
-							try {
+						try (final ModelReference modelReference = instance.getReference()) {
+							final LNGScenarioModel root = (LNGScenarioModel) modelReference.getInstance();
+							if (root == null) {
+								// No data model, skip
+								return;
+							}
+							if (evaluatorLock.claim()) {
 								// Submit request to queue
 								executor.submit(new Callable<Object>() {
 									@Override
@@ -141,29 +146,24 @@ public class LiveEvaluator extends MMXAdapterImpl {
 										if (instance.getValidationStatusCode() == IStatus.ERROR) {
 											return null;
 										}
-										try (ModelReference modelReference = instance.getReference()) {
-											final LNGScenarioModel root = (LNGScenarioModel) modelReference.getInstance();
-											if (root == null) {
-												return null;
-											}
-											final ScheduleModel scheduleModel = root.getPortfolioModel().getScheduleModel();
-											if (!scheduleModel.isDirty()) {
-												return null;
-											}
-											log.debug("About to evaluate " + instance.getName());
-											scenarioInstanceEvaluator.evaluate(instance);
+										final ScheduleModel scheduleModel = root.getPortfolioModel().getScheduleModel();
+										if (!scheduleModel.isDirty()) {
+											return null;
 										}
+										log.debug("About to evaluate " + instance.getName());
+										scenarioInstanceEvaluator.evaluate(instance);
+
 										return null;
 									}
 								});
-							} catch (final Throwable th) {
-
-							} finally {
-								evaluatorLock.release();
+							} else {
+								// log.debug("Didn't get lock, spinning");
+								spinLock = true;
 							}
-						} else {
-							// log.debug("Didn't get lock, spinning");
-							spinLock = true;
+						} catch (final Throwable th) {
+
+						} finally {
+							evaluatorLock.release();
 						}
 					} else {
 						log.debug("Could not find evaluator when evaluating " + instance.getName());
