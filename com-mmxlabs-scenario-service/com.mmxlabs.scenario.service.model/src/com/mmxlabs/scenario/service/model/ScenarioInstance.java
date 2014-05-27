@@ -446,6 +446,7 @@ public interface ScenarioInstance extends Container {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * Request a {@link ScenarioLock} object of the given type. Typically before claiming the lock a {@link ModelReference} should also be obtained.
 	 * <!-- end-user-doc -->
 	 * @model required="true" keyRequired="true"
 	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final List<ScenarioLock> locks = getLocks();\n\t\tsynchronized (locks) {\n\t\t\tfor (final ScenarioLock lock : locks) {\n\t\t\t\tif (lock.getKey().equals(key)) {\n\t\t\t\t\treturn lock;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tfinal ScenarioLock newLock = ScenarioServiceFactory.eINSTANCE.createScenarioLock();\n\t\t\tnewLock.setKey(key);\n\t\t\tlocks.add(newLock);\n\t\t\tnewLock.init();\n\t\t\treturn newLock;\n\t\t}'"

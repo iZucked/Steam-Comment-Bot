@@ -209,33 +209,32 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
+		final EObject instance = scenarioInstance.getInstance();
+		if (instance == null) {
+			return;
+		}
+		
 		final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.SAVING);
-		if (lock.awaitClaim()) {
-			try {
-				final EObject instance = scenarioInstance.getInstance();
-				if (instance == null) {
-					return;
+		try (final ModelReference modelReference = scenarioInstance.getReference()) {
+			if (lock.awaitClaim()) {
+
+				fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
+
+				final MMXRootObject rootObject = (MMXRootObject) modelReference.getInstance();
+				final Resource eResource = rootObject.eResource();
+				ResourceHelper.saveResource(eResource);
+
+				// Update last modified date
+				final Metadata metadata = scenarioInstance.getMetadata();
+				if (metadata != null) {
+					metadata.setLastModified(new Date());
 				}
-				try (final ModelReference modelReference = scenarioInstance.getReference()) {
+				scenarioInstance.setDirty(false);
 
-					fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
-
-					final MMXRootObject rootObject = (MMXRootObject) modelReference.getInstance();
-					final Resource eResource = rootObject.eResource();
-					ResourceHelper.saveResource(eResource);
-
-					// Update last modified date
-					final Metadata metadata = scenarioInstance.getMetadata();
-					if (metadata != null) {
-						metadata.setLastModified(new Date());
-					}
-					scenarioInstance.setDirty(false);
-
-					fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
-				}
-			} finally {
-				lock.release();
+				fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
 			}
+		} finally {
+			lock.release();
 		}
 	}
 
