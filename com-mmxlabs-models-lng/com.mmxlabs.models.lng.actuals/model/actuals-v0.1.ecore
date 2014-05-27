@@ -43,6 +43,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="insurancePremium" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="crewBonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LoadActuals" eSuperTypes="#//SlotActuals">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
