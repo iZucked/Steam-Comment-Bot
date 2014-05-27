@@ -273,8 +273,7 @@ public class HorizontalKPIReportView extends ViewPart {
 			public void partClosed(final IWorkbenchPart part) {
 
 				if (currentActiveEditor == part) {
-					currentActiveEditor = null;
-					scheduleModel = null;
+					activeEditorChange(null);
 				}
 				viewerSynchronizer.refreshViewer();
 			}
@@ -366,6 +365,7 @@ public class HorizontalKPIReportView extends ViewPart {
 	private void activeEditorChange(final IEditorPart activeEditor) {
 		if (this.modelReference != null) {
 			this.modelReference.close();
+			this.modelReference = null;
 		}
 		this.currentActiveEditor = activeEditor;
 		ScheduleModel scheduleModel = null;
