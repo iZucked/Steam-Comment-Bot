@@ -79,6 +79,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -106,10 +107,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private final Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
 
+	private ModelReference modelReference;
+
 	/**
 	 * The root object from {@link #jointModel}
 	 */
-	private MMXRootObject rootObject;
+	 private MMXRootObject rootObject;
 
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 
@@ -167,8 +170,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 
 	private boolean locked;
 	private PropertySheetPage propertySheetPage;
-
-	private IScenarioService scenarioService;
 
 	private ScenarioInstance scenarioInstance;
 
@@ -262,8 +263,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					try {
 						saving = true;
 						monitor.beginTask("Saving", 1);
-						scenarioService.save(scenarioInstance);
-
+						scenarioInstance.save();
 						monitor.worked(1);
 					} catch (final IOException e) {
 						log.error("IO Error during save", e);
@@ -412,22 +412,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			throw new IllegalArgumentException("Editor input should be instance of IScenarioServiceEditorInput");
 		}
 
-		scenarioService = instance.getScenarioService();
-
-		if (scenarioService == null) {
-			throw new IllegalStateException("Scenario Service does not exist yet a scenario service editor input has been used");
-		}
-
 		editorLock = instance.getLock(ScenarioLock.EDITORS);
 
-		EObject ro;
-		try {
-			ro = scenarioService.load(instance);
-		} catch (final IOException e) {
-			log.error("Exception loading instance: " + e.getMessage(), e);
-			throw new RuntimeException("Exception loading instance: " + e.getMessage());
-		}
-
+		modelReference = instance.getReference();
+		EObject ro = modelReference.getInstance();
 		if (ro == null) {
 			throw new RuntimeException("Instance was not loaded");
 		}
@@ -626,10 +614,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		this.lockedAdapter = null;
 		this.validationContextStack.clear();
 		this.selectionViewer = null;
-		this.rootObject = null;
 		this.scenarioInstance = null;
-		this.scenarioService = null;
 		this.selectionChangedListeners.clear();
+
+		this.rootObject = null;
+		this.modelReference.close();
+		this.modelReference = null;
 
 		super.dispose();
 	}
