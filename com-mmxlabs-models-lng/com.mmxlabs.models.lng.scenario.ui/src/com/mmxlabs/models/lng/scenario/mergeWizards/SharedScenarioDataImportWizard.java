@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.scenario.mergeWizards;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,6 +31,7 @@ import com.mmxlabs.models.lng.scenario.mergeWizards.SharedDataScenariosSelection
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.merge.EMFModelMergeTools;
 import com.mmxlabs.models.ui.merge.IMappingDescriptor;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -123,91 +123,55 @@ public class SharedScenarioDataImportWizard extends Wizard implements IImportWiz
 				return;
 			}
 
-			boolean unloadSourceScenario = false;
-			EObject sourceRoot = sourceScenario.getInstance();
-			if (sourceRoot == null) {
-				try {
-					sourceScenario.getScenarioService().load(sourceScenario);
-					sourceRoot = sourceScenario.getInstance();
-					// Unload after processing
-					unloadSourceScenario = true;
-				} catch (final IOException e) {
-					log.error("Unable to load scenario " + sourceScenario.getName() + ".", e);
-					monitor.worked(1);
+			try (final ModelReference sourceModelRef = sourceScenario.getReference()) {
+				final EObject sourceRoot = sourceModelRef.getInstance();
+
+				if (sourceRoot == null) {
+					log.error("Unable to load scenario " + sourceScenario.getName() + ".", new RuntimeException());
 					return;
 				}
-			}
 
-			if (sourceRoot == null) {
-				log.error("Unable to load scenario " + sourceScenario.getName() + ".", new RuntimeException());
-				return;
-			}
+				monitor.beginTask("Update Scenarios", destinationScenarios.size());
+				try {
+					for (final ScenarioInstance destScenario : destinationScenarios) {
 
-			monitor.beginTask("Update Scenarios", destinationScenarios.size());
-			try {
-				for (final ScenarioInstance destScenario : destinationScenarios) {
+						if (monitor.isCanceled()) {
+							return;
+						}
 
-					if (monitor.isCanceled()) {
-						return;
-					}
-
-					monitor.subTask("Update " + destScenario.getName());
-					// Do not import into self
-					if (destScenario == sourceScenario) {
-						monitor.worked(1);
-						continue;
-					}
-
-					boolean unloadDestScenario = false;
-					EObject destRoot = destScenario.getInstance();
-					if (destRoot == null) {
-						try {
-							destScenario.getScenarioService().load(destScenario);
-							destRoot = destScenario.getInstance();
-							// Unload after processing
-							unloadDestScenario = true;
-						} catch (final Exception e) {
-							log.error("Unable to load scenario " + destScenario.getName() + ". skipping.", e);
+						monitor.subTask("Update " + destScenario.getName());
+						// Do not import into self
+						if (destScenario == sourceScenario) {
 							monitor.worked(1);
 							continue;
 						}
-					}
 
-					if (destRoot == null) {
-						log.error("Unable to load scenario " + destScenario.getName() + ". skipping.", new RuntimeException());
+						try (final ModelReference destModelRef = destScenario.getReference()) {
+
+							final EObject destRoot = destModelRef.getInstance();
+
+							if (destRoot == null) {
+								log.error("Unable to load scenario " + destScenario.getName() + ". skipping.", new RuntimeException());
+								monitor.worked(1);
+								continue;
+							}
+
+							final ScenarioLock editorLock = destScenario.getLock(ScenarioLock.EDITORS);
+							if (editorLock.awaitClaim()) {
+								try {
+									mergeScenarioData(sourceRoot, destRoot, (EditingDomain) destScenario.getAdapters().get(EditingDomain.class), dataOptions);
+								} finally {
+									editorLock.release();
+								}
+							}
+
+						}
 						monitor.worked(1);
-						continue;
 					}
 
-					final ScenarioLock editorLock = destScenario.getLock(ScenarioLock.EDITORS);
-					if (editorLock.awaitClaim()) {
-						try {
-							mergeScenarioData(sourceRoot, destRoot, (EditingDomain) destScenario.getAdapters().get(EditingDomain.class), dataOptions);
-						} finally {
-							editorLock.release();
-						}
-					}
-
-					// Unload if required
-					if (unloadDestScenario) {
-						// Auto save the scenario
-						try {
-							destScenario.getScenarioService().save(destScenario);
-							destScenario.getScenarioService().unload(destScenario);
-						} catch (final IOException e) {
-							log.error("Error saving scenario: " + destScenario.getName());
-						}
-					}
-					monitor.worked(1);
+				} finally {
+					monitor.done();
 				}
-
-				// Unload if required
-				if (unloadSourceScenario) {
-					sourceScenario.getScenarioService().unload(sourceScenario);
-				}
-
-			} finally {
-				monitor.done();
 			}
 		}
 	}

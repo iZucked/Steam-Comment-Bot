@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
@@ -49,25 +50,25 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 		if (root instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) root;
 			switch (importTarget) {
-				case CHOICE_COMMODITY_INDICES: {
-					return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);				
-				}
-				case CHOICE_CARGOES: {
-					return new CargoImportAction(ihp, scenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES);					
-				}
-				case CHOICE_CHARTER_INDICES: {
-					return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
-				}
-				case CHOICE_BASE_FUEL_CURVES: {
-					return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
-				}			
+			case CHOICE_COMMODITY_INDICES: {
+				return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES);
+			}
+			case CHOICE_CARGOES: {
+				return new CargoImportAction(ihp, scenarioModel.getPortfolioModel().getCargoModel(), CargoPackage.Literals.CARGO_MODEL__CARGOES);
+			}
+			case CHOICE_CHARTER_INDICES: {
+				return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES);
+			}
+			case CHOICE_BASE_FUEL_CURVES: {
+				return new SimpleImportAction(ihp, scenarioModel.getPricingModel(), PricingPackage.Literals.PRICING_MODEL__BASE_FUEL_PRICES);
+			}
 			}
 		}
 
 		return null;
 	}
 
-	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final Shell shell, final String importFilePath, final char csvSeparator, final char decimalSeparator) {
+	public ImportAction.ImportHooksProvider getHooksProvider(final ScenarioInstance instance, final ModelReference modelReference, final Shell shell, final String importFilePath, final char csvSeparator, final char decimalSeparator) {
 		return new ImportAction.ImportHooksProvider() {
 			ScenarioLock lock;
 
@@ -78,7 +79,7 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 
 			@Override
 			public MMXRootObject getRootObject() {
-				return (MMXRootObject) instance.getInstance();
+				return (MMXRootObject) modelReference.getInstance();
 			}
 
 			@Override
@@ -152,43 +153,46 @@ public abstract class BulkImportCSVHandler extends AbstractHandler {
 	}
 
 	void bulkImport(final FieldChoice importTarget, final Shell shell, final List<ScenarioInstance> instances, final String filename, final char listSeparator, final char decimalSeparator) {
-		final List<ScenarioInstance> badInstances = new LinkedList<ScenarioInstance>();
-
-		for (final ScenarioInstance instance : instances) {
-			if (instance.getInstance() == null) {
-				try {
-					instance.getScenarioService().load(instance);
-				} catch (final Exception e) {
-					e.printStackTrace();
-					badInstances.add(instance);
-				}
-			}
-		}
-
-		if (!badInstances.isEmpty()) {
-			final StringBuilder sb = new StringBuilder("The following scenario(s) have problems and cannot have data imported into them:\n");
-			for (final ScenarioInstance instance : badInstances) {
-				sb.append("\n");
-				sb.append(instance.getName());
-			}
-			MessageDialog.openWarning(shell, "Import Problems", sb.toString());
-		}
-
+//		final List<ScenarioInstance> badInstances = new LinkedList<ScenarioInstance>();
+//
+//		for (final ScenarioInstance instance : instances) {
+//			if (instance.getInstance() == null) {
+//				try {
+//					instance.getScenarioService().load(instance);
+//				} catch (final Exception e) {
+//					e.printStackTrace();
+//					badInstances.add(instance);
+//				}
+//			}
+//		}
+//
+//		if (!badInstances.isEmpty()) {
+//			final StringBuilder sb = new StringBuilder("The following scenario(s) have problems and cannot have data imported into them:\n");
+//			for (final ScenarioInstance instance : badInstances) {
+//				sb.append("\n");
+//				sb.append(instance.getName());
+//			}
+//			MessageDialog.openWarning(shell, "Import Problems", sb.toString());
+//		}
+//
 		final Set<String> uniqueProblems = new HashSet<String>();
 		final List<String> allProblems = new ArrayList<String>();
-		final Set<ScenarioInstance> goodInstances = new HashSet<ScenarioInstance>(instances);
-		goodInstances.removeAll(badInstances);
+//		final Set<ScenarioInstance> goodInstances = new HashSet<ScenarioInstance>(instances);
+//		goodInstances.removeAll(badInstances);
 
-		for (final ScenarioInstance instance : goodInstances) {
-			final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, shell, filename, listSeparator, decimalSeparator);
-			final ImportAction action = getImportAction(importTarget, ihp);
+		for (final ScenarioInstance instance : instances) {
+			
+			try (final ModelReference modelReference = instance.getReference()) {
+				final ImportAction.ImportHooksProvider ihp = getHooksProvider(instance, modelReference, shell, filename, listSeparator, decimalSeparator);
+				final ImportAction action = getImportAction(importTarget, ihp);
 
-			final DefaultImportContext context = action.safelyImport();
-			for (final IImportProblem problem : context.getProblems()) {
-				final String description = problem.getProblemDescription();
-				if (!uniqueProblems.contains(description)) {
-					uniqueProblems.add(description);
-					allProblems.add(description);
+				final DefaultImportContext context = action.safelyImport();
+				for (final IImportProblem problem : context.getProblems()) {
+					final String description = problem.getProblemDescription();
+					if (!uniqueProblems.contains(description)) {
+						uniqueProblems.add(description);
+						allProblems.add(description);
+					}
 				}
 			}
 		}

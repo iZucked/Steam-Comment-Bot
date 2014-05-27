@@ -31,6 +31,7 @@ import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IExtraModelImporter;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultExportContext;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -60,63 +61,56 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 
 		final boolean createExportDirectories = instances.size() > 1;
 		for (final ScenarioInstance instance : instances) {
-			EObject rootObject = instance.getInstance();
+			// Release reference on block exit
+			try (final ModelReference modelReference = instance.getReference()) {
+			
+				final EObject rootObject = modelReference.getInstance();
 
-			if (rootObject == null) {
-				try {
-					instance.getScenarioService().load(instance);
-				} catch (final IOException e) {
-					log.error(e.getMessage(), e);
-					throw new RuntimeException(e);
-				}
-				rootObject = instance.getInstance();
-			}
-
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-				final IExportContext context = new DefaultExportContext(scenarioModel, decimalSeparator);
-				final File directory = createExportDirectories ? new File(outputDirectory, instance.getName()) : outputDirectory;
-				if (!directory.exists()) {
-					if (!directory.mkdirs()) {
-						MessageDialog.openError(getShell(), "Export error", "Unable to create target directory");
-						return false;
+				if (rootObject instanceof LNGScenarioModel) {
+					final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
+					final IExportContext context = new DefaultExportContext(scenarioModel, decimalSeparator);
+					final File directory = createExportDirectories ? new File(outputDirectory, instance.getName()) : outputDirectory;
+					if (!directory.exists()) {
+						if (!directory.mkdirs()) {
+							MessageDialog.openError(getShell(), "Export error", "Unable to create target directory");
+							return false;
+						}
 					}
-				}
-
-				// generate export files
-				for (final UUIDObject modelInstance : getSubModels(scenarioModel)) {
-					final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
-					if (importer != null) {
+	
+					// generate export files
+					for (final UUIDObject modelInstance : getSubModels(scenarioModel)) {
+						final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(modelInstance.eClass());
+						if (importer != null) {
+							final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
+							importer.exportModel(modelInstance, outputs, context);
+	
+							for (final String key : outputs.keySet()) {
+								final Collection<Map<String, String>> rows = outputs.get(key);
+								final String friendlyName = importer.getRequiredInputs().get(key);
+								final File outputFile = new File(directory, friendlyName + ".csv");
+	
+								// export CSV for this file
+								writeCSV(rows, outputFile, delimiter);
+							}
+						}
+					}
+	
+					final Collection<IExtraModelImporter> extra = Activator.getDefault().getImporterRegistry().getExtraModelImporters();
+					for (final IExtraModelImporter importer : extra) {
 						final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
-						importer.exportModel(modelInstance, outputs, context);
-
+						importer.exportModel(outputs, context);
 						for (final String key : outputs.keySet()) {
 							final Collection<Map<String, String>> rows = outputs.get(key);
 							final String friendlyName = importer.getRequiredInputs().get(key);
 							final File outputFile = new File(directory, friendlyName + ".csv");
-
+	
 							// export CSV for this file
 							writeCSV(rows, outputFile, delimiter);
 						}
 					}
 				}
-
-				final Collection<IExtraModelImporter> extra = Activator.getDefault().getImporterRegistry().getExtraModelImporters();
-				for (final IExtraModelImporter importer : extra) {
-					final Map<String, Collection<Map<String, String>>> outputs = new HashMap<String, Collection<Map<String, String>>>();
-					importer.exportModel(outputs, context);
-					for (final String key : outputs.keySet()) {
-						final Collection<Map<String, String>> rows = outputs.get(key);
-						final String friendlyName = importer.getRequiredInputs().get(key);
-						final File outputFile = new File(directory, friendlyName + ".csv");
-
-						// export CSV for this file
-						writeCSV(rows, outputFile, delimiter);
-					}
-				}
 			}
 		}
-
 		exportPage.saveDirectorySetting();
 
 		return true;
