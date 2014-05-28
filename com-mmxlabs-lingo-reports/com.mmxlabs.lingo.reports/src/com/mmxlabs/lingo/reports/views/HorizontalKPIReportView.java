@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -55,6 +56,10 @@ public class HorizontalKPIReportView extends ViewPart {
 	private IPartListener partListener;
 
 	private ScenarioViewerSynchronizer viewerSynchronizer;
+
+	private IEditorPart currentActiveEditor;
+
+	private ModelReference modelReference;
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
@@ -97,16 +102,16 @@ public class HorizontalKPIReportView extends ViewPart {
 				case 5:
 					rtn = (d.shippingPNL != null ? d.shippingPNL - (pinD != null ? pinD.shippingPNL : 0) : null);
 					return format(rtn, KPIContentProvider.TYPE_COST);
-//				case 6:
-//					return "MtM";
-//				case 7:
-//					rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
-//					return format(rtn, KPIContentProvider.TYPE_COST);
-//				case 8:
-//					return "Shipping Cost";
-//				case 9:
-//					rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
-//					return format(rtn, KPIContentProvider.TYPE_COST);
+					// case 6:
+					// return "MtM";
+					// case 7:
+					// rtn = (d.mtmPnl != null ? d.mtmPnl - (pinD != null ? pinD.mtmPnl : 0) : null);
+					// return format(rtn, KPIContentProvider.TYPE_COST);
+					// case 8:
+					// return "Shipping Cost";
+					// case 9:
+					// rtn = (d.shippingCost != null ? d.shippingCost - (pinD != null ? pinD.shippingCost : 0) : null);
+					// return format(rtn, KPIContentProvider.TYPE_COST);
 				case 6:
 					return "Idle Time";
 				case 7:
@@ -233,12 +238,12 @@ public class HorizontalKPIReportView extends ViewPart {
 			case 4:
 				width = 63; // "P&L Shipping"
 				break;
-//			case 6:
-//				width = 35; // "P&L (MtM)"
-//				break;
-//			case 8:
-//				width = 85; // "Shipping Cost"
-//				break;
+			// case 6:
+			// width = 35; // "P&L (MtM)"
+			// break;
+			// case 8:
+			// width = 85; // "Shipping Cost"
+			// break;
 			case 6:
 				width = 60; // "Idle time"
 				break;
@@ -267,6 +272,10 @@ public class HorizontalKPIReportView extends ViewPart {
 			@Override
 			public void partClosed(final IWorkbenchPart part) {
 
+				if (currentActiveEditor == part) {
+					activeEditorChange(null);
+				}
+				viewerSynchronizer.refreshViewer();
 			}
 
 			@Override
@@ -344,11 +353,21 @@ public class HorizontalKPIReportView extends ViewPart {
 		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
 		viewerSynchronizer = null;
 
+		if (modelReference != null) {
+			modelReference.close();
+			modelReference = null;
+		}
+
 		getSite().getPage().removePartListener(partListener);
 		super.dispose();
 	}
 
 	private void activeEditorChange(final IEditorPart activeEditor) {
+		if (this.modelReference != null) {
+			this.modelReference.close();
+			this.modelReference = null;
+		}
+		this.currentActiveEditor = activeEditor;
 		ScheduleModel scheduleModel = null;
 		if (activeEditor != null) {
 			final IEditorInput editorInput = activeEditor.getEditorInput();
@@ -356,7 +375,8 @@ public class HorizontalKPIReportView extends ViewPart {
 				final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) editorInput;
 				final ScenarioInstance scenarioInstance = ssInput.getScenarioInstance();
 				if (scenarioInstance != null) {
-					final EObject instance = scenarioInstance.getInstance();
+					this.modelReference = scenarioInstance.getReference();
+					final EObject instance = modelReference.getInstance();
 					if (instance instanceof LNGScenarioModel) {
 						final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) instance;
 						final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();

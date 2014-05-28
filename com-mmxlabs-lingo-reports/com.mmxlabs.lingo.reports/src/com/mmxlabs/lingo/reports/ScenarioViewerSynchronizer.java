@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.lingo.reports;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
@@ -12,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
@@ -41,9 +42,11 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 	private static final Logger log = LoggerFactory.getLogger(ScenarioViewerSynchronizer.class);
 	private Viewer viewer;
 	private IScenarioServiceSelectionProvider selectionProvider;
-	private final HashSet<CommandStack> commandStacks = new HashSet<CommandStack>();
+	private final Set<CommandStack> commandStacks = new HashSet<>();
 	private final IScenarioInstanceElementCollector collector;
 
+	private final Map<ScenarioInstance, ModelReference> scenarioReferenes = new HashMap<>();
+	
 	public ScenarioViewerSynchronizer(final Viewer viewer, final IScenarioInstanceElementCollector collector) {
 		this.viewer = viewer;
 		this.collector = collector;
@@ -78,6 +81,10 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			if (commandStack != null) {
 				commandStack.removeCommandStackListener(this);
 				commandStacks.remove(commandStack);
+			}
+			final ModelReference ref = scenarioReferenes.remove(instance);
+			if (ref != null) {
+				ref.close();
 			}
 		}
 		refreshViewer();
@@ -114,6 +121,7 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			commandStack.addCommandStackListener(this);
 			commandStacks.add(commandStack);
 		}
+		scenarioReferenes.put(instance, instance.getReference());
 	}
 
 	private boolean needsRefresh;
@@ -165,22 +173,22 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			if (scenarioService == null) {
 				continue;
 			}
-			EObject instance = null;
-			try {
-				instance = scenarioService.load(job);
-			} catch (final IOException e) {
-			}
+			
+			final ModelReference modelReference = scenarioReferenes.get(job);
+			if (modelReference != null) {
+				final EObject instance = modelReference.getInstance();
 
-			if (instance instanceof LNGScenarioModel) {
-				final LNGScenarioModel rootObject = (LNGScenarioModel) instance;
-				scenarioModels.add(rootObject);
-				portfolioModels.add(rootObject.getPortfolioModel());
-				final Collection<? extends Object> viewerContent = collector.collectElements(rootObject, isPinned);
-				for (final Object o : viewerContent) {
-					sourceScenarioByElement.put(o, new Pair<ScenarioInstance, LNGScenarioModel>(job, rootObject));
-					sourcePortfolioByElement.put(o, new Pair<ScenarioInstance, LNGPortfolioModel>(job, rootObject.getPortfolioModel()));
+				if (instance instanceof LNGScenarioModel) {
+					final LNGScenarioModel rootObject = (LNGScenarioModel) instance;
+					scenarioModels.add(rootObject);
+					portfolioModels.add(rootObject.getPortfolioModel());
+					final Collection<? extends Object> viewerContent = collector.collectElements(rootObject, isPinned);
+					for (final Object o : viewerContent) {
+						sourceScenarioByElement.put(o, new Pair<ScenarioInstance, LNGScenarioModel>(job, rootObject));
+						sourcePortfolioByElement.put(o, new Pair<ScenarioInstance, LNGPortfolioModel>(job, rootObject.getPortfolioModel()));
+					}
+					selectedObjects.addAll(viewerContent);
 				}
-				selectedObjects.addAll(viewerContent);
 			}
 		}
 
