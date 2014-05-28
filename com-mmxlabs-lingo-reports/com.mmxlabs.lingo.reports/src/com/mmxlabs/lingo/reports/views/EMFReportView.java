@@ -67,6 +67,7 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
+import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -666,7 +667,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	    				 final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
 	    				 
 	    				 // convert this cargo's wiring of slot allocations to a string
-	    				 result = pinnedCargoAllocation.getWiringAsString();
+	    				 result = CargoAllocationUtils.getWiringAsString(pinnedCargoAllocation);
 	    			 } 
 	    			 catch (Exception e) {
 	    				 log.warn("Error formatting previous wiring", e);

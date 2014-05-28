@@ -61,4 +61,27 @@ public class CargoAllocationUtils {
 		return nodes;
 	}
 
+	/**
+	 * Format this cargo allocation's wiring of slot allocations to a string
+	 * 
+	 * @param CargoAllocation
+	 * @return String
+	 */
+	public static String getWiringAsString(CargoAllocation ca) {
+		List<SlotAllocation> slotAllocations = ca.getSlotAllocations();
+		StringBuffer sb = new StringBuffer();
+		
+		SlotAllocation sa0 = slotAllocations.get(0);
+		sb.append(sa0 != null ? sa0.getName() : "()");
+
+		for (int i = 1; i < slotAllocations.size(); ++i) {
+			SlotAllocation sa =slotAllocations.get(i);
+			sb.append(" -- ").append(sa != null ? sa.getName() : "()");
+		}	
+		
+		return sb.toString();
+	}	
+	
+	
+	
 }
