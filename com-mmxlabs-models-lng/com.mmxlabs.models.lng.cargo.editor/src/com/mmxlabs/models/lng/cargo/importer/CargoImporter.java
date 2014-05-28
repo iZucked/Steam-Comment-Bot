@@ -273,7 +273,8 @@ public class CargoImporter extends DefaultClassImporter {
 
 		// TODO: sort out this hack. Is the identity of the "row object" important
 		// when returning from this method?
-		final ImportResults newResult = new ImportResults(null);
+		// Always return cargo object for LDD style cargo import
+		final ImportResults newResult = new ImportResults(cargo);
 
 		boolean keepCargo = true;
 		if (load == null || load.getWindowStart() == null) {
@@ -338,8 +339,7 @@ public class CargoImporter extends DefaultClassImporter {
 				return IImportContext.STAGE_MODIFY_SUBMODELS;
 			}
 		});
-		// Always return cargo object for LDD style cargo import
-		newResult.add(cargo);
+
 
 		return newResult;
 	}

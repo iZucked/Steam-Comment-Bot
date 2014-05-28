@@ -55,8 +55,8 @@ public class CargoImporterTest {
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
 			row.put("buy.date", "2013-1-1");
 			row.put("buy.time", "9");
-			row.put("buy." + CargoPackage.eINSTANCE.getLoadSlot_CargoCV().getName().toLowerCase(), "12.7");
-		}
+			row.put("buy." + CargoPackage.eINSTANCE.getLoadSlot_CargoCV().getName().toLowerCase(), "23.702");
+		}	
 		final CargoImporter cargoImporter = new CargoImporter();
 		final IImportContext context = Mockito.mock(IImportContext.class);
 		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context).getCreatedObjects();
@@ -89,7 +89,7 @@ public class CargoImporterTest {
 				Assert.assertEquals(7, loadSlot.getWindowSize());
 				Assert.assertEquals(new Date(2013 - 1900, 0, 1, 0, 0, 0), loadSlot.getWindowStart());
 				Assert.assertEquals(9, loadSlot.getWindowStartTime());
-				Assert.assertEquals(12.7, loadSlot.getCargoCV(), 0);
+				Assert.assertEquals(23.702, loadSlot.getCargoCV(), 0);
 			}
 		}
 		Assert.assertTrue(foundCargo);
