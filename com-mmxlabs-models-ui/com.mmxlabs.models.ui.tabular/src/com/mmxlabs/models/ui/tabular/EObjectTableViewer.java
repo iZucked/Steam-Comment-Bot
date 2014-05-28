@@ -454,6 +454,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 					}
 				}
 
+				validationSupport.getValidationErrors().clear();
 				if (inputElement != null) {
 					// Perform initial validation
 					validationSupport.processStatus(false);

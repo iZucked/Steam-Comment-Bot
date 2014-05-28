@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IValidationService;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -27,8 +28,6 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 	private final ScenarioInstance scenarioInstance;
 
 	private IValidationService validationService;
-
-	private IExtraValidationContext extraContext;
 
 	private final ScenarioLock validationLock;
 
@@ -39,7 +38,6 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		final Object instance = scenarioInstance.getInstance();
 		if (instance instanceof MMXRootObject) {
 			final MMXRootObject rootObject = (MMXRootObject) instance;
-			extraContext = new DefaultExtraValidationContext(rootObject, false);
 			rootObject.eAdapters().add(ScenarioInstanceValidator.this);
 		}
 	}
@@ -50,39 +48,43 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 			final MMXRootObject rootObject = (MMXRootObject) instance;
 			rootObject.eAdapters().remove(ScenarioInstanceValidator.this);
 		}
-		extraContext = null;
 	}
 
 	public void performValidation() {
 		// Run the validation
-		if (validationService != null && extraContext != null) {
+		if (validationService != null) {
 
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
-					if (extraContext == null) {
-						return;
-					}
 
-					final MMXRootObject rootObject = extraContext.getRootObject();
-					if (rootObject == null) {
-						return;
-					}
+					// Create ModelReference to keep model loaded while validating
+					try (final ModelReference modelReference = scenarioInstance.getReference()) {
 
-					IStatus status = null;
-					// Perform initial validation
-					if (claimValidationLock()) {
-						try {
-							if (validationService != null) {
-								status = validationService.runValidation(createValidator(), extraContext, Collections.singleton(rootObject));
-							}
-						} finally {
-							releaseValidationLock();
+						// Pin member variables
+						final IValidationService pValidationService = validationService;
+						if (pValidationService == null) {
+							return;
 						}
-					}
-					if (status != null) {
-						validationStatus(status);
+						final MMXRootObject rootObject = (MMXRootObject) modelReference.getInstance();
+						if (rootObject == null) {
+							return;
+						}
+						final IExtraValidationContext extraContext = new DefaultExtraValidationContext(rootObject, false);
+
+						IStatus status = null;
+						// Perform initial validation
+						if (claimValidationLock()) {
+							try {
+								status = pValidationService.runValidation(createValidator(), extraContext, Collections.singleton(rootObject));
+							} finally {
+								releaseValidationLock();
+							}
+						}
+						if (status != null) {
+							validationStatus(status);
+						}
 					}
 				}
 			});

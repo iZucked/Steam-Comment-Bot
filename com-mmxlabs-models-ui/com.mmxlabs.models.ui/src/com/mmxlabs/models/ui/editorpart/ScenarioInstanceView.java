@@ -45,6 +45,7 @@ import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -54,6 +55,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	private final Logger log = LoggerFactory.getLogger(ScenarioInstanceView.class);
 
 	private ScenarioInstance scenarioInstance;
+	private ModelReference modelReference;
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 	private ReferenceValueProviderCache valueProviderCache;
 
@@ -147,6 +149,13 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			scenarioInstanceStatusProvider.dispose();
 		}
 
+		if (modelReference != null) {
+			modelReference.close();
+			modelReference = null;
+		}
+
+		scenarioInstance = null;
+		
 		// getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		getSite().getPage().removePartListener(partListener);
 		super.dispose();
@@ -184,8 +193,18 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			scenarioInstanceStatusProvider.dispose();
 		}
 
+		if (modelReference != null) {
+			modelReference.close();
+			modelReference = null;
+		}
+
+		scenarioInstance = null;
+
+		
 		if (instance != null) {
 			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(instance);
+			this.scenarioInstance = instance;
+			modelReference = instance.getReference();
 			getRootObject();
 
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
@@ -228,7 +247,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		if (scenarioInstance == null) {
 			return null;
 		}
-		
+
 		final Map<Class<?>, Object> adapters = scenarioInstance.getAdapters();
 		if (adapters != null) {
 			return (EditingDomain) adapters.get(EditingDomain.class);
@@ -279,22 +298,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	@Override
 	public MMXRootObject getRootObject() {
 
-		if (scenarioInstance == null) {
+		if (modelReference == null) {
 			return null;
 		}
-		final IScenarioService scenarioService = scenarioInstance.getScenarioService();
-		if (scenarioService == null) {
-			// This may or may not be null
-			return (MMXRootObject) scenarioInstance.getInstance();
-		}
-
-		try {
-			return (MMXRootObject) scenarioInstance.getScenarioService().load(scenarioInstance);
-
-		} catch (final Exception e) {
-			log.error("Error getting root object", e);
-			return null;
-		}
+		return (MMXRootObject)modelReference.getInstance();
 	}
 
 	@Override
