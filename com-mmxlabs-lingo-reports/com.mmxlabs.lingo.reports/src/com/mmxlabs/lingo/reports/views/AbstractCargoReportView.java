@@ -45,9 +45,10 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);		
 		
 		// Register columns that will be displayed when in Pin/Diff mode
-		pinDiffModeManager
+		pinDiffModeHelper
 			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef))
-			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));		
+			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef))
+			.addColumn("Related Slots", generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
 	}
 
 	@Override
@@ -123,7 +124,7 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 	 * @return
 	 */
 	@Override
-	protected String getElementKey(EObject element) {
+	public String getElementKey(EObject element) {
 		
 		if (element.eIsSet(cargoAllocationRef)) {
 			element = (EObject) element.eGet(cargoAllocationRef);

@@ -212,7 +212,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 
 		// Register columns that will be displayed when in Pin/Diff mode 
-		pinDiffModeManager
+		pinDiffModeHelper
 			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef));
 		
 	}
@@ -460,7 +460,7 @@ public class SchedulePnLReport extends EMFReportView {
 	 * @return
 	 */
 	@Override
-	protected String getElementKey(EObject element) {
+	public String getElementKey(EObject element) {
 
 		if (element.eIsSet(cargoAllocationRef)) {
 			element = (EObject) element.eGet(cargoAllocationRef);

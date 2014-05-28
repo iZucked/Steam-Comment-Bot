@@ -179,7 +179,7 @@ public class CapacityViolationReportView extends EMFReportView {
 	 * @return
 	 */
 	@Override
-	protected String getElementKey(EObject element) {
+	public String getElementKey(EObject element) {
 
 		if (element.eIsSet(ref_Row_Owner)) {
 			element = (EObject) element.eGet(ref_Row_Owner);
