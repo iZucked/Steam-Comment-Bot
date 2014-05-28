@@ -68,7 +68,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	private static final EAttribute uuidAttribute = ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid();
 
 	private IScenarioMigrationService scenarioMigrationService;
-	private IScenarioCipherProvider scenarioCipherProvider;
+	private IScenarioCipherProvider _scenarioCipherProvider;
 
 	protected AbstractScenarioService(final String name) {
 		this.name = name;
@@ -175,7 +175,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	 * 
 	 */
 	protected ResourceSet createResourceSet() {
-		final ResourceSet resourceSet = ResourceHelper.createResourceSet(scenarioCipherProvider);
+		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
 		return resourceSet;
 	}
 
@@ -368,11 +368,11 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	}
 
 	public IScenarioCipherProvider getScenarioCipherProvider() {
-		return scenarioCipherProvider;
+		return _scenarioCipherProvider;
 	}
 
 	public void setScenarioCipherProvider(final IScenarioCipherProvider scenarioCipherProvider) {
-		this.scenarioCipherProvider = scenarioCipherProvider;
+		this._scenarioCipherProvider = scenarioCipherProvider;
 	}
 
 	/**
