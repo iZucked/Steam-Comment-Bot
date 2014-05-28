@@ -599,7 +599,7 @@ public class CargoEditorMenuHelper {
 			// Check restrictions on both slots
 			if (slot instanceof LoadSlot) {
 				if (((LoadSlot) slot).isDESPurchase()) {
-					if (!(slot.getPort() == source.getPort())) {
+					if (slot.getPort() != source.getPort() && slot.isDivertible() == false) {
 						continue;
 					}
 				}
