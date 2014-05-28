@@ -54,7 +54,7 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 	}
 
 	// This currently triggers an assertion. Run tests with -ea
-	@Test(expected=AssertionError.class)
+	@Test()
 	public void testVoyageRequirementsGreaterThanVesselCapacity() {
 
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
