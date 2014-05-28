@@ -13,8 +13,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -48,7 +50,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 
 public class ShippingCalculationsTest extends AbstractShippingCalculationsTestClass {
 
@@ -248,8 +249,14 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// but the vessel's capacity is only 50m3 greater than its minimum heel
 		// and the journeys (after loading) use a total of 40m3 NBO
 		// so only 10m3 is available for FBO, which is not enough for both journeys
-		msc.vc.setCapacity(60);
+		msc.vc.setCapacity(70);
 		msc.vc.setMinHeel(10);
+
+		// Create second cargo to require arriving cold
+		Cargo secondCargo = msc.createDefaultCargo(msc.loadPort, msc.dischargePort);
+
+		// and send the vessel back to the origin port at end of itinerary
+		msc.setDefaultAvailability(msc.originPort, msc.originPort);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -337,8 +344,8 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		final Integer[] expectedJourneyCosts = { 1500, 630, 315 };
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
 
-		// idle LNG consumption is 10, plus 30 + 15 for journeys and 500 min heel
-		final Integer[] expectedloadDischargeVolumes = { 10000, -9445 };
+		// idle LNG consumption is 10, plus 30 + 15 for journeys and no safety heel retained
+		final Integer[] expectedloadDischargeVolumes = { 10000, -9945 };
 		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
@@ -1076,7 +1083,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		SequenceTester checker = getDefaultTester();
 
-		final int lastIdleHours = /*SchedulerBuilder.minDaysFromLastEventToEnd*/ 60 * 24 - checker.getExpectedValues(Expectations.DURATIONS, Journey.class)[2];
+		final int lastIdleHours = /* SchedulerBuilder.minDaysFromLastEventToEnd */60 * 24 - checker.getExpectedValues(Expectations.DURATIONS, Journey.class)[2];
 		;
 		checker.setExpectedValue(lastIdleHours, Expectations.DURATIONS, Idle.class, 2);
 		checker.setExpectedValue(lastIdleHours * 5, Expectations.BF_USAGE, Idle.class, 2);
