@@ -243,15 +243,12 @@ public class CargoEditorMenuHelper {
 
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
-				if (dischargeSlot.isFOBSale()) {
-					createNewSlotMenu(newMenuManager, dischargeSlot);
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
-				} else {
-					createNewSlotMenu(newMenuManager, dischargeSlot);
-					createMenus(manager, dischargeSlot, dischargeSlot.getCargo(), filterSlotsByCompatibility(dischargeSlot, cargoModel.getLoadSlots()), false);
+				createNewSlotMenu(newMenuManager, dischargeSlot);
+				createMenus(manager, dischargeSlot, dischargeSlot.getCargo(), filterSlotsByCompatibility(dischargeSlot, cargoModel.getLoadSlots()), false);
+				if (dischargeSlot.isFOBSale() == false) {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot);
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
 				}
+				createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot);
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getContract(), dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
 				if (dischargeSlot.isFOBSale()) {
@@ -428,13 +425,10 @@ public class CargoEditorMenuHelper {
 				final LoadSlot loadSlot = loadSlots.get(index);
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
-				if (loadSlot.isDESPurchase()) {
-					createNewSlotMenu(newMenuManager, loadSlot);
-					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
-				} else {
-					createNewSlotMenu(newMenuManager, loadSlot);
-					createMenus(manager, loadSlot, loadSlot.getCargo(), filterSlotsByCompatibility(loadSlot, cargoModel.getDischargeSlots()), true);
-					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
+				createNewSlotMenu(newMenuManager, loadSlot);
+				createMenus(manager, loadSlot, loadSlot.getCargo(), filterSlotsByCompatibility(loadSlot, cargoModel.getDischargeSlots()), true);
+				createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot);
+				if (loadSlot.isDESPurchase() == false) {
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot);
 				}
 				createEditMenu(manager, loadSlot, loadSlot.getContract(), loadSlot.getCargo());
@@ -587,6 +581,10 @@ public class CargoEditorMenuHelper {
 	}
 
 	/**
+	 * Returns a list of slots among the specified possible targets which are compatible with the specified source slot.
+	 * FOB purchases may be paired with DES sales or with FOB sales (which must be at the same port unless the sale
+	 * is divertible), while DES purchases may be paired only with DES sales (which must be at the same port unless the 
+	 * purchase is divertible). 
 	 * 
 	 * @param source
 	 * @param possibleTargets
@@ -594,20 +592,12 @@ public class CargoEditorMenuHelper {
 	 */
 	private List<Slot> filterSlotsByCompatibility(final Slot source, final List<? extends Slot> possibleTargets) {
 
-		final List<Slot> filteredSlots = new LinkedList<Slot>();
+		final List<Slot> filteredSlots = new LinkedList<Slot>();		
+		
 		for (final Slot slot : possibleTargets) {
 			// Check restrictions on both slots
-			if (slot instanceof LoadSlot) {
-				if (((LoadSlot) slot).isDESPurchase()) {
-					if (slot.getPort() != source.getPort() && slot.isDivertible() == false) {
-						continue;
-					}
-				}
-			}
-			if (slot instanceof DischargeSlot) {
-				if (((DischargeSlot) slot).isFOBSale()) {
-					continue;
-				}
+			if (areUnsortedSlotsCompatible(source, slot) == false) {
+				continue;
 			}
 			if (!checkSourceContractConstraints(source, slot) || !checkSourceContractConstraints(slot, source)) {
 				continue;
@@ -617,6 +607,109 @@ public class CargoEditorMenuHelper {
 		return filteredSlots;
 	}
 
+	
+	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
+		Date loadStart = load.getWindowStartWithSlotOrPortTime();
+		Date loadEnd = load.getWindowEndWithSlotOrPortTime();
+		Date dischargeStart = discharge.getWindowStartWithSlotOrPortTime();
+		Date dischargeEnd = discharge.getWindowEndWithSlotOrPortTime();
+
+		// slots with unknown time windows are incompatible
+		if (loadStart == null || dischargeStart == null || loadEnd == null || dischargeEnd == null) {
+			return false;
+		}
+
+		// can never load before discharging 
+		if (loadStart.after(dischargeEnd)) {
+			return false;
+		}
+		
+		boolean overlap = (dischargeStart.before(loadEnd));
+		
+		final long diff = dischargeEnd.getTime() - loadStart.getTime();
+		int daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
+		
+		// DES load
+		if (load.isDESPurchase()) {
+			// divertible DES - discharge time should be within shipping restriction window for load slot
+			if (load.isDivertible()) {
+				int restriction = load.getShippingDaysRestriction();
+				return (daysDifference <= restriction);
+			}
+			// regular DES - windows should overlap
+			else {
+				return overlap;
+			}
+		}
+		// FOB load
+		else {
+			// FOB sale - windows should overlap
+			if (discharge.isFOBSale()) {
+				return overlap;
+			}
+			// shipped cargo
+			else {
+				return true;
+			}
+		}
+		
+	}
+	
+	private boolean areSlotsCompatible(final LoadSlot load, final DischargeSlot discharge) {
+		// DES purchase not compatible with FOB sale
+		if (load.isDESPurchase() && discharge.isFOBSale()) {
+			return false;
+		}
+		
+		// check that window timings are compatible
+		if (areSlotWindowsCompatible(load, discharge) == false) {
+			return false;
+		}		
+		
+		// DES purchase
+		if (load.isDESPurchase() == true) {
+			// FOB sale - incompatible
+			if (discharge.isFOBSale() == true) {
+				return false;
+			}
+			// DES sale - only at the same port or divertible
+			else {
+				return load.isDivertible() || (load.getPort() == discharge.getPort());
+			}			
+		}
+		// FOB purchase 
+		else {
+			// FOB sale - only at the same port or divertible
+			if (discharge.isFOBSale() == true) {
+				return discharge.isDivertible() || (load.getPort() == discharge.getPort());
+			}
+			// DES sale - compatible
+			else {
+				return true;
+			}
+		}
+		
+	}
+	
+	/**
+	 * Decides whether two slots are compatible.
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	private boolean areUnsortedSlotsCompatible(final Slot a, final Slot b) {
+		// need load / discharge or discharge / load
+		if (a instanceof LoadSlot && b instanceof DischargeSlot) {
+			return areSlotsCompatible((LoadSlot) a, (DischargeSlot) b);
+		}
+		else if (a instanceof DischargeSlot && b instanceof LoadSlot) {
+			return areSlotsCompatible((LoadSlot) b, (DischargeSlot) a);
+		}
+		else {
+			return false;
+		}
+	}
+	
 	/**
 	 * Given a source slot, check that the target slot is compatible with the source slot contract restrictions.
 	 * 
@@ -674,6 +767,8 @@ public class CargoEditorMenuHelper {
 					continue;
 				}
 				// Filter null windows and backwards pairings
+				// no - this should be done in filterSlots...
+				/*
 				if (loadSlot.getWindowStart() == null) {
 					continue;
 				}
@@ -683,6 +778,7 @@ public class CargoEditorMenuHelper {
 				if (loadSlot.getWindowStart().after(dischargeSlot.getWindowStart())) {
 					continue;
 				}
+				*/
 				final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
 				daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
 			}
