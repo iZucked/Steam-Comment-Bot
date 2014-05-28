@@ -18,6 +18,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -59,6 +61,10 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  */
 public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInstance {
 
+	/**
+	 * @generated NOT
+	 */
+	private static final Logger log = LoggerFactory.getLogger(ScenarioInstanceImpl.class);
 	
 	/**
 	 * Object used as a lock when performing IO operations {@link #load()}, {@link #save()} and {@link #unload()};
@@ -787,6 +793,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			}
 			// Model references are still present! (note revert command will now break!)
 			if (!getModelReferences().isEmpty()) {
+				log.error("Attempting to unload a scenario which still has open model references");
 				return;
 			}
 			scenarioService.unload(this);

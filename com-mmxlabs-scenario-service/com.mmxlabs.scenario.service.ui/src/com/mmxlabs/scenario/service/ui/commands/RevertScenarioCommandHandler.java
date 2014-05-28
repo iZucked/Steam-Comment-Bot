@@ -69,31 +69,15 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 										activePage.closeEditors(editorReferences, false);
 									}
 
-									if (!scenarioInstance.getModelReferences().isEmpty()) {
-										log.error("Attempting to unload a scenario which still has open model references");
-										final CommandStack commandStack = (CommandStack) scenarioInstance.getAdapters().get(CommandStack.class);
-										if (commandStack != null) {
-											while (commandStack.canUndo()) {
-												commandStack.getUndoCommand().undo();
-											}
-										}
-										scenarioInstance.setDirty(false);
-									} else {
-
-										// Set to false
-										scenarioInstance.setDirty(false);
-										// Trigger unload.
-										scenarioInstance.unload();
-									}
 									// Set to false
 									scenarioInstance.setDirty(false);
+									// Force unload.
+									scenarioInstance.unload();
 
 									if (editorReferences != null && editorReferences.length > 0) {
 										// scenarioInstance.getScenarioService().load(scenarioInstance);
 										OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
 									}
-									// } catch (final IOException e) {
-									// log.error(e.getMessage(), e);
 								} catch (final PartInitException e) {
 									log.error(e.getMessage(), e);
 								} finally {
