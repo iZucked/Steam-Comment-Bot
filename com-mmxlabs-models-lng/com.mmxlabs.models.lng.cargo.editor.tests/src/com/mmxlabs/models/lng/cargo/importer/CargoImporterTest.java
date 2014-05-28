@@ -55,10 +55,12 @@ public class CargoImporterTest {
 			row.put("buy." + CargoPackage.eINSTANCE.getSlot_WindowSize().getName().toLowerCase(), "7");
 			row.put("buy.date", "2013-1-1");
 			row.put("buy.time", "9");
-			row.put("buy." + CargoPackage.eINSTANCE.getLoadSlot_CargoCV().getName().toLowerCase(), "23.702");
+			row.put("buy.cargoCV" , "23.702");
 		}	
 		final CargoImporter cargoImporter = new CargoImporter();
 		final IImportContext context = Mockito.mock(IImportContext.class);
+		// This is needed otherwise there is no decimal separator!
+		Mockito.when(context.getDecimalSeparator()).thenReturn('.');
 		final Collection<EObject> importedObjects = cargoImporter.importObject(null, CargoPackage.eINSTANCE.getCargo(), row, context).getCreatedObjects();
 
 		Assert.assertEquals(2, importedObjects.size());
