@@ -152,7 +152,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			if (loadVolume < fuelDeficit) {
 				loadVolume = fuelDeficit;
 				// we should never be required to load more than the vessel can fit in its tanks
-				assert (loadVolume <= availableCargoSpace);
+//				assert (loadVolume <= availableCargoSpace);
 			}
 
 			// the amount of LNG available for discharge
