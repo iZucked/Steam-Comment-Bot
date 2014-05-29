@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -29,9 +32,12 @@ import org.eclipse.emf.ecore.resource.impl.AESCipherImpl;
 class EMFCipher implements URIConverter.Cipher {
 	private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 
+	private static final byte FLAG_ZIPPED = 0x1;
+	
 	private final KeyFile keyFile;
 
-	boolean useZip = false;
+	// Save data compressed by default.
+	final boolean useZip = true;
 
 	public EMFCipher(final KeyFile keyFile) {
 		this.keyFile = keyFile;
@@ -63,7 +69,11 @@ class EMFCipher implements URIConverter.Cipher {
 		outputStream = new BufferedOutputStream(outputStream);
 		outputStream.write(keyFile.getKeyUUID());
 		// Flags - currently unused
-		outputStream.write((byte) 0);
+		byte flags = (byte)0;
+		if (useZip) {
+			flags |= FLAG_ZIPPED;
+		}
+		outputStream.write(flags);
 		// generate the IV for encryption
 		final byte[] encryptionIV = randomBytes(16);
 		outputStream.write(encryptionIV);
@@ -80,34 +90,35 @@ class EMFCipher implements URIConverter.Cipher {
 				// Do nothing
 			}
 		};
-		return new CipherOutputStream(outputStream, cipher);
+		CipherOutputStream cos = new CipherOutputStream(outputStream, cipher);
 
-		// if (useZip) {
-		// ZipOutputStream zipOutputStream = new ZipOutputStream(cos) {
-		// @Override
-		// public void finish() throws IOException {
-		// super.finish();
-		// def.end();
-		// }
-		//
-		// @Override
-		// public void flush() {
-		// // Do nothing.
-		// }
-		//
-		// @Override
-		// public void close() throws IOException {
-		// try {
-		// super.flush();
-		// } catch (IOException exception) {
-		// // Continue and try to close.
-		// }
-		// super.close();
-		// }
-		// };
-		// zipOutputStream.putNextEntry(new ZipEntry("ResourceContents"));
-		// return zipOutputStream;
-		// }
+		if (useZip) {
+			ZipOutputStream zipOutputStream = new ZipOutputStream(cos) {
+				@Override
+				public void finish() throws IOException {
+					super.finish();
+					def.end();
+				}
+
+				@Override
+				public void flush() {
+					// Do nothing.
+				}
+
+				@Override
+				public void close() throws IOException {
+					try {
+						super.flush();
+					} catch (IOException exception) {
+						// Continue and try to close.
+					}
+					super.close();
+				}
+			};
+			zipOutputStream.putNextEntry(new ZipEntry("ResourceContents"));
+			return zipOutputStream;
+		}
+		return cos;
 	}
 
 	@Override
@@ -116,7 +127,7 @@ class EMFCipher implements URIConverter.Cipher {
 	}
 
 	@Override
-	public InputStream decrypt(final InputStream in) throws Exception {
+	public InputStream decrypt(InputStream in) throws Exception {
 		byte[] uuid = keyFile.getKeyUUID();
 		final byte[] fileUUID = readBytes(uuid.length, in);
 		if (!Arrays.equals(uuid, fileUUID)) {
@@ -126,20 +137,23 @@ class EMFCipher implements URIConverter.Cipher {
 		byte[] flags = readBytes(1, in);
 		final byte[] encryptionIV = readBytes(16, in);
 
-		// if (useZip) {
-		// ZipInputStream zipInputStream = new ZipInputStream(in);
-		// while (zipInputStream.available() != 0) {
-		// ZipEntry zipEntry = zipInputStream.getNextEntry();
-		// // if (isContentZipEntry(zipEntry)) {
-		// in = zipInputStream;
-		// break;
-		// // }
-		// }
-		// }
 		// now create the decrypt cipher
 		final Cipher cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
 		cipher.init(Cipher.DECRYPT_MODE, keyFile.getKey(), new IvParameterSpec(encryptionIV));
-		return new CipherInputStream(in, cipher);
+		in = new CipherInputStream(in, cipher);
+
+		if ((flags[0] & FLAG_ZIPPED) == FLAG_ZIPPED) {
+			ZipInputStream zipInputStream = new ZipInputStream(in);
+			while (zipInputStream.available() != 0) {
+				ZipEntry zipEntry = zipInputStream.getNextEntry();
+				// if (isContentZipEntry(zipEntry)) {
+				in = zipInputStream;
+				break;
+				// }
+			}
+		}
+
+		return in;
 	}
 
 	@Override
