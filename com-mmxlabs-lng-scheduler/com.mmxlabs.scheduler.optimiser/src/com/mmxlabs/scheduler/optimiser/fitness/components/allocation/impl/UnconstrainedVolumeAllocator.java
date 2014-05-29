@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
@@ -152,7 +152,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			if (loadVolume < fuelDeficit) {
 				loadVolume = fuelDeficit;
 				// we should never be required to load more than the vessel can fit in its tanks
-				assert (loadVolume <= availableCargoSpace);
+//				assert (loadVolume <= availableCargoSpace);
 			}
 
 			// the amount of LNG available for discharge
