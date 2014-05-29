@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views;
@@ -67,7 +67,7 @@ public class CapacityViolationReportView extends EMFReportView {
 		addColumn("Type", objectFormatter, ref_Row_Owner, sp.getEvent__Type());
 
 		addColumn("Violation", objectFormatter, attrib_Row_Type);
-		addColumn("Quantity (m³)", objectFormatter, attrib_Row_Quantity);
+		addColumn("Quantity (m??)", objectFormatter, attrib_Row_Quantity);
 	}
 
 	@Override
