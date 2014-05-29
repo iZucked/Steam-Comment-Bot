@@ -72,11 +72,11 @@ public class OptimisationRepeatabilityTest {
 		// Add other packages?
 	}
 
-	@Ignore
+	@Ignore("Ignoring as EMF compare does not work properly and we can encounter memory issues")
 	@Test
 	public void testScenario() throws IOException, InterruptedException, IncompleteScenarioException {
 
-		final URL url = getClass().getResource("/OptimisationRepeatabilityTest.scenario");
+		final URL url = getClass().getResource("/scenarios/sample-data.lingo");
 
 		testScenario(url, 5, getScenarioCipherProvider());
 	}
