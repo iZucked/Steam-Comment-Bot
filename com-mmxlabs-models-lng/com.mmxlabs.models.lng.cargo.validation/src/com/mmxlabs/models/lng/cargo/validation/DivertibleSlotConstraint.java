@@ -71,10 +71,8 @@ public class DivertibleSlotConstraint extends AbstractModelMultiConstraint {
 						failures.add(dsd);
 					}
 				}
-
 			}
 		}
-
 		return Activator.PLUGIN_ID;
 	}
 }
