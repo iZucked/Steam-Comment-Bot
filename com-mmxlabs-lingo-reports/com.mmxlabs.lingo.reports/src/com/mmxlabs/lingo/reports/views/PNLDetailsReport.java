@@ -40,7 +40,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.properties.views.DetailPropertiesView;
-import com.mmxlabs.shiplingo.platform.reports.internal.Activator;
+import com.mmxlabs.lingo.reports.internal.Activator;
 
 public class PNLDetailsReport extends DetailPropertiesView {
 
