@@ -50,6 +50,8 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -201,8 +203,11 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 								if (slot.getAssignment() instanceof Vessel) {
 									cargoActuals.setVessel((Vessel) slot.getAssignment());
 								}
+							} else {
 							}
 							slotActuals.setCV(((LoadSlot) slot).getCargoCV());
+
+							((LoadActuals) slotActuals).setContractType(loadSlot.isDESPurchase() ? "DES" : "FOB");
 						} else if (slot instanceof DischargeSlot) {
 							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 							dischargePort = dischargeSlot.getPort();
@@ -212,6 +217,8 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									cargoActuals.setVessel((Vessel) slot.getAssignment());
 								}
 							}
+
+							((DischargeActuals) slotActuals).setDeliveryType(dischargeSlot.isFOBSale() ? "FOB" : "DES");
 						}
 						if (slotActuals != null) {
 							slotActuals.setSlot(slot);
@@ -255,7 +262,14 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									Route ladenRoute = null;
 									Route ballastRoute = null;
 									boolean isLaden = false;
+
+									long totalCharterCost = 0;
+									int totalDurationInHours = 0;
+
 									for (final Event event : cargoAllocation.getEvents()) {
+
+										totalCharterCost += event.getCharterCost();
+										totalDurationInHours += event.getDuration();
 
 										if (event instanceof SlotVisit) {
 											final SlotVisit slotVisit = (SlotVisit) event;
@@ -295,9 +309,9 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 											}
 
 										}
-
 									}
 
+									// Look up distances for divertable des cargoes
 									if (isDivertableDESPurchase && portModel != null && loadPort != null && dischargePort != null) {
 
 										// Take direct route
@@ -307,9 +321,11 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 											}
 											for (final RouteLine rl : route.getLines()) {
 												if (rl.getFrom() == loadPort && rl.getTo() == dischargePort) {
+													ladenRoute = route;
 													ladenDistance = rl.getDistance();
 												}
 												if (rl.getTo() == loadPort && rl.getFrom() == dischargePort) {
+													ballastRoute = route;
 													ballastDistance = rl.getDistance();
 												}
 											}
@@ -327,37 +343,25 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 										slotActuals.setPriceDOL(slotAllocation.getPrice());
 										slotActuals.setPortCharges(slotAllocation.getSlotVisit().getPortCost());
+
 										if (slotActuals instanceof LoadActuals) {
-											if (isDivertableDESPurchase) {
-												final Vessel vessel = cargoActuals.getVessel();
-												if (vessel != null) {
-													((LoadActuals) slotActuals).setStartingHeelM3(vessel.getVesselClass().getMinHeel());
-													((LoadActuals) slotActuals).setStartingHeelMMBTu((int) Math.round(vessel.getVesselClass().getMinHeel() * cargoCV));
-												}
-											} else {
-												((LoadActuals) slotActuals).setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
-												((LoadActuals) slotActuals).setStartingHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
-											}
+
+											final LoadActuals loadActuals = (LoadActuals) slotActuals;
+											loadActuals.setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
+											loadActuals.setStartingHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
 											slotActuals.setBaseFuelConsumption(ladenBaseFuelConsumptionInMT);
 											slotActuals.setRouteCosts(ladenRouteCosts);
 											slotActuals.setDistance(ladenDistance);
 											slotActuals.setRoute(ladenRoute);
+
 											// Reset in case of multiple loads/discharges!
 											ladenBaseFuelConsumptionInMT = 0;
 											ladenRouteCosts = 0;
 											ladenDistance = 0;
 											ladenRoute = null;
 										} else if (slotActuals instanceof DischargeActuals) {
-											if (isDivertableDESPurchase) {
-												final Vessel vessel = cargoActuals.getVessel();
-												if (vessel != null) {
-													((DischargeActuals) slotActuals).setEndHeelM3(vessel.getVesselClass().getMinHeel());
-													((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(vessel.getVesselClass().getMinHeel() * cargoCV));
-												}
-											} else {
-												((DischargeActuals) slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
-												((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
-											}
+											((DischargeActuals) slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
+											((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
 											slotActuals.setBaseFuelConsumption(ballastBaseFuelConsumptionInMT);
 											slotActuals.setRouteCosts(ballastRouteCosts);
 											slotActuals.setDistance(ballastDistance);
@@ -379,6 +383,9 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										}
 									}
 
+									// Take average charter cost
+									cargoActuals.setCharterRatePerDay((int) Math.round((double) totalCharterCost / ((double) totalDurationInHours / 24.0)));
+
 									final ReturnActuals returnActuals = ActualsFactory.eINSTANCE.createReturnActuals();
 
 									cargoActuals.setReturnActuals(returnActuals);
@@ -386,16 +393,23 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									final EList<Event> events = cargoAllocation.getEvents();
 									final Event lastEvent = events.get(events.size() - 1);
 									final Event nextEvent = lastEvent.getNextEvent();
-									if (lastEvent.getSequence().isFleetVessel() && nextEvent != null) {
+									final Sequence sequence = lastEvent.getSequence();
+									if (sequence.getSequenceType() == SequenceType.VESSEL || sequence.getSequenceType() == SequenceType.SPOT_VESSEL && nextEvent != null) {
 										returnActuals.setEndHeelM3(nextEvent.getHeelAtStart());
 										returnActuals.setTitleTransferPoint(nextEvent.getPort());
 										returnActuals.setOperationsStart(nextEvent.getLocalStart().getTime());
 									} else {
 										final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 										cal.clear();
-										cal.set(Calendar.YEAR, 2014);
+										// In the past to trigger validation error.
+										cal.set(Calendar.YEAR, 2010);
 										returnActuals.setOperationsStart(cal.getTime());
+
+										if (isDivertableDESPurchase && loadPort != null) {
+											returnActuals.setTitleTransferPoint(loadPort);
+										}
 									}
+
 								}
 							}
 						}
