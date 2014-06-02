@@ -72,6 +72,7 @@ import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -734,9 +735,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					try { 
 						EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 						final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-						final Vessel vessel = (Vessel) ca.getInputCargo().getAssignment();
-						if (vessel != null)
-							result = vessel.getName();
+						AVesselSet<? extends Vessel> l = ca.getInputCargo().getAssignment();
+						if (l != null) result = l.getName();
 					}
 					catch (Exception e) {
 						log.warn("Error formatting previous assignment", e);
