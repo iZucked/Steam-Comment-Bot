@@ -592,9 +592,12 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				
 				public Object getValue(final EObject object) {
 					Object result = null;
-					PurchaseContract purchaseContract = (PurchaseContract) getContract();
+					final PurchaseContract purchaseContract = (PurchaseContract) getContract();
 					if (purchaseContract != null) {
-						result = purchaseContract.eGetWithDefault(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV);						
+						// Get value if set, otherwise we want to fall back to current load port, not contract fallback.
+						if (purchaseContract.eIsSet(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV)) {
+							result = purchaseContract.eGet(CommercialPackage.Literals.PURCHASE_CONTRACT__CARGO_CV);
+						}
 					}
 					if (result == null && port != null) {
 						result =  port.eGetWithDefault(PortPackage.Literals.PORT__CV_VALUE);
