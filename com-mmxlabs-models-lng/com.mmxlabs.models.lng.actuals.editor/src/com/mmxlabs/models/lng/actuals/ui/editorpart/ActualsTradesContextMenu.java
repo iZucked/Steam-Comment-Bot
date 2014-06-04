@@ -202,7 +202,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									cargoActuals.setVessel((Vessel) slot.getAssignment());
 								}
 							}
-							slotActuals.setCV(((LoadSlot) slot).getCargoCV());
+							slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegatedCV());
 						} else if (slot instanceof DischargeSlot) {
 							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 							dischargePort = dischargeSlot.getPort();
