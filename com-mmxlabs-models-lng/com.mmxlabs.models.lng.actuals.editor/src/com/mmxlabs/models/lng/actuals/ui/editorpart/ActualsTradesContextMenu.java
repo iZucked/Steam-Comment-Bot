@@ -209,7 +209,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 								}
 							} else {
 							}
-							slotActuals.setCV(((LoadSlot) slot).getCargoCV());
+							slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegatedCV());
 
 							((LoadActuals) slotActuals).setContractType(loadSlot.isDESPurchase() ? "DES" : "FOB");
 						} else if (slot instanceof DischargeSlot) {
