@@ -17,6 +17,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.models.lng.actuals.ActualsModel;
+import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
@@ -68,13 +69,13 @@ public class ActualsEditorMenuHelper {
 		}
 	}
 
-	private void createDeleteSlotMenu(final IMenuManager newMenuManager, final SlotActuals slot) {
+	private void createDeleteSlotMenu(final IMenuManager newMenuManager, final CargoActuals cargoActuals) {
 		final Action deleteAction = new Action("Delete") {
 			@Override
 			public void run() {
 
-				final CompoundCommand currentWiringCommand = new CompoundCommand("Delete slot");
-				currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), slot));
+				final CompoundCommand currentWiringCommand = new CompoundCommand("Delete cargo actuals");
+				currentWiringCommand.append(DeleteCommand.create(scenarioEditingLocation.getEditingDomain(), cargoActuals));
 				// CargoActuals cargo = null;
 				// if (slot instanceof LoadActuals) {
 				// final LoadActuals loadSlot = (LoadActuals) slot;
@@ -101,11 +102,13 @@ public class ActualsEditorMenuHelper {
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
 				final LoadActuals loadSlot = loadSlots.get(index);
-//				final MenuManager newMenuManager = new MenuManager("New...", null);
-//				manager.add(newMenuManager);
-//				createNewSlotMenu(newMenuManager, loadSlot, actualsModel);
 				createEditMenu(manager, loadSlot);
-				createDeleteSlotMenu(manager, loadSlot);
+				
+				final EObject container = loadSlot.eContainer();
+				if (container instanceof CargoActuals) {
+					final CargoActuals cargoActuals = (CargoActuals) container;
+					createDeleteSlotMenu(manager, cargoActuals);
+				}
 			}
 
 		};
@@ -121,11 +124,13 @@ public class ActualsEditorMenuHelper {
 
 				final DischargeActuals dischargeSlot = dischargeSlots.get(index);
 
-//				final MenuManager newMenuManager = new MenuManager("New...", null);
-//				manager.add(newMenuManager);
-//				createNewSlotMenu(newMenuManager, dischargeSlot, actualsModel);
 				createEditMenu(manager, dischargeSlot);
-				createDeleteSlotMenu(manager, dischargeSlot);
+				
+				final EObject container = dischargeSlot.eContainer();
+				if (container instanceof CargoActuals) {
+					final CargoActuals cargoActuals = (CargoActuals) container;
+					createDeleteSlotMenu(manager, cargoActuals);
+				}
 			}
 
 		};

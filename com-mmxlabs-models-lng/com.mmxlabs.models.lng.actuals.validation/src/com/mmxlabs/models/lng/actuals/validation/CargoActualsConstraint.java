@@ -163,7 +163,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					}
 
 					// Sanity check cv and m3 -> mmbtu conversions
-					if (Math.abs((slotActuals.getCV() * slotActuals.getVolumeInM3()) - slotActuals.getVolumeInMMBtu()) > 1.0) {
+					if (Math.abs((slotActuals.getVolumeInMMBtu() / slotActuals.getCV()) - slotActuals.getVolumeInM3()) > 0.2) {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 								(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, volume in m3 and volume in mmBtu do not match up"));
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);
@@ -173,7 +173,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 					}
 					if (slotActuals instanceof LoadActuals) {
 						final LoadActuals loadActuals = (LoadActuals) slotActuals;
-						if (Math.abs((slotActuals.getCV() * loadActuals.getStartingHeelM3()) - loadActuals.getStartingHeelMMBTu()) > 1.0) {
+						if (Math.abs((loadActuals.getStartingHeelMMBTu() / slotActuals.getCV()) - loadActuals.getStartingHeelM3()) > 0.2) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 									(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, heel volume in m3 and heel volume in mmBtu do not match up"));
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);
@@ -183,7 +183,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						}
 					} else if (slotActuals instanceof DischargeActuals) {
 						final DischargeActuals dischargeActuals = (DischargeActuals) slotActuals;
-						if (Math.abs((slotActuals.getCV() * dischargeActuals.getEndHeelM3()) - dischargeActuals.getEndHeelMMBTu()) > 1.0) {
+						if (Math.abs((dischargeActuals.getEndHeelMMBTu() / slotActuals.getCV()) - dischargeActuals.getEndHeelM3()) > 0.2) {
 							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 									(IConstraintStatus) ctx.createFailureStatus("Slot actual CV, heel volume in m3 and heel volume in mmBtu do not match up"));
 							status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__CV);
@@ -199,7 +199,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__DISTANCE);
 						failures.add(status);
 					}
-					
+
 					final ReturnActuals returnActuals = cargoActuals.getReturnActuals();
 					if (returnActuals != null) {
 						final Date returnOperationsStart = returnActuals.getOperationsStart();
