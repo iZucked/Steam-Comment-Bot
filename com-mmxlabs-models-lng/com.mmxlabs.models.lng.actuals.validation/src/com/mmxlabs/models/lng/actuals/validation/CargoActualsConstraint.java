@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.actuals.validation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -113,7 +114,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				}
 
 				for (final SlotActuals slotActuals : cargoActuals.getActuals()) {
-					Slot slot = slotActuals.getSlot();
+					final Slot slot = slotActuals.getSlot();
 
 					if (slot != null) {
 						if (!cargoActuals.getCargo().getSlots().contains(slot)) {
@@ -197,6 +198,20 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Slot actual needs a distance"));
 						status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__DISTANCE);
 						failures.add(status);
+					}
+					
+					final ReturnActuals returnActuals = cargoActuals.getReturnActuals();
+					if (returnActuals != null) {
+						final Date returnOperationsStart = returnActuals.getOperationsStart();
+						if (returnOperationsStart != null && slotActuals.getOperationsStart() != null) {
+							if (returnOperationsStart.before(slotActuals.getOperationsStart())) {
+								final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+										(IConstraintStatus) ctx.createFailureStatus("Return actuals date is before slot actuals date"));
+								status.addEObjectAndFeature(slotActuals, ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
+								status.addEObjectAndFeature(returnActuals, ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START);
+								failures.add(status);
+							}
+						}
 					}
 
 				}
