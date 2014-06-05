@@ -398,7 +398,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 									final Event lastEvent = events.get(events.size() - 1);
 									final Event nextEvent = lastEvent.getNextEvent();
 									final Sequence sequence = lastEvent.getSequence();
-									if (sequence.getSequenceType() == SequenceType.VESSEL || sequence.getSequenceType() == SequenceType.SPOT_VESSEL && nextEvent != null) {
+									if (nextEvent != null && (sequence.getSequenceType() == SequenceType.VESSEL || sequence.getSequenceType() == SequenceType.SPOT_VESSEL)) {
 										returnActuals.setEndHeelM3(nextEvent.getHeelAtStart());
 										returnActuals.setTitleTransferPoint(nextEvent.getPort());
 										returnActuals.setOperationsStart(nextEvent.getLocalStart().getTime());
