@@ -26,12 +26,18 @@ import com.mmxlabs.scenario.service.util.encryption.ui.ExistingPasswordPromptDia
  */
 public final class KeyFileLoader {
 
+	private static final String ENC_KEY_FILE_PROPERTY = "lingo.enc.keyfile";
+
 	public static URIConverter.Cipher loadCipher(final String keyFileName) throws Exception {
 
 		// Try to find the key file
 
-		// Look in instance area - e.g. workspace folder / runtime folder
-		File keyFileFile = getInstanceDataKeyFile(keyFileName);
+		// Look for file specified in system property
+		File keyFileFile = getEncFilePropertyDataKeyFile(keyFileName);
+		if (keyFileFile == null) {
+			// Look in instance area - e.g. workspace folder / runtime folder
+			keyFileFile = getInstanceDataKeyFile(keyFileName);
+		}
 		if (keyFileFile == null) {
 			// Look in eclipse top of installation directory
 			keyFileFile = getEclipseDataKeyFile(keyFileName);
@@ -159,6 +165,18 @@ public final class KeyFileLoader {
 				}
 			} catch (final MalformedURLException e) {
 				// Ignore
+			}
+		}
+		return null;
+	}
+
+	private static File getEncFilePropertyDataKeyFile(final String keyFileName) {
+
+		final String encKeyFile = System.getProperty(ENC_KEY_FILE_PROPERTY);
+		if (encKeyFile != null) {
+			final File f = new File(encKeyFile);
+			if (f.exists()) {
+				return f;
 			}
 		}
 		return null;
