@@ -273,15 +273,17 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 			final IScenarioService scenarioService = container.getScenarioService();
 			final ScenarioInstance instance = scenarioService.duplicate(scenario, container);
 
-			for (final Container c : scenario.getElements()) {
-				if (monitor.isCanceled()) {
-					return;
-				}
-				monitor.subTask("Copying " + c.getName());
-				if (c instanceof Folder) {
-					copyFolder(instance, (Folder) c, new SubProgressMonitor(monitor, 10));
-				} else {
-					copyScenario(instance, (ScenarioInstance) c, new SubProgressMonitor(monitor, 10));
+			if (instance != null) {
+				for (final Container c : scenario.getElements()) {
+					if (monitor.isCanceled()) {
+						return;
+					}
+					monitor.subTask("Copying " + c.getName());
+					if (c instanceof Folder) {
+						copyFolder(instance, (Folder) c, new SubProgressMonitor(monitor, 10));
+					} else {
+						copyScenario(instance, (ScenarioInstance) c, new SubProgressMonitor(monitor, 10));
+					}
 				}
 			}
 		} finally {
