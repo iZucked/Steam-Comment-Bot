@@ -131,7 +131,7 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("At Port", objectFormatter, sp.getEvent_Port(), name);
 		addColumn("Route", objectFormatter, sp.getJourney_Route(), name);
 
-		addColumn("Transfer Volume", "In m3", new IntegerFormatter() {
+		addColumn("Transfer Volume", "In m³", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof SlotVisit) {
@@ -145,7 +145,7 @@ public class PortRotationReportView extends EMFReportView {
 				return null;
 			}
 		});
-		addColumn("Heel Start", "In m3", new IntegerFormatter() {
+		addColumn("Heel Start", "In m³", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -155,7 +155,7 @@ public class PortRotationReportView extends EMFReportView {
 				return null;
 			}
 		});
-		addColumn("Heel End", "In m3", new IntegerFormatter() {
+		addColumn("Heel End", "In m³", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
