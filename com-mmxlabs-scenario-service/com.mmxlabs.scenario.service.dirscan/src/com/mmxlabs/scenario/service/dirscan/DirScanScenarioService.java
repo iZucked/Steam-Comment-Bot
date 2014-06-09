@@ -493,11 +493,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				scenarioInstance.setName(scenarioname);
 				scenarioInstance.setVersionContext(manifest.getVersionContext());
 				scenarioInstance.setScenarioVersion(manifest.getScenarioVersion());
-				
+
 				scenarioInstance.setClientVersionContext(manifest.getClientVersionContext());
 				scenarioInstance.setClientScenarioVersion(manifest.getClientScenarioVersion());
 
-				
 				final Metadata meta = ScenarioServiceFactory.eINSTANCE.createMetadata();
 				scenarioInstance.setMetadata(meta);
 				meta.setContentType(manifest.getScenarioType());
@@ -553,24 +552,15 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 			final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
 
-			// TODO: Deselect from view
-			// Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
-
 			final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
-			Display.getDefault().syncExec(new Runnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
-					lock.readLock().lock();
-					try {
 
-						final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-						final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
-						// TODO: Prompt to save?
-						activePage.closeEditors(editorReferences, false);
-					} finally {
-						lock.readLock().unlock();
-					}
+					final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+					final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+					activePage.closeEditors(editorReferences, false);
 				}
 			});
 		}
@@ -742,11 +732,15 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
 
+		// Make read-only...
+		instance.setReadonly(true);
 		if (instance.getInstance() == null) {
 			try {
 				final EObject object = super.load(instance);
 
 				if (object != null) {
+					// Forces editor lock to disallow users from editing the scenario.
+					// TODO: This is not a very clean way to do it!
 					final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
 					lock.claim();
 				}
@@ -786,7 +780,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			lock.readLock().unlock();
 		}
 	}
-	
+
 	/**
 	 * Override the normal method as we register the {@link DirScanScenarioService} is a different way. Thus we can avoid keeping a service tracker active.
 	 */
