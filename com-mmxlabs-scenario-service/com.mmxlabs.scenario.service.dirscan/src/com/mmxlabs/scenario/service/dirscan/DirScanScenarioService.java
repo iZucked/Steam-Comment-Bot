@@ -4,31 +4,21 @@
  */
 package com.mmxlabs.scenario.service.dirscan;
 
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
-import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.nio.file.ClosedWatchServiceException;
-import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchEvent.Kind;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -80,12 +70,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 	 */
 	private String serviceName;
 
-	/**
-	 * The watch service instance
-	 */
-	private WatchService watcher;
-	private final Map<WatchKey, Path> keys;
-
 	private final Map<String, WeakReference<Container>> folderMap = new HashMap<String, WeakReference<Container>>();
 	private final Map<String, WeakReference<ScenarioInstance>> scenarioMap = new HashMap<String, WeakReference<ScenarioInstance>>();
 	private final Map<Container, Path> modelToFilesystemMap = new WeakHashMap<Container, Path>();
@@ -135,8 +119,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 	public DirScanScenarioService(final String name) throws IOException {
 		super(name);
-		this.keys = new HashMap<WatchKey, Path>();
-
 	}
 
 	@Override
@@ -232,7 +214,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		lock.writeLock().lock();
 		try {
-			this.watcher = FileSystems.getDefault().newWatchService();
 			try {
 				recursiveAdd(getServiceModel(), dataPath.toPath());
 			} catch (final IOException e) {
@@ -248,93 +229,14 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			public void run() {
 
 				while (watchThreadRunning) {
-
-					// wait for key to be signalled
-					final WatchKey key;
-					try {
-						// Yield every 2 seconds to check running state
-						key = watcher.poll(2, TimeUnit.SECONDS);
-					} catch (final ClosedWatchServiceException e) {
-						break;
-					} catch (final InterruptedException x) {
-						return;
-					}
-
-					if (key == null) {
-						continue;
-					}
 					lock.writeLock().lock();
 					try {
-						final Path dir = keys.get(key);
-						if (dir == null) {
-							// note - potential race condition between key being created and added to map and events firing. We typically get here for the source dir of a moveInto operation/
-							// This can happen as the write lock is stalled by the op read lock after the watcher poll() returns an event.
-							final boolean valid = key.reset();
-							if (!valid) {
-								keys.remove(key);
-
-								// all directories are inaccessible
-								if (keys.isEmpty()) {
-									watchThreadRunning = false;
-									return;
-								}
-							}
-							return;
-						}
-
-						for (final WatchEvent<?> event : key.pollEvents()) {
-							final Kind<?> kind = event.kind();
-
-							// TBD - provide example of how OVERFLOW event is handled
-							if (kind == OVERFLOW) {
-								continue;
-							}
-
-							// Context for directory entry event is the file name of entry
-							@SuppressWarnings("unchecked")
-							final WatchEvent<Path> ev = (WatchEvent<Path>) (event);
-							// Work out filename - if renamed or deleted, the old name will no longer exist on filesystem.
-							final Path name = ev.context();
-							final Path child = dir.resolve(name);
-
-							log.debug("Event " + ev.kind().name() + " - " + child);
-							// if directory is created, and watching recursively, then
-							// register it and its sub-directories
-							if (kind == ENTRY_CREATE) {
-								try {
-									recursiveAdd(folderMap.get(child.getParent().normalize().toString()).get(), child);
-								} catch (final IOException e) {
-									log.error(e.getMessage(), e);
-								}
-							}
-
-							else if (kind == ENTRY_DELETE) {
-
-								final String pathKey = child.normalize().toString();
-								if (folderMap.containsKey(pathKey)) {
-									removeFolder(child);
-								} else if (scenarioMap.containsKey(pathKey)) {
-									removeFile(child);
-								}
-							} else if (kind == ENTRY_MODIFY) {
-								//
-								if (Files.isRegularFile(child)) {
-									addFile(child);
-								}
-							}
-						}
-
-						// reset key and remove from set if directory no longer accessible
-						final boolean valid = key.reset();
-						if (!valid) {
-							keys.remove(key);
-
-							// all directories are inaccessible
-							if (keys.isEmpty()) {
-								watchThreadRunning = false;
-								return;
-							}
-						}
+						scanDirectory(getServiceModel(), dataPath.toPath());
+						Thread.sleep(20000);
+					} catch (final InterruptedException e) {
+						// ignore
+					} catch (final Exception e) {
+						log.error(e.getMessage(), e);
 					} finally {
 						lock.writeLock().unlock();
 					}
@@ -348,25 +250,65 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		// Terminate watch thread
 		watchThreadRunning = false;
-		// Close watch service - this will cause the watch#poll/take methods to throw exceptions
-		if (watcher != null) {
-			try {
-				watcher.close();
-			} catch (final IOException e) {
-				log.error(e.getMessage(), e);
-			}
-		}
-		// Cancel all keys
-		for (final WatchKey key : keys.keySet()) {
-			key.cancel();
-		}
 		// Remove Model elements
 		getServiceModel().getElements().clear();
 
 		// Empty maps
-		keys.clear();
 		folderMap.clear();
 		scenarioMap.clear();
+
+	}
+
+	private void scanDirectory(final Container root, final Path dataPath) throws IOException {
+
+		final Set<String> newFolders = new HashSet<>();
+		final Set<String> newFiles = new HashSet<>();
+
+		// register directory and sub-directories
+		Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+				log.debug("preVisitDirectory: " + dir.normalize());
+				addFolder(dir);
+				newFolders.add(dir.normalize().toString());
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+				log.debug("visitFile: " + file.normalize());
+
+				addFile(file);
+				newFiles.add(file.normalize().toString());
+				return super.visitFile(file, attrs);
+			}
+		});
+		{
+			final Set<String> currentFiles = new HashSet<>(scenarioMap.keySet());
+			currentFiles.removeAll(newFiles);
+			for (final String file : currentFiles) {
+				final WeakReference<ScenarioInstance> ref = scenarioMap.get(file);
+				if (ref != null) {
+					final ScenarioInstance scenarioInstance = ref.get();
+					if (scenarioInstance != null) {
+						removeFile(modelToFilesystemMap.get(scenarioInstance));
+					}
+				}
+			}
+		}
+		{
+			final Set<String> currentFolders = new HashSet<>(folderMap.keySet());
+			currentFolders.removeAll(newFolders);
+			for (final String file : currentFolders) {
+				final WeakReference<Container> ref = folderMap.get(file);
+				if (ref != null) {
+					final Container container = ref.get();
+					if (container != null) {
+						removeFolder(modelToFilesystemMap.get(container));
+					}
+				}
+			}
+		}
 
 	}
 
@@ -393,6 +335,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 				return super.visitFile(file, attrs);
 			}
+
 		});
 	}
 
@@ -409,15 +352,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			final EObject container = c.eContainer();
 			if (container instanceof Container) {
 				((Container) container).getElements().remove(c);
-			}
-		}
-		for (final Map.Entry<WatchKey, Path> e : keys.entrySet()) {
-			if (e.getValue().equals(dir)) {
-				log.debug("Unwatching " + dir.toString());
-				final WatchKey key = e.getKey();
-				key.cancel();
-				keys.remove(key);
-				break;
 			}
 		}
 	}
@@ -454,17 +388,6 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				modelToFilesystemMap.put(folder, dir);
 			} else {
 				folderMap.put(dataPath.toPath().normalize().toString(), new WeakReference<Container>(getServiceModel()));
-			}
-			try {
-				log.debug("Watching " + dir.toString());
-				final WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-				if (key == null) {
-					log.error("Null watch key created for directory: " + dir.toString(), new RuntimeException());
-				} else {
-					keys.put(key, dir);
-				}
-			} catch (final Exception e) {
-				log.error("Exception thrown attempting to watch directory: " + dir.toString(), e);
 			}
 		}
 	}
