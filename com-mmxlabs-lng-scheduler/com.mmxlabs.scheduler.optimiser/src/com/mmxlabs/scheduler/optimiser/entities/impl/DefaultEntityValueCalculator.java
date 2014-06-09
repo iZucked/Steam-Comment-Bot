@@ -244,12 +244,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					}
 				}
 				cargoPNLData.slotPricePerMMBTu[idx] = pricePerMMBTu;
-				// TODO: Split into a third loop
-				{
-					additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, currentAllocation, cargoPNLData.slotPricePerMMBTu, vessel,
-							vesselStartTime, plan, portSlotDetails);
-					cargoPNLData.slotAdditionalPNL[idx] = additionProfitAndLoss;
-				}
+				
 				// Tmp hack until we sort out the API around this - AllocationAnnotation is an input to this method!
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
 
@@ -264,6 +259,20 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				assert cargoPNLData.slotPricePerMMBTu[idx] == actualsDataProvider.getLNGPricePerMMBTu(slot);
 			}
 
+			idx++;
+		}
+
+		// Calculate additional P&L
+		idx = 0;
+		for (final IPortSlot slot : slots) {
+			if (slot instanceof ILoadOption) {
+				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
+				final ILoadOption loadOption = (ILoadOption) slot;
+
+				final long additionProfitAndLoss = loadOption.getLoadPriceCalculator().calculateAdditionalProfitAndLoss(loadOption, currentAllocation, cargoPNLData.slotPricePerMMBTu, vessel,
+						vesselStartTime, plan, portSlotDetails);
+				cargoPNLData.slotAdditionalPNL[idx] = additionProfitAndLoss;
+			}
 			idx++;
 		}
 
