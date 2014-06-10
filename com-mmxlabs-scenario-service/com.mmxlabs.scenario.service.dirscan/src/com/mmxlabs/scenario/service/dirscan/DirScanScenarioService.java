@@ -208,19 +208,18 @@ public class DirScanScenarioService extends AbstractScenarioService {
 
 		dataPath = new File(path);
 
-		if (!dataPath.exists()) {
-			throw new IOException("Target folder does not exist: " + dataPath.toString());
-		}
+		if (dataPath.exists()) {
+			lock.writeLock().lock();
 
-		lock.writeLock().lock();
-		try {
 			try {
-				recursiveAdd(getServiceModel(), dataPath.toPath());
-			} catch (final IOException e) {
-				log.error(e.getMessage(), e);
+				try {
+					scanDirectory(getServiceModel(), dataPath.toPath());
+				} catch (final IOException e) {
+					log.error(e.getMessage(), e);
+				}
+			} finally {
+				lock.writeLock().unlock();
 			}
-		} finally {
-			lock.writeLock().unlock();
 		}
 
 		watchThreadRunning = true;
@@ -264,34 +263,36 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		final Set<String> newFolders = new HashSet<>();
 		final Set<String> newFiles = new HashSet<>();
 
-		// register directory and sub-directories
-		Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-				log.debug("preVisitDirectory: " + dir.normalize());
-				addFolder(dir);
-				newFolders.add(dir.normalize().toString());
-				return FileVisitResult.CONTINUE;
-			}
+		if (Files.exists(dataPath)) {
+			// register directory and sub-directories
+			Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
+				@Override
+				public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+					log.debug("preVisitDirectory: " + dir.normalize());
+					addFolder(dir);
+					newFolders.add(dir.normalize().toString());
+					return FileVisitResult.CONTINUE;
+				}
 
-			@Override
-			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-				log.debug("visitFile: " + file.normalize());
+				@Override
+				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+					log.debug("visitFile: " + file.normalize());
 
-				addFile(file);
-				newFiles.add(file.normalize().toString());
-				return super.visitFile(file, attrs);
-			}
-		});
+					addFile(file);
+					newFiles.add(file.normalize().toString());
+					return super.visitFile(file, attrs);
+				}
+			});
+		}
 		{
 			final Set<String> currentFiles = new HashSet<>(scenarioMap.keySet());
 			currentFiles.removeAll(newFiles);
 			for (final String file : currentFiles) {
-				final WeakReference<ScenarioInstance> ref = scenarioMap.get(file);
+				final WeakReference<ScenarioInstance> ref = scenarioMap.remove(file);
 				if (ref != null) {
 					final ScenarioInstance scenarioInstance = ref.get();
 					if (scenarioInstance != null) {
-						removeFile(modelToFilesystemMap.get(scenarioInstance));
+						removeFile(scenarioInstance);
 					}
 				}
 			}
@@ -300,43 +301,16 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			final Set<String> currentFolders = new HashSet<>(folderMap.keySet());
 			currentFolders.removeAll(newFolders);
 			for (final String file : currentFolders) {
-				final WeakReference<Container> ref = folderMap.get(file);
+				final WeakReference<Container> ref = folderMap.remove(file);
 				if (ref != null) {
 					final Container container = ref.get();
 					if (container != null) {
-						removeFolder(modelToFilesystemMap.get(container));
+						removeFolder(container);
 					}
 				}
 			}
 		}
 
-	}
-
-	/**
-	 * Register the given directory, and all its sub-directories, with the WatchService.
-	 */
-
-	private void recursiveAdd(final Container root, final Path dataPath) throws IOException {
-		// register directory and sub-directories
-		Files.walkFileTree(dataPath, new SimpleFileVisitor<Path>() {
-			@Override
-			public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
-				log.debug("preVisitDirectory: " + dir.normalize());
-				addFolder(dir);
-
-				return FileVisitResult.CONTINUE;
-			}
-
-			@Override
-			public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
-				log.debug("visitFile: " + file.normalize());
-
-				addFile(file);
-
-				return super.visitFile(file, attrs);
-			}
-
-		});
 	}
 
 	protected void removeFolder(final Path dir) {
@@ -347,6 +321,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			return;
 		}
 		final Container c = remove.get();
+		removeFolder(c);
+	}
+
+	protected void removeFolder(final Container c) {
 		if (c != null) {
 			detachSubTree(c);
 			final EObject container = c.eContainer();
@@ -449,6 +427,10 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			return;
 		}
 		final ScenarioInstance c = scenarioRef.get();
+		removeFile(c);
+	}
+
+	protected void removeFile(ScenarioInstance c) {
 
 		if (c != null) {
 			detachSubTree(c);
