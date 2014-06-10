@@ -100,6 +100,15 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	};
 
 	private final class InternalSaveablesProvider extends SaveablesProvider {
+
+		boolean disposed = false;
+
+		@Override
+		public void dispose() {
+			disposed = true;
+			super.dispose();
+		}
+
 		@Override
 		public Saveable[] getSaveables() {
 			return saveablesMap.keySet().toArray(new Saveable[0]);
@@ -128,8 +137,10 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 				@Override
 				public void run() {
-					fireSaveablesOpened(models);
-					fireSaveablesClosed(models);
+					if (!disposed) {
+						fireSaveablesOpened(models);
+						fireSaveablesClosed(models);
+					}
 				}
 			});
 
@@ -140,8 +151,10 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 				@Override
 				public void run() {
-					fireSaveablesDirtyChanged(models);
-					fireSaveablesClosed(models);
+					if (!disposed) {
+						fireSaveablesDirtyChanged(models);
+						fireSaveablesClosed(models);
+					}
 				}
 			});
 		}
@@ -151,7 +164,9 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 				@Override
 				public void run() {
-					fireSaveablesDirtyChanged(models);
+					if (!disposed) {
+						fireSaveablesDirtyChanged(models);
+					}
 				}
 			});
 		}
@@ -312,8 +327,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			}
 			if (e instanceof ModelReference) {
 				// Ignore!
-			} else 
-			if (filtered) {
+			} else if (filtered) {
 				filteredElements.put(e, true);
 			} else {
 				c.add(e);
