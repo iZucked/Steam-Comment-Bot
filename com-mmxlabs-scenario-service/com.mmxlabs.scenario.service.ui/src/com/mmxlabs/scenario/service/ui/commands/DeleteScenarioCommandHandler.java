@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,12 +13,16 @@ import java.util.List;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -60,19 +65,18 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 
 					if (totalChildCount > 0) {
 						final MessageDialog dialog = new MessageDialog(HandlerUtil.getActiveShell(event), "Delete selection and contents?", null,
-								"Do you really want to delete the selection and all and its contents (" + totalChildCount + " scenarios)? Note: this action cannot be undone", MessageDialog.CONFIRM, new String[] { "Don't Delete",
-										"Delete" }, 1);
+								"Do you really want to delete the selection and all and its contents (" + totalChildCount + " scenarios)? Note: this action cannot be undone", MessageDialog.CONFIRM,
+								new String[] { "Don't Delete", "Delete" }, 1);
 						if (dialog.open() != 1) {
 							return;
 						}
 					}
-					List<ScenarioInstance> scenarios = new LinkedList<>();
+					final List<ScenarioInstance> scenarios = new LinkedList<>();
 
-					
 					// Find scenarios to save/close editor
-					List<EObject> search = new LinkedList<>(filtered);
+					final List<EObject> search = new LinkedList<>(filtered);
 					while (!search.isEmpty()) {
-						final Container container = (Container)search.remove(0);
+						final Container container = (Container) search.remove(0);
 						search.addAll(container.getElements());
 						if (container instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) container;
@@ -91,13 +95,47 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 							activePage.closeEditors(editorReferences, false);
 						}
 					}
-					
-					// Finally delete
-					for (final EObject object : filtered) {
-						final Container container = (Container) object;
 
-						final IScenarioService service = container.getScenarioService();
-						service.delete(container);
+					final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
+
+					try {
+						dialog.run(true, true, new IRunnableWithProgress() {
+
+							@Override
+							public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+								monitor.beginTask("Deleting", scenarios.size() + 1);
+								try {
+
+									// Delete scenario instances first
+									for (final ScenarioInstance scenarioInstance : scenarios) {
+										monitor.subTask("Deleting " + scenarioInstance.getName());
+
+										final IScenarioService service = scenarioInstance.getScenarioService();
+										service.delete(scenarioInstance);
+										filtered.remove(scenarioInstance);
+										monitor.worked(1);
+									}
+									// Finally delete remainder (should be folders)
+									for (final EObject object : filtered) {
+										final Container container = (Container) object;
+										monitor.subTask("Deleting " + container.getName());
+
+										final IScenarioService service = container.getScenarioService();
+										service.delete(container);
+									}
+									monitor.worked(1);
+								} finally {
+									monitor.done();
+								}
+							}
+						});
+					} catch (final InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (final InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
 			}
