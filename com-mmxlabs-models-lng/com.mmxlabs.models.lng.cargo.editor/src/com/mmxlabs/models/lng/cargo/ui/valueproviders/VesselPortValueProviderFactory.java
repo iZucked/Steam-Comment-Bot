@@ -19,6 +19,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -46,13 +47,12 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 		if (delegate == null)
 			return null;
 		final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
-		if (reference == CargoPackage.eINSTANCE.getVesselAvailability_StartAt() ||
-			reference == CargoPackage.eINSTANCE.getVesselAvailability_EndAt()) {
+		if (reference == CargoPackage.eINSTANCE.getVesselAvailability_StartAt() || reference == CargoPackage.eINSTANCE.getVesselAvailability_EndAt()) {
 			return new IReferenceValueProvider() {
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
-			
-//					??
+
+					// ??
 					if (changedFeature == CargoPackage.eINSTANCE.getSlot_Contract()) {
 						return true;
 					} else if (changedFeature == FleetPackage.eINSTANCE.getVessel_InaccessiblePorts()) {
@@ -76,19 +76,22 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 
-//					I assume delegateValue is list of all ports??
-					
+					// I assume delegateValue is list of all ports??
+
 					if (target instanceof VesselAvailability) {
 						final VesselAvailability va = (VesselAvailability) target;
-						final EList<APortSet<Port>> ips =  va.getVessel().getInaccessiblePorts();
-						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
-						for (final Pair<String, EObject> p : delegateValue) {
-//							search recursively
-							if(!contains(ips, p.getSecond())){
-								filteredList.add(p);
+						final Vessel vessel = va.getVessel();
+						if (vessel != null) {
+							final EList<APortSet<Port>> ips = vessel.getInaccessiblePorts();
+							final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
+							for (final Pair<String, EObject> p : delegateValue) {
+								// search recursively
+								if (!contains(ips, p.getSecond())) {
+									filteredList.add(p);
+								}
+								return filteredList;
 							}
-						}												
-						return filteredList;
+						}
 					}
 					return delegateValue;
 				}
@@ -102,20 +105,20 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 			return delegateFactory;
 		}
 	}
-	
-	private boolean contains(EList<APortSet<Port>> ips, EObject value){
 
-		for (APortSet<Port> aPort: ips) {
-			if(aPort instanceof Port){
-				Port port = (Port) aPort;
-				if(port == value) return true; 
-			}
-			else if (aPort instanceof PortGroup){
-				PortGroup portGroup = (PortGroup) aPort;
+	private boolean contains(final EList<APortSet<Port>> ips, final EObject value) {
+
+		for (final APortSet<Port> aPort : ips) {
+			if (aPort instanceof Port) {
+				final Port port = (Port) aPort;
+				if (port == value)
+					return true;
+			} else if (aPort instanceof PortGroup) {
+				final PortGroup portGroup = (PortGroup) aPort;
 				return contains(portGroup.getContents(), value);
 			}
 		}
 		return false;
 	}
-	
+
 }
