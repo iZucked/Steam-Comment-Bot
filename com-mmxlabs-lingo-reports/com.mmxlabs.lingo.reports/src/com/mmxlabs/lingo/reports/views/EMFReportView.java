@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -151,6 +152,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		private final String title;
 		private final String tooltip;
 		public GridViewerColumn column;
+		public int viewIndex;
 
 		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title) {
 			this(formatter, features, title, null);
@@ -626,6 +628,108 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return handler;
 	}
 	
+	/**
+	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in
+	 * the grid's display.
+	 * 
+	 * @param handler
+	 * @return
+	 */
+	public int getColumnGridIndex(final ColumnHandler handler) {
+		Grid grid = viewer.getGrid();
+		int[] columnOrder = grid.getColumnOrder();
+		int gridIndex = grid.indexOf(handler.column.getColumn());
+		for (int i = 0; i < columnOrder.length; i++) {
+			if (columnOrder[i] == gridIndex) {
+				return i;
+			}
+		}
+		
+		return -1;		
+	}
+	
+	public void swapVisibleColumnOrder(final ColumnHandler a, final ColumnHandler b) {
+		int[] columnOrder = viewer.getGrid().getColumnOrder();
+		int aViewIndex = getColumnGridIndex(a);
+		int bViewIndex = getColumnGridIndex(b);
+		int swap = columnOrder[aViewIndex];
+		columnOrder[aViewIndex] = columnOrder[bViewIndex];
+		columnOrder[bViewIndex] = swap;		
+		viewer.getGrid().setColumnOrder(columnOrder);			
+	}
+	
+	protected ColumnHandler findHandler(final GridColumn column) {
+		for (ColumnHandler handler: handlers) {
+			if (handler.column.getColumn() == column) {
+				return handler;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Sets the column associated with handler <handler> to have a view index of viewIndex.
+	 * N.B.: this is relative to other columns with the same visibility state; for instance,
+	 * setting the view index to 2 (3rd element) on a visible column will  
+	 * 
+	 * @param handler
+	 * @param viewIndex
+	 */
+	public void setColumnViewIndex(final ColumnHandler handler, int viewIndex) {
+		GridColumn hColumn = handler.column.getColumn();
+		
+		int[] columnOrder = viewer.getGrid().getColumnOrder();
+		List<ColumnHandler> matchingColumns = new ArrayList<>();
+				
+		for (int i = 0; i < columnOrder.length; i++) {
+			GridColumn column = viewer.getGrid().getColumn(columnOrder[i]);
+			if (column.getVisible() == hColumn.getVisible()) {
+				matchingColumns.add(findHandler(column));
+			}
+		}
+		
+		swapVisibleColumnOrder(handler, matchingColumns.get(viewIndex));
+	}
+	
+	public int getColumnViewIndex(final ColumnHandler handler) {
+		Grid grid = viewer.getGrid();
+		GridColumn hColumn = handler.column.getColumn();
+		
+		int result = 0;
+		int[] columnOrder = grid.getColumnOrder();
+		for (int i = 0; i < columnOrder.length; i++) {
+			int index = columnOrder[i];
+			GridColumn column = grid.getColumn(index);
+			if (column == hColumn) {
+				return result;
+			}
+			else if (column.getVisible() == hColumn.getVisible()) {
+				result += 1;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public void swapColumnViewIndex(final ColumnHandler handler, int viewIndex) {
+		int[] columnOrder = viewer.getGrid().getColumnOrder();
+		int oldViewIndex = getColumnGridIndex(handler);
+		int swappedGridIndex = columnOrder[viewIndex];
+		columnOrder[viewIndex] = columnOrder[oldViewIndex];
+		columnOrder[oldViewIndex] = swappedGridIndex;
+		
+		viewer.getGrid().setColumnOrder(columnOrder);
+	}
+
+	protected ColumnHandler[] getHandlersInViewOrder() {
+		ColumnHandler[] result = new ColumnHandler [handlers.size()];
+		
+		for (final ColumnHandler handler: handlers) {
+			result[getColumnGridIndex(handler)] = handler;
+		}
+		
+		return result;
+	}	
 	
 
 	protected Pair<EObject, CargoAllocation> getIfCargoAllocation(final Object obj, final EStructuralFeature cargoAllocationRef) {
@@ -894,7 +998,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		fillLocalToolBar(bars.getToolBarManager());
 	}
 
-	private void fillLocalPullDown(final IMenuManager manager) {
+	protected void fillLocalPullDown(final IMenuManager manager) {
+		manager.add(new GroupMarker("additions"));
 	}
 
 	private void fillContextMenu(final IMenuManager manager) {
@@ -902,7 +1007,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
-	private void fillLocalToolBar(final IToolBarManager manager) {
+	protected void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(new GroupMarker("filter"));
 //BE		manager.add(new GroupMarker("sortmode")); //BE		
 		manager.add(new GroupMarker("pack"));
@@ -1081,4 +1186,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return selection;
 	}
+	
+	protected List<ColumnHandler> getHandlersInOrder() {
+		return handlersInOrder;
+	}
+
+
+	
+
 }
