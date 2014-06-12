@@ -8,8 +8,12 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -34,11 +38,13 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Files;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
 import com.mmxlabs.scenario.service.util.encryption.IScenarioCipherProvider;
 
 /**
@@ -163,6 +169,31 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		return false;
 	}
 
+	private void scanTree(final File root, final java.util.List<File> scenarioFiles, final Container container, final Map<File, Container> scenarioContainerMap) {
+
+		for (final File f : root.listFiles()) {
+			if (f.isFile() && Files.getFileExtension(f.getName()).equals("lingo")) {
+				scenarioFiles.add(f);
+				scenarioContainerMap.put(f, container);
+			} else if (f.isDirectory()) {
+				// Check for existing dir in contents and reuse!
+				Folder folder = null;
+				for (Container c : container.getElements()) {
+					if (c instanceof Folder && c.getName().equals(f.getName())) {
+						folder = (Folder) c;
+						break;
+					}
+				}
+				if (folder == null) {
+					folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+					folder.setName(f.getName());
+					container.getElements().add(folder);
+				}
+				scanTree(f, scenarioFiles, folder, scenarioContainerMap);
+			}
+		}
+	}
+
 	/**
 	 * @param clipboard
 	 * @param container
@@ -178,24 +209,83 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 			final String[] files = (String[]) fileData;
 			final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 
+			// Scan tree creating folder structure and gathering scenarios.
+			final List<File> scenarioFiles = new LinkedList<>();
+			final Map<File, Container> scenarioContainerMap = new HashMap<>();
+			for (final String filePath : files) {
+				final File f = new File(filePath);
+				if (f.isFile() && Files.getFileExtension(f.getName()).equals("lingo")) {
+					scenarioFiles.add(f);
+					scenarioContainerMap.put(f, container);
+				} else if (f.isDirectory()) {
+					// Check for existing dir in contents and reuse!
+					Folder folder = null;
+					for (Container c : container.getElements()) {
+						if (c instanceof Folder && c.getName().equals(f.getName())) {
+							folder = (Folder) c;
+							break;
+						}
+					}
+					if (folder == null) {
+						folder = ScenarioServiceFactory.eINSTANCE.createFolder();
+						folder.setName(f.getName());
+						container.getElements().add(folder);
+					}
+					scanTree(f, scenarioFiles, folder, scenarioContainerMap);
+				}
+			}
+
 			try {
 				dialog.run(true, true, new IRunnableWithProgress() {
 
 					@Override
 					public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						monitor.beginTask("Copying", files.length);
+						monitor.beginTask("Copying", scenarioFiles.size());
 						try {
 
-							for (final String filePath : files) {
-								monitor.subTask("Copying " + filePath);
-								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath, scenarioCipherProvider);
+							for (final File f : scenarioFiles) {
+
+								if (monitor.isCanceled()) {
+									break;
+								}
+
+								monitor.subTask("Copying " + f.getName());
+								final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(f.getAbsolutePath(), scenarioCipherProvider);
 								if (instance != null) {
-									service.duplicate(instance, container).setName(new File(filePath).getName());
+									Container destinationContainer = scenarioContainerMap.get(f);
+
+									// Get basic name
+									String scenarioName = f.getName();
+									if (scenarioName.endsWith(".lingo")) {
+										// Guava 14+
+										// scenarioName = Files.getNameWithoutExtension(f);
+										scenarioName = scenarioName.replaceAll(".lingo", "");
+									}
+
+									// Avoid name clashes
+									final Set<String> existingNames = new HashSet<String>();
+									for (final Container c : destinationContainer.getElements()) {
+										if (c instanceof Folder) {
+											existingNames.add(((Folder) c).getName());
+										} else if (c instanceof ScenarioInstance) {
+											existingNames.add(((ScenarioInstance) c).getName());
+										}
+									}
+
+									final String namePrefix = scenarioName;
+									String newName = namePrefix;
+									int counter = 1;
+									while (existingNames.contains(newName)) {
+										newName = namePrefix + " (" + counter++ + ")";
+									}
+
+									service.duplicate(instance, destinationContainer).setName(newName);
 								}
 								monitor.worked(1);
+
 							}
-						} catch (IOException e) {
+						} catch (final IOException e) {
 							log.error(e.getMessage(), e);
 						} finally {
 							monitor.done();
