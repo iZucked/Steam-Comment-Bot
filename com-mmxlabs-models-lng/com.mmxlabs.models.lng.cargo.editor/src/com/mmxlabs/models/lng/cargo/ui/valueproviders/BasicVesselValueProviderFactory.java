@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -96,6 +97,10 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 							}
 						}
 					}
+					boolean includeSpotVessels = true;
+					if (target instanceof VesselEvent) {
+						includeSpotVessels = false;
+					}
 
 					boolean useScenarioVessel = true;
 					if (target instanceof LoadSlot) {
@@ -104,9 +109,9 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						useScenarioVessel = !((DischargeSlot) target).isFOBSale();
 					}
 
-					List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
-					boolean noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, target);
-					
+					final List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
+					final boolean noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, target);
+
 					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
 					// filter the global list by the object's allowed values
 					if (allowedVessels != null) {
@@ -124,11 +129,13 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 					}
 
 					final Set<VesselClass> availableSpotVesselClasses = new HashSet<>();
-					final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
-					if (spotMarketsModel != null) {
-						for (final CharterCostModel charteringSpotMarket : spotMarketsModel.getCharteringSpotMarkets()) {
-							if (charteringSpotMarket.getSpotCharterCount() > 0) {
-								availableSpotVesselClasses.addAll(charteringSpotMarket.getVesselClasses());
+					if (includeSpotVessels) {
+						final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
+						if (spotMarketsModel != null) {
+							for (final CharterCostModel charteringSpotMarket : spotMarketsModel.getCharteringSpotMarkets()) {
+								if (charteringSpotMarket.getSpotCharterCount() > 0) {
+									availableSpotVesselClasses.addAll(charteringSpotMarket.getVesselClasses());
+								}
 							}
 						}
 					}
@@ -177,8 +184,8 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 					}
 
 					return result;
-				}				
-				
+				}
+
 				@Override
 				protected Pair<String, EObject> getEmptyObject() {
 					return new Pair<String, EObject>("<Unassigned>", null);
