@@ -58,7 +58,6 @@ import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModul
 import com.mmxlabs.models.lng.transformer.inject.modules.PostExportProcessorModule;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
@@ -193,10 +192,6 @@ public class LNGSchedulerJobUtils {
 	public static Command derive(final EditingDomain domain, final MMXRootObject scenario, final Schedule schedule, final CargoModel cargoModel,
 			final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
-
-		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();
-
-		final HashSet<UUIDObject> reassigned = new HashSet<UUIDObject>();
 
 		// The ElementAssignment needs a cargo linked to a slot. Not all slots will have a cargo until after the command generated here is executed. Therefore build up a map to perform the link. Fall
 		// back to slot.getCargo() is there is no mapping.
