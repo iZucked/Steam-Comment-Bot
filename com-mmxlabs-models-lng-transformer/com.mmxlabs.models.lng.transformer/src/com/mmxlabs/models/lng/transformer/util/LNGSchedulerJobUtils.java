@@ -58,7 +58,6 @@ import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModul
 import com.mmxlabs.models.lng.transformer.inject.modules.PostExportProcessorModule;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;

@@ -1364,7 +1364,7 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				final String yearMonthString = getKeyForDate(cal.getTime());
+				final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
 
 				// Roll forward
 				cal.add(Calendar.MONTH, 1);
@@ -1385,7 +1385,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.DES_PURCHASE, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(SpotType.DES_PURCHASE, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1482,7 +1482,7 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				final String yearMonthString = getKeyForDate(cal.getTime());
+				final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
 				// Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
@@ -1502,7 +1502,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_SALE, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_SALE, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1607,12 +1607,12 @@ public class LNGScenarioTransformer {
 					Date startTime = cal.getTime();
 					while (startTime.before(latestDate)) {
 
-						final String yearMonthString = getKeyForDate(cal.getTime());
+						final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
 						// Roll forward
 						cal.add(Calendar.MONTH, 1);
 						final Date endTime = cal.getTime();
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.DES_SALE, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(SpotType.DES_SALE, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1721,14 +1721,14 @@ public class LNGScenarioTransformer {
 					Date startTime = cal.getTime();
 					while (startTime.before(latestDate)) {
 
-						final String yearMonthString = getKeyForDate(cal.getTime());
+						final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
 
 						// Roll forward
 						cal.add(Calendar.MONTH, 1);
 						final Date endTime = cal.getTime();
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_PURCHASE, getKeyForDate(startTime));
+						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_PURCHASE, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -2336,7 +2336,7 @@ public class LNGScenarioTransformer {
 		}
 		if (spotSlot instanceof Slot) {
 			final Slot slot = (Slot) spotSlot;
-			final String key = getKeyForDate(slot.getWindowStart());
+			final String key = getKeyForDate(TimeZone.getTimeZone(slot.getPort().getTimeZone()), slot.getWindowStart());
 			final Collection<Slot> slots;
 			if (curve.containsKey(key)) {
 				slots = curve.get(key);
@@ -2361,8 +2361,10 @@ public class LNGScenarioTransformer {
 		return Collections.emptyList();
 	}
 
-	private String getKeyForDate(final Date date) {
-		final String key = new SimpleDateFormat("yyyy-MM").format(date);
+	private String getKeyForDate(TimeZone zone, final Date date) {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+		df.setTimeZone(zone);
+		final String key = df.format(date);
 		return key;
 	}
 
