@@ -42,6 +42,7 @@ public class VesselClassSpeedCurveConstraint extends AbstractModelMultiConstrain
 						final String message = String.format("Vessel Class %s has duplicate speed entry of %2.2f in Laden attributes", vesselClass.getName(), line.getSpeed());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_LadenAttributes());
+						statuses.add(dcsd);
 					}
 				}
 			}
@@ -53,6 +54,7 @@ public class VesselClassSpeedCurveConstraint extends AbstractModelMultiConstrain
 						final String message = String.format("Vessel Class %s has duplicate speed entry of %2.2f in ballast attributes", vesselClass.getName(), line.getSpeed());
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_LadenAttributes());
+						statuses.add(dcsd);
 					}
 				}
 			}
