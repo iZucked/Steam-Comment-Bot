@@ -362,60 +362,59 @@ public class CargoEditorMenuHelper {
 	}
 
 	public IMenuListener createMultipleSelectionMenuListener(final Set<Cargo> cargoes) {
-		
+
 		final IMenuListener l = new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
 				boolean anyLocked = false;
 				boolean anyUnlocked = false;
-				
-				for (Cargo cargo: cargoes) {
+
+				for (Cargo cargo : cargoes) {
 					if (cargo.getCargoType() == CargoType.FLEET) {
 						if (cargo.isLocked()) {
 							anyLocked = true;
-						}
-						else {
+						} else {
 							anyUnlocked = true;
 						}
 					}
 				}
-				
+
 				if (anyLocked) {
 					final Action action = new Action("Unlock") {
 						@Override
 						public void run() {
 							final CompoundCommand cc = new CompoundCommand("Unlock assignments");
-							for (Cargo cargo: cargoes) {
+							for (Cargo cargo : cargoes) {
 								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.FALSE));
 								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
 							}
 							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 						}
 					};
-					manager.add(action);					
+					manager.add(action);
 				}
-				
+
 				if (anyUnlocked) {
 					final Action action = new Action("Lock") {
 						@Override
 						public void run() {
 							final CompoundCommand cc = new CompoundCommand("Lock assignments");
-							for (Cargo cargo: cargoes) {
+							for (Cargo cargo : cargoes) {
 								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, Boolean.TRUE));
 								cc.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), cargo, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.FALSE));
 							}
 							scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cc);
 						}
 					};
-					manager.add(action);					
+					manager.add(action);
 				}
 			}
 
 		};
 		return l;
-	}	
-	
+	}
+
 	public IMenuListener createLoadSlotMenuListener(final List<LoadSlot> loadSlots, final int index) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 		final IMenuListener l = new IMenuListener() {
@@ -1033,8 +1032,10 @@ public class CargoEditorMenuHelper {
 		private final boolean isDesPurchaseOrFobSale;
 		private final Port shipToShipPort;
 
-		private String getKeyForDate(final Date date) {
-			final String key = new SimpleDateFormat("yyyy-MM").format(date);
+		private String getKeyForDate(final TimeZone zone, final Date date) {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+			df.setTimeZone(zone);
+			final String key = df.format(date);
 			return key;
 		}
 
@@ -1098,7 +1099,7 @@ public class CargoEditorMenuHelper {
 						cal.set(Calendar.SECOND, 0);
 						cal.set(Calendar.MILLISECOND, 0);
 						final Date startDate = cal.getTime();
-						final String yearMonthString = getKeyForDate(cal.getTime());
+						final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
 						dischargeSlot.setWindowStart(startDate);
 						dischargeSlot.setWindowStartTime(0);
 						cal.add(Calendar.MONTH, 1);
@@ -1143,7 +1144,7 @@ public class CargoEditorMenuHelper {
 						cal.set(Calendar.MILLISECOND, 0);
 						final Date startDate = cal.getTime();
 
-						final String yearMonthString = getKeyForDate(cal.getTime());
+						final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
 
 						loadSlot.setWindowStart(startDate);
 						loadSlot.setWindowStartTime(0);
@@ -1434,6 +1435,5 @@ public class CargoEditorMenuHelper {
 
 		return travelTime;
 	}
-
 
 }
