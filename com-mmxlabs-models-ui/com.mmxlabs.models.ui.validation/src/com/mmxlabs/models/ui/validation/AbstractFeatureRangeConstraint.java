@@ -22,21 +22,20 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	protected Map<EStructuralFeature, Double> minValues = new HashMap<EStructuralFeature, Double>();
 	protected Map<EStructuralFeature, Double> maxValues = new HashMap<EStructuralFeature, Double>();
 	protected Map<EStructuralFeature, String> featureLabels = new HashMap<EStructuralFeature, String>();
-	
+
 	public AbstractFeatureRangeConstraint() {
 		createConstraints();
 	}
-	
+
 	/**
-	 * Sets the required range for a particular feature. The min and max values may be null for "any".
-	 * A label string to use when displaying the feature may also be supplied.
+	 * Sets the required range for a particular feature. The min and max values may be null for "any". A label string to use when displaying the feature may also be supplied.
 	 * 
 	 * @param feature
 	 * @param min
 	 * @param max
 	 * @param label
 	 */
-	protected void setRange(EStructuralFeature feature, Double min, Double max, String label) {
+	protected void setRange(final EStructuralFeature feature, final Double min, final Double max, final String label) {
 		if (min != null) {
 			minValues.put(feature, min);
 		}
@@ -47,31 +46,32 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 			featureLabels.put(feature, label);
 		}
 	}
-	
+
 	/**
 	 * Returns a collection of the features which this constraint applies to.
+	 * 
 	 * @return
 	 */
 	private Collection<EStructuralFeature> getConstrainedFeatures() {
-		HashSet<EStructuralFeature> result = new HashSet<EStructuralFeature>(minValues.keySet());
+		final HashSet<EStructuralFeature> result = new HashSet<EStructuralFeature>(minValues.keySet());
 		result.addAll(maxValues.keySet());
 		return result;
 	}
-	
+
 	/**
 	 * Returns the display label to use for a particular feature.
 	 * 
 	 * @param feature
 	 * @return
 	 */
-	private String getLabel(EStructuralFeature feature) {
+	private String getLabel(final EStructuralFeature feature) {
 		if (featureLabels.containsKey(feature)) {
 			return featureLabels.get(feature);
 		}
-		
+
 		return feature.getEContainingClass().getName() + " " + feature.getName();
 	}
-	
+
 	/**
 	 * Implement this method to indicate whether or not a particular object's feature should be validated.
 	 * 
@@ -79,66 +79,62 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	 * @param feature
 	 * @return
 	 */
-	abstract protected boolean shouldValidateFeature(EObject object, EStructuralFeature feature);	
+	abstract protected boolean shouldValidateFeature(EObject object, EStructuralFeature feature);
 
-	/** 
-	 * Implementing classes should set their constraints here, via
-	 * setRange() calls.
+	/**
+	 * Implementing classes should set their constraints here, via setRange() calls.
 	 */
 	abstract protected void createConstraints();
-	
-	protected String validate(final IValidationContext ctx, List<IStatus> statuses) {
+
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		for (EStructuralFeature feature: getConstrainedFeatures()) {
-			if (target.eIsSet(feature) && shouldValidateFeature(target,feature)) {
+		for (final EStructuralFeature feature : getConstrainedFeatures()) {
+			if (target.eIsSet(feature) && shouldValidateFeature(target, feature)) {
 				final String className = target.eClass().getName();
 				final String featureName = feature.getName();
-			
+
 				final Object value = target.eGet(feature);
-				
+
 				if (value instanceof Number) {
 					final Double number = ((Number) value).doubleValue();
-					
+
 					String comparator = null;
 					Double comparison = null;
-					
+
 					final Double minValue = minValues.get(feature);
 					final Double maxValue = maxValues.get(feature);
 					if (minValue != null && number <= minValue) {
 						comparator = "more";
 						comparison = minValue;
-					}
-					else if (maxValue != null && number >= maxValue) {
+					} else if (maxValue != null && number >= maxValue) {
 						comparator = "less";
 						comparison = maxValue;
 					}
-					
+
 					if (comparison != null) {
 						final String message = String.format("%s is %.2f (should be %s than %.2f)", getLabel(feature), number, comparator, comparison);
 						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 						dcsd.addEObjectAndFeature(target, feature);
 						statuses.add(dcsd);
-					}					
-				}			
-				else if (value != null) {
+					}
+				} else if (value != null) {
 					final String message = String.format("%s %s has non-numeric value", className, featureName);
 					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					dcsd.addEObjectAndFeature(target, feature);
 					statuses.add(dcsd);
-					
+
 				}
 
 			}
 		}
 
 		return getPluginId();
-		
+
 	}
 
 	/**
-	 * Implementing sub-classes should implement this with the body "return Activator.PLUGIN_ID;"
-	 * (assuming there is a local Activator class to import).
+	 * Implementing sub-classes should implement this with the body "return Activator.PLUGIN_ID;" (assuming there is a local Activator class to import).
 	 * 
 	 * @return
 	 */
