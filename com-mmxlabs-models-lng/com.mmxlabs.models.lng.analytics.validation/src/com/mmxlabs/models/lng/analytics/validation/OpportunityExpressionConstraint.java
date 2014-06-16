@@ -32,16 +32,16 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class OpportunityExpressionConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof BuyOpportunity) {
-			final SeriesParser parser = getParser();
+			final SeriesParser parser = getParser(extraContext);
 			final BuyOpportunity slot = (BuyOpportunity) target;
 			validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getBuyOpportunity_PriceExpression(), slot.getPriceExpression(), parser, failures);
 		}
 		if (target instanceof SellOpportunity) {
-			final SeriesParser parser = getParser();
+			final SeriesParser parser = getParser(extraContext);
 			final SellOpportunity slot = (SellOpportunity) target;
 			validatePriceExpression(ctx, slot, AnalyticsPackage.eINSTANCE.getSellOpportunity_PriceExpression(), slot.getPriceExpression(), parser, failures);
 		}
@@ -82,34 +82,27 @@ public class OpportunityExpressionConstraint extends AbstractModelMultiConstrain
 	}
 
 	@SuppressWarnings("rawtypes")
-	private SeriesParser getParser() {
-		final Activator activator = Activator.getDefault();
-		if (activator == null) {
-			return null;
-		}
-		final IExtraValidationContext extraValidationContext = activator.getExtraValidationContext();
-		if (extraValidationContext != null) {
-			final MMXRootObject rootObject = extraValidationContext.getRootObject();
+	private SeriesParser getParser(final IExtraValidationContext extraContext) {
+		final MMXRootObject rootObject = extraContext.getRootObject();
 
-			if (rootObject instanceof LNGScenarioModel) {
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-				final SeriesParser indices = new SeriesParser();
+		if (rootObject instanceof LNGScenarioModel) {
+			final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
+			final SeriesParser indices = new SeriesParser();
 
-				final PricingModel pricingModel = lngScenarioModel.getPricingModel();
-				for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
-					final Index<Double> index = commodityIndex.getData();
-					if (index instanceof DataIndex) {
-						// For this validation, we do not need real times or values
-						final int[] times = new int[1];
-						final Number[] nums = new Number[1];
-						indices.addSeriesData(commodityIndex.getName(), times, nums);
-					} else if (index instanceof DerivedIndex) {
-						indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
-					}
+			final PricingModel pricingModel = lngScenarioModel.getPricingModel();
+			for (final CommodityIndex commodityIndex : pricingModel.getCommodityIndices()) {
+				final Index<Double> index = commodityIndex.getData();
+				if (index instanceof DataIndex) {
+					// For this validation, we do not need real times or values
+					final int[] times = new int[1];
+					final Number[] nums = new Number[1];
+					indices.addSeriesData(commodityIndex.getName(), times, nums);
+				} else if (index instanceof DerivedIndex) {
+					indices.addSeriesExpression(commodityIndex.getName(), ((DerivedIndex) index).getExpression());
 				}
-				return indices;
-
 			}
+			return indices;
+
 		}
 		return null;
 	}

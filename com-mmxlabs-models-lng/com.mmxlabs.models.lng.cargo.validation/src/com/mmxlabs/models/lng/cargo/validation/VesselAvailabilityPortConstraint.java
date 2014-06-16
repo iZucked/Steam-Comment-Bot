@@ -39,9 +39,8 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 	/**
 	 */
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		final IExtraValidationContext extraContext = Activator.getDefault().getExtraValidationContext();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability availablility = (VesselAvailability) target;
 			final Vessel vessel = availablility.getVessel();

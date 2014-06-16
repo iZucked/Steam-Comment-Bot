@@ -80,7 +80,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 	}
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		// Valid slot data checks
@@ -160,8 +160,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 			final Cargo cargo = (Cargo) object;
 
 			if (cargo.getCargoType() != CargoType.FLEET) {
-				final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-				final MMXRootObject scenario = extraValidationContext.getRootObject();
+				final MMXRootObject scenario = extraContext.getRootObject();
 				if (scenario instanceof LNGScenarioModel) {
 
 					final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) scenario;

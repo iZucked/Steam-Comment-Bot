@@ -32,55 +32,54 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class VesselUniqueAvailabilityConstraint extends AbstractModelMultiConstraint {
 
-	protected HashMap<Vessel, List<VesselAvailability>> createCurrentConstraintData(IValidationContext ctx) {
+	protected HashMap<Vessel, List<VesselAvailability>> createCurrentConstraintData(final IValidationContext ctx, final IExtraValidationContext extraContext) {
 		final HashMap<Vessel, List<VesselAvailability>> result = new HashMap<Vessel, List<VesselAvailability>>();
 
 		final VesselAvailability target = (VesselAvailability) ctx.getTarget();
-		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-		final Pair<EObject, EReference> containerAndFeature = new Pair<EObject, EReference>(extraValidationContext.getContainer(target), extraValidationContext.getContainment(target));
+		final Pair<EObject, EReference> containerAndFeature = new Pair<EObject, EReference>(extraContext.getContainer(target), extraContext.getContainment(target));
 
 		final EObject container = containerAndFeature.getFirst(); // target.eContainer();
 		if (container == null) {
 			return result;
 		}
-		
-		List<EObject> siblings = extraValidationContext.getSiblings(target);
-		
-		for (EObject sibling: siblings) {
+
+		final List<EObject> siblings = extraContext.getSiblings(target);
+
+		for (final EObject sibling : siblings) {
 			final Vessel vessel = ((VesselAvailability) sibling).getVessel();
 			if (!result.containsKey(vessel)) {
 				result.put(vessel, new LinkedList<VesselAvailability>());
 			}
 			result.get(vessel).add((VesselAvailability) sibling);
-		}			
-		
+		}
+
 		return result;
 	}
-	
-	protected HashMap<Vessel, List<VesselAvailability>> getCurrentConstraintData(IValidationContext ctx) {
+
+	protected HashMap<Vessel, List<VesselAvailability>> getCurrentConstraintData(final IValidationContext ctx, final IExtraValidationContext extraContext) {
 		HashMap<Vessel, List<VesselAvailability>> result = (HashMap<Vessel, List<VesselAvailability>>) ctx.getCurrentConstraintData();
 		if (result == null) {
-			result = createCurrentConstraintData(ctx);
+			result = createCurrentConstraintData(ctx, extraContext);
 			ctx.putCurrentConstraintData(result);
 		}
 		return result;
 	}
-	
+
 	@Override
-	protected String validate(IValidationContext ctx, List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		
+
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability availability = (VesselAvailability) target;
-			List<VesselAvailability> conflicts = getCurrentConstraintData(ctx).get(availability.getVessel());
-			
+			final List<VesselAvailability> conflicts = getCurrentConstraintData(ctx, extraContext).get(availability.getVessel());
+
 			if (conflicts != null && (conflicts.size() > 1 || conflicts.get(0) != availability)) {
 				// add a validation failure to the current availability
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("More than one availability assigned to same vessel."));
 				dcsd.addEObjectAndFeature(availability, CargoPackage.Literals.VESSEL_AVAILABILITY__VESSEL);
-				statuses.add(dcsd);				
-			}			
-			
+				statuses.add(dcsd);
+			}
+
 		}
 
 		return Activator.PLUGIN_ID;

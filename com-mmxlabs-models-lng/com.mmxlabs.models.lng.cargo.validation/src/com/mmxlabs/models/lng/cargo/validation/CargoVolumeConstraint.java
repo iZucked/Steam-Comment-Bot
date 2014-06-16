@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * A constraint which checks that the load and discharge quantities for a cargo are compatible, so min discharge volume < max load volume
@@ -29,7 +30,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class CargoVolumeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(IValidationContext ctx, List<IStatus> failures) {
+	protected String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof Cargo) {
 

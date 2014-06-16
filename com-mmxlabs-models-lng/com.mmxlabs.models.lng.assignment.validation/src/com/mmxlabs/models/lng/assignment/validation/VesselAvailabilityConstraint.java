@@ -28,14 +28,13 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * Checks to test if slot and vessel event dates are consistent with the start / end dates
- * of the assigned vessel.
- *
+ * Checks to test if slot and vessel event dates are consistent with the start / end dates of the assigned vessel.
+ * 
  */
 public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		if (object instanceof AssignableElement) {
@@ -45,8 +44,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 				return Activator.PLUGIN_ID;
 			}
 			CargoModel cargoModel = null;
-			final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-			final MMXRootObject rootObject = extraValidationContext.getRootObject();
+			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
@@ -65,13 +63,13 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 				VesselAvailability vesselAvailability = null;
 				for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
-					if (va.getVessel() == extraValidationContext.getOriginal(vessel) || va.getVessel() == extraValidationContext.getReplacement(vessel)) {
+					if (va.getVessel() == extraContext.getOriginal(vessel) || va.getVessel() == extraContext.getReplacement(vessel)) {
 						vesselAvailability = va;
 						break;
 
 					}
 				}
-				
+
 				if (vesselAvailability != null) {
 
 					if (assignment instanceof Cargo) {
@@ -85,7 +83,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 									failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowSize());
 									failures.add(failure);
 								}
-							} 
+							}
 							if (vesselAvailability.isSetEndBy()) {
 								if (slot.getWindowStartWithSlotOrPortTime().after(vesselAvailability.getEndBy())) {
 									final String message = String.format("Slot|%s is assigned to vessel %s but window date is after the vessel end date.", slot.getName(), vessel.getName());
@@ -107,7 +105,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 								failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartBy());
 								failures.add(failure);
 							}
-						} 
+						}
 						if (vesselAvailability.isSetEndBy()) {
 							if (vesselEvent.getStartAfter().after(vesselAvailability.getEndBy())) {
 								final String message = String.format("Vessel Event|%s is assigned to vessel %s but window date is after the vessel end date.", vesselEvent.getName(), vessel.getName());

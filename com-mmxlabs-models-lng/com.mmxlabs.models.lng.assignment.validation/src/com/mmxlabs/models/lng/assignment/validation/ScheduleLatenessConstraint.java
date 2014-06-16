@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * A constraint to problem EMF level support for the TimeSortConstraintChecker to avoid getting scenarios which do not optimise when there is certain kinds of lateness.
@@ -40,10 +41,9 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		// final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
 		if (target instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) target;
 			final FleetModel fleetModel = scenarioModel.getFleetModel();

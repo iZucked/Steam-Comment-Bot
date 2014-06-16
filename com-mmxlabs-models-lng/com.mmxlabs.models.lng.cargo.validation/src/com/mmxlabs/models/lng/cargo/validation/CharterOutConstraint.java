@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * @author Simon Goodall
@@ -23,7 +24,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class CharterOutConstraint extends AbstractModelMultiConstraint {
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof CharterOutEvent) {
 			final CharterOutEvent charterOutEvent = (CharterOutEvent) target;

@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * 
@@ -26,7 +27,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class VesselMinHeelConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof Vessel) {
 			final Vessel vessel = (Vessel) target;

@@ -30,11 +30,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class STSCargoConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
-		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
 
-		final int severity = extraValidationContext.isValidatingClone() ? IStatus.WARNING : IStatus.ERROR;
+		final int severity = extraContext.isValidatingClone() ? IStatus.WARNING : IStatus.ERROR;
 
 		if (target instanceof Slot) {
 			// final SeriesParser parser = getParser();
@@ -48,20 +47,20 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				if (loadSlot.getTransferFrom() != null) {
 					transferFrom = loadSlot.getTransferFrom();
 					transferTo = loadSlot;
-					cargo = ((DischargeSlot) extraValidationContext.getOriginal(transferFrom)).getCargo();
+					cargo = ((DischargeSlot) extraContext.getOriginal(transferFrom)).getCargo();
 				}
 			} else if (slot instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 				if (dischargeSlot.getTransferTo() != null) {
 					transferTo = dischargeSlot.getTransferTo();
 					transferFrom = dischargeSlot;
-					cargo = ((LoadSlot) extraValidationContext.getOriginal(transferTo)).getCargo();
+					cargo = ((LoadSlot) extraContext.getOriginal(transferTo)).getCargo();
 				}
 			}
 
 			if (transferFrom != null && transferTo != null) {
 				validateAttributes(ctx, transferTo, transferFrom, failures, severity);
-				validateSlotPlacements(ctx, transferTo, transferFrom, failures, severity);
+				validateSlotPlacements(ctx, extraContext, transferTo, transferFrom, failures, severity);
 
 				if (cargo != null) {
 					final Slot s = cargo.getSortedSlots().get(0);
@@ -77,8 +76,6 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					}
 
 					// make sure cargo is assigned to a vessel
-					final LNGScenarioModel model = (LNGScenarioModel) extraValidationContext.getRootObject();
-
 					boolean isAssigned = cargo.getAssignment() != null;
 
 					if (!isAssigned) {
@@ -150,7 +147,8 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 
 	}
 
-	private void validateSlotPlacements(final IValidationContext ctx, final LoadSlot loadSlot, final DischargeSlot dischargeSlot, final List<IStatus> failures, final int severity) {
+	private void validateSlotPlacements(final IValidationContext ctx, final IExtraValidationContext extraContext, final LoadSlot loadSlot, final DischargeSlot dischargeSlot,
+			final List<IStatus> failures, final int severity) {
 
 		final Cargo loadCargo = loadSlot.getCargo();
 		final Cargo dischargeCargo = dischargeSlot.getCargo();
@@ -166,8 +164,7 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 				failures.add(dsd);
 			}
 
-			final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-			final MMXRootObject rootObject = extraValidationContext.getRootObject();
+			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;

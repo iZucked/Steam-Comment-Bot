@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * Check that if a time charter rate is set, it is not zero.
@@ -28,7 +29,7 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class TimeCharterCostConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;

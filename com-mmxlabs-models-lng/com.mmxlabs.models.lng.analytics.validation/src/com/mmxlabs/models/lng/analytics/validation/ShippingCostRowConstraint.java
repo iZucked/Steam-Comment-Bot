@@ -25,16 +25,15 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 
-		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
 
 		if (target instanceof ShippingCostRow) {
 			final ShippingCostRow shippingCostRow = (ShippingCostRow) target;
 			{
 				final EObject plan = shippingCostRow.eContainer();
-				final EObject original = extraValidationContext.getOriginal(plan);
+				final EObject original = extraContext.getOriginal(plan);
 				if (plan != null && original != plan) {
 					return Activator.PLUGIN_ID;
 				}
@@ -71,7 +70,7 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 						EObject container = shippingCostRow.eContainer();
 						if (container == null) {
 
-							final EObject original = extraValidationContext.getOriginal(shippingCostRow);
+							final EObject original = extraContext.getOriginal(shippingCostRow);
 							if (original != null) {
 								container = original.eContainer();
 							}

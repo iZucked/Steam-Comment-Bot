@@ -7,15 +7,12 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -34,6 +31,7 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
@@ -43,7 +41,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * @author Simon McGregor
  * 
  */
-public class CurveDataExistsConstraint extends AbstractModelConstraint {
+public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 	IndexStartFinder indexFinder = new IndexStartFinder();
 	TaxRateStartFinder taxFinder = new TaxRateStartFinder();
 
@@ -55,9 +53,9 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 
 	class IndexStartFinder implements CurveStartFinder<Index<?>> {
 		@Override
-		public Date getStart(Index<?> curve) {
+		public Date getStart(final Index<?> curve) {
 			Date result = null;
-			for (Date date : curve.getDates()) {
+			for (final Date date : curve.getDates()) {
 				if (result == null || result.after(date)) {
 					result = date;
 				}
@@ -71,10 +69,10 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 	class TaxRateStartFinder implements CurveStartFinder<EList<TaxRate>> {
 
 		@Override
-		public Date getStart(EList<TaxRate> curve) {
+		public Date getStart(final EList<TaxRate> curve) {
 			Date result = null;
-			for (TaxRate rate : curve) {
-				Date date = rate.getDate();
+			for (final TaxRate rate : curve) {
+				final Date date = rate.getDate();
 				if (result == null || result.after(date)) {
 					result = date;
 				}
@@ -95,7 +93,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 	}
 
 	<T> Date getEarliestDate(final CurveStartFinder<T> finder, final T curve, final IValidationContext ctx) {
-		Map<Object, Date> map = getEarliestDates(finder, ctx);
+		final Map<Object, Date> map = getEarliestDates(finder, ctx);
 		Date result = map.get(curve);
 		if (result == null) {
 			result = finder.getStart(curve);
@@ -105,7 +103,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 	}
 
 	<T> boolean curveCovers(final Date date, final CurveStartFinder<T> finder, final T curve, final IValidationContext ctx) {
-		Date start = getEarliestDate(finder, curve, ctx);
+		final Date start = getEarliestDate(finder, curve, ctx);
 		if (start == null) {
 			return false;
 		}
@@ -123,10 +121,9 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 	 * @param ctx
 	 * @param failures
 	 */
-	protected void validateSlot(final Slot slot, final IValidationContext ctx, final List<IStatus> failures) {
-		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+	protected void validateSlot(final Slot slot, final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 
-		final MMXRootObject rootObject = extraValidationContext.getRootObject();
+		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 
 			final PricingModel pricingModel = ((LNGScenarioModel) rootObject).getPricingModel();
@@ -139,10 +136,10 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 			final Date date = slot.getWindowStartWithSlotOrPortTime();
 
 			// check market indices
-			for (CommodityIndex index : pricingModel.getCommodityIndices()) {
+			for (final CommodityIndex index : pricingModel.getCommodityIndices()) {
 				if (Exposures.getExposureCoefficient(slot, index) != 0) {
 					if (!curveCovers(date, indexFinder, index.getData(), ctx)) {
-						String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
+						final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
 						final String failureMessage = String.format(format, index.getName(), sdf.format(slot.getWindowStart()), slot.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 						if (slot.isSetPriceExpression()) {
@@ -165,7 +162,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 
 			// check entity tax rates
 			if (entity != null && !curveCovers(date, taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
-				String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
+				final String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
 				final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
@@ -185,27 +182,26 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 	 * @param ctx
 	 * @param failures
 	 */
-	protected void validateCargo(final Cargo cargo, final IValidationContext ctx, final List<IStatus> failures) {
-		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+	protected void validateCargo(final Cargo cargo, final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 
-		final MMXRootObject rootObject = extraValidationContext.getRootObject();
+		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final CommercialModel commercialModel = ((LNGScenarioModel) rootObject).getCommercialModel();
 
 			for (final Slot slot : cargo.getSlots()) {
 
 				final Date date = slot.getWindowStartWithSlotOrPortTime();
-//				final BaseLegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
+				// final BaseLegalEntity entity = commercialModel.getShippingEntity(); // get default shipping entity
 
 				// check entity tax rates
-//				if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
-//					String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo '%s'.";
-//					final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
-//					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
-//					dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
-//					dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
-//					failures.add(dsd);
-//				}
+				// if (entity != null && !curveCovers(date, taxFinder, entity.getTaxRates(), ctx)) {
+				// String format = "[Entity|'%s'] No tax data for '%s', the load date for cargo '%s'.";
+				// final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
+				// final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
+				// dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
+				// dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TAX_RATES);
+				// failures.add(dsd);
+				// }
 			}
 		}
 	}
@@ -216,34 +212,23 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse .emf.validation.IValidationContext)
 	 */
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
-		final List<IStatus> failures = new LinkedList<IStatus>();
 
 		// check slots for index data (price expressions or contracts) and tax rate data (entity)
 		if (object instanceof Slot) {
-			validateSlot((Slot) object, ctx, failures);
+			validateSlot((Slot) object, ctx, extraContext, statuses);
 		}
 		// check cargoes against the shipping entity tax curve
 		else if (object instanceof Cargo) {
-			validateCargo((Cargo) object, ctx, failures);
+			validateCargo((Cargo) object, ctx, extraContext, statuses);
 		}
 		// check vessel availability against charter curve data (if relevant)
 		else if (object instanceof Vessel) {
 
 		}
 
-		if (failures.isEmpty()) {
-			return ctx.createSuccessStatus();
-		} else if (failures.size() == 1) {
-			return failures.get(0);
-		} else {
-			final MultiStatus multi = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, null, null);
-			for (final IStatus s : failures) {
-				multi.add(s);
-			}
-			return multi;
-		}
+		return Activator.PLUGIN_ID;
 	}
 
 }

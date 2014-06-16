@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.*;
 
@@ -50,10 +51,10 @@ import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.*;
 public class AssignableElementMissingDistancesConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
+		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (target instanceof CargoModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
 			final FleetModel fleetModel = scenarioModel.getFleetModel();

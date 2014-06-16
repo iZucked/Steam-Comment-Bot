@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
@@ -97,7 +98,8 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotTravelTime(final IValidationContext ctx, final Cargo cargo, final Slot from, final Slot to, final int availableTime, final List<IStatus> failures) {
+	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final Cargo cargo, final Slot from, final Slot to, final int availableTime,
+			final List<IStatus> failures) {
 
 		// Skip for FOB/DES cargoes.
 		// TODO: Roll in common des redirection travel time
@@ -106,8 +108,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 		}
 
 		if (availableTime >= 0) {
-
-			final MMXRootObject scenario = Activator.getDefault().getExtraValidationContext().getRootObject();
+			final MMXRootObject scenario = extraContext.getRootObject();
 			if (scenario instanceof LNGScenarioModel) {
 
 				double maxSpeedKnots = 0.0;
@@ -218,7 +219,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 	}
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		if (object instanceof Cargo) {
@@ -247,7 +248,7 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 								if (constraintID.equals(DATE_ORDER_ID)) {
 									validateSlotOrder(ctx, cargo, prevSlot, availableTime, failures);
 								} else if (constraintID.equals(TRAVEL_TIME_ID)) {
-									validateSlotTravelTime(ctx, cargo, prevSlot, slot, availableTime, failures);
+									validateSlotTravelTime(ctx, extraContext, cargo, prevSlot, slot, availableTime, failures);
 								} else if (constraintID.equals(AVAILABLE_TIME_ID)) {
 									validateSlotAvailableTime(ctx, cargo, prevSlot, availableTime, failures);
 								}
