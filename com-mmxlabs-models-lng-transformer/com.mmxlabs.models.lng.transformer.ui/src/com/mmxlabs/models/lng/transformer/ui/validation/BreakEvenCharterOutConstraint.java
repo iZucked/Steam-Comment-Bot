@@ -26,14 +26,13 @@ import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof Slot) {
 
 			final Slot slot = (Slot) target;
-			final IExtraValidationContext extraContext = Activator.getDefault().getExtraValidationContext();
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final SpotMarketsModel spotMarketsModel = ((LNGScenarioModel) rootObject).getSpotMarketsModel();
