@@ -46,6 +46,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * This constraint ensures that an {@link CargoActuals} is preceeded by another {@link CargoActuals}, or the vessel start. (or a vessel event with warning). This ensures proper heel tracking etc.
@@ -56,10 +57,10 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
-		final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
+		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (target instanceof ActualsModel) {
 			final ActualsModel actualsModel = (ActualsModel) target;
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
