@@ -5,10 +5,13 @@
 package com.mmxlabs.models.lng.ui.views;
 
 import java.util.Arrays;
+import java.util.EventObject;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -35,11 +38,12 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  * @author Simon McGregor
  */
-public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView {
+public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView implements CommandStackListener {
 	private Composite childComposite;
 	private final LinkedList<ScenarioTableViewerPane> viewerPanes = new LinkedList<ScenarioTableViewerPane>();
 	private UndoAction undoAction;
 	private RedoAction redoAction;
+	private CommandStack currentCommandStack;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -116,13 +120,24 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 		}
 	}
 
-	private void updateActions(EditingDomain editingDomain) {
+	private void updateActions(final EditingDomain editingDomain) {
+
+		if (currentCommandStack != null) {
+			currentCommandStack.removeCommandStackListener(this);
+		}
 
 		undoAction.setEditingDomain(editingDomain);
 		redoAction.setEditingDomain(editingDomain);
 
-		undoAction.setEnabled(editingDomain != null);
-		redoAction.setEnabled(editingDomain != null);
+		undoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canUndo());
+		redoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canRedo());
+
+		if (editingDomain != null) {
+			currentCommandStack = editingDomain.getCommandStack();
+			currentCommandStack.addCommandStackListener(this);
+			undoAction.update();
+			redoAction.update();
+		}
 	}
 
 	@Override
@@ -186,4 +201,9 @@ public abstract class MultiScenarioTableViewersView extends ScenarioInstanceView
 
 	}
 
+	@Override
+	public void commandStackChanged(final EventObject event) {
+		undoAction.update();
+		redoAction.update();
+	}
 }
