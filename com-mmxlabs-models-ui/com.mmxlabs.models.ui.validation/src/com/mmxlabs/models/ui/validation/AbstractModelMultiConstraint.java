@@ -13,6 +13,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
+import com.mmxlabs.models.ui.validation.internal.Activator;
+
 /**
  * An abstract implementation of {@link AbstractModelConstraint} designed to allow multiple status messages to be reported.
  * 
@@ -25,17 +27,18 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 	 * The real validate method call with the status list to populate.
 	 * 
 	 * @param ctx
-	 * @param failures
-	 * @return The pluginID to pass into a {@link MultiStatus}.
+	 * @param extraContext
+	 * @param statuses
+	 * @return
 	 */
-	protected abstract String validate(final IValidationContext ctx, List<IStatus> statuses);
+	protected abstract String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses);
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 
 		final List<IStatus> statuses = new LinkedList<IStatus>();
 
-		final String pluginId = validate(ctx, statuses);
+		final String pluginId = validate(ctx, Activator.getDefault().getExtraValidationContext(), statuses);
 
 		if (statuses.isEmpty()) {
 			return ctx.createSuccessStatus();

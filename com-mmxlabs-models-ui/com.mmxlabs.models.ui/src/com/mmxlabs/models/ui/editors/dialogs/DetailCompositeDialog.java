@@ -29,7 +29,6 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
@@ -62,7 +61,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.name.Named;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -373,15 +371,15 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		final EObject selection = inputs.get(selectedObjectIndex);
 		final IScenarioEditingLocation sel = location;
 
-		String text = returnDuplicates ?  "Duplicating " : "Editing ";
+		String text = returnDuplicates ? "Duplicating " : "Editing ";
 		text += EditorUtils.unmangle(selection.eClass().getName()).toLowerCase() + " ";
-		if(selection instanceof NamedObject) {
+		if (selection instanceof NamedObject) {
 			String name = ((NamedObject) selection).getName();
-			text+= name != null ? "\"" +  name + "\"" : "<unspecified>";	
+			text += name != null ? "\"" + name + "\"" : "<unspecified>";
 		} else {
 			final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
-			text += "\"" + itemLabelProvider.getText(selection) + "\"";			
-		}		
+			text += "\"" + itemLabelProvider.getText(selection) + "\"";
+		}
 		getShell().setText(text);
 
 		if (displayComposite != null) {
@@ -935,7 +933,9 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			final StringBuilder sb = new StringBuilder();
 			processMessages(sb, status);
 
-			managedForm.getForm().setMessage(sb.toString().trim(), convertType(status.getSeverity()));
+			String validationMessage = sb.toString().trim();
+			validationMessage = escapeValidationMessage(validationMessage);
+			managedForm.getForm().setMessage(validationMessage, convertType(status.getSeverity()));
 		}
 
 		if (displayComposite != null) {
@@ -943,6 +943,19 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		checkButtonEnablement(true);// !status.matches(IStatus.ERROR));
+	}
+
+	/**
+	 * Various characters in the string can be interpreted as control characters. E.g. &
+	 * 
+	 * @param validationMessage
+	 * @return
+	 */
+	private String escapeValidationMessage(String validationMessage) {
+		// Escape ampersands
+		validationMessage = validationMessage.replaceAll("&", "&&");
+
+		return validationMessage;
 	}
 
 	private void processMessages(final StringBuilder sb, final IStatus status) {
