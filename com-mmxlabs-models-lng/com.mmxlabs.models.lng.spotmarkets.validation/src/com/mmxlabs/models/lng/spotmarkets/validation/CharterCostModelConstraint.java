@@ -16,11 +16,12 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class CharterCostModelConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(IValidationContext ctx, List<IStatus> statuses) {
+	protected String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> statuses) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof CharterCostModel) {
 			CharterCostModel ccm = (CharterCostModel) object;

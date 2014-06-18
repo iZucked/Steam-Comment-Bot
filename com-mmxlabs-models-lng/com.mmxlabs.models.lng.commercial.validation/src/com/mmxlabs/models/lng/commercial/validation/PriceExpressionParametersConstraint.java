@@ -16,11 +16,12 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class PriceExpressionParametersConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		EObject target = ctx.getTarget();
 
 		if (target instanceof ExpressionPriceParameters) {

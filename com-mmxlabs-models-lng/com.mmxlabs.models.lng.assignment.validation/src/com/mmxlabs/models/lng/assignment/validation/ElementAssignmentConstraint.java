@@ -40,7 +40,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		if (object instanceof AssignableElement) {
@@ -68,8 +68,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 			}
 
 			final Set<Vessel> scenarioVessels = new HashSet<>();
-			final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-			final MMXRootObject rootObject = extraValidationContext.getRootObject();
+			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();

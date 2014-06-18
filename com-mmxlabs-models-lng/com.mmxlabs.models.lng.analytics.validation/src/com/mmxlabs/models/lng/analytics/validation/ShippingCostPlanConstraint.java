@@ -30,13 +30,14 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
 public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof ShippingCostPlan) {
 			final ShippingCostPlan shippingCostPlan = (ShippingCostPlan) target;
@@ -91,7 +92,7 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 					idx++;
 				}
 
-				validateSlotTravelTime(ctx, shippingCostPlan, statuses);
+				validateSlotTravelTime(ctx, extraContext, shippingCostPlan, statuses);
 			}
 		}
 		return Activator.PLUGIN_ID;
@@ -105,9 +106,9 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 	 * @param availableTime
 	 * @return
 	 */
-	private void validateSlotTravelTime(final IValidationContext ctx, final ShippingCostPlan plan, final List<IStatus> statuses) {
+	private void validateSlotTravelTime(final IValidationContext ctx, final IExtraValidationContext extraContext, final ShippingCostPlan plan, final List<IStatus> statuses) {
 
-		final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
+		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (rootObject instanceof LNGScenarioModel) {
 			final LNGScenarioModel scenario = (LNGScenarioModel) rootObject;
 			final VesselClass vesselClass = plan.getVessel().getVesselClass();

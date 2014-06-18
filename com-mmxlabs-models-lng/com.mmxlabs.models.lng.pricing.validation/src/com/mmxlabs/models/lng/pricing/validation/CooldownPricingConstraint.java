@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * A constraint for ensuring that all ports have a cooldown constraint in the given pricing model.
@@ -37,12 +38,12 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 
 	@Override
-	protected String validate(IValidationContext ctx, List<IStatus> failures) {
+	protected String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof PricingModel) {
 			final PricingModel pm = (PricingModel) target;
-			final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
+			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 				final PortModel ports = ((LNGScenarioModel)rootObject).getPortModel();
 				if (ports != null) {

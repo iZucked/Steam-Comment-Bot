@@ -473,14 +473,16 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					if (newModel == null) {
 						return;
 					}
+
 					final EditingDomain ed = getJointModelEditorPart().getEditingDomain();
-					final CompoundCommand cc = new CompoundCommand();
-					cc.append(DeleteCommand.create(ed, distanceModel.getLines()));
-					cc.append(AddCommand.create(ed, distanceModel, PortPackage.eINSTANCE.getRoute_Lines(), newModel.getLines()));
+					final CompoundCommand cc = new CompoundCommand("Edit distances");
+					cc.append(DeleteCommand.create(ed, new ArrayList<>(distanceModel.getLines())));
+					cc.append(AddCommand.create(ed, distanceModel, PortPackage.eINSTANCE.getRoute_Lines(), new ArrayList<>(newModel.getLines())));
 					getJointModelEditorPart().setDisableUpdates(true);
 					ed.getCommandStack().execute(cc);
 					getJointModelEditorPart().setDisableUpdates(false);
 					// display error
+
 				}
 
 				private Route edit(final Route distanceModel) {

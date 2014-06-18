@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  * Constraint to check the Assigned Vessel is in the allowed vessel list, if specified.
@@ -42,7 +43,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 	private static final Logger log = LoggerFactory.getLogger(AllowedVesselAssignmentConstraint.class);
 
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
 		if (object instanceof AssignableElement) {

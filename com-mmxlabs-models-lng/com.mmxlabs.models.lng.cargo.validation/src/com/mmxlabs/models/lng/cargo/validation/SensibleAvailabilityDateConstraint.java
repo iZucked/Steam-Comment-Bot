@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class SensibleAvailabilityDateConstraint  extends AbstractModelMultiConstraint {
 
@@ -34,7 +35,7 @@ public class SensibleAvailabilityDateConstraint  extends AbstractModelMultiConst
 	 * Impose sensible date cutoffs for vessel availabilities and events
 	 */
 	@Override
-	public String validate(final IValidationContext ctx, List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 		if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;

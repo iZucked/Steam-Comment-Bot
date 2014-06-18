@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 
@@ -30,7 +31,7 @@ public class RestrictedElementsConstraint extends AbstractModelMultiConstraint {
 	private static final String DISCHARGE = "discharge";
 
 	@Override
-	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 
 		final EObject target = ctx.getTarget();
 		if (target instanceof Cargo) {

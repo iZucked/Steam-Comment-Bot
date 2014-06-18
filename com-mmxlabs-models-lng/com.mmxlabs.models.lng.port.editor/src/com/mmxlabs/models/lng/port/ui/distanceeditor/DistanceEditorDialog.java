@@ -145,18 +145,18 @@ public class DistanceEditorDialog extends Dialog {
 
 		final Grid grid = viewer.getGrid();
 		final Label rowLabel = new Label(barComposite, SWT.NONE);
-		rowLabel.setText("Row:");
+		rowLabel.setText("From:");
 		final Text rowFilter = new Text(barComposite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 		rowFilter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		rowFilter.setToolTipText("Filter rows to show source ports with names containing this text");
+		rowFilter.setToolTipText("Filter from rows to show source ports with names containing this text");
 
 		final Label columnLabel = new Label(barComposite, SWT.NONE);
-		columnLabel.setText("Column:");
+		columnLabel.setText("To:");
 		final Text columnFilter = new Text(barComposite, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 		columnFilter.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		columnFilter.setToolTipText("Filter columns to show destination ports with names containing this text");
+		columnFilter.setToolTipText("Filter to columns to show destination ports with names containing this text");
 
 		columnFilter.addModifyListener(new ModifyListener() {
 			@Override

@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
+import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
  */
@@ -24,7 +25,7 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 	private static double maxExpressionValue = 90.0;
 	
 	@Override
-	public String validate(final IValidationContext ctx, final List<IStatus> failures) {
+	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof Slot) {
