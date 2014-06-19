@@ -833,7 +833,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		@Override
 		public boolean isColumnMovable(Object columnObj) {
 			// TODO Auto-generated method stub
-			return false;
+			return true;
 		}
 
 		@Override

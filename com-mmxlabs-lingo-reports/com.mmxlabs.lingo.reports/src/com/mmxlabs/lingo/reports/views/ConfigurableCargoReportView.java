@@ -664,6 +664,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					public void setColumnVisible(Object columnObj,
 							boolean visible) {
 						((ColumnBlock) columnObj).setVisible(visible);
+						viewer.refresh();
 						
 					}
 
@@ -671,6 +672,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					public void swapColumnPositions(Object columnObj1,
 							Object columnObj2) {
 						blockManager.swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
+						viewer.refresh();
 					}
 					
 				};
