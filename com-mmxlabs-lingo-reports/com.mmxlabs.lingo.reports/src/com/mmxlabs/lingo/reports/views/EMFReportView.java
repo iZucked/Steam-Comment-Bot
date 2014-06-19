@@ -482,7 +482,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	
 	
 	private final String helpContextId;
-	private ScenarioViewerSynchronizer jobManagerListener;
+	protected ScenarioViewerSynchronizer synchronizer;
 
 	protected IScenarioViewerSynchronizerOutput synchronizerOutput = null;
 
@@ -964,7 +964,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 		}
 
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
+		synchronizer = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 	}
 
 	protected abstract IScenarioInstanceElementCollector getElementCollector();
@@ -1076,7 +1076,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	@Override
 	public void dispose() {
-		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
+		ScenarioViewerSynchronizer.deregisterView(synchronizer);
 
 		super.dispose();
 	}

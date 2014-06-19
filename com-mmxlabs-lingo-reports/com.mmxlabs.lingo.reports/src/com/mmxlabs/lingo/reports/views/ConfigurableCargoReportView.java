@@ -507,7 +507,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		} else if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-				return true || rowFilterInfo.contains(CARGO_ROW);
+				return rowFilterInfo.contains(CARGO_ROW);
 			}
 		}
 		return false;
@@ -697,13 +697,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 				};
 				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
-				//dialog.setCheckBoxInfo(new String [] { CARGO_ROW, VESSEL_EVENT_ROW, CHARTER_OUT_ROW }, rowFilterInfo);
+				dialog.setCheckBoxInfo(new String [] { CARGO_ROW, VESSEL_EVENT_ROW, CHARTER_OUT_ROW }, rowFilterInfo);
 				dialog.open();
 				
-				//IScenarioViewerSynchronizerOutput input = (IScenarioViewerSynchronizerOutput) viewer.getInput();
-				//viewer.setInput(null);
-				//viewer.setInput(input);
-				//viewer.refresh();
+				//synchronizer.refreshViewer();
+
 			}
 			
 		};
