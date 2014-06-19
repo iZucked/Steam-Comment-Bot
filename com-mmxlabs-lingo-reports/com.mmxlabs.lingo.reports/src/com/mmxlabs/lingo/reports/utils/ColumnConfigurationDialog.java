@@ -183,7 +183,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
 		
-		createRowCheckBoxes(composite);
+		//createRowCheckBoxes(composite);
 		//createWidthArea(composite);
 		Object element = visibleViewer.getElementAt(0);
 		if (element != null)
