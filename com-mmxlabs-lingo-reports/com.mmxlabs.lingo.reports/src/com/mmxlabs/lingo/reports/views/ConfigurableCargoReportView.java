@@ -507,7 +507,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		} else if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-				return rowFilterInfo.contains(CARGO_ROW);
+				return true || rowFilterInfo.contains(CARGO_ROW);
 			}
 		}
 		return false;
