@@ -408,6 +408,14 @@ public class EObjectTableViewer extends GridTreeViewer {
 			}
 		});
 
+		setWrappedContentProvider(contentProvider);
+		viewer.setComparator(sortingSupport.createViewerComparer());
+
+		addFilter(filterSupport.createViewerFilter());
+	}
+	
+	public void setWrappedContentProvider(final ITreeContentProvider contentProvider) {
+		final GridTreeViewer viewer = this;
 		viewer.setContentProvider(
 
 		new ITreeContentProvider() {
@@ -486,10 +494,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 				return contentProvider.hasChildren(element);
 			}
 		});
-
-		viewer.setComparator(sortingSupport.createViewerComparer());
-
-		addFilter(filterSupport.createViewerFilter());
+		
 	}
 
 	private EReference currentReference;
