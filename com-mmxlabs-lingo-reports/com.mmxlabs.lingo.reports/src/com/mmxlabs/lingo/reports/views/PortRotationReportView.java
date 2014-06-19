@@ -131,7 +131,7 @@ public class PortRotationReportView extends EMFReportView {
 		addColumn("At Port", objectFormatter, sp.getEvent_Port(), name);
 		addColumn("Route", objectFormatter, sp.getJourney_Route(), name);
 
-		addColumn("Transfer Volume", "In m3", new IntegerFormatter() {
+		addColumn("Transfer Volume", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof SlotVisit) {
@@ -144,8 +144,8 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				return null;
 			}
-		});
-		addColumn("Heel Start", "In m3", new IntegerFormatter() {
+		}).setTooltip("In m3");
+		addColumn("Heel Start", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -154,8 +154,8 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				return null;
 			}
-		});
-		addColumn("Heel End", "In m3", new IntegerFormatter() {
+		}).setTooltip("In m3");
+		addColumn("Heel End", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -164,10 +164,10 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				return null;
 			}
-		});
+		}).setTooltip("In m3");
 
 		for (final Fuel fuelName : Fuel.values()) {
-			addColumn(fuelName.toString(), "In " + fuelQuanityUnits.get(fuelName), new IntegerFormatter() {
+			addColumn(fuelName.toString(), new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -188,8 +188,8 @@ public class PortRotationReportView extends EMFReportView {
 						return null;
 					}
 				}
-			});
-			addColumn(fuelName + " Unit Price", "Price per " + fuelUnitPriceUnits.get(fuelName), new PriceFormatter(true) {
+			}).setTooltip("In " + fuelQuanityUnits.get(fuelName));
+			addColumn(fuelName + " Unit Price", new PriceFormatter(true) {
 				@Override
 				public Double getDoubleValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -207,7 +207,7 @@ public class PortRotationReportView extends EMFReportView {
 					}
 					return null;
 				}
-			});
+			}).setTooltip("Price per " + fuelUnitPriceUnits.get(fuelName));
 			addColumn(fuelName + " Cost", new CostFormatter(true) {
 				@Override
 				public Integer getIntValue(final Object object) {

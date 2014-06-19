@@ -13,10 +13,12 @@ package com.mmxlabs.lingo.reports.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.resource.JFaceResources;
@@ -69,7 +71,7 @@ import org.eclipse.swt.widgets.Text;
 public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	/** The list contains columns that are currently visible in viewer */
-	private List visible;
+	private List<? extends Object> visible;
 
 	/** The list contains columns that are note shown in viewer */
 	private List nonVisible;
@@ -84,6 +86,21 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	private Text widthText;
 
 	private Point tableLabelSize;
+
+	private Comparator<Object> comparator = new Comparator<Object>() {
+
+		@Override
+		public int compare(Object arg0, Object arg1) {
+			IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
+			return infoProvider.getColumnIndex(arg0) - infoProvider.getColumnIndex(arg1); 
+		}
+		
+	};
+
+	private Set<String> checkBoxStore;
+
+	private String[] checkBoxStrings;
+
 
 	/**
 	 * Create a new instance of the receiver.
@@ -116,12 +133,12 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			if (columnInfo.isColumnVisible(data)) {
 				updater.setColumnVisible(data, true);
 				//updater.setColumnIndex(data, visible.size());
-				updater.setColumnIndex(data, index);
+				//updater.setColumnIndex(data, index);
 				visible.add(data);
 			} else {
 				updater.setColumnVisible(data, false);
 				//updater.setColumnIndex(data, nonVisible.size());
-				updater.setColumnIndex(data, index);
+				//updater.setColumnIndex(data, index);
 				nonVisible.add(data);
 			}
 		}
@@ -143,7 +160,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 		applyDialogFont(dialogArea);
 
-		//initializeDialog();
+		
 
 		return dialogArea;
 	}
@@ -165,11 +182,40 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createMoveButtons(composite);
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
+		
+		createRowCheckBoxes(composite);
 		//createWidthArea(composite);
 		Object element = visibleViewer.getElementAt(0);
 		if (element != null)
 			visibleViewer.setSelection(new StructuredSelection(element));
 		visibleViewer.getTable().setFocus();
+		return composite;
+	}
+
+	private Control createRowCheckBoxes(Composite parent) {
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridLayout compositeLayout = new GridLayout();
+		compositeLayout.marginHeight = 0;
+		compositeLayout.marginWidth = 0;
+		composite.setLayout(compositeLayout);
+		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
+		
+		for (final String text: checkBoxStrings) {
+			Button button = new Button(composite, SWT.CHECK);
+			button.setText(text);
+			button.setSelection(checkBoxStore.contains(text));
+			button.addListener(SWT.Selection, new Listener() {
+				public void handleEvent(Event event) {
+					if (checkBoxStore.contains(text)) {
+						checkBoxStore.remove(text);
+					}
+					else {
+						checkBoxStore.add(text);
+					}
+				}
+			});
+		}
+		
 		return composite;
 	}
 
@@ -506,10 +552,12 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		IColumnUpdater updater = doGetColumnUpdater();
 		for (int i = selVCols.length - 1; i >= 0; i--) {
 			Object colObj = selVCols[i];
-			int index = allVCols.indexOf(colObj);
-			updater.setColumnIndex(colObj, index + 1);
-			allVCols.remove(index);
-			allVCols.add(index + 1, colObj);
+			int visibleIndex = allVCols.indexOf(colObj);
+			
+			updater.swapColumnPositions(colObj, allVCols.get(visibleIndex+1));
+			//updater.setColumnIndex(colObj, visibleIndex + 1);
+			allVCols.remove(visibleIndex);
+			allVCols.add(visibleIndex + 1, colObj);
 		}
 		visibleViewer.refresh();
 		handleVisibleSelection(selection);
@@ -530,10 +578,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		IColumnUpdater updater = doGetColumnUpdater();
 		for (int i = 0; i < selVCols.length; i++) {
 			Object colObj = selVCols[i];
-			int index = allVCols.indexOf(colObj);
-			updater.setColumnIndex(colObj, index - 1);
-			allVCols.remove(index);
-			allVCols.add(index - 1, colObj);
+			int visibleIndex = allVCols.indexOf(colObj);
+			updater.swapColumnPositions(colObj, allVCols.get(visibleIndex-1));
+			//updater.setColumnIndex(colObj, index - 1);
+			allVCols.remove(visibleIndex);
+			allVCols.add(visibleIndex - 1, colObj);
 		}
 		visibleViewer.refresh();
 		handleVisibleSelection(selection);
@@ -554,10 +603,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 		List list = getVisible();
 		list.addAll(selVCols);
+		Collections.sort(list, comparator);
 
 		updateVisibility(selVCols, true);
-		updateIndices(getVisible());
-		updateIndices(getNonVisible());
+		//updateIndices(getVisible());
+		//updateIndices(getNonVisible());
 
 		visibleViewer.refresh();
 		visibleViewer.setSelection(selection);
@@ -588,9 +638,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		getVisible().removeAll(selVCols);
 		getNonVisible().addAll(selVCols);
 
+		Collections.sort(getNonVisible(), comparator);
+
 		updateVisibility(selVCols, false);
-		updateIndices(getVisible());
-		updateIndices(getNonVisible());
+		//updateIndices(getVisible());
+		//updateIndices(getNonVisible());
 
 		nonVisibleViewer.refresh();
 		nonVisibleViewer.setSelection(selection);
@@ -599,13 +651,15 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		handleNonVisibleSelection(nonVisibleViewer.getSelection());
 	}
 
+	/*
 	void updateIndices(List list) {
 		ListIterator iterator = list.listIterator();
 		IColumnUpdater updater = doGetColumnUpdater();
 		while (iterator.hasNext()) {
-			updater.setColumnIndex(iterator.next(), iterator.previousIndex());
+			//updater.setColumnIndex(iterator.next(), iterator.previousIndex());
 		}
 	}
+	*/
 
 	void updateVisibility(List list, boolean visibility) {
 		IColumnUpdater updater = doGetColumnUpdater();
@@ -637,8 +691,10 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 */
 	public List getVisible() {
 		if (visible == null) {
-			visible = new ArrayList();
+			visible = new ArrayList<Object>();
 		}
+			
+		Collections.sort(visible, comparator);		
 		return visible;
 	}
 
@@ -649,6 +705,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		if (nonVisible == null) {
 			nonVisible = new ArrayList();
 		}
+		Collections.sort(nonVisible, comparator);		
 		return nonVisible;
 	}
 
@@ -770,6 +827,28 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		public boolean isColumnResizable(Object columnObj);
 
 	}
+	
+	public static abstract class ColumnInfoAdapter implements IColumnInfoProvider {
+
+		@Override
+		public boolean isColumnMovable(Object columnObj) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		@Override
+		public boolean isColumnResizable(Object columnObj) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+		@Override
+		public int getColumnWidth(Object columnObj) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+	}
 
 	/**
 	 * Update various aspects of a columns from a viewer such
@@ -803,6 +882,15 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		public void setColumnIndex(Object columnObj, int index);
 
 		/**
+		 * Call back to notify change in the index of the column represented by
+		 * columnObj
+		 * 
+		 * @param columnObj
+		 * @param index
+		 */
+		public void swapColumnPositions(Object columnObj1, Object columnObj2);
+
+		/**
 		 * Dummy method - more a result of symmetry
 		 * 
 		 * @param columnObj
@@ -821,6 +909,34 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	}
 
+	public static abstract class ColumnUpdaterAdapter implements IColumnUpdater {
+
+		@Override
+		public void setColumnMovable(Object columnObj, boolean movable) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void setColumnIndex(Object columnObj, int index) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void setColumnResizable(Object columnObj, boolean resizable) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void setColumnWidth(Object columnObj, int newWidth) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
 	// //////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * Ignore the class below as it is simply meant to test the above. I intend
@@ -921,6 +1037,13 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 				public void setColumnIndex(Object columnObj, int index) {
 					((TestData) columnObj).newIndex = index;
+				}
+
+				@Override
+				public void swapColumnPositions(Object columnObj1,
+						Object columnObj2) {
+					// TODO Auto-generated method stub
+					
 				}
 			};
 		}
@@ -1027,6 +1150,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 		}
 
+	}
+
+	public void setCheckBoxInfo(String[] strings, Set<String> store) {
+		checkBoxStore = store;
+		checkBoxStrings = strings;
 	}
 
 }

@@ -6,8 +6,10 @@ package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -16,26 +18,27 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.XMLMemento;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
-import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.TestData;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -72,7 +75,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
+	private static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	private static final String VESSEL_EVENT_ROW = "Vessel Events";
+	private static final String CHARTER_OUT_ROW = "Charter Outs";
+	private static final String CARGO_ROW = "Cargoes";
 	final List<String> entityColumnNames = new ArrayList<String>();
 
 	private final EPackage tableDataModel;
@@ -82,6 +89,9 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	private final EStructuralFeature loadAllocationRef;
 	private final EStructuralFeature dischargeAllocationRef;
 	private final EStructuralFeature openSlotAllocationRef;
+	private IMemento memento;
+	private Set<String> rowFilterInfo = new HashSet<>();
+	
 
 	public ConfigurableCargoReportView() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
@@ -225,7 +235,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 			}
 		}, targetObjectRef);
 
-
+		
 		// Register columns that will be displayed when in Pin/Diff mode 
 		pinDiffModeHelper
 			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef));
@@ -271,11 +281,12 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		addPNLColumn("Group Total", null, bookContainmentFeature);
 	}
 
-	private void addPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
-		addPNLColumn(entityName, entityName, bookContainmentFeature);
+	private void addSpecificEntityPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
+		ColumnHandler handler = addPNLColumn(entityName, entityName, bookContainmentFeature);
+		handler.setBlockName("P & L");
 	}
 
-	private void addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+	private ColumnHandler addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
 		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
@@ -284,7 +295,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 			entityColumnNames.add(title);
 		}
 
-		addColumn(title, new IntegerFormatter() {
+		return addColumn(title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
@@ -304,6 +315,33 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		}, targetObjectRef);
 	}
 
+	@Override
+	public void init(final IViewSite site, IMemento memento) throws PartInitException {
+		if (memento == null) {
+			memento = XMLMemento.createWriteRoot("workbench");
+		}
+		this.memento = memento;
+
+		super.init(site, memento);
+	}
+
+	@Override
+	public void saveState(final IMemento memento) {
+		super.saveState(memento);
+		blockManager.saveToMemento(CONFIGURABLE_COLUMNS_ORDER, memento);
+	}
+	
+
+	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+		if (memento != null) {
+			blockManager.initFromMemento(CONFIGURABLE_COLUMNS_ORDER, memento);
+		}
+		
+	}
+	
+	
 	@Override
 	protected ITreeContentProvider getContentProvider() {
 		final ITreeContentProvider superProvider = super.getContentProvider();
@@ -333,8 +371,8 @@ public class ConfigurableCargoReportView extends EMFReportView {
 								final CommercialModel commercialModel = rootObject.getCommercialModel();
 								if (commercialModel != null) {
 									for (final BaseLegalEntity e : commercialModel.getEntities()) {
-										addPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
-										addPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+										addSpecificEntityPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+										addSpecificEntityPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 									}
 								}
 							}
@@ -443,17 +481,8 @@ public class ConfigurableCargoReportView extends EMFReportView {
 				final List<EObject> interestingEvents = new LinkedList<EObject>();
 				for (final Sequence sequence : schedule.getSequences()) {
 					for (final Event event : sequence.getEvents()) {
-						if (event instanceof StartEvent) {
+						if (showEvent(event)) {
 							interestingEvents.add(event);
-						} else if (event instanceof VesselEventVisit) {
-							interestingEvents.add(event);
-						} else if (event instanceof GeneratedCharterOut) {
-							interestingEvents.add(event);
-						} else if (event instanceof SlotVisit) {
-							final SlotVisit slotVisit = (SlotVisit) event;
-							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-								interestingEvents.add(event);
-							}
 						}
 					}
 				} 
@@ -466,6 +495,22 @@ public class ConfigurableCargoReportView extends EMFReportView {
 				return nodes;
 			}
 		};
+	}
+	
+	protected boolean showEvent(final Event event) {
+		if (event instanceof StartEvent) {
+			return true;
+		} else if (event instanceof VesselEventVisit) {
+			return true || rowFilterInfo.contains(VESSEL_EVENT_ROW);
+		} else if (event instanceof GeneratedCharterOut) {
+			return true || rowFilterInfo.contains(CHARTER_OUT_ROW);
+		} else if (event instanceof SlotVisit) {
+			final SlotVisit slotVisit = (SlotVisit) event;
+			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+				return rowFilterInfo.contains(CARGO_ROW);
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -584,6 +629,14 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		return true;
 	}
 	
+	public void setInput(final Object input) {
+		super.setInput(input);
+	}
+	
+	/**
+	 * Fills the top-right pulldown menu, adding an option to configure the 
+	 * columns visible in this view. 
+	 */
 	protected void fillLocalPullDown(final IMenuManager manager) {
 		super.fillLocalPullDown(manager);
 		IWorkbench wb = PlatformUI.getWorkbench();
@@ -591,72 +644,36 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		
 		Action configureColumnsAction = new Action("Configure Contents") {
 			public void run() {
-				final IColumnInfoProvider infoProvider = new IColumnInfoProvider() {
+				final IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
 
 					@Override
 					public int getColumnIndex(Object columnObj) {
-						//return getColumnViewIndex((ColumnHandler) columnObj);
-						return getColumnViewIndex((ColumnHandler) columnObj);
-					}
-
-					@Override
-					public int getColumnWidth(Object columnObj) {
-						return 0;
+						return blockManager.getBlockIndex((ColumnBlock) columnObj);
 					}
 
 					@Override
 					public boolean isColumnVisible(Object columnObj) {
-						return ((ColumnHandler) columnObj).column.getColumn().isVisible();
-					}
-
-					@Override
-					public boolean isColumnMovable(Object columnObj) {
-						return true;
-					}
-
-					@Override
-					public boolean isColumnResizable(Object columnObj) {
-						return false;
+						return blockManager.getBlockVisible((ColumnBlock) columnObj);
 					}
 					
 				};
 				
-				final IColumnUpdater updater = new IColumnUpdater() {
+				final IColumnUpdater updater = new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
 
 					@Override
 					public void setColumnVisible(Object columnObj,
 							boolean visible) {
-						((ColumnHandler) columnObj).column.getColumn().setVisible(visible);						
-					}
-
-					@Override
-					public void setColumnMovable(Object columnObj,
-							boolean movable) {
-						// TODO Auto-generated method stub
+						((ColumnBlock) columnObj).setVisible(visible);
 						
 					}
 
 					@Override
-					public void setColumnIndex(Object columnObj, int index) {
-						setColumnViewIndex((ColumnHandler) columnObj, index);
-						viewer.refresh();
-						
-					}
-
-					@Override
-					public void setColumnResizable(Object columnObj,
-							boolean resizable) {
-						// TODO Auto-generated method stub
-						
-					}
-
-					@Override
-					public void setColumnWidth(Object columnObj, int newWidth) {
-						// TODO Auto-generated method stub
-						
+					public void swapColumnPositions(Object columnObj1,
+							Object columnObj2) {
+						blockManager.swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
 					}
 					
-				};				
+				};
 				
 				ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
 
@@ -667,7 +684,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					protected ITableLabelProvider getLabelProvider() {
 						return new TableLabelProvider() {
 							public String getColumnText(Object element, int columnIndex) {
-								return ((ColumnHandler) element).column.getColumn().getText();
+								return ((ColumnBlock) element).name;
 							}
 							
 						};
@@ -677,9 +694,14 @@ public class ConfigurableCargoReportView extends EMFReportView {
 						return updater;
 					}
 				};
-				dialog.setColumnsObjs(getHandlersInViewOrder());
+				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
+				//dialog.setCheckBoxInfo(new String [] { CARGO_ROW, VESSEL_EVENT_ROW, CHARTER_OUT_ROW }, rowFilterInfo);
 				dialog.open();
-											
+				
+				//IScenarioViewerSynchronizerOutput input = (IScenarioViewerSynchronizerOutput) viewer.getInput();
+				//viewer.setInput(null);
+				//viewer.setInput(input);
+				//viewer.refresh();
 			}
 			
 		};
@@ -687,6 +709,5 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	}
 
 
-	
 	
 }

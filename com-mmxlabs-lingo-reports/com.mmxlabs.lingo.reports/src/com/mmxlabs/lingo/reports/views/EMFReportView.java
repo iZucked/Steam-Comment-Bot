@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
@@ -60,10 +61,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.common.PairKeyedMap;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
@@ -113,6 +112,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<String, List<EObject>>();
 
+	protected final ColumnBlockManager blockManager = new ColumnBlockManager();
 
 	
 	protected EMFReportView() {
@@ -150,20 +150,15 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		private final IFormatter formatter;
 		private final EMFPath path;
 		private final String title;
-		private final String tooltip;
+		private String tooltip;
 		public GridViewerColumn column;
 		public int viewIndex;
 
 		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title) {
-			this(formatter, features, title, null);
-		}
-
-		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title, final String tooltip) {
 			super();
 			this.formatter = formatter;
 			this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);
 			this.title = title;
-			this.tooltip = tooltip;
 		}
 
 		public GridViewerColumn createColumn(final EObjectTableViewer viewer) {
@@ -189,7 +184,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					return formatter.getFilterable(object);
 				}
 			}, noEditing, path);
-
+			
 			final GridColumn tc = column.getColumn();
 			tc.setData(COLUMN_HANDLER, this);
 			this.column = column;
@@ -199,6 +194,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			}
 
 			return column;
+		}
+
+		public void setTooltip(final String tooltip) {
+			this.tooltip = tooltip;			
+		}
+		
+		public void setBlockName(final String blockName) {
+			blockManager.setHandlerBlockName(this, blockName);
 		}
 	}
 
@@ -597,37 +600,25 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	public ColumnHandler addColumn(final String title, final IFormatter formatter, final Object... path) {
+		return addColumn(title, null, formatter, path);
+	}
+
+	protected ColumnHandler addColumn(final String title, String blockName, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
+	
 		handlers.add(handler);
 		handlersInOrder.add(handler);
+		if (blockName == null) {
+			blockName = title;
+		}
+		handler.setBlockName(blockName);
 
 		if (viewer != null) {
 			handler.createColumn(viewer).getColumn().pack();
 		}
 		return handler;
 	}
-
-	
-	/**
-	 * Similar to {@link #addColumn(String, IFormatter, Object...)} but supports a column tooltip
-	 * 
-	 * @param title
-	 * @param tooltip
-	 * @param formatter
-	 * @param path
-	 * @return
-	 */
-	protected ColumnHandler addColumn(final String title, final String tooltip, final IFormatter formatter, final Object... path) {
-		final ColumnHandler handler = new ColumnHandler(formatter, path, title, tooltip);
-		handlers.add(handler);
-		handlersInOrder.add(handler);
-
-		if (viewer != null) {
-			handler.createColumn(viewer).getColumn().pack();
-		}
-		return handler;
-	}
-	
+		
 	/**
 	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in
 	 * the grid's display.
@@ -1190,8 +1181,236 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected List<ColumnHandler> getHandlersInOrder() {
 		return handlersInOrder;
 	}
-
-
 	
+	/**
+	 * A named group which report columns can be attached to. The configuration dialog allows the user to
+	 * edit the placement and visibility of these groups, which affects all columns in the group.
+	 * Saved configurations reflect only the placement and visibility of the groups. 
+	 * 
+	 * @author Simon McGregor
+	 *
+	 */
+	class ColumnBlock {
+		List<ColumnHandler> blockHandlers = new ArrayList<>();
+		boolean visible;
+		int viewIndex;
+		String name;
+		
+		public ColumnBlock(String name) {
+			this.name = name;
+		}
+		
+		public void addColumn(ColumnHandler handler) {
+			blockHandlers.add(handler);
+			if (handler.column != null) {
+				handler.column.getColumn().setVisible(visible);
+			}
+		}
+		
+		public void setVisible(boolean visible) {
+			this.visible = visible;
+			for (ColumnHandler handler: blockHandlers) {
+				handler.column.getColumn().setVisible(visible);
+			}
+		}
+				
+		public ColumnHandler findHandler(GridColumn column) {
+			for (ColumnHandler handler: blockHandlers) {
+				if (handler.column.getColumn() == column) {
+					return handler;
+				}
+			}
+			return null;
+		}
+		
+	}
+	
+	/**
+	 * A class which manages custom column blocks for a Nebula Grid widget.
+	 * The blocks have columns assigned to them, can be made visible or invisible, and can be
+	 * moved en masse on the grid. 
+	 *  
+	 * @author Simon McGregor
+	 *
+	 */
+	class ColumnBlockManager {
+		private static final String COLUMN_BLOCK_CONFIG_MEMENTO = "COLUMN_BLOCK_CONFIG_MEMENTO";
+		private static final String BLOCK_VISIBLE_MEMENTO = "VISIBLE";
+		List<ColumnBlock> blocks = new ArrayList<>();
+		
+		protected ColumnBlock findColumnBlock(GridColumn column) {
+			for (ColumnBlock block: blocks) {
+				if (block.findHandler(column) != null) {
+				  return block;
+				}
+			}
+			
+			return null;
+		}
+		
+		protected ColumnBlock getBlockByName(String name) {
+			for (ColumnBlock block: blocks) {
+				if (block.name.equals(name)) {
+					return block;
+				}
+			}
+			
+			return null;
+		}
 
+		/**
+		 * Associates the specified column handler with a column block specified 
+		 * by the given name, removing it from any block it is already attached to. 
+		 * If no block exists with that name, one is created unless the name is null.
+		 * In the case of a null name, this method merely removes the handler from 
+		 * all currently known blocks.
+		 *  
+		 * @param handler
+		 * @param blockName
+		 */
+		public void setHandlerBlockName(final ColumnHandler handler, final String blockName) {
+			ColumnBlock namedBlock = null;
+			List<ColumnBlock> blocksToPurge = new ArrayList<>();
+			
+			for (ColumnBlock block: blocks) {
+				if (block.name.equals(blockName)) {
+					namedBlock = block;
+				}
+				else {
+					block.blockHandlers.remove(handler);
+					if (block.blockHandlers.isEmpty()) {
+						blocksToPurge.add(block);
+					}
+				}
+			}
+			
+			if (namedBlock == null && blockName != null) {
+				namedBlock = new ColumnBlock(blockName);
+				blocks.add(namedBlock);			
+			}
+			
+			if (namedBlock.blockHandlers.contains(handler) == false) {
+				namedBlock.addColumn(handler);
+			}
+			
+			if (blocksToPurge.isEmpty() == false) {
+				blocks.removeAll(blocksToPurge);
+			}
+			
+		}
+		
+		/**
+		 * Returns the block order for the grid widget. 
+		 * Assumes that the column display order on the widget respects the managed column blocks (i.e. all columns in a block 
+		 * are displayed contiguously).
+		 * Returns null and prints an error if there is an inconsistency.
+		 * 
+		 * TODO: throw an exception if there is any inconsistency.
+		 * 
+		 * @return
+		 */
+		public List<ColumnBlock> getBlocksInVisibleOrder() {
+			Grid grid = viewer.getGrid();
+			List<ColumnBlock> result = new ArrayList<>();
+			ColumnBlock current = null;
+
+			int[] colOrder = grid.getColumnOrder();			
+			for (int i = 0; i < colOrder.length; i++) {
+				GridColumn column = grid.getColumn(colOrder[i]);
+				ColumnBlock block = findColumnBlock(column);
+				// the next column in the grid display should belong to a managed block
+				if (block == null) {
+					System.err.println(String.format("Grid contains an un-managed column: %s.", column.toString()));
+					return null;
+				}
+				// and the block should not be one which has been seen before unless it contained the last column as well
+				if (block != current && result.contains(block)) {
+					System.err.println(String.format("Grid contains an out-of-block column: %s.", column.toString()));
+					return null;					
+				}
+				// otherwise everything should be fine
+				if (result.contains(block) == false) {
+					result.add(block);
+				}
+				current = block;
+			}
+			
+			return result;			
+		}
+		
+		public void setVisibleBlockOrder(List<ColumnBlock> order) {
+			Grid grid = viewer.getGrid();
+			int index = 0;
+			int[] colOrder = grid.getColumnOrder();
+			
+			for (ColumnBlock block: order) {
+				for (ColumnHandler handler: block.blockHandlers) {
+					colOrder[index] = grid.indexOf(handler.column.getColumn());
+					index += 1;
+				}
+			}
+			
+			grid.setColumnOrder(colOrder);			
+		}
+		
+		public void swapBlockOrder(ColumnBlock block1, ColumnBlock block2) {
+			List<ColumnBlock> order = getBlocksInVisibleOrder();
+			int index1 = order.indexOf(block1);
+			int index2 = order.indexOf(block2);
+			order.set(index1, block2);
+			order.set(index2, block1);
+			setVisibleBlockOrder(order);
+		}
+		
+		public int getBlockIndex(ColumnBlock block) {
+			return getBlocksInVisibleOrder().indexOf(block);
+		}
+
+		@SuppressWarnings("null")
+		public boolean getBlockVisible(ColumnBlock block) {
+			Boolean result = null;
+			for (ColumnHandler handler: block.blockHandlers) {
+				GridColumn column = handler.column.getColumn();
+				if (result != null && column.getVisible() != result) {
+					System.err.println(String.format("Column block has inconsistent visibility: %s.", column.toString()));
+					return false;					
+				}
+				result = column.getVisible();
+			}
+			return result;
+		}
+		
+		public void saveToMemento(String uniqueConfigKey, IMemento memento) {
+			IMemento blocksInfo = memento.createChild(uniqueConfigKey);
+			for (ColumnBlock block: this.getBlocksInVisibleOrder()) {
+				IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, block.name);
+				blockInfo.putBoolean(BLOCK_VISIBLE_MEMENTO, getBlockVisible(block));
+			}
+		}
+		
+		public void initFromMemento(String uniqueConfigKey, IMemento memento) {
+			IMemento blocksInfo = memento.getChild(uniqueConfigKey);
+			List<ColumnBlock> order = new ArrayList<>();
+			
+			if (blocksInfo != null) {
+			
+				for (IMemento blockInfo: blocksInfo.getChildren(COLUMN_BLOCK_CONFIG_MEMENTO)) {
+					String blockName = blockInfo.getID();
+					ColumnBlock block = getBlockByName(blockName);
+					if (block == null) {
+						block = new ColumnBlock(blockName);
+						blocks.add(block);
+					}
+					Boolean visible = blockInfo.getBoolean(BLOCK_VISIBLE_MEMENTO);
+					if (visible != null) {
+						block.setVisible(visible);
+					}
+					order.add(block);
+				}
+				
+				setVisibleBlockOrder(order);
+			}
+		}
+	}
+	
 }
