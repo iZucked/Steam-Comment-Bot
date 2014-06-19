@@ -183,7 +183,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
 		
-		//createRowCheckBoxes(composite);
+		createRowCheckBoxes(composite);
 		//createWidthArea(composite);
 		Object element = visibleViewer.getElementAt(0);
 		if (element != null)
@@ -200,20 +200,22 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		composite.setLayout(compositeLayout);
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 		
-		for (final String text: checkBoxStrings) {
-			Button button = new Button(composite, SWT.CHECK);
-			button.setText(text);
-			button.setSelection(checkBoxStore.contains(text));
-			button.addListener(SWT.Selection, new Listener() {
-				public void handleEvent(Event event) {
-					if (checkBoxStore.contains(text)) {
-						checkBoxStore.remove(text);
+		if (checkBoxStrings != null) {
+			for (final String text: checkBoxStrings) {
+				Button button = new Button(composite, SWT.CHECK);
+				button.setText(text);
+				button.setSelection(checkBoxStore.contains(text));
+				button.addListener(SWT.Selection, new Listener() {
+					public void handleEvent(Event event) {
+						if (checkBoxStore.contains(text)) {
+							checkBoxStore.remove(text);
+						}
+						else {
+							checkBoxStore.add(text);
+						}
 					}
-					else {
-						checkBoxStore.add(text);
-					}
-				}
-			});
+				});
+			}
 		}
 		
 		return composite;
