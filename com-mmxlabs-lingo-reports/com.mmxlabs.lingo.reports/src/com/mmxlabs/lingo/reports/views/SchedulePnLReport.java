@@ -73,14 +73,13 @@ public class SchedulePnLReport extends EMFReportView {
 
 		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge", "openslot");
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
-		nameObjectRef = 		GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
-//		GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
+		nameObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
+		// GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
 		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
 		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "discharge");
 		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
-
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
@@ -180,7 +179,7 @@ public class SchedulePnLReport extends EMFReportView {
 		addColumn("Type", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
-				if (object instanceof OpenSlotAllocation ) {
+				if (object instanceof OpenSlotAllocation) {
 					OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
 					String type = "Open Slot";
 					final Slot slot = openSlotAllocation.getSlot();
@@ -210,11 +209,9 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		}, targetObjectRef);
 
+		// Register columns that will be displayed when in Pin/Diff mode
+		pinDiffModeHelper.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef));
 
-		// Register columns that will be displayed when in Pin/Diff mode 
-		pinDiffModeHelper
-			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef));
-		
 	}
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
@@ -266,6 +263,9 @@ public class SchedulePnLReport extends EMFReportView {
 
 		// HACK: don't the label to the entity column names if the column is for total group P&L
 		if (entityKey != null) {
+			if (entityColumnNames.contains(title)) {
+				return;
+			}
 			entityColumnNames.add(title);
 		}
 
@@ -274,7 +274,8 @@ public class SchedulePnLReport extends EMFReportView {
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
 
-				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut || object instanceof OpenSlotAllocation) {
+				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
+						|| object instanceof OpenSlotAllocation) {
 					container = (ProfitAndLossContainer) object;
 				}
 				if (object instanceof SlotVisit) {
@@ -441,7 +442,7 @@ public class SchedulePnLReport extends EMFReportView {
 							}
 						}
 					}
-				} 
+				}
 				interestingEvents.addAll(schedule.getOpenSlotAllocations());
 
 				final List<EObject> nodes = generateNodes(dataModelInstance, interestingEvents);
@@ -542,13 +543,13 @@ public class SchedulePnLReport extends EMFReportView {
 				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "openslot", openSlotAllocation);
 				final Slot slot = openSlotAllocation.getSlot();
 				if (slot == null) {
-					
+
 					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", "??");
 				} else {
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slot.getName());
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slot.getName());
 				}
 				nodes.add(node);
-				
+
 			} else if (element instanceof Event) {
 				final Event event = (Event) element;
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);

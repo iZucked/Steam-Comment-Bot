@@ -144,7 +144,7 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				return null;
 			}
-		}).setTooltip("In m3");
+		}).setTooltip("In m³");
 		addColumn("Heel Start", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
@@ -154,7 +154,7 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				return null;
 			}
-		}).setTooltip("In m3");
+		}).setTooltip("In m³");
 		addColumn("Heel End", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
@@ -164,7 +164,7 @@ public class PortRotationReportView extends EMFReportView {
 				}
 				return null;
 			}
-		}).setTooltip("In m3");
+		}).setTooltip("In m³");
 
 		for (final Fuel fuelName : Fuel.values()) {
 			addColumn(fuelName.toString(), new IntegerFormatter() {
