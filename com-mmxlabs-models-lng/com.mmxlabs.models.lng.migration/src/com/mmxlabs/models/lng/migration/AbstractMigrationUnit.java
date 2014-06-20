@@ -84,19 +84,4 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		// Save the model.
 		ResourceHelper.saveResource(modelResource);
 	}
-
-	/**
-	 * Sub classes can initialise new sub model instances here and add them to the map.
-	 * 
-	 * @param loader
-	 *            (in)
-	 * @param existingModels
-	 *            (in) The set of existing models in the scenario
-	 * @param newModels
-	 *            (out) A map to store new model references in.
-	 */
-	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> existingModels, final Map<ModelsLNGSet_v1, EObject> newModels) {
-
-	}
-
 }
