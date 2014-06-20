@@ -89,8 +89,8 @@ public class VesselPortValueProviderFactory implements IReferenceValueProviderFa
 								if (!contains(ips, p.getSecond())) {
 									filteredList.add(p);
 								}
-								return filteredList;
 							}
+							return filteredList;
 						}
 					}
 					return delegateValue;
