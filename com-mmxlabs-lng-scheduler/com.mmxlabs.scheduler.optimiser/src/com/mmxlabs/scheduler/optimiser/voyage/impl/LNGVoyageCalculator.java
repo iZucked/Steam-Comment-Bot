@@ -618,8 +618,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			}
 		}
 
-		final boolean boiloffWasUsed = (lastVoyageDetailsElement != null);
-
 		int violationsCount = 0;
 
 		// If load or discharge has been set, then the other must be too.
@@ -895,10 +893,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				} else {
 					portCosts = portCostProvider.getPortCost(portSlot.getPort(), options.getVessel(), portSlot.getPortType());
 				}
-				if (portCosts == 0) {
-					
-					int ii = 0;
-				}
+
 				details.setPortCosts(portCosts);
 
 				result.add(details);
