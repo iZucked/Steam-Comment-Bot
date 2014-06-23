@@ -139,6 +139,8 @@ public class ScenarioStorageUtil {
 			manifest.setUUID(instance.getUuid());
 			manifest.setScenarioVersion(instance.getScenarioVersion());
 			manifest.setVersionContext(instance.getVersionContext());
+			manifest.setClientScenarioVersion(instance.getClientScenarioVersion());
+			manifest.setClientVersionContext(instance.getClientVersionContext());
 			final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
 			final Resource manifestResource = resourceSet.createResource(manifestURI);
 
