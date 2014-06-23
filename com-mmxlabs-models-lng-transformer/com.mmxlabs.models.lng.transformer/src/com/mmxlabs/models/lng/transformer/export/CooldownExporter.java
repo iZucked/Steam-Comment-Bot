@@ -37,8 +37,8 @@ public class CooldownExporter extends BaseAnnotationExporter {
 			return null;
 		}
 
-		final long cooldownVolume = event.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
-		if (cooldownVolume > 0) {
+		if (event.isCooldownPerformed()) {
+			final long cooldownVolume = event.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 			Port ePort = modelEntityMap.getModelObject(event.getPort(), Port.class);
 			if (ePort == null)
 				ePort = visitExporter.getLastPortVisited();

@@ -36,8 +36,12 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
 		final LNGScenarioModel scenario = msc.buildScenario();
 
+		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, // start to load
+				SlotVisit.class, Journey.class, Idle.class, // load to discharge
+				SlotVisit.class, Journey.class, Idle.class, // discharge to end
+				EndEvent.class };
 		// change from default scenario
-		final SequenceTester checker = getDefaultTester();
+		final SequenceTester checker = getDefaultTester(classes);
 
 		final VesselAvailability vesselAvailability = msc.vesselAvailability;
 		vesselAvailability.getStartHeel().setVolumeAvailable(1);
@@ -57,6 +61,8 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 		checker.baseFuelPricePerMT = 100;
 
 		msc.vessel.getVesselClass().setWarmingTime(0);
+
+		msc.setupCooldown(20.0);
 
 		// change from default scenario
 		// first journey should use NBO and base fuel (not just base fuel)
@@ -264,103 +270,103 @@ public class SafetyHeelTests extends AbstractShippingCalculationsTestClass {
 	}
 
 	// Not valid as we try to force heel use if available
-//	@Test
-//	public void testStartEventHeelIgnored() {
-//		System.err.println("\n\nPlenty of heel, but base fuel is cheaper");
-//		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-//		final LNGScenarioModel scenario = msc.buildScenario();
-//
-//		// change from default scenario
-//		final SequenceTester checker = getDefaultTester();
-//
-//		final VesselAvailability vesselAvailability = msc.vesselAvailability;
-//		vesselAvailability.getStartHeel().setVolumeAvailable(5000);
-//		// FIXME: These need to match the cargo defaults....
-//		vesselAvailability.getStartHeel().setCvValue(21);
-//		vesselAvailability.getStartHeel().setPricePerMMBTU(1);
-//
-//		// change from default scenario
-//
-//		// Orphan Ballast
-//		{
-//			int expectedDuration = 1;
-//			int expectedNBO = expectedDuration * 0;
-//			int expectedFBO = expectedDuration * 0;
-//			int expectedBF = expectedDuration * 15;
-//			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 0);
-//			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 0);
-//			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 0);
-//
-//			int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 10;
-//			checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 0);
-//
-//		}
-//		int expectedHeelRolledOver = 0;
-//
-//		int totalLNGUsed = 0;
-//		// Laden leg
-//		{
-//			int expectedDuration = 2;
-//			int expectedNBO = expectedDuration * 10;
-//			int expectedFBO = expectedDuration * 0;
-//			int expectedBF = expectedDuration * 5;
-//			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 1);
-//			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 1);
-//			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 1);
-//
-//			int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 10;
-//			checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 1);
-//
-//			totalLNGUsed += expectedNBO;
-//			totalLNGUsed += expectedFBO;
-//		}
-//		// Laden idle -- same as default
-//		{
-//			int expectedDuration = 1;
-//			int expectedNBO = expectedDuration * 10;
-//			// checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Idle.class, 1);
-//			// checker.setExpectedValue(0, Expectations.BF_USAGE, Idle.class, 1);
-//			//
-//			// int expectedCosts = (expectedNBO) * 21;
-//			// checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Idle.class, 1);
-//
-//			totalLNGUsed += expectedNBO;
-//		}
-//		// Ballast leg
-//		{
-//			int expectedDuration = 1;
-//			int expectedNBO = expectedDuration * 0;
-//			int expectedFBO = expectedDuration * 0;
-//			int expectedBF = expectedDuration * 15;
-//			checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 2);
-//			checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 2);
-//			checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 2);
-//
-//			int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 10;
-//			checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 2);
-//
-//			totalLNGUsed += expectedNBO;
-//			totalLNGUsed += expectedFBO;
-//		}
-//		// No ballast idle
-//
-//		int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
-//		int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
-//		int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
-//		// change from default scenario
-//		// first load should be only 5010
-//		// 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
-//		checker.setExpectedValue(expectedLoadVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
-//		int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
-//		checker.setExpectedValue(-expectedDischargeVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 1);
-//
-//		final Schedule schedule = ScenarioTools.evaluate(scenario);
-//		ScenarioTools.printSequences(schedule);
-//
-//		final Sequence sequence = schedule.getSequences().get(0);
-//
-//		checker.check(sequence);
-//	}
+	// @Test
+	// public void testStartEventHeelIgnored() {
+	// System.err.println("\n\nPlenty of heel, but base fuel is cheaper");
+	// final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+	// final LNGScenarioModel scenario = msc.buildScenario();
+	//
+	// // change from default scenario
+	// final SequenceTester checker = getDefaultTester();
+	//
+	// final VesselAvailability vesselAvailability = msc.vesselAvailability;
+	// vesselAvailability.getStartHeel().setVolumeAvailable(5000);
+	// // FIXME: These need to match the cargo defaults....
+	// vesselAvailability.getStartHeel().setCvValue(21);
+	// vesselAvailability.getStartHeel().setPricePerMMBTU(1);
+	//
+	// // change from default scenario
+	//
+	// // Orphan Ballast
+	// {
+	// int expectedDuration = 1;
+	// int expectedNBO = expectedDuration * 0;
+	// int expectedFBO = expectedDuration * 0;
+	// int expectedBF = expectedDuration * 15;
+	// checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 0);
+	// checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 0);
+	// checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 0);
+	//
+	// int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 10;
+	// checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 0);
+	//
+	// }
+	// int expectedHeelRolledOver = 0;
+	//
+	// int totalLNGUsed = 0;
+	// // Laden leg
+	// {
+	// int expectedDuration = 2;
+	// int expectedNBO = expectedDuration * 10;
+	// int expectedFBO = expectedDuration * 0;
+	// int expectedBF = expectedDuration * 5;
+	// checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 1);
+	// checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 1);
+	// checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 1);
+	//
+	// int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 10;
+	// checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 1);
+	//
+	// totalLNGUsed += expectedNBO;
+	// totalLNGUsed += expectedFBO;
+	// }
+	// // Laden idle -- same as default
+	// {
+	// int expectedDuration = 1;
+	// int expectedNBO = expectedDuration * 10;
+	// // checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Idle.class, 1);
+	// // checker.setExpectedValue(0, Expectations.BF_USAGE, Idle.class, 1);
+	// //
+	// // int expectedCosts = (expectedNBO) * 21;
+	// // checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Idle.class, 1);
+	//
+	// totalLNGUsed += expectedNBO;
+	// }
+	// // Ballast leg
+	// {
+	// int expectedDuration = 1;
+	// int expectedNBO = expectedDuration * 0;
+	// int expectedFBO = expectedDuration * 0;
+	// int expectedBF = expectedDuration * 15;
+	// checker.setExpectedValue(expectedNBO, Expectations.NBO_USAGE, Journey.class, 2);
+	// checker.setExpectedValue(expectedFBO, Expectations.FBO_USAGE, Journey.class, 2);
+	// checker.setExpectedValue(expectedBF, Expectations.BF_USAGE, Journey.class, 2);
+	//
+	// int expectedCosts = (expectedNBO + expectedFBO) * 21 + expectedBF * 10;
+	// checker.setExpectedValue(expectedCosts, Expectations.FUEL_COSTS, Journey.class, 2);
+	//
+	// totalLNGUsed += expectedNBO;
+	// totalLNGUsed += expectedFBO;
+	// }
+	// // No ballast idle
+	//
+	// int vesselCapacity = (int) (msc.vessel.getVesselOrVesselClassCapacity() * msc.vessel.getVesselOrVesselClassFillCapacity());
+	// int maxQuantity = msc.cargo.getSlots().get(0).getMaxQuantity();
+	// int expectedLoadVolume = Math.min(vesselCapacity, maxQuantity) - expectedHeelRolledOver;
+	// // change from default scenario
+	// // first load should be only 5010
+	// // 5010 = 10000 [vessel capacity] - (5000 [start heel] - 10 [journey boiloff])
+	// checker.setExpectedValue(expectedLoadVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 0);
+	// int expectedDischargeVolume = expectedLoadVolume + expectedHeelRolledOver - totalLNGUsed;
+	// checker.setExpectedValue(-expectedDischargeVolume, Expectations.LOAD_DISCHARGE, SlotVisit.class, 1);
+	//
+	// final Schedule schedule = ScenarioTools.evaluate(scenario);
+	// ScenarioTools.printSequences(schedule);
+	//
+	// final Sequence sequence = schedule.getSequences().get(0);
+	//
+	// checker.check(sequence);
+	// }
 
 	@Test
 	public void testStartEventHeelForcedToStayCold() {

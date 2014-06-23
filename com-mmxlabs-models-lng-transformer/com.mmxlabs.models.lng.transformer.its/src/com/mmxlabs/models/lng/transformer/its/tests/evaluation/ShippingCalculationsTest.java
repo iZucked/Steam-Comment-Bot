@@ -249,7 +249,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// but the vessel's capacity is only 50m3 greater than its minimum heel
 		// and the journeys (after loading) use a total of 40m3 NBO
 		// so only 10m3 is available for FBO, which is not enough for both journeys
-		msc.vc.setCapacity(70);
+		msc.vc.setCapacity(60);
 		msc.vc.setMinHeel(10);
 
 		// Create second cargo to require arriving cold
