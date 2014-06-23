@@ -14,6 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
+import com.mmxlabs.models.migration.IClientMigrationUnit;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.migration.PackageData;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
@@ -26,7 +27,7 @@ import com.mmxlabs.scenario.service.util.ResourceHelper;
  * @author Simon Goodall
  * 
  */
-public abstract class AbstractMigrationUnit implements IMigrationUnit {
+public abstract class AbstractClientMigrationUnit implements IClientMigrationUnit {
 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getSourceVersion()}.

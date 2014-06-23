@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.lng.ui.views;
 
+import java.util.EventObject;
+
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.ui.action.RedoAction;
 import org.eclipse.emf.edit.ui.action.UndoAction;
@@ -28,11 +32,12 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * @author hinton
  * 
  */
-public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane> extends ScenarioInstanceView {
+public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane> extends ScenarioInstanceView implements CommandStackListener {
 	private Composite childComposite;
 	private T viewerPane;
 	private UndoAction undoAction;
 	private RedoAction redoAction;
+	private CommandStack currentCommandStack;
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -91,13 +96,25 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		}
 	}
 
-	private void updateActions(EditingDomain editingDomain) {
+	private void updateActions(final EditingDomain editingDomain) {
+
+		if (currentCommandStack != null) {
+			currentCommandStack.removeCommandStackListener(this);
+		}
 
 		undoAction.setEditingDomain(editingDomain);
 		redoAction.setEditingDomain(editingDomain);
 
-		undoAction.setEnabled(editingDomain != null);
-		redoAction.setEnabled(editingDomain != null);
+		undoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canUndo());
+		redoAction.setEnabled(editingDomain != null && editingDomain.getCommandStack().canRedo());
+
+		if (editingDomain != null) {
+			currentCommandStack = editingDomain.getCommandStack();
+			currentCommandStack.addCommandStackListener(this);
+			
+			undoAction.update();
+			redoAction.update();
+		}
 	}
 
 	@Override
@@ -135,5 +152,11 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 		if (viewerPane != null) {
 			viewerPane.getScenarioViewer().setSelection(selection, reveal);
 		}
+	}
+
+	@Override
+	public void commandStackChanged(final EventObject event) {
+		undoAction.update();
+		redoAction.update();
 	}
 }
