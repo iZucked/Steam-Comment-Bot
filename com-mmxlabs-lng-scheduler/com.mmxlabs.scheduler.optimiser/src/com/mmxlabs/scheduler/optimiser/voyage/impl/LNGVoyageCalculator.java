@@ -628,7 +628,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		int cargoCVValue = 0;
 
 		// the LNG which will be required to complete the sequence, including
-		// NBO, FBO and any minimum heel if travelling on NBO
+		// NBO, FBO and any safety heel if travelling on NBO
 		long lngCommitmentInM3;
 
 		// Load/Discharge sequence
@@ -689,7 +689,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				// No cooldown performed, but we expected to arrive cold, thus either we still have gas on board, or we are within warming time.
 				if (expectedHeelLeftOnBoard) {
 					// Gas on board
-					remainingHeelInM3 = vesselClass.getMinHeel();
+					remainingHeelInM3 = vesselClass.getSafetyHeel();
 					voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 				} else {
 					// Warming time

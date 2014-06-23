@@ -109,7 +109,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				returnSlotHeelInM3 = actualsDataProvider.getStartHeelInM3(returnSlot);
 			} else {
 				// Use safety heel if not actualised
-				returnSlotHeelInM3 = vessel.getVesselClass().getMinHeel();
+				returnSlotHeelInM3 = vessel.getVesselClass().getSafetyHeel();
 			}
 
 			usedFuelVolume -= returnSlotHeelInM3;

@@ -197,7 +197,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	/**
-	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel class min heel.
+	 * Set the heel that remains at the end of this voyage plan - typically (always...) due to the vessel class safety heel.
 	 * 
 	 * @param remainingHeelInM3
 	 */
