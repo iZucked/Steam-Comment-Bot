@@ -45,4 +45,6 @@ public interface IFuelUsingEvent {
 	 * @return
 	 */
 	FuelUnit getFuelPriceUnit(FuelComponent fuel);
+	
+	boolean isCooldownPerformed();
 }

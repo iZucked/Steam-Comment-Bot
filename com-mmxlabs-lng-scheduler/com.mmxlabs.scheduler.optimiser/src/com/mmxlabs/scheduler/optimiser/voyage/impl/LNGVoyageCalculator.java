@@ -100,6 +100,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		calculateIdleFuelRequirements(options, output, vesselClass, vesselState, idleTimeInHours);
 
 		// Check cooldown
+		output.setCooldownPerformed(false);
 		if (options.shouldBeCold()) {
 
 			// Work out how long we have been warming up
@@ -113,6 +114,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (options.isWarm() || (warmingHours > vesselClass.getWarmupTime())) {
 				final long cooldownVolume = vesselClass.getCooldownVolume();
 				output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
+				output.setCooldownPerformed(true);
 			}
 		}
 
@@ -454,8 +456,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if (sequence[i] instanceof VoyageDetails) {
 
 				final VoyageDetails details = (VoyageDetails) sequence[i];
-				final long cooldownVolumeInM3 = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
-				if (details.getOptions().shouldBeCold() && (cooldownVolumeInM3 > 0)) {
+				if (details.getOptions().shouldBeCold() && details.isCooldownPerformed()) {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
 					// Look up arrival of next port
@@ -477,6 +478,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					}
 
 					// Store the MMBTu cooldown value
+					final long cooldownVolumeInM3 = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
 					details.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MMBTu, Calculator.convertM3ToMMBTu(cooldownVolumeInM3, cooldownCV));
 
 					assert FuelComponent.Cooldown.getPricingFuelUnit() == FuelUnit.MMBTu;
@@ -653,7 +655,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			// Apply safety heel if required
 			final long remainingHeelInM3;
-			if (lastVoyageDetailsElement != null && lastVoyageDetailsElement.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
+			if (lastVoyageDetailsElement != null && lastVoyageDetailsElement.isCooldownPerformed()) {
 				remainingHeelInM3 = 0;
 			} else if (lastVoyageDetailsElement != null && lastVoyageDetailsElement.getOptions().shouldBeCold()) {
 				remainingHeelInM3 = vesselClass.getMinHeel();
@@ -847,8 +849,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
 				final boolean shouldBeCold = details.getOptions().shouldBeCold() && !details.getOptions().getAllowCooldown();
-				final long fuelConsumption = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
-				if (shouldBeCold && (fuelConsumption > 0)) {
+				if (shouldBeCold && details.isCooldownPerformed()) {
 
 					// if ((loadIdx != -1)) {
 					++cooldownViolations;

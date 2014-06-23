@@ -252,6 +252,8 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					}
 					idle.setVesselState(details.getOptions().getVesselState());
 
+					idle.setCooldownPerformed(details.isCooldownPerformed());
+					
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
 				}
 			} else {
