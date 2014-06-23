@@ -653,13 +653,49 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 			final long cargoCapacityInM3 = vessel.getCargoCapacity();
 
+			// This block of code looks to see if we expect to arrive at our destination with our safety heel intact.
+			// This should apply to most voyages. Exceptions are when a cooldown has been performed, or we have used up gas, but are still within our warming time.
+			boolean expectedHeelLeftOnBoard = false;
+			int warmingTime = 0;
+			if (lastVoyageDetailsElement != null) {
+				// Check based on fuel consumption
+				if (lastVoyageDetailsElement.getIdleTime() > 0) {
+					expectedHeelLeftOnBoard = lastVoyageDetailsElement.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3) > 0;
+				} else if (lastVoyageDetailsElement.getTravelTime() > 0) {
+					expectedHeelLeftOnBoard = lastVoyageDetailsElement.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3) > 0;
+				} else {
+					expectedHeelLeftOnBoard = true;
+				}
+
+				// Check the warming up time.
+				if (lastVoyageDetailsElement.getIdleTime() > 0) {
+					if (lastVoyageDetailsElement.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3) == 0) {
+						warmingTime += lastVoyageDetailsElement.getIdleTime();
+					}
+				}
+				if (lastVoyageDetailsElement.getTravelTime() > 0) {
+					if (lastVoyageDetailsElement.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3) == 0) {
+						warmingTime += lastVoyageDetailsElement.getTravelTime();
+					}
+				}
+			}
+
 			// Apply safety heel if required
 			final long remainingHeelInM3;
 			if (lastVoyageDetailsElement != null && lastVoyageDetailsElement.isCooldownPerformed()) {
+				// Performed cooldown. By definition we were out of gas.
 				remainingHeelInM3 = 0;
 			} else if (lastVoyageDetailsElement != null && lastVoyageDetailsElement.getOptions().shouldBeCold()) {
-				remainingHeelInM3 = vesselClass.getMinHeel();
-				voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
+				// No cooldown performed, but we expected to arrive cold, thus either we still have gas on board, or we are within warming time.
+				if (expectedHeelLeftOnBoard) {
+					// Gas on board
+					remainingHeelInM3 = vesselClass.getMinHeel();
+					voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
+				} else {
+					// Warming time
+					remainingHeelInM3 = 0;
+				}
+				assert warmingTime > 0 || expectedHeelLeftOnBoard;
 			} else {
 				remainingHeelInM3 = 0;
 			}
