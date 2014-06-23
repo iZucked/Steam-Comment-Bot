@@ -65,12 +65,12 @@ public class VesselClassTest {
 	}
 
 	@Test
-	public void testGetSetMinHeel() {
+	public void testGetSetSafetyHeel() {
 		final long value = 100l;
 		final VesselClass vesselClass = new VesselClass();
-		Assert.assertEquals(0, vesselClass.getMinHeel());
-		vesselClass.setMinHeel(value);
-		Assert.assertEquals(value, vesselClass.getMinHeel());
+		Assert.assertEquals(0, vesselClass.getSafetyHeel());
+		vesselClass.setSafetyHeel(value);
+		Assert.assertEquals(value, vesselClass.getSafetyHeel());
 	}
 
 	@Test

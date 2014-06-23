@@ -162,16 +162,16 @@ public class SchedulerBuilderTest {
 		final int minSpeed = 1;
 		final int maxSpeed = 2;
 		final long capacity = 3l;
-		final int minHeel = 4;
+		final int safetyHeel = 4;
 
-		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, minHeel, 7000, 1000, 0, 35353, 10101, 0);
+		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, 7000, 1000, 0, 35353, 10101, 0);
 		// createVesselClass("name", minSpeed,
-		// maxSpeed, capacity, minHeel, 700;
+		// maxSpeed, capacity, safetyHeel, 700;
 
 		Assert.assertEquals(minSpeed, vesselClass.getMinSpeed());
 		Assert.assertEquals(maxSpeed, vesselClass.getMaxSpeed());
 		Assert.assertEquals(capacity, vesselClass.getCargoCapacity());
-		Assert.assertEquals(minHeel, vesselClass.getMinHeel());
+		Assert.assertEquals(safetyHeel, vesselClass.getSafetyHeel());
 		Assert.assertEquals(7000, vesselClass.getBaseFuelUnitPrice());
 		Assert.assertEquals(1000, vesselClass.getBaseFuelConversionFactor());
 

@@ -26,6 +26,8 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 
 	private final EnumMap<FuelComponent, Integer> fuelUnitPrice = new EnumMap<FuelComponent, Integer>(FuelComponent.class);
 
+	private boolean cooldownPerformed;
+
 	@Override
 	public long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
 
@@ -65,7 +67,7 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 	}
 
 	@Override
-	public FuelUnit getFuelPriceUnit(FuelComponent fuel) {
+	public FuelUnit getFuelPriceUnit(final FuelComponent fuel) {
 		if (fuelPriceUnit.containsKey(fuel)) {
 			return fuelPriceUnit.get(fuel);
 		} else {
@@ -74,7 +76,7 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 	}
 
 	@Override
-	public int getFuelUnitPrice(FuelComponent fuel) {
+	public int getFuelUnitPrice(final FuelComponent fuel) {
 		if (fuelUnitPrice.containsKey(fuel)) {
 			return fuelUnitPrice.get(fuel);
 		} else {
@@ -89,4 +91,13 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 	public void setFuelUnitPrice(final FuelComponent fuel, final int pricePerUnit) {
 		fuelUnitPrice.put(fuel, pricePerUnit);
 	}
+
+	public boolean isCooldownPerformed() {
+		return cooldownPerformed;
+	}
+
+	public void setCooldownPerformed(final boolean cooldownPerformed) {
+		this.cooldownPerformed = cooldownPerformed;
+	}
+
 }

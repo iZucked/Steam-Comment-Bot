@@ -179,8 +179,8 @@ public class ScheduleCalculator {
 		if (nominatedVessel != null) {
 			// Set a start and end heel for BOG estimations
 
-			currentPlan.setStartingHeelInM3(nominatedVessel.getVesselClass().getMinHeel());
-			currentPlan.setRemainingHeelInM3(nominatedVessel.getVesselClass().getMinHeel());
+			currentPlan.setStartingHeelInM3(nominatedVessel.getVesselClass().getSafetyHeel());
+			currentPlan.setRemainingHeelInM3(nominatedVessel.getVesselClass().getSafetyHeel());
 		}
 		boolean startSet = false;
 		int startTime = 0;

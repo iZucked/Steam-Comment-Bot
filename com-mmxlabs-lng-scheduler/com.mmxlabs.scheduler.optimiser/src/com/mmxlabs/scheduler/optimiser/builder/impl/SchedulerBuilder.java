@@ -1130,7 +1130,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long minHeelInM3, final int baseFuelUnitPricePerMT,
+	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long safetyHeelInM3, final int baseFuelUnitPricePerMT,
 			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final long cooldownVolumeM3, final int minBaseFuelConsumptionPerDay) {
 
 		final VesselClass vesselClass = new VesselClass();
@@ -1140,7 +1140,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vesselClass.setMaxSpeed(maxSpeed);
 
 		vesselClass.setCargoCapacity(capacityInM3);
-		vesselClass.setMinHeel(minHeelInM3);
+		vesselClass.setSafetyHeel(safetyHeelInM3);
 
 		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPricePerMT);
 		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);

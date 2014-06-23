@@ -1051,7 +1051,7 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
 
 		// 2 days of boil off
-		vesselClass.setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
+		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
 
 		vesselClass.setInPortConsumptionRateInMTPerDay(PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(35));
 		vesselClass.setInPortConsumptionRateInMTPerDay(PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(45));

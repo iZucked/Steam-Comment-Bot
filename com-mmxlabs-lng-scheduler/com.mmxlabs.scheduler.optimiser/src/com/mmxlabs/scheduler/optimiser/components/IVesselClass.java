@@ -91,7 +91,7 @@ public interface IVesselClass {
 	 * 
 	 * @return
 	 */
-	long getMinHeel();
+	long getSafetyHeel();
 
 	/**
 	 * Returns the speed the vessel must travel at to use up all NBO.

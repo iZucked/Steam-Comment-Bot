@@ -36,16 +36,16 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 
 	private long routeCost = 0;
 
-	// private boolean charterOutIdleTime;
-
 	private long totalGroupProfitAndLoss;
+
+	private boolean cooldownPerformed;
 
 	public VoyageDetails() {
 	}
 
 	public VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final long routeCost2, final VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
-			final LongFastEnumMap<FuelComponent> fuelUnitPrices2, final long totalGroupProfitAndLoss2) {
+			final LongFastEnumMap<FuelComponent> fuelUnitPrices2, final long totalGroupProfitAndLoss2, final boolean cooldownPerformed) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
@@ -56,6 +56,7 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 		this.fuelUnitPrices.putAll(fuelUnitPrices2);
 		putAll(this.routeAdditionalConsumption, routeAdditionalConsumption2);
 		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss2;
+		this.cooldownPerformed = cooldownPerformed;
 	}
 
 	// TODO: Add to LongFastEnumEnumMap
@@ -70,7 +71,8 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 
 	@Override
 	public VoyageDetails clone() {
-		return new VoyageDetails(idleTime, travelTime, speed, startTime, routeCost, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, totalGroupProfitAndLoss);
+		return new VoyageDetails(idleTime, travelTime, speed, startTime, routeCost, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, totalGroupProfitAndLoss,
+				cooldownPerformed);
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
@@ -151,13 +153,13 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 				&& Objects.equal(idleTime,  d.idleTime)
 				&& Objects.equal(travelTime,  d.travelTime)
 				&& Objects.equal(startTime,  d.startTime)
-//				&& Objects.equal(charterOutIdleTime,  d.charterOutIdleTime)
 				&& Objects.equal(routeCost,  d.routeCost)
 				&& Objects.equal(options,  d.options)
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
 				&& Objects.equal(fuelUnitPrices,  d.fuelUnitPrices)
 				&& Objects.equal(totalGroupProfitAndLoss,  d.totalGroupProfitAndLoss)
+				&& Objects.equal(cooldownPerformed,  d.cooldownPerformed)
 				;
 				// @formatter:on
 		}
@@ -172,6 +174,7 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 				.add("fuelConsumption", fuelConsumption)
 				.add("routeAdditionalConsumption", routeAdditionalConsumption)
 				.add("fuelUnitPrices", fuelUnitPrices)
+				.add("cooldownPerformed", cooldownPerformed)
 				.add("idleTime", idleTime)
 				.add("travelTime", travelTime)
 				.add("speed", speed)
@@ -190,5 +193,13 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 	@Override
 	public void setTotalGroupProfitAndLoss(final long totalGroupProfitAndLoss) {
 		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
+	}
+
+	public boolean isCooldownPerformed() {
+		return cooldownPerformed;
+	}
+
+	public void setCooldownPerformed(final boolean cooldownPerformed) {
+		this.cooldownPerformed = cooldownPerformed;
 	}
 }

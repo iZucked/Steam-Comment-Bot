@@ -273,7 +273,7 @@ public class VoyagePlanner {
 		long heelVolumeInM3 = 0;
 		// For spot charters, start with the safety heel.
 		if (vessel.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
-			heelVolumeInM3 = vessel.getVesselClass().getMinHeel();
+			heelVolumeInM3 = vessel.getVesselClass().getSafetyHeel();
 			assert heelVolumeInM3 >= 0;
 		}
 
@@ -551,10 +551,10 @@ public class VoyagePlanner {
 						} else if (actualsDataProvider.hasActuals(voyageOptions.getFromPortSlot())) {
 							final long heelAfterDischarge = actualsDataProvider.getEndHeelInM3(voyageOptions.getFromPortSlot());
 							// end heel cannot be larger than discharge heel
-							endHeelInM3 = Math.min(heelAfterDischarge, vessel.getVesselClass().getMinHeel());
+							endHeelInM3 = Math.min(heelAfterDischarge, vessel.getVesselClass().getSafetyHeel());
 						} else {
 							// Assume we arrive with safety heel at next destination.
-							endHeelInM3 = vessel.getVesselClass().getMinHeel();
+							endHeelInM3 = vessel.getVesselClass().getSafetyHeel();
 						}
 						// Take of end heel, this is now our laden BOG quantity;
 						lngInM3 -= endHeelInM3;

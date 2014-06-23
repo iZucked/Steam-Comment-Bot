@@ -580,7 +580,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		final int idleTime = options.getVessel().getVesselClass().getWarmupTime() - 1;
 		// Set heel to zero to avoid it getting in the way
-		((VesselClass) options.getVessel().getVesselClass()).setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(0));
+		((VesselClass) options.getVessel().getVesselClass()).setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(0));
 
 		final VoyageDetails details = new VoyageDetails();
 
@@ -1112,7 +1112,7 @@ public class NewLNGVoyageCalculatorTest {
 		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
 
 		// 2 days of boil off
-		vesselClass.setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(150 * HEEL_DURATION));
+		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(150 * HEEL_DURATION));
 
 		vesselClass.setInPortConsumptionRateInMTPerDay(PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(35));
 		vesselClass.setInPortConsumptionRateInMTPerDay(PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(45));
