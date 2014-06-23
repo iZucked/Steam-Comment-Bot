@@ -36,8 +36,6 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 
 	private long routeCost = 0;
 
-	// private boolean charterOutIdleTime;
-
 	private long totalGroupProfitAndLoss;
 
 	private boolean cooldownPerformed;
@@ -155,7 +153,6 @@ public final class VoyageDetails implements IProfitAndLossDetails, IDetailsSeque
 				&& Objects.equal(idleTime,  d.idleTime)
 				&& Objects.equal(travelTime,  d.travelTime)
 				&& Objects.equal(startTime,  d.startTime)
-//				&& Objects.equal(charterOutIdleTime,  d.charterOutIdleTime)
 				&& Objects.equal(routeCost,  d.routeCost)
 				&& Objects.equal(options,  d.options)
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
