@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -72,11 +73,15 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 
 				if (vesselAvailability != null) {
 
+					final Date availabilityStartAfter = vesselAvailability.getStartAfter();
+					final Date availabilityEndBy = vesselAvailability.getEndBy();
+
 					if (assignment instanceof Cargo) {
 						final Cargo cargo = (Cargo) assignment;
 						for (final Slot slot : cargo.getSlots()) {
 							if (vesselAvailability.isSetStartAfter()) {
-								if (slot.getWindowEndWithSlotOrPortTime().before(vesselAvailability.getStartAfter())) {
+								final Date windowEndWithSlotOrPortTime = slot.getWindowEndWithSlotOrPortTime();
+								if (windowEndWithSlotOrPortTime != null && availabilityStartAfter != null && windowEndWithSlotOrPortTime.before(availabilityStartAfter)) {
 									final String message = String.format("Slot|%s is assigned to vessel %s but window date is before the vessel start date.", slot.getName(), vessel.getName());
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
 									failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -85,7 +90,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 								}
 							}
 							if (vesselAvailability.isSetEndBy()) {
-								if (slot.getWindowStartWithSlotOrPortTime().after(vesselAvailability.getEndBy())) {
+								final Date windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+								if (windowStartWithSlotOrPortTime != null && availabilityEndBy != null && windowStartWithSlotOrPortTime.after(availabilityEndBy)) {
 									final String message = String.format("Slot|%s is assigned to vessel %s but window date is after the vessel end date.", slot.getName(), vessel.getName());
 									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
 									failure.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
@@ -98,7 +104,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 					} else if (assignment instanceof VesselEvent) {
 						final VesselEvent vesselEvent = (VesselEvent) assignment;
 						if (vesselAvailability.isSetStartAfter()) {
-							if (vesselEvent.getStartBy().before(vesselAvailability.getStartAfter())) {
+							final Date eventStartBy = vesselEvent.getStartBy();
+							if (eventStartBy != null && availabilityStartAfter != null && eventStartBy.before(availabilityStartAfter)) {
 								final String message = String.format("Vessel Event|%s is assigned to vessel %s but window date is before the vessel start date.", vesselEvent.getName(),
 										vessel.getName());
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
@@ -107,7 +114,8 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 							}
 						}
 						if (vesselAvailability.isSetEndBy()) {
-							if (vesselEvent.getStartAfter().after(vesselAvailability.getEndBy())) {
+							final Date eventStartAfter = vesselEvent.getStartAfter();
+							if (eventStartAfter != null && availabilityEndBy != null && eventStartAfter.after(availabilityEndBy)) {
 								final String message = String.format("Vessel Event|%s is assigned to vessel %s but window date is after the vessel end date.", vesselEvent.getName(), vessel.getName());
 								final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message, IStatus.ERROR));
 								failure.addEObjectAndFeature(vesselEvent, CargoPackage.eINSTANCE.getVesselEvent_StartAfter());
