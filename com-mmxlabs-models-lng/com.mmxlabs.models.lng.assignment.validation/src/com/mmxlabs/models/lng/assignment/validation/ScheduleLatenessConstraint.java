@@ -128,15 +128,21 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
-			Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-			cal.setTime(slot.getWindowStartWithSlotOrPortTime());
-			cal.add(Calendar.HOUR_OF_DAY, slot.getSlotOrPortDuration());
-			return cal.getTime();
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+			final Date windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
+			if (windowStartWithSlotOrPortTime != null) {
+				cal.setTime(windowStartWithSlotOrPortTime);
+				cal.add(Calendar.HOUR_OF_DAY, slot.getSlotOrPortDuration());
+				return cal.getTime();
+			}
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
 			final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(vesselEvent.getTimeZone(CargoPackage.eINSTANCE.getVesselEvent_StartAfter())));
-			calendar.setTime(vesselEvent.getStartAfter());
-			return calendar.getTime();
+			final Date startAfter = vesselEvent.getStartAfter();
+			if (startAfter != null) {
+				calendar.setTime(startAfter);
+				return calendar.getTime();
+			}
 		}
 		return null;
 	}
