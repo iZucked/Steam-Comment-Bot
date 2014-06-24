@@ -9,12 +9,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.joda.time.DateTimeZone;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -26,6 +28,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -34,6 +37,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
  * A model constraint for checking that curves which are attached to objects have data for the dates associated with those objects.
@@ -42,10 +46,10 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
-	IndexStartFinder indexFinder = new IndexStartFinder();
-	TaxRateStartFinder taxFinder = new TaxRateStartFinder();
+	private final IndexStartFinder indexFinder = new IndexStartFinder();
+	private final TaxRateStartFinder taxFinder = new TaxRateStartFinder();
 
-	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	interface CurveStartFinder<CurveType> {
 		Date getStart(CurveType curve);
@@ -82,7 +86,11 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 
 	}
 
-	<T> Map<Object, Date> getEarliestDates(final CurveStartFinder<T> finder, final IValidationContext ctx) {
+	public CurveDataExistsConstraint() {
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+	}
+
+	private <T> Map<Object, Date> getEarliestDates(final CurveStartFinder<T> finder, final IValidationContext ctx) {
 		@SuppressWarnings("unchecked")
 		Map<Object, Date> result = (Map<Object, Date>) ctx.getCurrentConstraintData();
 		if (result == null) {
@@ -92,7 +100,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 		return result;
 	}
 
-	<T> Date getEarliestDate(final CurveStartFinder<T> finder, final T curve, final IValidationContext ctx) {
+	private <T> Date getEarliestDate(final CurveStartFinder<T> finder, final T curve, final IValidationContext ctx) {
 		final Map<Object, Date> map = getEarliestDates(finder, ctx);
 		Date result = map.get(curve);
 		if (result == null) {
@@ -102,7 +110,7 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 		return result;
 	}
 
-	<T> boolean curveCovers(final Date date, final CurveStartFinder<T> finder, final T curve, final IValidationContext ctx) {
+	private <T> boolean curveCovers(final Date date, final CurveStartFinder<T> finder, final T curve, final IValidationContext ctx) {
 		final Date start = getEarliestDate(finder, curve, ctx);
 		if (start == null) {
 			return false;
@@ -133,12 +141,18 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			}
 
 			// earliest slot date
-			final Date date = slot.getWindowStartWithSlotOrPortTime();
+			final Date portLocalDate = slot.getWindowStartWithSlotOrPortTime();
+			final Port port = slot.getPort();
+			if (port == null) {
+				return;
+			}
+			final DateTimeZone portDTZ = DateTimeZone.forID(port.getTimeZone());
+			final Date utcDate = new Date(portDTZ.convertUTCToLocal(portLocalDate.getTime()));
 
 			// check market indices
 			for (final CommodityIndex index : pricingModel.getCommodityIndices()) {
 				if (Exposures.getExposureCoefficient(slot, index) != 0) {
-					if (!curveCovers(date, indexFinder, index.getData(), ctx)) {
+					if (!curveCovers(utcDate, indexFinder, index.getData(), ctx)) {
 						final String format = "[Index|'%s'] No data for %s, the window start of slot '%s'.";
 						final String failureMessage = String.format(format, index.getName(), sdf.format(slot.getWindowStart()), slot.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
@@ -161,9 +175,9 @@ public class CurveDataExistsConstraint extends AbstractModelMultiConstraint {
 			}
 
 			// check entity tax rates
-			if (entity != null && !curveCovers(date, taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
+			if (entity != null && !curveCovers(portLocalDate, taxFinder, entity.getTradingBook().getTaxRates(), ctx)) {
 				final String format = "[Entity|'%s'] No tax data for %s, the window start of slot '%s'.";
-				final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
+				final String failureMessage = String.format(format, entity.getName(), sdf.format(utcDate), slot.getName());
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
 				dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
