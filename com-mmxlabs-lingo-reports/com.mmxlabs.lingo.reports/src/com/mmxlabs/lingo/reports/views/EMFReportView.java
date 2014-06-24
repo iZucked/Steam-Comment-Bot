@@ -97,24 +97,24 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
  */
 /**
  * @author berkan
- *
+ * 
  */
 public abstract class EMFReportView extends ViewPart implements ISelectionListener {
-	private static final Logger log = LoggerFactory.getLogger(new Object(){}.getClass().getEnclosingClass());
-	
+	private static final Logger log = LoggerFactory.getLogger(new Object() {
+	}.getClass().getEnclosingClass());
+
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
 	private FilterField filterField;
 
 	private boolean currentlyPinned = false;
 	private int numberOfSchedules;
-	protected PinDiffModeColumnManager pinDiffModeHelper = new PinDiffModeColumnManager(this);	
+	protected PinDiffModeColumnManager pinDiffModeHelper = new PinDiffModeColumnManager(this);
 
 	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<String, List<EObject>>();
 
 	protected final ColumnBlockManager blockManager = new ColumnBlockManager();
 
-	
 	protected EMFReportView() {
 		this(null);
 	}
@@ -184,7 +184,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					return formatter.getFilterable(object);
 				}
 			}, noEditing, path);
-			
+
 			final GridColumn tc = column.getColumn();
 			tc.setData(COLUMN_HANDLER, this);
 			this.column = column;
@@ -197,9 +197,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 
 		public void setTooltip(final String tooltip) {
-			this.tooltip = tooltip;			
+			this.tooltip = tooltip;
 		}
-		
+
 		public void setBlockName(final String blockName) {
 			blockManager.setHandlerBlockName(this, blockName);
 		}
@@ -224,7 +224,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	};
 	protected final IFormatter objectFormatter = new BaseFormatter();
 
-	public class BaseFormatter implements IFormatter {		
+	public class BaseFormatter implements IFormatter {
 		@Override
 		public String format(final Object object) {
 			if (object == null) {
@@ -478,9 +478,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private Action packColumnsAction;
 	private Action copyTableAction;
-//BE	private Action sortModeAction; //BE
-	
-	
+	// BE private Action sortModeAction; //BE
+
 	private final String helpContextId;
 	protected ScenarioViewerSynchronizer synchronizer;
 
@@ -503,7 +502,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 							c.getColumn().setVisible(synchronizerOutput.getLNGPortfolioModels().size() > 1);
 						}
 					}
-		
+
 					// Add Difference/Change columns when in Pin/Diff mode
 					pinDiffModeHelper.addAllColumnsToTableIf(numberOfSchedules > 1 && currentlyPinned);
 				}
@@ -518,11 +517,11 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			public Object[] getElements(final Object inputElement) {
 
 				clearInputEquivalents();
-				
+
 				final Object[] result;
-				Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();				
+				Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
 				final Collection<EObject> pinnedObjectsSet = pinnedObjects.values();
-				
+
 				if (numberOfSchedules > 1 && currentlyPinned) {
 					final List<EObject> objects = new LinkedList<EObject>();
 					for (final Map.Entry<String, List<EObject>> e : allObjectsByKey.entrySet()) {
@@ -605,7 +604,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected ColumnHandler addColumn(final String title, String blockName, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(formatter, path, title);
-	
+
 		handlers.add(handler);
 		handlersInOrder.add(handler);
 		if (blockName == null) {
@@ -618,10 +617,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 		return handler;
 	}
-		
+
 	/**
-	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in
-	 * the grid's display.
+	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in the grid's display.
 	 * 
 	 * @param handler
 	 * @return
@@ -635,57 +633,56 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				return i;
 			}
 		}
-		
-		return -1;		
+
+		return -1;
 	}
-	
+
 	public void swapVisibleColumnOrder(final ColumnHandler a, final ColumnHandler b) {
 		int[] columnOrder = viewer.getGrid().getColumnOrder();
 		int aViewIndex = getColumnGridIndex(a);
 		int bViewIndex = getColumnGridIndex(b);
 		int swap = columnOrder[aViewIndex];
 		columnOrder[aViewIndex] = columnOrder[bViewIndex];
-		columnOrder[bViewIndex] = swap;		
-		viewer.getGrid().setColumnOrder(columnOrder);			
+		columnOrder[bViewIndex] = swap;
+		viewer.getGrid().setColumnOrder(columnOrder);
 	}
-	
+
 	protected ColumnHandler findHandler(final GridColumn column) {
-		for (ColumnHandler handler: handlers) {
+		for (ColumnHandler handler : handlers) {
 			if (handler.column.getColumn() == column) {
 				return handler;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Sets the column associated with handler <handler> to have a view index of viewIndex.
-	 * N.B.: this is relative to other columns with the same visibility state; for instance,
-	 * setting the view index to 2 (3rd element) on a visible column will  
+	 * Sets the column associated with handler <handler> to have a view index of viewIndex. N.B.: this is relative to other columns with the same visibility state; for instance, setting the view index
+	 * to 2 (3rd element) on a visible column will
 	 * 
 	 * @param handler
 	 * @param viewIndex
 	 */
 	public void setColumnViewIndex(final ColumnHandler handler, int viewIndex) {
 		GridColumn hColumn = handler.column.getColumn();
-		
+
 		int[] columnOrder = viewer.getGrid().getColumnOrder();
 		List<ColumnHandler> matchingColumns = new ArrayList<>();
-				
+
 		for (int i = 0; i < columnOrder.length; i++) {
 			GridColumn column = viewer.getGrid().getColumn(columnOrder[i]);
 			if (column.getVisible() == hColumn.getVisible()) {
 				matchingColumns.add(findHandler(column));
 			}
 		}
-		
+
 		swapVisibleColumnOrder(handler, matchingColumns.get(viewIndex));
 	}
-	
+
 	public int getColumnViewIndex(final ColumnHandler handler) {
 		Grid grid = viewer.getGrid();
 		GridColumn hColumn = handler.column.getColumn();
-		
+
 		int result = 0;
 		int[] columnOrder = grid.getColumnOrder();
 		for (int i = 0; i < columnOrder.length; i++) {
@@ -693,115 +690,108 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			GridColumn column = grid.getColumn(index);
 			if (column == hColumn) {
 				return result;
-			}
-			else if (column.getVisible() == hColumn.getVisible()) {
+			} else if (column.getVisible() == hColumn.getVisible()) {
 				result += 1;
 			}
 		}
-		
+
 		return -1;
 	}
-	
+
 	public void swapColumnViewIndex(final ColumnHandler handler, int viewIndex) {
 		int[] columnOrder = viewer.getGrid().getColumnOrder();
 		int oldViewIndex = getColumnGridIndex(handler);
 		int swappedGridIndex = columnOrder[viewIndex];
 		columnOrder[viewIndex] = columnOrder[oldViewIndex];
 		columnOrder[oldViewIndex] = swappedGridIndex;
-		
+
 		viewer.getGrid().setColumnOrder(columnOrder);
 	}
 
 	protected ColumnHandler[] getHandlersInViewOrder() {
-		ColumnHandler[] result = new ColumnHandler [handlers.size()];
-		
-		for (final ColumnHandler handler: handlers) {
+		ColumnHandler[] result = new ColumnHandler[handlers.size()];
+
+		for (final ColumnHandler handler : handlers) {
 			result[getColumnGridIndex(handler)] = handler;
 		}
-		
+
 		return result;
-	}	
-	
+	}
 
 	protected Pair<EObject, CargoAllocation> getIfCargoAllocation(final Object obj, final EStructuralFeature cargoAllocationRef) {
-		 if (obj instanceof EObject) {
-			 EObject eObj = (EObject) obj;
-			 if (eObj.eIsSet(cargoAllocationRef)) {
-				 return new Pair<EObject,CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
-			 }
-		 }
-		 return null;		
+		if (obj instanceof EObject) {
+			EObject eObj = (EObject) obj;
+			if (eObj.eIsSet(cargoAllocationRef)) {
+				return new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
+			}
+		}
+		return null;
 	}
-	
-	
+
 	/**
 	 * Generate a new formatter for the previous-wiring column
-	 *  
+	 * 
 	 * Used in pin/diff mode.
-	 *  
+	 * 
 	 * @param cargoAllocationRef
 	 * @return
 	 */
 	protected IFormatter generatePreviousWiringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
-	    	 @Override
-	    	 public String format(final Object obj) {
-	    		 Pair <EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-	    		 if (eObjectAsCargoAllocation == null) return "";
+			@Override
+			public String format(final Object obj) {
+				Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
+				if (eObjectAsCargoAllocation == null)
+					return "";
 
-	    		 EObject eObj = eObjectAsCargoAllocation.getFirst();
-	    		 //CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
-	    		 	    		 
-	    		 String result = "";
-	    			 		
-	    		 // for objects not coming from the pinned scenario, 
-	    		 // return the pinned counterpart's wiring to display as the previous wiring 
-	    		 if (! pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-	    			 
-	    			 try { 
-	    				 EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-	    				 final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-	    				 
-	    				 // convert this cargo's wiring of slot allocations to a string
-	    				 result = CargoAllocationUtils.getWiringAsString(pinnedCargoAllocation);
-	    			 } 
-	    			 catch (Exception e) {
-	    				 log.warn("Error formatting previous wiring", e);
-	    			 }
-	    			 
-	    		 }
+				EObject eObj = eObjectAsCargoAllocation.getFirst();
+				// CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
 
-	    		 return result;
-	    	 }
+				String result = "";
+
+				// for objects not coming from the pinned scenario,
+				// return the pinned counterpart's wiring to display as the previous wiring
+				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
+
+					try {
+						EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
+						final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+
+						// convert this cargo's wiring of slot allocations to a string
+						result = CargoAllocationUtils.getWiringAsString(pinnedCargoAllocation);
+					} catch (Exception e) {
+						log.warn("Error formatting previous wiring", e);
+					}
+
+				}
+
+				return result;
+			}
 		};
 	}
 
-
 	protected RelatedSlotAllocations relatedSlotAllocations = new RelatedSlotAllocations();
-	
+
 	protected IFormatter generateRelatedSlotSetColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
-			public String format (final Object obj) {
-	    		 Pair <EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-	    		 if (eObjectAsCargoAllocation == null) return "";
+			public String format(final Object obj) {
+				Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
+				if (eObjectAsCargoAllocation == null)
+					return "";
 
-	    		 //EObject eObj = eObjectAsCargoAllocation.getFirst();
-	    		 CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
-				
+				// EObject eObj = eObjectAsCargoAllocation.getFirst();
+				CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
+
 				relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
-			
-				return  "[ " 
-					+ Joiner.on(", ").skipNulls()
-						.join(relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation))
-					+ " ]";
-						
+
+				return "[ " + Joiner.on(", ").skipNulls().join(relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation)) + " ]";
+
 			}
 		};
-		
+
 	}
-	
-	
+
 	/**
 	 * Generate a new formatter for the previous-vessel-assignment column
 	 * 
@@ -814,37 +804,36 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-				Pair <EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null) return "";
+				Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
+				if (eObjectAsCargoAllocation == null)
+					return "";
 
 				EObject eObj = eObjectAsCargoAllocation.getFirst();
-				//CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
-				
+				// CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
+
 				String result = "";
-					    			 		
-				// for objects not coming from the pinned scenario,  
+
+				// for objects not coming from the pinned scenario,
 				// return and display the vessel used by the pinned counterpart
-				if (! pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-				
+				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
+
 					// TODO: Q: can any of these lookups return null?
-					try { 
+					try {
 						EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 						final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
 						AVesselSet<? extends Vessel> l = ca.getInputCargo().getAssignment();
-						if (l != null) result = l.getName();
-					}
-					catch (Exception e) {
+						if (l != null)
+							result = l.getName();
+					} catch (Exception e) {
 						log.warn("Error formatting previous assignment", e);
 					}
 				}
-				
+
 				return result;
 			}
 		};
-	}                          
-	
-	
-	
+	}
+
 	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
 	private final HashSet<Object> contents = new HashSet<Object>();
 
@@ -918,10 +907,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		// this is very slow on refresh
 		viewer.setDisplayValidationErrors(false);
 
-		//BE
-//		viewer.getSortingSupport().setCategoryFunction(this.rowCategoryFunction);
-		//BE
-		
+		// BE
+		// viewer.getSortingSupport().setCategoryFunction(this.rowCategoryFunction);
+		// BE
+
 		if (handleSelections()) {
 			viewer.setComparer(new IElementComparer() {
 				@Override
@@ -1000,7 +989,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(new GroupMarker("filter"));
-//BE		manager.add(new GroupMarker("sortmode")); //BE		
+		// BE manager.add(new GroupMarker("sortmode")); //BE
 		manager.add(new GroupMarker("pack"));
 		manager.add(new GroupMarker("additions"));
 		manager.add(new GroupMarker("edit"));
@@ -1009,7 +998,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		manager.add(new GroupMarker("exporters"));
 
 		manager.appendToGroup("filter", filterField.getContribution());
-//BE		manager.appendToGroup("sortmode", sortModeAction); //BE
+		// BE manager.appendToGroup("sortmode", sortModeAction); //BE
 		manager.appendToGroup("pack", packColumnsAction);
 		manager.appendToGroup("copy", copyTableAction);
 	}
@@ -1019,16 +1008,16 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 
-		//BE
-//		sortModeAction = new Action("S", IAction.AS_CHECK_BOX) {
-//			@Override
-//			public void run() {
-//				log.error("hello");
-//				viewer.setInput(viewer.getInput());
-//				viewer.refresh();
-//			}
-//		};
-		//BE
+		// BE
+		// sortModeAction = new Action("S", IAction.AS_CHECK_BOX) {
+		// @Override
+		// public void run() {
+		// log.error("hello");
+		// viewer.setInput(viewer.getInput());
+		// viewer.refresh();
+		// }
+		// };
+		// BE
 	}
 
 	@Override
@@ -1120,7 +1109,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		++numberOfSchedules;
 
 		Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
-		
+
 		for (final EObject ca : objects) {
 			final List<EObject> l;
 			final String key = getElementKey(ca);
@@ -1177,132 +1166,123 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
 		return selection;
 	}
-	
+
 	protected List<ColumnHandler> getHandlersInOrder() {
 		return handlersInOrder;
 	}
-	
+
 	/**
-	 * A named group which report columns can be attached to. The configuration dialog allows the user to
-	 * edit the placement and visibility of these groups, which affects all columns in the group.
-	 * Saved configurations reflect only the placement and visibility of the groups. 
+	 * A named group which report columns can be attached to. The configuration dialog allows the user to edit the placement and visibility of these groups, which affects all columns in the group.
+	 * Saved configurations reflect only the placement and visibility of the groups.
 	 * 
 	 * @author Simon McGregor
-	 *
+	 * 
 	 */
 	class ColumnBlock {
 		List<ColumnHandler> blockHandlers = new ArrayList<>();
 		boolean visible;
 		int viewIndex;
 		String name;
-		
+
 		public ColumnBlock(String name) {
 			this.name = name;
 		}
-		
+
 		public void addColumn(ColumnHandler handler) {
 			blockHandlers.add(handler);
 			if (handler.column != null) {
 				handler.column.getColumn().setVisible(visible);
 			}
 		}
-		
+
 		public void setVisible(boolean visible) {
 			this.visible = visible;
-			for (ColumnHandler handler: blockHandlers) {
+			for (ColumnHandler handler : blockHandlers) {
 				handler.column.getColumn().setVisible(visible);
 			}
 		}
-				
+
 		public ColumnHandler findHandler(GridColumn column) {
-			for (ColumnHandler handler: blockHandlers) {
+			for (ColumnHandler handler : blockHandlers) {
 				if (handler.column.getColumn() == column) {
 					return handler;
 				}
 			}
 			return null;
 		}
-		
+
 	}
-	
+
 	/**
-	 * A class which manages custom column blocks for a Nebula Grid widget.
-	 * The blocks have columns assigned to them, can be made visible or invisible, and can be
-	 * moved en masse on the grid. 
-	 *  
+	 * A class which manages custom column blocks for a Nebula Grid widget. The blocks have columns assigned to them, can be made visible or invisible, and can be moved en masse on the grid.
+	 * 
 	 * @author Simon McGregor
-	 *
+	 * 
 	 */
 	class ColumnBlockManager {
 		private static final String COLUMN_BLOCK_CONFIG_MEMENTO = "COLUMN_BLOCK_CONFIG_MEMENTO";
 		private static final String BLOCK_VISIBLE_MEMENTO = "VISIBLE";
 		List<ColumnBlock> blocks = new ArrayList<>();
-		
+
 		protected ColumnBlock findColumnBlock(GridColumn column) {
-			for (ColumnBlock block: blocks) {
+			for (ColumnBlock block : blocks) {
 				if (block.findHandler(column) != null) {
-				  return block;
+					return block;
 				}
 			}
-			
+
 			return null;
 		}
-		
+
 		protected ColumnBlock getBlockByName(String name) {
-			for (ColumnBlock block: blocks) {
+			for (ColumnBlock block : blocks) {
 				if (block.name.equals(name)) {
 					return block;
 				}
 			}
-			
+
 			return null;
 		}
 
 		/**
-		 * Associates the specified column handler with a column block specified 
-		 * by the given name, removing it from any block it is already attached to. 
-		 * If no block exists with that name, one is created unless the name is null.
-		 * In the case of a null name, this method merely removes the handler from 
-		 * all currently known blocks.
-		 *  
+		 * Associates the specified column handler with a column block specified by the given name, removing it from any block it is already attached to. If no block exists with that name, one is
+		 * created unless the name is null. In the case of a null name, this method merely removes the handler from all currently known blocks.
+		 * 
 		 * @param handler
 		 * @param blockName
 		 */
 		public void setHandlerBlockName(final ColumnHandler handler, final String blockName) {
 			ColumnBlock namedBlock = null;
 			List<ColumnBlock> blocksToPurge = new ArrayList<>();
-			
-			for (ColumnBlock block: blocks) {
+
+			for (ColumnBlock block : blocks) {
 				if (block.name.equals(blockName)) {
 					namedBlock = block;
-				}
-				else {
+				} else {
 					block.blockHandlers.remove(handler);
 					if (block.blockHandlers.isEmpty()) {
 						blocksToPurge.add(block);
 					}
 				}
 			}
-			
+
 			if (namedBlock == null && blockName != null) {
 				namedBlock = new ColumnBlock(blockName);
-				blocks.add(namedBlock);			
+				blocks.add(namedBlock);
 			}
-			
-			if (namedBlock.blockHandlers.contains(handler) == false) {
+
+			if (namedBlock != null && namedBlock.blockHandlers.contains(handler) == false) {
 				namedBlock.addColumn(handler);
 			}
-			
+
 			if (blocksToPurge.isEmpty() == false) {
 				blocks.removeAll(blocksToPurge);
 			}
-			
+
 		}
-		
+
 		/**
-		 * Returns the block order for the grid widget. 
-		 * Assumes that the column display order on the widget respects the managed column blocks (i.e. all columns in a block 
-		 * are displayed contiguously).
+		 * Returns the block order for the grid widget. Assumes that the column display order on the widget respects the managed column blocks (i.e. all columns in a block are displayed contiguously).
 		 * Returns null and prints an error if there is an inconsistency.
 		 * 
 		 * TODO: throw an exception if there is any inconsistency.
@@ -1314,7 +1294,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			List<ColumnBlock> result = new ArrayList<>();
 			ColumnBlock current = null;
 
-			int[] colOrder = grid.getColumnOrder();			
+			int[] colOrder = grid.getColumnOrder();
 			for (int i = 0; i < colOrder.length; i++) {
 				GridColumn column = grid.getColumn(colOrder[i]);
 				ColumnBlock block = findColumnBlock(column);
@@ -1326,7 +1306,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				// and the block should not be one which has been seen before unless it contained the last column as well
 				if (block != current && result.contains(block)) {
 					System.err.println(String.format("Grid contains an out-of-block column: %s.", column.toString()));
-					return null;					
+					return null;
 				}
 				// otherwise everything should be fine
 				if (result.contains(block) == false) {
@@ -1334,25 +1314,25 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				}
 				current = block;
 			}
-			
-			return result;			
+
+			return result;
 		}
-		
+
 		public void setVisibleBlockOrder(List<ColumnBlock> order) {
 			Grid grid = viewer.getGrid();
 			int index = 0;
 			int[] colOrder = grid.getColumnOrder();
-			
-			for (ColumnBlock block: order) {
-				for (ColumnHandler handler: block.blockHandlers) {
+
+			for (ColumnBlock block : order) {
+				for (ColumnHandler handler : block.blockHandlers) {
 					colOrder[index] = grid.indexOf(handler.column.getColumn());
 					index += 1;
 				}
 			}
-			
-			grid.setColumnOrder(colOrder);			
+
+			grid.setColumnOrder(colOrder);
 		}
-		
+
 		public void swapBlockOrder(ColumnBlock block1, ColumnBlock block2) {
 			List<ColumnBlock> order = getBlocksInVisibleOrder();
 			int index1 = order.indexOf(block1);
@@ -1361,7 +1341,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			order.set(index2, block1);
 			setVisibleBlockOrder(order);
 		}
-		
+
 		public int getBlockIndex(ColumnBlock block) {
 			return getBlocksInVisibleOrder().indexOf(block);
 		}
@@ -1369,32 +1349,32 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		@SuppressWarnings("null")
 		public boolean getBlockVisible(ColumnBlock block) {
 			Boolean result = null;
-			for (ColumnHandler handler: block.blockHandlers) {
+			for (ColumnHandler handler : block.blockHandlers) {
 				GridColumn column = handler.column.getColumn();
 				if (result != null && column.getVisible() != result) {
 					System.err.println(String.format("Column block has inconsistent visibility: %s.", column.toString()));
-					return false;					
+					return false;
 				}
 				result = column.getVisible();
 			}
-			return result;
+			return (result == null ? false : result.booleanValue());
 		}
-		
+
 		public void saveToMemento(String uniqueConfigKey, IMemento memento) {
 			IMemento blocksInfo = memento.createChild(uniqueConfigKey);
-			for (ColumnBlock block: this.getBlocksInVisibleOrder()) {
+			for (ColumnBlock block : this.getBlocksInVisibleOrder()) {
 				IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, block.name);
 				blockInfo.putBoolean(BLOCK_VISIBLE_MEMENTO, getBlockVisible(block));
 			}
 		}
-		
+
 		public void initFromMemento(String uniqueConfigKey, IMemento memento) {
 			IMemento blocksInfo = memento.getChild(uniqueConfigKey);
 			List<ColumnBlock> order = new ArrayList<>();
-			
+
 			if (blocksInfo != null) {
-			
-				for (IMemento blockInfo: blocksInfo.getChildren(COLUMN_BLOCK_CONFIG_MEMENTO)) {
+
+				for (IMemento blockInfo : blocksInfo.getChildren(COLUMN_BLOCK_CONFIG_MEMENTO)) {
 					String blockName = blockInfo.getID();
 					ColumnBlock block = getBlockByName(blockName);
 					if (block == null) {
@@ -1407,10 +1387,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					}
 					order.add(block);
 				}
-				
+
 				setVisibleBlockOrder(order);
 			}
 		}
 	}
-	
+
 }
