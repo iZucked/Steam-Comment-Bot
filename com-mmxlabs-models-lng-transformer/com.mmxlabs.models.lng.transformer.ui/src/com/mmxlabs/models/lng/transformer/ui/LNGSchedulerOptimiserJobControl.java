@@ -74,7 +74,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		// Disable optimisation in P&L testing phase
 		if (SecurityUtils.getSubject().isPermitted("features:phase-pnl-testing")) {
 			// Note escaped &!
-			throw new RuntimeException("Optimisation is disabled during the P&&L testing phase.");
+			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 		}
 
 	}
