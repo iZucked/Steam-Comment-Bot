@@ -1,0 +1,26 @@
+package com.mmxlabs.models.util;
+
+/**
+ * @noinstantiate This class is not intended to be instantiated by clients.
+ * @author Simon Goodall
+ * 
+ */
+public final class StringEscaper {
+
+	private StringEscaper() {
+	}
+
+	/**
+	 * Escape control characters for display in the UI. Currently this is just ampersand.
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static final String escapeUIString(final String input) {
+		// Escape ampersands
+		String str = input;
+		str = str.replaceAll("&", "&&");
+
+		return str;
+	}
+}

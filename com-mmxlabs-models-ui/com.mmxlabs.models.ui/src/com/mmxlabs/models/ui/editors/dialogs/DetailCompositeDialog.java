@@ -78,6 +78,7 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.models.util.StringEscaper;
 
 /**
  * A dialog for editing scenario objects using the generated detail views.
@@ -934,7 +935,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			processMessages(sb, status);
 
 			String validationMessage = sb.toString().trim();
-			validationMessage = escapeValidationMessage(validationMessage);
+			validationMessage = StringEscaper.escapeUIString(validationMessage);
 			managedForm.getForm().setMessage(validationMessage, convertType(status.getSeverity()));
 		}
 
@@ -943,19 +944,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		checkButtonEnablement(true);// !status.matches(IStatus.ERROR));
-	}
-
-	/**
-	 * Various characters in the string can be interpreted as control characters. E.g. &
-	 * 
-	 * @param validationMessage
-	 * @return
-	 */
-	private String escapeValidationMessage(String validationMessage) {
-		// Escape ampersands
-		validationMessage = validationMessage.replaceAll("&", "&&");
-
-		return validationMessage;
 	}
 
 	private void processMessages(final StringBuilder sb, final IStatus status) {
