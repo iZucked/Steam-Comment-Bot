@@ -33,18 +33,18 @@ public class BasicCargoReportView extends AbstractCargoReportView {
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		// TODO cargo id not slot id.
-		addColumn("ID", objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
+		addColumn("ID", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
 
-		addColumn("Type", objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c.getCargo__GetCargoType());
+		addColumn("Type", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c.getCargo__GetCargoType());
 
-		addColumn("Load Port", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
-		addColumn("Load Date", datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
-		addColumn("Purchase Contract", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetContract(), name);
+		addColumn("Load Port", ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Load Date", ColumnType.NORMAL, datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Purchase Contract", ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation__GetContract(), name);
 
-		addColumn("Discharge Port", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
-		addColumn("Discharge Date", datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalStart());
-		addColumn("Sales Contract", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetContract(), name);
+		addColumn("Discharge Port", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Discharge Date", ColumnType.NORMAL, datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Sales Contract", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetContract(), name);
 
-		addColumn("Vessel", objectFormatter, cargoAllocationRef, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
+		addColumn("Vessel", ColumnType.NORMAL, objectFormatter, ColumnType.NORMAL, cargoAllocationRef, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
 	}
 }

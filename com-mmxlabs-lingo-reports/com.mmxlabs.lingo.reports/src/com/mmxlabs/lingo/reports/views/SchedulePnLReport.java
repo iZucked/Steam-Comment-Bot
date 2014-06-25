@@ -83,13 +83,13 @@ public class SchedulePnLReport extends EMFReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, nameObjectRef);
+		addColumn("ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
 
 		// add the total (aggregate) P&L column
 		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
 		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 
-		addColumn("Discharge Port", new BaseFormatter() {
+		addColumn("Discharge Port", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof SlotAllocation) {
@@ -108,7 +108,7 @@ public class SchedulePnLReport extends EMFReportView {
 				return "";
 			}
 		}, dischargeAllocationRef);
-		addColumn("Sales Contract", new BaseFormatter() {
+		addColumn("Sales Contract", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof SlotAllocation) {
@@ -134,7 +134,7 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		}, dischargeAllocationRef);
 
-		addColumn("Purchase Price", new BaseFormatter() {
+		addColumn("Purchase Price", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof SlotAllocation) {
@@ -153,7 +153,7 @@ public class SchedulePnLReport extends EMFReportView {
 				return 0.0;
 			}
 		}, loadAllocationRef);
-		addColumn("Sales Price", new BaseFormatter() {
+		addColumn("Sales Price", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof SlotAllocation) {
@@ -173,7 +173,7 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		}, dischargeAllocationRef);
 
-		addColumn("Type", new BaseFormatter() {
+		addColumn("Type", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof OpenSlotAllocation) {
@@ -207,13 +207,9 @@ public class SchedulePnLReport extends EMFReportView {
 		}, targetObjectRef);
 
 		// Register columns that will be displayed when in Pin/Diff mode
-		// @formatter:off
-		pinDiffModeHelper
-			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef))
-			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef))
-			.addColumn("Permutation", generateRelatedSlotSetColumnFormatter(cargoAllocationRef))
-			;
-		// @formatter:on
+		addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
+		addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
+		addColumn("Permutation", ColumnType.DIFF, generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
 	}
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
@@ -271,7 +267,7 @@ public class SchedulePnLReport extends EMFReportView {
 			entityColumnNames.add(title);
 		}
 
-		addColumn(title, new IntegerFormatter() {
+		addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;

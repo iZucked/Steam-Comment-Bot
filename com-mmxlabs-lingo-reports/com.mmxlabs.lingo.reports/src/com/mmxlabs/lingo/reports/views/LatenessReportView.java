@@ -38,10 +38,10 @@ public class LatenessReportView extends EMFReportView {
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("ID", objectFormatter, sp.getEvent__Name());
+		addColumn("ID", ColumnType.NORMAL, objectFormatter, sp.getEvent__Name());
 
-		addColumn("Type", objectFormatter, sp.getEvent__Type());
-		addColumn("Lateness", new BaseFormatter() {
+		addColumn("Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
+		addColumn("Lateness", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 
@@ -91,13 +91,13 @@ public class LatenessReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Start by", new BaseFormatter() {
+		addColumn("Start by", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				return calendarFormatterNoTZ.format(getWindowEndDate(object));
 			}
 		});
-		addColumn("Scheduled time", calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
+		addColumn("Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
 
 	}
 
@@ -166,7 +166,6 @@ public class LatenessReportView extends EMFReportView {
 		return null;
 	}
 
-
 	@Override
 	protected ITreeContentProvider getContentProvider() {
 		final ITreeContentProvider superProvider = super.getContentProvider();
@@ -221,7 +220,7 @@ public class LatenessReportView extends EMFReportView {
 			}
 		};
 	}
-	
+
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduledEventCollector() {
@@ -250,7 +249,7 @@ public class LatenessReportView extends EMFReportView {
 				} else if (e instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) e;
 					final Sequence seq = visit.getSequence();
-				
+
 					final VesselAvailability availability = seq.getVesselAvailability();
 					if (availability == null) {
 						return false;

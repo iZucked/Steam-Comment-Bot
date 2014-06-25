@@ -80,21 +80,21 @@ public class PortRotationReportView extends EMFReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		vesselColumn = addColumn("Vessel", objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), sp.getSequence__GetName());
+		vesselColumn = addColumn("Vessel", ColumnType.NORMAL, objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), sp.getSequence__GetName());
 
-		addColumn("Type", objectFormatter, sp.getEvent__Type());
+		addColumn("Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
 
-		addColumn("ID", objectFormatter, sp.getEvent__Name());
+		addColumn("ID", ColumnType.NORMAL, objectFormatter, sp.getEvent__Name());
 
-		
-		addColumn("Contract", new BaseFormatter() {
+		addColumn("Contract", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				final Event se = (Event) object;
-				if(se instanceof SlotVisit){ 
+				if (se instanceof SlotVisit) {
 					SlotVisit sv = (SlotVisit) se;
 					Contract c = sv.getSlotAllocation().getContract();
-					if(c != null) return c.getName();
+					if (c != null)
+						return c.getName();
 				}
 				return null;
 			}
@@ -106,11 +106,11 @@ public class PortRotationReportView extends EMFReportView {
 
 		});
 
-		dateColumn = addColumn("Start Date", calendarFormatter, sp.getEvent__GetLocalStart());
+		dateColumn = addColumn("Start Date", ColumnType.NORMAL, calendarFormatter, sp.getEvent__GetLocalStart());
 
-		addColumn("End Date", calendarFormatter, sp.getEvent__GetLocalEnd());
+		addColumn("End Date", ColumnType.NORMAL, calendarFormatter, sp.getEvent__GetLocalEnd());
 
-		durationColumn = addColumn("Duration (DD:HH)", new BaseFormatter() {
+		durationColumn = addColumn("Duration (DD:HH)", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				final Event se = (Event) object;
@@ -124,14 +124,14 @@ public class PortRotationReportView extends EMFReportView {
 			}
 
 		});
-		addColumn("Speed", new NumberOfDPFormatter(1), sp.getJourney_Speed());
-		addColumn("Distance", integerFormatter, sp.getJourney_Distance());
-		addColumn("From Port", objectFormatter, sp.getEvent_Port(), name);
-		addColumn("To Port", objectFormatter, sp.getJourney_Destination(), name);
-		addColumn("At Port", objectFormatter, sp.getEvent_Port(), name);
-		addColumn("Route", objectFormatter, sp.getJourney_Route(), name);
+		addColumn("Speed", ColumnType.NORMAL, new NumberOfDPFormatter(1), sp.getJourney_Speed());
+		addColumn("Distance", ColumnType.NORMAL, integerFormatter, sp.getJourney_Distance());
+		addColumn("From Port", ColumnType.NORMAL, objectFormatter, sp.getEvent_Port(), name);
+		addColumn("To Port", ColumnType.NORMAL, objectFormatter, sp.getJourney_Destination(), name);
+		addColumn("At Port", ColumnType.NORMAL, objectFormatter, sp.getEvent_Port(), name);
+		addColumn("Route", ColumnType.NORMAL, objectFormatter, sp.getJourney_Route(), name);
 
-		addColumn("Transfer Volume", new IntegerFormatter() {
+		addColumn("Transfer Volume", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof SlotVisit) {
@@ -145,7 +145,7 @@ public class PortRotationReportView extends EMFReportView {
 				return null;
 			}
 		}).setTooltip("In m³");
-		addColumn("Heel Start", new IntegerFormatter() {
+		addColumn("Heel Start", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -155,7 +155,7 @@ public class PortRotationReportView extends EMFReportView {
 				return null;
 			}
 		}).setTooltip("In m³");
-		addColumn("Heel End", new IntegerFormatter() {
+		addColumn("Heel End", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -167,7 +167,7 @@ public class PortRotationReportView extends EMFReportView {
 		}).setTooltip("In m³");
 
 		for (final Fuel fuelName : Fuel.values()) {
-			addColumn(fuelName.toString(), new IntegerFormatter() {
+			addColumn(fuelName.toString(), ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -189,7 +189,7 @@ public class PortRotationReportView extends EMFReportView {
 					}
 				}
 			}).setTooltip("In " + fuelQuanityUnits.get(fuelName));
-			addColumn(fuelName + " Unit Price", new PriceFormatter(true) {
+			addColumn(fuelName + " Unit Price", ColumnType.NORMAL, new PriceFormatter(true) {
 				@Override
 				public Double getDoubleValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -208,7 +208,7 @@ public class PortRotationReportView extends EMFReportView {
 					return null;
 				}
 			}).setTooltip("Price per " + fuelUnitPriceUnits.get(fuelName));
-			addColumn(fuelName + " Cost", new CostFormatter(true) {
+			addColumn(fuelName + " Cost", ColumnType.NORMAL, new CostFormatter(true) {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof FuelUsage) {
@@ -225,7 +225,7 @@ public class PortRotationReportView extends EMFReportView {
 			});
 		}
 
-		addColumn("Fuel Cost", new CostFormatter(true) {
+		addColumn("Fuel Cost", ColumnType.NORMAL, new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof FuelUsage) {
@@ -235,16 +235,16 @@ public class PortRotationReportView extends EMFReportView {
 				}
 			}
 		});
-		addColumn("Charter Cost", new CostFormatter(true) {
+		addColumn("Charter Cost", ColumnType.NORMAL, new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				return (int) ((Event) object).getCharterCost();
 			}
 		});
 
-		addColumn("Canal Cost", new CostFormatter(true), sp.getJourney_Toll());
+		addColumn("Canal Cost", ColumnType.NORMAL, new CostFormatter(true), sp.getJourney_Toll());
 
-		addColumn("Port Costs", new CostFormatter(true) {
+		addColumn("Port Costs", ColumnType.NORMAL, new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof PortVisit) {
@@ -255,7 +255,7 @@ public class PortRotationReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Total Cost", new CostFormatter(true) {
+		addColumn("Total Cost", ColumnType.NORMAL, new CostFormatter(true) {
 			@Override
 			public Integer getIntValue(final Object object) {
 				long total = 0;

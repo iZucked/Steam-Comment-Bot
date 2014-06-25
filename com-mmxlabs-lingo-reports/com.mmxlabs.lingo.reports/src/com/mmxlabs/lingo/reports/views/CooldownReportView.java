@@ -34,8 +34,8 @@ public class CooldownReportView extends EMFReportView {
 		super("com.mmxlabs.shiplingo.platform.reports.CooldownReportView");
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
-		addColumn("Vessel", objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), SchedulePackage.eINSTANCE.getSequence__GetName());
-		addColumn("Cause ID", new BaseFormatter() {
+		addColumn("Vessel", ColumnType.NORMAL, objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), SchedulePackage.eINSTANCE.getSequence__GetName());
+		addColumn("Cause ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof Idle) {
@@ -57,7 +57,7 @@ public class CooldownReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("ID", new BaseFormatter() {
+		addColumn("ID", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof Idle) {
@@ -72,10 +72,10 @@ public class CooldownReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Date", datePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
-		addColumn("Time", timePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
-		addColumn("Port", objectFormatter, SchedulePackage.eINSTANCE.getEvent_Port(), MMXCorePackage.eINSTANCE.getNamedObject_Name());
-		addColumn("Volume", new IntegerFormatter() {
+		addColumn("Date", ColumnType.NORMAL, datePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
+		addColumn("Time", ColumnType.NORMAL, timePartFormatter, SchedulePackage.eINSTANCE.getEvent__GetLocalStart());
+		addColumn("Port", ColumnType.NORMAL, objectFormatter, SchedulePackage.eINSTANCE.getEvent_Port(), MMXCorePackage.eINSTANCE.getNamedObject_Name());
+		addColumn("Volume", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof Cooldown) {
@@ -85,7 +85,7 @@ public class CooldownReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Cost", new IntegerFormatter() {
+		addColumn("Cost", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof Cooldown) {

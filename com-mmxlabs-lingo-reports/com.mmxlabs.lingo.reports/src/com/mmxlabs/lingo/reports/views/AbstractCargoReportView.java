@@ -34,8 +34,8 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 	protected EPackage tableDataModel;
 	protected EStructuralFeature cargoAllocationRef;
 	protected EStructuralFeature loadAllocationRef;
-	protected EStructuralFeature dischargeAllocationRef;	
-	
+	protected EStructuralFeature dischargeAllocationRef;
+
 	public AbstractCargoReportView(String id) {
 		super(id);
 
@@ -45,10 +45,9 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);		
 		
 		// Register columns that will be displayed when in Pin/Diff mode
-		pinDiffModeHelper
-			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef))
-			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef))
-			.addColumn("Permutation", generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
+		addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
+		addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
+		addColumn("Permutation", ColumnType.DIFF, generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
 	}
 
 	@Override
@@ -88,7 +87,7 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 
 	@Override
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return ScheduleDiffUtils.isElementDifferent((EObject)pinnedObject.eGet(cargoAllocationRef), (EObject)otherObject.eGet(cargoAllocationRef));
+		return ScheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(cargoAllocationRef), (EObject) otherObject.eGet(cargoAllocationRef));
 	}
 
 	@Override
@@ -125,11 +124,11 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 	 */
 	@Override
 	public String getElementKey(EObject element) {
-		
+
 		if (element.eIsSet(cargoAllocationRef)) {
 			element = (EObject) element.eGet(cargoAllocationRef);
 		}
-		
+
 		if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
 		}

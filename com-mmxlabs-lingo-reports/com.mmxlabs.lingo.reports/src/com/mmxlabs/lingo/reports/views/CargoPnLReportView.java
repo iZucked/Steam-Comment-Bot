@@ -30,20 +30,20 @@ public class CargoPnLReportView extends AbstractCargoReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
+		addColumn("ID", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
 
 		// addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
 		addPNLColumn(cargoAllocationRef);
 
 		// addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
-		addColumn("Load Date", datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Load Date", ColumnType.NORMAL, datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
 		// addColumn("Buy Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
-		addColumn("Buy Price", objectFormatter, loadAllocationRef, s.getSlotAllocation_Price());
+		addColumn("Buy Price", ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation_Price());
 
 		// addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
 		// addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
 		// addColumn("Sell Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
-		addColumn("Sell Price", objectFormatter, dischargeAllocationRef, s.getSlotAllocation_Price());
+		addColumn("Sell Price", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation_Price());
 
 		// addColumn("Vessel", objectFormatter, value1, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
 
@@ -57,7 +57,7 @@ public class CargoPnLReportView extends AbstractCargoReportView {
 	private void addPNLColumn(final EStructuralFeature feature) {
 
 		final String title = "P&L";
-		addColumn(title, new IntegerFormatter() {
+		addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 

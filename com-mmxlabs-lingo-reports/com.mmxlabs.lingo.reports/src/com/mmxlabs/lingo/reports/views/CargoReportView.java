@@ -40,11 +40,11 @@ public class CargoReportView extends AbstractCargoReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
+		addColumn("ID", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName());
 
-		addColumn("Type", objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), CargoPackage.eINSTANCE.getCargo__GetCargoType());
+		addColumn("Type", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), CargoPackage.eINSTANCE.getCargo__GetCargoType());
 
-		addColumn("Vessel", new BaseFormatter() {
+		addColumn("Vessel", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 
@@ -61,21 +61,21 @@ public class CargoReportView extends AbstractCargoReportView {
 			}
 		}, cargoAllocationRef, s.getCargoAllocation_Sequence());
 
-		addColumn("Buy Port", objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Buy Port", ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
 
-		addColumn("Sell Port", objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Sell Port", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
 
-		addColumn("Load Date", datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
-		addColumn("Load Time", timePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Load Date", ColumnType.NORMAL, datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Load Time", ColumnType.NORMAL, timePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
 
-		addColumn("Discharge Date", datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
-		addColumn("Discharge Time", timePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
+		addColumn("Discharge Date", ColumnType.NORMAL, datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
+		addColumn("Discharge Time", ColumnType.NORMAL, timePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
 
-		addColumn("Buy Volume", integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeTransferred());
+		addColumn("Buy Volume", ColumnType.NORMAL, integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeTransferred());
 
-		addColumn("Sell Volume", integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred());
+		addColumn("Sell Volume", ColumnType.NORMAL, integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred());
 
-		addColumn("Laden Cost", new IntegerFormatter() {
+		addColumn("Laden Cost", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 
@@ -84,7 +84,7 @@ public class CargoReportView extends AbstractCargoReportView {
 
 		});
 
-		addColumn("Ballast Cost", new IntegerFormatter() {
+		addColumn("Ballast Cost", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 
@@ -92,7 +92,7 @@ public class CargoReportView extends AbstractCargoReportView {
 			}
 		});
 
-		addColumn("Total Cost", new IntegerFormatter() {
+		addColumn("Total Cost", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof CargoAllocation) {
