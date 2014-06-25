@@ -34,7 +34,6 @@ import org.eclipse.ui.XMLMemento;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
@@ -629,6 +628,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		return true;
 	}
 	
+	@Override
 	public void setInput(final Object input) {
 		super.setInput(input);
 	}
@@ -637,12 +637,14 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	 * Fills the top-right pulldown menu, adding an option to configure the 
 	 * columns visible in this view. 
 	 */
+	@Override
 	protected void fillLocalPullDown(final IMenuManager manager) {
 		super.fillLocalPullDown(manager);
 		IWorkbench wb = PlatformUI.getWorkbench();
 		final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 		
 		Action configureColumnsAction = new Action("Configure Contents") {
+			@Override
 			public void run() {
 				final IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
 
@@ -663,6 +665,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					@Override
 					public void setColumnVisible(Object columnObj,
 							boolean visible) {
+						
 						((ColumnBlock) columnObj).setVisible(visible);
 						viewer.refresh();
 						
@@ -679,12 +682,15 @@ public class ConfigurableCargoReportView extends EMFReportView {
 				
 				ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
 
+					@Override
 					protected IColumnInfoProvider getColumnInfoProvider() {
 						return infoProvider;
 					}
 
+					@Override
 					protected ITableLabelProvider getLabelProvider() {
 						return new TableLabelProvider() {
+							@Override
 							public String getColumnText(Object element, int columnIndex) {
 								return ((ColumnBlock) element).name;
 							}
@@ -692,6 +698,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 						};
 					}
 
+					@Override
 					protected IColumnUpdater getColumnUpdater() {
 						return updater;
 					}
