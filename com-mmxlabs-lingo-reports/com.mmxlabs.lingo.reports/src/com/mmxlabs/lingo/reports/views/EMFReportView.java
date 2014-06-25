@@ -89,19 +89,9 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
  * This shares a lot of function with EObjectTableViewer
  * 
  * @author hinton
- * 
- */
-/**
- * @author berkan
- *
- */
-/**
- * @author berkan
- * 
  */
 public abstract class EMFReportView extends ViewPart implements ISelectionListener {
-	private static final Logger log = LoggerFactory.getLogger(new Object() {
-	}.getClass().getEnclosingClass());
+	private static final Logger log = LoggerFactory.getLogger(EMFReportView.class);
 
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
@@ -755,10 +745,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 					try {
 						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+						if (pinnedObject != null) {
+							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
 
-						// convert this cargo's wiring of slot allocations to a string
-						result = CargoAllocationUtils.getWiringAsString(pinnedCargoAllocation);
+							// convert this cargo's wiring of slot allocations to a string
+							result = CargoAllocationUtils.getWiringAsString(pinnedCargoAllocation);
+						}
 					} catch (final Exception e) {
 						log.warn("Error formatting previous wiring", e);
 					}
@@ -820,10 +812,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					// TODO: Q: can any of these lookups return null?
 					try {
 						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-						final AVesselSet<? extends Vessel> l = ca.getInputCargo().getAssignment();
-						if (l != null)
-							result = l.getName();
+						if (pinnedObject != null) {
+							final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+							final AVesselSet<? extends Vessel> l = ca.getInputCargo().getAssignment();
+							if (l != null)
+								result = l.getName();
+						}
 					} catch (final Exception e) {
 						log.warn("Error formatting previous assignment", e);
 					}
