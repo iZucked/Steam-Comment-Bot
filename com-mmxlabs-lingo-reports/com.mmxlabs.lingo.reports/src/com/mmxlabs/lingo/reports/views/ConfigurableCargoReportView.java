@@ -75,8 +75,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	 */
 	private static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	private static final String LONG_CARGOES = "Longs";
+	private static final String SHORT_CARGOES = "Shorts";
+	private static final String VESSEL_START_ROW = "Start ballast legs";
 	private static final String VESSEL_EVENT_ROW = "Vessel Events";
-	private static final String CHARTER_OUT_ROW = "Charter Outs";
+	private static final String CHARTER_OUT_ROW = "Charter Outs (Virt)";
 	private static final String CARGO_ROW = "Cargoes";
 	final List<String> entityColumnNames = new ArrayList<String>();
 
@@ -88,7 +91,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	private final EStructuralFeature dischargeAllocationRef;
 	private final EStructuralFeature openSlotAllocationRef;
 	private IMemento memento;
-	private Set<String> rowFilterInfo = new HashSet<>();
+	private final Set<String> rowFilterInfo = new HashSet<>();
 
 	public ConfigurableCargoReportView() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
@@ -199,7 +202,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 			@Override
 			public String format(final Object object) {
 				if (object instanceof OpenSlotAllocation) {
-					OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
+					final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
 					String type = "Open Slot";
 					final Slot slot = openSlotAllocation.getSlot();
 					if (slot instanceof LoadSlot) {
@@ -273,7 +276,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	}
 
 	private void addSpecificEntityPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
-		ColumnHandler handler = addPNLColumn(entityName, entityName, bookContainmentFeature);
+		final ColumnHandler handler = addPNLColumn(entityName, entityName, bookContainmentFeature);
 		handler.setBlockName("P & L");
 	}
 
@@ -476,7 +479,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 						}
 					}
 				}
-				interestingEvents.addAll(schedule.getOpenSlotAllocations());
+				for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+					if (showOpenSlot(openSlotAllocation)) {
+						interestingEvents.add(openSlotAllocation);
+					}
+				}
 
 				final List<EObject> nodes = generateNodes(dataModelInstance, interestingEvents);
 
@@ -487,13 +494,23 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		};
 	}
 
+	protected boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
+
+		if (openSlotAllocation.getSlot() instanceof LoadSlot) {
+			return rowFilterInfo.contains(LONG_CARGOES);
+		} else if (openSlotAllocation.getSlot() instanceof DischargeSlot) {
+			return rowFilterInfo.contains(SHORT_CARGOES);
+		}
+		return false;
+	}
+
 	protected boolean showEvent(final Event event) {
 		if (event instanceof StartEvent) {
-			return true;
+			return rowFilterInfo.contains(VESSEL_START_ROW);
 		} else if (event instanceof VesselEventVisit) {
-			return true || rowFilterInfo.contains(VESSEL_EVENT_ROW);
+			return rowFilterInfo.contains(VESSEL_EVENT_ROW);
 		} else if (event instanceof GeneratedCharterOut) {
-			return true || rowFilterInfo.contains(CHARTER_OUT_ROW);
+			return rowFilterInfo.contains(CHARTER_OUT_ROW);
 		} else if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
@@ -630,21 +647,21 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	@Override
 	protected void fillLocalPullDown(final IMenuManager manager) {
 		super.fillLocalPullDown(manager);
-		IWorkbench wb = PlatformUI.getWorkbench();
+		final IWorkbench wb = PlatformUI.getWorkbench();
 		final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
 
-		Action configureColumnsAction = new Action("Configure Contents") {
+		final Action configureColumnsAction = new Action("Configure Contents") {
 			@Override
 			public void run() {
 				final IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
 
 					@Override
-					public int getColumnIndex(Object columnObj) {
+					public int getColumnIndex(final Object columnObj) {
 						return blockManager.getBlockIndex((ColumnBlock) columnObj);
 					}
 
 					@Override
-					public boolean isColumnVisible(Object columnObj) {
+					public boolean isColumnVisible(final Object columnObj) {
 						return blockManager.getBlockVisible((ColumnBlock) columnObj);
 					}
 
@@ -653,7 +670,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 				final IColumnUpdater updater = new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
 
 					@Override
-					public void setColumnVisible(Object columnObj, boolean visible) {
+					public void setColumnVisible(final Object columnObj, final boolean visible) {
 
 						((ColumnBlock) columnObj).setVisible(visible);
 						viewer.refresh();
@@ -661,14 +678,14 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 
 					@Override
-					public void swapColumnPositions(Object columnObj1, Object columnObj2) {
+					public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
 						blockManager.swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
 						viewer.refresh();
 					}
 
 				};
 
-				ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
+				final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
 
 					@Override
 					protected IColumnInfoProvider getColumnInfoProvider() {
@@ -679,7 +696,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					protected ITableLabelProvider getLabelProvider() {
 						return new TableLabelProvider() {
 							@Override
-							public String getColumnText(Object element, int columnIndex) {
+							public String getColumnText(final Object element, final int columnIndex) {
 								return ((ColumnBlock) element).name;
 							}
 
@@ -692,10 +709,10 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 				};
 				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
-				dialog.setCheckBoxInfo(new String[] { CARGO_ROW, VESSEL_EVENT_ROW, CHARTER_OUT_ROW }, rowFilterInfo);
+				dialog.setCheckBoxInfo(new String[] { VESSEL_START_ROW, CARGO_ROW, VESSEL_EVENT_ROW, CHARTER_OUT_ROW, LONG_CARGOES, SHORT_CARGOES }, rowFilterInfo);
 				dialog.open();
 
-				// synchronizer.refreshViewer();
+				synchronizer.refreshViewer();
 
 			}
 
