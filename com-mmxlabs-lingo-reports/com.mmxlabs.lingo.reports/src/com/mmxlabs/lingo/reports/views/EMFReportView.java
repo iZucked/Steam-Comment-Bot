@@ -519,7 +519,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				clearInputEquivalents();
 
 				final Object[] result;
-				Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
+				final Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
 				final Collection<EObject> pinnedObjectsSet = pinnedObjects.values();
 
 				if (numberOfSchedules > 1 && currentlyPinned) {
@@ -625,9 +625,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @return
 	 */
 	public int getColumnGridIndex(final ColumnHandler handler) {
-		Grid grid = viewer.getGrid();
-		int[] columnOrder = grid.getColumnOrder();
-		int gridIndex = grid.indexOf(handler.column.getColumn());
+		final Grid grid = viewer.getGrid();
+		final int[] columnOrder = grid.getColumnOrder();
+		final int gridIndex = grid.indexOf(handler.column.getColumn());
 		for (int i = 0; i < columnOrder.length; i++) {
 			if (columnOrder[i] == gridIndex) {
 				return i;
@@ -638,17 +638,17 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	public void swapVisibleColumnOrder(final ColumnHandler a, final ColumnHandler b) {
-		int[] columnOrder = viewer.getGrid().getColumnOrder();
-		int aViewIndex = getColumnGridIndex(a);
-		int bViewIndex = getColumnGridIndex(b);
-		int swap = columnOrder[aViewIndex];
+		final int[] columnOrder = viewer.getGrid().getColumnOrder();
+		final int aViewIndex = getColumnGridIndex(a);
+		final int bViewIndex = getColumnGridIndex(b);
+		final int swap = columnOrder[aViewIndex];
 		columnOrder[aViewIndex] = columnOrder[bViewIndex];
 		columnOrder[bViewIndex] = swap;
 		viewer.getGrid().setColumnOrder(columnOrder);
 	}
 
 	protected ColumnHandler findHandler(final GridColumn column) {
-		for (ColumnHandler handler : handlers) {
+		for (final ColumnHandler handler : handlers) {
 			if (handler.column.getColumn() == column) {
 				return handler;
 			}
@@ -663,14 +663,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @param handler
 	 * @param viewIndex
 	 */
-	public void setColumnViewIndex(final ColumnHandler handler, int viewIndex) {
-		GridColumn hColumn = handler.column.getColumn();
+	public void setColumnViewIndex(final ColumnHandler handler, final int viewIndex) {
+		final GridColumn hColumn = handler.column.getColumn();
 
-		int[] columnOrder = viewer.getGrid().getColumnOrder();
-		List<ColumnHandler> matchingColumns = new ArrayList<>();
+		final int[] columnOrder = viewer.getGrid().getColumnOrder();
+		final List<ColumnHandler> matchingColumns = new ArrayList<>();
 
 		for (int i = 0; i < columnOrder.length; i++) {
-			GridColumn column = viewer.getGrid().getColumn(columnOrder[i]);
+			final GridColumn column = viewer.getGrid().getColumn(columnOrder[i]);
 			if (column.getVisible() == hColumn.getVisible()) {
 				matchingColumns.add(findHandler(column));
 			}
@@ -680,14 +680,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	public int getColumnViewIndex(final ColumnHandler handler) {
-		Grid grid = viewer.getGrid();
-		GridColumn hColumn = handler.column.getColumn();
+		final Grid grid = viewer.getGrid();
+		final GridColumn hColumn = handler.column.getColumn();
 
 		int result = 0;
-		int[] columnOrder = grid.getColumnOrder();
+		final int[] columnOrder = grid.getColumnOrder();
 		for (int i = 0; i < columnOrder.length; i++) {
-			int index = columnOrder[i];
-			GridColumn column = grid.getColumn(index);
+			final int index = columnOrder[i];
+			final GridColumn column = grid.getColumn(index);
 			if (column == hColumn) {
 				return result;
 			} else if (column.getVisible() == hColumn.getVisible()) {
@@ -698,10 +698,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return -1;
 	}
 
-	public void swapColumnViewIndex(final ColumnHandler handler, int viewIndex) {
-		int[] columnOrder = viewer.getGrid().getColumnOrder();
-		int oldViewIndex = getColumnGridIndex(handler);
-		int swappedGridIndex = columnOrder[viewIndex];
+	public void swapColumnViewIndex(final ColumnHandler handler, final int viewIndex) {
+		final int[] columnOrder = viewer.getGrid().getColumnOrder();
+		final int oldViewIndex = getColumnGridIndex(handler);
+		final int swappedGridIndex = columnOrder[viewIndex];
 		columnOrder[viewIndex] = columnOrder[oldViewIndex];
 		columnOrder[oldViewIndex] = swappedGridIndex;
 
@@ -709,7 +709,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	protected ColumnHandler[] getHandlersInViewOrder() {
-		ColumnHandler[] result = new ColumnHandler[handlers.size()];
+		final ColumnHandler[] result = new ColumnHandler[handlers.size()];
 
 		for (final ColumnHandler handler : handlers) {
 			result[getColumnGridIndex(handler)] = handler;
@@ -720,7 +720,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected Pair<EObject, CargoAllocation> getIfCargoAllocation(final Object obj, final EStructuralFeature cargoAllocationRef) {
 		if (obj instanceof EObject) {
-			EObject eObj = (EObject) obj;
+			final EObject eObj = (EObject) obj;
 			if (eObj.eIsSet(cargoAllocationRef)) {
 				return new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
 			}
@@ -740,11 +740,11 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-				Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
+				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
 				if (eObjectAsCargoAllocation == null)
 					return "";
 
-				EObject eObj = eObjectAsCargoAllocation.getFirst();
+				final EObject eObj = eObjectAsCargoAllocation.getFirst();
 				// CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
 
 				String result = "";
@@ -754,12 +754,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
 
 					try {
-						EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
+						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 						final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
 
 						// convert this cargo's wiring of slot allocations to a string
 						result = CargoAllocationUtils.getWiringAsString(pinnedCargoAllocation);
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						log.warn("Error formatting previous wiring", e);
 					}
 
@@ -776,12 +776,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-				Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
+				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
 				if (eObjectAsCargoAllocation == null)
 					return "";
 
 				// EObject eObj = eObjectAsCargoAllocation.getFirst();
-				CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
+				final CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
 
 				relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
 
@@ -804,11 +804,11 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-				Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
+				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
 				if (eObjectAsCargoAllocation == null)
 					return "";
 
-				EObject eObj = eObjectAsCargoAllocation.getFirst();
+				final EObject eObj = eObjectAsCargoAllocation.getFirst();
 				// CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
 
 				String result = "";
@@ -819,12 +819,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 					// TODO: Q: can any of these lookups return null?
 					try {
-						EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
+						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 						final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-						AVesselSet<? extends Vessel> l = ca.getInputCargo().getAssignment();
+						final AVesselSet<? extends Vessel> l = ca.getInputCargo().getAssignment();
 						if (l != null)
 							result = l.getName();
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						log.warn("Error formatting previous assignment", e);
 					}
 				}
@@ -1108,7 +1108,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		currentlyPinned |= isPinned;
 		++numberOfSchedules;
 
-		Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
+		final Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
 
 		for (final EObject ca : objects) {
 			final List<EObject> l;
@@ -1184,26 +1184,29 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		int viewIndex;
 		String name;
 
-		public ColumnBlock(String name) {
+		public ColumnBlock(final String name) {
 			this.name = name;
 		}
 
-		public void addColumn(ColumnHandler handler) {
+		public void addColumn(final ColumnHandler handler) {
 			blockHandlers.add(handler);
 			if (handler.column != null) {
 				handler.column.getColumn().setVisible(visible);
 			}
 		}
 
-		public void setVisible(boolean visible) {
+		public void setVisible(final boolean visible) {
 			this.visible = visible;
-			for (ColumnHandler handler : blockHandlers) {
-				handler.column.getColumn().setVisible(visible);
+			for (final ColumnHandler handler : blockHandlers) {
+				final GridColumn column = handler.column.getColumn();
+				if (!column.isDisposed()) {
+					column.setVisible(visible);
+				}
 			}
 		}
 
-		public ColumnHandler findHandler(GridColumn column) {
-			for (ColumnHandler handler : blockHandlers) {
+		public ColumnHandler findHandler(final GridColumn column) {
+			for (final ColumnHandler handler : blockHandlers) {
 				if (handler.column.getColumn() == column) {
 					return handler;
 				}
@@ -1224,8 +1227,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		private static final String BLOCK_VISIBLE_MEMENTO = "VISIBLE";
 		List<ColumnBlock> blocks = new ArrayList<>();
 
-		protected ColumnBlock findColumnBlock(GridColumn column) {
-			for (ColumnBlock block : blocks) {
+		protected ColumnBlock findColumnBlock(final GridColumn column) {
+			for (final ColumnBlock block : blocks) {
 				if (block.findHandler(column) != null) {
 					return block;
 				}
@@ -1234,8 +1237,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			return null;
 		}
 
-		protected ColumnBlock getBlockByName(String name) {
-			for (ColumnBlock block : blocks) {
+		protected ColumnBlock getBlockByName(final String name) {
+			for (final ColumnBlock block : blocks) {
 				if (block.name.equals(name)) {
 					return block;
 				}
@@ -1253,9 +1256,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		 */
 		public void setHandlerBlockName(final ColumnHandler handler, final String blockName) {
 			ColumnBlock namedBlock = null;
-			List<ColumnBlock> blocksToPurge = new ArrayList<>();
+			final List<ColumnBlock> blocksToPurge = new ArrayList<>();
 
-			for (ColumnBlock block : blocks) {
+			for (final ColumnBlock block : blocks) {
 				if (block.name.equals(blockName)) {
 					namedBlock = block;
 				} else {
@@ -1290,14 +1293,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		 * @return
 		 */
 		public List<ColumnBlock> getBlocksInVisibleOrder() {
-			Grid grid = viewer.getGrid();
-			List<ColumnBlock> result = new ArrayList<>();
+			final Grid grid = viewer.getGrid();
+			final List<ColumnBlock> result = new ArrayList<>();
 			ColumnBlock current = null;
 
-			int[] colOrder = grid.getColumnOrder();
+			final int[] colOrder = grid.getColumnOrder();
 			for (int i = 0; i < colOrder.length; i++) {
-				GridColumn column = grid.getColumn(colOrder[i]);
-				ColumnBlock block = findColumnBlock(column);
+				final GridColumn column = grid.getColumn(colOrder[i]);
+				final ColumnBlock block = findColumnBlock(column);
 				// the next column in the grid display should belong to a managed block
 				if (block == null) {
 					System.err.println(String.format("Grid contains an un-managed column: %s.", column.toString()));
@@ -1318,13 +1321,13 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			return result;
 		}
 
-		public void setVisibleBlockOrder(List<ColumnBlock> order) {
-			Grid grid = viewer.getGrid();
+		public void setVisibleBlockOrder(final List<ColumnBlock> order) {
+			final Grid grid = viewer.getGrid();
 			int index = 0;
-			int[] colOrder = grid.getColumnOrder();
+			final int[] colOrder = grid.getColumnOrder();
 
-			for (ColumnBlock block : order) {
-				for (ColumnHandler handler : block.blockHandlers) {
+			for (final ColumnBlock block : order) {
+				for (final ColumnHandler handler : block.blockHandlers) {
 					colOrder[index] = grid.indexOf(handler.column.getColumn());
 					index += 1;
 				}
@@ -1333,55 +1336,55 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			grid.setColumnOrder(colOrder);
 		}
 
-		public void swapBlockOrder(ColumnBlock block1, ColumnBlock block2) {
-			List<ColumnBlock> order = getBlocksInVisibleOrder();
-			int index1 = order.indexOf(block1);
-			int index2 = order.indexOf(block2);
+		public void swapBlockOrder(final ColumnBlock block1, final ColumnBlock block2) {
+			final List<ColumnBlock> order = getBlocksInVisibleOrder();
+			final int index1 = order.indexOf(block1);
+			final int index2 = order.indexOf(block2);
 			order.set(index1, block2);
 			order.set(index2, block1);
 			setVisibleBlockOrder(order);
 		}
 
-		public int getBlockIndex(ColumnBlock block) {
+		public int getBlockIndex(final ColumnBlock block) {
 			return getBlocksInVisibleOrder().indexOf(block);
 		}
 
 		@SuppressWarnings("null")
-		public boolean getBlockVisible(ColumnBlock block) {
+		public boolean getBlockVisible(final ColumnBlock block) {
 			Boolean result = null;
-			for (ColumnHandler handler : block.blockHandlers) {
-				GridColumn column = handler.column.getColumn();
-				if (result != null && column.getVisible() != result) {
+			for (final ColumnHandler handler : block.blockHandlers) {
+				final GridColumn column = handler.column.getColumn();
+				if (result != null && !column.isDisposed() && column.getVisible() != result) {
 					System.err.println(String.format("Column block has inconsistent visibility: %s.", column.toString()));
 					return false;
 				}
-				result = column.getVisible();
+				result = !column.isDisposed() && column.getVisible();
 			}
 			return (result == null ? false : result.booleanValue());
 		}
 
-		public void saveToMemento(String uniqueConfigKey, IMemento memento) {
-			IMemento blocksInfo = memento.createChild(uniqueConfigKey);
-			for (ColumnBlock block : this.getBlocksInVisibleOrder()) {
-				IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, block.name);
+		public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
+			final IMemento blocksInfo = memento.createChild(uniqueConfigKey);
+			for (final ColumnBlock block : this.getBlocksInVisibleOrder()) {
+				final IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, block.name);
 				blockInfo.putBoolean(BLOCK_VISIBLE_MEMENTO, getBlockVisible(block));
 			}
 		}
 
-		public void initFromMemento(String uniqueConfigKey, IMemento memento) {
-			IMemento blocksInfo = memento.getChild(uniqueConfigKey);
-			List<ColumnBlock> order = new ArrayList<>();
+		public void initFromMemento(final String uniqueConfigKey, final IMemento memento) {
+			final IMemento blocksInfo = memento.getChild(uniqueConfigKey);
+			final List<ColumnBlock> order = new ArrayList<>();
 
 			if (blocksInfo != null) {
 
-				for (IMemento blockInfo : blocksInfo.getChildren(COLUMN_BLOCK_CONFIG_MEMENTO)) {
-					String blockName = blockInfo.getID();
+				for (final IMemento blockInfo : blocksInfo.getChildren(COLUMN_BLOCK_CONFIG_MEMENTO)) {
+					final String blockName = blockInfo.getID();
 					ColumnBlock block = getBlockByName(blockName);
 					if (block == null) {
 						block = new ColumnBlock(blockName);
 						blocks.add(block);
 					}
-					Boolean visible = blockInfo.getBoolean(BLOCK_VISIBLE_MEMENTO);
+					final Boolean visible = blockInfo.getBoolean(BLOCK_VISIBLE_MEMENTO);
 					if (visible != null) {
 						block.setVisible(visible);
 					}
