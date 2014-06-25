@@ -279,7 +279,9 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	private void addSpecificEntityPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
 		final ColumnHandler handler = addPNLColumn(entityName, entityName, bookContainmentFeature);
-		handler.setBlockName("P & L", ColumnType.NORMAL);
+		if (handler != null) {
+			handler.setBlockName("P & L", ColumnType.NORMAL);
+		}
 	}
 
 	private ColumnHandler addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
@@ -288,6 +290,9 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 		// HACK: don't the label to the entity column names if the column is for total group P&L
 		if (entityKey != null) {
+			if (entityColumnNames.contains(title)) {
+				return null;
+			}
 			entityColumnNames.add(title);
 		}
 
