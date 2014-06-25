@@ -232,8 +232,13 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		}, targetObjectRef);
 
 		// Register columns that will be displayed when in Pin/Diff mode
-		pinDiffModeHelper.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef));
-
+		// @formatter:off
+		pinDiffModeHelper
+			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef))
+			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef))
+			.addColumn("Permutation", generateRelatedSlotSetColumnFormatter(cargoAllocationRef))
+			;
+		// @formatter:on
 	}
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {

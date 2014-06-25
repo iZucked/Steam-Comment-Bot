@@ -89,9 +89,6 @@ public class SchedulePnLReport extends EMFReportView {
 		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
 		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 
-		// addPNLColumn("Asia");
-		// addPNLColumn("Europe");
-		//
 		addColumn("Discharge Port", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
@@ -210,8 +207,13 @@ public class SchedulePnLReport extends EMFReportView {
 		}, targetObjectRef);
 
 		// Register columns that will be displayed when in Pin/Diff mode
-		pinDiffModeHelper.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef));
-
+		// @formatter:off
+		pinDiffModeHelper
+			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef))
+			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef))
+			.addColumn("Permutation", generateRelatedSlotSetColumnFormatter(cargoAllocationRef))
+			;
+		// @formatter:on
 	}
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
