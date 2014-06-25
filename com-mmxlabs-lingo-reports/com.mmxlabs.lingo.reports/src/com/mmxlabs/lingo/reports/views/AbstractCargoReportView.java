@@ -48,7 +48,7 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 		pinDiffModeHelper
 			.addColumn("Prev. wiring", generatePreviousWiringColumnFormatter(cargoAllocationRef))
 			.addColumn("Prev. Vessel", generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef))
-			.addColumn("Related Slots", generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
+			.addColumn("Permutation", generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
 	}
 
 	@Override
