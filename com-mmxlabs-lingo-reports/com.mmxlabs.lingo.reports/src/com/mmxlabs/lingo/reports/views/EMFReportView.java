@@ -993,6 +993,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				viewer.removeColumn(h.column);
 				handlers.remove(h);
 				handlersInOrder.remove(h);
+				h.setBlockName(null, null);
 				break;
 			}
 		}
@@ -1278,7 +1279,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 			for (final ColumnBlock block : order) {
 				for (final ColumnHandler handler : block.blockHandlers) {
-					colOrder[index] = grid.indexOf(handler.column.getColumn());
+					final GridColumn column = handler.column.getColumn();
+					if (column.isDisposed()) {
+						colOrder[index] = -1;//grid.indexOf(column);
+					} else {
+						colOrder[index] = grid.indexOf(column);
+					}
 					index += 1;
 				}
 			}
