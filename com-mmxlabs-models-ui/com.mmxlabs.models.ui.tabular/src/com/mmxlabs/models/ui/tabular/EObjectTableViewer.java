@@ -5,9 +5,11 @@
 package com.mmxlabs.models.ui.tabular;
 
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.CommandStack;
@@ -37,6 +39,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Widget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -287,7 +290,23 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				return manipulator.getCellEditor(viewer.getGrid(), path.get((EObject) element));
+
+				final CellEditor cellEditor = manipulator.getCellEditor(viewer.getGrid(), path.get((EObject) element));
+
+				// Hook our control listener into the cell editor
+				// Note - SG: This looks like we could have used a CellEditorActionHandler, but I could not get it working, so lifted the salient pieces.
+				final Control control = cellEditor.getControl();
+
+				// Remove existing listener references.
+				control.removeListener(SWT.Activate, controlListener);
+				control.removeListener(SWT.Deactivate, controlListener);
+
+				controlToEditor.put(control, cellEditor);
+
+				control.addListener(SWT.Activate, controlListener);
+				control.addListener(SWT.Deactivate, controlListener);
+
+				return cellEditor;
 			}
 
 			@Override
@@ -368,6 +387,13 @@ public class EObjectTableViewer extends GridTreeViewer {
 		sortingSupport.clearColumnSortOrder();
 
 		validationSupport.dispose();
+
+		for (final Widget control : controlToEditor.keySet()) {
+			control.removeListener(SWT.Activate, controlListener);
+			control.removeListener(SWT.Deactivate, controlListener);
+		}
+
+		controlToEditor.clear();
 	}
 
 	@Override
@@ -615,5 +641,45 @@ public class EObjectTableViewer extends GridTreeViewer {
 	 */
 	public EObjectTableViewerSortingSupport getSortingSupport() {
 		return sortingSupport;
+	}
+
+	private final Map<Widget, CellEditor> controlToEditor = new HashMap<>();
+
+	/**
+	 * Control listener used to listen for cell editor activate and deactivate events.
+	 * 
+	 */
+	private class ControlListener implements Listener {
+		public void handleEvent(final Event event) {
+			switch (event.type) {
+			case SWT.Activate:
+				cellEditorActivated(event.widget, controlToEditor.get(event.widget));
+				break;
+			case SWT.Deactivate:
+				cellEditorDeactivated(event.widget, controlToEditor.get(event.widget));
+			default:
+				break;
+			}
+		}
+	}
+
+	private final ControlListener controlListener = new ControlListener();
+
+	/**
+	 * Overrideable method to indicate the given cell editor has activated. This can be used to e.g. disable global actions.
+	 * 
+	 * @param widget
+	 * @param cellEditor
+	 */
+	protected void cellEditorActivated(final Widget widget, final CellEditor cellEditor) {
+	}
+
+	/**
+	 * Overrideable method to indicate the given cell editor has deactivated. This can be used to e.g. enable global actions.
+	 * 
+	 * @param widget
+	 * @param cellEditor
+	 */
+	protected void cellEditorDeactivated(final Widget widget, final CellEditor cellEditor) {
 	}
 }
