@@ -38,6 +38,7 @@ import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -78,6 +79,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -85,6 +87,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
+import org.eclipse.ui.part.CellEditorActionHandler;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.google.common.collect.Lists;
@@ -226,6 +229,20 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
 		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
+
+			@Override
+			protected void cellEditorActivated(Widget widget, CellEditor cellEditor) {
+				if (deleteAction != null) {
+					deleteAction.setEnabled(false);
+				}
+			}
+
+			@Override
+			protected void cellEditorDeactivated(Widget widget, CellEditor cellEditor) {
+				if (deleteAction != null) {
+					deleteAction.setEnabled(true);
+				}
+			}
 
 			@Override
 			public EReference getCurrentContainment() {
@@ -470,13 +487,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		scenarioViewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
 
 			private Menu menu;
-			
+
 			private void populateSingleSelectionMenu(final GridItem item, final GridColumn column) {
 				if (item == null) {
 					return;
 				}
-				
-				
+
 				final Object data = item.getData();
 				if (data instanceof RowData) {
 
@@ -532,7 +548,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					}
 
 					menu.setVisible(true);
-				}				
+				}
 			}
 
 			@Override
@@ -541,28 +557,27 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (locked) {
 					return;
 				}
-				
+
 				final Grid grid = getScenarioViewer().getGrid();
-				
+
 				final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 				final GridColumn column = grid.getColumn(mousePoint);
-				
+
 				IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
 				GridItem[] items = grid.getSelection();
-				
+
 				if (selection.size() <= 1) {
 					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
-				}
-				else {
+				} else {
 					Set<Cargo> cargoes = new HashSet<Cargo>();
-					for (Object item: selection.toList()) {
+					for (Object item : selection.toList()) {
 						Cargo cargo = ((RowData) item).cargo;
 						if (cargo != null) {
 							cargoes.add(cargo);
 						}
 					}
 					populateMultipleSelectionMenu(cargoes);
-				}				
+				}
 			}
 
 			private void populateMultipleSelectionMenu(Set<Cargo> cargoes) {
@@ -570,7 +585,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
 				mgr.removeAll();
-								
+
 				final IMenuListener listener = menuHelper.createMultipleSelectionMenuListener(cargoes);
 				listener.menuAboutToShow(mgr);
 				menu.setVisible(true);
@@ -1219,6 +1234,13 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.Literals.CARGO__ALLOW_REWIRING, Boolean.TRUE));
 
 					setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), dischargeSide.dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo(), c));
+					if (c != null && dischargeSide.dischargeSlot.isFOBSale()) {
+						// Cargo assignments should be removed.
+						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_Assignment(), SetCommand.UNSET_VALUE));
+						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
+						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
+						setCommands.add(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));
+					}
 
 					{
 						Cargo dischargeCargo = null;
