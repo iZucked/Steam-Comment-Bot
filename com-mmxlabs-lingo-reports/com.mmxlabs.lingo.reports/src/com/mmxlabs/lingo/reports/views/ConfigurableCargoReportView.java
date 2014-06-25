@@ -679,7 +679,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					@Override
 					public void setColumnVisible(final Object columnObj, final boolean visible) {
 
-						((ColumnBlock) columnObj).setVisible(visible);
+						((ColumnBlock) columnObj).setUserVisible(visible);
 						viewer.refresh();
 
 					}

@@ -38,7 +38,6 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -411,8 +410,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected IScenarioViewerSynchronizerOutput synchronizerOutput = null;
 
-	private ColumnHandler scheduleColumnHandler;
-
 	/**
 	 */
 	protected ITreeContentProvider getContentProvider() {
@@ -422,19 +419,11 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				synchronizerOutput = null;
 				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 					synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
-					if (scheduleColumnHandler != null) {
-						final GridViewerColumn c = scheduleColumnHandler.column;
-						if (c != null) {
-							c.getColumn().setVisible(synchronizerOutput.getLNGPortfolioModels().size() > 1);
-						}
-					}
 
 					// Add Difference/Change columns when in Pin/Diff mode
 					final boolean pinDiffMode = numberOfSchedules > 1 && currentlyPinned;
 					for (final ColumnBlock handler : blockManager.getBlocksInVisibleOrder()) {
-						if (handler.getColumnType() == ColumnType.DIFF) {
-							handler.setVisible(pinDiffMode);
-						}
+						handler.setViewState(numberOfSchedules > 1, pinDiffMode);
 					}
 				}
 			}
@@ -525,7 +514,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected ColumnHandler addScheduleColumn(final String title, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = addColumn(title, ColumnType.MULTIPLE, formatter, path);
-		scheduleColumnHandler = handler;
 		return handler;
 	}
 
@@ -1116,7 +1104,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 */
 	class ColumnBlock {
 		List<ColumnHandler> blockHandlers = new ArrayList<>();
-		boolean visible;
+		boolean userVisible;
+		boolean modeVisible;
 		int viewIndex;
 		String name;
 		ColumnType columnType;
@@ -1129,18 +1118,41 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		public void addColumn(final ColumnHandler handler) {
 			blockHandlers.add(handler);
 			if (handler.column != null) {
-				handler.column.getColumn().setVisible(visible);
+				final GridColumn column = handler.column.getColumn();
+				if (!column.isDisposed()) {
+					column.setVisible(userVisible && modeVisible);
+				}
 			}
 		}
 
-		public void setVisible(final boolean visible) {
-			this.visible = visible;
+		public void setUserVisible(final boolean visible) {
+			this.userVisible = visible;
+			updateVisibility();
+		}
+
+		protected void updateVisibility() {
 			for (final ColumnHandler handler : blockHandlers) {
 				final GridColumn column = handler.column.getColumn();
 				if (!column.isDisposed()) {
-					column.setVisible(visible);
+					column.setVisible(userVisible && modeVisible);
 				}
 			}
+		}
+
+		public void setViewState(final boolean isMultiple, final boolean isPinDiff) {
+			switch (columnType) {
+			case DIFF:
+				modeVisible = isPinDiff;
+				break;
+			case MULTIPLE:
+				modeVisible = isMultiple;
+				break;
+			case NORMAL:
+			default:
+				modeVisible = true;
+				break;
+			}
+			updateVisibility();
 		}
 
 		public ColumnHandler findHandler(final GridColumn column) {
@@ -1154,7 +1166,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		public void setColumnType(final ColumnType columnType) {
 			this.columnType = columnType;
-
+			updateVisibility();
 		}
 
 		public ColumnType getColumnType() {
@@ -1281,7 +1293,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				for (final ColumnHandler handler : block.blockHandlers) {
 					final GridColumn column = handler.column.getColumn();
 					if (column.isDisposed()) {
-						colOrder[index] = -1;//grid.indexOf(column);
+						colOrder[index] = -1;// grid.indexOf(column);
 					} else {
 						colOrder[index] = grid.indexOf(column);
 					}
@@ -1342,7 +1354,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					}
 					final Boolean visible = blockInfo.getBoolean(BLOCK_VISIBLE_MEMENTO);
 					if (visible != null) {
-						block.setVisible(visible);
+						block.setUserVisible(visible);
 					}
 					order.add(block);
 				}
