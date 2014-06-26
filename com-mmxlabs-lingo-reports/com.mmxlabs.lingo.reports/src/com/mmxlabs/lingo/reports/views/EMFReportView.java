@@ -727,12 +727,13 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			@Override
 			public String format(final Object obj) {
 				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null)
+				if (eObjectAsCargoAllocation == null) {
 					return "";
+				}
 
 				final EObject eObj = eObjectAsCargoAllocation.getFirst();
-				
-				String currentAssignment = getVesselAssignmentName(eObjectAsCargoAllocation.getSecond());
+
+				final String currentAssignment = getVesselAssignmentName(eObjectAsCargoAllocation.getSecond());
 
 				String result = "";
 
@@ -740,7 +741,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				// return and display the vessel used by the pinned counterpart
 				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
 
-					// TODO: Q: can any of these lookups return null?
 					try {
 						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 						if (pinnedObject != null) {
@@ -752,6 +752,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					}
 				}
 
+				// Only show if different.
 				if (currentAssignment.equals(result)) {
 					return "";
 				}
@@ -762,7 +763,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				if (ca == null) {
 					return "";
 				}
-				Cargo inputCargo = ca.getInputCargo();
+				final Cargo inputCargo = ca.getInputCargo();
 				if (inputCargo == null) {
 					return "";
 				}

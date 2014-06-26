@@ -67,11 +67,7 @@ public class ColumnHandler {
 			column.getColumn().setHeaderTooltip(tooltip);
 		}
 
-		// TODO: Might not need this straight away - always set to false?
-		// if (columnType != ColumnType.NORMAL) {
-		// Diff columns are initially hidden
 		column.getColumn().setVisible(false);
-		// }
 
 		return column;
 	}
