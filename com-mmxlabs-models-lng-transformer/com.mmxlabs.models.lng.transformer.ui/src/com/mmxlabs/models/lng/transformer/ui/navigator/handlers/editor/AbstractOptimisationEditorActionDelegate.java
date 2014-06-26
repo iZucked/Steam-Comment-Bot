@@ -50,7 +50,7 @@ public abstract class AbstractOptimisationEditorActionDelegate extends Parameter
 						final String uuid = instance.getUuid();
 
 						final IJobDescriptor job = jobManager.findJobForResource(uuid);
-						if (job == null) {
+						if (job == null && action != null) {
 							action.setEnabled(true);
 							return true;
 						}
