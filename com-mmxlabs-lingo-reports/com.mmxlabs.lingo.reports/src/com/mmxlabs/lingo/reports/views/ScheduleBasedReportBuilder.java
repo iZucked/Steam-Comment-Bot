@@ -28,8 +28,11 @@ import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -392,7 +395,7 @@ public class ScheduleBasedReportBuilder {
 		// Register columns that will be displayed when in Pin/Diff mode
 		report.addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
 		report.addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
-		report.addColumn("Permutation", ColumnType.DIFF, generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
+		report.addColumn("Permutation", ColumnType.DIFF, generatePermutationColumnFormatter(cargoAllocationRef));
 	}
 
 	/**
@@ -486,9 +489,10 @@ public class ScheduleBasedReportBuilder {
 						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 						if (pinnedObject != null) {
 							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-
-							// convert this cargo's wiring of slot allocations to a string
-							result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+							if (pinnedCargoAllocation != null) {
+								// convert this cargo's wiring of slot allocations to a string
+								result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+							}
 						}
 					} catch (final Exception e) {
 						log.warn("Error formatting previous wiring", e);
@@ -506,66 +510,105 @@ public class ScheduleBasedReportBuilder {
 		};
 	}
 
-	private IFormatter generateRelatedSlotSetColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+	private IFormatter generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null) {
-					return "";
-				}
 
-				// Check to see if wiring has changed.
-				boolean different = false;
-				{
-					final EObject eObj = eObjectAsCargoAllocation.getFirst();
-					final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
+				if (obj instanceof EObject) {
+					final EObject eObj = (EObject) obj;
+					if (eObj.eIsSet(cargoAllocationRef)) {
+						final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
 
-					if (pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-						final Set<EObject> unpinnedObjects = pinDiffModeHelper.getUnpinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (unpinnedObjects != null) {
-							for (final EObject unpinnedObject : unpinnedObjects) {
-								final CargoAllocation pinnedCargoAllocation = (CargoAllocation) unpinnedObject.eGet(cargoAllocationRef);
+						// Check to see if wiring has changed.
+						boolean different = false;
+						{
+							final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
 
-								// convert this cargo's wiring of slot allocations to a string
-								final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-								different = !currentWiring.equals(result);
-								if (different) {
-									break;
+							if (pinDiffModeHelper.pinnedObjectsContains(eObj)) {
+								final Set<EObject> unpinnedObjects = pinDiffModeHelper.getUnpinnedObjectWithTheSameKeyAsThisObject(eObj);
+								if (unpinnedObjects != null) {
+									for (final EObject unpinnedObject : unpinnedObjects) {
+										final CargoAllocation pinnedCargoAllocation = (CargoAllocation) unpinnedObject.eGet(cargoAllocationRef);
+
+										// convert this cargo's wiring of slot allocations to a string
+										final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+										different = !currentWiring.equals(result);
+										if (different) {
+											break;
+										}
+									}
 								}
+							} else {
+								final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
+								if (pinnedObject != null) {
+									final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+									if (pinnedCargoAllocation != null) {
+										// convert this cargo's wiring of slot allocations to a string
+										final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+										different = !currentWiring.equals(result);
+									} else {
+										different = true;
+									}
+								}
+
 							}
 						}
-					} else {
-						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (pinnedObject != null) {
-							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-
-							// convert this cargo's wiring of slot allocations to a string
-							final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-							different = !currentWiring.equals(result);
+						if (!different) {
+							return "";
 						}
 
+						// EObject eObj = eObjectAsCargoAllocation.getFirst();
+						final CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
+
+						// FIXME: This only works as refresh is triggered multiple times. Otherwise this first call only gets this cargoes slot allocations. The set is updated with other cargo
+						// allocations and
+						// the second refresh call gets the correct data string as a result of the first op.
+						relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
+
+						final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
+						final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
+
+						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new ToStringFunction())) + " ]";
+						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new ToStringFunction())) + " ]";
+
+						return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
+					} else if (eObj.eIsSet(openSlotAllocationRef)) {
+						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) eObj.eGet(openSlotAllocationRef);
+						if (openSlotAllocation != null) {
+							final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
+							final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
+
+							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new ToStringFunction())) + " ]";
+							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new ToStringFunction())) + " ]";
+
+							return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
+						}
+					} else {
+						final Object target = eObj.eGet(targetObjectRef);
+						if (target instanceof GeneratedCharterOut) {
+							return "Charter out (Virt)";
+						}
+						if (target instanceof StartEvent) {
+							return "Orphan Ballast";
+						}
+						if (target instanceof DryDockEvent) {
+							return "Drydock";
+						}
+						if (target instanceof MaintenanceEvent) {
+							return "Maintenance";
+						}
+						if (target instanceof CharterOutEvent) {
+							return "Charter out";
+						}
+						if (target instanceof DryDockEvent) {
+							return "Event";
+						}
 					}
 				}
-				if (!different) {
-					return "";
-				}
-
-				// EObject eObj = eObjectAsCargoAllocation.getFirst();
-				final CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
-
-				// FIXME: This only works as refresh is triggered multiple times. Otherwise this first call only gets this cargoes slot allocations. The set is updated with other cargo allocations and
-				// the second refresh call gets the correct data string as a result of the first op.
-				relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
-
-				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
-				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
-
-				final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new ToStringFunction())) + " ]";
-				final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new ToStringFunction())) + " ]";
-
-				return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
+				return "";
 			}
+
 		};
 
 	}

@@ -102,6 +102,7 @@ public class ScheduleDiffUtils {
 					}
 				}
 			}
+			return false;
 		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
 			SlotVisit ref = null;
 			SlotVisit ca = null;
@@ -204,10 +205,10 @@ public class ScheduleDiffUtils {
 			if (Math.abs(refTime - vevTime) > 3 * 24) {
 				return true;
 			}
-
+			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	public static int getEventDuration(final Event event) {
