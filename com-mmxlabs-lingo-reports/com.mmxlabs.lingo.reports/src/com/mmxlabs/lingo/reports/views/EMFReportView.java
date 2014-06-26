@@ -1078,7 +1078,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			int index = 0;
 			final int[] colOrder = grid.getColumnOrder();
 
-			int usedCount = 0;
+			int maxIndex = 0;
 			for (final ColumnBlock block : order) {
 				for (final ColumnHandler handler : block.blockHandlers) {
 					final GridColumn column = handler.column.getColumn();
@@ -1086,17 +1086,35 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 						colOrder[index] = -1;// grid.indexOf(column);
 					} else {
 						colOrder[index] = grid.indexOf(column);
-						usedCount++;
 					}
+					maxIndex = Math.max(maxIndex, colOrder[index]);
 					index += 1;
 				}
 			}
-			// Replace -1's with valid index
-			for (int i = 0; i < colOrder.length; ++i) {
-				if (colOrder[i] == -1) {
-					colOrder[i] = usedCount++;
+
+			// The incoming column block order may have come from a memto. There may be different columns thus a mismatch on old and new column blocks. Here we make sure any new columns not covered by
+			// the column order have a unique column index.
+			for (; index < colOrder.length; ++index) {
+				colOrder[index] = ++maxIndex;
+			}
+
+			// Renumber the col order to have consecutive numbering from zero. Removed columns may cause holes in sequence.
+			index = 0;
+			for (int i = 0; i <= maxIndex; ++i) {
+				for (int j = 0; j < colOrder.length; ++j) {
+					if (colOrder[j] == i) {
+						colOrder[j] = index++;
+						break;
+					}
 				}
 			}
+
+			// // Replace -1's with valid index
+			// for (int i = 0; i < colOrder.length; ++i) {
+			// if (colOrder[i] == -1) {
+			// colOrder[i] = usedCount++;
+			// }
+			// }
 
 			grid.setColumnOrder(colOrder);
 		}
