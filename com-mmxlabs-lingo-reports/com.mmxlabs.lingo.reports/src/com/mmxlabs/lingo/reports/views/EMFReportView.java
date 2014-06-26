@@ -14,11 +14,9 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -53,27 +51,16 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider;
-import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
-import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
@@ -89,7 +76,6 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
  * @author hinton
  */
 public abstract class EMFReportView extends ViewPart implements ISelectionListener {
-	private static final Logger log = LoggerFactory.getLogger(EMFReportView.class);
 
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
@@ -398,206 +384,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return result;
 	}
 
-	protected Pair<EObject, CargoAllocation> getIfCargoAllocation(final Object obj, final EStructuralFeature cargoAllocationRef) {
-		if (obj instanceof EObject) {
-			final EObject eObj = (EObject) obj;
-			if (eObj.eIsSet(cargoAllocationRef)) {
-				return new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Generate a new formatter for the previous-wiring column
-	 * 
-	 * Used in pin/diff mode.
-	 * 
-	 * @param cargoAllocationRef
-	 * @return
-	 */
-	protected IFormatter generatePreviousWiringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String format(final Object obj) {
-				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null)
-					return "";
-
-				final EObject eObj = eObjectAsCargoAllocation.getFirst();
-				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
-
-				String result = "";
-
-				// for objects not coming from the pinned scenario,
-				// return the pinned counterpart's wiring to display as the previous wiring
-				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-
-					try {
-						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (pinnedObject != null) {
-							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-
-							// convert this cargo's wiring of slot allocations to a string
-							result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-						}
-					} catch (final Exception e) {
-						log.warn("Error formatting previous wiring", e);
-					}
-
-				}
-
-				// Do not display if same
-				if (currentWiring.equals(result)) {
-					return "";
-				}
-
-				return result;
-			}
-		};
-	}
-
-	protected RelatedSlotAllocations relatedSlotAllocations = new RelatedSlotAllocations();
-
-	private class ToStringFunction implements Function<Slot, String> {
-
-		@Override
-		public String apply(Slot o) {
-			return o.getName();
-		}
-
-		@Override
-		public String toString() {
-			return "toString";
-		}
-	}
-
-	protected IFormatter generateRelatedSlotSetColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String format(final Object obj) {
-				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null) {
-					return "";
-				}
-
-				// Check to see if wiring has changed.
-				boolean different = false;
-				{
-					final EObject eObj = eObjectAsCargoAllocation.getFirst();
-					final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
-
-					if (pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-						Set<EObject> unpinnedObjects = pinDiffModeHelper.getUnpinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (unpinnedObjects != null) {
-							for (final EObject unpinnedObject : unpinnedObjects) {
-								final CargoAllocation pinnedCargoAllocation = (CargoAllocation) unpinnedObject.eGet(cargoAllocationRef);
-
-								// convert this cargo's wiring of slot allocations to a string
-								String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-								different = !currentWiring.equals(result);
-								if (different) {
-									break;
-								}
-							}
-						}
-					} else {
-						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (pinnedObject != null) {
-							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-
-							// convert this cargo's wiring of slot allocations to a string
-							String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-							different = !currentWiring.equals(result);
-						}
-
-					}
-				}
-				if (!different) {
-					return "";
-				}
-
-				// EObject eObj = eObjectAsCargoAllocation.getFirst();
-				final CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
-
-				// FIXME: This only works as refresh is triggered multiple times. Otherwise this first call only gets this cargoes slot allocations. The set is updated with other cargo allocations and
-				// the second refresh call gets the correct data string as a result of the first op.
-				relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
-
-				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
-				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
-
-				final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new ToStringFunction())) + " ]";
-				final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new ToStringFunction())) + " ]";
-
-				return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
-			}
-		};
-
-	}
-
-	/**
-	 * Generate a new formatter for the previous-vessel-assignment column
-	 * 
-	 * Used in pin/diff mode.
-	 * 
-	 * @param cargoAllocationRef
-	 * @return
-	 */
-	protected IFormatter generatePreviousVesselAssignmentColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String format(final Object obj) {
-				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null) {
-					return "";
-				}
-
-				final EObject eObj = eObjectAsCargoAllocation.getFirst();
-
-				final String currentAssignment = getVesselAssignmentName(eObjectAsCargoAllocation.getSecond());
-
-				String result = "";
-
-				// for objects not coming from the pinned scenario,
-				// return and display the vessel used by the pinned counterpart
-				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-
-					try {
-						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (pinnedObject != null) {
-							final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-							result = getVesselAssignmentName(ca);
-						}
-					} catch (final Exception e) {
-						log.warn("Error formatting previous assignment", e);
-					}
-				}
-
-				// Only show if different.
-				if (currentAssignment.equals(result)) {
-					return "";
-				}
-				return result;
-			}
-
-			protected String getVesselAssignmentName(final CargoAllocation ca) {
-				if (ca == null) {
-					return "";
-				}
-				final Cargo inputCargo = ca.getInputCargo();
-				if (inputCargo == null) {
-					return "";
-				}
-				final AVesselSet<? extends Vessel> l = inputCargo.getAssignment();
-				if (l != null) {
-					return l.getName();
-				}
-				return "";
-			}
-		};
-	}
-
 	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
 	private final HashSet<Object> contents = new HashSet<Object>();
 
@@ -862,7 +648,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		allObjectsByKey.clear();
 		numberOfSchedules = 0;
 		pinDiffModeHelper.reset();
-		relatedSlotAllocations.clear();
 	}
 
 	/**

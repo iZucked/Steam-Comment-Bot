@@ -6,16 +6,11 @@ package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -31,10 +26,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
@@ -56,14 +49,11 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
-import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
-import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -77,14 +67,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	 * The ID of the view as specified by the extension.
 	 */
 	private static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
-	private static final String LONG_CARGOES = "Longs";
-	private static final String SHORT_CARGOES = "Shorts";
-	private static final String VESSEL_START_ROW = "Start ballast legs";
-	private static final String VESSEL_EVENT_ROW = "Vessel Events";
-	private static final String CHARTER_OUT_ROW = "Charter Outs (Virt)";
-	private static final String CARGO_ROW = "Cargoes";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.ConfigurableCargoReportView";
+
 	final List<String> entityColumnNames = new ArrayList<String>();
+
+	private final ScheduleBasedReportBuilder builder;
 
 	private final EPackage tableDataModel;
 	private final EStructuralFeature nameObjectRef;
@@ -93,21 +80,20 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	private final EStructuralFeature loadAllocationRef;
 	private final EStructuralFeature dischargeAllocationRef;
 	private final EStructuralFeature openSlotAllocationRef;
+
 	private IMemento memento;
-	private final Set<String> rowFilterInfo = new HashSet<>();
 
 	public ConfigurableCargoReportView() {
-		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
+		super(ID);
 
-		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge", "openslot");
-		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
-		nameObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
-		// GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
-		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
-		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
-		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
-		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "discharge");
-		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
+		builder = new ScheduleBasedReportBuilder(this, pinDiffModeHelper);
+		tableDataModel = builder.getTableDataModel();
+		nameObjectRef = builder.getNameObjectRef();
+		targetObjectRef = builder.getTargetObjectRef();
+		cargoAllocationRef = builder.getCargoAllocationRef();
+		loadAllocationRef = builder.getLoadAllocationRef();
+		dischargeAllocationRef = builder.getDischargeAllocationRef();
+		openSlotAllocationRef = builder.getOpenSlotAllocationRef();
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
@@ -235,11 +221,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 			}
 		}, targetObjectRef);
 
-		// Register columns that will be displayed when in Pin/Diff mode
-		addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
-		addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
-		addColumn("Permutation", ColumnType.DIFF, generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
-
+		builder.createPinDiffColumns();
 	}
 
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
@@ -340,6 +322,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
+		viewer.setComparator(GenericEMFTableDataModel.createGroupComparator(viewer.getComparator(), tableDataModel));
 		if (memento != null) {
 			blockManager.initFromMemento(CONFIGURABLE_COLUMNS_ORDER, memento);
 		}
@@ -416,119 +399,12 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	@Override
 	protected void processInputs(final Object[] result) {
-		for (final Object row : result) {
-
-			// Map our "Node" data to the CargoAllocation object
-			if (row instanceof EObject) {
-				final EObject eObj = (EObject) row;
-				if (eObj.eIsSet(targetObjectRef)) {
-
-					final Object a = eObj.eGet(targetObjectRef);
-
-					// map to events
-					if (a instanceof CargoAllocation) {
-						final CargoAllocation allocation = (CargoAllocation) a;
-
-						final List<Object> equivalents = new LinkedList<Object>();
-						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-							equivalents.add(slotAllocation.getSlot());
-							equivalents.add(slotAllocation.getSlotVisit());
-						}
-						equivalents.addAll(allocation.getEvents());
-						equivalents.add(allocation.getInputCargo());
-						setInputEquivalents(row, equivalents);
-					} else if (a instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) a;
-
-						final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
-
-						final List<Object> equivalents = new LinkedList<Object>();
-						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-							equivalents.add(slotAllocation.getSlot());
-							equivalents.add(slotAllocation.getSlotVisit());
-						}
-						equivalents.addAll(allocation.getEvents());
-						equivalents.add(allocation.getInputCargo());
-						setInputEquivalents(row, equivalents);
-					} else if (a instanceof VesselEventVisit) {
-						final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
-						setInputEquivalents(row, Lists.<Object> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
-					} else if (a instanceof StartEvent) {
-						final StartEvent startEvent = (StartEvent) a;
-						setInputEquivalents(row, Lists.<Object> newArrayList(startEvent, startEvent.getSequence().getVesselAvailability().getVessel()));
-					} else if (a instanceof OpenSlotAllocation) {
-						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
-						setInputEquivalents(row, Lists.<Object> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
-					}
-				}
-			}
-		}
+		builder.processInputs(result);
 	}
 
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
-		return new ScheduleElementCollector() {
-
-			private EObject dataModelInstance;
-
-			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
-				ConfigurableCargoReportView.this.clearPinModeData();
-				dataModelInstance = GenericEMFTableDataModel.createRootInstance(tableDataModel);
-
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
-
-				final List<EObject> interestingEvents = new LinkedList<EObject>();
-				for (final Sequence sequence : schedule.getSequences()) {
-					for (final Event event : sequence.getEvents()) {
-						if (showEvent(event)) {
-							interestingEvents.add(event);
-						}
-					}
-				}
-				for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-					if (showOpenSlot(openSlotAllocation)) {
-						interestingEvents.add(openSlotAllocation);
-					}
-				}
-
-				final List<EObject> nodes = generateNodes(dataModelInstance, interestingEvents);
-
-				ConfigurableCargoReportView.this.collectPinModeElements(nodes, isPinned);
-
-				return nodes;
-			}
-		};
-	}
-
-	protected boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
-
-		if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-			return rowFilterInfo.contains(LONG_CARGOES);
-		} else if (openSlotAllocation.getSlot() instanceof DischargeSlot) {
-			return rowFilterInfo.contains(SHORT_CARGOES);
-		}
-		return false;
-	}
-
-	protected boolean showEvent(final Event event) {
-		if (event instanceof StartEvent) {
-			return rowFilterInfo.contains(VESSEL_START_ROW);
-		} else if (event instanceof VesselEventVisit) {
-			return rowFilterInfo.contains(VESSEL_EVENT_ROW);
-		} else if (event instanceof GeneratedCharterOut) {
-			return rowFilterInfo.contains(CHARTER_OUT_ROW);
-		} else if (event instanceof SlotVisit) {
-			final SlotVisit slotVisit = (SlotVisit) event;
-			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-				return rowFilterInfo.contains(CARGO_ROW);
-			}
-		}
-		return false;
+		return builder.getElementCollector();
 	}
 
 	/**
@@ -539,19 +415,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	 */
 	@Override
 	public String getElementKey(EObject element) {
-
-		if (element.eIsSet(cargoAllocationRef)) {
-			element = (EObject) element.eGet(cargoAllocationRef);
-		} else if (element.eIsSet(targetObjectRef)) {
-			element = (EObject) element.eGet(targetObjectRef);
-		}
-
-		if (element instanceof CargoAllocation) {
-			return ((CargoAllocation) element).getName();
-		} else if (element instanceof Event) {
-			return ((Event) element).name();
-		}
-		return super.getElementKey(element);
+		return builder.getElementKey(element);
 	}
 
 	@Override
@@ -561,83 +425,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	@Override
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
-		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size());
-		for (final Object obj : selection) {
-			if (obj instanceof EObject) {
-				adaptedSelection.add(((EObject) obj).eGet(targetObjectRef));
-			}
-		}
-
-		return adaptedSelection;
-	}
-
-	private List<EObject> generateNodes(final EObject dataModelInstance, final List<EObject> interestingElements) {
-		final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
-
-		for (final Object element : interestingElements) {
-
-			if (element instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) element;
-				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-
-				// Build up list of slots assigned to cargo, sorting into loads and discharges
-				final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
-				final List<SlotAllocation> dischargeSlots = new ArrayList<SlotAllocation>();
-				for (final SlotAllocation slot : cargoAllocation.getSlotAllocations()) {
-					if (slot.getSlot() instanceof LoadSlot) {
-						loadSlots.add(slot);
-					} else if (slot.getSlot() instanceof DischargeSlot) {
-						dischargeSlots.add(slot);
-					} else {
-						// Assume some kind of discharge?
-						// dischargeSlots.add((Slot) slot);
-					}
-
-				}
-
-				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-				// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
-				for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
-
-					final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "cargo", cargoAllocation);
-					if (i < loadSlots.size()) {
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "load", loadSlots.get(i));
-					}
-					if (i < dischargeSlots.size()) {
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "discharge", dischargeSlots.get(i));
-					}
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", cargoAllocation);
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slotVisit.name());
-					nodes.add(node);
-				}
-			} else if (element instanceof OpenSlotAllocation) {
-
-				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
-				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", openSlotAllocation);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "openslot", openSlotAllocation);
-				final Slot slot = openSlotAllocation.getSlot();
-				if (slot == null) {
-
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", "??");
-				} else {
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slot.getName());
-				}
-				nodes.add(node);
-
-			} else if (element instanceof Event) {
-				final Event event = (Event) element;
-				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-
-				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", event);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", event.name());
-				nodes.add(node);
-			}
-		}
-		return nodes;
+		return builder.adaptSelectionFromWidget(selection);
 	}
 
 	/**
@@ -645,11 +433,6 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	@Override
 	protected boolean handleSelections() {
 		return true;
-	}
-
-	@Override
-	public void setInput(final Object input) {
-		super.setInput(input);
 	}
 
 	/**
@@ -720,7 +503,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 				};
 				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
-				dialog.setCheckBoxInfo(new String[] { VESSEL_START_ROW, CARGO_ROW, VESSEL_EVENT_ROW, CHARTER_OUT_ROW, LONG_CARGOES, SHORT_CARGOES }, rowFilterInfo);
+				dialog.setCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
 				dialog.open();
 
 				synchronizer.refreshViewer();
