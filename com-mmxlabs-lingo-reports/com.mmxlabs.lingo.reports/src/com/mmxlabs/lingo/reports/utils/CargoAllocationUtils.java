@@ -67,32 +67,61 @@ public class CargoAllocationUtils {
 	 * @param CargoAllocation
 	 * @return String
 	 */
-	public static String getWiringAsString(CargoAllocation ca) {
-		List<SlotAllocation> slotAllocations = ca.getSlotAllocations();
-		StringBuffer sb = new StringBuffer();
+	public static String getWiringAsString(final CargoAllocation ca) {
+		final List<SlotAllocation> slotAllocations = ca.getSlotAllocations();
+		final StringBuffer sb = new StringBuffer();
 
-		SlotAllocation sa0 = slotAllocations.get(0);
+		final SlotAllocation sa0 = slotAllocations.get(0);
 		sb.append(sa0 != null ? sa0.getName() : "()");
 
 		for (int i = 1; i < slotAllocations.size(); ++i) {
-			SlotAllocation sa = slotAllocations.get(i);
+			final SlotAllocation sa = slotAllocations.get(i);
 			sb.append(" -- ").append(sa != null ? sa.getName() : "()");
 		}
 
 		return sb.toString();
 	}
 
-	public static String getSalesWiringAsString(CargoAllocation ca) {
-		List<SlotAllocation> slotAllocations = ca.getSlotAllocations();
-		StringBuffer sb = new StringBuffer();
+	public static String getSalesWiringAsString(final CargoAllocation ca) {
+		if (ca == null) {
+			return "";
+		}
+		final List<SlotAllocation> slotAllocations = ca.getSlotAllocations();
+		final StringBuffer sb = new StringBuffer();
 
 		// SlotAllocation sa0 = slotAllocations.get(0);
 		// sb.append(sa0 != null ? sa0.getName() : "()");
 
 		boolean first = true;
 		for (int i = 0; i < slotAllocations.size(); ++i) {
-			SlotAllocation sa = slotAllocations.get(i);
+			final SlotAllocation sa = slotAllocations.get(i);
 			if (sa.getSlot() instanceof DischargeSlot) {
+				if (!first) {
+					sb.append(" -- ");
+				} else {
+					first = false;
+				}
+				sb.append(sa != null ? sa.getName() : "()");
+			}
+		}
+
+		return sb.toString();
+	}
+
+	public static String getPurchaseWiringAsString(final CargoAllocation ca) {
+		if (ca == null) {
+			return "";
+		}
+		final List<SlotAllocation> slotAllocations = ca.getSlotAllocations();
+		final StringBuffer sb = new StringBuffer();
+
+		// SlotAllocation sa0 = slotAllocations.get(0);
+		// sb.append(sa0 != null ? sa0.getName() : "()");
+
+		boolean first = true;
+		for (int i = 0; i < slotAllocations.size(); ++i) {
+			final SlotAllocation sa = slotAllocations.get(i);
+			if (sa.getSlot() instanceof LoadSlot) {
 				if (!first) {
 					sb.append(" -- ");
 				} else {

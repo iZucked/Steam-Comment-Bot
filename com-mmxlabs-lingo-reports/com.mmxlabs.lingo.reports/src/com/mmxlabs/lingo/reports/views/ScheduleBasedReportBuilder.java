@@ -321,6 +321,8 @@ public class ScheduleBasedReportBuilder {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 
+				relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
+
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
 				final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
 				final List<SlotAllocation> dischargeSlots = new ArrayList<SlotAllocation>();
@@ -472,40 +474,67 @@ public class ScheduleBasedReportBuilder {
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null)
-					return "";
 
-				final EObject eObj = eObjectAsCargoAllocation.getFirst();
-				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
+				if (obj instanceof EObject) {
+					final EObject eObj = (EObject) obj;
+					if (eObj.eIsSet(cargoAllocationRef)) {
+						final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
 
-				String result = "";
+						final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
 
-				// for objects not coming from the pinned scenario,
-				// return the pinned counterpart's wiring to display as the previous wiring
-				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
+						String result = "";
 
-					try {
-						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (pinnedObject != null) {
-							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-							if (pinnedCargoAllocation != null) {
-								// convert this cargo's wiring of slot allocations to a string
-								result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+						// for objects not coming from the pinned scenario,
+						// return the pinned counterpart's wiring to display as the previous wiring
+						if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
+
+							try {
+								final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
+								if (pinnedObject != null) {
+									final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+									if (pinnedCargoAllocation != null) {
+										// convert this cargo's wiring of slot allocations to a string
+										result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+									}
+								}
+							} catch (final Exception e) {
+								log.warn("Error formatting previous wiring", e);
 							}
+
 						}
-					} catch (final Exception e) {
-						log.warn("Error formatting previous wiring", e);
+
+						// Do not display if same
+						if (currentWiring.equals(result)) {
+							return "";
+						}
+
+						return result;
+					} else if (eObj.eIsSet(openSlotAllocationRef)) {
+						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) eObj.eGet(openSlotAllocationRef);
+						if (openSlotAllocation != null) {
+
+							final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
+							if (pinnedObject != null) {
+								if (pinnedObject.eIsSet(cargoAllocationRef)) {
+									final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+									if (pinnedCargoAllocation != null) {
+
+										final String result;
+										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
+
+											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+										} else {
+											result = CargoAllocationUtils.getPurchaseWiringAsString(pinnedCargoAllocation);
+										}
+										return result;
+									}
+								}
+							}
+
+						}
 					}
-
 				}
-
-				// Do not display if same
-				if (currentWiring.equals(result)) {
-					return "";
-				}
-
-				return result;
+				return "";
 			}
 		};
 	}
@@ -530,10 +559,14 @@ public class ScheduleBasedReportBuilder {
 								if (unpinnedObjects != null) {
 									for (final EObject unpinnedObject : unpinnedObjects) {
 										final CargoAllocation pinnedCargoAllocation = (CargoAllocation) unpinnedObject.eGet(cargoAllocationRef);
+										if (pinnedCargoAllocation != null) {
+											// convert this cargo's wiring of slot allocations to a string
+											final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
 
-										// convert this cargo's wiring of slot allocations to a string
-										final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-										different = !currentWiring.equals(result);
+											different = !currentWiring.equals(result);
+										} else {
+											different = true;
+										}
 										if (different) {
 											break;
 										}
@@ -555,7 +588,8 @@ public class ScheduleBasedReportBuilder {
 							}
 						}
 						if (!different) {
-							return "";
+							// FIXME: This excess filters out stuff with spots.
+//							return "";
 						}
 
 						// EObject eObj = eObjectAsCargoAllocation.getFirst();
@@ -564,7 +598,7 @@ public class ScheduleBasedReportBuilder {
 						// FIXME: This only works as refresh is triggered multiple times. Otherwise this first call only gets this cargoes slot allocations. The set is updated with other cargo
 						// allocations and
 						// the second refresh call gets the correct data string as a result of the first op.
-						relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
+//						relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
 
 						final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
 						final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);

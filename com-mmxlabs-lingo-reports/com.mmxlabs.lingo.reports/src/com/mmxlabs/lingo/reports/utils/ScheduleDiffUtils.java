@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -72,11 +73,15 @@ public class ScheduleDiffUtils {
 				{
 					final Slot caSlot = caAllocation.getSlot();
 					final Slot refSlot = refAllocation.getSlot();
-					final String caName = caSlot == null ? null : caSlot.getName();
-					final String refName = refSlot == null ? null : refSlot.getName();
 
-					if (!Equality.isEqual(caName, refName)) {
-						return true;
+					if (!(caSlot instanceof SpotSlot && refSlot instanceof SpotSlot)) {
+
+						final String caName = caSlot == null ? null : caSlot.getName();
+						final String refName = refSlot == null ? null : refSlot.getName();
+
+						if (!Equality.isEqual(caName, refName)) {
+							return true;
+						}
 					}
 				}
 
