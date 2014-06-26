@@ -60,6 +60,7 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -108,7 +109,8 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		addColumn("ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
+		addColumn("L-ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
+		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, SchedulePackage.Literals.SLOT_ALLOCATION___GET_NAME);
 
 		// add the total (aggregate) P&L column
 		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
