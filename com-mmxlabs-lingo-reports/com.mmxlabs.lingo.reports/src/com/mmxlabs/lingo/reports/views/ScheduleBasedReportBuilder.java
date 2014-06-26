@@ -71,6 +71,7 @@ public class ScheduleBasedReportBuilder {
 
 	private final EPackage tableDataModel;
 	private final EStructuralFeature nameObjectRef;
+	private final EStructuralFeature name2ObjectRef;
 	private final EStructuralFeature targetObjectRef;
 	private final EStructuralFeature cargoAllocationRef;
 	private final EStructuralFeature loadAllocationRef;
@@ -99,6 +100,7 @@ public class ScheduleBasedReportBuilder {
 
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
 		nameObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
+		name2ObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name2");
 		// GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
 		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
@@ -120,6 +122,10 @@ public class ScheduleBasedReportBuilder {
 
 	public EStructuralFeature getNameObjectRef() {
 		return nameObjectRef;
+	}
+
+	public EStructuralFeature getName2ObjectRef() {
+		return name2ObjectRef;
 	}
 
 	public EStructuralFeature getTargetObjectRef() {
@@ -332,15 +338,18 @@ public class ScheduleBasedReportBuilder {
 				for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
 
 					final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "cargo", cargoAllocation);
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, cargoAllocationRef, cargoAllocation);
 					if (i < loadSlots.size()) {
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "load", loadSlots.get(i));
+						SlotAllocation slot = loadSlots.get(i);
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, loadAllocationRef, slot);
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
 					}
 					if (i < dischargeSlots.size()) {
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, "discharge", dischargeSlots.get(i));
+						SlotAllocation slot = dischargeSlots.get(i);
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, dischargeAllocationRef, slot);
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
 					}
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", cargoAllocation);
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slotVisit.name());
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, cargoAllocation);
 					nodes.add(node);
 				}
 			} else if (element instanceof OpenSlotAllocation) {
@@ -348,14 +357,17 @@ public class ScheduleBasedReportBuilder {
 				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
 				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", openSlotAllocation);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "openslot", openSlotAllocation);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, openSlotAllocation);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, openSlotAllocationRef, openSlotAllocation);
 				final Slot slot = openSlotAllocation.getSlot();
 				if (slot == null) {
-
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", "??");
+					GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, "??");
 				} else {
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", slot.getName());
+					if (slot instanceof DischargeSlot) {
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
+					} else {
+						GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
+					}
 				}
 				nodes.add(node);
 
@@ -364,8 +376,8 @@ public class ScheduleBasedReportBuilder {
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
 
 				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "target", event);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, "name", event.name());
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, event);
+				GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, event.name());
 				nodes.add(node);
 			}
 		}

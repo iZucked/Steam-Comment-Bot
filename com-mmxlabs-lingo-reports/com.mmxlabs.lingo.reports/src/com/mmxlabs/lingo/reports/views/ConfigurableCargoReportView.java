@@ -75,6 +75,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	private final EPackage tableDataModel;
 	private final EStructuralFeature nameObjectRef;
+	private final EStructuralFeature name2ObjectRef;
 	private final EStructuralFeature targetObjectRef;
 	private final EStructuralFeature cargoAllocationRef;
 	private final EStructuralFeature loadAllocationRef;
@@ -89,6 +90,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		builder = new ScheduleBasedReportBuilder(this, pinDiffModeHelper);
 		tableDataModel = builder.getTableDataModel();
 		nameObjectRef = builder.getNameObjectRef();
+		name2ObjectRef = builder.getName2ObjectRef();
 		targetObjectRef = builder.getTargetObjectRef();
 		cargoAllocationRef = builder.getCargoAllocationRef();
 		loadAllocationRef = builder.getLoadAllocationRef();
@@ -98,7 +100,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		addColumn("L-ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
-		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, SchedulePackage.Literals.SLOT_ALLOCATION___GET_NAME);
+		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, name2ObjectRef);
 
 		// add the total (aggregate) P&L column
 		addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
