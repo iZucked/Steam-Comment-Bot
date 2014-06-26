@@ -54,7 +54,9 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
@@ -69,6 +71,7 @@ import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -200,8 +203,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				clearInputEquivalents();
 
 				final Object[] result;
-				final Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
-				final Collection<EObject> pinnedObjectsSet = pinnedObjects.values();
 
 				if (numberOfSchedules > 1 && currentlyPinned) {
 					final List<EObject> objects = new LinkedList<EObject>();
@@ -211,7 +212,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 						// Find ref...
 						for (final EObject ca : e.getValue()) {
-							if (pinnedObjectsSet.contains(ca)) {
+							if (pinDiffModeHelper.pinnedObjectsContains(ca)) {
 								ref = ca;
 								break;
 							}
@@ -459,24 +460,76 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected RelatedSlotAllocations relatedSlotAllocations = new RelatedSlotAllocations();
 
+	private class ToStringFunction implements Function<Slot, String> {
+
+		@Override
+		public String apply(Slot o) {
+			return o.getName();
+		}
+
+		@Override
+		public String toString() {
+			return "toString";
+		}
+	}
+
 	protected IFormatter generateRelatedSlotSetColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
 				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null)
+				if (eObjectAsCargoAllocation == null) {
 					return "";
+				}
+
+				// Check to see if wiring has changed.
+				boolean different = false;
+				{
+					final EObject eObj = eObjectAsCargoAllocation.getFirst();
+					final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
+
+					if (pinDiffModeHelper.pinnedObjectsContains(eObj)) {
+						Set<EObject> unpinnedObjects = pinDiffModeHelper.getUnpinnedObjectWithTheSameKeyAsThisObject(eObj);
+						if (unpinnedObjects != null) {
+							for (final EObject unpinnedObject : unpinnedObjects) {
+								final CargoAllocation pinnedCargoAllocation = (CargoAllocation) unpinnedObject.eGet(cargoAllocationRef);
+
+								// convert this cargo's wiring of slot allocations to a string
+								String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+								different = !currentWiring.equals(result);
+								if (different) {
+									break;
+								}
+							}
+						}
+					} else {
+						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
+						if (pinnedObject != null) {
+							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+
+							// convert this cargo's wiring of slot allocations to a string
+							String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+							different = !currentWiring.equals(result);
+						}
+
+					}
+				}
+				if (!different) {
+					return "";
+				}
 
 				// EObject eObj = eObjectAsCargoAllocation.getFirst();
 				final CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
 
+				// FIXME: This only works as refresh is triggered multiple times. Otherwise this first call only gets this cargoes slot allocations. The set is updated with other cargo allocations and
+				// the second refresh call gets the correct data string as a result of the first op.
 				relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
 
-				final Set<String> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
-				final Set<String> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
+				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
+				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
 
-				final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(buysSet) + " ]";
-				final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(sellsSet) + " ]";
+				final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new ToStringFunction())) + " ]";
+				final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new ToStringFunction())) + " ]";
 
 				return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
 			}
@@ -807,7 +860,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		currentlyPinned = false;
 		allObjectsByKey.clear();
 		numberOfSchedules = 0;
-		pinDiffModeHelper.getPinnedObjects().clear();
+		pinDiffModeHelper.reset();
 		relatedSlotAllocations.clear();
 	}
 
@@ -820,8 +873,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
 		currentlyPinned |= isPinned;
 		++numberOfSchedules;
-
-		final Map<String, EObject> pinnedObjects = pinDiffModeHelper.getPinnedObjects();
 
 		for (final EObject ca : objects) {
 			final List<EObject> l;
@@ -836,7 +887,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			l.add(ca);
 
 			if (isPinned) {
-				pinnedObjects.put(key, ca);
+				pinDiffModeHelper.setPinnedObject(key, ca);
+			} else {
+				pinDiffModeHelper.addUnpinnedObject(key, ca);
 			}
 		}
 	}
