@@ -68,6 +68,7 @@ import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -730,7 +731,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					return "";
 
 				final EObject eObj = eObjectAsCargoAllocation.getFirst();
-				// CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
+				
+				String currentAssignment = getVesselAssignmentName(eObjectAsCargoAllocation.getSecond());
 
 				String result = "";
 
@@ -743,16 +745,32 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 						if (pinnedObject != null) {
 							final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-							final AVesselSet<? extends Vessel> l = ca.getInputCargo().getAssignment();
-							if (l != null)
-								result = l.getName();
+							result = getVesselAssignmentName(ca);
 						}
 					} catch (final Exception e) {
 						log.warn("Error formatting previous assignment", e);
 					}
 				}
 
+				if (currentAssignment.equals(result)) {
+					return "";
+				}
 				return result;
+			}
+
+			protected String getVesselAssignmentName(final CargoAllocation ca) {
+				if (ca == null) {
+					return "";
+				}
+				Cargo inputCargo = ca.getInputCargo();
+				if (inputCargo == null) {
+					return "";
+				}
+				final AVesselSet<? extends Vessel> l = inputCargo.getAssignment();
+				if (l != null) {
+					return l.getName();
+				}
+				return "";
 			}
 		};
 	}

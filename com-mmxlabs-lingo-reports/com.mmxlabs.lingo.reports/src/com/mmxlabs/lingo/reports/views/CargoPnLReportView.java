@@ -23,7 +23,9 @@ public class CargoPnLReportView extends AbstractCargoReportView {
 
 	public CargoPnLReportView() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
-
+	}
+	@Override
+	protected void createColumns() {
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
 		final EAttribute name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
@@ -47,6 +49,7 @@ public class CargoPnLReportView extends AbstractCargoReportView {
 
 		// addColumn("Vessel", objectFormatter, value1, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
 
+		super.createColumns();
 	}
 
 	@Override

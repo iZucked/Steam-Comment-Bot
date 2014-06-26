@@ -33,7 +33,10 @@ public class CargoReportView extends AbstractCargoReportView {
 
 	public CargoReportView() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoReportView");
-
+	}
+	
+	@Override
+	protected void createColumns() {
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
 		final EAttribute name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
@@ -123,6 +126,8 @@ public class CargoReportView extends AbstractCargoReportView {
 
 			}
 		}, cargoAllocationRef);
+		
+		super.createColumns();
 	}
 
 	private Integer calculateLegCost(final Object object, EStructuralFeature allocationRef) {

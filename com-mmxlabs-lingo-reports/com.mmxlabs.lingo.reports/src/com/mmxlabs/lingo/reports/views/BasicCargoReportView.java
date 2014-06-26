@@ -24,6 +24,10 @@ public class BasicCargoReportView extends AbstractCargoReportView {
 
 	public BasicCargoReportView() {
 		super("com.mmxlabs.shiplingo.platform.reports.BasicCargoReportView");
+	}
+
+	@Override
+	protected void createColumns() {
 
 		final CargoPackage c = CargoPackage.eINSTANCE;
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
@@ -45,6 +49,8 @@ public class BasicCargoReportView extends AbstractCargoReportView {
 		addColumn("Discharge Date", ColumnType.NORMAL, datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalStart());
 		addColumn("Sales Contract", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetContract(), name);
 
-		addColumn("Vessel", ColumnType.NORMAL, objectFormatter, ColumnType.NORMAL, cargoAllocationRef, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
+		addColumn("Vessel", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
+
+		super.createColumns();
 	}
 }

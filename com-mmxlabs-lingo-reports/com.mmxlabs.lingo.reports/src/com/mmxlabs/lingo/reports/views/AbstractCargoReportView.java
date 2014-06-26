@@ -42,12 +42,9 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 		tableDataModel = GenericEMFTableDataModel.createEPackage(CargoAllocationUtils.NODE_FEATURE_CARGO, CargoAllocationUtils.NODE_FEATURE_LOAD, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_CARGO);
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_LOAD);
-		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);		
-		
-		// Register columns that will be displayed when in Pin/Diff mode
-		addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
-		addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
-		addColumn("Permutation", ColumnType.DIFF, generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
+		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, CargoAllocationUtils.NODE_FEATURE_DISCHARGE);
+
+		createColumns();
 	}
 
 	@Override
@@ -55,6 +52,13 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 		super.createPartControl(parent);
 
 		viewer.setComparator(GenericEMFTableDataModel.createGroupComparator(viewer.getComparator(), tableDataModel));
+	}
+
+	protected void createColumns() {
+		// Register columns that will be displayed when in Pin/Diff mode
+		addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
+		addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
+		addColumn("Permutation", ColumnType.DIFF, generateRelatedSlotSetColumnFormatter(cargoAllocationRef));
 	}
 
 	@Override
