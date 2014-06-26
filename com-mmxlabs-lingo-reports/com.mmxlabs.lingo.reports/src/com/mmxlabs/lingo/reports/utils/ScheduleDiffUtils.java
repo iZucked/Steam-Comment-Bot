@@ -181,6 +181,12 @@ public class ScheduleDiffUtils {
 
 	}
 
+	/**
+	 * Returns true if the event is the start of a sequence of events (and thus the prior events sequence ends) For example this could the Load up to the end of the voyage before another load.
+	 * 
+	 * @param event
+	 * @return
+	 */
 	public static boolean isSegmentStart(final Event event) {
 		if (event instanceof VesselEventVisit) {
 			return true;
