@@ -57,16 +57,16 @@ public class ScheduleDiffUtils {
 				return true;
 			}
 
-			EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
-			EList<SlotAllocation> refSlotAllocations = ref.getSlotAllocations();
+			final EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
+			final EList<SlotAllocation> refSlotAllocations = ref.getSlotAllocations();
 
 			if (caSlotAllocations.size() != refSlotAllocations.size()) {
 				return true;
 			}
 
 			for (int i = 0; i < caSlotAllocations.size(); ++i) {
-				SlotAllocation caAllocation = caSlotAllocations.get(i);
-				SlotAllocation refAllocation = refSlotAllocations.get(i);
+				final SlotAllocation caAllocation = caSlotAllocations.get(i);
+				final SlotAllocation refAllocation = refSlotAllocations.get(i);
 
 				{
 					final Slot caSlot = caAllocation.getSlot();
