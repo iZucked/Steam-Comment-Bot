@@ -1,13 +1,10 @@
 package com.mmxlabs.lingo.reports.utils;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.lingo.reports.views.ColumnHandler;
 import com.mmxlabs.lingo.reports.views.EMFReportView;
 
 /**
