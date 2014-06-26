@@ -16,6 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.eclipse.core.runtime.Assert;
@@ -665,7 +666,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					return "";
 
 				final EObject eObj = eObjectAsCargoAllocation.getFirst();
-				// CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
+				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
 
 				String result = "";
 
@@ -679,12 +680,17 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 							final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
 
 							// convert this cargo's wiring of slot allocations to a string
-							result = CargoAllocationUtils.getWiringAsString(pinnedCargoAllocation);
+							result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
 						}
 					} catch (final Exception e) {
 						log.warn("Error formatting previous wiring", e);
 					}
 
+				}
+
+				// Do not display if same
+				if (currentWiring.equals(result)) {
+					return "";
 				}
 
 				return result;
@@ -707,8 +713,13 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 				relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
 
-				return "[ " + Joiner.on(", ").skipNulls().join(relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation)) + " ]";
+				final Set<String> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
+				final Set<String> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
 
+				final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(buysSet) + " ]";
+				final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(sellsSet) + " ]";
+
+				return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
 			}
 		};
 
@@ -1123,8 +1134,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 */
 	class ColumnBlock {
 		List<ColumnHandler> blockHandlers = new ArrayList<>();
-		boolean userVisible;
-		boolean modeVisible;
+		boolean userVisible = true;
+		boolean modeVisible = true;
 		int viewIndex;
 		String name;
 		ColumnType columnType;
@@ -1185,6 +1196,11 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		public void setColumnType(final ColumnType columnType) {
 			this.columnType = columnType;
+			// TODO: This should include modes checks stored from setView Sate.
+			//
+			// TODO: Misc reports do not have any columsn now :()
+			// TODO: termination points!
+			// TODO: show only if changed
 			updateVisibility();
 		}
 
@@ -1308,6 +1324,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			int index = 0;
 			final int[] colOrder = grid.getColumnOrder();
 
+			int usedCount = 0;
 			for (final ColumnBlock block : order) {
 				for (final ColumnHandler handler : block.blockHandlers) {
 					final GridColumn column = handler.column.getColumn();
@@ -1315,8 +1332,15 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 						colOrder[index] = -1;// grid.indexOf(column);
 					} else {
 						colOrder[index] = grid.indexOf(column);
+						usedCount++;
 					}
 					index += 1;
+				}
+			}
+			// Replace -1's with valid index
+			for (int i = 0; i < colOrder.length; ++i) {
+				if (colOrder[i] == -1) {
+					colOrder[i] = usedCount++;
 				}
 			}
 
