@@ -239,12 +239,16 @@ public class ScheduleBasedReportBuilder {
 
 		if (element.eIsSet(cargoAllocationRef)) {
 			element = (EObject) element.eGet(cargoAllocationRef);
+		} else if (element.eIsSet(openSlotAllocationRef)) {
+			element = (EObject) element.eGet(openSlotAllocationRef);
 		} else if (element.eIsSet(targetObjectRef)) {
 			element = (EObject) element.eGet(targetObjectRef);
 		}
 
 		if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
+		} else if (element instanceof OpenSlotAllocation) {
+			return ((OpenSlotAllocation) element).getSlot().getName();
 		} else if (element instanceof Event) {
 			return ((Event) element).name();
 		}

@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -152,6 +153,46 @@ public class ScheduleDiffUtils {
 				}
 			}
 			return isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
+		} else if (pinnedObject instanceof OpenSlotAllocation && otherObject instanceof OpenSlotAllocation) {
+			OpenSlotAllocation ref = null;
+			OpenSlotAllocation ca = null;
+			ref = (OpenSlotAllocation) pinnedObject;
+
+			ca = (OpenSlotAllocation) otherObject;
+
+			{
+				final Slot caSlot = ca.getSlot();
+				final Slot refSlot = ref.getSlot();
+				final String caName = caSlot == null ? null : caSlot.getName();
+				final String refName = refSlot == null ? null : refSlot.getName();
+
+				if (!Equality.isEqual(caName, refName)) {
+					return true;
+				}
+			}
+
+			{
+				final Port caPort = ca.getSlot().getPort();
+				final Port refPort = ref.getSlot().getPort();
+				final String caName = caPort == null ? null : caPort.getName();
+				final String refName = refPort == null ? null : refPort.getName();
+
+				if (!Equality.isEqual(caName, refName)) {
+					return true;
+				}
+			}
+
+			{
+				final Contract caContract = ca.getSlot().getContract();
+				final Contract refContract = ref.getSlot().getContract();
+				final String caName = caContract == null ? null : caContract.getName();
+				final String refName = refContract == null ? null : refContract.getName();
+
+				if (!Equality.isEqual(caName, refName)) {
+					return true;
+				}
+			}
+			return false;
 		} else if (pinnedObject instanceof Event && otherObject instanceof Event) {
 			final Event vev = (Event) otherObject;
 			final Event ref = (Event) pinnedObject;
