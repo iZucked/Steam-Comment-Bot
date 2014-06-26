@@ -32,7 +32,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
@@ -956,11 +955,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		public void setColumnType(final ColumnType columnType) {
 			this.columnType = columnType;
-			// TODO: This should include modes checks stored from setView Sate.
-			//
-			// TODO: Misc reports do not have any columsn now :()
-			// TODO: termination points!
-			// TODO: show only if changed
 			updateVisibility();
 		}
 
