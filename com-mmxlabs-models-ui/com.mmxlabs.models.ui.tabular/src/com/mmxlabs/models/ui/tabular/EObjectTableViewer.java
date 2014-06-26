@@ -292,20 +292,20 @@ public class EObjectTableViewer extends GridTreeViewer {
 			protected CellEditor getCellEditor(final Object element) {
 
 				final CellEditor cellEditor = manipulator.getCellEditor(viewer.getGrid(), path.get((EObject) element));
+				if (cellEditor != null) {
+					// Hook our control listener into the cell editor
+					// Note - SG: This looks like we could have used a CellEditorActionHandler, but I could not get it working, so lifted the salient pieces.
+					final Control control = cellEditor.getControl();
 
-				// Hook our control listener into the cell editor
-				// Note - SG: This looks like we could have used a CellEditorActionHandler, but I could not get it working, so lifted the salient pieces.
-				final Control control = cellEditor.getControl();
+					// Remove existing listener references.
+					control.removeListener(SWT.Activate, controlListener);
+					control.removeListener(SWT.Deactivate, controlListener);
 
-				// Remove existing listener references.
-				control.removeListener(SWT.Activate, controlListener);
-				control.removeListener(SWT.Deactivate, controlListener);
+					controlToEditor.put(control, cellEditor);
 
-				controlToEditor.put(control, cellEditor);
-
-				control.addListener(SWT.Activate, controlListener);
-				control.addListener(SWT.Deactivate, controlListener);
-
+					control.addListener(SWT.Activate, controlListener);
+					control.addListener(SWT.Deactivate, controlListener);
+				}
 				return cellEditor;
 			}
 
