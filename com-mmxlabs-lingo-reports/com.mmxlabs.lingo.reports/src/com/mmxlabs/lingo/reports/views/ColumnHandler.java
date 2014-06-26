@@ -8,7 +8,7 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.views.EMFReportView.IFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.util.emfpath.CompiledEMFPath;

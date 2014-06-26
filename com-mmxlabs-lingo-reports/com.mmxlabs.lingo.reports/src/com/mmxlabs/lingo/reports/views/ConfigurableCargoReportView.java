@@ -39,6 +39,8 @@ import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;

@@ -8,6 +8,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;

@@ -24,5 +24,6 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.reports,
  com.mmxlabs.lingo.reports.properties,
  com.mmxlabs.lingo.reports.utils,
- com.mmxlabs.lingo.reports.views
+ com.mmxlabs.lingo.reports.views,
+ com.mmxlabs.lingo.reports.views.formatters
 Import-Package: com.mmxlabs.models.lng.commercial.parseutils

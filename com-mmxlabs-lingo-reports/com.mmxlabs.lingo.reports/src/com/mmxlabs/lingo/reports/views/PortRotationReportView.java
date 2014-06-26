@@ -17,6 +17,11 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
+import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;

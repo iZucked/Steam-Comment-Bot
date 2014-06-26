@@ -6,9 +6,7 @@ package com.mmxlabs.lingo.reports.views;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -17,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.EObject;
@@ -59,7 +56,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Preconditions;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
@@ -69,6 +65,10 @@ import com.mmxlabs.lingo.reports.properties.ScheduledEventPropertySourceProvider
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
+import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -132,16 +132,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 	};
 
-	/**
-	 */
-	public interface IFormatter {
-		public String format(final Object object);
-
-		public Comparable getComparable(final Object object);
-
-		public Object getFilterable(final Object object);
-	}
-
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
 		@Override
 		public String format(final Object object) {
@@ -150,236 +140,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	};
 	protected final IFormatter objectFormatter = new BaseFormatter();
-
-	public class BaseFormatter implements IFormatter {
-		@Override
-		public String format(final Object object) {
-			if (object == null) {
-				return "";
-			} else {
-				return object.toString();
-			}
-		}
-
-		@Override
-		public Comparable getComparable(final Object object) {
-			return format(object);
-		}
-
-		@Override
-		public Object getFilterable(final Object object) {
-			return getComparable(object);
-		}
-	}
-
-	public class IntegerFormatter implements IFormatter {
-		public Integer getIntValue(final Object object) {
-			if (object == null) {
-				return null;
-			}
-			return ((Number) object).intValue();
-		}
-
-		@Override
-		public String format(final Object object) {
-			if (object == null) {
-				return "";
-			}
-			final Integer x = getIntValue(object);
-			if (x == null) {
-				return "";
-			}
-			return String.format("%,d", x);
-		}
-
-		@Override
-		public Comparable getComparable(final Object object) {
-			final Integer x = getIntValue(object);
-			if (x == null) {
-				return -Integer.MAX_VALUE;
-			}
-			return x;
-		}
-
-		@Override
-		public Object getFilterable(final Object object) {
-			return getComparable(object);
-		}
-	}
-
-	/**
-	 * Formatter to format a floating point number to a given number of decimal places.
-	 * 
-	 * @author Simon Goodall
-	 * 
-	 */
-	public class NumberOfDPFormatter implements IFormatter {
-
-		private final int dp;
-
-		public NumberOfDPFormatter(final int dp) {
-			Preconditions.checkArgument(dp >= 0);
-			this.dp = dp;
-		}
-
-		public Double getDoubleValue(final Object object) {
-			if (object == null) {
-				return null;
-			}
-			return ((Number) object).doubleValue();
-		}
-
-		@Override
-		public String format(final Object object) {
-			if (object == null) {
-				return "";
-			}
-			final Double x = getDoubleValue(object);
-			if (x == null) {
-				return "";
-			}
-			return String.format("%,." + dp + "f", x);
-		}
-
-		@Override
-		public Comparable getComparable(final Object object) {
-			final Double x = getDoubleValue(object);
-			if (x == null) {
-				return -Double.MAX_VALUE;
-			}
-			return x;
-		}
-
-		@Override
-		public Object getFilterable(final Object object) {
-			return getComparable(object);
-		}
-	}
-
-	/**
-	 */
-	public class CostFormatter implements IFormatter {
-
-		private final boolean includeUnits;
-
-		public CostFormatter(final boolean includeUnits) {
-			this.includeUnits = includeUnits;
-		}
-
-		public Integer getIntValue(final Object object) {
-			if (object == null) {
-				return null;
-			}
-			return ((Number) object).intValue();
-		}
-
-		@Override
-		public String format(final Object object) {
-			if (object == null) {
-				return "";
-			}
-			final Integer x = getIntValue(object);
-			if (x == null) {
-				return "";
-			}
-			return String.format(includeUnits ? "$%,d" : "%,d", x);
-		}
-
-		@Override
-		public Comparable getComparable(final Object object) {
-			final Integer x = getIntValue(object);
-			if (x == null) {
-				return -Integer.MAX_VALUE;
-			}
-			return x;
-		}
-
-		@Override
-		public Object getFilterable(final Object object) {
-			return getComparable(object);
-		}
-	}
-
-	/**
-	 */
-	public class PriceFormatter implements IFormatter {
-
-		private final boolean includeUnits;
-
-		public PriceFormatter(final boolean includeUnits) {
-			this.includeUnits = includeUnits;
-		}
-
-		public Double getDoubleValue(final Object object) {
-			if (object == null) {
-				return null;
-			}
-			return ((Number) object).doubleValue();
-		}
-
-		@Override
-		public String format(final Object object) {
-			if (object == null) {
-				return "";
-			}
-			final Double x = getDoubleValue(object);
-			if (x == null) {
-				return "";
-			}
-			return String.format(includeUnits ? "$%,.2f" : "%,.2f", x);
-		}
-
-		@Override
-		public Comparable getComparable(final Object object) {
-			final Double x = getDoubleValue(object);
-			if (x == null) {
-				return -Double.MAX_VALUE;
-			}
-			return x;
-		}
-
-		@Override
-		public Object getFilterable(final Object object) {
-			return getComparable(object);
-		}
-	}
-
-	protected class CalendarFormatter extends BaseFormatter {
-		final DateFormat dateFormat;
-		final boolean showZone;
-
-		public CalendarFormatter(final DateFormat dateFormat, final boolean showZone) {
-			this.dateFormat = dateFormat;
-			this.showZone = showZone;
-		}
-
-		@Override
-		public String format(final Object object) {
-			if (object == null) {
-				return "";
-			}
-			final Calendar cal = (Calendar) object;
-
-			dateFormat.setCalendar(cal);
-			return dateFormat.format(cal.getTime()) + (showZone ? (" (" + cal.getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")") : "");
-		}
-
-		@Override
-		public Comparable getComparable(final Object object) {
-			if (object == null) {
-				return new Date(-Long.MAX_VALUE);
-			}
-			return ((Calendar) object).getTime();
-		}
-
-		@Override
-		public Object getFilterable(final Object object) {
-			if (object instanceof Calendar) {
-				return object;
-			}
-			return object;
-		}
-	}
 
 	protected final IFormatter calendarFormatter = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true);
 	protected final IFormatter calendarFormatterNoTZ = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), false);
