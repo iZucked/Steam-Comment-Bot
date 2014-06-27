@@ -320,10 +320,12 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the pricingEvent feature on Slot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_pricingEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PRICING_EVENT));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PRICING_EVENT);
+		editor.addNotificationChangedListener(new PricingEventInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);		
 	}
 
 	/**

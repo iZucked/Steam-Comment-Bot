@@ -97,7 +97,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		pricingFeatures = new ArrayList<EStructuralFeature[]>();
 		pricingFeatures.add(new EStructuralFeature[] { Contract });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
-		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingDate() });
+		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingDate(), CargoFeatures.getSlot_PricingEvent() });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Hedges(), CargoFeatures.getSlot_CancellationFee()});
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
