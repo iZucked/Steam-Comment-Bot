@@ -19,6 +19,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
@@ -629,8 +630,8 @@ public class ScheduleBasedReportBuilder {
 						final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
 						final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
 
-						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new SlotToStringFunction())) + " ]";
-						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new SlotToStringFunction())) + " ]";
+						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(buysSet, new SlotToStringFunction()))) + " ]";
+						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()))) + " ]";
 
 						return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
 					} else if (eObj.eIsSet(openSlotAllocationRef)) {
@@ -639,8 +640,8 @@ public class ScheduleBasedReportBuilder {
 							final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
 							final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
 
-							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new SlotToStringFunction())) + " ]";
-							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new SlotToStringFunction())) + " ]";
+							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(buysSet, new SlotToStringFunction()))) + " ]";
+							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()))) + " ]";
 
 							return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
 						}
