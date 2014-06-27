@@ -347,15 +347,36 @@ public class ScheduleBasedReportBuilder {
 
 	public List<EObject> generateNodes(final EObject dataModelInstance, final Schedule schedule) {
 
+		final List<ICustomRelatedSlotHandler> relatedSlotHandlers = getCustomRelatedSlotHandlers();
+
 		final List<EObject> interestingEvents = new LinkedList<EObject>();
 		for (final Sequence sequence : schedule.getSequences()) {
 			for (final Event event : sequence.getEvents()) {
+
+				// Always consider cargoes for permutations, even if filtered out
+				if (event instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) event;
+					final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+
+					// TODO: Only required for pin/diff mode really.
+					relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
+
+					for (final ICustomRelatedSlotHandler h : relatedSlotHandlers) {
+						h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
+					}
+				}
+
 				if (showEvent(event)) {
 					interestingEvents.add(event);
 				}
 			}
 		}
+
 		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
+			// Always consider open positions for permutations, even if filtered out
+			for (final ICustomRelatedSlotHandler h : relatedSlotHandlers) {
+				h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);
+			}
 			if (showOpenSlot(openSlotAllocation)) {
 				interestingEvents.add(openSlotAllocation);
 			}
@@ -382,13 +403,6 @@ public class ScheduleBasedReportBuilder {
 			if (element instanceof SlotVisit) {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-
-				// TODO: Only required for pin/diff mode really.
-				relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
-
-				for (final ICustomRelatedSlotHandler h : getCustomRelatedSlotHandlers()) {
-					h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
-				}
 
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
 				final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
@@ -427,10 +441,6 @@ public class ScheduleBasedReportBuilder {
 			} else if (element instanceof OpenSlotAllocation) {
 
 				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
-
-				for (final ICustomRelatedSlotHandler h : getCustomRelatedSlotHandlers()) {
-					h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);
-				}
 
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
 				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);

@@ -71,47 +71,54 @@ public class RelatedSlotAllocations {
 
 			// get the names of the slots at either end of this cargo leg
 			final SlotAllocation slotAllocationA = slotAllocations.get(i - 1);
-			final String sA = slotAllocationA.getName();
 			final SlotAllocation slotAllocationB = slotAllocations.get(i);
-			final String sB = slotAllocationB.getName();
 
 			final Slot slotA = slotAllocationA.getSlot();
 			final Slot slotB = slotAllocationB.getSlot();
 
-			// Do not merge spots
-			if (slotA instanceof SpotSlot || slotB instanceof SpotSlot) {
-
-				// get/create the sets of slots these wired slots are related to
-				final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
-				final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
-
-				// merge the two sets
-				setA.add(slotB);
-				setB.add(slotA);
-
-				slotsAndTheirRelatedSets.put(slotA.getName(), setA);
-				slotsAndTheirRelatedSets.put(slotB.getName(), setB);
-
-			} else {
-
-				// get/create the sets of slots these wired slots are related to
-				final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
-				final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
-
-				// merge the two sets
-				setA.addAll(setB);
-				final Set<Slot> mergedSet = setA;
-
-				// make sure all slots in the mergedSet are related to the new mergedSet
-				for (final Slot slot : mergedSet) {
-					slotsAndTheirRelatedSets.put(slot.getName(), mergedSet);
-				}
-			}
-
+			addRelatedSlot(slotA, slotB);
+			
 		}
 	}
 
 	public void clear() {
 		slotsAndTheirRelatedSets.clear();
+	}
+
+	public void addRelatedSlot(Slot slotA, Slot slotB) {
+		
+		final String sA = slotA.getName();
+		final String sB = slotB.getName();
+		
+		// Do not merge spots
+		if (slotA instanceof SpotSlot || slotB instanceof SpotSlot) {
+
+			// get/create the sets of slots these wired slots are related to
+			final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
+			final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
+
+			// merge the two sets
+			setA.add(slotB);
+			setB.add(slotA);
+
+			slotsAndTheirRelatedSets.put(slotA.getName(), setA);
+			slotsAndTheirRelatedSets.put(slotB.getName(), setB);
+
+		} else {
+
+			// get/create the sets of slots these wired slots are related to
+			final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
+			final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
+
+			// merge the two sets
+			setA.addAll(setB);
+			final Set<Slot> mergedSet = setA;
+
+			// make sure all slots in the mergedSet are related to the new mergedSet
+			for (final Slot slot : mergedSet) {
+				slotsAndTheirRelatedSets.put(slot.getName(), mergedSet);
+			}
+		}
+
 	}
 }
