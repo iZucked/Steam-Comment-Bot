@@ -68,6 +68,13 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
+/**
+ * Big helper class for any report based on {@link CargoAllocation}s, {@link OpenSlotAllocation}s, or other events. This builds the internal report data model and handles pin/diff comparison hooks.
+ * Currently this class also some generic columns used in these reports but these should be broken out into separate classes as part of FogBugz: 51/
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class ScheduleBasedReportBuilder {
 
 	private static final Logger log = LoggerFactory.getLogger(ScheduleBasedReportBuilder.class);
