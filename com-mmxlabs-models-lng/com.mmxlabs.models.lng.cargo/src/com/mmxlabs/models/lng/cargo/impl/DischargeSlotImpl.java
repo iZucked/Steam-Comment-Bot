@@ -3,21 +3,23 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -597,8 +599,10 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		}
 		
 		else if (feature == CargoPackage.Literals.DISCHARGE_SLOT__MAX_CV_VALUE) {
-			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE, 0.0);			
-		}	
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE, 0.0);
+		} else if (feature == CargoPackage.Literals.SLOT__PRICING_EVENT) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.CONTRACT__PRICING_EVENT, PricingEvent.START_DISCHARGE);
+		}
 		
 		return super.getUnsetValueOrDelegate(feature);
 	}

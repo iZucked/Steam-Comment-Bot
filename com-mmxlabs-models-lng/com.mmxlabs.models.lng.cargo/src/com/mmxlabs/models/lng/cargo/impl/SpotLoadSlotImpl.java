@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -260,6 +261,8 @@ public class SpotLoadSlotImpl extends LoadSlotImpl implements SpotLoadSlot {
 					
 				}
 			};
+		} else if (feature == CargoPackage.Literals.SLOT__PRICING_EVENT) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSpotSlot_Market(), SpotMarketsPackage.Literals.SPOT_MARKET__PRICING_EVENT, PricingEvent.START_LOAD);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}

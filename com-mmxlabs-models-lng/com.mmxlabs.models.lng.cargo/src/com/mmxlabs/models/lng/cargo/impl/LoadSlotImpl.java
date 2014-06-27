@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
@@ -612,7 +613,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__ARRIVE_COLD) {
 			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__ALLOW_COOLDOWN, Boolean.TRUE);
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__SALES_DELIVERY_TYPE) {
-			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE, CargoDeliveryType.ANY);			
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.PURCHASE_CONTRACT__SALES_DELIVERY_TYPE, CargoDeliveryType.ANY);
+		} else if (feature == CargoPackage.Literals.SLOT__PRICING_EVENT) {
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Contract(), CommercialPackage.Literals.CONTRACT__PRICING_EVENT, PricingEvent.START_LOAD);
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}
