@@ -220,6 +220,8 @@ public class ConfigurableCargoReportView extends EMFReportView {
 			}
 		}, targetObjectRef);
 
+		builder.createPNLColumnBlock();
+
 		builder.createPinDiffColumns();
 	}
 

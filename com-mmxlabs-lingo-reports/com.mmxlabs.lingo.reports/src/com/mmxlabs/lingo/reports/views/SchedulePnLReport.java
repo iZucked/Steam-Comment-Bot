@@ -202,6 +202,8 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		}, targetObjectRef);
 
+		builder.createPNLColumnBlock();
+
 		builder.createPinDiffColumns();
 	}
 

@@ -77,6 +77,8 @@ import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
  */
 public class ScheduleBasedReportBuilder {
 
+	public static final String COLUMN_BLOCK_PNL = "P & L";
+
 	private static final Logger log = LoggerFactory.getLogger(ScheduleBasedReportBuilder.class);
 
 	public static final String ROW_FILTER_LONG_CARGOES = "Longs";
@@ -765,6 +767,15 @@ public class ScheduleBasedReportBuilder {
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
 
+	public void createPNLColumnBlock() {
+
+		ColumnBlock block = report.blockManager.getBlockByName(COLUMN_BLOCK_PNL);
+		if (block == null) {
+			block = report.blockManager.createBlock(COLUMN_BLOCK_PNL, ColumnType.NORMAL);
+		}
+		block.setPlaceholder(true);
+	}
+
 	public ITreeContentProvider createPNLColumnssContentProvider(final ITreeContentProvider superProvider) {
 
 		return new ITreeContentProvider() {
@@ -839,7 +850,7 @@ public class ScheduleBasedReportBuilder {
 	public ColumnHandler addSpecificEntityPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
 		final ColumnHandler handler = addPNLColumn(entityName, entityName, bookContainmentFeature);
 		if (handler != null) {
-			handler.setBlockName("P & L", ColumnType.NORMAL);
+			handler.setBlockName(COLUMN_BLOCK_PNL, ColumnType.NORMAL);
 		}
 		return handler;
 	}

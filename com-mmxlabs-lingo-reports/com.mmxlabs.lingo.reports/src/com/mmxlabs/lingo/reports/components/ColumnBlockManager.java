@@ -17,7 +17,7 @@ public class ColumnBlockManager {
 	private static final String COLUMN_BLOCK_CONFIG_MEMENTO = "COLUMN_BLOCK_CONFIG_MEMENTO";
 	private static final String BLOCK_VISIBLE_MEMENTO = "VISIBLE";
 
-	private List<ColumnBlock> blocks = new ArrayList<>();
+	private final List<ColumnBlock> blocks = new ArrayList<>();
 	private Grid grid;
 
 	protected ColumnBlock findColumnBlock(final GridColumn column) {
@@ -63,8 +63,7 @@ public class ColumnBlockManager {
 		}
 
 		if (namedBlock == null && blockName != null) {
-			namedBlock = new ColumnBlock(blockName, columnType);
-			blocks.add(namedBlock);
+			namedBlock = createBlock(blockName, columnType);
 		}
 
 		if (namedBlock != null) {
@@ -76,9 +75,21 @@ public class ColumnBlockManager {
 		}
 
 		if (blocksToPurge.isEmpty() == false) {
-			blocks.removeAll(blocksToPurge);
+			for (final ColumnBlock block : blocksToPurge) {
+				// Do not purge placeholder columns
+				if (!block.isPlaceholder()) {
+					blocks.remove(block);
+				}
+			}
 		}
 
+	}
+
+	public ColumnBlock createBlock(final String blockName, final ColumnType columnType) {
+		ColumnBlock namedBlock;
+		namedBlock = new ColumnBlock(blockName, columnType);
+		blocks.add(namedBlock);
+		return namedBlock;
 	}
 
 	/**
@@ -207,8 +218,7 @@ public class ColumnBlockManager {
 				final String blockName = blockInfo.getID();
 				ColumnBlock block = getBlockByName(blockName);
 				if (block == null) {
-					block = new ColumnBlock(blockName, ColumnType.NORMAL);
-					blocks.add(block);
+					block = createBlock(blockName, ColumnType.NORMAL);
 				}
 				final Boolean visible = blockInfo.getBoolean(BLOCK_VISIBLE_MEMENTO);
 				if (visible != null) {
@@ -221,7 +231,7 @@ public class ColumnBlockManager {
 		}
 	}
 
-	public void setGrid(Grid grid) {
+	public void setGrid(final Grid grid) {
 		this.grid = grid;
 
 	}

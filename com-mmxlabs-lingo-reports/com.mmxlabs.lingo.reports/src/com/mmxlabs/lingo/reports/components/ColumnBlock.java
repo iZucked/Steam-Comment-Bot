@@ -18,6 +18,10 @@ public class ColumnBlock {
 	private boolean modeVisible = true;
 	public String name;
 	private ColumnType columnType;
+	/**
+	 * Place holder columns are not purged.
+	 */
+	private boolean placeholder;
 
 	public ColumnBlock(final String name, final ColumnType columnType) {
 		this.name = name;
@@ -80,6 +84,14 @@ public class ColumnBlock {
 
 	public ColumnType getColumnType() {
 		return columnType;
+	}
+
+	public boolean isPlaceholder() {
+		return placeholder;
+	}
+
+	public void setPlaceholder(boolean placeholder) {
+		this.placeholder = placeholder;
 	}
 
 }
