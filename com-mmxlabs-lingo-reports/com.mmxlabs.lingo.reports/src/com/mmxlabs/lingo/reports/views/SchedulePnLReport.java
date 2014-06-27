@@ -4,19 +4,17 @@
  */
 package com.mmxlabs.lingo.reports.views;
 
-import java.util.Collection;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
@@ -29,11 +27,8 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
@@ -62,10 +57,13 @@ public class SchedulePnLReport extends EMFReportView {
 	private final EStructuralFeature dischargeAllocationRef;
 	private final EStructuralFeature openSlotAllocationRef;
 
-	public SchedulePnLReport() {
+	@Inject
+	public SchedulePnLReport(ScheduleBasedReportBuilder builder) {
 		super(ID);
+		this.builder = builder;
+		builder.setReport(this);
+		builder.setPinDiffModeHelper(pinDiffModeHelper);
 
-		builder = new ScheduleBasedReportBuilder(this, pinDiffModeHelper);
 		tableDataModel = builder.getTableDataModel();
 		nameObjectRef = builder.getNameObjectRef();
 		name2ObjectRef = builder.getName2ObjectRef();
@@ -83,7 +81,6 @@ public class SchedulePnLReport extends EMFReportView {
 		addColumn("ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
 		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, name2ObjectRef);
 
-		
 		// add the total (aggregate) P&L column
 		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
 		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);

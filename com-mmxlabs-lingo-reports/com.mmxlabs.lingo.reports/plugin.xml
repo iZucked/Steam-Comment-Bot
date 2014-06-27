@@ -7,6 +7,7 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="CustomRelatedSlotHandlerExtension" name="CustomRelatedSlotHandlerExtension" schema="schema/CustomRelatedSlotHandlerExtension.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
@@ -19,7 +20,7 @@
             name="Cargo Costs"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.CargoReportView"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.CargoReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.CargoReportView">
       </view>
       
@@ -27,7 +28,7 @@
             name="Configurable Report"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.ConfigurableCargoReportView">
       </view>
       
@@ -35,7 +36,7 @@
             name="Cargo"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.BasicCargoReportView"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.BasicCargoReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView">
       </view>
       
@@ -43,7 +44,7 @@
             name="Cargo PnL"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.CargoPnLReportView"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.CargoPnLReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView">
       </view>
       
@@ -67,7 +68,7 @@
             name="Schedule PnL"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.SchedulePnLReport"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.SchedulePnLReport"
             id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
       </view>
       
@@ -173,5 +174,10 @@
             primary="false">
       </toc>
    </extension>
-
+   <extension
+         point="org.ops4j.peaberry.eclipse.modules">
+      <module
+            class="com.mmxlabs.lingo.reports.components.ReportComponentModule">
+      </module>
+   </extension>
 </plugin>

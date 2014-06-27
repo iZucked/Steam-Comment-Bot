@@ -4,11 +4,14 @@
  */
 package com.mmxlabs.lingo.reports.views;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.lingo.reports.components.ColumnType;
+import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -34,10 +37,11 @@ public class CargoReportView extends AbstractCargoReportView {
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.CargoReportView";
 
-	public CargoReportView() {
-		super("com.mmxlabs.shiplingo.platform.reports.CargoReportView");
+	@Inject
+	public CargoReportView(ScheduleBasedReportBuilder builder) {
+		super("com.mmxlabs.shiplingo.platform.reports.CargoReportView", builder);
 	}
-	
+
 	@Override
 	protected void createColumns() {
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
@@ -129,7 +133,7 @@ public class CargoReportView extends AbstractCargoReportView {
 
 			}
 		}, cargoAllocationRef);
-		
+
 		super.createColumns();
 	}
 

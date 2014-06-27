@@ -31,6 +31,7 @@ import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
+import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView;
@@ -102,8 +103,8 @@ public class ScheduleBasedReportBuilder {
 
 	private final RelatedSlotAllocations relatedSlotAllocations = new RelatedSlotAllocations();
 
-	private final PinDiffModeColumnManager pinDiffModeHelper;
-	private final EMFReportView report;
+	private PinDiffModeColumnManager pinDiffModeHelper;
+	private EMFReportView report;
 
 	// Dynamic table data model fields
 	private final EPackage tableDataModel;
@@ -118,11 +119,9 @@ public class ScheduleBasedReportBuilder {
 	private final Set<String> rowFilterInfo = new HashSet<>();
 
 	@Inject(optional = true)
-	private Iterable<ICustomRelatedSlotHandler> customRelatedSlotHandlers;
+	private Iterable<ICustomRelatedSlotHandlerExtension> customRelatedSlotHandlers;
 
-	public ScheduleBasedReportBuilder(final EMFReportView report, final PinDiffModeColumnManager pinDiffModeHelper) {
-		this.report = report;
-		this.pinDiffModeHelper = pinDiffModeHelper;
+	public ScheduleBasedReportBuilder() {
 
 		// Create table data model with the given references.
 		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge", "openslot");
@@ -139,6 +138,14 @@ public class ScheduleBasedReportBuilder {
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
 		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "discharge");
 		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
+	}
+
+	public void setReport(final EMFReportView report) {
+		this.report = report;
+	}
+
+	public void setPinDiffModeHelper(final PinDiffModeColumnManager pinDiffModeHelper) {
+		this.pinDiffModeHelper = pinDiffModeHelper;
 	}
 
 	/**
@@ -357,6 +364,16 @@ public class ScheduleBasedReportBuilder {
 		return generateNodes(dataModelInstance, schedule, interestingEvents);
 	}
 
+	private List<ICustomRelatedSlotHandler> getCustomRelatedSlotHandlers() {
+		final List<ICustomRelatedSlotHandler> l = new LinkedList<ICustomRelatedSlotHandler>();
+		if (customRelatedSlotHandlers != null) {
+			for (final ICustomRelatedSlotHandlerExtension h : customRelatedSlotHandlers) {
+				l.add(h.getInstance());
+			}
+		}
+		return l;
+	}
+
 	public List<EObject> generateNodes(final EObject dataModelInstance, final Schedule schedule, final List<EObject> interestingElements) {
 		final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
 
@@ -369,10 +386,8 @@ public class ScheduleBasedReportBuilder {
 				// TODO: Only required for pin/diff mode really.
 				relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
 
-				if (customRelatedSlotHandlers != null) {
-					for (final ICustomRelatedSlotHandler h : customRelatedSlotHandlers) {
-						h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
-					}
+				for (final ICustomRelatedSlotHandler h : getCustomRelatedSlotHandlers()) {
+					h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
 				}
 
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
@@ -397,12 +412,12 @@ public class ScheduleBasedReportBuilder {
 					final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
 					GenericEMFTableDataModel.setRowValue(tableDataModel, node, cargoAllocationRef, cargoAllocation);
 					if (i < loadSlots.size()) {
-						SlotAllocation slot = loadSlots.get(i);
+						final SlotAllocation slot = loadSlots.get(i);
 						GenericEMFTableDataModel.setRowValue(tableDataModel, node, loadAllocationRef, slot);
 						GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
 					}
 					if (i < dischargeSlots.size()) {
-						SlotAllocation slot = dischargeSlots.get(i);
+						final SlotAllocation slot = dischargeSlots.get(i);
 						GenericEMFTableDataModel.setRowValue(tableDataModel, node, dischargeAllocationRef, slot);
 						GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
 					}
@@ -413,10 +428,8 @@ public class ScheduleBasedReportBuilder {
 
 				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
 
-				if (customRelatedSlotHandlers != null) {
-					for (final ICustomRelatedSlotHandler h : customRelatedSlotHandlers) {
-						h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);
-					}
+				for (final ICustomRelatedSlotHandler h : getCustomRelatedSlotHandlers()) {
+					h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);
 				}
 
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
@@ -942,5 +955,4 @@ public class ScheduleBasedReportBuilder {
 		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		return null;
 	}
-
 }

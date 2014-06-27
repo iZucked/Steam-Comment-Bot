@@ -4,9 +4,12 @@
  */
 package com.mmxlabs.lingo.reports.views;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EAttribute;
 
 import com.mmxlabs.lingo.reports.components.ColumnType;
+import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -23,8 +26,9 @@ public class BasicCargoReportView extends AbstractCargoReportView {
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView";
 
-	public BasicCargoReportView() {
-		super("com.mmxlabs.shiplingo.platform.reports.BasicCargoReportView");
+	@Inject
+	public BasicCargoReportView(ScheduleBasedReportBuilder builder) {
+		super("com.mmxlabs.shiplingo.platform.reports.BasicCargoReportView", builder);
 	}
 
 	@Override

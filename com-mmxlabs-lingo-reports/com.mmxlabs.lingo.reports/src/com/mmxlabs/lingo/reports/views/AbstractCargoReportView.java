@@ -31,10 +31,11 @@ public abstract class AbstractCargoReportView extends EMFReportView {
 
 	private final ScheduleBasedReportBuilder builder;
 
-	public AbstractCargoReportView(String id) {
+	public AbstractCargoReportView(String id, ScheduleBasedReportBuilder builder) {
 		super(id);
-
-		builder = new ScheduleBasedReportBuilder(this, pinDiffModeHelper);
+		this.builder = builder;
+		builder.setReport(this);
+		builder.setPinDiffModeHelper(pinDiffModeHelper);
 
 		tableDataModel = builder.getTableDataModel();
 		cargoAllocationRef = builder.getCargoAllocationRef();

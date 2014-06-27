@@ -5,8 +5,9 @@
 package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -15,9 +16,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
@@ -27,7 +26,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
@@ -37,7 +35,6 @@ import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProv
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -45,19 +42,11 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.commercial.BaseEntityBook;
-import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
-import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
@@ -88,10 +77,14 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	private IMemento memento;
 
-	public ConfigurableCargoReportView() {
+	@Inject
+	public ConfigurableCargoReportView(final ScheduleBasedReportBuilder builder) {
 		super(ID);
 
-		builder = new ScheduleBasedReportBuilder(this, pinDiffModeHelper);
+		this.builder = builder;
+		builder.setReport(this);
+		builder.setPinDiffModeHelper(pinDiffModeHelper);
+
 		tableDataModel = builder.getTableDataModel();
 		nameObjectRef = builder.getNameObjectRef();
 		name2ObjectRef = builder.getName2ObjectRef();
@@ -279,7 +272,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	 * @return
 	 */
 	@Override
-	public String getElementKey(EObject element) {
+	public String getElementKey(final EObject element) {
 		return builder.getElementKey(element);
 	}
 
