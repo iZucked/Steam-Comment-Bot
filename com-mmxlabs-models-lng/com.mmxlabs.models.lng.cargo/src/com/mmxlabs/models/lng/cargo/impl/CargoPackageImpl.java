@@ -602,6 +602,15 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getSlot__GetSlotOrDelegatedPricingEvent() {
+		return slotEClass.getEOperations().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getLoadSlot() {
 		return loadSlotEClass;
 	}
@@ -1251,6 +1260,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_PORTS);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEOperation(slotEClass, SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE);
+		createEOperation(slotEClass, SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT);
 
 		loadSlotEClass = createEClass(LOAD_SLOT);
 		createEAttribute(loadSlotEClass, LOAD_SLOT__CARGO_CV);
@@ -1457,6 +1467,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEOperation(getSlot__GetSlotOrContractRestrictedListsArePermissive(), ecorePackage.getEBoolean(), "getSlotOrContractRestrictedListsArePermissive", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEOperation(getSlot__GetSlotOrContractCancellationFee(), ecorePackage.getEInt(), "getSlotOrContractCancellationFee", 0, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getSlot__GetSlotOrDelegatedPricingEvent(), theCommercialPackage.getPricingEvent(), "getSlotOrDelegatedPricingEvent", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(loadSlotEClass, LoadSlot.class, "LoadSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadSlot_CargoCV(), ecorePackage.getEDouble(), "cargoCV", null, 1, 1, LoadSlot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -1115,6 +1115,14 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 */
 	int getSlotOrContractCancellationFee();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	PricingEvent getSlotOrDelegatedPricingEvent();
+
 } // end of  Slot
 
 // finish type fixing

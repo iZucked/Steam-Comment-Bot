@@ -641,13 +641,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 11;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
+
+	/**
 	 * The number of operations of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 12;
+	int SLOT_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.
@@ -1117,6 +1126,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
@@ -1613,6 +1631,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
@@ -2338,6 +2365,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = LOAD_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
 
 	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = LOAD_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
+
+	/**
 	 * The operation id for the '<em>Get Slot Or Delegated CV</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2842,6 +2878,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = DISCHARGE_SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE;
+
+	/**
+	 * The operation id for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = DISCHARGE_SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT;
 
 	/**
 	 * The operation id for the '<em>Get Slot Or Contract Min Cv</em>' operation.
@@ -4481,6 +4526,16 @@ public interface CargoPackage extends EPackage {
 	EOperation getSlot__GetSlotOrContractCancellationFee();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedPricingEvent() <em>Get Slot Or Delegated Pricing Event</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Slot Or Delegated Pricing Event</em>' operation.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getSlotOrDelegatedPricingEvent()
+	 * @generated
+	 */
+	EOperation getSlot__GetSlotOrDelegatedPricingEvent();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.LoadSlot <em>Load Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5518,6 +5573,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE = eINSTANCE.getSlot__GetSlotOrContractCancellationFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Slot Or Delegated Pricing Event</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT = eINSTANCE.getSlot__GetSlotOrDelegatedPricingEvent();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl <em>Load Slot</em>}' class.

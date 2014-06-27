@@ -1794,6 +1794,15 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public PricingEvent getSlotOrDelegatedPricingEvent() {
+		return (PricingEvent) eGetWithDefault(CargoPackage.Literals.SLOT__PRICING_EVENT);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -2284,6 +2293,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return getSlotOrContractRestrictedListsArePermissive();
 			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_CANCELLATION_FEE:
 				return getSlotOrContractCancellationFee();
+			case CargoPackage.SLOT___GET_SLOT_OR_DELEGATED_PRICING_EVENT:
+				return getSlotOrDelegatedPricingEvent();
 			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
 				return getTimeZone((EAttribute)arguments.get(0));
 		}
