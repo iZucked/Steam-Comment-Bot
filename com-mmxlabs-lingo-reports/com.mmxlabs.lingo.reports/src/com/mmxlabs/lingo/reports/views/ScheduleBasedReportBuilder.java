@@ -202,7 +202,6 @@ public class ScheduleBasedReportBuilder {
 				relatedSlotAllocations.clear();
 				report.clearPinModeData();
 				dataModelInstance = GenericEMFTableDataModel.createRootInstance(tableDataModel);
-
 			}
 
 			@Override
@@ -651,6 +650,10 @@ public class ScheduleBasedReportBuilder {
 						final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
 						final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
 
+						if (buysSet.isEmpty() && sellsSet.isEmpty()) {
+							return "";
+						}
+
 						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(buysSet, new SlotToStringFunction()))) + " ]";
 						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()))) + " ]";
 
@@ -660,6 +663,10 @@ public class ScheduleBasedReportBuilder {
 						if (openSlotAllocation != null) {
 							final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
 							final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
+
+							if (buysSet.isEmpty() && sellsSet.isEmpty()) {
+								return "";
+							}
 
 							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(buysSet, new SlotToStringFunction()))) + " ]";
 							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()))) + " ]";
