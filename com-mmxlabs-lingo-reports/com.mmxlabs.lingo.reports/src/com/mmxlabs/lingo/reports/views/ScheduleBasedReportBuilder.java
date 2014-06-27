@@ -12,6 +12,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,12 +26,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -35,11 +41,19 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.BaseEntityBook;
+import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -416,6 +430,10 @@ public class ScheduleBasedReportBuilder {
 		return nodes;
 	}
 
+	public Set<String> getRowFilterInfo() {
+		return rowFilterInfo;
+	}
+
 	// / Normal Columns
 
 	// ////// Pin / Diff Columns
@@ -687,8 +705,216 @@ public class ScheduleBasedReportBuilder {
 		return null;
 	}
 
-	public Set<String> getRowFilterInfo() {
-		return rowFilterInfo;
+	// //// P&L Columns
+
+	private final List<String> entityColumnNames = new ArrayList<String>();
+
+	public ITreeContentProvider createPNLColumnssContentProvider(final ITreeContentProvider superProvider) {
+
+		return new ITreeContentProvider() {
+			@Override
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				superProvider.inputChanged(viewer, oldInput, newInput);
+				Display.getCurrent().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						if (viewer.getControl().isDisposed()) {
+							return;
+						}
+
+						// Clear existing entity columns
+						for (final String s : entityColumnNames) {
+							report.removeColumn(s);
+						}
+
+						entityColumnNames.clear();
+						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
+							final Collection<LNGScenarioModel> rootObjects = synchronizerOutput.getLNGScenarioModels();
+
+							for (final LNGScenarioModel rootObject : rootObjects) {
+
+								final CommercialModel commercialModel = rootObject.getCommercialModel();
+								if (commercialModel != null) {
+									for (final BaseLegalEntity e : commercialModel.getEntities()) {
+										addSpecificEntityPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+										addSpecificEntityPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+									}
+								}
+							}
+						}
+
+						viewer.refresh();
+					}
+				});
+			}
+
+			@Override
+			public void dispose() {
+				superProvider.dispose();
+			}
+
+			@Override
+			public Object[] getElements(final Object object) {
+				return superProvider.getElements(object);
+			}
+
+			@Override
+			public Object[] getChildren(final Object parentElement) {
+				return superProvider.getChildren(parentElement);
+			}
+
+			@Override
+			public Object getParent(final Object element) {
+				return superProvider.getParent(element);
+			}
+
+			@Override
+			public boolean hasChildren(final Object element) {
+				return superProvider.hasChildren(element);
+			}
+		};
+	}
+
+	public void addPNLColumn(final EStructuralFeature bookContainmentFeature) {
+		addPNLColumn("Group Total", null, bookContainmentFeature);
+	}
+
+	public ColumnHandler addSpecificEntityPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
+		final ColumnHandler handler = addPNLColumn(entityName, entityName, bookContainmentFeature);
+		if (handler != null) {
+			handler.setBlockName("P & L", ColumnType.NORMAL);
+		}
+		return handler;
+	}
+
+	public ColumnHandler addTotalPNLColumn(@Nullable final EStructuralFeature bookContainmentFeature) {
+		final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
+		final String title = String.format("P&L (%s)", book);
+
+		return report.addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				ProfitAndLossContainer container = null;
+
+				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
+						|| object instanceof OpenSlotAllocation) {
+					container = (ProfitAndLossContainer) object;
+				}
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+						container = slotVisit.getSlotAllocation().getCargoAllocation();
+					}
+				}
+
+				return getTotalEntityPNLEntry(container, bookContainmentFeature);
+			}
+		}, targetObjectRef);
+	}
+
+	public ColumnHandler addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
+		final String title = String.format("P&L (%s - %s)", entityLabel, book);
+
+		// HACK: don't the label to the entity column names if the column is for total group P&L
+		if (entityKey != null) {
+			if (entityColumnNames.contains(title)) {
+				return null;
+			}
+			entityColumnNames.add(title);
+		}
+
+		return report.addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				ProfitAndLossContainer container = null;
+
+				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
+						|| object instanceof OpenSlotAllocation) {
+					container = (ProfitAndLossContainer) object;
+				}
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+						container = slotVisit.getSlotAllocation().getCargoAllocation();
+					}
+				}
+
+				return getEntityPNLEntry(container, entityKey, bookContainmentFeature);
+			}
+		}, targetObjectRef);
+	}
+
+	/**
+	 * Get combined book P&L
+	 * 
+	 * @param container
+	 * @param bookContainmentFeature
+	 * @return
+	 */
+	private Integer getTotalEntityPNLEntry(final ProfitAndLossContainer container, @Nullable final EStructuralFeature bookContainmentFeature) {
+		if (container == null) {
+			return null;
+		}
+
+		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+		if (groupProfitAndLoss == null) {
+			return null;
+		}
+
+		int groupTotal = 0;
+		boolean foundValue = false;
+		for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+			foundValue = true;
+			final BaseEntityBook entityBook = entityPNL.getEntityBook();
+			if (entityBook == null) {
+				continue;
+			}
+			if (bookContainmentFeature == null || entityBook.eContainmentFeature() == bookContainmentFeature) {
+				groupTotal += entityPNL.getProfitAndLoss();
+			}
+		}
+		if (foundValue) {
+			return groupTotal;
+		}
+		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
+		return null;
+	}
+
+	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
+		if (container == null) {
+			return null;
+		}
+
+		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
+		if (groupProfitAndLoss == null) {
+			return null;
+		}
+
+		int groupTotal = 0;
+		boolean foundValue = false;
+		for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
+			if (entity == null || entityPNL.getEntity().getName().equals(entity)) {
+				foundValue = true;
+				final BaseEntityBook entityBook = entityPNL.getEntityBook();
+				if (entityBook == null) {
+					// Fall back code path for old models.
+					if (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK) {
+						groupTotal += groupProfitAndLoss.getProfitAndLoss();
+					}
+				} else {
+					if (entityBook.eContainmentFeature() == bookContainmentFeature) {
+						groupTotal += entityPNL.getProfitAndLoss();
+					}
+				}
+			}
+		}
+		if (foundValue) {
+			return groupTotal;
+		}
+		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
+		return null;
 	}
 
 }
