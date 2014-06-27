@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.EObject;
@@ -206,12 +207,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 							// No ref found, so add all
 							objectsToAdd.addAll(e.getValue());
 						} else {
-							
+
 							int keyPresentCount = 0;
 							if (keyPresentInSchedulesCount.containsKey(e.getKey())) {
 								keyPresentCount = keyPresentInSchedulesCount.get(e.getKey()).intValue();
 							}
-							
+
 							for (final EObject ca : e.getValue()) {
 								if (keyPresentCount != numberOfSchedules) {
 									// Different number of elements, so add all!
@@ -666,22 +667,17 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		currentlyPinned |= isPinned;
 		++numberOfSchedules;
 
+		final Set<String> elementKeys = new HashSet<>();
 		for (final EObject ca : objects) {
 			final List<EObject> l;
 			final String key = getElementKey(ca);
+			elementKeys.add(key);
 			if (allObjectsByKey.containsKey(key)) {
 				l = allObjectsByKey.get(key);
 			} else {
 				l = new LinkedList<EObject>();
 				allObjectsByKey.put(key, l);
-				
-				int count = 0;
-				if (keyPresentInSchedulesCount.containsKey(key)) {
-					count = keyPresentInSchedulesCount.get(key).intValue();
-				}
-				keyPresentInSchedulesCount.put(key, ++count);
 			}
-
 			l.add(ca);
 
 			if (isPinned) {
@@ -689,6 +685,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			} else {
 				pinDiffModeHelper.addUnpinnedObject(key, ca);
 			}
+		}
+
+		for (final String key : elementKeys) {
+			int count = 0;
+			if (keyPresentInSchedulesCount.containsKey(key)) {
+				count = keyPresentInSchedulesCount.get(key).intValue();
+			}
+			keyPresentInSchedulesCount.put(key, ++count);
 		}
 	}
 
