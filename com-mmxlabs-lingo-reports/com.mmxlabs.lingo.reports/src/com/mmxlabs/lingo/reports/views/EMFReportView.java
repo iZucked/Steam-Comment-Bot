@@ -85,7 +85,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private int numberOfSchedules;
 	protected PinDiffModeColumnManager pinDiffModeHelper = new PinDiffModeColumnManager(this);
 
-	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<String, List<EObject>>();
+	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<>();
+	private final Map<String, Integer> keyPresentInSchedulesCount = new LinkedHashMap<>();
 
 	protected final ColumnBlockManager blockManager = new ColumnBlockManager();
 
@@ -207,8 +208,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 							// No ref found, so add all
 							objectsToAdd.addAll(e.getValue());
 						} else {
+							
+							int keyPresentCount = 0;
+							if (keyPresentInSchedulesCount.containsKey(e.getKey())) {
+								keyPresentCount = keyPresentInSchedulesCount.get(e.getKey()).intValue();
+							}
+							
 							for (final EObject ca : e.getValue()) {
-								if (e.getValue().size() != numberOfSchedules) {
+								if (keyPresentCount != numberOfSchedules) {
 									// Different number of elements, so add all!
 									// This means something has been removed/added
 									objectsToAdd.addAll(e.getValue());
@@ -646,6 +653,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		clearInputEquivalents();
 		currentlyPinned = false;
 		allObjectsByKey.clear();
+		keyPresentInSchedulesCount.clear();
 		numberOfSchedules = 0;
 		pinDiffModeHelper.reset();
 	}
@@ -668,6 +676,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			} else {
 				l = new LinkedList<EObject>();
 				allObjectsByKey.put(key, l);
+				
+				int count = 0;
+				if (keyPresentInSchedulesCount.containsKey(key)) {
+					count = keyPresentInSchedulesCount.get(key).intValue();
+				}
+				keyPresentInSchedulesCount.put(key, ++count);
 			}
 
 			l.add(ca);
