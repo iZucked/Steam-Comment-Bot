@@ -615,17 +615,10 @@ public class ScheduleBasedReportBuilder {
 							}
 						}
 						if (!different) {
-							// FIXME: This excess filters out stuff with spots.
-							// return "";
+							return "";
 						}
 
-						// EObject eObj = eObjectAsCargoAllocation.getFirst();
 						final CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
-
-						// FIXME: This only works as refresh is triggered multiple times. Otherwise this first call only gets this cargoes slot allocations. The set is updated with other cargo
-						// allocations and
-						// the second refresh call gets the correct data string as a result of the first op.
-						// relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
 
 						final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
 						final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
