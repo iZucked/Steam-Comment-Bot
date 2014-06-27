@@ -25,7 +25,6 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -62,7 +61,6 @@ import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
-import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -97,27 +95,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		this.helpContextId = helpContextId;
 	}
 
-	final ICellManipulator noEditing = new ICellManipulator() {
-		@Override
-		public void setValue(final Object object, final Object value) {
-
-		}
-
-		@Override
-		public Object getValue(final Object object) {
-			return null;
-		}
-
-		@Override
-		public CellEditor getCellEditor(final Composite parent, final Object object) {
-			return null;
-		}
-
-		@Override
-		public boolean canEdit(final Object object) {
-			return false;
-		}
-	};
+	
 
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
 		@Override
@@ -275,7 +253,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	protected ColumnHandler addColumn(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
-		final ColumnHandler handler = new ColumnHandler(this, formatter, path, title);
+		final ColumnHandler handler = new ColumnHandler(blockManager, formatter, path, title);
 
 		handlers.add(handler);
 		handlersInOrder.add(handler);

@@ -18,7 +18,6 @@ public class ColumnHandler {
 	/**
 	 * 
 	 */
-	private final EMFReportView emfReportView;
 	private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 	private final IFormatter formatter;
 	private final EMFPath path;
@@ -26,10 +25,11 @@ public class ColumnHandler {
 	private String tooltip;
 	public GridViewerColumn column;
 	public int viewIndex;
+	private final ColumnBlockManager blockManager;
 
-	public ColumnHandler(final EMFReportView emfReportView, final IFormatter formatter, final Object[] features, final String title) {
+	public ColumnHandler(final ColumnBlockManager blockManager, final IFormatter formatter, final Object[] features, final String title) {
 		super();
-		this.emfReportView = emfReportView;
+		this.blockManager = blockManager;
 		this.formatter = formatter;
 		this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);
 		this.title = title;
@@ -57,7 +57,7 @@ public class ColumnHandler {
 			public Object getFilterValue(final Object object) {
 				return formatter.getFilterable(object);
 			}
-		}, this.emfReportView.noEditing, path);
+		}, NoEditingCellManipulator.INSTANCE, path);
 
 		final GridColumn tc = column.getColumn();
 		tc.setData(COLUMN_HANDLER, this);
@@ -77,6 +77,6 @@ public class ColumnHandler {
 	}
 
 	public void setBlockName(final String blockName, final ColumnType columnType) {
-		this.emfReportView.blockManager.setHandlerBlockName(this, blockName, columnType);
+		this.blockManager.setHandlerBlockName(this, blockName, columnType);
 	}
 }
