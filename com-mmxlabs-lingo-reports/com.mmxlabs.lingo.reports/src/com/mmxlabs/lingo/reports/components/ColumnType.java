@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.components;
 
 public enum ColumnType {
 	/**

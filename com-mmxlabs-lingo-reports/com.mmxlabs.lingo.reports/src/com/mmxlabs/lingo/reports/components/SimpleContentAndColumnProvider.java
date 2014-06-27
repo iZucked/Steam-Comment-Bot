@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.components;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.lingo.reports.views.IndexExposureData;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -25,7 +26,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
  */
 public abstract class SimpleContentAndColumnProvider<T> implements ITreeContentProvider {
 
-	protected static class ColumnManager<T> {
+	public static class ColumnManager<T> {
 		private final String name;
 
 		public ColumnManager(final String name) {

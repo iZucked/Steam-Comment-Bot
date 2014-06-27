@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views;
 
 import org.eclipse.emf.ecore.EAttribute;
 
+import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;

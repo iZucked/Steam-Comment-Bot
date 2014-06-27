@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.components;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,13 +24,16 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
+import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
+import com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
@@ -113,6 +116,9 @@ public class ScheduleBasedReportBuilder {
 	private final EStructuralFeature openSlotAllocationRef;
 
 	private final Set<String> rowFilterInfo = new HashSet<>();
+
+	@Inject(optional = true)
+	private Iterable<ICustomRelatedSlotHandler> customRelatedSlotHandlers;
 
 	public ScheduleBasedReportBuilder(final EMFReportView report, final PinDiffModeColumnManager pinDiffModeHelper) {
 		this.report = report;
@@ -348,10 +354,10 @@ public class ScheduleBasedReportBuilder {
 			}
 		}
 
-		return generateNodes(dataModelInstance, interestingEvents);
+		return generateNodes(dataModelInstance, schedule, interestingEvents);
 	}
 
-	public List<EObject> generateNodes(final EObject dataModelInstance, final List<EObject> interestingElements) {
+	public List<EObject> generateNodes(final EObject dataModelInstance, final Schedule schedule, final List<EObject> interestingElements) {
 		final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
 
 		for (final Object element : interestingElements) {
@@ -362,6 +368,12 @@ public class ScheduleBasedReportBuilder {
 
 				// TODO: Only required for pin/diff mode really.
 				relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
+
+				if (customRelatedSlotHandlers != null) {
+					for (final ICustomRelatedSlotHandler h : customRelatedSlotHandlers) {
+						h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
+					}
+				}
 
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
 				final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
@@ -400,6 +412,13 @@ public class ScheduleBasedReportBuilder {
 			} else if (element instanceof OpenSlotAllocation) {
 
 				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+
+				if (customRelatedSlotHandlers != null) {
+					for (final ICustomRelatedSlotHandler h : customRelatedSlotHandlers) {
+						h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);
+					}
+				}
+
 				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
 				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
 				GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, openSlotAllocation);

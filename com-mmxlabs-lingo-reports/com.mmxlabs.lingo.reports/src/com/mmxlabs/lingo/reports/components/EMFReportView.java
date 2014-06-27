@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.components;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -647,7 +647,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
 	 * 
 	 */
-	protected void clearPinModeData() {
+	public void clearPinModeData() {
 		clearInputEquivalents();
 		currentlyPinned = false;
 		allObjectsByKey.clear();
@@ -662,7 +662,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * @param objects
 	 * @param isPinned
 	 */
-	protected void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
+	public void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
 		currentlyPinned |= isPinned;
 		++numberOfSchedules;
 

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.lingo.reports.components.SimpleContentAndColumnProvider;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures.MonthYear;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;

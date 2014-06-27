@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.lingo.reports.views.EMFReportView;
+import com.mmxlabs.lingo.reports.components.EMFReportView;
 
 /**
  * Helper class for managing columns that appear when in Pin/Diff mode
