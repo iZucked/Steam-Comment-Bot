@@ -518,10 +518,21 @@ public class ScheduleBasedReportBuilder {
 							try {
 								final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
 								if (pinnedObject != null) {
-									final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-									if (pinnedCargoAllocation != null) {
-										// convert this cargo's wiring of slot allocations to a string
-										result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+									if (pinnedObject.eIsSet(cargoAllocationRef)) {
+										final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+										if (pinnedCargoAllocation != null) {
+											// convert this cargo's wiring of slot allocations to a string
+											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+										}
+									} else if (pinnedObject.eIsSet(openSlotAllocationRef)) {
+										final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) pinnedObject.eGet(openSlotAllocationRef);
+										if (openSlotAllocation != null) {
+											if (openSlotAllocation.getSlot() instanceof LoadSlot) {
+												result = "Long";
+											} else {
+												result = "Short";
+											}
+										}
 									}
 								}
 							} catch (final Exception e) {
@@ -548,7 +559,6 @@ public class ScheduleBasedReportBuilder {
 
 										final String result;
 										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-
 											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
 										} else {
 											result = CargoAllocationUtils.getPurchaseWiringAsString(pinnedCargoAllocation);
