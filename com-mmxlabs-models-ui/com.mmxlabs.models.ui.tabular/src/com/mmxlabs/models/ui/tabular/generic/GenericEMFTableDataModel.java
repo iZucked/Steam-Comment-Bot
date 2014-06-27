@@ -239,6 +239,10 @@ public class GenericEMFTableDataModel {
 		row.eSet(getRowFeature(dataModel, value), obj);
 	}
 
+	public static void setRowValue(final EPackage dataModel, final EObject row, final EStructuralFeature feature, final Object obj) {
+		row.eSet(feature, obj);
+	}
+
 	/**
 	 * Creates a wrapper {@link ViewerComparator} to keep "Row" objects with the same "Group" together.
 	 * 
