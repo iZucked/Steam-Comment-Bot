@@ -254,23 +254,27 @@ public class SchedulePnLReport extends EMFReportView {
 		addPNLColumn("Group Total", null, bookContainmentFeature);
 	}
 
-	private void addPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
-		addPNLColumn(entityName, entityName, bookContainmentFeature);
+	private ColumnHandler addSpecificEntityPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
+		final ColumnHandler handler = addPNLColumn(entityName, entityName, bookContainmentFeature);
+		if (handler != null) {
+			handler.setBlockName("P & L", ColumnType.NORMAL);
+		}
+		return handler;
 	}
 
-	private void addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+	private ColumnHandler addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
 		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
 		// HACK: don't the label to the entity column names if the column is for total group P&L
 		if (entityKey != null) {
 			if (entityColumnNames.contains(title)) {
-				return;
+				return null;
 			}
 			entityColumnNames.add(title);
 		}
 
-		addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
+		return addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
@@ -320,8 +324,8 @@ public class SchedulePnLReport extends EMFReportView {
 								final CommercialModel commercialModel = rootObject.getCommercialModel();
 								if (commercialModel != null) {
 									for (final BaseLegalEntity e : commercialModel.getEntities()) {
-										addPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
-										addPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+										addSpecificEntityPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+										addSpecificEntityPNLColumn(e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
 									}
 								}
 							}
