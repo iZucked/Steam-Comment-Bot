@@ -89,6 +89,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_optionalEditor(detailComposite, topClass);
 		add_priceExpressionEditor(detailComposite, topClass);
 		add_cargoEditor(detailComposite, topClass);
+		add_pricingEventEditor(detailComposite, topClass);
 		add_pricingDateEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 		add_divertibleEditor(detailComposite, topClass);
@@ -314,6 +315,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cargoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CARGO));
+	}
+
+	/**
+	 * Create the editor for the pricingEvent feature on Slot
+	 *
+	 * @generated
+	 */
+	protected void add_pricingEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PRICING_EVENT));
 	}
 
 	/**

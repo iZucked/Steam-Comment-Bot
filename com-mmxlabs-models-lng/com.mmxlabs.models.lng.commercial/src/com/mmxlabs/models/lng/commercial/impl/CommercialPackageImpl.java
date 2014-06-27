@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.SimpleEntityBook;
@@ -144,6 +145,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EEnum contractTypeEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum pricingEventEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -394,8 +402,17 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getContract_CancellationFee() {
+	public EAttribute getContract_PricingEvent() {
 		return (EAttribute)contractEClass.getEStructuralFeatures().get(11);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getContract_CancellationFee() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(12);
 	}
 
 	/**
@@ -601,6 +618,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EEnum getPricingEvent() {
+		return pricingEventEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public CommercialFactory getCommercialFactory() {
 		return (CommercialFactory)getEFactoryInstance();
 	}
@@ -647,6 +673,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(contractEClass, CONTRACT__PRICE_INFO);
 		createEAttribute(contractEClass, CONTRACT__NOTES);
 		createEAttribute(contractEClass, CONTRACT__CONTRACT_TYPE);
+		createEAttribute(contractEClass, CONTRACT__PRICING_EVENT);
 		createEAttribute(contractEClass, CONTRACT__CANCELLATION_FEE);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
@@ -682,6 +709,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		// Create enums
 		contractTypeEEnum = createEEnum(CONTRACT_TYPE);
+		pricingEventEEnum = createEEnum(PRICING_EVENT);
 	}
 
 	/**
@@ -761,6 +789,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getContract_PriceInfo(), this.getLNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_ContractType(), this.getContractType(), "contractType", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_PricingEvent(), this.getPricingEvent(), "pricingEvent", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_CancellationFee(), ecorePackage.getEInt(), "cancellationFee", "0", 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -799,6 +828,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		addEEnumLiteral(contractTypeEEnum, ContractType.BOTH);
 		addEEnumLiteral(contractTypeEEnum, ContractType.FOB);
 		addEEnumLiteral(contractTypeEEnum, ContractType.DES);
+
+		initEEnum(pricingEventEEnum, PricingEvent.class, "PricingEvent");
+		addEEnumLiteral(pricingEventEEnum, PricingEvent.START_LOAD);
+		addEEnumLiteral(pricingEventEEnum, PricingEvent.END_LOAD);
+		addEEnumLiteral(pricingEventEEnum, PricingEvent.START_DISCHARGE);
+		addEEnumLiteral(pricingEventEEnum, PricingEvent.END_DISCHARGE);
 
 		// Create resource
 		createResource(eNS_URI);

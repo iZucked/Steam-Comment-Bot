@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -61,6 +62,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isDivertible <em>Divertible</em>}</li>
@@ -410,6 +412,35 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * @ordered
 	 */
 	protected Cargo cargo;
+
+	/**
+	 * The default value of the '{@link #getPricingEvent() <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final PricingEvent PRICING_EVENT_EDEFAULT = PricingEvent.START_LOAD;
+
+	/**
+	 * The cached value of the '{@link #getPricingEvent() <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected PricingEvent pricingEvent = PRICING_EVENT_EDEFAULT;
+
+	/**
+	 * This is true if the Pricing Event attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean pricingEventESet;
 
 	/**
 	 * The default value of the '{@link #getPricingDate() <em>Pricing Date</em>}' attribute.
@@ -1248,6 +1279,52 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PricingEvent getPricingEvent() {
+		return pricingEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPricingEvent(PricingEvent newPricingEvent) {
+		PricingEvent oldPricingEvent = pricingEvent;
+		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
+		boolean oldPricingEventESet = pricingEventESet;
+		pricingEventESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICING_EVENT, oldPricingEvent, pricingEvent, !oldPricingEventESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPricingEvent() {
+		PricingEvent oldPricingEvent = pricingEvent;
+		boolean oldPricingEventESet = pricingEventESet;
+		pricingEvent = PRICING_EVENT_EDEFAULT;
+		pricingEventESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PRICING_EVENT, oldPricingEvent, PRICING_EVENT_EDEFAULT, oldPricingEventESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPricingEvent() {
+		return pricingEventESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public Date getPricingDate() {
 		return pricingDate;
 	}
@@ -1801,6 +1878,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CARGO:
 				if (resolve) return getCargo();
 				return basicGetCargo();
+			case CargoPackage.SLOT__PRICING_EVENT:
+				return getPricingEvent();
 			case CargoPackage.SLOT__PRICING_DATE:
 				return getPricingDate();
 			case CargoPackage.SLOT__NOTES:
@@ -1883,6 +1962,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__CARGO:
 				setCargo((Cargo)newValue);
+				return;
+			case CargoPackage.SLOT__PRICING_EVENT:
+				setPricingEvent((PricingEvent)newValue);
 				return;
 			case CargoPackage.SLOT__PRICING_DATE:
 				setPricingDate((Date)newValue);
@@ -1979,6 +2061,9 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 			case CargoPackage.SLOT__CARGO:
 				setCargo((Cargo)null);
 				return;
+			case CargoPackage.SLOT__PRICING_EVENT:
+				unsetPricingEvent();
+				return;
 			case CargoPackage.SLOT__PRICING_DATE:
 				unsetPricingDate();
 				return;
@@ -2055,6 +2140,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 				return isSetPriceExpression();
 			case CargoPackage.SLOT__CARGO:
 				return cargo != null;
+			case CargoPackage.SLOT__PRICING_EVENT:
+				return isSetPricingEvent();
 			case CargoPackage.SLOT__PRICING_DATE:
 				return isSetPricingDate();
 			case CargoPackage.SLOT__NOTES:
@@ -2236,6 +2323,8 @@ public abstract class SlotImpl extends UUIDObjectImpl implements Slot {
 		result.append(optional);
 		result.append(", priceExpression: ");
 		if (priceExpressionESet) result.append(priceExpression); else result.append("<unset>");
+		result.append(", pricingEvent: ");
+		if (pricingEventESet) result.append(pricingEvent); else result.append("<unset>");
 		result.append(", pricingDate: ");
 		if (pricingDateESet) result.append(pricingDate); else result.append("<unset>");
 		result.append(", notes: ");

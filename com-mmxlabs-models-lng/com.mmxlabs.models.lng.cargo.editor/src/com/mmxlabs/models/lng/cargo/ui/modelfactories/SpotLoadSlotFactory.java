@@ -28,7 +28,7 @@ public class SpotLoadSlotFactory extends DefaultModelFactory {
 				object.eSet(reference, createSubInstance(object, reference));
 			}
 		}
-
+		
 		return object;
 	}
 

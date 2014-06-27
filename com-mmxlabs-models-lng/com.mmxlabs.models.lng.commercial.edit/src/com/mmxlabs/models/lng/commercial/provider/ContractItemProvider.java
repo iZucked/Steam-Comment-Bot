@@ -73,6 +73,7 @@ public class ContractItemProvider
 			addRestrictedPortsPropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addContractTypePropertyDescriptor(object);
+			addPricingEventPropertyDescriptor(object);
 			addCancellationFeePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
@@ -321,6 +322,28 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Event feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingEventPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_pricingEvent_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_pricingEvent_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__PRICING_EVENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Cancellation Fee feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -415,6 +438,7 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 			case CommercialPackage.CONTRACT__NOTES:
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
+			case CommercialPackage.CONTRACT__PRICING_EVENT:
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

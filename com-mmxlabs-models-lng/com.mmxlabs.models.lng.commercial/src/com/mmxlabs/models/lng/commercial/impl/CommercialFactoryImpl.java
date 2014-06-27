@@ -90,6 +90,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 		switch (eDataType.getClassifierID()) {
 			case CommercialPackage.CONTRACT_TYPE:
 				return createContractTypeFromString(eDataType, initialValue);
+			case CommercialPackage.PRICING_EVENT:
+				return createPricingEventFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -105,6 +107,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 		switch (eDataType.getClassifierID()) {
 			case CommercialPackage.CONTRACT_TYPE:
 				return convertContractTypeToString(eDataType, instanceValue);
+			case CommercialPackage.PRICING_EVENT:
+				return convertPricingEventToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -217,6 +221,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * @generated
 	 */
 	public String convertContractTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PricingEvent createPricingEventFromString(EDataType eDataType, String initialValue) {
+		PricingEvent result = PricingEvent.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertPricingEventToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

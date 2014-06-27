@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPricingEvent <em>Pricing Event</em>}</li>
  * </ul>
  * </p>
  *
@@ -125,6 +127,26 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @ordered
 	 */
 	protected BaseLegalEntity entity;
+
+	/**
+	 * The default value of the '{@link #getPricingEvent() <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final PricingEvent PRICING_EVENT_EDEFAULT = PricingEvent.START_LOAD;
+
+	/**
+	 * The cached value of the '{@link #getPricingEvent() <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected PricingEvent pricingEvent = PRICING_EVENT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -337,6 +359,27 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PricingEvent getPricingEvent() {
+		return pricingEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPricingEvent(PricingEvent newPricingEvent) {
+		PricingEvent oldPricingEvent = pricingEvent;
+		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT, oldPricingEvent, pricingEvent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -369,6 +412,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
 				if (resolve) return getEntity();
 				return basicGetEntity();
+			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
+				return getPricingEvent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -400,6 +445,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
 				setEntity((BaseLegalEntity)newValue);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
+				setPricingEvent((PricingEvent)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -430,6 +478,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
 				setEntity((BaseLegalEntity)null);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
+				setPricingEvent(PRICING_EVENT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -454,6 +505,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return priceInfo != null;
 			case SpotMarketsPackage.SPOT_MARKET__ENTITY:
 				return entity != null;
+			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
+				return pricingEvent != PRICING_EVENT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -506,6 +559,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);
+		result.append(", pricingEvent: ");
+		result.append(pricingEvent);
 		result.append(')');
 		return result.toString();
 	}

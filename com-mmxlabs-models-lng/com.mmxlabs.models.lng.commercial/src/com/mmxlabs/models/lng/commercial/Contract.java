@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getContractType <em>Contract Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
@@ -297,6 +298,35 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setContractType(ContractType value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Event</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.commercial.PricingEvent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pricing Event</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Event</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @see #setPricingEvent(PricingEvent)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PricingEvent()
+	 * @model
+	 * @generated
+	 */
+	PricingEvent getPricingEvent();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Event</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @see #getPricingEvent()
+	 * @generated
+	 */
+	void setPricingEvent(PricingEvent value);
 
 	/**
 	 * Returns the value of the '<em><b>Cancellation Fee</b></em>' attribute.

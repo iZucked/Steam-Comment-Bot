@@ -67,6 +67,7 @@ public class SpotMarketItemProvider
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
+			addPricingEventPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -160,6 +161,28 @@ public class SpotMarketItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Event feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingEventPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_pricingEvent_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_pricingEvent_feature", "_UI_SpotMarket_type"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__PRICING_EVENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -219,6 +242,7 @@ public class SpotMarketItemProvider
 			case SpotMarketsPackage.SPOT_MARKET__NAME:
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
+			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:

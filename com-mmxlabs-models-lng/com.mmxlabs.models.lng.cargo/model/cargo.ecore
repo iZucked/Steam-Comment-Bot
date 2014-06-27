@@ -47,6 +47,8 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
         eOpposite="#//Cargo/slots"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" eType="ecore:EEnum ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//PricingEvent"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingDate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

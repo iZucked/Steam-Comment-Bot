@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ContractType;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -43,6 +44,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getContractType <em>Contract Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getCancellationFee <em>Cancellation Fee</em>}</li>
  * </ul>
  * </p>
@@ -228,6 +230,26 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * @ordered
 	 */
 	protected ContractType contractType = CONTRACT_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getPricingEvent() <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final PricingEvent PRICING_EVENT_EDEFAULT = PricingEvent.START_LOAD;
+
+	/**
+	 * The cached value of the '{@link #getPricingEvent() <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPricingEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected PricingEvent pricingEvent = PRICING_EVENT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCancellationFee() <em>Cancellation Fee</em>}' attribute.
@@ -554,6 +576,27 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PricingEvent getPricingEvent() {
+		return pricingEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPricingEvent(PricingEvent newPricingEvent) {
+		PricingEvent oldPricingEvent = pricingEvent;
+		pricingEvent = newPricingEvent == null ? PRICING_EVENT_EDEFAULT : newPricingEvent;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PRICING_EVENT, oldPricingEvent, pricingEvent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getCancellationFee() {
 		return cancellationFee;
 	}
@@ -618,6 +661,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return getNotes();
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				return getContractType();
+			case CommercialPackage.CONTRACT__PRICING_EVENT:
+				return getPricingEvent();
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				return getCancellationFee();
 		}
@@ -672,6 +717,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				setContractType((ContractType)newValue);
 				return;
+			case CommercialPackage.CONTRACT__PRICING_EVENT:
+				setPricingEvent((PricingEvent)newValue);
+				return;
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				setCancellationFee((Integer)newValue);
 				return;
@@ -723,6 +771,9 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				setContractType(CONTRACT_TYPE_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__PRICING_EVENT:
+				setPricingEvent(PRICING_EVENT_EDEFAULT);
+				return;
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				setCancellationFee(CANCELLATION_FEE_EDEFAULT);
 				return;
@@ -762,6 +813,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 				return NOTES_EDEFAULT == null ? notes != null : !NOTES_EDEFAULT.equals(notes);
 			case CommercialPackage.CONTRACT__CONTRACT_TYPE:
 				return contractType != CONTRACT_TYPE_EDEFAULT;
+			case CommercialPackage.CONTRACT__PRICING_EVENT:
+				return pricingEvent != PRICING_EVENT_EDEFAULT;
 			case CommercialPackage.CONTRACT__CANCELLATION_FEE:
 				return cancellationFee != CANCELLATION_FEE_EDEFAULT;
 		}
@@ -822,6 +875,8 @@ public class ContractImpl extends UUIDObjectImpl implements Contract {
 		result.append(notes);
 		result.append(", contractType: ");
 		result.append(contractType);
+		result.append(", pricingEvent: ");
+		result.append(pricingEvent);
 		result.append(", cancellationFee: ");
 		result.append(cancellationFee);
 		result.append(')');

@@ -362,13 +362,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int SPOT_MARKET_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
@@ -451,6 +460,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__ENTITY = SPOT_MARKET__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -562,6 +580,15 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__ENTITY = SPOT_MARKET__ENTITY;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
+
+	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -660,6 +687,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__ENTITY = SPOT_MARKET__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
@@ -778,6 +814,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__ENTITY = SPOT_MARKET__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Origin Ports</b></em>' reference list.
@@ -1121,6 +1166,17 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSpotMarket_Entity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPricingEvent <em>Pricing Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Event</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPricingEvent()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EAttribute getSpotMarket_PricingEvent();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket <em>DES Purchase Market</em>}'.
@@ -1515,6 +1571,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SPOT_MARKET__ENTITY = eINSTANCE.getSpotMarket_Entity();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Event</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKET__PRICING_EVENT = eINSTANCE.getSpotMarket_PricingEvent();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.

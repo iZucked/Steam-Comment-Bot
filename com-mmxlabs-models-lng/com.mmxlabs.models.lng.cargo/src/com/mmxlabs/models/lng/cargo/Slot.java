@@ -8,6 +8,7 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -34,6 +35,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingEvent <em>Pricing Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPricingDate <em>Pricing Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isDivertible <em>Divertible</em>}</li>
@@ -557,6 +559,62 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	void setCargo(Cargo value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Event</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.commercial.PricingEvent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pricing Event</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Event</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @see #isSetPricingEvent()
+	 * @see #unsetPricingEvent()
+	 * @see #setPricingEvent(PricingEvent)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PricingEvent()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	PricingEvent getPricingEvent();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingEvent <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Event</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @see #isSetPricingEvent()
+	 * @see #unsetPricingEvent()
+	 * @see #getPricingEvent()
+	 * @generated
+	 */
+	void setPricingEvent(PricingEvent value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingEvent <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetPricingEvent()
+	 * @see #getPricingEvent()
+	 * @see #setPricingEvent(PricingEvent)
+	 * @generated
+	 */
+	void unsetPricingEvent();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPricingEvent <em>Pricing Event</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Pricing Event</em>' attribute is set.
+	 * @see #unsetPricingEvent()
+	 * @see #getPricingEvent()
+	 * @see #setPricingEvent(PricingEvent)
+	 * @generated
+	 */
+	boolean isSetPricingEvent();
 
 	/**
 	 * Returns the value of the '<em><b>Pricing Date</b></em>' attribute.

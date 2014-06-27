@@ -76,6 +76,7 @@ public class SlotItemProvider
 			addOptionalPropertyDescriptor(object);
 			addPriceExpressionPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
+			addPricingEventPropertyDescriptor(object);
 			addPricingDatePropertyDescriptor(object);
 			addNotesPropertyDescriptor(object);
 			addDivertiblePropertyDescriptor(object);
@@ -444,6 +445,28 @@ public class SlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Pricing Event feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricingEventPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Slot_pricingEvent_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_pricingEvent_feature", "_UI_Slot_type"),
+				 CargoPackage.Literals.SLOT__PRICING_EVENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Pricing Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -734,6 +757,7 @@ public class SlotItemProvider
 			case CargoPackage.SLOT__MAX_QUANTITY:
 			case CargoPackage.SLOT__OPTIONAL:
 			case CargoPackage.SLOT__PRICE_EXPRESSION:
+			case CargoPackage.SLOT__PRICING_EVENT:
 			case CargoPackage.SLOT__PRICING_DATE:
 			case CargoPackage.SLOT__NOTES:
 			case CargoPackage.SLOT__DIVERTIBLE:

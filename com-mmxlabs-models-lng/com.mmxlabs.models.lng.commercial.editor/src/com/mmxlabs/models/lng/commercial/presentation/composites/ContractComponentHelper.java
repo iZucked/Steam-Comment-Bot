@@ -77,6 +77,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_priceInfoEditor(detailComposite, topClass);
 		add_notesEditor(detailComposite, topClass);
 		add_contractTypeEditor(detailComposite, topClass);
+		add_pricingEventEditor(detailComposite, topClass);
 		add_cancellationFeeEditor(detailComposite, topClass);
 	}
 	
@@ -97,6 +98,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_contractTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__CONTRACT_TYPE));
+	}
+
+	/**
+	 * Create the editor for the pricingEvent feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_pricingEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PRICING_EVENT));
 	}
 
 	/**

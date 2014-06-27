@@ -389,13 +389,22 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__CONTRACT_TYPE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+
+	/**
 	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int CONTRACT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
@@ -404,7 +413,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int CONTRACT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -541,6 +550,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PRICING_EVENT = CONTRACT__PRICING_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
@@ -722,6 +740,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PURCHASE_CONTRACT__CONTRACT_TYPE = CONTRACT__CONTRACT_TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Pricing Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PRICING_EVENT = CONTRACT__PRICING_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Cancellation Fee</b></em>' attribute.
@@ -1075,6 +1102,16 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT_TYPE = 14;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
+	 * @generated
+	 */
+	int PRICING_EVENT = 15;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1289,6 +1326,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getContract_ContractType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getPricingEvent <em>Pricing Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Pricing Event</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getPricingEvent()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_PricingEvent();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getCancellationFee <em>Cancellation Fee</em>}'.
@@ -1533,6 +1581,16 @@ public interface CommercialPackage extends EPackage {
 	EEnum getContractType();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Pricing Event</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @generated
+	 */
+	EEnum getPricingEvent();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1721,6 +1779,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT__CONTRACT_TYPE = eINSTANCE.getContract_ContractType();
+
+		/**
+		 * The meta object literal for the '<em><b>Pricing Event</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__PRICING_EVENT = eINSTANCE.getContract_PricingEvent();
 
 		/**
 		 * The meta object literal for the '<em><b>Cancellation Fee</b></em>' attribute feature.
@@ -1927,6 +1993,16 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum CONTRACT_TYPE = eINSTANCE.getContractType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.PricingEvent <em>Pricing Event</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPricingEvent()
+		 * @generated
+		 */
+		EEnum PRICING_EVENT = eINSTANCE.getPricingEvent();
 
 	}
 

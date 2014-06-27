@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.spotmarkets;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -21,6 +22,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPricingEvent <em>Pricing Event</em>}</li>
  * </ul>
  * </p>
  *
@@ -158,6 +160,35 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setEntity(BaseLegalEntity value);
+
+	/**
+	 * Returns the value of the '<em><b>Pricing Event</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.commercial.PricingEvent}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Pricing Event</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Pricing Event</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @see #setPricingEvent(PricingEvent)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_PricingEvent()
+	 * @model
+	 * @generated
+	 */
+	PricingEvent getPricingEvent();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPricingEvent <em>Pricing Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Pricing Event</em>' attribute.
+	 * @see com.mmxlabs.models.lng.commercial.PricingEvent
+	 * @see #getPricingEvent()
+	 * @generated
+	 */
+	void setPricingEvent(PricingEvent value);
 
 	/**
 	 * <!-- begin-user-doc -->
