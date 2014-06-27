@@ -53,7 +53,22 @@ public class ScheduleBasedReportBuilder {
 
 	private static final Logger log = LoggerFactory.getLogger(ScheduleBasedReportBuilder.class);
 
-	private class ToStringFunction implements Function<Slot, String> {
+	public static final String ROW_FILTER_LONG_CARGOES = "Longs";
+	public static final String ROW_FILTER_SHORT_CARGOES = "Shorts";
+	public static final String ROW_FILTER_VESSEL_START_ROW = "Start ballast legs";
+	public static final String ROW_FILTER_VESSEL_EVENT_ROW = "Vessel Events";
+	public static final String ROW_FILTER_CHARTER_OUT_ROW = "Charter Outs (Virt)";
+	public static final String ROW_FILTER_CARGO_ROW = "Cargoes";
+
+	/** All filters (note this order is also used in the {@link ConfigurableCargoReportView} dialog */
+	public static final String[] ROW_FILTER_ALL = new String[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
+			ROW_FILTER_VESSEL_START_ROW };
+
+	/**
+	 * Guava {@link Function} to convert a Slot to a String based on it's name;
+	 * 
+	 */
+	private static class SlotToStringFunction implements Function<Slot, String> {
 
 		@Override
 		public String apply(final Slot o) {
@@ -72,6 +87,7 @@ public class ScheduleBasedReportBuilder {
 	private final PinDiffModeColumnManager pinDiffModeHelper;
 	private final EMFReportView report;
 
+	// Dynamic table data model fields
 	private final EPackage tableDataModel;
 	private final EStructuralFeature nameObjectRef;
 	private final EStructuralFeature name2ObjectRef;
@@ -81,30 +97,22 @@ public class ScheduleBasedReportBuilder {
 	private final EStructuralFeature dischargeAllocationRef;
 	private final EStructuralFeature openSlotAllocationRef;
 
-	public static final String ROW_FILTER_LONG_CARGOES = "Longs";
-	public static final String ROW_FILTER_SHORT_CARGOES = "Shorts";
-	public static final String ROW_FILTER_VESSEL_START_ROW = "Start ballast legs";
-	public static final String ROW_FILTER_VESSEL_EVENT_ROW = "Vessel Events";
-	public static final String ROW_FILTER_CHARTER_OUT_ROW = "Charter Outs (Virt)";
-	public static final String ROW_FILTER_CARGO_ROW = "Cargoes";
-
-	// All filters
-	public static final String[] ROW_FILTER_ALL = new String[] { ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_START_ROW, ROW_FILTER_VESSEL_EVENT_ROW,
-			ROW_FILTER_CHARTER_OUT_ROW, ROW_FILTER_CARGO_ROW };
-
 	private final Set<String> rowFilterInfo = new HashSet<>();
 
 	public ScheduleBasedReportBuilder(final EMFReportView report, final PinDiffModeColumnManager pinDiffModeHelper) {
 		this.report = report;
 		this.pinDiffModeHelper = pinDiffModeHelper;
 
-		// Create table data model
+		// Create table data model with the given references.
 		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge", "openslot");
 
+		// Get the row class
 		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
+		// Add additional name attributes
 		nameObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
 		name2ObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name2");
-		// GenericEMFTableDataModel.getRowFeature(tableDataModel, "name");
+
+		// Get the EStructuralFeature refs created above.
 		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
 		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
 		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
@@ -112,10 +120,27 @@ public class ScheduleBasedReportBuilder {
 		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
 	}
 
+	/**
+	 * Replace the existing row filters with the following set.
+	 * 
+	 * @param filters
+	 */
 	public void setRowFilter(final String... filters) {
 		rowFilterInfo.clear();
 		for (final String filter : filters) {
 			rowFilterInfo.add(filter);
+		}
+	}
+
+	public void addRowFilters(final String... filters) {
+		for (final String filter : filters) {
+			rowFilterInfo.add(filter);
+		}
+	}
+
+	public void removeRowFilters(final String... filters) {
+		for (final String filter : filters) {
+			rowFilterInfo.remove(filter);
 		}
 	}
 
@@ -321,6 +346,7 @@ public class ScheduleBasedReportBuilder {
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
 
+				// TODO: Only required for pin/diff mode really.
 				relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
 
 				// Build up list of slots assigned to cargo, sorting into loads and discharges
@@ -589,7 +615,7 @@ public class ScheduleBasedReportBuilder {
 						}
 						if (!different) {
 							// FIXME: This excess filters out stuff with spots.
-//							return "";
+							// return "";
 						}
 
 						// EObject eObj = eObjectAsCargoAllocation.getFirst();
@@ -598,13 +624,13 @@ public class ScheduleBasedReportBuilder {
 						// FIXME: This only works as refresh is triggered multiple times. Otherwise this first call only gets this cargoes slot allocations. The set is updated with other cargo
 						// allocations and
 						// the second refresh call gets the correct data string as a result of the first op.
-//						relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
+						// relatedSlotAllocations.updateRelatedSetsFor(thisCargoAllocation);
 
 						final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
 						final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
 
-						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new ToStringFunction())) + " ]";
-						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new ToStringFunction())) + " ]";
+						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new SlotToStringFunction())) + " ]";
+						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new SlotToStringFunction())) + " ]";
 
 						return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
 					} else if (eObj.eIsSet(openSlotAllocationRef)) {
@@ -613,8 +639,8 @@ public class ScheduleBasedReportBuilder {
 							final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
 							final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
 
-							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new ToStringFunction())) + " ]";
-							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new ToStringFunction())) + " ]";
+							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(buysSet, new SlotToStringFunction())) + " ]";
+							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Iterables.transform(sellsSet, new SlotToStringFunction())) + " ]";
 
 							return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
 						}
