@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.ColumnType;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -52,6 +53,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 	private final EPackage tableDataModel;
 	private final EStructuralFeature nameObjectRef;
+	private final EStructuralFeature name2ObjectRef;
 	private final EStructuralFeature targetObjectRef;
 	private final EStructuralFeature cargoAllocationRef;
 	private final EStructuralFeature loadAllocationRef;
@@ -64,6 +66,7 @@ public class SchedulePnLReport extends EMFReportView {
 		builder = new ScheduleBasedReportBuilder(this, pinDiffModeHelper);
 		tableDataModel = builder.getTableDataModel();
 		nameObjectRef = builder.getNameObjectRef();
+		name2ObjectRef = builder.getName2ObjectRef();
 		targetObjectRef = builder.getTargetObjectRef();
 		cargoAllocationRef = builder.getCargoAllocationRef();
 		loadAllocationRef = builder.getLoadAllocationRef();
@@ -76,7 +79,9 @@ public class SchedulePnLReport extends EMFReportView {
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		addColumn("ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
+		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, name2ObjectRef);
 
+		
 		// add the total (aggregate) P&L column
 		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
 		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
