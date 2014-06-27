@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
@@ -439,13 +440,13 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	ILoadSlot createLoadSlot(String id, @NonNull IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours,
-			boolean cooldownSet, boolean cooldownForbidden, int pricingDate, boolean slotIsOptional);
+			boolean cooldownSet, boolean cooldownForbidden, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional);
 
 	/**
 	 */
 	@NonNull
 	ILoadOption createDESPurchaseLoadSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue,
-			int durationInHours, int pricingDate, boolean slotIsOptional);
+			int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -463,7 +464,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IDischargeSlot createDischargeSlot(String id, @NonNull IPort port, ITimeWindow window, long minVolumeInM3, long maxVolumeInM3, long minCvValue, long maxCvValue,
-			ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, boolean optional);
+			ISalesPriceCalculator pricePerMMBTu, int durationHours, int pricingDate, PricingEventType pricingEvent, boolean optional);
 
 	/**
 	 * 
@@ -478,7 +479,7 @@ public interface ISchedulerBuilder {
 	 */
 	@NonNull
 	IDischargeOption createFOBSaleDischargeSlot(String id, @Nullable IPort port, ITimeWindow window, long minVolume, long maxVolume, long minCvValue, long maxCvValue,
-			ISalesPriceCalculator priceCalculator, int durationInHours, int pricingDate, boolean slotIsOptional);
+			ISalesPriceCalculator priceCalculator, int durationInHours, int pricingDate, PricingEventType pricingEvent, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these

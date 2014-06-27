@@ -41,6 +41,8 @@ public interface ILoadOption extends IPortSlot {
 	 */
 	int getPricingDate();
 
+	PricingEventType getPricingEvent();
+	
 	/**
 	 * Returns the {@link com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator} which should be used to determine the unit cost of LNG at this slot.
 	 * 

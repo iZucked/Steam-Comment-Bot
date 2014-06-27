@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -27,6 +28,8 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	private ISalesPriceCalculator priceCalculator;
 
 	private int pricingDate;
+	
+	private PricingEventType pricingEvent;
 
 	public DischargeOption() {
 		setPortType(PortType.Discharge);
@@ -131,6 +134,15 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	 */
 	public void setPricingDate(final int value) {
 		pricingDate = value;
+	}
+
+	@Override
+	public PricingEventType getPricingEvent() {
+		return pricingEvent;
+	}
+
+	public void setPricingEvent(PricingEventType pricingEvent) {
+		this.pricingEvent = pricingEvent;
 	}
 	
 }

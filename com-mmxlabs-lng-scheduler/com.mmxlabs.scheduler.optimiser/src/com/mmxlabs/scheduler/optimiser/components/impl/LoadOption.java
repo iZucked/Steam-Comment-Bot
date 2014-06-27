@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -41,6 +42,8 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 */
 	private int pricingDate;
 
+	private PricingEventType pricingEvent;
+	
 	public LoadOption() {
 		setPortType(PortType.Load);
 	}
@@ -149,6 +152,15 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 */
 	public void setPricingDate(final int value) {
 		pricingDate = value;
+	}
+
+	@Override
+	public PricingEventType getPricingEvent() {
+		return pricingEvent;
+	}
+
+	public void setPricingEvent(PricingEventType pricingEvent) {
+		this.pricingEvent = pricingEvent;
 	}
 
 }

@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -50,7 +51,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
 
-		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, IPortSlot.NO_PRICING_DATE, false);
+		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -63,7 +64,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
 
-		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, IPortSlot.NO_PRICING_DATE, false);
+		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false);
 	}
 
 	@Ignore
@@ -82,7 +83,7 @@ public class SchedulerBuilderTest {
 
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, false);
+		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -95,7 +96,7 @@ public class SchedulerBuilderTest {
 
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, false);
+		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_DISCHARGE, false);
 	}
 
 	@Ignore

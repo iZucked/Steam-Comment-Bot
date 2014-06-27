@@ -11,6 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -77,5 +78,10 @@ public class MarkToMarketLoadOption implements ILoadOption, IMarkToMarketOption 
 	@Override
 	public IMarkToMarket getMarkToMarket() {
 		return markToMarket;
+	}
+
+	@Override
+	public PricingEventType getPricingEvent() {
+		return dischargeOption.getPricingEvent();
 	}
 }
