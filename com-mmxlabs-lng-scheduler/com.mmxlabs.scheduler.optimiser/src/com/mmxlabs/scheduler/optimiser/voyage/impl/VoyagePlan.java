@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import com.google.common.base.Objects;
 import com.mmxlabs.common.impl.LongFastEnumMap;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -15,6 +16,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * {@link VoyagePlan} may represent a single Cargo - A load, voyage, discharge, voyage, next destination sequence. Typically the last element of a {@link VoyagePlan} will be the start of the next
  * {@link VoyagePlan}. In such cases the last element is used to provide information, but costings etc are to be applied to the next {@link VoyagePlan}. However in some cases we will wish to include
  * the element. In such cases {@link #isIgnoreEnd()} will return false.
+ * 
+ * Note we do not include arrival times as the {@link VoyagePlan} is cached in the {@link CachingVoyagePlanOptimiser} in a time independent way.
  * 
  * @author Simon Goodall
  * 
