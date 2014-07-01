@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -46,7 +48,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation, IVessel vessel, int vesselStartTime,
-			VoyagePlan plan, IDetailTree annotations);
+			VoyagePlan plan, @Nullable IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when the cargo is a DES Purchase
@@ -62,7 +64,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation,
-			IDetailTree annotations);
+			@Nullable IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a the cargo is a FOB Sale
@@ -77,7 +79,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @return
 	 */
 	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			IDetailTree annotations);
+			@Nullable IDetailTree annotations);
 
 	/**
 	 * Questions -> Volume allocator interaction? -> EntityValueCalcuator interaction -> Statefull/less?
@@ -86,8 +88,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
 	 */
-	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, IAllocationAnnotation allocationAnnotation, int[] slotPricesPerMMBTu, IVessel vessel, int vesselStartTime,
-			VoyagePlan plan, IDetailTree annotations);
+	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, IAllocationAnnotation allocationAnnotation, int[] slotPricesPerMMBTu, IVessel vessel, int vesselStartTime, VoyagePlan plan,
+			@Nullable IDetailTree annotations);
 
 	/**
 	 * Invoked before final P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to
