@@ -77,8 +77,10 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				annotation.getSlots().add(slot);
 
 				// Scheduler should have made this happen, but lets make sure here
-				assert allocationRecord.slotTimes.get(i) == actualsDataProvider.getArrivalTime(slot);
-				annotation.setSlotTime(slot, allocationRecord.slotTimes.get(i));
+				assert allocationRecord.portTimesRecord.getSlotTime(slot) == actualsDataProvider.getArrivalTime(slot);
+				assert allocationRecord.portTimesRecord.getSlotDuration(slot) == actualsDataProvider.getVisitDuration(slot);
+				annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+				annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
 
 				// Actuals mode, take values directly
 				annotation.setSlotVolumeInM3(slot, actualsDataProvider.getVolumeInM3(slot));
@@ -254,7 +256,8 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		for (int i = 0; i < slots.size(); i++) {
 			final IPortSlot slot = allocationRecord.slots.get(i);
 			annotation.getSlots().add(slot);
-			annotation.setSlotTime(slot, allocationRecord.slotTimes.get(i));
+			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
 			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), cargoCVValue));
 		}
 

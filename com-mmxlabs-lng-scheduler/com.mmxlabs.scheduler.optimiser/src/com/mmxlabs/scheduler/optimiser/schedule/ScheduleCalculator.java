@@ -17,9 +17,7 @@ import javax.inject.Provider;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
@@ -60,6 +58,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.UnusedSlotDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -223,10 +222,16 @@ public class ScheduleCalculator {
 		// TODO: This should come from the ISequencesScheduler
 		final int times[] = new int[sequence.size()];
 		Arrays.fill(times, startTime);
+		final PortTimesRecord portTimesRecord = new PortTimesRecord();
+		for (final ISequenceElement element : sequence) {
+			final IPortSlot slot = portSlotProvider.getPortSlot(element);
+			portTimesRecord.setSlotTime(slot, startTime);
+			portTimesRecord.setSlotDuration(slot, 0);
+		}
 		currentPlan.setSequence(currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		if (customNonShippedScheduler != null) {
-			customNonShippedScheduler.modifyArrivalTimes(resource, startTime, currentPlan, times);
+			customNonShippedScheduler.modifyArrivalTimes(resource, startTime, currentPlan, portTimesRecord);
 		}
 
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
@@ -235,7 +240,7 @@ public class ScheduleCalculator {
 		final int vesselStartTime = startTime;
 
 		// TODO: This is not the place!
-		final IAllocationAnnotation annotation = volumeAllocator.allocate(vessel, vesselStartTime, currentPlan, CollectionsUtil.toArrayList(times));
+		final IAllocationAnnotation annotation = volumeAllocator.allocate(vessel, vesselStartTime, currentPlan, portTimesRecord);
 		scheduledSequence.getAllocations().put(currentPlan, annotation);
 
 		return scheduledSequence;
@@ -458,7 +463,6 @@ public class ScheduleCalculator {
 
 	protected void calculateMarkToMarketPNL(final ISequences sequences, final IAnnotatedSolution annotatedSolution) {
 		// Mark-to-Market Calculations
-
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (element == null) {
 				continue;
@@ -497,6 +501,12 @@ public class ScheduleCalculator {
 				continue;
 			}
 
+			final PortTimesRecord portTimesRecord = new PortTimesRecord();
+			portTimesRecord.setSlotTime(loadOption, time);
+			portTimesRecord.setSlotTime(dischargeOption, time);
+			portTimesRecord.setSlotDuration(loadOption, 0);
+			portTimesRecord.setSlotDuration(dischargeOption, 0);
+
 			// Create voyage plan
 			final VoyagePlan voyagePlan = new VoyagePlan();
 			{
@@ -516,7 +526,7 @@ public class ScheduleCalculator {
 			}
 			voyagePlan.setIgnoreEnd(false);
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, time, voyagePlan, Lists.newArrayList(Integer.valueOf(time), Integer.valueOf(time)));
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, time, voyagePlan, portTimesRecord);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 

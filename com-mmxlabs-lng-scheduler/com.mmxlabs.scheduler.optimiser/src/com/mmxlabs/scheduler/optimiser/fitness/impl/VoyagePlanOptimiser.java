@@ -9,15 +9,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
@@ -36,11 +34,11 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final int RELAXATION_STEP = 6;
 
-	private static final Logger log = LoggerFactory.getLogger(VoyagePlanOptimiser.class);
-
 	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
 
 	private List<IOptionsSequenceElement> basicSequence;
+
+	private IPortTimesRecord portTimesRecord;
 
 	private IVessel vessel;
 
@@ -82,8 +80,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		if (basicSequence == null) {
 			throw new IllegalStateException("Basic sequence has not been set");
 		}
-		if (arrivalTimes == null) {
-			throw new IllegalStateException("Arrival times have not been set");
+		if (portTimesRecord == null) {
+			throw new IllegalStateException("Port times record has not been set");
 		}
 	}
 
@@ -97,7 +95,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		bestPlan = null;
 		bestPlanFitsInAvailableTime = false;
 		bestCost = Long.MAX_VALUE;
-		arrivalTimes = null;
+		portTimesRecord = null;
 	}
 
 	/**
@@ -105,10 +103,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	@Override
 	public void dispose() {
-		choices.clear();
-		vessel = null;
-		basicSequence = null;
-		bestPlan = null;
+		reset();
 	}
 
 	/**
@@ -139,7 +134,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			if (slot.getPortType() == PortType.End) {
 				final ITimeWindow window = slot.getTimeWindow();
 
-				final int lastArrivalTime = arrivalTimes.get(arrivalTimes.size() - 1);
+				final int lastArrivalTime = portTimesRecord.getSlotTime(slot);
 				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getEnd() ? 0 : window.getEnd() - lastArrivalTime);
 
 				evaluateVoyagePlan(extraExtent);
@@ -390,16 +385,14 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		currentPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
 
 		// Calculate voyage plan
-		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeel, baseFuelPricePerMT, arrivalTimes, currentSequence.toArray(new IDetailsSequenceElement[0]));
+		voyageCalculator.calculateVoyagePlan(currentPlan, vessel, startHeel, baseFuelPricePerMT, portTimesRecord, currentSequence.toArray(new IDetailsSequenceElement[0]));
 
 		return currentPlan;
 	}
 
-	private List<Integer> arrivalTimes;
-
 	@Override
-	public void setArrivalTimes(final List<Integer> arrivalTimes) {
-		this.arrivalTimes = arrivalTimes;
+	public void setPortTimesRecord(final IPortTimesRecord portTimesRecord) {
+		this.portTimesRecord = portTimesRecord;
 	}
 
 	/**

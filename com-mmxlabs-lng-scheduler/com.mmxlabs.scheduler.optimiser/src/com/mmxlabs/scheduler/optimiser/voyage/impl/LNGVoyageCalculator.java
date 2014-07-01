@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
  * Implementation of {@link ILNGVoyageCalculator}.
@@ -448,10 +449,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return
 	 */
-	final public int calculateCooldownPrices(final IVesselClass vesselClass, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
+	final public int calculateCooldownPrices(final IVesselClass vesselClass, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement... sequence) {
 		int cooldownM3Price = 0;
 
-		int arrivalTimeIndex = -1;
 		for (int i = 0; i < sequence.length; ++i) {
 			if (sequence[i] instanceof VoyageDetails) {
 
@@ -460,7 +460,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
 					// Look up arrival of next port
-					final int cooldownTime = arrivalTimes.get(arrivalTimeIndex + 1);
+					final int cooldownTime = portTimesRecord.getSlotTime(details.getOptions().getToPortSlot());
 
 					int cooldownPricePerMMBTU = 0;
 					int cooldownCV = 0;
@@ -486,7 +486,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				}
 			} else {
 				assert sequence[i] instanceof PortDetails;
-				arrivalTimeIndex++;
 			}
 		}
 
@@ -505,7 +504,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @param sequence
 	 * @return A list of LNG prices, or null if there was no way to establish LNG prices.
 	 */
-	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final List<Integer> arrivalTimes, final IDetailsSequenceElement... sequence) {
+	final public int[] getLngEffectivePrices(final List<Integer> loadIndices, final List<Integer> dischargeIndices, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement... sequence) {
 		// TODO: does not need to be this long
 		final int[] resultPerMMBtu = new int[sequence.length];
 
@@ -542,7 +541,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final IDischargeSlot dischargeSlot = (IDischargeSlot) slot;
 
 			// calculate the effective LNG value based on this discharge slot
-			lngValuePerMMBTu = dischargeSlot.getDischargePriceCalculator().estimateSalesUnitPrice(dischargeSlot, arrivalTimes.get(i / 2), null);
+			lngValuePerMMBTu = dischargeSlot.getDischargePriceCalculator().estimateSalesUnitPrice(dischargeSlot, portTimesRecord, null);
 
 			// and apply the value to prices on all preceding voyages
 			for (int j = prevDischargeIndex; j < i; j++) {
@@ -576,7 +575,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * @return Number of capacity constraints which had to be violated in the allocation
 	 */
 	@Override
-	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final long startHeelInM3, final int baseFuelPricePerMT, final List<Integer> arrivalTimes,
+	public final int calculateVoyagePlan(final VoyagePlan voyagePlan, final IVessel vessel, final long startHeelInM3, final int baseFuelPricePerMT, final IPortTimesRecord voyageRecord,
 			final IDetailsSequenceElement... sequence) {
 		/*
 		 * TODO: instead of taking an interleaved List<Object> as a parameter, this would have a far more informative signature (and cleaner logic?) if it passed a list of IPortDetails and a list of
@@ -755,7 +754,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// processing, but this is where the information is being processed.
 		// Can this be moved into the scheduler? If so, we need to ensure the
 		// same price is used in all valid voyage legs.
-		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, arrivalTimes, sequence);
+		final int[] pricesPerMMBTu = getLngEffectivePrices(loadIndices, dischargeIndices, voyageRecord, sequence);
 
 		// set the LNG values for the voyages
 		// final int numVoyages = sequence.length / 2;
@@ -817,7 +816,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(c, baseFuelPricePerMT));
 		}
 
-		final int cooldownM3Price = calculateCooldownPrices(vesselClass, arrivalTimes, sequence);
+		final int cooldownM3Price = calculateCooldownPrices(vesselClass, voyageRecord, sequence);
 		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);

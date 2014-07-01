@@ -104,6 +104,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		public final long[] slotAdditionalPNL;
 		public final IEntity[] slotEntity;
 		public final int[] arrivalTimes;
+		public final int[] visitDurations;
 
 		public CargoPNLData(final IAllocationAnnotation allocationAnnotation) {
 			this.allocationAnnotation = allocationAnnotation;
@@ -115,6 +116,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			this.slotAdditionalPNL = new long[slots.size()];
 			this.slotEntity = new IEntity[slots.size()];
 			this.arrivalTimes = new int[slots.size()];
+			this.visitDurations= new int[slots.size()];
 		}
 	}
 
@@ -172,14 +174,14 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final ILoadOption loadOption = (ILoadOption) slots.get(0);
 
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
-				cargoPNLData.slotPricePerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(loadOption, dischargeOption, currentAllocation.getSlotTime(loadOption),
-						currentAllocation.getSlotTime(dischargeOption), currentAllocation.getSlotVolumeInMMBTu(slot), portSlotDetails);
+				cargoPNLData.slotPricePerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(loadOption, dischargeOption, currentAllocation, portSlotDetails);
 
 				// Tmp hack until we sort out the API around this - AllocationAnnotation is an input to this method!
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, cargoPNLData.slotPricePerMMBTu[idx]);
 			}
 			// Last discharge is tax time;
 			taxTime = cargoPNLData.arrivalTimes[idx] = currentAllocation.getSlotTime(slot);
+			cargoPNLData.visitDurations[idx] = currentAllocation.getSlotDuration(slot);
 			cargoPNLData.slotVolumeInM3[idx] = currentAllocation.getSlotVolumeInM3(slot);
 			cargoPNLData.slotVolumeInMMBTu[idx] = currentAllocation.getSlotVolumeInMMBTu(slot);
 			cargoPNLData.slotCargoCV[idx] = currentAllocation.getSlotCargoCV(slot);
@@ -253,6 +255,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// Sanity checks for actuals DCP
 			if (actualsDataProvider.hasActuals(slot)) {
 				assert cargoPNLData.arrivalTimes[idx] == actualsDataProvider.getArrivalTime(slot);
+				assert cargoPNLData.visitDurations[idx] == actualsDataProvider.getVisitDuration(slot);
 				assert cargoPNLData.slotCargoCV[idx] == actualsDataProvider.getCVValue(slot);
 				assert cargoPNLData.slotVolumeInM3[idx] == actualsDataProvider.getVolumeInM3(slot);
 				assert cargoPNLData.slotVolumeInMMBTu[idx] == actualsDataProvider.getVolumeInMMBtu(slot);

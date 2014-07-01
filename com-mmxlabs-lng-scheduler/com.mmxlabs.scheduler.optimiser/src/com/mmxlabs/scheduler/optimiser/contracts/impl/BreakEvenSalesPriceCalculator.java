@@ -10,6 +10,8 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
  */
@@ -25,7 +27,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(final IDischargeOption option, final int time, final IDetailTree annotations) {
+	public int estimateSalesUnitPrice(final IDischargeOption option, IPortTimesRecord voyageRecord, final IDetailTree annotations) {
 		return price;
 	}
 
@@ -35,7 +37,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, int loadTime, int dischargeTime, long dischargeVolumeInMMBTu, IDetailTree annotations) {
+	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, final IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
 		return price;
 	}
 

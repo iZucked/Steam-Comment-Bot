@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -16,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -40,12 +43,12 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(IDischargeOption option, int time, IDetailTree annotations) {
+	public int estimateSalesUnitPrice(IDischargeOption option, IPortTimesRecord voyageRecord, @Nullable IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, int loadTime, int dischargeTime, long dischargeVolumeInMMBTu, IDetailTree annotations) {
+	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, final IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 

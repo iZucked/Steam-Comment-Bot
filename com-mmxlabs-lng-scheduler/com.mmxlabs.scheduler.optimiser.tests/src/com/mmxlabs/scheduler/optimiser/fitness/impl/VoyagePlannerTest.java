@@ -70,6 +70,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -186,7 +187,7 @@ public final class VoyagePlannerTest {
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
 
 		// Set data providers
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			public void configure() {
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
@@ -205,7 +206,7 @@ public final class VoyagePlannerTest {
 		});
 
 		// Init scheduler and ensure all required components are in place
-		VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
+		final VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
@@ -308,12 +309,12 @@ public final class VoyagePlannerTest {
 		final int[] arrivalTimes = new int[] { 5, 10, 15, 20 };
 
 		// Expected arrival times per plan
-		final int[] arrivalTimes1 = new int[] { 5, 10, 15 };
-		final int[] arrivalTimes2 = new int[] { 15, 20 };
+		// final int[] arrivalTimes1 = new int[] { 5, 10, 15 };
+		// final int[] arrivalTimes2 = new int[] { 15, 20 };
 
 		// Schedule sequence
 		// final LinkedHashMap<VoyagePlan, IAllocationAnnotation> plans =
-		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
@@ -339,8 +340,20 @@ public final class VoyagePlannerTest {
 		Mockito.verify(voyagePlanOptimiser).optimise();
 		Mockito.verify(voyagePlanOptimiser).reset();
 
-		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes1)));
-		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes2)));
+		// Expected arrival times per plan
+		// final int[] arrivalTimes1 = new int[] { 5, 10, 15 };
+		// final int[] arrivalTimes2 = new int[] { 15, 20 };
+
+		final PortTimesRecord portTimesRecord1 = new PortTimesRecord();
+		portTimesRecord1.setSlotTime(loadSlot1, 5);
+		portTimesRecord1.setSlotTime(dischargeSlot1, 10);
+		portTimesRecord1.setSlotTime(loadSlot2, 15);
+
+		final PortTimesRecord portTimesRecord2 = new PortTimesRecord();
+		portTimesRecord1.setSlotTime(loadSlot2, 15);
+		portTimesRecord1.setSlotTime(dischargeSlot2, 20);
+		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord1));
+		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord2));
 
 		Assert.assertNotNull(plans);
 		Assert.assertEquals(2, plans.size());
@@ -441,7 +454,7 @@ public final class VoyagePlannerTest {
 		final IRouteCostProvider routeCostProvider = Mockito.mock(IRouteCostProvider.class);
 
 		// Set data providers
-		Injector injector = Guice.createInjector(new AbstractModule() {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
 			@Override
 			public void configure() {
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
@@ -461,7 +474,7 @@ public final class VoyagePlannerTest {
 		});
 
 		// Init scheduler and ensure all required components are in place
-		VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
+		final VoyagePlanner planner = injector.getInstance(VoyagePlanner.class);
 
 		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
 		expectedVoyageOptions1.setAvailableTime(4);
@@ -540,7 +553,7 @@ public final class VoyagePlannerTest {
 		final int[] arrivalTimes = new int[] { 5, 10, 15 };
 
 		// Schedule sequence
-		List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
+		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
@@ -563,7 +576,16 @@ public final class VoyagePlannerTest {
 		Mockito.verify(voyagePlanOptimiser).optimise();
 		Mockito.verify(voyagePlanOptimiser).reset();
 
-		Mockito.verify(voyagePlanOptimiser).setArrivalTimes(Matchers.eq(CollectionsUtil.toArrayList(arrivalTimes)));
+		// Expected arrival times per plan
+
+		// final int[] arrivalTimes = new int[] { 5, 10, 15 };
+
+		final PortTimesRecord portTimesRecord = new PortTimesRecord();
+		portTimesRecord.setSlotTime(loadSlot1, 5);
+		portTimesRecord.setSlotTime(dischargeSlot1, 10);
+		portTimesRecord.setSlotTime(loadSlot2, 15);
+
+		Mockito.verify(voyagePlanOptimiser).setPortTimesRecord(Matchers.eq(portTimesRecord));
 
 		Assert.assertNotNull(voyagePlans);
 		Assert.assertEquals(1, voyagePlans.size());

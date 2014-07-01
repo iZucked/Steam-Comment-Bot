@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.Alloca
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -54,8 +55,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public IAllocationAnnotation allocate(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final List<Integer> arrivalTimes) {
-		final AllocationRecord allocationRecord = createAllocationRecord(vessel, vesselStartTime, plan, arrivalTimes);
+	public IAllocationAnnotation allocate(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
+		final AllocationRecord allocationRecord = createAllocationRecord(vessel, vesselStartTime, plan, portTimesRecord);
 		if (allocationRecord == null) {
 			return null;
 		}
@@ -67,7 +68,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public AllocationRecord createAllocationRecord(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final List<Integer> arrivalTimes) {
+	public AllocationRecord createAllocationRecord(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
 
 		final long minEndVolumeInM3 = plan.getRemainingHeelInM3();
 
@@ -80,14 +81,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 		boolean foundALoad = false;
 
-		final List<Integer> slotTimes = new ArrayList<>(numElements);
-
 		// These handle current special cases around FOB/DES
-		Integer transferTime = null;
 		Long transferVolume = null;
 		IVessel nominatedVessel = null;
 		final int adjust = plan.isIgnoreEnd() ? 1 : 0;
-		int timeCounter = -1;
 		// Assume true, unless a slot has said otherwise
 		boolean hasActuals = true;
 		
@@ -97,7 +94,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			final IDetailsSequenceElement element = sequence[i];
 
 			if (element instanceof PortDetails) {
-				++timeCounter;
 				final PortDetails pd = (PortDetails) element;
 				final IPortSlot slot = pd.getOptions().getPortSlot();
 				
@@ -111,13 +107,11 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				}
 				if (slot instanceof ILoadOption) {
 					slots.add(slot);
-					slotTimes.add(arrivalTimes.get(timeCounter));
 					final ILoadOption loadOption = (ILoadOption) slot;
 					minVolumes.add(loadOption.getMinLoadVolume());
 					maxVolumes.add(loadOption.getMaxLoadVolume());
 					foundALoad = true;
 					if (!(loadOption instanceof ILoadSlot)) {
-						transferTime = arrivalTimes.get(i);
 						if (transferVolume == null) {
 							transferVolume = loadOption.getMaxLoadVolume();
 						} else {
@@ -128,12 +122,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					hasActuals &= actualsDataProvider.hasActuals(slot);
 				} else if (slot instanceof IDischargeOption) {
 					slots.add(slot);
-					slotTimes.add(arrivalTimes.get(timeCounter));
 					final IDischargeOption dischargeOption = (IDischargeOption) slot;
 					minVolumes.add(dischargeOption.getMinDischargeVolume());
 					maxVolumes.add(dischargeOption.getMaxDischargeVolume());
 					if (!(dischargeOption instanceof IDischargeSlot)) {
-						transferTime = arrivalTimes.get(i);
 						if (transferVolume == null) {
 							transferVolume = dischargeOption.getMaxDischargeVolume();
 						} else {
@@ -144,7 +136,6 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					hasActuals &= actualsDataProvider.hasActuals(slot);
 				} else if (slot instanceof IHeelOptionsPortSlot) {
 					slots.add(slot);
-					slotTimes.add(arrivalTimes.get(timeCounter));
 					final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) slot;
 					final IHeelOptions heelOptions = heelOptionsPortSlot.getHeelOptions();
 					minVolumes.add(heelOptions.getHeelLimit());
@@ -163,7 +154,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	
 
-		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, slotTimes,
+		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, portTimesRecord,
 				returnSlot, minVolumes, maxVolumes);
 
 		if (hasActuals) {

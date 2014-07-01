@@ -9,6 +9,7 @@ import java.util.List;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ICustomVolumeAllocator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -29,7 +30,7 @@ public interface IVolumeAllocator {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes);
+	IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord);
 
 	/**
 	 * Creates and returns the initial {@link AllocationRecord} instance based on input data. This can be modified before passing to {@link #allocate(AllocationRecord)}. This method should be called
@@ -41,7 +42,7 @@ public interface IVolumeAllocator {
 	 * @param arrivalTimes
 	 * @return
 	 */
-	AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes);
+	AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord);
 
 	/**
 	 * Given the {@link AllocationRecord}, perform the volume allocation to create an {@link IAllocationAnnotation}. This method should be called in cases where the {@link ICustomVolumeAllocator} is

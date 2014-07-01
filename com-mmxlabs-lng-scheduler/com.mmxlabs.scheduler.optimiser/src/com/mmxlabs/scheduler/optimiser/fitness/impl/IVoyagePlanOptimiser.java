@@ -9,6 +9,7 @@ import java.util.List;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -59,7 +60,7 @@ public interface IVoyagePlanOptimiser {
 	 */
 	void setBasicSequence(final List<IOptionsSequenceElement> basicSequence);
 
-	void setArrivalTimes(final List<Integer> currentTimes);
+	void setPortTimesRecord(final IPortTimesRecord portTimesRecord);
 	
 	void setVesselCharterInRatePerDay(int charterInRatePerDay);
 

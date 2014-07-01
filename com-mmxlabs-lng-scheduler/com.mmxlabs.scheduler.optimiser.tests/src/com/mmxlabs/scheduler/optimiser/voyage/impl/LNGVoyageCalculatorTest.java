@@ -6,13 +6,12 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -33,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class LNGVoyageCalculatorTest {
 
@@ -212,8 +212,8 @@ public class LNGVoyageCalculatorTest {
 		options.setUseFBOForSupplement(false);
 
 		options.setAvailableTime(120);
-		int expectedTravelTime = 48;
-		int expectedIdleTime = 72;
+		final int expectedTravelTime = 48;
+		final int expectedIdleTime = 72;
 
 		assert expectedTravelTime + expectedIdleTime == options.getAvailableTime();
 		options.setDistance(15 * expectedTravelTime);
@@ -240,7 +240,8 @@ public class LNGVoyageCalculatorTest {
 		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(150 * expectedTravelTime) / 24l, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit()));
 
-		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(10 * expectedIdleTime) / 24l, details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
+		Assert.assertEquals(OptimiserUnitConvertor.convertToInternalVolume(10 * expectedIdleTime) / 24l,
+				details.getFuelConsumption(FuelComponent.IdleBase, FuelComponent.IdleBase.getDefaultFuelUnit()));
 
 		Assert.assertEquals(0, details.getFuelConsumption(FuelComponent.IdleNBO, FuelComponent.IdleNBO.getDefaultFuelUnit()));
 	}
@@ -569,12 +570,10 @@ public class LNGVoyageCalculatorTest {
 
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details, dischargeDetails };
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
-			arrivalTimes.add(0);
-		}
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
 
-		calc.calculateVoyagePlan(plan, vessel, 0, 0, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, 0, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -593,7 +592,7 @@ public class LNGVoyageCalculatorTest {
 
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
-		int baseFuelInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(2);
+		final int baseFuelInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(2);
 		vesselClass.setBaseFuelUnitPrice(baseFuelInternalPrice);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
@@ -640,11 +639,10 @@ public class LNGVoyageCalculatorTest {
 
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details, dischargeDetails };
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
-			arrivalTimes.add(0);
-		}
-		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, arrivalTimes, sequence);
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
+
+		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -714,12 +712,11 @@ public class LNGVoyageCalculatorTest {
 
 		// Expect to throw a RuntimeException here for a capacity violation
 		fail("Better to return object, recording the error");
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
-			arrivalTimes.add(0);
-		}
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
+
 		final VoyagePlan plan = new VoyagePlan();
-		calc.calculateVoyagePlan(plan, vessel, 0, 0, arrivalTimes, sequence);
+		calc.calculateVoyagePlan(plan, vessel, 0, 0, portTimesRecord, sequence);
 
 	}
 
@@ -729,7 +726,7 @@ public class LNGVoyageCalculatorTest {
 		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
-		int baseFuelInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(2);
+		final int baseFuelInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(2);
 		vesselClass.setBaseFuelUnitPrice(baseFuelInternalPrice);
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
@@ -795,11 +792,10 @@ public class LNGVoyageCalculatorTest {
 
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, details1, dischargeDetails, details2, otherDetails };
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
-			arrivalTimes.add(0);
-		}
-		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, arrivalTimes, sequence);
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
+
+		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -873,11 +869,10 @@ public class LNGVoyageCalculatorTest {
 
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
-			arrivalTimes.add(0);
-		}
-		calc.calculateVoyagePlan(plan, vessel, 0, 0, arrivalTimes, sequence);
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
+
+		calc.calculateVoyagePlan(plan, vessel, 0, 0, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
@@ -905,8 +900,8 @@ public class LNGVoyageCalculatorTest {
 		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = Mockito.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
-		int baseFuelPrice = 2;
-		int baseFuelInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(baseFuelPrice);
+		final int baseFuelPrice = 2;
+		final int baseFuelInternalPrice = OptimiserUnitConvertor.convertToInternalPrice(baseFuelPrice);
 		vesselClass.setBaseFuelUnitPrice(baseFuelInternalPrice);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
@@ -957,11 +952,10 @@ public class LNGVoyageCalculatorTest {
 
 		final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		for (int i = 0; i < 1 + (sequence.length / 2); ++i) {
-			arrivalTimes.add(0);
-		}
-		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, arrivalTimes, sequence);
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
+		
+		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);

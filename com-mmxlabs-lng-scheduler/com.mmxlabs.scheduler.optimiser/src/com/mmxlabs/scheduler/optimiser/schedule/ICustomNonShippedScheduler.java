@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.schedule;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -15,6 +16,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public interface ICustomNonShippedScheduler {
 
-	void modifyArrivalTimes(IResource resource, int startTime, VoyagePlan currentPlan, int[] times);
+	void modifyArrivalTimes(IResource resource, int startTime, VoyagePlan currentPlan, PortTimesRecord portTimesRecord);
 
 }

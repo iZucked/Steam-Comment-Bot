@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -31,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public class NewLNGVoyageCalculatorTest {
 
@@ -345,7 +347,8 @@ public class NewLNGVoyageCalculatorTest {
 
 		Assert.assertEquals(nboRate * travelTime / 24, details.getFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit()));
 		// Some supplement expected
-		Assert.assertEquals((expectedBaseConsumption - nboRate / 2) * travelTime / 24, details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
+		Assert.assertEquals((expectedBaseConsumption - nboRate / 2) * travelTime / 24,
+				details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()));
 		// Equivalence is 0.5
 		Assert.assertTrue(details.getFuelConsumption(FuelComponent.Base_Supplemental, FuelComponent.Base_Supplemental.getDefaultFuelUnit()) > 0);
 
@@ -978,9 +981,9 @@ public class NewLNGVoyageCalculatorTest {
 
 		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		arrivalTimes.add(1);
-		arrivalTimes.add(2);
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(fromPortSlot)).thenReturn(1);
+		Mockito.when(portTimesRecord.getSlotTime(toPortSlot)).thenReturn(2);
 
 		final IPort toPort = Mockito.mock(IPort.class);
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
@@ -1000,7 +1003,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Expect the non-load slot branch - time 3 == time of next Port
 		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(2, toPort)).thenReturn(expectedCooldownPrice);
 
-		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), arrivalTimes, fromPortDetails, voyageDetails, toPortDetails);
+		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
 
 		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(2, toPort);
 
@@ -1050,10 +1053,9 @@ public class NewLNGVoyageCalculatorTest {
 
 		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
 
-		final List<Integer> arrivalTimes = new ArrayList<Integer>();
-		arrivalTimes.add(1);
-		arrivalTimes.add(2);
-		arrivalTimes.add(3);
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(fromPortSlot)).thenReturn(1);
+		Mockito.when(portTimesRecord.getSlotTime(toPortSlot)).thenReturn(2);
 
 		final IPort toPort = Mockito.mock(IPort.class);
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
@@ -1073,7 +1075,7 @@ public class NewLNGVoyageCalculatorTest {
 		// Expect the load slot branch - time 3 == time of next Port
 		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(toPortSlot, 2)).thenReturn(expectedCooldownPrice);
 
-		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), arrivalTimes, fromPortDetails, voyageDetails, toPortDetails);
+		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
 
 		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(toPortSlot, 2);
 

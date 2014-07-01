@@ -63,6 +63,7 @@ import com.mmxlabs.scheduler.optimiser.schedule.VoyagePlanAnnotator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -1297,7 +1298,7 @@ public class TestCalculations {
 				bind(IVolumeAllocator.class).toInstance(new IVolumeAllocator() {
 
 					@Override
-					public AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes) {
+					public AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
 						// TODO Auto-generated method stub
 						return null;
 					}
@@ -1309,7 +1310,7 @@ public class TestCalculations {
 					}
 
 					@Override
-					public IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, List<Integer> arrivalTimes) {
+					public IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
 						// TODO Auto-generated method stub
 						return null;
 					}

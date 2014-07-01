@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -25,6 +26,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		public int cargoCV;
 		public int pricePerMMBTu;
 		public int startTime;
+		public int duration;
 	}
 
 	private final Map<IPortSlot, SlotAllocationAnnotation> slotAllocations = new HashMap<IPortSlot, SlotAllocationAnnotation>();
@@ -34,6 +36,9 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	private long startHeelVolumeInM3;
 	private long remainingHeelVolumeInM3;
+
+	private int firstSlotTime = Integer.MAX_VALUE;
+	private IPortSlot firstPortSlot = null;
 
 	@Override
 	public long getFuelVolumeInM3() {
@@ -97,12 +102,29 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		if (allocation != null) {
 			return allocation.startTime;
 		}
-		// TODO: throw an exception instead of returning magic value
-		return -1;
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 
 	public void setSlotTime(final IPortSlot slot, final int time) {
 		getOrCreateSlotAllocation(slot).startTime = time;
+		// Set or update the first port slot and time
+		if (firstPortSlot == null || slot == firstPortSlot) {
+			firstSlotTime = time;
+			firstPortSlot = slot;
+		}
+	}
+
+	@Override
+	public int getSlotDuration(final IPortSlot slot) {
+		final SlotAllocationAnnotation allocation = slotAllocations.get(slot);
+		if (allocation != null) {
+			return allocation.duration;
+		}
+		return 0;
+	}
+
+	public void setSlotDuration(final IPortSlot slot, final int duration) {
+		getOrCreateSlotAllocation(slot).duration = duration;
 	}
 
 	@Override
@@ -111,8 +133,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		if (allocation != null) {
 			return allocation.pricePerMMBTu;
 		}
-		// TODO: throw an exception instead of returning magic value
-		return -1;
+		throw new IllegalArgumentException("Unknown port slot");
 	}
 
 	public void setSlotPricePerMMBTu(final IPortSlot slot, final int price) {
@@ -173,4 +194,12 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		this.startHeelVolumeInM3 = startHeelVolumeInM3;
 	}
 
+	public IPortSlot getFirstSlot() {
+		return firstPortSlot;
+	}
+
+	@Override
+	public int getFirstSlotTime() {
+		return firstSlotTime;
+	}
 }

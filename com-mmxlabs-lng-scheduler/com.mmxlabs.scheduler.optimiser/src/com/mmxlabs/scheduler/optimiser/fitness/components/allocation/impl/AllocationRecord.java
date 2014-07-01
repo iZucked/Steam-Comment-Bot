@@ -9,6 +9,8 @@ import java.util.List;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -40,7 +42,8 @@ public final class AllocationRecord {
 	/** The LNG volume which must remain at the end of the voyage (the remaining heel) */
 	public long minEndVolumeInM3;
 
-	public final List<Integer> slotTimes;
+	// public final List<Integer> slotTimes;
+	// public final List<Integer> slotDurations;
 
 	/** Slots in the cargo */
 	public final List<IPortSlot> slots;
@@ -66,16 +69,18 @@ public final class AllocationRecord {
 	 */
 	public IPortSlot returnSlot;
 
-	public AllocationRecord(final IVessel resourceVessel, VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3, final long requiredFuelVolumeInM3,
-			final long minEndVolumeInM3, final List<IPortSlot> slots, final List<Integer> times, IPortSlot returnSlot, List<Long> minVolumes, List<Long> maxVolumes) {
+	public IPortTimesRecord portTimesRecord;
+
+	public AllocationRecord(final IVessel resourceVessel, final VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3, final long requiredFuelVolumeInM3,
+			final long minEndVolumeInM3, final List<IPortSlot> slots, final IPortTimesRecord portTimesRecord, final IPortSlot returnSlot, final List<Long> minVolumes, final List<Long> maxVolumes) {
 		this.resourceVessel = resourceVessel;
 		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.vesselStartTime = vesselStartTime;
 		this.startVolumeInM3 = startVolumeInM3;
 		this.requiredFuelVolumeInM3 = requiredFuelVolumeInM3;
 		this.minEndVolumeInM3 = minEndVolumeInM3;
-		this.slotTimes = times;
 		this.slots = slots;
+		this.portTimesRecord = portTimesRecord;
 		this.returnSlot = returnSlot;
 		this.minVolumes = minVolumes;
 		this.maxVolumes = maxVolumes;

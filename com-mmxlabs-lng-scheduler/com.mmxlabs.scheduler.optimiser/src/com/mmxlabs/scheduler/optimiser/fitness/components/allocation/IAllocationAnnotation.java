@@ -10,6 +10,7 @@ import com.mmxlabs.optimiser.core.IElementAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 /**
  * An annotation which is appended to both {@link ILoadOption} and {@link IDischargeOption} indicating decisions made by the {@link IVolumeAllocator}
@@ -17,7 +18,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * @author hinton
  * 
  */
-public interface IAllocationAnnotation extends IElementAnnotation {
+public interface IAllocationAnnotation extends IPortTimesRecord {
+
+	@Override
 	List<IPortSlot> getSlots();
 
 	/**
@@ -48,9 +51,11 @@ public interface IAllocationAnnotation extends IElementAnnotation {
 	 * 
 	 * @return
 	 */
+	@Override
 	int getSlotTime(IPortSlot slot);
 
-	int getSlotPricePerMMBTu(IPortSlot slot);
+	@Override
+	int getSlotDuration(IPortSlot slot);
 
 	long getSlotVolumeInMMBTu(IPortSlot slot);
 
@@ -61,4 +66,6 @@ public interface IAllocationAnnotation extends IElementAnnotation {
 	 * @return
 	 */
 	int getSlotCargoCV(IPortSlot slot);
+
+	int getSlotPricePerMMBTu(IPortSlot slot);
 }

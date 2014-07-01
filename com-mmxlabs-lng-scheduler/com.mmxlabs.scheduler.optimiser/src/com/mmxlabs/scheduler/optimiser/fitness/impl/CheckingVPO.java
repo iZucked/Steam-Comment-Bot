@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -113,9 +114,9 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser#setArrivalTimes(java.util.List)
 	 */
 	@Override
-	public void setArrivalTimes(final List<Integer> currentTimes) {
-		reference.setArrivalTimes(currentTimes);
-		delegate.setArrivalTimes(currentTimes);
+	public void setPortTimesRecord(final IPortTimesRecord portTimesRecord) {
+		reference.setPortTimesRecord(portTimesRecord);
+		delegate.setPortTimesRecord(portTimesRecord);
 	}
 
 	@Override

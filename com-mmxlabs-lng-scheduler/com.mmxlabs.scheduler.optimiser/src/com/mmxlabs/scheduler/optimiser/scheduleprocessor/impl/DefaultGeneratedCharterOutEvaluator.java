@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -63,7 +64,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private IActualsDataProvider actualsDataProvider;
 
 	@Override
-	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
 
 		if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null; // continue;
@@ -72,7 +73,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// TODO: Extract out further for custom base fuel pricing logic?
 		// Use forecast BF, but check for actuals later
 		int baseFuelUnitPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, arrivalTimes.get(0));
+		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, portTimesRecord.getFirstSlotTime());
 
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
@@ -83,15 +84,16 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		int ballastIdx = -1;
 		int ballastStartTime = -1;
 
-		int currentTime = arrivalTimes.get(0);
-		int aTimeIdx = 0;
+		int currentTime = 0;// arrivalTimes.get(0);
+		final int aTimeIdx = 0;
 		for (int idx = 0; idx < currentSequence.length; ++idx) {
 			final Object obj = currentSequence[idx];
 			if (obj instanceof PortDetails) {
 				final PortDetails details = (PortDetails) obj;
 				if (idx != (currentSequence.length - 1)) {
-					currentTime = arrivalTimes.get(aTimeIdx++);
-					currentTime += details.getOptions().getVisitDuration();
+					currentTime = portTimesRecord.getSlotTime(details.getOptions().getPortSlot());
+					assert details.getOptions().getVisitDuration() == portTimesRecord.getSlotDuration(details.getOptions().getPortSlot());
+					currentTime += portTimesRecord.getSlotDuration(details.getOptions().getPortSlot());
 
 					if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 						isCargoPlan = true;
@@ -187,9 +189,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// Install our new alternative sequence
 		vpo.setBasicSequence(newRawSequence);
 
-		// Rebuilt the arrival times list
-		final List<Integer> currentTimes = new ArrayList<Integer>(arrivalTimes);
-		vpo.setArrivalTimes(currentTimes);
+		vpo.setPortTimesRecord(portTimesRecord);
 
 		// Add in the route choice
 		{
@@ -221,15 +221,15 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		if (isCargoPlan) {
 			// Get the new cargo allocation.
 
-			final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vesselStartTime, vp, arrivalTimes);
-			newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, newVoyagePlan, arrivalTimes);
+			final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vesselStartTime, vp, portTimesRecord);
+			newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, newVoyagePlan, portTimesRecord);
 
 			originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, vesselStartTime, null);
 			newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, vesselStartTime, null);
 
 		} else {
-			originalOption = entityValueCalculator.evaluate(vp, vessel, arrivalTimes.get(0), vesselStartTime, null);
-			newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, arrivalTimes.get(0), vesselStartTime, null);
+			originalOption = entityValueCalculator.evaluate(vp, vessel, portTimesRecord.getFirstSlotTime(), vesselStartTime, null);
+			newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, portTimesRecord.getFirstSlotTime(), vesselStartTime, null);
 			newAllocation = null;
 		}
 		// TODO: This should be recorded based on market availability groups and then processed.

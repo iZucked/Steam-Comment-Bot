@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -43,7 +44,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		private final IVessel vessel;
 		private final int vesselCharterInRatePerDay;
 		private final int baseFuelPricePerMT;
-		private final int[] times;
+		private final int[] voyageTimes;
 		private final IPortSlot[] slots;
 		private final List<IOptionsSequenceElement> sequence;
 		private final List<IVoyagePlanChoice> choices;
@@ -51,17 +52,17 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		private final int dischargePrice;
 
-		protected List<Integer> arrivalTimes;
+		protected IPortTimesRecord portTimesRecord;
 		protected final long startHeel;
 
-		public CacheKey(final IVessel vessel, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence, final List<Integer> arrivalTimes,
+		public CacheKey(final IVessel vessel, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence, final IPortTimesRecord portTimesRecord,
 				final List<IVoyagePlanChoice> choices, final long startHeel) {
 			super();
 			this.vessel = vessel;
 			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
 			this.baseFuelPricePerMT = baseFuelPricePerMT;
 			final int sz = sequence.size();
-			this.times = new int[sz / 2];
+			this.voyageTimes = new int[sz / 2];
 			this.slots = new IPortSlot[(sz / 2) + 1];
 			int slotix = 0;
 			int timeix = 0;
@@ -77,12 +78,12 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					}
 					slotix++;
 				} else {
-					times[timeix++] = ((VoyageOptions) o).getAvailableTime();
+					voyageTimes[timeix++] = ((VoyageOptions) o).getAvailableTime();
 				}
 			}
 
 			this.sequence = sequence;
-			this.arrivalTimes = arrivalTimes;
+			this.portTimesRecord = portTimesRecord;
 			this.choices = choices;
 			this.startHeel = startHeel;
 
@@ -90,7 +91,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// loadPrice =
 				// ((ILoadSlot)
 				// slots[loadix]).getPurchasePriceAtTime(arrivalTimes.get(loadix));
-				dischargePrice = ((IDischargeSlot) slots[dischargeix]).getDischargePriceCalculator().estimateSalesUnitPrice((IDischargeSlot) slots[dischargeix], arrivalTimes.get(dischargeix), null);
+				dischargePrice = ((IDischargeSlot) slots[dischargeix]).getDischargePriceCalculator().estimateSalesUnitPrice((IDischargeSlot) slots[dischargeix], portTimesRecord, null);
 			} else {
 				// loadPrice =
 				dischargePrice = -1;
@@ -103,7 +104,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int result = 1;
 			// result = prime * result + getOuterType().hashCode();
 			result = (prime * result) + Arrays.hashCode(slots);
-			result = (prime * result) + Arrays.hashCode(times);
+			result = (prime * result) + Arrays.hashCode(voyageTimes);
 
 			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
@@ -130,7 +131,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// if (!getOuterType().equals(other.getOuterType()))
 				// return false;
 
-				return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(times, other.times) && (// loadPrice == other.loadPrice &&
+				return Equality.shallowEquals(slots, other.slots) && (vessel == other.vessel) && Arrays.equals(voyageTimes, other.voyageTimes) && (// loadPrice == other.loadPrice &&
 						dischargePrice == other.dischargePrice && startHeel == other.startHeel);
 			}
 			return false;
@@ -152,7 +153,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private int baseFuelPricePerMT;
 	private final List<IVoyagePlanChoice> choices = new ArrayList<IVoyagePlanChoice>();
 
-	private List<Integer> arrivalTimes;
+	private IPortTimesRecord portTimesRecord;
 
 	private long startHeel;
 
@@ -172,7 +173,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				delegate.setVessel(arg.vessel, arg.baseFuelPricePerMT);
 				delegate.setVesselCharterInRatePerDay(arg.vesselCharterInRatePerDay);
 				delegate.setBasicSequence(arg.sequence);
-				delegate.setArrivalTimes(arg.arrivalTimes);
+				delegate.setPortTimesRecord(arg.portTimesRecord);
 				delegate.setStartHeel(arg.startHeel);
 				delegate.init();
 				delegate.optimise();
@@ -190,7 +191,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Override
 	public VoyagePlan optimise() {
 
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, arrivalTimes, choices, startHeel));
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, portTimesRecord, choices, startHeel));
 
 		// bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestPlan = best.getFirst();
@@ -257,14 +258,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		choices.add(choice);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser# setArrivalTimes(java.util.List)
-	 */
 	@Override
-	public void setArrivalTimes(final List<Integer> arrivalTimes) {
-		this.arrivalTimes = arrivalTimes;
+	public void setPortTimesRecord(final IPortTimesRecord portTimesRecord) {
+		this.portTimesRecord = portTimesRecord;
 	}
 
 	@Override

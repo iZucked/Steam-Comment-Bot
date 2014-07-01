@@ -26,6 +26,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -165,9 +166,15 @@ public class TestPriceExpressionContract {
 		final IDischargeSlot dischargeSlotNoPricingDate = mock(IDischargeSlot.class);
 		when(dischargeSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
-		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(dischargeSlotWithPricingDate, dischargeTime, null);
+		IPortTimesRecord portTimesRecord1 = mock(IPortTimesRecord.class);
+		when(portTimesRecord1.getSlotTime(dischargeSlotWithPricingDate)).thenReturn(dischargeTime);
 
-		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(dischargeSlotNoPricingDate, dischargeTime, null);
+		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(dischargeSlotWithPricingDate, portTimesRecord1, null);
+
+		IPortTimesRecord portTimesRecord2 = mock(IPortTimesRecord.class);
+		when(portTimesRecord2.getSlotTime(dischargeSlotNoPricingDate)).thenReturn(dischargeTime);
+
+		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(dischargeSlotNoPricingDate, portTimesRecord2, null);
 
 		verify(curve).getValueAtPoint(pricingDate);
 		verify(curve).getValueAtPoint(dischargeTime);

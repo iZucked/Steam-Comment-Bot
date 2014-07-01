@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.scheduleprocessor;
 
-import java.util.List;
-
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -16,9 +15,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface IBreakEvenEvaluator {
 
 	static final String MARKER = "?";
-	
-//	void processSchedule(ScheduledSequences scheduledSequences);
 
-	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, IVessel vessel, VoyagePlan vp, List<Integer> arrivalTimes);
+	Pair<VoyagePlan, IAllocationAnnotation> processSchedule(int vesselStartTime, IVessel vessel, VoyagePlan vp, IPortTimesRecord portTimesRecord);
 
 }
