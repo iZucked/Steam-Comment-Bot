@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.LinkedFBOVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IOptionsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -160,10 +161,18 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			returnOptions.setVessel(vessel);
 
 			final List<IOptionsSequenceElement> basicSequence = Lists.<IOptionsSequenceElement> newArrayList(loadOptions, ladenOptions, dischargeOptions, ballastOptions, returnOptions);
-			final List<Integer> arrivalTimes = Lists.newArrayList(loadTime, dischargeTime, notionalReturnTime);
+
+			final PortTimesRecord portTimesRecord = new PortTimesRecord();
+			portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
+			portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
+			portTimesRecord.setSlotTime(notionalReturnSlot, notionalReturnTime);
+
+			portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
+			portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
+			portTimesRecord.setSlotDuration(notionalReturnSlot, 0);
 
 			vpo.setBasicSequence(basicSequence);
-			vpo.setArrivalTimes(arrivalTimes);
+			vpo.setPortTimesRecord(portTimesRecord);
 			vpo.setVessel(vessel, baseFuelPricePerMT);
 			vpo.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 			vpo.setStartHeel(startHeelInM3);

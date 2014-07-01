@@ -24,6 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -36,9 +37,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 	private ILNGVoyageCalculator voyageCalculator;
 
 	@Override
-	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, int loadDuration, final int dischargeTime, int dischargeDuration,
-			@NonNull final IVessel vessel, final int vesselCharterInRatePerDay, long startHeelInM3, final int notionalSpeed, final int cargoCVValue, @NonNull final String route,
-			final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
+	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
+			final int dischargeDuration, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int notionalSpeed, final int cargoCVValue,
+			@NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
@@ -53,7 +54,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Determine notional port visit times.
 		final int notionalReturnTime = dischargeTime + dischargeDuration + travelTime;
-		final int[] arrivalTimes = new int[] { loadTime, dischargeTime, notionalReturnTime };
 
 		final LoadSlot notionalLoadSlot = new LoadSlot();
 		notionalLoadSlot.setPort(loadPort);
@@ -71,6 +71,15 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final PortSlot notionalReturnSlot = new EndPortSlot();
 		notionalReturnSlot.setPort(loadPort);
 		notionalReturnSlot.setTimeWindow(new TimeWindow(notionalReturnTime, notionalReturnTime));
+
+		final PortTimesRecord portTimesRecord = new PortTimesRecord();
+		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
+		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
+		portTimesRecord.setSlotTime(notionalReturnSlot, notionalReturnTime);
+
+		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
+		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
+		portTimesRecord.setSlotDuration(notionalReturnSlot, 0);
 
 		// Calculate new voyage requirements
 		{
@@ -96,7 +105,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, startHeelInM3, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, startHeelInM3, baseFuelPricePerMT, portTimesRecord, sequence);
 
 			return notionalPlan;
 		}
@@ -104,8 +113,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 	@Override
 	@Nullable
-	public VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,
-			@NonNull IVessel vessel, final int vesselCharterInRatePerDay, long startHeelInM3, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, @NonNull ISalesPriceCalculator salesPrice) {
+	public VoyagePlan calculateShippingCosts(@NonNull final IPort loadPort, @NonNull final IPort dischargePort, final int loadTime, final int loadDuration, final int dischargeTime,
+			final int dischargeDuration, final int returnTime, @NonNull final IVessel vessel, final int vesselCharterInRatePerDay, final long startHeelInM3, final int cargoCVValue,
+			@NonNull final String route, final int baseFuelPricePerMT, @NonNull final ISalesPriceCalculator salesPrice) {
 
 		final VoyagePlan notionalPlan = new VoyagePlan();
 		notionalPlan.setCharterInRatePerDay(vesselCharterInRatePerDay);
@@ -134,6 +144,15 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		notionalReturnSlot.setPort(loadPort);
 		notionalReturnSlot.setTimeWindow(new TimeWindow(returnTime, returnTime));
 
+		final PortTimesRecord portTimesRecord = new PortTimesRecord();
+		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
+		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
+		portTimesRecord.setSlotTime(notionalReturnSlot, returnTime);
+
+		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
+		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
+		portTimesRecord.setSlotDuration(notionalReturnSlot, 0);
+
 		// Calculate new voyage requirements
 		{
 			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot);
@@ -158,7 +177,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 			final IDetailsSequenceElement[] sequence = new IDetailsSequenceElement[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 			notionalPlan.setSequence(sequence);
-			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, startHeelInM3, baseFuelPricePerMT, CollectionsUtil.toArrayList(arrivalTimes), sequence);
+			voyageCalculator.calculateVoyagePlan(notionalPlan, vessel, startHeelInM3, baseFuelPricePerMT, portTimesRecord, sequence);
 
 			return notionalPlan;
 		}
