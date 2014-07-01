@@ -59,7 +59,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 				@Override
 				public void run() {
 
-					// Create ModelReference to keep model loaded while validating
+					// Create ModelReference to keep model loaded (if already loaded) while validating
 					try (final ModelReference modelReference = scenarioInstance.getReference()) {
 
 						// Pin member variables
@@ -67,7 +67,8 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 						if (pValidationService == null) {
 							return;
 						}
-						final MMXRootObject rootObject = (MMXRootObject) modelReference.getInstance();
+						// Get the model reference if already loaded.
+						final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
 						if (rootObject == null) {
 							return;
 						}
