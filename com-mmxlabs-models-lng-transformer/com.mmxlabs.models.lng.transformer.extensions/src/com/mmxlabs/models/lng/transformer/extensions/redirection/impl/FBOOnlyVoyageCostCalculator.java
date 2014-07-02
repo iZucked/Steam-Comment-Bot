@@ -75,11 +75,10 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
 		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
-		portTimesRecord.setSlotTime(notionalReturnSlot, notionalReturnTime);
+		portTimesRecord.setReturnSlotTime(notionalReturnSlot, notionalReturnTime);
 
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
-		portTimesRecord.setSlotDuration(notionalReturnSlot, 0);
 
 		// Calculate new voyage requirements
 		{
@@ -147,11 +146,10 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
 		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
-		portTimesRecord.setSlotTime(notionalReturnSlot, returnTime);
+		portTimesRecord.setReturnSlotTime(notionalReturnSlot, returnTime);
 
 		portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 		portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
-		portTimesRecord.setSlotDuration(notionalReturnSlot, 0);
 
 		// Calculate new voyage requirements
 		{

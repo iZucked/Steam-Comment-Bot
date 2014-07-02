@@ -165,11 +165,10 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 			final PortTimesRecord portTimesRecord = new PortTimesRecord();
 			portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
 			portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
-			portTimesRecord.setSlotTime(notionalReturnSlot, notionalReturnTime);
+			portTimesRecord.setReturnSlotTime(notionalReturnSlot, notionalReturnTime);
 
 			portTimesRecord.setSlotDuration(notionalLoadSlot, loadDuration);
 			portTimesRecord.setSlotDuration(notionalDischargeSlot, dischargeDuration);
-			portTimesRecord.setSlotDuration(notionalReturnSlot, 0);
 
 			vpo.setBasicSequence(basicSequence);
 			vpo.setPortTimesRecord(portTimesRecord);
