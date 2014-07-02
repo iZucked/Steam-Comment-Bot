@@ -37,7 +37,7 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, final IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
+	public int calculateSalesUnitPrice(IDischargeOption option, final IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
 		return price;
 	}
 

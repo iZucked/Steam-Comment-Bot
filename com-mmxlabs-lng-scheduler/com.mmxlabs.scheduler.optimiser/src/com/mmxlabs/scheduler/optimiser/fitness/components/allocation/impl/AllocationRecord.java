@@ -45,7 +45,7 @@ public final class AllocationRecord {
 	// public final List<Integer> slotTimes;
 	// public final List<Integer> slotDurations;
 
-	/** Slots in the cargo */
+	/** Slots in the cargo, excluding the return port slot */
 	public final List<IPortSlot> slots;
 
 	/**

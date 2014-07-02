@@ -33,22 +33,22 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public int calculateCooldownUnitPrice(ILoadSlot option, int time) {
+	public int calculateCooldownUnitPrice(final ILoadSlot option, final int time) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int calculateCooldownUnitPrice(int time, IPort port) {
+	public int calculateCooldownUnitPrice(final int time, final IPort port) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(IDischargeOption option, IPortTimesRecord voyageRecord, @Nullable IDetailTree annotations) {
+	public int estimateSalesUnitPrice(final IDischargeOption option, final IPortTimesRecord voyageRecord, @Nullable final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, final IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations) {
+	public int calculateSalesUnitPrice(final IDischargeOption option, final IAllocationAnnotation allocationAnnotation, @Nullable final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
@@ -58,29 +58,31 @@ public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalc
 	}
 
 	@Override
-	public void prepareEvaluation(ISequences sequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 
 	}
 
 	@Override
-	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation, IVessel vessel, int vesselStartTime,
-			VoyagePlan plan, IDetailTree annotations) {
+	public int calculateFOBPricePerMMBTu(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
+			final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
+	public int calculateDESPurchasePricePerMMBTu(final ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
+			final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, IDischargeOption dischargeOption, int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation, IDetailTree annotations) {
+	public int calculatePriceForFOBSalePerMMBTu(final ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
+			final IDetailTree annotations) {
 		return pricePerMMBTU;
 	}
 
 	@Override
-	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, IAllocationAnnotation allocationAnnotation, int[] dischargePricesPerMMBTu, IVessel vessel, int vesselStartTime,
-			VoyagePlan plan, IDetailTree annotations) {
+	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu, final IVessel vessel,
+			final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		return 0;
 	}
 

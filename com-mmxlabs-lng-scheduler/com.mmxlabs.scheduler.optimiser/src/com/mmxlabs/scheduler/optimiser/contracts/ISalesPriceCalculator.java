@@ -9,7 +9,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -51,7 +50,7 @@ public interface ISalesPriceCalculator extends ICalculator {
 	 *            TODO
 	 * @param slot
 	 */
-	public int calculateSalesUnitPrice(ILoadOption loadOption, IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
+	public int calculateSalesUnitPrice(IDischargeOption option, IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
 
 	/**
 	 * Invoked before final P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to

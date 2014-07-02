@@ -116,7 +116,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			this.slotAdditionalPNL = new long[slots.size()];
 			this.slotEntity = new IEntity[slots.size()];
 			this.arrivalTimes = new int[slots.size()];
-			this.visitDurations= new int[slots.size()];
+			this.visitDurations = new int[slots.size()];
 		}
 	}
 
@@ -170,11 +170,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				final IDetailTree portSlotDetails = portSlotDetailTreeMap == null ? null : getPortSlotDetails(portSlotDetailTreeMap, slot);
 
-				// Special case! May not be correct for LLD case
-				final ILoadOption loadOption = (ILoadOption) slots.get(0);
-
 				final IDischargeOption dischargeOption = (IDischargeOption) slot;
-				cargoPNLData.slotPricePerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(loadOption, dischargeOption, currentAllocation, portSlotDetails);
+				cargoPNLData.slotPricePerMMBTu[idx] = dischargeOption.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeOption, currentAllocation, portSlotDetails);
 
 				// Tmp hack until we sort out the API around this - AllocationAnnotation is an input to this method!
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, cargoPNLData.slotPricePerMMBTu[idx]);
@@ -220,14 +217,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					// Hardcoded LD cargo P&L
 					// TODO: Change API's to match additional P&L
 					final IDischargeOption dischargeOption = (IDischargeOption) slots.get(1);
-					final int loadTime = cargoPNLData.arrivalTimes[0];
-					final int dischargeTime = cargoPNLData.arrivalTimes[1];
 					final int dischargePricePerMMBTu = cargoPNLData.slotPricePerMMBTu[1];
-					final long loadVolumeInM3 = cargoPNLData.slotVolumeInM3[0];
-					final long dischargeVolumeInM3 = cargoPNLData.slotVolumeInM3[1];
 
-					final int transferTime = dischargeTime;
-					final long transferVolumeInM3 = dischargeVolumeInM3;
 					// FOB Purchase to DES Sale
 					if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
 						final ILoadSlot loadSlot = (ILoadSlot) loadOption;
@@ -246,7 +237,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					}
 				}
 				cargoPNLData.slotPricePerMMBTu[idx] = pricePerMMBTu;
-				
+
 				// Tmp hack until we sort out the API around this - AllocationAnnotation is an input to this method!
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
 

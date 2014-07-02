@@ -12,7 +12,6 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -62,20 +61,19 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
 
-		final int dischargePricingDate = dischargeOption == null ? IPortSlot.NO_PRICING_DATE : dischargeOption.getPricingDate();
-		final int pricingDate = (dischargePricingDate == IPortSlot.NO_PRICING_DATE ? voyageRecord.getSlotTime(dischargeOption) : dischargePricingDate);
+		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeOption, voyageRecord);
 		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final IDetailTree annotations) {
+	public int calculateSalesUnitPrice(final IDischargeOption dischargeOption, final IAllocationAnnotation allocationAnnotation, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
 
-		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeOption, loadOption, allocationAnnotation);
+		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeOption, allocationAnnotation);
 		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
@@ -109,7 +107,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
 		}
-		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeSlot, loadOption, allocationAnnotation);
+		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeSlot, allocationAnnotation);
 		return calculateSimpleUnitPrice(pricingDate, dischargeSlot.getPort());
 	}
 

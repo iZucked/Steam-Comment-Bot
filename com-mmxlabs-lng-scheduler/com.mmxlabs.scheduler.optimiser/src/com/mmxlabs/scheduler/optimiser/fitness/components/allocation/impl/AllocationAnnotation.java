@@ -39,6 +39,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 
 	private int firstSlotTime = Integer.MAX_VALUE;
 	private IPortSlot firstPortSlot = null;
+	private IPortSlot returnPortSlot = null;
 
 	@Override
 	public long getFuelVolumeInM3() {
@@ -112,6 +113,11 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 			firstSlotTime = time;
 			firstPortSlot = slot;
 		}
+	}
+
+	public void setReturnSlotTime(final IPortSlot slot, final int time) {
+		setSlotTime(slot, time);
+		returnPortSlot = slot;
 	}
 
 	@Override
@@ -194,6 +200,7 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 		this.startHeelVolumeInM3 = startHeelVolumeInM3;
 	}
 
+	@Override
 	public IPortSlot getFirstSlot() {
 		return firstPortSlot;
 	}
@@ -201,5 +208,10 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	@Override
 	public int getFirstSlotTime() {
 		return firstSlotTime;
+	}
+
+	@Override
+	public IPortSlot getReturnSlot() {
+		return returnPortSlot;
 	}
 }

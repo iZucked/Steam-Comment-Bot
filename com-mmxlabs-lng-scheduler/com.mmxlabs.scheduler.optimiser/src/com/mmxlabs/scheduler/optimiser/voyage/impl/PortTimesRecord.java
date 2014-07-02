@@ -48,6 +48,7 @@ public class PortTimesRecord implements IPortTimesRecord {
 	private final List<IPortSlot> slots = new ArrayList<IPortSlot>(INITIAL_CAPACITY);
 	private int firstSlotTime = Integer.MAX_VALUE;
 	private IPortSlot firstPortSlot = null;
+	private IPortSlot returnSlot;
 
 	public PortTimesRecord() {
 
@@ -59,9 +60,14 @@ public class PortTimesRecord implements IPortTimesRecord {
 	 * @param other
 	 */
 	public PortTimesRecord(final IPortTimesRecord other) {
+		IPortSlot otherReturnSlot = other.getReturnSlot();
 		for (final IPortSlot slot : other.getSlots()) {
-			this.setSlotTime(slot, other.getSlotTime(slot));
-			this.setSlotDuration(slot, other.getSlotDuration(slot));
+			if (otherReturnSlot == slot) {
+				this.setReturnSlotTime(slot, other.getSlotTime(slot));
+			} else {
+				this.setSlotTime(slot, other.getSlotTime(slot));
+				this.setSlotDuration(slot, other.getSlotDuration(slot));
+			}
 		}
 	}
 
@@ -108,6 +114,11 @@ public class PortTimesRecord implements IPortTimesRecord {
 		throw new IllegalArgumentException("Unknown port slot");
 	}
 
+	public void setReturnSlotTime(IPortSlot slot, final int time) {
+		setSlotTime(slot, time);
+		this.returnSlot = slot;
+	}
+
 	public void setSlotTime(final IPortSlot slot, final int time) {
 		getOrCreateSlotRecord(slot).startTime = time;
 		// Set or update the first port slot and time
@@ -131,11 +142,6 @@ public class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
-	public int getFirstSlotTime() {
-		return firstSlotTime;
-	}
-
-	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof PortTimesRecord) {
 			final PortTimesRecord other = (PortTimesRecord) obj;
@@ -150,7 +156,18 @@ public class PortTimesRecord implements IPortTimesRecord {
 	}
 
 	@Override
+	public int getFirstSlotTime() {
+		// return getSlotTime(getFirstSlot());
+		return firstSlotTime;
+	}
+
+	@Override
 	public IPortSlot getFirstSlot() {
 		return firstPortSlot;
+	}
+
+	@Override
+	public IPortSlot getReturnSlot() {
+		return returnSlot;
 	}
 }

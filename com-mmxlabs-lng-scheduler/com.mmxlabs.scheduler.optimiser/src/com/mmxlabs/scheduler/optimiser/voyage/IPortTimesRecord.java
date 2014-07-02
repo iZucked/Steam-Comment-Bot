@@ -27,7 +27,14 @@ public interface IPortTimesRecord extends IElementAnnotation {
 
 	int getSlotDuration(IPortSlot slot);
 
+	/**
+	 * Should be expected to do equivalent of "ptr.getSlotTime(ptr.getFirstSlot())"
+	 * @return
+	 */
 	int getFirstSlotTime();
 
 	IPortSlot getFirstSlot();
+	
+	IPortSlot getReturnSlot();
+	
 }

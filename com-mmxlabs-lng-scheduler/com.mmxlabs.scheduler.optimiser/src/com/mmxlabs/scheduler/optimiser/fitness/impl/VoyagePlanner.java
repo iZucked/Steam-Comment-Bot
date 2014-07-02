@@ -334,17 +334,24 @@ public class VoyagePlanner {
 			portOptions.setVisitDuration(visitDuration);
 			portOptions.setPortSlot(thisPortSlot);
 			portOptions.setVessel(vessel);
-			portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
-			// Sequence scheduler should be using the actuals time
-			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getArrivalTime(thisPortSlot) == arrivalTimes[idx];
-
-			if (isShortsSequence && portType == PortType.Short_Cargo_End) {
-				portTimesRecord.setSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
-			} else {
-				portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
-			}
 			voyageOrPortOptions.add(portOptions);
 
+			// Sequence scheduler should be using the actuals time
+			assert actualsDataProvider.hasActuals(thisPortSlot) == false || actualsDataProvider.getArrivalTime(thisPortSlot) == arrivalTimes[idx];
+			if (breakSequence[idx]) {
+				if (isShortsSequence && portType == PortType.Short_Cargo_End) {
+					portTimesRecord.setReturnSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
+				} else {
+					portTimesRecord.setReturnSlotTime(thisPortSlot, arrivalTimes[idx]);
+				}
+			} else {
+				if (isShortsSequence && portType == PortType.Short_Cargo_End) {
+					portTimesRecord.setSlotTime(thisPortSlot, shortCargoReturnArrivalTime);
+				} else {
+					portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
+				}
+				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);
+			}
 			if (breakSequence[idx]) {
 
 				// Use prev slot as "thisPortSlot" is the start of a new voyage plan and thus likely a different cargo
@@ -382,6 +389,7 @@ public class VoyagePlanner {
 				voyageOrPortOptions.clear();
 				voyageOrPortOptions.add(portOptions);
 
+				// Reset object ref
 				portTimesRecord = new PortTimesRecord();
 				portTimesRecord.setSlotTime(thisPortSlot, arrivalTimes[idx]);
 				portTimesRecord.setSlotDuration(thisPortSlot, visitDuration);

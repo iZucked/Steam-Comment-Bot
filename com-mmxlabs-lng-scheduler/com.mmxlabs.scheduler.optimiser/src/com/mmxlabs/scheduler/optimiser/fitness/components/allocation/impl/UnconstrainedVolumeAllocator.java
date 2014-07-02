@@ -154,7 +154,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			if (loadVolume < fuelDeficit) {
 				loadVolume = fuelDeficit;
 				// we should never be required to load more than the vessel can fit in its tanks
-//				assert (loadVolume <= availableCargoSpace);
+				// assert (loadVolume <= availableCargoSpace);
 			}
 
 			// the amount of LNG available for discharge
@@ -259,6 +259,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
 			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), cargoCVValue));
+		}
+		// Copy over the return slot time if present
+		{
+			final IPortSlot slot = allocationRecord.portTimesRecord.getReturnSlot();
+			if (slot != null) {
+				annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
+			}
 		}
 
 		return annotation;
