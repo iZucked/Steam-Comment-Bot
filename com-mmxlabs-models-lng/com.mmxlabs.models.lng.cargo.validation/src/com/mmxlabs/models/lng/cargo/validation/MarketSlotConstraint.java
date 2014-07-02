@@ -109,6 +109,12 @@ public class MarketSlotConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_MaxQuantity());
 					failures.add(dsd);
 				}
+				if (slot.isSetPricingEvent()) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("[Market model|" + slot.getName() + "] " + type
+							+ " should not have a pricing event."));
+					dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PricingEvent());
+					failures.add(dsd);
+				}
 			}
 
 			if (spotSlot instanceof SpotLoadSlot) {
