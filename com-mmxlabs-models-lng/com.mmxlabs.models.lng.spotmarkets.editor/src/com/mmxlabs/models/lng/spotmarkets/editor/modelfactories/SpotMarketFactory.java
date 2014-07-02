@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.ISelection;
 
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
@@ -91,22 +92,27 @@ public class SpotMarketFactory extends DefaultModelFactory {
 
 	protected EObject constructInstance(final EClass eClass, EObject container) {
 		final EObject object;
+		final SpotMarket market;
 		if (container instanceof SpotMarketGroup) {
 			final SpotMarketGroup spotMarketGroup = (SpotMarketGroup) container;
 			switch (spotMarketGroup.getType()) {
 			case DES_PURCHASE:
-				object = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
+				object = market = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
+				market.setPricingEvent(PricingEvent.START_DISCHARGE);
 				break;
 			case DES_SALE:
-				object = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
+				object = market = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
+				market.setPricingEvent(PricingEvent.START_DISCHARGE);
 				break;
 			case FOB_PURCHASE:
-				object = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
+				object = market = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
+				market.setPricingEvent(PricingEvent.START_LOAD);
 				break;
 			case FOB_SALE:
-				object = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
+				object = market = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
+				market.setPricingEvent(PricingEvent.START_LOAD);
 				break;
-				default:
+			default:
 				object = eClass.getEPackage().getEFactoryInstance().create(eClass);
 			}
 
@@ -131,9 +137,9 @@ public class SpotMarketFactory extends DefaultModelFactory {
 			if (priceInfoClass != null) {
 				return priceInfoClass.getEPackage().getEFactoryInstance().create(priceInfoClass);
 			}
-			
+
 			return null;
-			
+
 		}
 		return super.createSubInstance(top, reference);
 	}
@@ -143,6 +149,5 @@ public class SpotMarketFactory extends DefaultModelFactory {
 		super.initFromExtension(ID, label, "com.mmxlabs.models.lng.spotmarkets.SpotMarket", replacementEReference, replacementEClass);
 		this.priceInfoClassName = prototype;
 	}
-	
 
 }
