@@ -67,7 +67,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	final ExpandableSet esPricing;
 	private final ExpandableSet esWindow;
 	private final ExpandableSet esTerms;
-	private ExpandableSet esOther;
+	private final ExpandableSet esOther;
 	private ArrayList<EStructuralFeature[]> nameFeatures;
 	private ArrayList<EStructuralFeature[]> pricingFeatures;
 	private HashSet<EStructuralFeature> pricingTitleFeatures;
@@ -81,7 +81,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 
 	private ArrayList<EStructuralFeature[]> missedFeatures;
 	private ArrayList<EStructuralFeature> missedFeaturesList;
-	
+
 	{
 		allFeatures = new HashSet<EStructuralFeature>();
 
@@ -90,7 +90,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(nameFeatures));
 
 		mainFeatures = new ArrayList<EStructuralFeature[]>();
-		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(),  CargoFeatures.getSlot_Entity()});
+		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Port(), CargoFeatures.getSlot_Entity() });
 		mainFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_MinQuantity(), CargoFeatures.getSlot_MaxQuantity() });
 		allFeatures.addAll(getAllFeatures(mainFeatures));
 
@@ -98,7 +98,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		pricingFeatures.add(new EStructuralFeature[] { Contract });
 		pricingFeatures.add(new EStructuralFeature[] { PriceExpression });
 		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_PricingDate() });
-		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Hedges(), CargoFeatures.getSlot_CancellationFee()});
+		pricingFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Hedges(), CargoFeatures.getSlot_CancellationFee() });
 		pricingTitleFeatures = Sets.newHashSet(Contract, PriceExpression);
 		allFeatures.addAll(getAllFeatures(pricingFeatures));
 
@@ -110,34 +110,34 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		allFeatures.addAll(getAllFeatures(windowFeatures));
 
 		loadTermsFeatures = new ArrayList<EStructuralFeature[]>();
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV()});
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive()});
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts()});
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_ArriveCold(), CargoFeatures.getLoadSlot_CargoCV() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
 
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels()});
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment()});
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction()});
-		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType()});
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
+		loadTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getLoadSlot_SalesDeliveryType() });
 		allFeatures.addAll(getAllFeatures(loadTermsFeatures));
 
 		dischargeTermsFeatures = new ArrayList<EStructuralFeature[]>();
 		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_PurchaseDeliveryType() });
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment()});
-		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction()});
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getDischargeSlot_MinCvValue(), CargoFeatures.getDischargeSlot_MaxCvValue() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedListsArePermissive() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedPorts() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_RestrictedContracts() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_AllowedVessels() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getAssignableElement_Assignment() });
+		dischargeTermsFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Divertible(), CargoFeatures.getSlot_ShippingDaysRestriction() });
 		allFeatures.addAll(getAllFeatures(dischargeTermsFeatures));
 
 		noteFeatures = new ArrayList<EStructuralFeature[]>();
 		noteFeatures.add(new EStructuralFeature[] { CargoFeatures.getSlot_Notes() });
 		allFeatures.addAll(getAllFeatures(noteFeatures));
-		
+
 		missedFeaturesList = new ArrayList<EStructuralFeature>();
-		missedFeatures = new ArrayList<EStructuralFeature[]>();		
+		missedFeatures = new ArrayList<EStructuralFeature[]>();
 	}
 
 	public SlotDetailComposite(final Composite parent, final int style, final FormToolkit toolkit) {
@@ -160,10 +160,9 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				text += pe != null ? pe : "";
 				textClient.setText(text);
 				textClient.update();
-//				ec.setText(baseTitle + ":   " + text);
+				// ec.setText(baseTitle + ":   " + text);
 			}
 		};
-
 
 		esWindow = new ExpandableSet("Window", this) {
 
@@ -173,18 +172,20 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				final SimpleDateFormat windowDateFormat = new SimpleDateFormat(WindowDateFormatString);
 				windowDateFormat.setTimeZone(LocalDateUtil.getTimeZone(eo, null));
 
-				final MMXObject mmxEo = (MMXObject) eo;				
+				final MMXObject mmxEo = (MMXObject) eo;
 				final Date d = (Date) mmxEo.eGet(WindowStart);
-				final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
-				final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
-				String text = windowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours";
-				textClient.setText(text);
-//				ec.setText(baseTitle + ":   " + text);
+				if (d != null) {
+					final int time = (Integer) mmxEo.eGetWithDefault(WindowStartTime);
+					final int wsize = (Integer) mmxEo.eGetWithDefault(WindowSize);
+					final String text = windowDateFormat.format(d) + ", " + String.format("%02d:00", time) + " - " + wsize + " hours";
+					textClient.setText(text);
+					// ec.setText(baseTitle + ":   " + text);
+				}
 			}
 		};
 
 		esTerms = new ExpandableSet("Terms", this);
-		
+
 		esOther = new ExpandableSet("Other", this);
 	}
 
@@ -205,7 +206,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 				if (feature == CargoPackage.Literals.SLOT__MAX_QUANTITY || feature == CargoPackage.Literals.SLOT__MIN_QUANTITY) {
 					final GridData gd = (GridData) super.createEditorLayoutData(root, value, editor, control);
 					// 64 - magic constant from MultiDetailDialog
-//					gd.widthHint = 80;
+					// gd.widthHint = 80;
 					return gd;
 				}
 				if (feature == CargoPackage.Literals.SLOT__NOTES) {
@@ -261,10 +262,10 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		contentComposite = toolkit.createComposite(this);
-		Layout l = layoutProvider.createDetailLayout(root, object);
-//		contentComposite.setLayout(new GridLayout(2, false));
-		 
-		GridLayout layout = new GridLayout(2, false);
+		final Layout l = layoutProvider.createDetailLayout(root, object);
+		// contentComposite.setLayout(new GridLayout(2, false));
+
+		final GridLayout layout = new GridLayout(2, false);
 		layout.verticalSpacing = 8;
 		contentComposite.setLayout(layout);
 
@@ -277,17 +278,17 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 
 		createSpacer();
-		
-		HashSet<EStructuralFeature> contractFeatures = new HashSet<EStructuralFeature>();
-		for (EStructuralFeature f : missedFeaturesList) {
-			
-			if(f.getEContainingClass().getEAllSuperTypes().contains(SlotContractParams)){
+
+		final HashSet<EStructuralFeature> contractFeatures = new HashSet<EStructuralFeature>();
+		for (final EStructuralFeature f : missedFeaturesList) {
+
+			if (f.getEContainingClass().getEAllSuperTypes().contains(SlotContractParams)) {
 				contractFeatures.add(f);
 			}
-		}		
-		for (EStructuralFeature f : contractFeatures) {
-			pricingFeatures.add(new EStructuralFeature[]{f});
-//			System.out.println("Adding pricing feature: " + f);
+		}
+		for (final EStructuralFeature f : contractFeatures) {
+			pricingFeatures.add(new EStructuralFeature[] { f });
+			// System.out.println("Adding pricing feature: " + f);
 			missedFeaturesList.remove(f);
 		}
 
@@ -299,20 +300,20 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		createSpacer();
 		makeExpandable(root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
 
-		if(!missedFeaturesList.isEmpty()) {		
-			
+		if (!missedFeaturesList.isEmpty()) {
+
 			createSpacer();
 			missedFeaturesList.size();
-			for (EStructuralFeature f : missedFeaturesList) {
-				missedFeatures.add(new EStructuralFeature[] {f});
+			for (final EStructuralFeature f : missedFeaturesList) {
+				missedFeatures.add(new EStructuralFeature[] { f });
 			}
-//			System.out.println(object);
-//			System.out.println(missedFeaturesList.size());
-//			for (EStructuralFeature[] eStructuralFeatures : missedFeatures) {
-//				for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
-//					System.out.println(eStructuralFeature);
-//				}
-//			}
+			// System.out.println(object);
+			// System.out.println(missedFeaturesList.size());
+			// for (EStructuralFeature[] eStructuralFeatures : missedFeatures) {
+			// for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+			// System.out.println(eStructuralFeature);
+			// }
+			// }
 			makeExpandable(root, object, dbc, esOther, missedFeatures, null, false);
 		}
 
@@ -321,18 +322,18 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 	}
 
-	private void makeExpandable(final MMXRootObject root, final EObject object,
-			final EMFDataBindingContext dbc, ExpandableSet expandable, List<EStructuralFeature[]> features, Set<EStructuralFeature> titleFeatures, boolean expanded) {
+	private void makeExpandable(final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc, final ExpandableSet expandable, final List<EStructuralFeature[]> features,
+			final Set<EStructuralFeature> titleFeatures, final boolean expanded) {
 		expandable.setFeatures(features, titleFeatures);
 		expandable.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
 		expandable.setExpanded(expanded);
 	}
 
 	private void createSpacer() {
-//		final Composite spacer = toolkit.createComposite(contentComposite);
-//		final GridData gd = new GridData();
-//		gd.heightHint = 3;
-//		spacer.setLayoutData(gd);
+		// final Composite spacer = toolkit.createComposite(contentComposite);
+		// final GridData gd = new GridData();
+		// gd.heightHint = 3;
+		// spacer.setLayoutData(gd);
 	}
 
 	@Override
@@ -360,11 +361,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		}
 		return null;
 	}
-	
-	private HashSet<EStructuralFeature> getAllFeatures(ArrayList<EStructuralFeature[]> list){
-		HashSet<EStructuralFeature> fs = new HashSet<EStructuralFeature>();
-		for (EStructuralFeature[] eStructuralFeatures : list) {
-			for (EStructuralFeature eStructuralFeature : eStructuralFeatures) {
+
+	private HashSet<EStructuralFeature> getAllFeatures(final ArrayList<EStructuralFeature[]> list) {
+		final HashSet<EStructuralFeature> fs = new HashSet<EStructuralFeature>();
+		for (final EStructuralFeature[] eStructuralFeatures : list) {
+			for (final EStructuralFeature eStructuralFeature : eStructuralFeatures) {
 				fs.add(eStructuralFeature);
 			}
 		}
