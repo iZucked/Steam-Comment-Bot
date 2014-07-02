@@ -614,10 +614,14 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 */
 	@Override
 	public Calendar getLocalStart() {
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(getOperationsStart());
-		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
-		return calendar;
+		final Date os = getOperationsStart();
+		if (os != null) {
+			final Calendar calendar = Calendar.getInstance();
+			calendar.setTime(os);
+			calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START)));
+			return calendar;
+		}
+		return null;
 	}
 
 	/**
@@ -627,10 +631,14 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 */
 	@Override
 	public Calendar getLocalEnd() {
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(getOperationsEnd());
-		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END)));
-		return calendar;
+		final Date oe = getOperationsEnd();
+		if (oe != null) {
+			final Calendar calendar = Calendar.getInstance();
+			calendar.setTime(oe);
+			calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_END)));
+			return calendar;
+		}
+		return null;
 	}
 
 	/**
