@@ -8,8 +8,10 @@ import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorFactory;
@@ -20,7 +22,13 @@ import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 public class PricingEventValueListInlineEditorFactory implements IInlineEditorFactory {
 	@Override
 	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
-		ArrayList<Object> objectsList = new ArrayList<>();
+		final ArrayList<Object> objectsList = new ArrayList<>(2 * (PricingEvent.values().length + 1));
+
+		if (feature.isUnsettable()) {
+			objectsList.add("<Not set>");
+			objectsList.add(null);
+		}
+
 		for (final PricingEvent type : PricingEvent.values()) {
 			final String name;
 			switch (type) {
