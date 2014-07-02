@@ -28,6 +28,7 @@ import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.port.Port;
@@ -57,12 +58,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private final Map<String, IScheduleViewColourScheme> colourSchemesById = new HashMap<String, IScheduleViewColourScheme>();
 	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<IScheduleViewColourScheme>();
 
-	private List<IScheduleViewColourScheme> highlighters = new ArrayList<IScheduleViewColourScheme>();
-	private Map<String, IScheduleViewColourScheme> highlightersById = new HashMap<String, IScheduleViewColourScheme>();
+	private final List<IScheduleViewColourScheme> highlighters = new ArrayList<IScheduleViewColourScheme>();
+	private final Map<String, IScheduleViewColourScheme> highlightersById = new HashMap<String, IScheduleViewColourScheme>();
 
 	private IScheduleViewColourScheme currentScheme = null;
 
-	private List<IScheduleViewColourScheme> currentHighlighters = new ArrayList<IScheduleViewColourScheme>();
+	private final List<IScheduleViewColourScheme> currentHighlighters = new ArrayList<IScheduleViewColourScheme>();
 
 	private final GanttChartViewer viewer;
 
@@ -73,7 +74,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	private boolean showCanals = false;
 
-	public EMFScheduleLabelProvider(final GanttChartViewer viewer, IMemento memento) {
+	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento) {
 		this.viewer = viewer;
 		this.memento = memento;
 	}
@@ -104,8 +105,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			}
 			text = seqText;
 		} else if (element instanceof Journey) {
-			Journey j = (Journey) element;
-			Route route = j.getRoute();
+			final Journey j = (Journey) element;
+			final Route route = j.getRoute();
 			if (route != null) {
 				if (route.isCanal()) {
 					if (memento.getBoolean(Show_Canals)) {
@@ -136,7 +137,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	public void toggleHighlighter(final IScheduleViewColourScheme hi) {
 
-		for (IScheduleViewColourScheme highlighter : currentHighlighters) {
+		for (final IScheduleViewColourScheme highlighter : currentHighlighters) {
 			if (hi != null && hi == highlighter) {
 				currentHighlighters.remove(highlighter);
 				highlighter.setViewer(null);
@@ -168,7 +169,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return showCanals;
 	}
 
-	public void addHighlighter(String id, IScheduleViewColourScheme cs) {
+	public void addHighlighter(final String id, final IScheduleViewColourScheme cs) {
 		if (id != null && !id.isEmpty()) {
 			highlightersById.put(id, cs);
 		}
@@ -188,7 +189,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return highlighters;
 	}
 
-	protected final boolean isActive(IScheduleViewColourScheme hi) {
+	protected final boolean isActive(final IScheduleViewColourScheme hi) {
 		return currentHighlighters.contains(hi);
 	}
 
@@ -229,10 +230,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				eventText.append(" \n");
 				// if (!journey.getRoute().equalsIgnoreCase("default")) {
 				eventText.append(String.format("%.1f knots", journey.getSpeed()));
-				for (FuelQuantity fq : journey.getFuels()) {
+				for (final FuelQuantity fq : journey.getFuels()) {
 					eventText.append(String.format(" | %s", fq.getFuel().toString()));
 				}
-				Route route = journey.getRoute();
+				final Route route = journey.getRoute();
 				if (route != null && route.isCanal()) {
 					eventText.append(" | " + route + "\n");
 				}
@@ -245,7 +246,21 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				// eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
 				eventText.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
 
-				if (slotVisit.getStart().after(slot.getWindowEndWithSlotOrPortTime())) {
+				boolean checkLateness = true;
+				// Do not check divertable slots
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
+						checkLateness = false;
+					}
+				} else if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					if (dischargeSlot.isFOBSale() && dischargeSlot.isDivertible()) {
+						checkLateness = false;
+					}
+				}
+
+				if (checkLateness && slotVisit.getStart().after(slot.getWindowEndWithSlotOrPortTime())) {
 					// lateness
 					final Calendar localStart = slotVisit.getLocalStart();
 					final Calendar windowEndDate = getWindowEndDate(element);
@@ -274,7 +289,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			}
 
 			{
-				Integer value = getPnL(element);
+				final Integer value = getPnL(element);
 				if (value != null) {
 					eventText.append("\nP&L: " + String.format("$%,d", value.intValue()));
 				}
@@ -331,7 +346,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public Color getBackground(final Object element) {
 
 		Color c = null;
-		for (IScheduleViewColourScheme highlighter : currentHighlighters) {
+		for (final IScheduleViewColourScheme highlighter : currentHighlighters) {
 			if (c == null)
 				c = highlighter.getBackground(element);
 		}
@@ -432,7 +447,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return 1;
 	}
 
-	private Integer getPnL(Object object) {
+	private Integer getPnL(final Object object) {
 		ProfitAndLossContainer container = null;
 
 		if (object instanceof CargoAllocation) {
