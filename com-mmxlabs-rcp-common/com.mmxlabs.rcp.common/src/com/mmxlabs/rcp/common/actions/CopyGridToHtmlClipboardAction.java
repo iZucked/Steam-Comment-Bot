@@ -6,12 +6,9 @@ package com.mmxlabs.rcp.common.actions;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.grid.Grid;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -19,7 +16,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.common.csv.CSVWriter;
+import com.google.common.html.HtmlEscapers;
 import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
@@ -57,7 +54,6 @@ public class CopyGridToHtmlClipboardAction extends Action {
 
 		final int numColumns = table.getColumnCount();
 
-		
 		sw.write("<table border='1'>\n");
 		try {
 			addHeader(sw);
@@ -65,8 +61,7 @@ public class CopyGridToHtmlClipboardAction extends Action {
 				// Ensure at least 1 column to grab data
 				processTableRow(sw, Math.max(1, numColumns), item);
 			}
-		}
-		catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace(); // should not occur, since we use a StringWriter
 		}
 		sw.write("</table>");
@@ -83,85 +78,80 @@ public class CopyGridToHtmlClipboardAction extends Action {
 			cb.dispose();
 		}
 	}
-	
+
 	private void addHeader(final StringWriter sw) {
 		final int numColumns = table.getColumnCount();
 		// write the head
 		sw.write("<thead>\n<tr>");
 		// top left blank cell
 		if (rowHeadersIncluded) {
-			addCell(sw, "th", "", new String [] { "bgcolor='grey'" });
+			addCell(sw, "th", "", new String[] { "bgcolor='grey'" });
 		}
 		// column headings
 		for (int i = 0; i < numColumns; ++i) {
-			addCell(sw, "th", table.getColumn(i).getText(), new String [] { "bgcolor='grey'" });
+			addCell(sw, "th", table.getColumn(i).getText(), new String[] { "bgcolor='grey'" });
 		}
-		sw.write("</tr>\n</thead>\n");		
+		sw.write("</tr>\n</thead>\n");
 	}
 
 	private void processTableRow(final StringWriter sw, final int numColumns, final GridItem item) throws IOException {
-		// start a row 
+		// start a row
 		sw.write("<tr>");
-		
-		
+
 		if (rowHeadersIncluded) {
-			addCell(sw, item.getHeaderText(), new String [] { "bgcolor='gray'" });
+			addCell(sw, item.getHeaderText(), new String[] { "bgcolor='gray'" });
 		}
-		
+
 		for (int i = 0; i < numColumns; ++i) {
 			final Color c = item.getBackground(i);
-			final String colourString; 
+			final String colourString;
 			if (c == null) {
 				colourString = "bgcolor='white'";
+			} else {
+				colourString = String.format("bgcolor='#%02X%02X%02X'", c.getRed(), c.getGreen(), c.getBlue());
 			}
-			else {
-				colourString = String.format("bgcolor='#%02X%02X%02X'", c.getRed(), c.getGreen(), c.getBlue());				
-			}
-			
-			addCell(sw, item.getText(i), new String [] { colourString, "" });
+
+			addCell(sw, item.getText(i), new String[] { colourString, "" });
 			// end row
 			if ((i + 1) == numColumns) {
 				sw.write("</tr>\n");
 			}
 		}
 	}
-	
-	public void addCell(StringWriter sw, String text, String [] attributes) {
+
+	public void addCell(final StringWriter sw, final String text, final String[] attributes) {
 		addCell(sw, "td", text, attributes);
 	}
-	
 
-	public void addCell(StringWriter sw, String tag, String text, String [] attributes) {
+	public void addCell(final StringWriter sw, final String tag, String text, final String[] attributes) {
 		if (attributes == null) {
-			sw.write("<" + tag + ">" + text + "</" + tag + ">");			
-		}
-		else {
+			sw.write("<" + tag + ">" + text + "</" + tag + ">");
+		} else {
 			sw.write("<" + tag);
-			for (String attribute: attributes) {
-				sw.write(" " + attribute);				
+			for (final String attribute : attributes) {
+				sw.write(" " + attribute);
 			}
 			sw.write(">");
 		}
 		text = htmlEscape(text);
-		
+
 		if (text.equals("")) {
 			text = "&nbsp;";
-		}			
-		
+		}
+
 		sw.write(text); // TODO: escape this for HTML
 		sw.write("</" + tag + ">");
 	}
-	
+
 	/**
-	 * Does rough HTML escaping on a piece of text. 
+	 * Does rough HTML escaping on a piece of text.
+	 * 
 	 * @param text
 	 * @return
 	 */
-	// TODO: replace with proper HTML escaping from a library somewhere
-	public String htmlEscape(String text) {
-		return text.replace("&", "&amp;").replace(">", "&gt;").replace("<", "&gt;").replace("\"", "&quot;");
+	public String htmlEscape(final String text) {
+		return HtmlEscapers.htmlEscaper().escape(text);
 	}
-	
 
 	public void setRowHeadersIncluded(final boolean b) {
 		this.rowHeadersIncluded = true;
