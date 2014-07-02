@@ -768,7 +768,6 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			if (getInstance() != null) {
 				return getInstance();
 			}
-	
 			return scenarioService.load(this);
 		}
 	}
