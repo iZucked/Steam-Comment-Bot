@@ -340,7 +340,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("Visible Columns");
+		label.setText("Enabled Columns");
 
 		final Table table = new Table(composite, SWT.BORDER | SWT.MULTI);
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -349,7 +349,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		table.setLayoutData(data);
 
 		final TableColumn column = new TableColumn(table, SWT.NONE);
-		column.setText("Visible Columns");
+		column.setText("Enabled Columns");
 		Listener columnResize = new Listener() {
 			public void handleEvent(Event event) {
 				column.setWidth(table.getClientArea().width);
@@ -391,7 +391,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		Label label = new Label(composite, SWT.NONE);
-		label.setText("Hidden Columns");
+		label.setText("Disabled Columns");
 		applyDialogFont(label);
 		tableLabelSize = label.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 
@@ -402,7 +402,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		table.setLayoutData(data);
 
 		final TableColumn column = new TableColumn(table, SWT.NONE);
-		column.setText("Hidden Columns");
+		column.setText("Disabled Columns");
 		Listener columnResize = new Listener() {
 			public void handleEvent(Event event) {
 				column.setWidth(table.getClientArea().width);
