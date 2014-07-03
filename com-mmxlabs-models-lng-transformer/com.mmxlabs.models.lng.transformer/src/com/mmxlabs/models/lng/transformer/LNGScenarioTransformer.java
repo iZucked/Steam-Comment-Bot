@@ -181,10 +181,10 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private Injector injector;
-	
+
 	@Inject
 	private TimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
-	
+
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
@@ -308,7 +308,7 @@ public class LNGScenarioTransformer {
 		modelEntityMap.setLatestDate(latestTime);
 
 		timeZoneToUtcOffsetProvider.setTimeZeroInMillis(earliestTime.getTime());
-		
+
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -443,7 +443,7 @@ public class LNGScenarioTransformer {
 			} else {
 				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone());
 			}
-			
+
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
@@ -997,10 +997,18 @@ public class LNGScenarioTransformer {
 			if (dischargeSlot.isDivertible()) {
 				// Bind to all loads
 				// TODO: Take into account shipping days restriction
-				builder.bindLoadSlotsToFOBSale(discharge, allLoadPorts);
+
+				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+				for (final IPort port : allLoadPorts) {
+					marketPortsMap.put(port, discharge.getTimeWindow());
+				}
+
+				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
 			} else {
 				// Bind to current port only
-				builder.bindLoadSlotsToFOBSale(discharge, Collections.<IPort> singleton(discharge.getPort()));
+				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+				marketPortsMap.put(discharge.getPort(), discharge.getTimeWindow());
+				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
 			}
 		}
 	}
@@ -1026,17 +1034,30 @@ public class LNGScenarioTransformer {
 					}
 
 				}
+
+				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+				for (final IPort port : marketPorts) {
+					marketPortsMap.put(port, load.getTimeWindow());
+				}
+
 				// Bind FOB/DES slots to resource
-				builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
+				builder.bindDischargeSlotsToDESPurchase(load, marketPortsMap);
 			} else {
 				// Bind FOB/DES slots to resource
 				if (loadSlot.isDivertible()) {
+
 					// Bind to all discharges
-					// TODO: Take into account shipping days restriction
-					builder.bindDischargeSlotsToDESPurchase(load, allDischargePorts);
+					// Note: DES Diversion already take into account shipping days restriction
+					final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+					for (final IPort port : allDischargePorts) {
+						marketPortsMap.put(port, load.getTimeWindow());
+					}
+					builder.bindDischargeSlotsToDESPurchase(load, marketPortsMap);
 				} else {
 					// Bind to current port only
-					builder.bindDischargeSlotsToDESPurchase(load, Collections.<IPort> singleton(load.getPort()));
+					final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+					marketPortsMap.put(load.getPort(), load.getTimeWindow());
+					builder.bindDischargeSlotsToDESPurchase(load, marketPortsMap);
 				}
 			}
 		}
@@ -1437,8 +1458,11 @@ public class LNGScenarioTransformer {
 								for (final IContractTransformer contractTransformer : contractTransformers) {
 									contractTransformer.slotTransformed(desSlot, desPurchaseSlot);
 								}
-
-								builder.bindDischargeSlotsToDESPurchase(desPurchaseSlot, marketPorts);
+								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+								for (final IPort port : marketPorts) {
+									marketPortsMap.put(port, desPurchaseSlot.getTimeWindow());
+								}
+								builder.bindDischargeSlotsToDESPurchase(desPurchaseSlot, marketPortsMap);
 
 								marketSlots.add(desPurchaseSlot);
 								marketGroupSlots.add(desPurchaseSlot);
@@ -1554,7 +1578,12 @@ public class LNGScenarioTransformer {
 									contractTransformer.slotTransformed(fobSlot, fobSaleSlot);
 								}
 
-								builder.bindLoadSlotsToFOBSale(fobSaleSlot, marketPorts);
+								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+								for (final IPort port : marketPorts) {
+									marketPortsMap.put(port, fobSaleSlot.getTimeWindow());
+								}
+
+								builder.bindLoadSlotsToFOBSale(fobSaleSlot, marketPortsMap);
 
 								marketSlots.add(fobSaleSlot);
 								marketGroupSlots.add(fobSaleSlot);
@@ -1656,13 +1685,11 @@ public class LNGScenarioTransformer {
 								}
 								final int pricingDate = desSlot.isSetPricingDate() ? convertTime(earliestTime, desSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
 
-								
 								final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 								final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
-								
-								final IDischargeOption desSalesSlot = builder
-										.createDischargeSlot(id, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator, desSlot.getSlotOrPortDuration(),
-												pricingDate, true);
+
+								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, minVolume, maxVolume, 0, Long.MAX_VALUE, priceCalculator,
+										desSlot.getSlotOrPortDuration(), pricingDate, true);
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
@@ -2361,8 +2388,8 @@ public class LNGScenarioTransformer {
 		return Collections.emptyList();
 	}
 
-	private String getKeyForDate(TimeZone zone, final Date date) {
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+	private String getKeyForDate(final TimeZone zone, final Date date) {
+		final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
 		df.setTimeZone(zone);
 		final String key = df.format(date);
 		return key;
