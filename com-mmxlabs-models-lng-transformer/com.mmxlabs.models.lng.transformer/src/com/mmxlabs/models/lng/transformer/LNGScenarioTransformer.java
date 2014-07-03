@@ -107,6 +107,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -911,12 +912,14 @@ public class LNGScenarioTransformer {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					// Bind FOB/DES slots to resource
 					final ILoadOption load = (ILoadOption) slotMap.get(loadSlot);
-					configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
+					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookup(loadSlot.getPort()));
+					configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load, twForBinding);
 					isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
-					configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge);
+					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort()));
+					configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge, twForBinding);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
 				}
 
@@ -967,7 +970,7 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load);
+			configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load, getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookup(loadSlot.getPort())));
 		}
 
 		for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
@@ -988,33 +991,65 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge);
+			configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge, getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort())));
 		}
 	}
 
-	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allLoadPorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge) {
-		if (dischargeSlot.isFOBSale()) {
-			if (dischargeSlot.isDivertible()) {
-				// Bind to all loads
-				// TODO: Take into account shipping days restriction
+	private ITimeWindow getTimeWindowForSlotBinding(final Slot modelSlot, final IPortSlot optimiserSlot, IPort port) {
 
+		if (modelSlot instanceof SpotSlot) {
+
+			final Date startTime = modelSlot.getWindowStartWithSlotOrPortTime();
+			final Date endTime = modelSlot.getWindowEndWithSlotOrPortTime();
+			// Convert port local external date/time into UTC based internal time units
+			final int twStart = timeZoneToUtcOffsetProvider.UTC(convertTime(earliestTime, startTime), port);
+			final int twEnd = timeZoneToUtcOffsetProvider.UTC(convertTime(earliestTime, endTime), port);
+			// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
+			// month block
+			final ITimeWindow twUTC = builder.createTimeWindow(twStart, Math.max(twStart, twEnd - 1));
+
+			return twUTC;
+		} else {
+			return optimiserSlot.getTimeWindow();
+		}
+
+	}
+
+	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allLoadPorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge,
+			final ITimeWindow twForSlotBinding) {
+		if (dischargeSlot.isFOBSale()) {
+
+			if (dischargeSlot instanceof SpotDischargeSlot) {
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : allLoadPorts) {
-					marketPortsMap.put(port, discharge.getTimeWindow());
+					// Take the UTC based window and shift according to local port timezone
+					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getStart(), port);
+					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getEnd(), port);
+					marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
+				}
+
+				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
+			} else
+
+			if (dischargeSlot.isDivertible()) {
+				// Bind to all loads
+				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
+				for (final IPort port : allLoadPorts) {
+					marketPortsMap.put(port, twForSlotBinding);
 				}
 
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
 			} else {
 				// Bind to current port only
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
-				marketPortsMap.put(discharge.getPort(), discharge.getTimeWindow());
+				marketPortsMap.put(discharge.getPort(), twForSlotBinding);
 				builder.bindLoadSlotsToFOBSale(discharge, marketPortsMap);
 			}
 		}
 	}
 
 	public void configureLoadSlotRestrictions(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Set<IPort> allDischargePorts, final LoadSlot loadSlot,
-			final ILoadOption load) {
+			final ILoadOption load, final ITimeWindow twForSlotBinding) {
 
 		if (loadSlot.isDESPurchase()) {
 			if (loadSlot instanceof SpotLoadSlot) {
@@ -1037,7 +1072,10 @@ public class LNGScenarioTransformer {
 
 				final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 				for (final IPort port : marketPorts) {
-					marketPortsMap.put(port, load.getTimeWindow());
+					// Take the UTC based window and shift according to local port timezone
+					final int twStart = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getStart(), port);
+					final int twEnd = timeZoneToUtcOffsetProvider.localTime(twForSlotBinding.getEnd(), port);
+					marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
 				}
 
 				// Bind FOB/DES slots to resource
@@ -1050,13 +1088,13 @@ public class LNGScenarioTransformer {
 					// Note: DES Diversion already take into account shipping days restriction
 					final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 					for (final IPort port : allDischargePorts) {
-						marketPortsMap.put(port, load.getTimeWindow());
+						marketPortsMap.put(port, twForSlotBinding);
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPortsMap);
 				} else {
 					// Bind to current port only
 					final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
-					marketPortsMap.put(load.getPort(), load.getTimeWindow());
+					marketPortsMap.put(load.getPort(), twForSlotBinding);
 					builder.bindDischargeSlotsToDESPurchase(load, marketPortsMap);
 				}
 			}
@@ -1165,10 +1203,16 @@ public class LNGScenarioTransformer {
 				// if (dischargeSlot.isDivertable()) {
 				// // Extend window out to cover whole shipping days restriction
 				// localTimeWindow = builder.createTimeWindow(dischargeWindow.getStart() - dischargeSlot.getShippingDaysRestriction() * 24, dischargeWindow.getEnd());
-				// } else {
-				localTimeWindow = dischargeWindow;
-				// }
+				// } else
 
+				if (dischargeSlot instanceof SpotDischargeSlot) {
+					// Convert back into a UTC based date and add in TZ flex
+					final int utcStart = timeZoneToUtcOffsetProvider.UTC(dischargeWindow.getStart(), portAssociation.lookup(dischargeSlot.getPort()));
+					final int utcEnd = timeZoneToUtcOffsetProvider.UTC(dischargeWindow.getEnd(), portAssociation.lookup(dischargeSlot.getPort()));
+					localTimeWindow = createUTCPlusTimeWindow(utcStart, utcEnd);
+				} else {
+					localTimeWindow = dischargeWindow;
+				}
 				final IPort port;
 				if (dischargeSlot instanceof SpotSlot) {
 					port = null;
@@ -1298,6 +1342,11 @@ public class LNGScenarioTransformer {
 			if (loadSlot.isDivertible()) {
 				// Extend window out to cover whole shipping days restriction
 				localTimeWindow = builder.createTimeWindow(loadWindow.getStart(), loadWindow.getEnd() + loadSlot.getShippingDaysRestriction() * 24);
+			} else if (loadSlot instanceof SpotLoadSlot) {
+				// Convert back into a UTC based date and add in TZ flex
+				final int utcStart = timeZoneToUtcOffsetProvider.UTC(loadWindow.getStart(), portAssociation.lookup(loadSlot.getPort()));
+				final int utcEnd = timeZoneToUtcOffsetProvider.UTC(loadWindow.getEnd(), portAssociation.lookup(loadSlot.getPort()));
+				localTimeWindow = createUTCPlusTimeWindow(utcStart, utcEnd);
 			} else {
 				localTimeWindow = loadWindow;
 			}
@@ -1424,7 +1473,14 @@ public class LNGScenarioTransformer {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
 
-								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
+								// As we have no port we create two timewindows. One is pure UTC which we base the EMF Slot date on and shift for the slot binding. The second is UTC with a +/- 12 flex
+								// for timezones passed into the optimiser slot. This combination allows the slot to be matched against any slot in the same month in any timezone, but be restricted to
+								// match the month boundary in that timezone.
+
+								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
+								// month block
+								final ITimeWindow twUTC = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime) - 1);
+								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
 								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
@@ -1437,7 +1493,7 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(id);
 
-								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, 0, IPortSlot.NO_PRICING_DATE, true);
 
 								// Create a fake model object to add in here;
@@ -1449,7 +1505,7 @@ public class LNGScenarioTransformer {
 								desSlot.setWindowStartTime(0);
 								// desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
-								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60;
+								final long duration = Math.max(0, (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60);
 								desSlot.setWindowSize((int) duration);
 								// Key piece of information
 								desSlot.setMarket(desPurchaseMarket);
@@ -1458,9 +1514,13 @@ public class LNGScenarioTransformer {
 								for (final IContractTransformer contractTransformer : contractTransformers) {
 									contractTransformer.slotTransformed(desSlot, desPurchaseSlot);
 								}
+
 								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 								for (final IPort port : marketPorts) {
-									marketPortsMap.put(port, desPurchaseSlot.getTimeWindow());
+									// Use the UTC based time window
+									final int twStart = timeZoneToUtcOffsetProvider.localTime(twUTC.getStart(), port);
+									final int twEnd = timeZoneToUtcOffsetProvider.localTime(twUTC.getEnd(), port);
+									marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
 								}
 								builder.bindDischargeSlotsToDESPurchase(desPurchaseSlot, marketPortsMap);
 
@@ -1543,8 +1603,14 @@ public class LNGScenarioTransformer {
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
+								// As we have no port we create two timewindows. One is pure UTC which we base the EMF Slot date on and shift for the slot binding. The second is UTC with a +/- 12 flex
+								// for timezones passed into the optimiser slot. This combination allows the slot to be matched against any slot in the same month in any timezone, but be restricted to
+								// match the month boundary in that timezone.
 
-								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
+								// This should probably be fixed in ScheduleBuilder#matchingWindows and elsewhere if needed, but subtract one to avoid e.g. 1st Feb 00:00 being permitted in the Jan
+								// month block
+								final ITimeWindow twUTC = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime) - 1);
+								final ITimeWindow twUTCPlus = createUTCPlusTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
 								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
@@ -1557,7 +1623,7 @@ public class LNGScenarioTransformer {
 								final long minCv = 0;
 								final long maxCv = Long.MAX_VALUE;
 
-								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, null, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, null, twUTCPlus, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, 0, IPortSlot.NO_PRICING_DATE, true);
 
 								// Create a fake model object to add in here;
@@ -1580,7 +1646,10 @@ public class LNGScenarioTransformer {
 
 								final Map<IPort, ITimeWindow> marketPortsMap = new HashMap<>();
 								for (final IPort port : marketPorts) {
-									marketPortsMap.put(port, fobSaleSlot.getTimeWindow());
+									// Use the UTC based time window
+									final int twStart = timeZoneToUtcOffsetProvider.localTime(twUTC.getStart(), port);
+									final int twEnd = timeZoneToUtcOffsetProvider.localTime(twUTC.getEnd(), port);
+									marketPortsMap.put(port, new TimeWindow(twStart, twEnd));
 								}
 
 								builder.bindLoadSlotsToFOBSale(fobSaleSlot, marketPortsMap);
@@ -1605,6 +1674,18 @@ public class LNGScenarioTransformer {
 				startTime = cal.getTime();
 			}
 		}
+	}
+
+	/**
+	 * Given a UTC based time window, extend it's range to cover the whole range of possible UTC offsets from UTC-12 to UTC+14
+	 * 
+	 * @param builder
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
+	private ITimeWindow createUTCPlusTimeWindow(final int startTime, final int endTime) {
+		return builder.createTimeWindow(startTime - 12, endTime + 14);
 	}
 
 	private void buildDESSalesSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
