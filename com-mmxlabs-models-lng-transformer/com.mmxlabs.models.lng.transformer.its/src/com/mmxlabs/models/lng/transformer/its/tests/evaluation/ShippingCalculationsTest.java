@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
 import com.mmxlabs.models.lng.types.PortCapability;
 
 public class ShippingCalculationsTest extends AbstractShippingCalculationsTestClass {
@@ -438,50 +439,6 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 		// first & last journeys cost 10x as much
 		final Integer[] expectedJourneyCosts = { 1500, 1420, 1500 };
 		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
-
-		final Schedule schedule = ScenarioTools.evaluate(scenario);
-		ScenarioTools.printSequences(schedule);
-
-		final Sequence sequence = schedule.getSequences().get(0);
-
-		checker.check(sequence);
-	}
-
-	/*
-	 * Discussion needed about whether this test is meaningful and what the behaviour should be if it is. The case is: maximum load quantity provides enough LNG fuel to reach the discharge port on NBO
-	 * but *not* enough to idle on NBO while there.
-	 */
-	@Ignore("Discuss desired behaviour before re-enabling this test")
-	@Test
-	public void testMaxLoadVolumeForcesBfIdle() {
-		System.err.println("\n\nMaximum Load Volume Forces BF Idle");
-		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
-		final LNGScenarioModel scenario = msc.buildScenario();
-
-		// change from default scenario: add a maximum load volume
-		msc.cargo.getSlots().get(0).setMaxQuantity(20);
-
-		final SequenceTester checker = getDefaultTester();
-
-		// change from default: no NBO consumption (min heel forces BF travel except on laden leg where it is required)
-		final Integer[] expectedNboJourneyConsumptions = { 0, 20, 0 };
-		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, expectedNboJourneyConsumptions);
-
-		// change from default: mostly BF consumption (min heel forces BF travel)
-		final Integer[] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
-		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, expectedBaseFuelJourneyConsumptions);
-
-		// DISCUSS:
-		final Integer[] expectedNboIdleConsumptions = { 0, 10, 0 };
-		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, expectedNboIdleConsumptions);
-
-		// expected costs of journeys
-		final Integer[] expectedJourneyCosts = { 150, 520, 150 };
-		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
-
-		// Expect -10 on discharge (negated for test API)
-		final Integer[] expectedloadDischargeVolumes = { 20, 10 };
-		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);

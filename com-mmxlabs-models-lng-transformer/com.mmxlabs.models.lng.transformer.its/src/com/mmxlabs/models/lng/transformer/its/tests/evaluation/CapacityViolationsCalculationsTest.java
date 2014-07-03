@@ -20,6 +20,8 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
+import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.SequenceTester;
 
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
 
@@ -479,7 +481,46 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final Sequence sequence = schedule.getSequences().get(0);
 
 		checker.check(sequence);
-
 	}
 
+	@Test
+	public void testBOGCausesMaxLoadViolation() {
+		System.err.println("\n\nMaximum Load Volume Forces BF Idle");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		// change from default scenario: add a maximum load volume
+		msc.cargo.getSlots().get(0).setMaxQuantity(20);
+
+		final SequenceTester checker = getDefaultTester();
+
+		// change from default: no NBO consumption (min heel forces BF travel except on laden leg where it is required)
+		final Integer[] expectedNboJourneyConsumptions = { 0, 20, 0 };
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, expectedNboJourneyConsumptions);
+
+		// change from default: mostly BF consumption (min heel forces BF travel)
+		final Integer[] expectedBaseFuelJourneyConsumptions = { 15, 10, 15 };
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, expectedBaseFuelJourneyConsumptions);
+
+		// DISCUSS:
+		final Integer[] expectedNboIdleConsumptions = { 0, 10, 0 };
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, expectedNboIdleConsumptions);
+
+		// expected costs of journeys
+		final Integer[] expectedJourneyCosts = { 150, 520, 150 };
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, expectedJourneyCosts);
+
+		// Need to load 30 for min NBO and discharge nothing as we have breached our load vol
+		final Integer[] expectedloadDischargeVolumes = { 30, 0 };
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, expectedloadDischargeVolumes);
+
+		checker.setExpectedValue(10, Expectations.MAX_LOAD_VIOLATIONS, SlotVisit.class, 0);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+	}
 }
