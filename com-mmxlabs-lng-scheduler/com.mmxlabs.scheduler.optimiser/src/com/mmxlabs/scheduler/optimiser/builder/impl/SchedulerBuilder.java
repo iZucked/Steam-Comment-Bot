@@ -1702,6 +1702,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				if (t1.getEnd() >= t2.getStart() && t1.getEnd() <= t2.getEnd()) {
 					return true;
 				}
+				// Start is within
 				if (t1.getStart() >= t2.getStart() && t1.getStart() <= t2.getEnd()) {
 					return true;
 				}
