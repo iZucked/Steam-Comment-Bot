@@ -16,6 +16,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -24,12 +25,14 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
+import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
@@ -61,6 +64,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	 */
 	private static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.ConfigurableCargoReportView";
+	private static final String CONFIGURABLE_ROWS_ORDER = "CONFIGURABLE_ROWS_ORDER";
 
 	final List<String> entityColumnNames = new ArrayList<String>();
 
@@ -238,6 +242,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	@Override
 	public void saveState(final IMemento memento) {
 		super.saveState(memento);
+		builder.saveToMemento(CONFIGURABLE_ROWS_ORDER, memento);
 		blockManager.saveToMemento(CONFIGURABLE_COLUMNS_ORDER, memento);
 	}
 
@@ -246,6 +251,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		super.createPartControl(parent);
 		viewer.setComparator(GenericEMFTableDataModel.createGroupComparator(viewer.getComparator(), tableDataModel));
 		if (memento != null) {
+			builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, memento);
 			blockManager.initFromMemento(CONFIGURABLE_COLUMNS_ORDER, memento);
 		}
 
@@ -338,6 +344,9 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 
 				};
+				
+				final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
+				final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
 
 				final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
 
@@ -351,7 +360,19 @@ public class ConfigurableCargoReportView extends EMFReportView {
 						return new TableLabelProvider() {
 							@Override
 							public String getColumnText(final Object element, final int columnIndex) {
-								return ((ColumnBlock) element).name;
+								ColumnBlock block = (ColumnBlock) element;
+								return block.name;
+							}
+							
+							@Override
+						    public Image getColumnImage(Object element, int columnIndex) {
+								ColumnBlock block = (ColumnBlock) element;
+								if (block.isModeVisible()) {
+									return visibleIcon;
+								}
+								else {
+									return nonVisibleIcon;
+								}
 							}
 
 						};
@@ -365,6 +386,8 @@ public class ConfigurableCargoReportView extends EMFReportView {
 				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
 				dialog.setCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
 				dialog.open();
+				
+				nonVisibleIcon.dispose();
 
 				synchronizer.refreshViewer();
 

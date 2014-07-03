@@ -51,6 +51,10 @@ public class ColumnBlock {
 			}
 		}
 	}
+	
+	public boolean isModeVisible() {
+		return modeVisible;
+	}
 
 	public void setViewState(final boolean isMultiple, final boolean isPinDiff) {
 		switch (columnType) {
@@ -92,6 +96,10 @@ public class ColumnBlock {
 
 	public void setPlaceholder(boolean placeholder) {
 		this.placeholder = placeholder;
+	}
+
+	public boolean getVisible() {
+		return userVisible;
 	}
 
 }
