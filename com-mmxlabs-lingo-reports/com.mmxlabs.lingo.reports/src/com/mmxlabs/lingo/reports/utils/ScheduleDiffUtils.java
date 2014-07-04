@@ -135,11 +135,14 @@ public class ScheduleDiffUtils {
 			{
 				final Slot caSlot = ca.getSlotAllocation().getSlot();
 				final Slot refSlot = ref.getSlotAllocation().getSlot();
-				final String caName = caSlot == null ? null : caSlot.getName();
-				final String refName = refSlot == null ? null : refSlot.getName();
+				if (!(caSlot instanceof SpotSlot && refSlot instanceof SpotSlot)) {
 
-				if (!Equality.isEqual(caName, refName)) {
-					return true;
+					final String caName = caSlot == null ? null : caSlot.getName();
+					final String refName = refSlot == null ? null : refSlot.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
 				}
 			}
 
@@ -175,11 +178,14 @@ public class ScheduleDiffUtils {
 			{
 				final Slot caSlot = ca.getSlot();
 				final Slot refSlot = ref.getSlot();
-				final String caName = caSlot == null ? null : caSlot.getName();
-				final String refName = refSlot == null ? null : refSlot.getName();
+				if (!(caSlot instanceof SpotSlot && refSlot instanceof SpotSlot)) {
 
-				if (!Equality.isEqual(caName, refName)) {
-					return true;
+					final String caName = caSlot == null ? null : caSlot.getName();
+					final String refName = refSlot == null ? null : refSlot.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
 				}
 			}
 

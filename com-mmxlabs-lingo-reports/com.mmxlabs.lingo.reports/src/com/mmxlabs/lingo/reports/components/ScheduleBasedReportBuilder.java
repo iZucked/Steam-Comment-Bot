@@ -104,7 +104,7 @@ public class ScheduleBasedReportBuilder {
 	private static final String ROW_FILTER_MEMENTO = "ROW_FILTER";
 	private static final String DIFF_FILTER_MEMENTO = "DIFF_FILTER";
 
-	private ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
+	private final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
 
 	/**
 	 * Guava {@link Function} to convert a Slot to a String based on it's name;
@@ -529,11 +529,11 @@ public class ScheduleBasedReportBuilder {
 
 	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento rowsInfo = memento.createChild(uniqueConfigKey);
-		for (String option : rowFilterInfo) {
+		for (final String option : rowFilterInfo) {
 			final IMemento optionInfo = rowsInfo.createChild(ROW_FILTER_MEMENTO);
 			optionInfo.putTextData(option);
 		}
-		for (String option : diffFilterInfo) {
+		for (final String option : diffFilterInfo) {
 			final IMemento optionInfo = rowsInfo.createChild(DIFF_FILTER_MEMENTO);
 			optionInfo.putTextData(option);
 		}
@@ -543,11 +543,11 @@ public class ScheduleBasedReportBuilder {
 		final IMemento rowsInfo = memento.getChild(uniqueConfigKey);
 		if (rowsInfo != null) {
 			rowFilterInfo.clear();
-			for (IMemento optionInfo : rowsInfo.getChildren(ROW_FILTER_MEMENTO)) {
+			for (final IMemento optionInfo : rowsInfo.getChildren(ROW_FILTER_MEMENTO)) {
 				rowFilterInfo.add(optionInfo.getTextData());
 			}
 			diffFilterInfo.clear();
-			for (IMemento optionInfo : rowsInfo.getChildren(DIFF_FILTER_MEMENTO)) {
+			for (final IMemento optionInfo : rowsInfo.getChildren(DIFF_FILTER_MEMENTO)) {
 				diffFilterInfo.add(optionInfo.getTextData());
 			}
 		} else {
@@ -786,11 +786,12 @@ public class ScheduleBasedReportBuilder {
 						if (buysSet.isEmpty() && sellsSet.isEmpty()) {
 							return "";
 						}
+						final Set<String> buysStringsSet = Sets.newLinkedHashSet(Iterables.transform(buysSet, new SlotToStringFunction()));
+						final Set<String> sellsStringsSet = Sets.newLinkedHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()));
+						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(buysStringsSet) + " ]";
+						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(sellsStringsSet) + " ]";
 
-						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(buysSet, new SlotToStringFunction()))) + " ]";
-						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()))) + " ]";
-
-						return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
+						return String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr);
 					} else if (eObj.eIsSet(openSlotAllocationRef)) {
 						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) eObj.eGet(openSlotAllocationRef);
 						if (openSlotAllocation != null) {
@@ -801,10 +802,12 @@ public class ScheduleBasedReportBuilder {
 								return "";
 							}
 
-							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(buysSet, new SlotToStringFunction()))) + " ]";
-							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(Sets.newHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()))) + " ]";
+							final Set<String> buysStringsSet = Sets.newLinkedHashSet(Iterables.transform(buysSet, new SlotToStringFunction()));
+							final Set<String> sellsStringsSet = Sets.newLinkedHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()));
+							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(buysStringsSet) + " ]";
+							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(sellsStringsSet) + " ]";
 
-							return String.format("Rewire %d x %d; Buys %s, Sells %s", buysSet.size(), sellsSet.size(), buysStr, sellsStr);
+							return String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr);
 						}
 					} else {
 						final Object target = eObj.eGet(targetObjectRef);
