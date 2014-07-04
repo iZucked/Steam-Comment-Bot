@@ -24,10 +24,12 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 /**
- * @noinstantiate This class is not intended to be instantiated by clients.
  */
 public class ScheduleDiffUtils {
-	public static boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+
+	private boolean checkAssignmentDifferences = true;
+
+	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 
 		// oops - dynamic eobjects coming here...
 
@@ -47,16 +49,18 @@ public class ScheduleDiffUtils {
 
 			ca = (CargoAllocation) otherObject;
 
-			// Check vessel
-			if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
-				return true;
-			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
-				return true;
-			} else if (ca.getSequence().getVesselAvailability() != null
-					&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
-				return true;
-			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
-				return true;
+			if (checkAssignmentDifferences) {
+				// Check vessel
+				if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
+					return true;
+				} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+					return true;
+				} else if (ca.getSequence().getVesselAvailability() != null
+						&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
+					return true;
+				} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+					return true;
+				}
 			}
 
 			final EList<SlotAllocation> caSlotAllocations = ca.getSlotAllocations();
@@ -114,16 +118,18 @@ public class ScheduleDiffUtils {
 			ref = (SlotVisit) pinnedObject;
 
 			ca = (SlotVisit) otherObject;
+			if (checkAssignmentDifferences) {
 
-			if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
-				return true;
-			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
-				return true;
-			} else if (ca.getSequence().getVesselAvailability() != null
-					&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
-				return true;
-			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
-				return true;
+				if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
+					return true;
+				} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+					return true;
+				} else if (ca.getSequence().getVesselAvailability() != null
+						&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
+					return true;
+				} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+					return true;
+				}
 			}
 
 			{
@@ -249,6 +255,14 @@ public class ScheduleDiffUtils {
 			}
 		}
 		return false;
+	}
+
+	public boolean isCheckAssignmentDifferences() {
+		return checkAssignmentDifferences;
+	}
+
+	public void setCheckAssignmentDifferences(final boolean checkAssignmentDifferences) {
+		this.checkAssignmentDifferences = checkAssignmentDifferences;
 	}
 
 }

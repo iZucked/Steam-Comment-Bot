@@ -241,7 +241,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 	@Override
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return ScheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
+		return builder.isElementDifferent(pinnedObject, otherObject);
 	}
 
 	@Override

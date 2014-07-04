@@ -96,8 +96,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	};
 
-	private Set<String> checkBoxStore;
-	private String[] checkBoxStrings;
+	private Set<String> rowCheckBoxStore;
+	private String[] rowCheckBoxStrings;
+
+	private Set<String> diffCheckBoxStore;
+	private String[] diffCheckBoxStrings;
 
 	/**
 	 * Create a new instance of the receiver.
@@ -132,7 +135,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		Object data = null;
 		for (int i = 0; i < columnObjs.length; i++) {
 			data = columnObjs[i];
-//			final int index = columnInfo.getColumnIndex(data);
+			// final int index = columnInfo.getColumnIndex(data);
 			if (columnInfo.isColumnVisible(data)) {
 				updater.setColumnVisible(data, true);
 				// updater.setColumnIndex(data, visible.size());
@@ -183,7 +186,8 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
 
-		createCheckBoxes(composite);
+		createRowCheckBoxes(composite);
+		createDiffCheckBoxes(composite);
 		// createWidthArea(composite);
 		final Object element = visibleViewer.getElementAt(0);
 		if (element != null)
@@ -192,7 +196,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		return composite;
 	}
 
-	private Control createCheckBoxes(final Composite parent) {
+	private Control createRowCheckBoxes(final Composite parent) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout compositeLayout = new GridLayout();
 		compositeLayout.marginHeight = 0;
@@ -200,18 +204,47 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		composite.setLayout(compositeLayout);
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 
-		if (checkBoxStrings != null) {
-			for (final String text : checkBoxStrings) {
+		if (rowCheckBoxStrings != null) {
+			for (final String text : rowCheckBoxStrings) {
 				final Button button = new Button(composite, SWT.CHECK);
 				button.setText(text);
-				button.setSelection(checkBoxStore.contains(text));
+				button.setSelection(rowCheckBoxStore.contains(text));
 				button.addListener(SWT.Selection, new Listener() {
 					@Override
 					public void handleEvent(final Event event) {
-						if (checkBoxStore.contains(text)) {
-							checkBoxStore.remove(text);
+						if (rowCheckBoxStore.contains(text)) {
+							rowCheckBoxStore.remove(text);
 						} else {
-							checkBoxStore.add(text);
+							rowCheckBoxStore.add(text);
+						}
+					}
+				});
+			}
+		}
+
+		return composite;
+	}
+
+	private Control createDiffCheckBoxes(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		final GridLayout compositeLayout = new GridLayout();
+		compositeLayout.marginHeight = 0;
+		compositeLayout.marginWidth = 0;
+		composite.setLayout(compositeLayout);
+		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
+
+		if (diffCheckBoxStrings != null) {
+			for (final String text : diffCheckBoxStrings) {
+				final Button button = new Button(composite, SWT.CHECK);
+				button.setText(text);
+				button.setSelection(diffCheckBoxStore.contains(text));
+				button.addListener(SWT.Selection, new Listener() {
+					@Override
+					public void handleEvent(final Event event) {
+						if (diffCheckBoxStore.contains(text)) {
+							diffCheckBoxStore.remove(text);
+						} else {
+							diffCheckBoxStore.add(text);
 						}
 					}
 				});
@@ -524,7 +557,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		upButton.setEnabled(moveUp);
 		downButton.setEnabled(moveDown);
 
-//		final boolean edit = selVCols.size() == 1 ? infoProvider.isColumnResizable(selVCols.get(0)) : false;
+		// final boolean edit = selVCols.size() == 1 ? infoProvider.isColumnResizable(selVCols.get(0)) : false;
 		// setWidthEnabled(edit);
 		/*
 		 * if (edit) { int width = infoProvider.getColumnWidth(selVCols.get(0)); widthText.setText(Integer.toString(width)); } else { widthText.setText(""); //$NON-NLS-1$ }
@@ -1125,9 +1158,14 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	}
 
-	public void setCheckBoxInfo(final String[] strings, final Set<String> store) {
-		checkBoxStore = store;
-		checkBoxStrings = strings;
+	public void setRowCheckBoxInfo(final String[] strings, final Set<String> store) {
+		rowCheckBoxStore = store;
+		rowCheckBoxStrings = strings;
+	}
+
+	public void setDiffCheckBoxInfo(final String[] strings, final Set<String> store) {
+		diffCheckBoxStore = store;
+		diffCheckBoxStrings = strings;
 	}
 
 }

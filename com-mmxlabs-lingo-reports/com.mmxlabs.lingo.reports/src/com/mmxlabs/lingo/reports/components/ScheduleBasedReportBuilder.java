@@ -36,6 +36,7 @@ import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
+import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
@@ -94,7 +95,16 @@ public class ScheduleBasedReportBuilder {
 	public static final String[] ROW_FILTER_ALL = new String[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
 			ROW_FILTER_VESSEL_START_ROW };
 
-	private static final String SCHEDULE_BASE_CONFIG_MEMENTO = "SCHEDULE_BASE_CONFIG_MEMENTO";
+	public static final String DIFF_FILTER_PINNDED_SCENARIO = "Pinned Scenario";
+	public static final String DIFF_FILTER_VESSEL_CHANGES = "Vessel Changes";
+
+	/** All filters (note this order is also used in the {@link ConfigurableCargoReportView} dialog */
+	public static final String[] DIFF_FILTER_ALL = new String[] { DIFF_FILTER_PINNDED_SCENARIO, DIFF_FILTER_VESSEL_CHANGES };
+
+	private static final String ROW_FILTER_MEMENTO = "ROW_FILTER";
+	private static final String DIFF_FILTER_MEMENTO = "DIFF_FILTER";
+
+	private ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
 
 	/**
 	 * Guava {@link Function} to convert a Slot to a String based on it's name;
@@ -130,6 +140,7 @@ public class ScheduleBasedReportBuilder {
 	private final EStructuralFeature openSlotAllocationRef;
 
 	private final Set<String> rowFilterInfo = new HashSet<>();
+	private final Set<String> diffFilterInfo = new HashSet<>();
 
 	@Inject(optional = true)
 	private Iterable<ICustomRelatedSlotHandlerExtension> customRelatedSlotHandlers;
@@ -182,6 +193,30 @@ public class ScheduleBasedReportBuilder {
 	public void removeRowFilters(final String... filters) {
 		for (final String filter : filters) {
 			rowFilterInfo.remove(filter);
+		}
+	}
+
+	/**
+	 * Replace the existing row filters with the following set.
+	 * 
+	 * @param filters
+	 */
+	public void setDiffFilter(final String... filters) {
+		diffFilterInfo.clear();
+		for (final String filter : filters) {
+			diffFilterInfo.add(filter);
+		}
+	}
+
+	public void addDiffFilters(final String... filters) {
+		for (final String filter : filters) {
+			diffFilterInfo.add(filter);
+		}
+	}
+
+	public void removeDiffFilters(final String... filters) {
+		for (final String filter : filters) {
+			diffFilterInfo.remove(filter);
 		}
 	}
 
@@ -487,11 +522,19 @@ public class ScheduleBasedReportBuilder {
 	public Set<String> getRowFilterInfo() {
 		return rowFilterInfo;
 	}
-	
+
+	public Set<String> getDiffFilterInfo() {
+		return diffFilterInfo;
+	}
+
 	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento rowsInfo = memento.createChild(uniqueConfigKey);
-		for (String option: rowFilterInfo) {
-			final IMemento optionInfo = rowsInfo.createChild(SCHEDULE_BASE_CONFIG_MEMENTO);
+		for (String option : rowFilterInfo) {
+			final IMemento optionInfo = rowsInfo.createChild(ROW_FILTER_MEMENTO);
+			optionInfo.putTextData(option);
+		}
+		for (String option : diffFilterInfo) {
+			final IMemento optionInfo = rowsInfo.createChild(DIFF_FILTER_MEMENTO);
 			optionInfo.putTextData(option);
 		}
 	}
@@ -500,18 +543,32 @@ public class ScheduleBasedReportBuilder {
 		final IMemento rowsInfo = memento.getChild(uniqueConfigKey);
 		if (rowsInfo != null) {
 			rowFilterInfo.clear();
-			for (IMemento optionInfo: rowsInfo.getChildren(SCHEDULE_BASE_CONFIG_MEMENTO)) {
+			for (IMemento optionInfo : rowsInfo.getChildren(ROW_FILTER_MEMENTO)) {
 				rowFilterInfo.add(optionInfo.getTextData());
 			}
-		}
-		else {
+			diffFilterInfo.clear();
+			for (IMemento optionInfo : rowsInfo.getChildren(DIFF_FILTER_MEMENTO)) {
+				diffFilterInfo.add(optionInfo.getTextData());
+			}
+		} else {
 			rowFilterInfo.addAll(Arrays.asList(ScheduleBasedReportBuilder.ROW_FILTER_ALL));
+			diffFilterInfo.addAll(Arrays.asList(ScheduleBasedReportBuilder.DIFF_FILTER_ALL));
 		}
-		
+		refreshDiffOptions();
 	}
+
 	// / Normal Columns
 
 	// ////// Pin / Diff Columns
+
+	public void refreshDiffOptions() {
+		scheduleDiffUtils.setCheckAssignmentDifferences(diffFilterInfo.contains(DIFF_FILTER_VESSEL_CHANGES));
+		pinDiffModeHelper.setShowPinnedData(diffFilterInfo.contains(DIFF_FILTER_PINNDED_SCENARIO));
+	}
+
+	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+		return scheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
+	}
 
 	public void createPinDiffColumns() {
 		// Register columns that will be displayed when in Pin/Diff mode
@@ -1008,4 +1065,5 @@ public class ScheduleBasedReportBuilder {
 		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		return null;
 	}
+
 }

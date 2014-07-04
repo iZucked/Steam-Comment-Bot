@@ -18,6 +18,8 @@ public class PinDiffModeColumnManager {
 	private final Map<String, EObject> pinnedObjects = new LinkedHashMap<>();
 	private final Map<String, Set<EObject>> unpinnedObjects = new LinkedHashMap<>();
 
+	private boolean showPinnedData = true;
+
 	// FIXME: turn into an interface
 	private final EMFReportView parentView;
 
@@ -55,5 +57,13 @@ public class PinDiffModeColumnManager {
 	public void reset() {
 		pinnedObjects.clear();
 		unpinnedObjects.clear();
+	}
+
+	public boolean showPinnedData() {
+		return showPinnedData;
+	}
+
+	public void setShowPinnedData(boolean show) {
+		this.showPinnedData = show;
 	}
 }

@@ -95,8 +95,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		this.helpContextId = helpContextId;
 	}
 
-	
-
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
 		@Override
 		public String format(final Object object) {
@@ -205,6 +203,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 									objectsToAdd.addAll(e.getValue());
 								}
 							}
+						}
+						if (!pinDiffModeHelper.showPinnedData()) {
+							objectsToAdd.remove(ref);
 						}
 						objects.addAll(objectsToAdd);
 
