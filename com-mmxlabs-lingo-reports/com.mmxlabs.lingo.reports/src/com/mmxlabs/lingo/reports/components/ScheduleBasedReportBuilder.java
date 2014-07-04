@@ -740,7 +740,6 @@ public class ScheduleBasedReportBuilder {
 						boolean different = false;
 						{
 							final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
-
 							if (pinDiffModeHelper.pinnedObjectsContains(eObj)) {
 								final Set<EObject> unpinnedObjects = pinDiffModeHelper.getUnpinnedObjectWithTheSameKeyAsThisObject(eObj);
 								if (unpinnedObjects != null) {
@@ -758,6 +757,8 @@ public class ScheduleBasedReportBuilder {
 											break;
 										}
 									}
+								} else {
+									different = true;
 								}
 							} else {
 								final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
