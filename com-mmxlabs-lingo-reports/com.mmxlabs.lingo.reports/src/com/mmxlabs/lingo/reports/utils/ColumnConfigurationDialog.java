@@ -57,10 +57,8 @@ import org.eclipse.swt.widgets.Text;
 /**
  * Adapted from MarkersViewColumnsDialog in Eclipse code:
  * 
- * This was introduced as a fix to Bug 231081 and related, as an effort to
- * combine the columns and preference dialogs into one. It should be noted that
- * the class can be re-used or turned into a tool for column viewers in general,
- * but with some modifications. See example attached at the end of this class
+ * This was introduced as a fix to Bug 231081 and related, as an effort to combine the columns and preference dialogs into one. It should be noted that the class can be re-used or turned into a tool
+ * for column viewers in general, but with some modifications. See example attached at the end of this class
  * 
  * @since 3.7
  * 
@@ -72,10 +70,10 @@ import org.eclipse.swt.widgets.Text;
 public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	/** The list contains columns that are currently visible in viewer */
-	private List<? extends Object> visible;
+	private List<Object> visible;
 
 	/** The list contains columns that are note shown in viewer */
-	private List nonVisible;
+	private List<Object> nonVisible;
 
 	private TableViewer visibleViewer, nonVisibleViewer;
 
@@ -88,100 +86,94 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	private Point tableLabelSize;
 
-	private Comparator<Object> comparator = new Comparator<Object>() {
+	private final Comparator<Object> comparator = new Comparator<Object>() {
 
 		@Override
-		public int compare(Object arg0, Object arg1) {
-			IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
-			return infoProvider.getColumnIndex(arg0) - infoProvider.getColumnIndex(arg1); 
+		public int compare(final Object arg0, final Object arg1) {
+			final IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
+			return infoProvider.getColumnIndex(arg0) - infoProvider.getColumnIndex(arg1);
 		}
-		
+
 	};
 
 	private Set<String> checkBoxStore;
-
 	private String[] checkBoxStrings;
-
 
 	/**
 	 * Create a new instance of the receiver.
 	 * 
 	 * @param parentShell
 	 */
-	public ColumnConfigurationDialog(Shell parentShell) {
+	public ColumnConfigurationDialog(final Shell parentShell) {
 		super(parentShell);
 	}
 
 	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
+	protected void createButtonsForButtonBar(final Composite parent) {
 		// don't create a Cancel button
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 	}
 
 	/**
-	 * Initialize visible /non-visible columns.
+	 * Initialise visible /non-visible columns.
 	 * 
 	 * @param columnObjs
 	 */
-	// NOTE: this method is annoying because the column indices are not properly synchronised with 
-	// getColumnIndex() in the info provider. 
-	
-	public void setColumnsObjs(Object[] columnObjs) {
-		IColumnInfoProvider columnInfo = doGetColumnInfoProvider();
-		IColumnUpdater updater = doGetColumnUpdater();
-		List visible = getVisible();
-		List nonVisible = getNonVisible();
+	// NOTE: this method is annoying because the column indices are not properly synchronised with
+	// getColumnIndex() in the info provider.
+
+	public void setColumnsObjs(final Object[] columnObjs) {
+		final IColumnInfoProvider columnInfo = doGetColumnInfoProvider();
+		final IColumnUpdater updater = doGetColumnUpdater();
+		final List<Object> visible = getVisible();
+		final List<Object> nonVisible = getNonVisible();
 		visible.clear();
 		nonVisible.clear();
 		Object data = null;
 		for (int i = 0; i < columnObjs.length; i++) {
 			data = columnObjs[i];
-			int index = columnInfo.getColumnIndex(data);
+//			final int index = columnInfo.getColumnIndex(data);
 			if (columnInfo.isColumnVisible(data)) {
 				updater.setColumnVisible(data, true);
-				//updater.setColumnIndex(data, visible.size());
-				//updater.setColumnIndex(data, index);
+				// updater.setColumnIndex(data, visible.size());
+				// updater.setColumnIndex(data, index);
 				visible.add(data);
 			} else {
 				updater.setColumnVisible(data, false);
-				//updater.setColumnIndex(data, nonVisible.size());
-				//updater.setColumnIndex(data, index);
+				// updater.setColumnIndex(data, nonVisible.size());
+				// updater.setColumnIndex(data, index);
 				nonVisible.add(data);
 			}
 		}
 	}
 
-	protected Control createDialogArea(Composite parent) {
+	@Override
+	protected Control createDialogArea(final Composite parent) {
 
-		Composite dialogArea = (Composite) super.createDialogArea(parent);
+		final Composite dialogArea = (Composite) super.createDialogArea(parent);
 
 		dialogArea.setLayout(new GridLayout(1, true));
 
 		initializeDialogUnits(dialogArea);
 
-		//createMessageArea(dialogArea).setLayoutData(
-		//		new GridData(SWT.FILL, SWT.NONE, true, false));
+		// createMessageArea(dialogArea).setLayoutData(
+		// new GridData(SWT.FILL, SWT.NONE, true, false));
 
-		createDialogContentArea(dialogArea).setLayoutData(
-				new GridData(SWT.FILL, SWT.FILL, true, true));
+		createDialogContentArea(dialogArea).setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		applyDialogFont(dialogArea);
 
-		
-
 		return dialogArea;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.eclipse.ui.internal.views.markers.ViewerSettingsAndStatusDialog#
-	 * createDialogContentArea(org.eclipse.swt.widgets.Composite)
+	 * @see org.eclipse.ui.internal.views.markers.ViewerSettingsAndStatusDialog# createDialogContentArea(org.eclipse.swt.widgets.Composite)
 	 */
-	protected Control createDialogContentArea(Composite dialogArea) {
-		Composite composite = new Composite(dialogArea, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(4, false);
+	protected Control createDialogContentArea(final Composite dialogArea) {
+		final Composite composite = new Composite(dialogArea, SWT.NONE);
+		final GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.marginHeight = 0;
 		composite.setLayout(gridLayout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -190,42 +182,42 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createMoveButtons(composite);
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
-		
-		createRowCheckBoxes(composite);
-		//createWidthArea(composite);
-		Object element = visibleViewer.getElementAt(0);
+
+		createCheckBoxes(composite);
+		// createWidthArea(composite);
+		final Object element = visibleViewer.getElementAt(0);
 		if (element != null)
 			visibleViewer.setSelection(new StructuredSelection(element));
 		visibleViewer.getTable().setFocus();
 		return composite;
 	}
 
-	private Control createRowCheckBoxes(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout compositeLayout = new GridLayout();
+	private Control createCheckBoxes(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		final GridLayout compositeLayout = new GridLayout();
 		compositeLayout.marginHeight = 0;
 		compositeLayout.marginWidth = 0;
 		composite.setLayout(compositeLayout);
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-		
+
 		if (checkBoxStrings != null) {
-			for (final String text: checkBoxStrings) {
-				Button button = new Button(composite, SWT.CHECK);
+			for (final String text : checkBoxStrings) {
+				final Button button = new Button(composite, SWT.CHECK);
 				button.setText(text);
 				button.setSelection(checkBoxStore.contains(text));
 				button.addListener(SWT.Selection, new Listener() {
-					public void handleEvent(Event event) {
+					@Override
+					public void handleEvent(final Event event) {
 						if (checkBoxStore.contains(text)) {
 							checkBoxStore.remove(text);
-						}
-						else {
+						} else {
 							checkBoxStore.add(text);
 						}
 					}
 				});
 			}
 		}
-		
+
 		return composite;
 	}
 
@@ -234,35 +226,36 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * 
 	 * @param parent
 	 */
-	Control createUpDownBtt(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout compositeLayout = new GridLayout();
+	Control createUpDownBtt(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		final GridLayout compositeLayout = new GridLayout();
 		compositeLayout.marginHeight = 0;
 		compositeLayout.marginWidth = 0;
 		composite.setLayout(compositeLayout);
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-		
-		Composite bttArea = new Composite(composite, SWT.NONE);
-		GridLayout layout = new GridLayout();
+
+		final Composite bttArea = new Composite(composite, SWT.NONE);
+		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		bttArea.setLayout(layout);
 		bttArea.setLayoutData(new GridData(SWT.NONE, SWT.CENTER, false, true));
 		upButton = new Button(bttArea, SWT.PUSH);
 		upButton.setText(JFaceResources.getString("ConfigureColumnsDialog_up")); //$NON-NLS-1$
 		upButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
+			@Override
+			public void handleEvent(final Event event) {
 				handleUpButton(event);
 			}
 		});
 		setButtonLayoutData(upButton);
-		((GridData)upButton.getLayoutData()).verticalIndent = tableLabelSize.y;
+		((GridData) upButton.getLayoutData()).verticalIndent = tableLabelSize.y;
 		upButton.setEnabled(false);
 
 		downButton = new Button(bttArea, SWT.PUSH);
-		downButton.setText(JFaceResources
-				.getString("ConfigureColumnsDialog_down")); //$NON-NLS-1$
+		downButton.setText(JFaceResources.getString("ConfigureColumnsDialog_down")); //$NON-NLS-1$
 		downButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
+			@Override
+			public void handleEvent(final Event event) {
 				handleDownButton(event);
 			}
 		});
@@ -277,29 +270,28 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * @param parent
 	 * @return {@link Control}
 	 */
-	Control createWidthArea(Composite parent) {
+	Control createWidthArea(final Composite parent) {
 
-		Label dummy = new Label(parent, SWT.NONE);
+		final Label dummy = new Label(parent, SWT.NONE);
 		dummy.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 2, 1));
-		
-		Composite widthComposite = new Composite(parent, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(2, false);
+
+		final Composite widthComposite = new Composite(parent, SWT.NONE);
+		final GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginHeight = 0;
 		widthComposite.setLayout(gridLayout);
 		widthComposite.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false, 2, 1));
-		
+
 		widthLabel = new Label(widthComposite, SWT.NONE);
-		//widthLabel.setText(MarkerMessages.MarkerPreferences_WidthOfShownColumn);
+		// widthLabel.setText(MarkerMessages.MarkerPreferences_WidthOfShownColumn);
 		GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
 		widthLabel.setLayoutData(gridData);
 
 		widthText = new Text(widthComposite, SWT.BORDER);
 		widthText.addVerifyListener(new VerifyListener() {
 
-			public void verifyText(VerifyEvent e) {
-				if (e.character != 0 && e.keyCode != SWT.BS
-						&& e.keyCode != SWT.DEL
-						&& !Character.isDigit(e.character)) {
+			@Override
+			public void verifyText(final VerifyEvent e) {
+				if (e.character != 0 && e.keyCode != SWT.BS && e.keyCode != SWT.DEL && !Character.isDigit(e.character)) {
 					e.doit = false;
 				}
 			}
@@ -310,20 +302,18 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		widthText.setLayoutData(gridData);
 		widthText.addModifyListener(new ModifyListener() {
 
-			public void modifyText(ModifyEvent e) {
+			@Override
+			public void modifyText(final ModifyEvent e) {
 				updateWidth();
 			}
 		});
-		//setWidthEnabled(false);
+		// setWidthEnabled(false);
 		return widthText;
 	}
 
 	/*
-	private void setWidthEnabled(boolean enabled) {
-		widthLabel.setEnabled(enabled);
-		widthText.setEnabled(enabled);
-	}
-	*/
+	 * private void setWidthEnabled(boolean enabled) { widthLabel.setEnabled(enabled); widthText.setEnabled(enabled); }
+	 */
 
 	/**
 	 * Creates the table that lists out visible columns in the viewer
@@ -331,27 +321,28 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * @param parent
 	 * @return {@link Control}
 	 */
-	Control createVisibleTable(Composite parent) {
+	Control createVisibleTable(final Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(1, false);
-		gridLayout.marginHeight =0;
+		final Composite composite = new Composite(parent, SWT.NONE);
+		final GridLayout gridLayout = new GridLayout(1, false);
+		gridLayout.marginHeight = 0;
 		composite.setLayout(gridLayout);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label label = new Label(composite, SWT.NONE);
+		final Label label = new Label(composite, SWT.NONE);
 		label.setText("Enabled Columns");
 
 		final Table table = new Table(composite, SWT.BORDER | SWT.MULTI);
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
+		final GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.widthHint = convertWidthInCharsToPixels(20);
 		data.heightHint = table.getItemHeight() * 15;
 		table.setLayoutData(data);
 
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setText("Enabled Columns");
-		Listener columnResize = new Listener() {
-			public void handleEvent(Event event) {
+		final Listener columnResize = new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
 				column.setWidth(table.getClientArea().width);
 			}
 		};
@@ -360,14 +351,15 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		visibleViewer = new TableViewer(table);
 		visibleViewer.setLabelProvider(doGetLabelProvider());
 		visibleViewer.setContentProvider(ArrayContentProvider.getInstance());
-		visibleViewer
-				.addSelectionChangedListener(new ISelectionChangedListener() {
-					public void selectionChanged(SelectionChangedEvent event) {
-						handleVisibleSelection(event.getSelection());
-					}
-				});
+		visibleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				handleVisibleSelection(event.getSelection());
+			}
+		});
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
-			public void handleEvent(Event event) {
+			@Override
+			public void handleEvent(final Event event) {
 				handleToNonVisibleButton(event);
 			}
 		});
@@ -381,30 +373,31 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * @param parent
 	 * @return {@link Control}
 	 */
-	Control createInvisibleTable(Composite parent) {
+	Control createInvisibleTable(final Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(1, false);
+		final Composite composite = new Composite(parent, SWT.NONE);
+		final GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginHeight = 0;
 		composite.setLayout(gridLayout);
 
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		Label label = new Label(composite, SWT.NONE);
+		final Label label = new Label(composite, SWT.NONE);
 		label.setText("Disabled Columns");
 		applyDialogFont(label);
 		tableLabelSize = label.computeSize(SWT.DEFAULT, SWT.DEFAULT);
 
 		final Table table = new Table(composite, SWT.BORDER | SWT.MULTI);
-		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
+		final GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.widthHint = convertWidthInCharsToPixels(20);
 		data.heightHint = table.getItemHeight() * 15;
 		table.setLayoutData(data);
 
 		final TableColumn column = new TableColumn(table, SWT.NONE);
 		column.setText("Disabled Columns");
-		Listener columnResize = new Listener() {
-			public void handleEvent(Event event) {
+		final Listener columnResize = new Listener() {
+			@Override
+			public void handleEvent(final Event event) {
 				column.setWidth(table.getClientArea().width);
 			}
 		};
@@ -413,14 +406,15 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		nonVisibleViewer = new TableViewer(table);
 		nonVisibleViewer.setLabelProvider(doGetLabelProvider());
 		nonVisibleViewer.setContentProvider(ArrayContentProvider.getInstance());
-		nonVisibleViewer
-				.addSelectionChangedListener(new ISelectionChangedListener() {
-					public void selectionChanged(SelectionChangedEvent event) {
-						handleNonVisibleSelection(event.getSelection());
-					}
-				});
+		nonVisibleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				handleNonVisibleSelection(event.getSelection());
+			}
+		});
 		table.addListener(SWT.MouseDoubleClick, new Listener() {
-			public void handleEvent(Event event) {
+			@Override
+			public void handleEvent(final Event event) {
 				handleToVisibleButton(event);
 			}
 		});
@@ -429,22 +423,21 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	}
 
 	/**
-	 * Creates buttons for moving columns from non-visible to visible and
-	 * vice-versa
+	 * Creates buttons for moving columns from non-visible to visible and vice-versa
 	 * 
 	 * @param parent
 	 * @return {@link Control}
 	 */
-	Control createMoveButtons(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout compositeLayout = new GridLayout();
+	Control createMoveButtons(final Composite parent) {
+		final Composite composite = new Composite(parent, SWT.NONE);
+		final GridLayout compositeLayout = new GridLayout();
 		compositeLayout.marginHeight = 0;
 		compositeLayout.marginWidth = 0;
 		composite.setLayout(compositeLayout);
 		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
 
-		Composite bttArea = new Composite(composite, SWT.NONE);
-		GridLayout layout = new GridLayout();
+		final Composite bttArea = new Composite(composite, SWT.NONE);
+		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		bttArea.setLayout(layout);
 		bttArea.setLayoutData(new GridData(SWT.NONE, SWT.CENTER, false, true));
@@ -452,9 +445,10 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		toVisibleBtt = new Button(bttArea, SWT.PUSH);
 		toVisibleBtt.setText("Show");
 		setButtonLayoutData(toVisibleBtt);
-		((GridData)toVisibleBtt.getLayoutData()).verticalIndent = tableLabelSize.y;
+		((GridData) toVisibleBtt.getLayoutData()).verticalIndent = tableLabelSize.y;
 		toVisibleBtt.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
+			@Override
+			public void handleEvent(final Event event) {
 				handleToVisibleButton(event);
 			}
 		});
@@ -465,7 +459,8 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		setButtonLayoutData(toNonVisibleBtt);
 
 		toNonVisibleBtt.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
+			@Override
+			public void handleEvent(final Event event) {
 				handleToNonVisibleButton(event);
 			}
 		});
@@ -475,49 +470,44 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	}
 
 	/**
-	 * Handles a selection change in the viewer that lists out the non-visible
-	 * columns
+	 * Handles a selection change in the viewer that lists out the non-visible columns
 	 * 
 	 * @param selection
 	 */
-	void handleNonVisibleSelection(ISelection selection) {
-		Object[] nvKeys = ((IStructuredSelection) selection).toArray();
+	void handleNonVisibleSelection(final ISelection selection) {
+		final Object[] nvKeys = ((IStructuredSelection) selection).toArray();
 		toVisibleBtt.setEnabled(nvKeys.length > 0);
-		if (visibleViewer.getControl().isFocusControl()
-				&& getVisible().size() <= 1) {
+		if (visibleViewer.getControl().isFocusControl() && getVisible().size() <= 1) {
 			/*
-			handleStatusUdpate(IStatus.INFO,
-					MarkerMessages.MarkerPreferences_AtLeastOneVisibleColumn);
-					*/
+			 * handleStatusUdpate(IStatus.INFO, MarkerMessages.MarkerPreferences_AtLeastOneVisibleColumn);
+			 */
 		} else {
-			//handleStatusUdpate(IStatus.INFO, getDefaultMessage());
-			
+			// handleStatusUdpate(IStatus.INFO, getDefaultMessage());
+
 		}
 	}
 
 	/**
-	 * Handles a selection change in the viewer that lists out the visible
-	 * columns. Takes care of various enablements.
+	 * Handles a selection change in the viewer that lists out the visible columns. Takes care of various enablements.
 	 * 
 	 * @param selection
 	 */
-	void handleVisibleSelection(ISelection selection) {
-		List selVCols = ((IStructuredSelection) selection).toList();
-		List allVCols = getVisible();
-		toNonVisibleBtt.setEnabled(selVCols.size() > 0
-				&& allVCols.size() > selVCols.size());
+	void handleVisibleSelection(final ISelection selection) {
+		final List<?> selVCols = ((IStructuredSelection) selection).toList();
+		final List<Object> allVCols = getVisible();
+		toNonVisibleBtt.setEnabled(selVCols.size() > 0 && allVCols.size() > selVCols.size());
 
-		IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
+		final IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
 		boolean moveDown = !selVCols.isEmpty(), moveUp = !selVCols.isEmpty();
-		Iterator iterator = selVCols.iterator();
+		final Iterator<?> iterator = selVCols.iterator();
 		while (iterator.hasNext()) {
-			Object columnObj = iterator.next();
+			final Object columnObj = iterator.next();
 			if (!infoProvider.isColumnMovable(columnObj)) {
 				moveUp = false;
 				moveDown = false;
 				break;
 			}
-			int i = allVCols.indexOf(columnObj);
+			final int i = allVCols.indexOf(columnObj);
 			if (i == 0) {
 				moveUp = false;
 				if (!moveDown) {
@@ -534,38 +524,30 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		upButton.setEnabled(moveUp);
 		downButton.setEnabled(moveDown);
 
-		boolean edit = selVCols.size() == 1 ? infoProvider
-				.isColumnResizable(selVCols.get(0)) : false;
-		//setWidthEnabled(edit);
-				/*
-		if (edit) {
-			int width = infoProvider.getColumnWidth(selVCols.get(0));
-			widthText.setText(Integer.toString(width));
-		} else {
-			widthText.setText(""); //$NON-NLS-1$
-		}
-		*/
+//		final boolean edit = selVCols.size() == 1 ? infoProvider.isColumnResizable(selVCols.get(0)) : false;
+		// setWidthEnabled(edit);
+		/*
+		 * if (edit) { int width = infoProvider.getColumnWidth(selVCols.get(0)); widthText.setText(Integer.toString(width)); } else { widthText.setText(""); //$NON-NLS-1$ }
+		 */
 	}
 
 	/**
-	 * Applies to visible columns, and handles the changes in the order of
-	 * columns
+	 * Applies to visible columns, and handles the changes in the order of columns
 	 * 
 	 * @param e
 	 *            event from the button click
 	 */
-	void handleDownButton(Event e) {
-		IStructuredSelection selection = (IStructuredSelection) visibleViewer
-				.getSelection();
-		Object[] selVCols = selection.toArray();
-		List allVCols = getVisible();
-		IColumnUpdater updater = doGetColumnUpdater();
+	void handleDownButton(final Event e) {
+		final IStructuredSelection selection = (IStructuredSelection) visibleViewer.getSelection();
+		final Object[] selVCols = selection.toArray();
+		final List<Object> allVCols = getVisible();
+		final IColumnUpdater updater = doGetColumnUpdater();
 		for (int i = selVCols.length - 1; i >= 0; i--) {
-			Object colObj = selVCols[i];
-			int visibleIndex = allVCols.indexOf(colObj);
-			
-			updater.swapColumnPositions(colObj, allVCols.get(visibleIndex+1));
-			//updater.setColumnIndex(colObj, visibleIndex + 1);
+			final Object colObj = selVCols[i];
+			final int visibleIndex = allVCols.indexOf(colObj);
+
+			updater.swapColumnPositions(colObj, allVCols.get(visibleIndex + 1));
+			// updater.setColumnIndex(colObj, visibleIndex + 1);
 			allVCols.remove(visibleIndex);
 			allVCols.add(visibleIndex + 1, colObj);
 		}
@@ -574,23 +556,21 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	}
 
 	/**
-	 * Applies to visible columns, and handles the changes in the order of
-	 * columns
+	 * Applies to visible columns, and handles the changes in the order of columns
 	 * 
 	 * @param e
 	 *            event from the button click
 	 */
-	void handleUpButton(Event e) {
-		IStructuredSelection selection = (IStructuredSelection) visibleViewer
-				.getSelection();
-		Object[] selVCols = selection.toArray();
-		List allVCols = getVisible();
-		IColumnUpdater updater = doGetColumnUpdater();
+	void handleUpButton(final Event e) {
+		final IStructuredSelection selection = (IStructuredSelection) visibleViewer.getSelection();
+		final Object[] selVCols = selection.toArray();
+		final List<Object> allVCols = getVisible();
+		final IColumnUpdater updater = doGetColumnUpdater();
 		for (int i = 0; i < selVCols.length; i++) {
-			Object colObj = selVCols[i];
-			int visibleIndex = allVCols.indexOf(colObj);
-			updater.swapColumnPositions(colObj, allVCols.get(visibleIndex-1));
-			//updater.setColumnIndex(colObj, index - 1);
+			final Object colObj = selVCols[i];
+			final int visibleIndex = allVCols.indexOf(colObj);
+			updater.swapColumnPositions(colObj, allVCols.get(visibleIndex - 1));
+			// updater.setColumnIndex(colObj, index - 1);
 			allVCols.remove(visibleIndex);
 			allVCols.add(visibleIndex - 1, colObj);
 		}
@@ -604,20 +584,19 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * @param e
 	 *            event from the button click
 	 */
-	void handleToVisibleButton(Event e) {
-		IStructuredSelection selection = (IStructuredSelection) nonVisibleViewer
-				.getSelection();
-		List selVCols = selection.toList();
-		List nonVisible = getNonVisible();
+	void handleToVisibleButton(final Event e) {
+		final IStructuredSelection selection = (IStructuredSelection) nonVisibleViewer.getSelection();
+		final List<?> selVCols = selection.toList();
+		final List<Object> nonVisible = getNonVisible();
 		nonVisible.removeAll(selVCols);
 
-		List list = getVisible();
+		final List<Object> list = getVisible();
 		list.addAll(selVCols);
 		Collections.sort(list, comparator);
 
 		updateVisibility(selVCols, true);
-		//updateIndices(getVisible());
-		//updateIndices(getNonVisible());
+		// updateIndices(getVisible());
+		// updateIndices(getNonVisible());
 
 		visibleViewer.refresh();
 		visibleViewer.setSelection(selection);
@@ -633,26 +612,20 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * @param e
 	 *            event from the button click
 	 */
-	protected void handleToNonVisibleButton(Event e) {
+	protected void handleToNonVisibleButton(final Event e) {
 		/*
-		if (visibleViewer.getControl().isFocusControl()
-				&& getVisible().size() <= 1) {
-			handleStatusUdpate(IStatus.INFO,
-					MarkerMessages.MarkerPreferences_AtLeastOneVisibleColumn);
-			return;
-		}
-		*/
-		IStructuredSelection selection = (IStructuredSelection) visibleViewer
-				.getSelection();
-		List selVCols = selection.toList();
+		 * if (visibleViewer.getControl().isFocusControl() && getVisible().size() <= 1) { handleStatusUdpate(IStatus.INFO, MarkerMessages.MarkerPreferences_AtLeastOneVisibleColumn); return; }
+		 */
+		final IStructuredSelection selection = (IStructuredSelection) visibleViewer.getSelection();
+		final List<?> selVCols = selection.toList();
 		getVisible().removeAll(selVCols);
 		getNonVisible().addAll(selVCols);
 
 		Collections.sort(getNonVisible(), comparator);
 
 		updateVisibility(selVCols, false);
-		//updateIndices(getVisible());
-		//updateIndices(getNonVisible());
+		// updateIndices(getVisible());
+		// updateIndices(getNonVisible());
 
 		nonVisibleViewer.refresh();
 		nonVisibleViewer.setSelection(selection);
@@ -662,26 +635,21 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	}
 
 	/*
-	void updateIndices(List list) {
-		ListIterator iterator = list.listIterator();
-		IColumnUpdater updater = doGetColumnUpdater();
-		while (iterator.hasNext()) {
-			//updater.setColumnIndex(iterator.next(), iterator.previousIndex());
-		}
-	}
-	*/
+	 * void updateIndices(List list) { ListIterator iterator = list.listIterator(); IColumnUpdater updater = doGetColumnUpdater(); while (iterator.hasNext()) {
+	 * //updater.setColumnIndex(iterator.next(), iterator.previousIndex()); } }
+	 */
 
-	void updateVisibility(List list, boolean visibility) {
-		IColumnUpdater updater = doGetColumnUpdater();
-		Iterator iterator = list.iterator();
+	void updateVisibility(final List<?> list, final boolean visibility) {
+		final IColumnUpdater updater = doGetColumnUpdater();
+		final Iterator<?> iterator = list.iterator();
 		while (iterator.hasNext()) {
 			updater.setColumnVisible(iterator.next(), visibility);
 		}
 	}
-	
+
 	protected void performDefaults() {
 		refreshViewers();
-		//super.performDefaults();
+		// super.performDefaults();
 	}
 
 	/**
@@ -699,23 +667,23 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	/**
 	 * @return List of visible columns
 	 */
-	public List getVisible() {
+	public List<Object> getVisible() {
 		if (visible == null) {
 			visible = new ArrayList<Object>();
 		}
-			
-		Collections.sort(visible, comparator);		
+
+		Collections.sort(visible, comparator);
 		return visible;
 	}
 
 	/**
 	 * @return List of non-visible columns
 	 */
-	public List getNonVisible() {
+	public List<Object> getNonVisible() {
 		if (nonVisible == null) {
-			nonVisible = new ArrayList();
+			nonVisible = new ArrayList<>();
 		}
-		Collections.sort(nonVisible, comparator);		
+		Collections.sort(nonVisible, comparator);
 		return nonVisible;
 	}
 
@@ -723,13 +691,14 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * An adapter class to {@link ITableLabelProvider}
 	 * 
 	 */
-	public class TableLabelProvider extends LabelProvider implements
-			ITableLabelProvider {
-		public Image getColumnImage(Object element, int columnIndex) {
+	public class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
+		@Override
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			return null;
 		}
 
-		public String getColumnText(Object element, int columnIndex) {
+		@Override
+		public String getColumnText(final Object element, final int columnIndex) {
 			return getText(element);
 		}
 	}
@@ -742,23 +711,19 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	}
 
 	/**
-	 * The tables-columns need to be displayed appropriately. The supplied
-	 * column objects are adapted to text and image as dictacted by this
-	 * {@link ITableLabelProvider}
+	 * The tables-columns need to be displayed appropriately. The supplied column objects are adapted to text and image as dictacted by this {@link ITableLabelProvider}
 	 */
 	protected abstract ITableLabelProvider getLabelProvider();
 
 	/**
-	 * Internal helper to @see
-	 * {@link ColumnConfigurationDialog#getColumnInfoProvider()}
+	 * Internal helper to @see {@link ColumnConfigurationDialog#getColumnInfoProvider()}
 	 */
 	IColumnInfoProvider doGetColumnInfoProvider() {
 		return getColumnInfoProvider();
 	}
 
 	/**
-	 * To configure the columns we need further information. The supplied column
-	 * objects are adapted for its properties via {@link IColumnInfoProvider}
+	 * To configure the columns we need further information. The supplied column objects are adapted for its properties via {@link IColumnInfoProvider}
 	 */
 	protected abstract IColumnInfoProvider getColumnInfoProvider();
 
@@ -770,8 +735,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	}
 
 	/**
-	 * To configure properties/order of the columns is achieved via
-	 * {@link IColumnUpdater}
+	 * To configure properties/order of the columns is achieved via {@link IColumnUpdater}
 	 */
 	protected abstract IColumnUpdater getColumnUpdater();
 
@@ -780,21 +744,19 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 */
 	private void updateWidth() {
 		try {
-			int width = Integer.parseInt(widthText.getText());
-			Object data = ((IStructuredSelection) visibleViewer.getSelection())
-					.getFirstElement();
+			final int width = Integer.parseInt(widthText.getText());
+			final Object data = ((IStructuredSelection) visibleViewer.getSelection()).getFirstElement();
 			if (data != null) {
-				IColumnUpdater updater = getColumnUpdater();
+				final IColumnUpdater updater = getColumnUpdater();
 				updater.setColumnWidth(data, width);
 			}
-		} catch (NumberFormatException ex) {
+		} catch (final NumberFormatException ex) {
 			// ignore
 		}
 	}
 
 	/**
-	 * Update various aspects of a columns from a viewer such
-	 * {@link TableViewer}
+	 * Update various aspects of a columns from a viewer such {@link TableViewer}
 	 */
 	public interface IColumnInfoProvider {
 
@@ -813,47 +775,44 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		public int getColumnWidth(Object columnObj);
 
 		/**
-		 * Returns true if the column represented by parameters is showing in
-		 * the viewer
+		 * Returns true if the column represented by parameters is showing in the viewer
 		 * 
 		 * @param columnObj
 		 */
 		public boolean isColumnVisible(Object columnObj);
 
 		/**
-		 * Returns true if the column represented by parameters is configured as
-		 * movable
+		 * Returns true if the column represented by parameters is configured as movable
 		 * 
 		 * @param columnObj
 		 */
 		public boolean isColumnMovable(Object columnObj);
 
 		/**
-		 * Returns true if the column represented by parameters is configured as
-		 * resizable
+		 * Returns true if the column represented by parameters is configured as resizable
 		 * 
 		 * @param columnObj
 		 */
 		public boolean isColumnResizable(Object columnObj);
 
 	}
-	
+
 	public static abstract class ColumnInfoAdapter implements IColumnInfoProvider {
 
 		@Override
-		public boolean isColumnMovable(Object columnObj) {
+		public boolean isColumnMovable(final Object columnObj) {
 			// TODO Auto-generated method stub
 			return true;
 		}
 
 		@Override
-		public boolean isColumnResizable(Object columnObj) {
+		public boolean isColumnResizable(final Object columnObj) {
 			// TODO Auto-generated method stub
 			return false;
 		}
-		
+
 		@Override
-		public int getColumnWidth(Object columnObj) {
+		public int getColumnWidth(final Object columnObj) {
 			// TODO Auto-generated method stub
 			return 0;
 		}
@@ -861,8 +820,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	}
 
 	/**
-	 * Update various aspects of a columns from a viewer such
-	 * {@link TableViewer}
+	 * Update various aspects of a columns from a viewer such {@link TableViewer}
 	 */
 	public interface IColumnUpdater {
 
@@ -883,8 +841,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		public void setColumnMovable(Object columnObj, boolean movable);
 
 		/**
-		 * Call back to notify change in the index of the column represented by
-		 * columnObj
+		 * Call back to notify change in the index of the column represented by columnObj
 		 * 
 		 * @param columnObj
 		 * @param index
@@ -892,8 +849,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		public void setColumnIndex(Object columnObj, int index);
 
 		/**
-		 * Call back to notify change in the index of the column represented by
-		 * columnObj
+		 * Call back to notify change in the index of the column represented by columnObj
 		 * 
 		 * @param columnObj
 		 * @param index
@@ -909,8 +865,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		public void setColumnResizable(Object columnObj, boolean resizable);
 
 		/**
-		 * Call back to notify change in the width of the column represented by
-		 * columnObj
+		 * Call back to notify change in the width of the column represented by columnObj
 		 * 
 		 * @param columnObj
 		 * @param newWidth
@@ -922,35 +877,34 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	public static abstract class ColumnUpdaterAdapter implements IColumnUpdater {
 
 		@Override
-		public void setColumnMovable(Object columnObj, boolean movable) {
+		public void setColumnMovable(final Object columnObj, final boolean movable) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
-		public void setColumnIndex(Object columnObj, int index) {
+		public void setColumnIndex(final Object columnObj, final int index) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
-		public void setColumnResizable(Object columnObj, boolean resizable) {
+		public void setColumnResizable(final Object columnObj, final boolean resizable) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
-		public void setColumnWidth(Object columnObj, int newWidth) {
+		public void setColumnWidth(final Object columnObj, final int newWidth) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
+
 	// //////////////////////////////////////////////////////////////////////////////////
 	/**
-	 * Ignore the class below as it is simply meant to test the above. I intend
-	 * to retain this for a while.
+	 * Ignore the class below as it is simply meant to test the above. I intend to retain this for a while.
 	 */
 	public static class TestData {
 
@@ -962,12 +916,13 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 		public boolean visibility, movable, resizable;
 
-		public TestData(Object key, int currIndex, boolean moveable) {
+		public TestData(final Object key, final int currIndex, final boolean moveable) {
 			this.key = key;
 			this.keyIndex = currIndex;
 			this.movable = moveable;
 		}
 
+		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
@@ -976,7 +931,8 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			return result;
 		}
 
-		public boolean equals(Object obj) {
+		@Override
+		public boolean equals(final Object obj) {
 			if (this == obj) {
 				return true;
 			}
@@ -986,7 +942,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			if (!(obj instanceof TestData)) {
 				return false;
 			}
-			TestData other = (TestData) obj;
+			final TestData other = (TestData) obj;
 			if (key == null) {
 				if (other.key != null) {
 					return false;
@@ -1000,22 +956,25 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			return true;
 		}
 
+		@Override
 		public String toString() {
 			return key.toString();
 		}
 
-		public static ColumnConfigurationDialog getDialog(Shell shell,
-				final TestData[] colums) {
-			ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(shell) {
+		public static ColumnConfigurationDialog getDialog(final Shell shell, final TestData[] colums) {
+			final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(shell) {
 
+				@Override
 				protected IColumnInfoProvider getColumnInfoProvider() {
 					return getInfoProvider(colums);
 				}
 
+				@Override
 				protected ITableLabelProvider getLabelProvider() {
 					return new TableLabelProvider();
 				}
 
+				@Override
 				protected IColumnUpdater getColumnUpdater() {
 					return getUpdater(colums);
 				}
@@ -1027,104 +986,108 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		private static IColumnUpdater getUpdater(final TestData[] data) {
 			return new IColumnUpdater() {
 
-				public void setColumnWidth(Object columnObj, int newWidth) {
+				@Override
+				public void setColumnWidth(final Object columnObj, final int newWidth) {
 					((TestData) columnObj).width = newWidth;
 				}
 
-				public void setColumnVisible(Object columnObj, boolean visible) {
+				@Override
+				public void setColumnVisible(final Object columnObj, final boolean visible) {
 					((TestData) columnObj).visibility = visible;
 				}
 
-				public void setColumnResizable(Object columnObj,
-						boolean resizable) {
+				@Override
+				public void setColumnResizable(final Object columnObj, final boolean resizable) {
 
 				}
 
-				public void setColumnMovable(Object columnObj, boolean movable) {
+				@Override
+				public void setColumnMovable(final Object columnObj, final boolean movable) {
 					((TestData) columnObj).movable = movable;
 
 				}
 
-				public void setColumnIndex(Object columnObj, int index) {
+				@Override
+				public void setColumnIndex(final Object columnObj, final int index) {
 					((TestData) columnObj).newIndex = index;
 				}
 
 				@Override
-				public void swapColumnPositions(Object columnObj1,
-						Object columnObj2) {
+				public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
 					// TODO Auto-generated method stub
-					
+
 				}
 			};
 		}
 
-		private static IColumnInfoProvider getInfoProvider(
-				final TestData[] colData) {
+		private static IColumnInfoProvider getInfoProvider(final TestData[] colData) {
 			return new IColumnInfoProvider() {
 
-				public boolean isColumnVisible(Object columnObj) {
+				@Override
+				public boolean isColumnVisible(final Object columnObj) {
 					return ((TestData) columnObj).visibility;
 				}
 
-				public boolean isColumnResizable(Object columnObj) {
+				@Override
+				public boolean isColumnResizable(final Object columnObj) {
 					return ((TestData) columnObj).resizable;
 				}
 
-				public boolean isColumnMovable(Object columnObj) {
+				@Override
+				public boolean isColumnMovable(final Object columnObj) {
 					return ((TestData) columnObj).movable;
 				}
 
-				public int getColumnWidth(Object columnObj) {
+				@Override
+				public int getColumnWidth(final Object columnObj) {
 					return ((TestData) columnObj).width;
 				}
 
-				public int getColumnIndex(Object columnObj) {
+				@Override
+				public int getColumnIndex(final Object columnObj) {
 					return ((TestData) columnObj).newIndex;
 				}
 			};
 		}
 
-		private static TestData[] genData(int count) {
-			String[] cols = new String[count];
+		private static TestData[] genData(final int count) {
+			final String[] cols = new String[count];
 			for (int i = 0; i < cols.length; i++) {
 				cols[i] = new String("Column-" + (i + 1)); //$NON-NLS-1$
 			}
-			Random random = new Random();
+			final Random random = new Random();
 
-			boolean[] visibility = new boolean[cols.length];
+			final boolean[] visibility = new boolean[cols.length];
 			Arrays.fill(visibility, true);
 			int ranInt = random.nextInt() % cols.length;
 			for (int i = 0; i < ranInt; i++) {
 				visibility[random.nextInt(ranInt)] = false;
 			}
 
-			boolean[] resizable = new boolean[cols.length];
+			final boolean[] resizable = new boolean[cols.length];
 			Arrays.fill(resizable, true);
 			ranInt = random.nextInt() % cols.length;
 			for (int i = 0; i < ranInt; i++) {
 				resizable[random.nextInt(ranInt)] = false;
 			}
 
-			boolean[] movable = new boolean[cols.length];
+			final boolean[] movable = new boolean[cols.length];
 			Arrays.fill(movable, true);
 			ranInt = random.nextInt() % cols.length;
 			for (int i = 0; i < ranInt; i++) {
 				movable[random.nextInt(ranInt)] = false;
 			}
 
-			int[] widths = new int[cols.length];
+			final int[] widths = new int[cols.length];
 			Arrays.fill(widths, 100);
-			return TestData.generateColumnsData(cols, visibility, resizable,
-					movable, widths);
+			return TestData.generateColumnsData(cols, visibility, resizable, movable, widths);
 		}
 
-		public static TestData[] generateColumnsData(Object[] keys,
-				boolean[] visibility, boolean[] resizable, boolean[] movable,
-				int[] widths) {
-			TestData[] colData = new TestData[keys.length];
+		public static TestData[] generateColumnsData(final Object[] keys, final boolean[] visibility, final boolean[] resizable, final boolean[] movable, final int[] widths) {
+			final TestData[] colData = new TestData[keys.length];
 			int m = 0, n = 0;
 			for (int i = 0; i < colData.length; i++) {
-				TestData data = new TestData(keys[i], i, movable[i]);
+				final TestData data = new TestData(keys[i], i, movable[i]);
 				data.visibility = visibility[i];
 				data.resizable = resizable[i];
 				data.movable = movable[i];
@@ -1144,11 +1107,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		 * 
 		 * @param args
 		 */
-		public static void main(String[] args) {
-			Display display = new Display();
+		public static void main(final String[] args) {
+			final Display display = new Display();
 			final Shell shell = new Shell(display);
 			shell.setLayout(new FillLayout());
-			ColumnConfigurationDialog dialog = getDialog(shell, genData(100));
+			final ColumnConfigurationDialog dialog = getDialog(shell, genData(100));
 			dialog.open();
 			shell.dispose();
 			while (!shell.isDisposed()) {
@@ -1162,7 +1125,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	}
 
-	public void setCheckBoxInfo(String[] strings, Set<String> store) {
+	public void setCheckBoxInfo(final String[] strings, final Set<String> store) {
 		checkBoxStore = store;
 		checkBoxStrings = strings;
 	}
