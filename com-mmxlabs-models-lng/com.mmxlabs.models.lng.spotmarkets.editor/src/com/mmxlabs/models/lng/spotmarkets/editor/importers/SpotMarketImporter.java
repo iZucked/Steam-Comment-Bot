@@ -4,12 +4,20 @@
  */
 package com.mmxlabs.models.lng.spotmarkets.editor.importers;
 
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
+import com.mmxlabs.models.lng.commercial.PricingEvent;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
+import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
@@ -36,5 +44,36 @@ public class SpotMarketImporter extends DefaultClassImporter {
 		}
 
 		return outputEClass;
+	}
+
+	@Override
+	protected void importAttributes(final Map<String, String> row, final IImportContext context, final EClass rowClass, final EObject instance) {
+		// Set pricing event defaults
+		if (instance instanceof SpotMarket) {
+			final SpotMarket spotMarket = (SpotMarket) instance;
+
+			SpotType type = null;
+			if (row.containsKey("type")) {
+				type = SpotType.getByName(row.get("type"));
+			}
+			if (type != null) {
+				switch (type) {
+				case DES_PURCHASE:
+					spotMarket.setPricingEvent(PricingEvent.START_DISCHARGE);
+					break;
+				case DES_SALE:
+					spotMarket.setPricingEvent(PricingEvent.START_DISCHARGE);
+					break;
+				case FOB_PURCHASE:
+					spotMarket.setPricingEvent(PricingEvent.START_LOAD);
+					break;
+				case FOB_SALE:
+					spotMarket.setPricingEvent(PricingEvent.START_LOAD);
+					break;
+
+				}
+			}
+		}
+		super.importAttributes(row, context, rowClass, instance);
 	}
 }

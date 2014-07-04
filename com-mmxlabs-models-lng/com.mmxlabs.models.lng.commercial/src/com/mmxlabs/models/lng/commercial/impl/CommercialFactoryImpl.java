@@ -147,22 +147,20 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	public SalesContract createSalesContract() {
 		SalesContractImpl salesContract = new SalesContractImpl();
-		salesContract.setPricingEvent(PricingEvent.START_DISCHARGE);
 		return salesContract;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated NOT
+	 * @generated
 	 */
 	public PurchaseContract createPurchaseContract() {
 		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
-		purchaseContract.setPricingEvent(PricingEvent.START_LOAD);
 		return purchaseContract;
 	}
 

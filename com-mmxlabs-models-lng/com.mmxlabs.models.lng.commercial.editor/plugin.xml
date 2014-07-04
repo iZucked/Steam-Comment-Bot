@@ -247,6 +247,12 @@
             eClassName="com.mmxlabs.models.lng.commercial.BaseLegalEntity"
             inheritable="true">
       </classImporter>
+      <classImporter
+            ID="com.mmxlabs.models.lng.commercial.importer.ContractClassImporter"
+            classImporterClass="com.mmxlabs.models.lng.commercial.importer.ContractClassImporter"
+            eClassName="com.mmxlabs.models.lng.commercial.Contract"
+            inheritable="true">
+      </classImporter>
    </extension>
 
 </plugin>

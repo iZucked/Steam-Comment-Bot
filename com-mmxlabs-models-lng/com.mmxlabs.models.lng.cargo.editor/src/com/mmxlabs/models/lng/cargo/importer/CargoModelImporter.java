@@ -20,16 +20,19 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.VesselType;
 import com.mmxlabs.models.lng.cargo.VesselTypeGroup;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -88,7 +91,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 
-
 		// Create Special groups
 		if (cargoModel != null) {
 			for (final VesselType type : VesselType.values()) {
@@ -108,7 +110,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
-		
+
 		if (inputs.containsKey(CARGO_KEY)) {
 			@SuppressWarnings("resource")
 			final CSVReader reader = inputs.get(CARGO_KEY);
@@ -117,9 +119,46 @@ public class CargoModelImporter implements ISubmodelImporter {
 				if (object instanceof Cargo) {
 					cargoModel.getCargoes().add((Cargo) object);
 				} else if (object instanceof LoadSlot) {
-					cargoModel.getLoadSlots().add((LoadSlot) object);
+					final LoadSlot loadSlot = (LoadSlot) object;
+					cargoModel.getLoadSlots().add(loadSlot);
+					// Set default pricing event if no delegate or previously set value
+					context.doLater(new IDeferment() {
+
+						@Override
+						public void run(IImportContext context) {
+							if (!(loadSlot instanceof SpotSlot) && loadSlot.getContract() == null) {
+								if (loadSlot.getPricingEvent() == null) {
+									loadSlot.setPricingEvent(PricingEvent.START_LOAD);
+								}
+							}
+						}
+
+						@Override
+						public int getStage() {
+							// TODO Auto-generated method stub
+							return 0;
+						}
+					});
 				} else if (object instanceof DischargeSlot) {
-					cargoModel.getDischargeSlots().add((DischargeSlot) object);
+					final DischargeSlot dischargeSlot = (DischargeSlot) object;
+					cargoModel.getDischargeSlots().add(dischargeSlot);
+					// Set default pricing event if no delegate or previously set value
+					context.doLater(new IDeferment() {
+
+						@Override
+						public void run(IImportContext context) {
+							if (!(dischargeSlot instanceof SpotSlot) && dischargeSlot.getContract() == null) {
+								if (dischargeSlot.getPricingEvent() == null) {
+									dischargeSlot.setPricingEvent(PricingEvent.START_DISCHARGE);
+								}
+							}
+						}
+
+						@Override
+						public int getStage() {
+							return IImportContext.STAGE_REFERENCES_RESOLVED;
+						}
+					});
 				}
 			}
 		}
