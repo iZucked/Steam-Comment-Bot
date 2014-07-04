@@ -77,7 +77,7 @@ public class RelatedSlotAllocations {
 			final Slot slotB = slotAllocationB.getSlot();
 
 			addRelatedSlot(slotA, slotB);
-			
+
 		}
 	}
 
@@ -86,18 +86,16 @@ public class RelatedSlotAllocations {
 	}
 
 	public void addRelatedSlot(Slot slotA, Slot slotB) {
-		
+
 		final String sA = slotA.getName();
 		final String sB = slotB.getName();
-		
+		// get/create the sets of slots these wired slots are related to
+		final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
+		final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
+
 		// Do not merge spots
 		if (slotA instanceof SpotSlot || slotB instanceof SpotSlot) {
 
-			// get/create the sets of slots these wired slots are related to
-			final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
-			final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
-
-			// merge the two sets
 			setA.add(slotB);
 			setB.add(slotA);
 
@@ -105,11 +103,6 @@ public class RelatedSlotAllocations {
 			slotsAndTheirRelatedSets.put(slotB.getName(), setB);
 
 		} else {
-
-			// get/create the sets of slots these wired slots are related to
-			final Set<Slot> setA = slotsAndTheirRelatedSets.containsKey(sA) ? slotsAndTheirRelatedSets.get(sA) : ASet.of(slotA);
-			final Set<Slot> setB = slotsAndTheirRelatedSets.containsKey(sB) ? slotsAndTheirRelatedSets.get(sB) : ASet.of(slotB);
-
 			// merge the two sets
 			setA.addAll(setB);
 			final Set<Slot> mergedSet = setA;
