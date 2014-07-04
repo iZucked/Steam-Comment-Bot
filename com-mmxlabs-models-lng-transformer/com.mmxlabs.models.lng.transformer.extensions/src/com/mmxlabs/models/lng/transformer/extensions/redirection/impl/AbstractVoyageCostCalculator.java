@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -24,6 +25,9 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
+
+	@Inject
+	private Injector injector;
 
 	@Override
 	public @Nullable
@@ -86,12 +90,15 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	protected @NonNull
 	ISalesPriceCalculator createSalesPriceCalculator(final int salesPricePerMMBTu) {
-		return new SimpleContract() {
+		final SimpleContract contract = new SimpleContract() {
 
 			@Override
 			protected int calculateSimpleUnitPrice(final int loadTime, final IPort port) {
 				return salesPricePerMMBTu;
 			}
 		};
+
+		injector.injectMembers(contract);
+		return contract;
 	}
 }
