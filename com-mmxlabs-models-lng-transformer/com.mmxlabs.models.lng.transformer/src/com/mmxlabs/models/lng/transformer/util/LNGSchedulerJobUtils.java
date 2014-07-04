@@ -5,12 +5,15 @@
 package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
@@ -38,6 +41,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
@@ -316,15 +320,15 @@ public class LNGSchedulerJobUtils {
 				// Spot slots may not have a port set, so copy from other half
 				if (allocation.getSlotAllocations().size() == 2) {
 					if (desPurchaseSlot instanceof SpotSlot) {
-//						if (desPurchaseSlot.getPort() == null) {
-							cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(1).getPort()));
-//						}
+						cmd.append(SetCommand.create(domain, desPurchaseSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(1).getPort()));
+						// Adjust port times to be local to new port
+						updateSpotSlotDate(domain, cmd, desPurchaseSlot, allocation.getSlotAllocations().get(1).getPort());
 					}
 
 					if (fobSaleSlot instanceof SpotSlot) {
-//						if (fobSaleSlot.getPort() == null) {
-							cmd.append(SetCommand.create(domain, fobSaleSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(0).getPort()));
-//						}
+						cmd.append(SetCommand.create(domain, fobSaleSlot, CargoPackage.eINSTANCE.getSlot_Port(), allocation.getSlotAllocations().get(0).getPort()));
+						// Adjust port times to be local to new port
+						updateSpotSlotDate(domain, cmd, fobSaleSlot, allocation.getSlotAllocations().get(0).getPort());
 					}
 				}
 			}
@@ -482,6 +486,44 @@ public class LNGSchedulerJobUtils {
 		// Create a fake context
 		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
 		return solution;
+	}
+
+	private static void updateSpotSlotDate(final EditingDomain domain, final CompoundCommand cmd, final Slot slot, final Port port) {
+
+		if (slot.getPort() != port) {
+			final String oldZone;
+			if (slot.getPort() == null) {
+				// Assume current date is UTC
+				oldZone = "UTC";
+			} else {
+				oldZone = slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
+			}
+			final String newZone = ((Port) port).getTimeZone();
+			// remap from old zone to new zone
+			if ((newZone == null && !(oldZone == null)) || (newZone != null && !newZone.equals(oldZone))) {
+				final Calendar oldCalendar = Calendar.getInstance(getZone(oldZone));
+				final Calendar newCalendar = Calendar.getInstance(getZone(newZone));
+				// Prime with current date in old tz
+				oldCalendar.setTime(slot.getWindowStart());
+				// Clear all components (specifically time)
+				newCalendar.clear();
+				// Replicate the date components in new TZ
+				newCalendar.set(Calendar.YEAR, oldCalendar.get(Calendar.YEAR));
+				newCalendar.set(Calendar.MONTH, oldCalendar.get(Calendar.MONTH));
+				newCalendar.set(Calendar.DAY_OF_MONTH, oldCalendar.get(Calendar.DAY_OF_MONTH));
+
+				final Date newDate = newCalendar.getTime();
+				cmd.append(SetCommand.create(domain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), newDate));
+			}
+		}
+
+	}
+
+	private static TimeZone getZone(final String zone) {
+		if (zone == null || zone.isEmpty())
+			return TimeZone.getTimeZone("UTC");
+		else
+			return TimeZone.getTimeZone(zone);
 	}
 
 }
