@@ -12,6 +12,7 @@ package com.mmxlabs.scheduler.optimiser.builder;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -628,7 +629,7 @@ public interface ISchedulerBuilder {
 	 * @param desPurchase
 	 * @param dischargePorts
 	 */
-	void bindDischargeSlotsToDESPurchase(@NonNull ILoadOption desPurchase, Collection<IPort> dischargePorts);
+	void bindDischargeSlotsToDESPurchase(@NonNull ILoadOption desPurchase, Map<IPort, ITimeWindow> dischargePorts);
 
 	/**
 	 * Permit all real load slots at the given {@link IPort}s to be re-wired to the given FOB Sale.
@@ -636,7 +637,7 @@ public interface ISchedulerBuilder {
 	 * @param desPurchase
 	 * @param dischargePorts
 	 */
-	void bindLoadSlotsToFOBSale(@NonNull IDischargeOption fobSale, Collection<IPort> loadPorts);
+	void bindLoadSlotsToFOBSale(@NonNull IDischargeOption fobSale, Map<IPort, ITimeWindow> loadPorts);
 
 	/**
 	 * Place a {@link Collection} of {@link IPortSlot}s into a "count" group - that is a group in which only the count number of elements may be used.

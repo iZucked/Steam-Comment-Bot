@@ -625,7 +625,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param cooldownPriceCalculator
 	 * @param timezoneId
 	 */
-	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, String timezoneId) {
+	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId) {
 
 		port.setName(name);
 		port.setShouldVesselsArriveCold(arriveCold);
@@ -975,7 +975,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
 			 */
 			int maxFastReturnTime = 0;
-			if ((dischargePort != null)) { // && (loadPort != null)) {
+			if ((dischargePort != null)) {
 				for (final ILoadOption loadSlot : loadSlots) {
 					final int returnDistance = portDistanceProvider.getMaximumValue(dischargePort, loadSlot.getPort());
 					if (returnDistance == Integer.MAX_VALUE) {
@@ -1585,8 +1585,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portCostProvider.setPortCost(port, vessel, portType, cost);
 	}
 
-	private final Map<IDischargeOption, Collection<IPort>> fobSalesToLoadPorts = new HashMap<>();
-	private final Map<ILoadOption, Collection<IPort>> desPurchasesToDischargePorts = new HashMap<>();
+	private final Map<IDischargeOption, Map<IPort, ITimeWindow>> fobSalesToLoadPorts = new HashMap<>();
+	private final Map<ILoadOption, Map<IPort, ITimeWindow>> desPurchasesToDischargePorts = new HashMap<>();
 
 	/**
 	 * A {@link Set} of {@link IPortSlot} which cannot be moved to another vessel/resource. This is populated be calls to {@link #freezeSlotToVessel(IPortSlot, IVessel)}.
@@ -1594,15 +1594,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final Set<IPortSlot> frozenSlots = new HashSet<>();
 
 	@Override
-	public void bindDischargeSlotsToDESPurchase(@NonNull final ILoadOption desPurchase, final Collection<IPort> dischargePorts) {
-		desPurchasesToDischargePorts.put(desPurchase, new ArrayList<>(dischargePorts));
+	public void bindDischargeSlotsToDESPurchase(@NonNull final ILoadOption desPurchase, final Map<IPort, ITimeWindow> dischargePortToCompatibleWindow) {
+		desPurchasesToDischargePorts.put(desPurchase, new HashMap<>(dischargePortToCompatibleWindow));
 
 	}
 
 	private void doBindDischargeSlotsToDESPurchase() {
-		for (final Map.Entry<ILoadOption, Collection<IPort>> e : desPurchasesToDischargePorts.entrySet()) {
+		for (final Map.Entry<ILoadOption, Map<IPort, ITimeWindow>> e : desPurchasesToDischargePorts.entrySet()) {
 			final ILoadOption desPurchase = e.getKey();
-			final Collection<IPort> dischargePorts = e.getValue();
+			final Map<IPort, ITimeWindow> dischargePorts = e.getValue();
 
 			final ISequenceElement desElement = portSlotsProvider.getElement(desPurchase);
 
@@ -1612,7 +1612,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
 			}
 
-			final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(desPurchase));
 			for (final IDischargeOption option : dischargeSlots) {
 
 				// Skip frozen slots
@@ -1622,11 +1621,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 				if (option instanceof DischargeSlot) {
 
-					if (dischargePorts.contains(option.getPort())) {
+					if (dischargePorts.keySet().contains(option.getPort())) {
 						// Get current allocation
+						final ITimeWindow desPurchaseWindowForPort = dischargePorts.get(option.getPort());
 
 						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-						if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+						if (matchingWindows(Collections.singletonList(desPurchaseWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(desPurchaseWindowForPort))) {
 
 							Set<IVessel> set = slotVesselRestrictions.get(option);
 							if (set == null || set.isEmpty()) {
@@ -1645,15 +1645,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
-	public void bindLoadSlotsToFOBSale(@NonNull final IDischargeOption fobSale, final Collection<IPort> loadPorts) {
-		fobSalesToLoadPorts.put(fobSale, new ArrayList<>(loadPorts));
+	public void bindLoadSlotsToFOBSale(@NonNull final IDischargeOption fobSale, final Map<IPort, ITimeWindow> loadPorts) {
+		fobSalesToLoadPorts.put(fobSale, new HashMap<>(loadPorts));
 	}
 
 	private void doBindLoadSlotsToFOBSale() {
 
-		for (final Map.Entry<IDischargeOption, Collection<IPort>> e : fobSalesToLoadPorts.entrySet()) {
+		for (final Map.Entry<IDischargeOption, Map<IPort, ITimeWindow>> e : fobSalesToLoadPorts.entrySet()) {
 			final IDischargeOption fobSale = e.getKey();
-			final Collection<IPort> loadPorts = e.getValue();
+			final Map<IPort, ITimeWindow> loadPorts = e.getValue();
 
 			final ISequenceElement desElement = portSlotsProvider.getElement(fobSale);
 
@@ -1662,7 +1662,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (virtualVessel == null) {
 				throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
 			}
-			final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(fobSale));
 
 			for (final ILoadOption option : loadSlots) {
 
@@ -1673,11 +1672,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 				if (option instanceof LoadSlot) {
 
-					if (loadPorts.contains(option.getPort())) {
+					if (loadPorts.keySet().contains(option.getPort())) {
 						// Get current allocation
+						final ITimeWindow fobSaleWindowForPort = loadPorts.get(option.getPort());
 
 						final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-						if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+						if (matchingWindows(Collections.singletonList(fobSaleWindowForPort), tw2) || matchingWindows(tw2, Collections.singletonList(fobSaleWindowForPort))) {
 							Set<IVessel> set = slotVesselRestrictions.get(option);
 							if (set == null || set.isEmpty()) {
 								set = new HashSet<IVessel>(realVessels);
@@ -1707,6 +1707,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				if (t1.getEnd() >= t2.getStart() && t1.getEnd() <= t2.getEnd()) {
 					return true;
 				}
+				// Start is within
 				if (t1.getStart() >= t2.getStart() && t1.getStart() <= t2.getEnd()) {
 					return true;
 				}

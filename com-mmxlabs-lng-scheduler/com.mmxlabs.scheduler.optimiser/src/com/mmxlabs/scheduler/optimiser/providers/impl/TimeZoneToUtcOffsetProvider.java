@@ -118,6 +118,47 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 
 		return UTC(localTime, timeZoneId);
 	}
+	
+	
+	@Override
+	public int localTime(final int utcTime, final String timezoneId) {
+		final DateTimeZone tz = DateTimeZone.forID(timezoneId);
+
+		// for now, re-throw any exceptions
+		try {
+			// check for illegal/wrong timezoneId
+			if (tz != null) {
+				final long utcTimeInMillis = convertInternalToMillis(utcTime);
+				//final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
+				final long localInMillis = utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
+
+				return convertMillisToInternal(localInMillis);
+			} else {
+				// TODO-3: Warn about the wrong timezoneId; currently returning localTime to keep things going
+				return utcTime;
+			}
+		} catch (final Exception e) {
+			throw (e);
+		}
+	}
+
+	@Override
+	public int localTime(final int utcTime, final IPort port) {
+		
+		String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
+		if (timeZoneId == null || timeZoneId.isEmpty()) {
+			timeZoneId = "UTC";
+		}
+		return localTime(utcTime, timeZoneId);
+	}
+
+	@Override
+	public int localTime(final int utcTime, final IPortSlot portSlot) {
+		final IPort port = portSlot == null ? null : portSlot.getPort();
+		final String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
+
+		return localTime(utcTime, timeZoneId);
+	}
 
 	/**
 	 * Get the local time - UTC offset in milliseconds

@@ -19,6 +19,12 @@ public interface ITimeZoneToUtcOffsetProvider extends IDataComponentProvider {
 	int UTC(int localTime, IPort port);
 
 	int UTC(int localTime, String timezoneId);
+
+	int localTime(int utcTime, String timezoneId);
+
+	int localTime(int utcTime, IPort port);
+
+	int localTime(int utcTime, IPortSlot portSlot);
 	
 }
 
