@@ -1,0 +1,3 @@
+name,otherNames,capabilities,timeZone,loadDuration,dischargeDuration,berths,cvValue,defaultStartTime,allowCooldown,defaultWindowSize,atobviacCode,dataloyCode,vesonCode,externalCode,UNLocode,location.country,location.lat,location.lon,location.kind,kind
+Canaport,Canaport,DISCHARGE,America/Halifax,0,24,1,0.000,7,false,24,0,103941,,0,,CANADA,45.205,-65.981,Location,Port
+Futtsu,Futtsu,DISCHARGE,Asia/Tokyo,0,24,1,0.000,7,false,24,0,102935,,0,,JAPAN,43.210,141.306,Location,Port
