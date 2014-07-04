@@ -201,10 +201,14 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 */
 	@Override
 	public Calendar getLocalStart() {
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTime(getOperationsStart());
-		calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START)));
-		return calendar;
+		final Date os = getOperationsStart();
+		if (os != null) {
+			final Calendar calendar = Calendar.getInstance();
+			calendar.setTime(os);
+			calendar.setTimeZone(TimeZone.getTimeZone(getTimeZone(ActualsPackage.Literals.RETURN_ACTUALS__OPERATIONS_START)));
+			return calendar;
+		}
+		return null;
 	}
 
 	/**
