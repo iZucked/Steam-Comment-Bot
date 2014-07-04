@@ -1,6 +1,7 @@
 package com.mmxlabs.lingo.reports.components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,6 +17,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IMemento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,6 +93,8 @@ public class ScheduleBasedReportBuilder {
 	/** All filters (note this order is also used in the {@link ConfigurableCargoReportView} dialog */
 	public static final String[] ROW_FILTER_ALL = new String[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
 			ROW_FILTER_VESSEL_START_ROW };
+
+	private static final String SCHEDULE_BASE_CONFIG_MEMENTO = "SCHEDULE_BASE_CONFIG_MEMENTO";
 
 	/**
 	 * Guava {@link Function} to convert a Slot to a String based on it's name;
@@ -483,7 +487,28 @@ public class ScheduleBasedReportBuilder {
 	public Set<String> getRowFilterInfo() {
 		return rowFilterInfo;
 	}
+	
+	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
+		final IMemento rowsInfo = memento.createChild(uniqueConfigKey);
+		for (String option: rowFilterInfo) {
+			final IMemento optionInfo = rowsInfo.createChild(SCHEDULE_BASE_CONFIG_MEMENTO);
+			optionInfo.putTextData(option);
+		}
+	}
 
+	public void initFromMemento(final String uniqueConfigKey, final IMemento memento) {
+		final IMemento rowsInfo = memento.getChild(uniqueConfigKey);
+		if (rowsInfo != null) {
+			rowFilterInfo.clear();
+			for (IMemento optionInfo: rowsInfo.getChildren(SCHEDULE_BASE_CONFIG_MEMENTO)) {
+				rowFilterInfo.add(optionInfo.getTextData());
+			}
+		}
+		else {
+			rowFilterInfo.addAll(Arrays.asList(ScheduleBasedReportBuilder.ROW_FILTER_ALL));
+		}
+		
+	}
 	// / Normal Columns
 
 	// ////// Pin / Diff Columns

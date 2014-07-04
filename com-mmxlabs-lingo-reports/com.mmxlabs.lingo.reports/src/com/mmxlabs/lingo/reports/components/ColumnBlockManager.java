@@ -1,6 +1,7 @@
 package com.mmxlabs.lingo.reports.components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -9,6 +10,8 @@ import org.eclipse.ui.IMemento;
 
 /**
  * A class which manages custom column blocks for a Nebula Grid widget. The blocks have columns assigned to them, can be made visible or invisible, and can be moved en masse on the grid.
+ * 
+ * The column block manager requires that every single column in the Grid widget, without exception, is attached to some named column block.
  * 
  * @author Simon McGregor
  * 
@@ -19,6 +22,7 @@ public class ColumnBlockManager {
 
 	private final List<ColumnBlock> blocks = new ArrayList<>();
 	private Grid grid;
+	private List<String> blockOrderByName = new ArrayList<>();
 
 	protected ColumnBlock findColumnBlock(final GridColumn column) {
 		for (final ColumnBlock block : blocks) {
@@ -92,6 +96,17 @@ public class ColumnBlockManager {
 		return namedBlock;
 	}
 
+	public void setNameOrder(final List<String> order) {
+		final List<ColumnBlock> blockOrder = new ArrayList<>();
+		for (String name: order) {
+			ColumnBlock block = getBlockByName(name);
+			blockOrder.add(block);
+		}
+		setVisibleBlockOrder(blockOrder);
+		blockOrderByName.clear();
+		blockOrderByName.addAll(order);
+	}	
+	
 	/**
 	 * Returns the block order for the grid widget. Assumes that the column display order on the widget respects the managed column blocks (i.e. all columns in a block are displayed contiguously).
 	 * Returns null and prints an error if there is an inconsistency.
@@ -100,7 +115,7 @@ public class ColumnBlockManager {
 	 * 
 	 * @return
 	 */
-	public List<ColumnBlock> getBlocksInVisibleOrder() {
+	public List<ColumnBlock> getBlockOrderFromGrid() {
 		final List<ColumnBlock> result = new ArrayList<>();
 		ColumnBlock current = null;
 
@@ -127,67 +142,105 @@ public class ColumnBlockManager {
 
 		return result;
 	}
-
+	
+	/**
+	 * Returns a list of block names in currently specified order. This will automatically
+	 * append any block names which were not listed in the last setNameOrder() call.
+	 * @return
+	 */
+	public List<String> getNameOrder() {		
+		final List<String> result = new ArrayList<String>(blockOrderByName);
+		for (ColumnBlock block: blocks) {
+			if (result.contains(block.name) == false) {
+				result.add(block.name);
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Returns a list of all blocks in the order they should appear in. 
+	 * @return
+	 */
+	public List<ColumnBlock> getBlocksInVisibleOrder() {
+		final ArrayList<ColumnBlock> result = new ArrayList<ColumnBlock>();
+		for (String name: getNameOrder()) {
+			ColumnBlock block = getBlockByName(name);
+			result.add(getBlockByName(name));
+		}
+		return result;
+	}
+	
+	/**
+	 * Sets the column ordering on a nebula grid widget to respect the desired ordering of column blocks.
+	 * 
+	 * @param order
+	 */
 	public void setVisibleBlockOrder(final List<ColumnBlock> order) {
 		int index = 0;
 		final int[] colOrder = grid.getColumnOrder();
 
-		int maxIndex = 0;
-		for (final ColumnBlock block : order) {
+		final List<ColumnBlock> finalOrder = new ArrayList<ColumnBlock>(order);
+		
+		// detect any visible blocks missing from the specified order and append them  
+		for (final ColumnBlock block: blocks) {
+			if (getBlockVisible(block) && finalOrder.contains(block) == false) {
+				finalOrder.add(block);
+			}
+		}
+		
+		// Java won't allow initialising a List<Integer> directly from an int []
+		final List<Integer> missingIndices = new ArrayList<>();
+		for (int i: colOrder) {
+			missingIndices.add(i);
+		}
+		
+		// go through blocks in order
+		for (final ColumnBlock block : finalOrder) {
+			// adding the columns in each block to the grid in the correct order
 			for (final ColumnHandler handler : block.blockHandlers) {
 				final GridColumn column = handler.column.getColumn();
-				if (column.isDisposed()) {
-					colOrder[index] = -1;// grid.indexOf(column);
-				} else {
+				// sanity check to make sure nothing is bad
+				if (column != null && column.isDisposed() == false) {
+					// the next column in the grid display will be the given column
 					colOrder[index] = grid.indexOf(column);
+					missingIndices.remove((Object) colOrder[index]); 
+					index += 1;
 				}
-				maxIndex = Math.max(maxIndex, colOrder[index]);
+			}
+		}
+		
+		// if there are any columns missing from the specified order, something is wrong
+		if (missingIndices.isEmpty() == false) {
+			System.err.println(String.format("Available blocks only account for %d out of %d columns.", index, colOrder.length));
+			for (int i: missingIndices) {
+				colOrder[index] = i;
 				index += 1;
 			}
 		}
-
-		// The incoming column block order may have come from a memto. There may be different columns thus a mismatch on old and new column blocks. Here we make sure any new columns not covered by
-		// the column order have a unique column index.
-		for (; index < colOrder.length; ++index) {
-			colOrder[index] = ++maxIndex;
-		}
-
-		// Renumber the col order to have consecutive numbering from zero. Removed columns may cause holes in sequence.
-		index = 0;
-		for (int i = 0; i <= maxIndex; ++i) {
-			for (int j = 0; j < colOrder.length; ++j) {
-				if (colOrder[j] == i) {
-					colOrder[j] = index++;
-					break;
-				}
-			}
-		}
-
-		// // Replace -1's with valid index
-		// for (int i = 0; i < colOrder.length; ++i) {
-		// if (colOrder[i] == -1) {
-		// colOrder[i] = usedCount++;
-		// }
-		// }
 
 		grid.setColumnOrder(colOrder);
 	}
 
 	public void swapBlockOrder(final ColumnBlock block1, final ColumnBlock block2) {
-		final List<ColumnBlock> order = getBlocksInVisibleOrder();
-		final int index1 = order.indexOf(block1);
-		final int index2 = order.indexOf(block2);
-		order.set(index1, block2);
-		order.set(index2, block1);
-		setVisibleBlockOrder(order);
+		List<String> order = getNameOrder();
+		final int index1 = order.indexOf(block1.name);
+		final int index2 = order.indexOf(block2.name);
+		order.set(index1, block2.name);
+		order.set(index2, block1.name);
+		setNameOrder(order);
 	}
 
 	public int getBlockIndex(final ColumnBlock block) {
 		return getBlocksInVisibleOrder().indexOf(block);
 	}
+	
+	public boolean getBlockVisible(final ColumnBlock block) {
+		return block.getVisible();
+	}
 
 	@SuppressWarnings("null")
-	public boolean getBlockVisible(final ColumnBlock block) {
+	public boolean getBlockReallyVisible(final ColumnBlock block) {
 		Boolean result = null;
 		for (final ColumnHandler handler : block.blockHandlers) {
 			final GridColumn column = handler.column.getColumn();
@@ -200,17 +253,31 @@ public class ColumnBlockManager {
 		return (result == null ? false : result.booleanValue());
 	}
 
+	/**
+	 * Saves the state of the block manager to an IMemento object.
+	 * 
+	 * @param uniqueConfigKey
+	 * @param memento
+	 */
 	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento blocksInfo = memento.createChild(uniqueConfigKey);
-		for (final ColumnBlock block : this.getBlocksInVisibleOrder()) {
-			final IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, block.name);
+		for (final String name: getNameOrder()) {
+			ColumnBlock block = getBlockByName(name);
+			final IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, name);
 			blockInfo.putBoolean(BLOCK_VISIBLE_MEMENTO, getBlockVisible(block));
 		}
 	}
 
+	/**
+	 * Loads the state of the block manager from an IMemento object.
+	 * 
+	 * @param uniqueConfigKey
+	 * @param memento
+	 */
 	public void initFromMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento blocksInfo = memento.getChild(uniqueConfigKey);
-		final List<ColumnBlock> order = new ArrayList<>();
+		final List<String> order = new ArrayList<>();
+		if (true) return;
 
 		if (blocksInfo != null) {
 
@@ -224,10 +291,10 @@ public class ColumnBlockManager {
 				if (visible != null) {
 					block.setUserVisible(visible);
 				}
-				order.add(block);
+				order.add(blockName);
 			}
 
-			setVisibleBlockOrder(order);
+			setNameOrder(order);
 		}
 	}
 
