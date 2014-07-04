@@ -30,6 +30,9 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	@Inject(optional = true)
 	private IActualsDataProvider actualsDataProvider;
 
+	@Inject
+	private PricingEventHelper pricingEventHelper;
+	
 	@Override
 	public void prepareEvaluation(final ISequences sequences) {
 
@@ -49,7 +52,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);
 		}
 
-		final int pricingDate = PricingEventHelper.getLoadPricingDate(loadSlot, dischargeSlot, allocationAnnotation);
+		final int pricingDate = pricingEventHelper.getLoadPricingDate(loadSlot, dischargeSlot, allocationAnnotation);
 		final IPort port = loadSlot == null ? null : loadSlot.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
@@ -61,7 +64,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
 
-		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeOption, voyageRecord);
+		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, voyageRecord);
 		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
@@ -73,7 +76,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
 
-		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeOption, allocationAnnotation);
+		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, allocationAnnotation);
 		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
@@ -107,7 +110,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(loadOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(loadOption);
 		}
-		final int pricingDate = PricingEventHelper.getDischargePricingDate(dischargeSlot, allocationAnnotation);
+		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeSlot, allocationAnnotation);
 		return calculateSimpleUnitPrice(pricingDate, dischargeSlot.getPort());
 	}
 
@@ -121,7 +124,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 			return actualsDataProvider.getLNGPricePerMMBTu(loadSlot);
 		}
 
-		final int pricingDate = PricingEventHelper.getLoadPricingDate(loadSlot, dischargeOption, allocationAnnotation);
+		final int pricingDate = pricingEventHelper.getLoadPricingDate(loadSlot, dischargeOption, allocationAnnotation);
 		return calculateSimpleUnitPrice(pricingDate, loadSlot.getPort());
 	}
 

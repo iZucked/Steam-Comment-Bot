@@ -1,88 +1,82 @@
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.google.inject.Inject;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 
 public final class PricingEventHelper {
 
-	private PricingEventHelper() {
+	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
-	}
-
-	public static int getLoadPricingDate(final ILoadOption loadOption, final IDischargeOption dischargeOption, final IPortTimesRecord portTimesRecord) {
+	public int getLoadPricingDate(@NonNull final ILoadOption loadOption, @NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 		final int pricingDate;
-		if (loadOption != null) {
-			final int loadPricingDate = loadOption.getPricingDate();
-			if (loadPricingDate != IPortSlot.NO_PRICING_DATE) {
-				pricingDate = loadPricingDate;
-			} else {
-				final PricingEventType pricingEvent = loadOption.getPricingEvent();
-				switch (pricingEvent) {
-				case END_OF_DISCHARGE:
-					final int dischargeDuration = portTimesRecord.getSlotDuration(dischargeOption);
-					pricingDate = portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration;
-					break;
-				case END_OF_LOAD:
-					final int loadDuration = portTimesRecord.getSlotDuration(loadOption);
-					pricingDate = portTimesRecord.getSlotTime(loadOption) + loadDuration;
-					break;
-				case START_OF_DISCHARGE:
-					pricingDate = portTimesRecord.getSlotTime(dischargeOption);
-					break;
-				default:
-					// Default is start of load
-				case START_OF_LOAD:
-					pricingDate = portTimesRecord.getSlotTime(loadOption);
-					break;
-				}
-			}
+		final int loadPricingDate = loadOption.getPricingDate();
+		if (loadPricingDate != IPortSlot.NO_PRICING_DATE) {
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(loadPricingDate, loadOption.getPort());
 		} else {
-			// Default is start of load
-			pricingDate = portTimesRecord.getSlotTime(loadOption);
+			final PricingEventType pricingEvent = loadOption.getPricingEvent();
+			switch (pricingEvent) {
+			case END_OF_DISCHARGE:
+				final int dischargeDuration = portTimesRecord.getSlotDuration(dischargeOption);
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration, dischargeOption.getPort());
+				break;
+			case END_OF_LOAD:
+				final int loadDuration = portTimesRecord.getSlotDuration(loadOption);
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption) + loadDuration, loadOption.getPort());
+				break;
+			case START_OF_DISCHARGE:
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), dischargeOption.getPort());
+				break;
+			default:
+				// Default is start of load
+			case START_OF_LOAD:
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption), loadOption.getPort());
+				break;
+			}
 		}
 		return pricingDate;
 	}
 
-	public static int getDischargePricingDate(final IDischargeOption dischargeOption, final IPortTimesRecord portTimesRecord) {
+	public int getDischargePricingDate(@NonNull final IDischargeOption dischargeOption, @NonNull final IPortTimesRecord portTimesRecord) {
 
 		final int pricingDate;
-		if (dischargeOption != null) {
-			final int dischargePricingDate = dischargeOption.getPricingDate();
-			if (dischargePricingDate != IPortSlot.NO_PRICING_DATE) {
-				pricingDate = dischargePricingDate;
-			} else {
-				final PricingEventType pricingEvent = dischargeOption.getPricingEvent();
-				switch (pricingEvent) {
-				case END_OF_DISCHARGE: {
-					final int dischargeDuration = portTimesRecord.getSlotDuration(dischargeOption);
-					pricingDate = portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration;
-					break;
-				}
-				case END_OF_LOAD: {
-					final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
-					final int loadDuration = portTimesRecord.getSlotDuration(loadOption);
-					pricingDate = portTimesRecord.getSlotTime(loadOption) + loadDuration;
-					break;
-				}
-				case START_OF_LOAD: {
-					final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
-					pricingDate = portTimesRecord.getSlotTime(loadOption);
-					break;
-				}
-				default:
-					// Default is start of discharge
-				case START_OF_DISCHARGE: {
-					pricingDate = portTimesRecord.getSlotTime(dischargeOption);
-					break;
-				}
-				}
-			}
+		final int dischargePricingDate = dischargeOption.getPricingDate();
+		if (dischargePricingDate != IPortSlot.NO_PRICING_DATE) {
+			pricingDate = timeZoneToUtcOffsetProvider.UTC(dischargePricingDate, dischargeOption.getPort());
 		} else {
-			// Default is start of discharge
-			pricingDate = portTimesRecord.getSlotTime(dischargeOption);
+			final PricingEventType pricingEvent = dischargeOption.getPricingEvent();
+			switch (pricingEvent) {
+			case END_OF_DISCHARGE: {
+				final int dischargeDuration = portTimesRecord.getSlotDuration(dischargeOption);
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption) + dischargeDuration, dischargeOption.getPort());
+				break;
+			}
+			case END_OF_LOAD: {
+				final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
+				final int loadDuration = portTimesRecord.getSlotDuration(loadOption);
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption) + loadDuration, loadOption.getPort());
+				break;
+			}
+			case START_OF_LOAD: {
+				final ILoadOption loadOption = findFirstLoadOption(portTimesRecord);
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(loadOption), loadOption.getPort());
+				break;
+			}
+			default:
+				// Default is start of discharge
+			case START_OF_DISCHARGE: {
+				pricingDate = timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getSlotTime(dischargeOption), dischargeOption.getPort());
+				;
+				break;
+			}
+			}
 		}
 		return pricingDate;
 	}

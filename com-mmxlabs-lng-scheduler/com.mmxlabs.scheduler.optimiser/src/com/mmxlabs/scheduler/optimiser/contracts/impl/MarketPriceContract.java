@@ -4,20 +4,15 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
-import javax.inject.Inject;
-
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 
 /**
  * @author hinton
  * 
  */
 public class MarketPriceContract extends SimpleContract {
-	@Inject
-	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	private final ICurve market;
 	private final int multiplier;
@@ -37,8 +32,7 @@ public class MarketPriceContract extends SimpleContract {
 	 */
 	@Override
 	public int calculateSimpleUnitPrice(final int time, final IPort port) {
-		final int valueAtPoint = market.getValueAtPoint(timeZoneToUtcOffsetProvider.UTC(time, port));
-		final int shareOfPrice = Calculator.getShareOfPrice(multiplier, valueAtPoint);
+		final int shareOfPrice = Calculator.getShareOfPrice(multiplier, time);
 		return offset + shareOfPrice;
 	}
 }
