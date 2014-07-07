@@ -769,7 +769,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 
-		return ScheduleDiffUtils.isElementDifferent(pinnedObject, otherObject);
+		return new ScheduleDiffUtils().isElementDifferent(pinnedObject, otherObject);
 	}
 
 	/**

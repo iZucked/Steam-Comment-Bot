@@ -286,7 +286,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	@Override
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return ScheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
+		return builder.isElementDifferent(pinnedObject, otherObject);
 	}
 
 	@Override
@@ -344,7 +344,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 
 				};
-				
+
 				final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
 				final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
 
@@ -363,14 +363,13 @@ public class ConfigurableCargoReportView extends EMFReportView {
 								ColumnBlock block = (ColumnBlock) element;
 								return block.name;
 							}
-							
+
 							@Override
-						    public Image getColumnImage(Object element, int columnIndex) {
+							public Image getColumnImage(Object element, int columnIndex) {
 								ColumnBlock block = (ColumnBlock) element;
 								if (block.isModeVisible()) {
 									return visibleIcon;
-								}
-								else {
+								} else {
 									return nonVisibleIcon;
 								}
 							}
@@ -384,8 +383,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 				};
 				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
-				dialog.setCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+				dialog.setRowCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+				dialog.setDiffCheckBoxInfo(ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
 				dialog.open();
+
+				builder.refreshDiffOptions();
 				
 				nonVisibleIcon.dispose();
 
