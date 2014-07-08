@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 /**
  * A gantt chart content provider which provides content for a selected EMF Schedule object.
@@ -180,7 +181,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 				Event start = event;
 
 				// Find segment start
-				while (start != null && !isSegmentStart(start)) {
+				while (start != null && !ScheduleModelUtils.isSegmentStart(start)) {
 					start = start.getPreviousEvent();
 				}
 
@@ -192,27 +193,6 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 		}
 		return null;
-	}
-
-	/**
-	 * Returns true if the event is of a type to indicate the start of a segment of related events.
-	 * 
-	 * @param event
-	 * @return
-	 */
-	private boolean isSegmentStart(final Event event) {
-		if (event instanceof StartEvent) {
-			return true;
-		} else if (event instanceof EndEvent) {
-			return true;
-		} else if (event instanceof GeneratedCharterOut) {
-			return true;
-		} else if (event instanceof SlotVisit && ((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
-			return true;
-		} else if (event instanceof VesselEventVisit) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
