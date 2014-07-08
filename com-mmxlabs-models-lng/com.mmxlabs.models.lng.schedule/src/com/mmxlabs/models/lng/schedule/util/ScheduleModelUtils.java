@@ -9,8 +9,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class ScheduleModelUtils {
-	
-	
+
 	/**
 	 * Returns true if the event is the start of a sequence of events (and thus the prior events sequence ends) For example this could the Load up to the end of the voyage before another load.
 	 * 
@@ -33,7 +32,49 @@ public class ScheduleModelUtils {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * For the given event, find the segment start.
+	 * 
+	 * @param event
+	 * @return
+	 */
+	public static Event getSegmentStart(final Event event) {
+
+		Event start = event;
+		// Find segment start
+		while (start != null && !isSegmentStart(start)) {
+			start = start.getPreviousEvent();
+		}
+		return start;
+	}
+
+	/**
+	 * For the given event, find the last segment event.
+	 * 
+	 * @param event
+	 * @return
+	 */
+	public static Event getSegmentEnd(final Event event) {
+
+		Event prevEvent = event;
+		Event currentEvent = event.getNextEvent();
+		// Find segment start
+		while (currentEvent != null && !isSegmentStart(currentEvent)) {
+			prevEvent = currentEvent;
+			currentEvent = currentEvent.getNextEvent();
+		}
+		return prevEvent;
+	}
+
+	/**
+	 * Returns the total duration from start of this event to the start of the next segment.
+	 * 
+	 * See {@link ScheduleModelUtils#isSegmentStart(Event)}
+	 * 
+	 * @param event
+	 * @return
+	 */
 	public static int getEventDuration(final Event event) {
 
 		int duration = event.getDuration();
@@ -43,6 +84,5 @@ public class ScheduleModelUtils {
 			next = next.getNextEvent();
 		}
 		return duration;
-
 	}
 }
