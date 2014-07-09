@@ -69,10 +69,13 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 	@Inject
 	private IVesselProvider vp;
+
 	@Inject
 	private IPortSlotProvider psp;
+
 	@Inject
 	private IStartEndRequirementProvider serp;
+
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
