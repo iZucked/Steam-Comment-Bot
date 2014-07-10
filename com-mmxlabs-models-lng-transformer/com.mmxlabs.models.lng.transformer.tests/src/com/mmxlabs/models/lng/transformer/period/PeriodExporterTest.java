@@ -15,23 +15,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoFactory;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.fleet.FleetFactory;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
-import com.mmxlabs.models.lng.scenario.model.LNGScenarioFactory;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 
 public class PeriodExporterTest {
@@ -45,13 +36,13 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load");
-		final DischargeSlot discharge1 = createDischargeSlot(originalScenario, "discharge");
-		final Cargo cargo1 = createCargo(originalScenario, "cargo", load1, discharge1);
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load");
+		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo", load1, discharge1);
 
 		// Create period copy
 		{
@@ -83,6 +74,8 @@ public class PeriodExporterTest {
 			Assert.assertSame(cargo1, originalScenario.getPortfolioModel().getCargoModel().getCargoes().get(0));
 			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
 			Assert.assertSame(discharge1, originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0));
+			Assert.assertSame(cargo1, load1.getCargo());
+			Assert.assertSame(cargo1, discharge1.getCargo());
 		}
 	}
 
@@ -95,13 +88,13 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load");
-		final DischargeSlot discharge1 = createDischargeSlot(originalScenario, "discharge");
-		final Cargo cargo1 = createCargo(originalScenario, "cargo", load1, discharge1);
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load");
+		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo", load1, discharge1);
 
 		// Create period copy
 		{
@@ -139,16 +132,16 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load");
-		final DischargeSlot discharge1 = createDischargeSlot(originalScenario, "discharge");
-		final Cargo cargo1 = createCargo(originalScenario, "cargo", load1, discharge1);
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load");
+		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo", load1, discharge1);
 
-		final Vessel vessel1 = createVessel(originalScenario, "vessel1");
-		final Vessel vessel2 = createVessel(originalScenario, "vessel2");
+		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
+		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
 
 		cargo1.setAssignment(vessel1);
 		cargo1.setSequenceHint(1);
@@ -192,17 +185,17 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load1");
-		final DischargeSlot discharge1 = createDischargeSlot(originalScenario, "discharge1");
-		final Cargo cargo1 = createCargo(originalScenario, "cargo1", load1, discharge1);
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
+		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
 
-		final LoadSlot load2 = createLoadSlot(originalScenario, "load2");
-		final DischargeSlot discharge2 = createDischargeSlot(originalScenario, "discharge2");
-		final Cargo cargo2 = createCargo(originalScenario, "cargo2", load2, discharge2);
+		final LoadSlot load2 = PeriodTestUtils.createLoadSlot(originalScenario, "load2");
+		final DischargeSlot discharge2 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge2");
+		final Cargo cargo2 = PeriodTestUtils.createCargo(originalScenario, "cargo2", load2, discharge2);
 
 		// Create period copy
 		{
@@ -253,13 +246,13 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load1");
-		final DischargeSlot discharge1 = createDischargeSlot(originalScenario, "discharge1");
-		final Cargo cargo1 = createCargo(originalScenario, "cargo1", load1, discharge1);
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
+		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
 
 		// Create period copy
 		{
@@ -311,13 +304,13 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load1");
-		final SpotDischargeSlot discharge1 = createSpotDischargeSlot(originalScenario, "spot-discharge1");
-		final Cargo cargo1 = createCargo(originalScenario, "cargo1", load1, discharge1);
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
+		final SpotDischargeSlot discharge1 = PeriodTestUtils.createSpotDischargeSlot(originalScenario, "spot-discharge1");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
 
 		// Create period copy
 		{
@@ -368,14 +361,14 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load1");
-		final DischargeSlot discharge1 = createDischargeSlot(originalScenario, "discharge1");
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
+		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
 
-		final Vessel vessel1 = createVessel(originalScenario, "vessel1");
+		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 		// Create period copy
 		{
 			final Copier copier = new Copier();
@@ -393,7 +386,7 @@ public class PeriodExporterTest {
 			final DischargeSlot copyDischarge1 = mapping.getCopyFromOriginal(discharge1);
 
 			// Create our new wiring
-			final Cargo copyCargo = createCargo(periodScenario, "cargo1", copyLoad1, copyDischarge1);
+			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, "cargo1", copyLoad1, copyDischarge1);
 
 			final Vessel copyVessel1 = mapping.getCopyFromOriginal(vessel1);
 			copyCargo.setAssignment(copyVessel1);
@@ -432,13 +425,13 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final LoadSlot load1 = createLoadSlot(originalScenario, "load1");
+		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
 
-		final Vessel vessel1 = createVessel(originalScenario, "vessel1");
+		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 		// Create period copy
 		{
 			final Copier copier = new Copier();
@@ -453,11 +446,11 @@ public class PeriodExporterTest {
 			// ...
 
 			final LoadSlot copyLoad1 = mapping.getCopyFromOriginal(load1);
-			final DischargeSlot copySpotDischarge1 = createSpotDischargeSlot(periodScenario, "spot-discharge1");
+			final DischargeSlot copySpotDischarge1 = PeriodTestUtils.createSpotDischargeSlot(periodScenario, "spot-discharge1");
 			copySpotDischarge1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
 
 			// Create our new wiring
-			final Cargo copyCargo = createCargo(periodScenario, "cargo1", copyLoad1, copySpotDischarge1);
+			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, "cargo1", copyLoad1, copySpotDischarge1);
 
 			final Vessel copyVessel1 = mapping.getCopyFromOriginal(vessel1);
 			copyCargo.setAssignment(copyVessel1);
@@ -500,25 +493,25 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
-		final Port port1 = createPort(originalScenario, "port1");
-		final Port port2 = createPort(originalScenario, "port1");
+		final Port port1 = PeriodTestUtils.createPort(originalScenario, "port1");
+		final Port port2 = PeriodTestUtils.createPort(originalScenario, "port1");
 
 		// Populate initial data
-		final SpotLoadSlot load1 = createSpotLoadSlot(originalScenario, "load1");
+		final SpotLoadSlot load1 = PeriodTestUtils.createSpotLoadSlot(originalScenario, "load1");
 		load1.setDESPurchase(true);
 		load1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		load1.setPort(port1);
 
-		final DischargeSlot discharge1 = createDischargeSlot(originalScenario, "discharge1");
+		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
 		discharge1.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		discharge1.setPort(port1);
 
-		final Cargo cargo1 = createCargo(originalScenario, "cargo1", load1, discharge1);
+		final Cargo cargo1 = PeriodTestUtils.createCargo(originalScenario, "cargo1", load1, discharge1);
 
-		final DischargeSlot discharge2 = createDischargeSlot(originalScenario, "discharge2");
+		final DischargeSlot discharge2 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge2");
 		discharge2.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		discharge2.setPort(port2);
 
@@ -569,14 +562,14 @@ public class PeriodExporterTest {
 		final IScenarioEntityMapping mapping = new ScenarioEntityMapping();
 
 		// Create an original scenario, a period scenario and mapping data.
-		final LNGScenarioModel originalScenario = createBasicScenario();
+		final LNGScenarioModel originalScenario = PeriodTestUtils.createBasicScenario();
 		LNGScenarioModel periodScenario;
 
 		// Populate initial data
-		final CharterOutEvent event1 = createCharterOutEvent(originalScenario, "charter1");
+		final CharterOutEvent event1 = PeriodTestUtils.createCharterOutEvent(originalScenario, "charter1");
 
-		final Vessel vessel1 = createVessel(originalScenario, "vessel1");
-		final Vessel vessel2 = createVessel(originalScenario, "vessel2");
+		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
+		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
 
 		event1.setAssignment(vessel1);
 		event1.setSequenceHint(1);
@@ -609,83 +602,6 @@ public class PeriodExporterTest {
 			Assert.assertSame(vessel2, event1.getAssignment());
 			Assert.assertEquals(2, event1.getSequenceHint());
 		}
-	}
-
-	private LNGScenarioModel createBasicScenario() {
-		final LNGScenarioModel scenarioModel = LNGScenarioFactory.eINSTANCE.createLNGScenarioModel();
-		final LNGPortfolioModel portfolioModel = LNGScenarioFactory.eINSTANCE.createLNGPortfolioModel();
-		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
-		final FleetModel fleetModel = FleetFactory.eINSTANCE.createFleetModel();
-		final PortModel portModel = PortFactory.eINSTANCE.createPortModel();
-
-		scenarioModel.setFleetModel(fleetModel);
-		scenarioModel.setPortfolioModel(portfolioModel);
-		scenarioModel.setPortModel(portModel);
-		portfolioModel.setCargoModel(cargoModel);
-
-		return scenarioModel;
-	}
-
-	private Vessel createVessel(final LNGScenarioModel scenarioModel, final String name) {
-		final Vessel vessel = FleetFactory.eINSTANCE.createVessel();
-		vessel.setName(name);
-		scenarioModel.getFleetModel().getVessels().add(vessel);
-		return vessel;
-	}
-
-	private Port createPort(final LNGScenarioModel scenarioModel, final String name) {
-		final Port port = PortFactory.eINSTANCE.createPort();
-		port.setName(name);
-		scenarioModel.getPortModel().getPorts().add(port);
-		return port;
-	}
-
-	private Cargo createCargo(final LNGScenarioModel scenarioModel, final String name, final Slot... slots) {
-		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		cargo.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getCargoes().add(cargo);
-
-		for (final Slot slot : slots) {
-			cargo.getSlots().add(slot);
-		}
-
-		return cargo;
-	}
-
-	private CharterOutEvent createCharterOutEvent(final LNGScenarioModel scenarioModel, final String name) {
-		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
-		event.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().add(event);
-
-		return event;
-	}
-
-	private LoadSlot createLoadSlot(final LNGScenarioModel scenarioModel, final String name) {
-		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
-		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().add(slot);
-		return slot;
-	}
-
-	private SpotLoadSlot createSpotLoadSlot(final LNGScenarioModel scenarioModel, final String name) {
-		final SpotLoadSlot slot = CargoFactory.eINSTANCE.createSpotLoadSlot();
-		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().add(slot);
-		return slot;
-	}
-
-	private DischargeSlot createDischargeSlot(final LNGScenarioModel scenarioModel, final String name) {
-		final DischargeSlot slot = CargoFactory.eINSTANCE.createDischargeSlot();
-		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().add(slot);
-		return slot;
-	}
-
-	private SpotDischargeSlot createSpotDischargeSlot(final LNGScenarioModel scenarioModel, final String name) {
-		final SpotDischargeSlot slot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
-		slot.setName(name);
-		scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().add(slot);
-		return slot;
 	}
 
 	protected void executeUpdate(final IScenarioEntityMapping mapping, final LNGScenarioModel originalScenario, final LNGScenarioModel periodScenario) {
