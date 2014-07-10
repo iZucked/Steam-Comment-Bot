@@ -4,11 +4,21 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
+import java.util.Date;
+
 import javax.management.timer.Timer;
 
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.IProgressConstants;
@@ -19,9 +29,15 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.period.IScenarioEntityMapping;
+import com.mmxlabs.models.lng.transformer.period.InclusionChecker;
+import com.mmxlabs.models.lng.transformer.period.PeriodExporter;
+import com.mmxlabs.models.lng.transformer.period.PeriodTransformer;
+import com.mmxlabs.models.lng.transformer.period.ScenarioEntityMapping;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -29,6 +45,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ModelReference;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.util.ScenarioInstanceSchedulingRule;
@@ -46,7 +63,10 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private final ModelReference modelReference;
 
-	private final LNGScenarioModel scenario;
+	private final LNGScenarioModel originalScenario;
+	private LNGScenarioModel optimiserScenario;
+
+	private IScenarioEntityMapping periodMapping;
 
 	private ModelEntityMap modelEntityMap;
 
@@ -54,7 +74,8 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	private long startTimeMillis;
 
-	private final EditingDomain editingDomain;
+	private final EditingDomain originalEditingDomain;
+	private EditingDomain optimiserEditingDomain;
 
 	private static final ImageDescriptor imgOpti = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
 	private static final ImageDescriptor imgEval = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
@@ -71,13 +92,13 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.modelReference = scenarioInstance.getReference();
-		this.scenario = (LNGScenarioModel) modelReference.getInstance();
-		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		this.originalScenario = (LNGScenarioModel) modelReference.getInstance();
+		this.originalEditingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 		setRule(new ScenarioInstanceSchedulingRule(scenarioInstance));
 
 		// Disable optimisation in P&L testing phase
 		if (SecurityUtils.getSubject().isPermitted("features:phase-pnl-testing")) {
-//			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
+			throw new RuntimeException("Optimisation is disabled during the P&L testing phase.");
 		}
 
 	}
@@ -86,7 +107,59 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	protected void reallyPrepare() {
 		startTimeMillis = System.currentTimeMillis();
 
-		transformer = new LNGTransformer(scenario, jobDescriptor.getOptimiserSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
+		{
+			final OptimisationRange range = jobDescriptor.getOptimiserSettings().getRange();
+			if (range != null) {
+				if (range.getOptimiseAfter() != null || range.getOptimiseBefore() != null) {
+					periodMapping = new ScenarioEntityMapping();
+				}
+			}
+		}
+
+		if (periodMapping != null) {
+
+			final PeriodTransformer t = new PeriodTransformer();
+			t.setInclusionChecker(new InclusionChecker());
+
+			optimiserScenario = t.transform(originalScenario, jobDescriptor.getOptimiserSettings(), periodMapping);
+
+			// DEBUGGING - store sub scenario as a "fork"
+			if (false) {
+				try {
+					IScenarioService scenarioService = scenarioInstance.getScenarioService();
+					ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
+					dup.setName("Period Scenario");
+
+					// Copy across various bits of information
+					dup.getMetadata().setContentType(scenarioInstance.getMetadata().getContentType());
+					dup.getMetadata().setCreated(scenarioInstance.getMetadata().getCreated());
+					dup.getMetadata().setLastModified(new Date());
+
+					// Copy version context information
+					dup.setVersionContext(scenarioInstance.getVersionContext());
+					dup.setScenarioVersion(scenarioInstance.getScenarioVersion());
+
+					dup.setClientVersionContext(scenarioInstance.getClientVersionContext());
+					dup.setClientScenarioVersion(scenarioInstance.getClientScenarioVersion());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			final BasicCommandStack commandStack = new BasicCommandStack();
+			final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+			adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+			optimiserEditingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+
+			// Delete commands need a resource set on the editing domain
+			final Resource r = new XMIResourceImpl();
+			r.getContents().add(optimiserScenario);
+			optimiserEditingDomain.getResourceSet().getResources().add(r);
+		} else {
+			optimiserScenario = originalScenario;
+			optimiserEditingDomain = originalEditingDomain;
+		}
+
+		transformer = new LNGTransformer(optimiserScenario, jobDescriptor.getOptimiserSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
 
 		injector = transformer.getInjector();
 
@@ -103,7 +176,17 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		optimiser.init();
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
-		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, modelEntityMap, startSolution, 0);
+		LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, startSolution, 0);
+		if (periodMapping != null) {
+			final PeriodExporter e = new PeriodExporter();
+			final CompoundCommand cmd = LNGSchedulerJobUtils.createBlankCommand(0);
+			cmd.append(e.updateOriginal(originalEditingDomain, originalScenario, optimiserScenario, periodMapping));
+			if (cmd.canExecute()) {
+				originalEditingDomain.getCommandStack().execute(cmd);
+			} else {
+				throw new RuntimeException("Unable to execute period optimisation merge command");
+			}
+		}
 	}
 
 	/*
@@ -126,8 +209,22 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 		if (optimiser.isFinished()) {
 			// export final state
 
-			LNGSchedulerJobUtils.undoPreviousOptimsationStep(editingDomain, 100);
-			LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), editingDomain, modelEntityMap, optimiser.getBestSolution(true), 100);
+			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
+			LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, optimiser.getBestSolution(true), 100);
+			if (periodMapping != null) {
+				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
+
+				final PeriodExporter e = new PeriodExporter();
+				final CompoundCommand cmd = LNGSchedulerJobUtils.createBlankCommand(100);
+				cmd.append(e.updateOriginal(originalEditingDomain, originalScenario, optimiserScenario, periodMapping));
+				if (cmd.canExecute()) {
+					originalEditingDomain.getCommandStack().execute(cmd);
+
+				} else {
+					throw new RuntimeException("Unable to execute period optimisation merge command");
+				}
+			}
+
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			super.setProgress(100);
@@ -173,7 +270,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	public final MMXRootObject getJobOutput() {
-		return scenario;
+		return originalScenario;
 	}
 
 	@Override
