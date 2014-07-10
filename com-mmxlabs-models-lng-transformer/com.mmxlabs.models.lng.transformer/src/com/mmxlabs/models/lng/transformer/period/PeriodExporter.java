@@ -54,7 +54,6 @@ public class PeriodExporter {
 					cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 				}
 				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newVesselEvent.getSequenceHint()));
-				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, newVesselEvent.isLocked()));
 			}
 
 		}
@@ -113,7 +112,6 @@ public class PeriodExporter {
 					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 				}
 				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newCargo.getSequenceHint()));
-				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED, newCargo.isLocked()));
 			}
 
 			final List<Cargo> originalCargoes = new LinkedList<>();
