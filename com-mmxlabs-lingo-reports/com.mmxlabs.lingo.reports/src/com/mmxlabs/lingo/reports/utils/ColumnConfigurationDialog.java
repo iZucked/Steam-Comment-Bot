@@ -22,7 +22,10 @@ import java.util.Set;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TrayDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.viewers.AbstractTableViewer;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -53,6 +56,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.mmxlabs.lingo.reports.internal.Activator;
 
 /**
  * Adapted from MarkersViewColumnsDialog in Eclipse code:
@@ -96,11 +102,15 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	};
 
+	final List<CheckboxInfoManager> checkboxInfo = new ArrayList<>();
+	
+	/*
 	private Set<String> rowCheckBoxStore;
 	private String[] rowCheckBoxStrings;
 
 	private Set<String> diffCheckBoxStore;
 	private String[] diffCheckBoxStrings;
+	*/
 
 	/**
 	 * Create a new instance of the receiver.
@@ -186,8 +196,9 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
 
-		createRowCheckBoxes(composite);
-		createDiffCheckBoxes(composite);
+		for (CheckboxInfoManager manager: checkboxInfo) {
+			createCheckBoxes(composite, manager);
+		}
 		// createWidthArea(composite);
 		final Object element = visibleViewer.getElementAt(0);
 		if (element != null)
@@ -195,64 +206,38 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		visibleViewer.getTable().setFocus();
 		return composite;
 	}
-
-	private Control createRowCheckBoxes(final Composite parent) {
+	
+	private Control createCheckBoxes(final Composite parent, final CheckboxInfoManager manager) {
 		final Composite composite = new Composite(parent, SWT.NONE);
-		final GridLayout compositeLayout = new GridLayout();
-		compositeLayout.marginHeight = 0;
-		compositeLayout.marginWidth = 0;
-		composite.setLayout(compositeLayout);
-		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-
-		if (rowCheckBoxStrings != null) {
-			for (final String text : rowCheckBoxStrings) {
+		if (manager != null && manager.strings != null && manager.strings.length > 0) {
+			final GridLayout compositeLayout = new GridLayout();
+			compositeLayout.marginHeight = 0;
+			compositeLayout.marginWidth = 0;
+			composite.setLayout(compositeLayout);
+			composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
+	
+			final Label label = new Label(composite, SWT.NONE);
+			label.setText(manager.title);
+			final Set<String> store = manager.store;
+			for (final String text : manager.strings) {
 				final Button button = new Button(composite, SWT.CHECK);
 				button.setText(text);
-				button.setSelection(rowCheckBoxStore.contains(text));
+				button.setSelection(store.contains(text));
 				button.addListener(SWT.Selection, new Listener() {
 					@Override
 					public void handleEvent(final Event event) {
-						if (rowCheckBoxStore.contains(text)) {
-							rowCheckBoxStore.remove(text);
+						if (store.contains(text)) {
+							store.remove(text);
 						} else {
-							rowCheckBoxStore.add(text);
+							store.add(text);
 						}
 					}
 				});
 			}
 		}
-
 		return composite;
 	}
 
-	private Control createDiffCheckBoxes(final Composite parent) {
-		final Composite composite = new Composite(parent, SWT.NONE);
-		final GridLayout compositeLayout = new GridLayout();
-		compositeLayout.marginHeight = 0;
-		compositeLayout.marginWidth = 0;
-		composite.setLayout(compositeLayout);
-		composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-
-		if (diffCheckBoxStrings != null) {
-			for (final String text : diffCheckBoxStrings) {
-				final Button button = new Button(composite, SWT.CHECK);
-				button.setText(text);
-				button.setSelection(diffCheckBoxStore.contains(text));
-				button.addListener(SWT.Selection, new Listener() {
-					@Override
-					public void handleEvent(final Event event) {
-						if (diffCheckBoxStore.contains(text)) {
-							diffCheckBoxStore.remove(text);
-						} else {
-							diffCheckBoxStore.add(text);
-						}
-					}
-				});
-			}
-		}
-
-		return composite;
-	}
 
 	/**
 	 * The Up and Down button to change column ordering.
@@ -462,6 +447,15 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * @return {@link Control}
 	 */
 	Control createMoveButtons(final Composite parent) {
+		// create the manager and bind to a widget
+		LocalResourceManager resManager = 
+		  new LocalResourceManager(JFaceResources.getResources(), parent);
+		
+		final ImageDescriptor leftImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/nav_backward.gif");
+		final Image leftImage = resManager.createImage(leftImageDescriptor);
+		final ImageDescriptor rightImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/nav_forward.gif");
+		final Image rightImage = resManager.createImage(rightImageDescriptor);
+		
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout compositeLayout = new GridLayout();
 		compositeLayout.marginHeight = 0;
@@ -477,6 +471,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 		toVisibleBtt = new Button(bttArea, SWT.PUSH);
 		toVisibleBtt.setText("Show");
+		toVisibleBtt.setImage(rightImage);
 		setButtonLayoutData(toVisibleBtt);
 		((GridData) toVisibleBtt.getLayoutData()).verticalIndent = tableLabelSize.y;
 		toVisibleBtt.addListener(SWT.Selection, new Listener() {
@@ -489,6 +484,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 		toNonVisibleBtt = new Button(bttArea, SWT.PUSH);
 		toNonVisibleBtt.setText("Hide");
+		toNonVisibleBtt.setImage(leftImage);
 		setButtonLayoutData(toNonVisibleBtt);
 
 		toNonVisibleBtt.addListener(SWT.Selection, new Listener() {
@@ -509,6 +505,9 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 */
 	void handleNonVisibleSelection(final ISelection selection) {
 		final Object[] nvKeys = ((IStructuredSelection) selection).toArray();
+		if (selection != null && selection.isEmpty() == false) {
+			visibleViewer.setSelection(null);
+		}
 		toVisibleBtt.setEnabled(nvKeys.length > 0);
 		if (visibleViewer.getControl().isFocusControl() && getVisible().size() <= 1) {
 			/*
@@ -529,6 +528,9 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		final List<?> selVCols = ((IStructuredSelection) selection).toList();
 		final List<Object> allVCols = getVisible();
 		toNonVisibleBtt.setEnabled(selVCols.size() > 0 && allVCols.size() > selVCols.size());
+		if (selection != null && selection.isEmpty() == false) {
+			nonVisibleViewer.setSelection(null);
+		}
 
 		final IColumnInfoProvider infoProvider = doGetColumnInfoProvider();
 		boolean moveDown = !selVCols.isEmpty(), moveUp = !selVCols.isEmpty();
@@ -1157,15 +1159,24 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		}
 
 	}
-
-	public void setRowCheckBoxInfo(final String[] strings, final Set<String> store) {
-		rowCheckBoxStore = store;
-		rowCheckBoxStrings = strings;
+	
+	public void addCheckBoxInfo(final String title, final String [] strings, final Set<String> store) {
+		checkboxInfo.add(new CheckboxInfoManager(title, strings, store));
 	}
 
-	public void setDiffCheckBoxInfo(final String[] strings, final Set<String> store) {
-		diffCheckBoxStore = store;
-		diffCheckBoxStrings = strings;
+	static class CheckboxInfoManager {
+
+		final String title;
+		final String[] strings;
+		final Set<String> store;
+		
+		public CheckboxInfoManager(String title, String[] strings,
+				Set<String> store) {
+			this.title = title;
+			this.strings = strings;
+			this.store = store;
+		}
+		
 	}
 
 }

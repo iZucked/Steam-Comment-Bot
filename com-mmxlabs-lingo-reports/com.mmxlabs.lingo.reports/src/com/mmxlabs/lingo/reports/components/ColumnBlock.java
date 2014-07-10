@@ -45,9 +45,11 @@ public class ColumnBlock {
 
 	protected void updateVisibility() {
 		for (final ColumnHandler handler : blockHandlers) {
-			final GridColumn column = handler.column.getColumn();
-			if (!column.isDisposed()) {
-				column.setVisible(userVisible && modeVisible);
+			if (handler.column != null) {
+				final GridColumn column = handler.column.getColumn();
+				if (!column.isDisposed()) {
+					column.setVisible(userVisible && modeVisible);
+				}
 			}
 		}
 	}

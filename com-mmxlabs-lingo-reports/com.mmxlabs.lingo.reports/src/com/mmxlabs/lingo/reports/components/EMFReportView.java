@@ -359,16 +359,6 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		viewer.getGrid().setColumnOrder(columnOrder);
 	}
 
-	protected ColumnHandler[] getHandlersInViewOrder() {
-		final ColumnHandler[] result = new ColumnHandler[handlers.size()];
-
-		for (final ColumnHandler handler : handlers) {
-			result[getColumnGridIndex(handler)] = handler;
-		}
-
-		return result;
-	}
-
 	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
 	private final HashSet<Object> contents = new HashSet<Object>();
 
