@@ -19,7 +19,7 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
  * @author Simon Goodall
  * 
  */
-public final class InclusionChecker {
+public class InclusionChecker {
 	/**
 	 * Enum defining where an object lies. The value {@link #In} is inside the optimisation range and can be optimised. The value {@link #Out} is outside range and should be excluded. The value
 	 * {@link #Boundary} is within the boundary and cutoff portion and should be included but frozen.
