@@ -25,6 +25,7 @@ Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.export,
  com.mmxlabs.models.lng.transformer.inject,
  com.mmxlabs.models.lng.transformer.inject.modules,
+ com.mmxlabs.models.lng.transformer.period,
  com.mmxlabs.models.lng.transformer.util
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"
