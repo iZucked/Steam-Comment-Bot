@@ -258,6 +258,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		final EAttribute name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
 
 		addScheduleColumn("Scenario", containingScheduleFormatter);
+		
 
 		addColumn("L-ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
 		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, name2ObjectRef);

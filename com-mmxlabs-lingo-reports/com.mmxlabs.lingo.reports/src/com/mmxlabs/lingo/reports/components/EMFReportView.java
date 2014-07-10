@@ -253,7 +253,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return addColumn(title, (String) null, columnType, formatter, path);
 	}
 
-	protected ColumnHandler addColumn(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+	public ColumnHandler addColumn(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(blockManager, formatter, path, title);
 
 		handlers.add(handler);
@@ -706,5 +706,34 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected List<ColumnHandler> getHandlersInOrder() {
 		return handlersInOrder;
+	}
+	
+	public static class EmfBlockColumnParameters {
+		final String columnName;
+		final String blockName;
+		final ColumnType columnType;
+		final IFormatter formatter;
+		final Object[] path;
+
+		public EmfBlockColumnParameters(final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+			this.columnName = title;
+			this.blockName = title;
+			this.columnType = columnType;
+			this.formatter = formatter;
+			this.path = path;					
+		}
+
+		public EmfBlockColumnParameters(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+			this.columnName = title;
+			this.blockName = blockName;
+			this.columnType = columnType;
+			this.formatter = formatter;
+			this.path = path;					
+		}
+		
+		public void addColumn(final EMFReportView report) {
+			report.addColumn(columnName, blockName, columnType, formatter, path);
+		}
+		
 	}
 }
