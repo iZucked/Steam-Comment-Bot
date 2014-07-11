@@ -329,7 +329,7 @@ public class PeriodTransformer {
 						}
 
 						// Only expect getNextEvent to be called once
-						// assert nextCounter < 2;
+						assert nextCounter < 2;
 						startConditionMap.put(cargo, (PortVisit) segmentEnd);
 
 					} else if (event instanceof VesselEventVisit) {
@@ -345,7 +345,7 @@ public class PeriodTransformer {
 							++nextCounter;
 						}
 						// Only expect getNextEvent to be called once
-						// assert nextCounter < 2;
+						assert nextCounter < 2;
 						startConditionMap.put(vesselEvent, (PortVisit) segmentEnd);
 
 					}

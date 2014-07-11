@@ -29,7 +29,17 @@ import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.parameters.ParametersFactory;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 
 public class PeriodTransformerTest {
@@ -1838,6 +1848,163 @@ public class PeriodTransformerTest {
 
 		// Registered objects as removed.
 		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void generateStartAndEndConditionsMapTest_Cargo() {
+
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Schedule schedule = PeriodTestUtils.createSchedule(scenarioModel);
+
+		final LoadSlot load = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		final DischargeSlot discharge = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", load, discharge);
+
+		final SlotAllocation loadAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, load);
+		final SlotAllocation dischargeAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, discharge);
+		final SlotVisit loadVisit = PeriodTestUtils.createSlotVisit(scenarioModel, loadAllocation);
+		final SlotVisit dischargeVisit = PeriodTestUtils.createSlotVisit(scenarioModel, dischargeAllocation);
+
+		Journey ladenJourney = PeriodTestUtils.createJourney();
+		Idle ladenIdle = PeriodTestUtils.createIdle();
+		Journey ballastJourney = PeriodTestUtils.createJourney();
+		Idle ballastIdle = PeriodTestUtils.createIdle();
+
+		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
+
+		final CargoAllocation cargoAllocation = PeriodTestUtils.createCargoAllocation(scenarioModel, cargo, loadAllocation, dischargeAllocation, loadVisit, ladenJourney, ladenIdle, dischargeVisit,
+				ballastJourney, ballastIdle);
+
+		final Sequence sequence = PeriodTestUtils.createSequence(scenarioModel, PeriodTestUtils.createStartEvent(), PeriodTestUtils.createJourney(), PeriodTestUtils.createIdle(), loadVisit,
+				ladenJourney, ladenIdle, dischargeVisit, ballastJourney, ballastIdle, endVisit);
+
+		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
+		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+
+		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+
+		Assert.assertSame(endVisit, startConditionMap.get(cargo));
+		Assert.assertSame(loadVisit, endConditionMap.get(cargo));
+
+	}
+
+	@Test
+	public void generateStartAndEndConditionsMapTest_CargoAndCooldown() {
+
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Schedule schedule = PeriodTestUtils.createSchedule(scenarioModel);
+
+		final LoadSlot load = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		final DischargeSlot discharge = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", load, discharge);
+
+		final SlotAllocation loadAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, load);
+		final SlotAllocation dischargeAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, discharge);
+		final SlotVisit loadVisit = PeriodTestUtils.createSlotVisit(scenarioModel, loadAllocation);
+		final SlotVisit dischargeVisit = PeriodTestUtils.createSlotVisit(scenarioModel, dischargeAllocation);
+
+		Journey ladenJourney = PeriodTestUtils.createJourney();
+		Idle ladenIdle = PeriodTestUtils.createIdle();
+		Journey ballastJourney = PeriodTestUtils.createJourney();
+		Idle ballastIdle = PeriodTestUtils.createIdle();
+		Cooldown cooldown = PeriodTestUtils.createCooldown();
+
+		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
+
+		final CargoAllocation cargoAllocation = PeriodTestUtils.createCargoAllocation(scenarioModel, cargo, loadAllocation, dischargeAllocation, loadVisit, ladenJourney, ladenIdle, dischargeVisit,
+				ballastJourney, ballastIdle, cooldown);
+
+		final Sequence sequence = PeriodTestUtils.createSequence(scenarioModel, PeriodTestUtils.createStartEvent(), PeriodTestUtils.createJourney(), PeriodTestUtils.createIdle(), loadVisit,
+				ladenJourney, ladenIdle, dischargeVisit, ballastJourney, ballastIdle, cooldown, endVisit);
+
+		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
+		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+
+		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+
+		Assert.assertSame(endVisit, startConditionMap.get(cargo));
+		Assert.assertSame(loadVisit, endConditionMap.get(cargo));
+
+	}
+
+	@Test
+	public void generateStartAndEndConditionsMapTest_VesselEvent() {
+
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Schedule schedule = PeriodTestUtils.createSchedule(scenarioModel);
+
+		final VesselEvent vesselEvent = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
+		VesselEventVisit vesselEventVisit = PeriodTestUtils.createVesselEventVisit(scenarioModel, vesselEvent);
+
+		Journey eventJourney = PeriodTestUtils.createJourney();
+		Idle eventIdle = PeriodTestUtils.createIdle();
+
+		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
+
+		final Sequence sequence = PeriodTestUtils.createSequence(scenarioModel, PeriodTestUtils.createStartEvent(), PeriodTestUtils.createJourney(), PeriodTestUtils.createIdle(), vesselEventVisit,
+				eventJourney, eventIdle, endVisit);
+
+		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
+		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+
+		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+
+		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
+		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
+
+	}
+
+	@Test
+	public void generateStartAndEndConditionsMapTest_CharterOutDifferentEndPort() {
+
+		Assert.fail("Not yet implemented");
+
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Schedule schedule = PeriodTestUtils.createSchedule(scenarioModel);
+
+		final VesselEvent vesselEvent = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
+		VesselEventVisit vesselEventVisit = PeriodTestUtils.createVesselEventVisit(scenarioModel, vesselEvent);
+
+		Journey eventJourney = PeriodTestUtils.createJourney();
+		Idle eventIdle = PeriodTestUtils.createIdle();
+
+		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
+
+		final Sequence sequence = PeriodTestUtils.createSequence(scenarioModel, PeriodTestUtils.createStartEvent(), PeriodTestUtils.createJourney(), PeriodTestUtils.createIdle(), vesselEventVisit,
+				eventJourney, eventIdle, endVisit);
+
+		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
+		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+
+		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+
+		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
+		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
+
 	}
 
 	private PeriodTransformer createPeriodTransformer(final InclusionChecker inclusionChecker) {
