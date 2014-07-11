@@ -2,15 +2,9 @@ package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.Calendar;
 
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
-import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -605,20 +599,12 @@ public class PeriodExporterTest {
 	}
 
 	protected void executeUpdate(final IScenarioEntityMapping mapping, final LNGScenarioModel originalScenario, final LNGScenarioModel periodScenario) {
-		final BasicCommandStack commandStack = new BasicCommandStack();
-		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
-		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
-		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
-
-		// Delete commands need a resource set on the editing domain
-		final Resource r = new XMIResourceImpl();
-		r.getContents().add(originalScenario);
-		editingDomain.getResourceSet().getResources().add(r);
+		final EditingDomain editingDomain = PeriodTestUtils.createEditingDomain(originalScenario);
 
 		final PeriodExporter exporter = new PeriodExporter();
 
 		final Command cmd = exporter.updateOriginal(editingDomain, originalScenario, periodScenario, mapping);
 		Assert.assertTrue(cmd.canExecute());
-		commandStack.execute(cmd);
+		editingDomain.getCommandStack().execute(cmd);
 	}
 }

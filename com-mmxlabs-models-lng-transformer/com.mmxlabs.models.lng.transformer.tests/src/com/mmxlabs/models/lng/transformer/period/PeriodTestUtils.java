@@ -5,6 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -16,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -126,6 +135,19 @@ public class PeriodTestUtils {
 		return event;
 	}
 
+	public static VesselEvent createCharterOutEvent(final LNGScenarioModel scenarioModel, final String name, final Port port, final Date date, final int duration) {
+		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
+		event.setName(name);
+		scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().add(event);
+
+		event.setStartBy(date);
+		event.setStartAfter(date);
+		event.setPort(port);
+		event.setDurationInDays(duration);
+
+		return event;
+	}
+
 	public static LoadSlot createLoadSlot(final LNGScenarioModel scenarioModel, final String name) {
 		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setName(name);
@@ -167,6 +189,19 @@ public class PeriodTestUtils {
 	public static CollectedAssignment createCollectedAssignment(final Vessel vessel, final AssignableElement... elements) {
 
 		return new CollectedAssignment(Arrays.asList(elements), vessel, null);
+	}
+
+	public static EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {
+		final BasicCommandStack commandStack = new BasicCommandStack();
+		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		final EditingDomain editingDomain = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
+
+		// Delete commands need a resource set on the editing domain
+		final Resource r = new XMIResourceImpl();
+		r.getContents().add(scenarioModel);
+		editingDomain.getResourceSet().getResources().add(r);
+		return editingDomain;
 	}
 
 }
