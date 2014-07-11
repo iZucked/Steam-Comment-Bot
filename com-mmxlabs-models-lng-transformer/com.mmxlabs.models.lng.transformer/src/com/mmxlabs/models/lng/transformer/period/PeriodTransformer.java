@@ -160,6 +160,8 @@ public class PeriodTransformer {
 		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 			if (inclusionChecker.getObjectInclusionType(vesselAvailability, periodRecord).getFirst() == InclusionType.Out) {
 				vesselsToRemove.add(vesselAvailability);
+				mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(vesselAvailability));
+
 			}
 		}
 		internalDomain.getCommandStack().execute(DeleteCommand.create(internalDomain, vesselsToRemove));
@@ -172,6 +174,7 @@ public class PeriodTransformer {
 		for (final VesselEvent event : cargoModel.getVesselEvents()) {
 			if (inclusionChecker.getObjectInclusionType(event, periodRecord).getFirst() == InclusionType.Out) {
 				eventsToRemove.add(event);
+				mapping.registerRemovedOriginal(mapping.getOriginalFromCopy(event));
 			}
 			if (event instanceof CharterOutEvent) {
 				// TODO: If in boundary, limit available vessels to assigned vessel

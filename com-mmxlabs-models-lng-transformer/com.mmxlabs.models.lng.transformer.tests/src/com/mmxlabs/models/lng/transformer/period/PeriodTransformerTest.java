@@ -17,7 +17,10 @@ import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -587,9 +590,7 @@ public class PeriodTransformerTest {
 	}
 
 	@Test
-	public void updateVesselAvailabilitiesTest8_VesselEvent() {
-
-		Assert.fail("Not yet implemented");
+	public void updateVesselAvailabilitiesTest_VesselEvent1() {
 
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
@@ -614,19 +615,154 @@ public class PeriodTransformerTest {
 		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
-		// vessel after period
-		final Vessel vessel8 = PeriodTestUtils.createVessel(scenarioModel, "Vessel8");
-		final VesselAvailability vesselAvailability8 = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel8);
-		vesselAvailability8.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "Vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+
+		{
+			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
+			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
+			event1.setAssignment(vessel);
+			event2.setAssignment(vessel);
+
+			startConditionMap.put(event1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1)));
+			endConditionMap.put(event1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
+
+			startConditionMap.put(event2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
+			endConditionMap.put(event2, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
+
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel, event1, event2));
+
+			mapCargoOrEventToVesselAvailability.put(event1, vesselAvailability);
+			mapCargoOrEventToVesselAvailability.put(event2, vesselAvailability);
+
+		}
 
 		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
 
-		Assert.assertTrue(vesselAvailability8.getStartAt().isEmpty());
-		Assert.assertTrue(vesselAvailability8.getEndAt().isEmpty());
-		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1), vesselAvailability8.getStartAfter());
-		Assert.assertNull(vesselAvailability8.getStartBy());
-		Assert.assertNull(vesselAvailability8.getEndAfter());
-		Assert.assertNull(vesselAvailability8.getEndBy());
+		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
+		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
+		Assert.assertNull(vesselAvailability.getStartAfter());
+		Assert.assertNull(vesselAvailability.getStartBy());
+		Assert.assertNull(vesselAvailability.getEndAfter());
+		Assert.assertNull(vesselAvailability.getEndBy());
+	}
+
+	@Test
+	public void updateVesselAvailabilitiesTest_VesselEvent2() {
+
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MAY, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JUNE, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Port port1 = PeriodTestUtils.createPort(scenarioModel, "port1");
+		final Port port2 = PeriodTestUtils.createPort(scenarioModel, "port2");
+		final Port port3 = PeriodTestUtils.createPort(scenarioModel, "port3");
+		final Port port4 = PeriodTestUtils.createPort(scenarioModel, "port4");
+
+		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
+		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
+		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
+
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "Vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+
+		{
+			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
+			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
+			event1.setAssignment(vessel);
+			event2.setAssignment(vessel);
+
+			startConditionMap.put(event1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1)));
+			endConditionMap.put(event1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
+
+			startConditionMap.put(event2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
+			endConditionMap.put(event2, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
+
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel, event1, event2));
+
+			mapCargoOrEventToVesselAvailability.put(event1, vesselAvailability);
+			mapCargoOrEventToVesselAvailability.put(event2, vesselAvailability);
+
+		}
+
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+
+		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getStartAt());
+		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), vesselAvailability.getStartAfter());
+		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), vesselAvailability.getStartBy());
+
+		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
+		Assert.assertNull(vesselAvailability.getEndAfter());
+		Assert.assertNull(vesselAvailability.getEndBy());
+	}
+
+	@Test
+	public void updateVesselAvailabilitiesTest_VesselEvent3() {
+
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JANUARY, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.MAY, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Port port1 = PeriodTestUtils.createPort(scenarioModel, "port1");
+		final Port port2 = PeriodTestUtils.createPort(scenarioModel, "port2");
+		final Port port3 = PeriodTestUtils.createPort(scenarioModel, "port3");
+		final Port port4 = PeriodTestUtils.createPort(scenarioModel, "port4");
+
+		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
+		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
+		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
+
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "Vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+
+		{
+			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
+			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
+			event1.setAssignment(vessel);
+			event2.setAssignment(vessel);
+
+			startConditionMap.put(event1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1)));
+			endConditionMap.put(event1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
+
+			startConditionMap.put(event2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
+			endConditionMap.put(event2, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
+
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel, event1, event2));
+
+			mapCargoOrEventToVesselAvailability.put(event1, vesselAvailability);
+			mapCargoOrEventToVesselAvailability.put(event2, vesselAvailability);
+
+		}
+
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+
+		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
+		Assert.assertNull(vesselAvailability.getStartAfter());
+		Assert.assertNull(vesselAvailability.getStartBy());
+
+		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getEndAt());
+		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), vesselAvailability.getEndAfter());
+		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), vesselAvailability.getEndBy());
 	}
 
 	@Test
@@ -755,6 +891,953 @@ public class PeriodTransformerTest {
 			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 8), vesselAvailability2.getEndBy());
 			Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JULY, 8), vesselAvailability2.getEndAfter());
 		}
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Cargo1() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		cargo.setAllowRewiring(true);
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		copyCargo.setAllowRewiring(true);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+
+		// Removed from copy
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
+
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(cargo);
+		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+		Mockito.verify(mapping).registerRemovedOriginal(dischargeSlot);
+
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Cargo2() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		cargo.setAllowRewiring(true);
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		copyCargo.setAllowRewiring(true);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+
+		// Still in copy
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+
+		// Check copy flags changed
+		Assert.assertTrue(copyCargo.isLocked());
+		Assert.assertFalse(copyCargo.isAllowRewiring());
+
+		// but not original
+		Assert.assertFalse(cargo.isLocked());
+		Assert.assertTrue(cargo.isAllowRewiring());
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Cargo3() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		cargo.setAllowRewiring(true);
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JULY, 1));
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		copyCargo.setAllowRewiring(true);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+
+		// Still in copy
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+
+		// Check copy flags unchanged
+		Assert.assertFalse(copyCargo.isLocked());
+		Assert.assertTrue(copyCargo.isAllowRewiring());
+
+		Assert.assertFalse(cargo.isLocked());
+		Assert.assertTrue(cargo.isAllowRewiring());
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Cargo4() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
+		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		cargo.setAllowRewiring(true);
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
+		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		copyCargo.setAllowRewiring(true);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+
+		// Still in copy
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+
+		// Check copy flags changed
+		Assert.assertTrue(copyCargo.isLocked());
+		Assert.assertFalse(copyCargo.isAllowRewiring());
+
+		// but not original
+		Assert.assertFalse(cargo.isLocked());
+		Assert.assertTrue(cargo.isAllowRewiring());
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Cargo5() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1));
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		cargo.setAllowRewiring(true);
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1));
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		copyCargo.setAllowRewiring(true);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+
+		// Removed from copy
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
+
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(cargo);
+		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+		Mockito.verify(mapping).registerRemovedOriginal(dischargeSlot);
+
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Cargo6() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
+		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
+		cargo.setAllowRewiring(true);
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		final DischargeSlot copyDischargeSlot = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge");
+		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
+		copyCargo.setAllowRewiring(true);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+
+		// Still in copy
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+
+		// Check copy flags changed
+		Assert.assertTrue(copyCargo.isLocked());
+		Assert.assertFalse(copyCargo.isAllowRewiring());
+
+		// but not original
+		Assert.assertFalse(cargo.isLocked());
+		Assert.assertTrue(cargo.isAllowRewiring());
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Slot1() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Slot2() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Slot3() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No changes
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Slot4() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+	}
+
+	@Test
+	public void filterSlotsAndCargoesTest_Slot5() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
+		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
+		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+
+		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+	}
+
+	@Test
+	public void filterVesselEventsTest1() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
+		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		event.setDurationInDays(10);
+
+		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
+		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyEvent.setDurationInDays(10);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(event)).thenReturn(copyEvent);
+		Mockito.when(mapping.getOriginalFromCopy(copyEvent)).thenReturn(event);
+
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().isEmpty());
+
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(event);
+	}
+
+	@Test
+	public void filterVesselEventsTest2() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
+		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		event.setDurationInDays(20);
+
+		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
+		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
+		copyEvent.setDurationInDays(20);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(event)).thenReturn(copyEvent);
+		Mockito.when(mapping.getOriginalFromCopy(copyEvent)).thenReturn(event);
+
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(copyEvent));
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterVesselEventsTest3() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
+		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		event.setDurationInDays(20);
+
+		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
+		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		copyEvent.setDurationInDays(20);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(event)).thenReturn(copyEvent);
+		Mockito.when(mapping.getOriginalFromCopy(copyEvent)).thenReturn(event);
+
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(copyEvent));
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterVesselEventsTest4() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final VesselEvent event = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
+		event.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		event.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		event.setDurationInDays(10);
+
+		final VesselEvent copyEvent = PeriodTestUtils.createCharterOutEvent(copyScenarioModel, "event");
+		copyEvent.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		copyEvent.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		copyEvent.setDurationInDays(10);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(event)).thenReturn(copyEvent);
+		Mockito.when(mapping.getOriginalFromCopy(copyEvent)).thenReturn(event);
+
+		transformer.filterVesselEvents(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().contains(event));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselEvents().isEmpty());
+
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(event);
+	}
+
+	@Test
+	public void filterVesselAvailabilitiesTest1() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+
+		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
+		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
+		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
+
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().isEmpty());
+
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(vesselAvailability);
+	}
+
+	@Test
+	public void filterVesselAvailabilitiesTest2() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+
+		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
+		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
+		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
+
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterVesselAvailabilitiesTest3() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
+		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
+		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
+
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
+	}
+
+	@Test
+	public void filterVesselAvailabilitiesTest4() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
+		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
+		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
+
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().isEmpty());
+
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(vesselAvailability);
+	}
+
+	@Test
+	public void filterVesselAvailabilitiesTest5() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.MARCH, 15);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.APRIL, 15);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.AUGUST, 15);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "vessel");
+		final VesselAvailability vesselAvailability = PeriodTestUtils.createVesselAvailability(scenarioModel, vessel);
+		vesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		vesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		vesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		vesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final Vessel copyVessel = PeriodTestUtils.createVessel(copyScenarioModel, "vessel");
+		final VesselAvailability copyVesselAvailability = PeriodTestUtils.createVesselAvailability(copyScenarioModel, copyVessel);
+		copyVesselAvailability.setStartAfter(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyVesselAvailability.setStartBy(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
+		copyVesselAvailability.setEndAfter(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+		copyVesselAvailability.setEndBy(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(vesselAvailability)).thenReturn(copyVesselAvailability);
+		Mockito.when(mapping.getOriginalFromCopy(copyVesselAvailability)).thenReturn(vesselAvailability);
+
+		transformer.filterVesselAvailabilities(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+
+		// No change to original
+		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(vesselAvailability));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getVesselAvailabilities().contains(copyVesselAvailability));
+
+		// Registered objects as removed.
+		Mockito.verifyNoMoreInteractions(mapping);
 	}
 
 	private PeriodTransformer createPeriodTransformer(final InclusionChecker inclusionChecker) {
