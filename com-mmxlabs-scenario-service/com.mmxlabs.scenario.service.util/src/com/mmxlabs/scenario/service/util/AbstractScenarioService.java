@@ -334,15 +334,18 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		}
 
 		fireEvent(ScenarioServiceEvent.PRE_UNLOAD, instance);
+		if (instance.getAdapters() != null) {
+			instance.getAdapters().remove(EditingDomain.class);
+			instance.getAdapters().remove(CommandStack.class);
+			instance.getAdapters().remove(BasicCommandStack.class);
 
-		instance.getAdapters().remove(EditingDomain.class);
-		instance.getAdapters().remove(BasicCommandStack.class);
-		final ResourceSet resourceSet = (ResourceSet) instance.getAdapters().remove(ResourceSet.class);
+			final ResourceSet resourceSet = (ResourceSet) instance.getAdapters().remove(ResourceSet.class);
+			for (final Resource r : resourceSet.getResources()) {
+				r.unload();
+			}
 
-		for (final Resource r : resourceSet.getResources()) {
-			r.unload();
+			instance.getAdapters().clear();
 		}
-
 		instance.setInstance(null);
 
 		fireEvent(ScenarioServiceEvent.POST_UNLOAD, instance);
