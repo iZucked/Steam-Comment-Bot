@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -240,8 +241,30 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 										final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath, scenarioCipherProvider);
 										if (instance != null) {
 											try {
-												final String scenarioName = new File(filePath).getName();
-												container.getScenarioService().duplicate(instance, container).setName(scenarioName);
+												// Get basic name
+												String scenarioName = new File(filePath).getName();
+												if (scenarioName.endsWith(".lingo")) {
+													scenarioName = scenarioName.replaceAll(".lingo", "");
+												}
+
+												// Avoid name clashes
+												final Set<String> existingNames = new HashSet<String>();
+												for (final Container c : container.getElements()) {
+													if (c instanceof Folder) {
+														existingNames.add(((Folder) c).getName());
+													} else if (c instanceof ScenarioInstance) {
+														existingNames.add(((ScenarioInstance) c).getName());
+													}
+												}
+
+												final String namePrefix = scenarioName;
+												String newName = namePrefix;
+												int counter = 1;
+												while (existingNames.contains(newName)) {
+													newName = namePrefix + " (" + counter++ + ")";
+												}
+
+												container.getScenarioService().duplicate(instance, container).setName(newName);
 											} catch (final IOException e) {
 												log.error(e.getMessage(), e);
 											}
