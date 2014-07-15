@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -99,17 +98,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 
 			// Check sequencing for each grouping
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {
-				VesselAvailability va = null;
-				// Check vessel start details
-				final AVesselSet<? extends Vessel> vesselOrClass = collectedAssignment.getVesselOrClass();
-				if (vesselOrClass instanceof Vessel) {
-					// Find availability.
-					for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-						if (vesselAvailability.getVessel() == vesselOrClass) {
-							va = vesselAvailability;
-						}
-					}
-				}
+				VesselAvailability va = collectedAssignment.getVesselAvailability();
 
 				// Assume vessel start is Actualised, but check state!
 				boolean previousElementHasActuals = true;
