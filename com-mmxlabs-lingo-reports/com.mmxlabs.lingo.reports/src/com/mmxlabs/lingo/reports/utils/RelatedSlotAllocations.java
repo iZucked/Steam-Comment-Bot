@@ -86,7 +86,10 @@ public class RelatedSlotAllocations {
 	}
 
 	public void addRelatedSlot(Slot slotA, Slot slotB) {
-
+		if (slotA == null || slotB == null) {
+			return;
+		}
+		
 		final String sA = slotA.getName();
 		final String sB = slotB.getName();
 		// get/create the sets of slots these wired slots are related to

@@ -18,16 +18,12 @@ import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
 
 /**
@@ -178,12 +174,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final Event event = (Event) element;
 			// Special case for cargo shorts - group items separately
 			if (event.getSequence().getSequenceType() == SequenceType.CARGO_SHORTS) {
-				Event start = event;
-
-				// Find segment start
-				while (start != null && !ScheduleModelUtils.isSegmentStart(start)) {
-					start = start.getPreviousEvent();
-				}
+				Event start = ScheduleModelUtils.getSegmentStart(event);
 
 				if (start != null) {
 					return start.name();
