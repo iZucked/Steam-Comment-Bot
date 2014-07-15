@@ -19,7 +19,9 @@ public final class StringEscaper {
 	public static final String escapeUIString(final String input) {
 		// Escape ampersands
 		String str = input;
-		str = str.replaceAll("&", "&&");
+		if (str != null) {
+			str = str.replaceAll("&", "&&");
+		}
 
 		return str;
 	}
