@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -16,6 +17,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
@@ -38,6 +40,7 @@ import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProv
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -48,12 +51,18 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
@@ -98,14 +107,26 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		dischargeAllocationRef = builder.getDischargeAllocationRef();
 		openSlotAllocationRef = builder.getOpenSlotAllocationRef();
 
-		addScheduleColumn("Schedule", containingScheduleFormatter);
+		final SchedulePackage s = SchedulePackage.eINSTANCE;
+		
+		addSimpleColumns();
+		
+		addColumn("Vessel", ColumnType.NORMAL, new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
 
-		addColumn("L-ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
-		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, name2ObjectRef);
+				if (object instanceof Sequence) {
+					final Sequence sequence = (Sequence) object;
+					if (sequence.getVesselAvailability() == null) {
+						return "Chartered";
+					} else {
+						return sequence.getVesselAvailability().getVessel().getName();
+					}
+				}
 
-		// add the total (aggregate) P&L column
-		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
-		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+				return super.format(object);
+			}
+		}, cargoAllocationRef, s.getCargoAllocation_Sequence());
 
 		addColumn("Discharge Port", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
@@ -126,6 +147,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 				return "";
 			}
 		}, dischargeAllocationRef);
+		
 		addColumn("Sales Contract", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
@@ -171,6 +193,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 				return 0.0;
 			}
 		}, loadAllocationRef);
+		
 		addColumn("Sales Price", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
@@ -224,9 +247,98 @@ public class ConfigurableCargoReportView extends EMFReportView {
 			}
 		}, targetObjectRef);
 
+		addCostColumns();
 		builder.createPNLColumnBlock();
-
 		builder.createPinDiffColumns();
+		
+	}
+	
+	protected void addSimpleColumns() {
+		final SchedulePackage s = SchedulePackage.eINSTANCE;
+		final EAttribute name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
+
+		addScheduleColumn("Scenario", containingScheduleFormatter);
+		
+
+		addColumn("L-ID", ColumnType.NORMAL, objectFormatter, nameObjectRef);
+		addColumn("D-ID", ColumnType.NORMAL, objectFormatter, name2ObjectRef);
+		addColumn("Load Date", ColumnType.NORMAL, datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Load Time", ColumnType.NORMAL, timePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart());
+		addColumn("Purchase Contract", ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation__GetContract(), name);
+		addColumn("Discharge Date", ColumnType.NORMAL, datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
+		addColumn("Discharge Time", ColumnType.NORMAL, timePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd());
+		addColumn("Buy Port", ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Sell Port", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name);
+		addColumn("Sales Contract", ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetContract(), name);
+
+		addColumn("Buy Volume", ColumnType.NORMAL, integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeTransferred());
+		addColumn("Sell Volume", ColumnType.NORMAL, integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred());
+
+		// add the total (aggregate) P&L column
+		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+		builder.addPNLColumn(CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+
+	}
+	
+	protected void addCostColumns() {
+
+		addColumn("Laden Cost", ColumnType.NORMAL, new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+
+				return calculateLegCost(object, loadAllocationRef);
+			}
+
+		});
+
+		addColumn("Ballast Cost", ColumnType.NORMAL, new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+
+				return calculateLegCost(object, dischargeAllocationRef);
+			}
+		});
+
+		addColumn("Total Cost", ColumnType.NORMAL, new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				if (object instanceof CargoAllocation) {
+					final CargoAllocation allocation = (CargoAllocation) object;
+
+					int total = 0;
+					for (final Event event : allocation.getEvents()) {
+
+						if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							total += slotVisit.getFuelCost();
+							total += slotVisit.getCharterCost();
+							total += slotVisit.getPortCost();
+						} else if (event instanceof Journey) {
+							final Journey journey = (Journey) event;
+							total += journey.getFuelCost();
+							total += journey.getCharterCost();
+							total += journey.getToll();
+						} else if (event instanceof Idle) {
+							final Idle idle = (Idle) event;
+							total += idle.getFuelCost();
+							total += idle.getCharterCost();
+						}
+					}
+					return total;
+				}
+				return null;
+
+			}
+		}, cargoAllocationRef);
+		
+	}
+
+	private void setColumnsImmovable() {
+		if (viewer != null) {
+			for (GridColumn column: viewer.getGrid().getColumns()) {
+				column.setMoveable(false);
+			}
+		}
 	}
 
 	@Override
@@ -249,6 +361,9 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	@Override
 	public void createPartControl(final Composite parent) {
 		super.createPartControl(parent);
+		// force the columns to be immovable except by using the config dialog
+		setColumnsImmovable();		
+
 		viewer.setComparator(GenericEMFTableDataModel.createGroupComparator(viewer.getComparator(), tableDataModel));
 		if (memento != null) {
 			builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, memento);
@@ -383,13 +498,16 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 				};
 				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
-				dialog.setRowCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
-				dialog.setDiffCheckBoxInfo(ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
+				//dialog.setRowCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+				//dialog.setDiffCheckBoxInfo(ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
+				dialog.addCheckBoxInfo("Row Filters", ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+				dialog.addCheckBoxInfo("Diff Filters", ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
 				dialog.open();
 
 				builder.refreshDiffOptions();
 				
 				nonVisibleIcon.dispose();
+				visibleIcon.dispose();
 
 				synchronizer.refreshViewer();
 
@@ -399,4 +517,52 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		manager.appendToGroup("additions", configureColumnsAction);
 	}
 
+	private Integer calculateLegCost(final Object object, EStructuralFeature allocationRef) {
+		if (object instanceof EObject) {
+			final EObject eObject = (EObject) object;
+			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
+			final SlotAllocation allocation = (SlotAllocation) eObject.eGet(allocationRef);
+			if (allocation != null && cargoAllocation != null) {
+
+				boolean collecting = false;
+				int total = 0;
+				for (final Event event : cargoAllocation.getEvents()) {
+					if (event instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) event;
+						if (allocation.getSlotVisit() == event) {
+							collecting = true;
+						} else {
+							if (collecting) {
+								// Finished!
+								break;
+							}
+						}
+						if (collecting) {
+							total += slotVisit.getFuelCost();
+							total += slotVisit.getCharterCost();
+							total += slotVisit.getPortCost();
+						}
+
+					} else if (event instanceof Journey) {
+						final Journey journey = (Journey) event;
+						if (collecting) {
+							total += journey.getFuelCost();
+							total += journey.getCharterCost();
+							total += journey.getToll();
+						}
+					} else if (event instanceof Idle) {
+						final Idle idle = (Idle) event;
+						if (collecting) {
+							total += idle.getFuelCost();
+							total += idle.getCharterCost();
+						}
+					}
+				}
+
+				return total;
+			}
+
+		}
+		return null;
+	}
 }

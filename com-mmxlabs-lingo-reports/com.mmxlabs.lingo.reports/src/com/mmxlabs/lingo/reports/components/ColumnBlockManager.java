@@ -277,7 +277,6 @@ public class ColumnBlockManager {
 	public void initFromMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento blocksInfo = memento.getChild(uniqueConfigKey);
 		final List<String> order = new ArrayList<>();
-		if (true) return;
 
 		if (blocksInfo != null) {
 
@@ -300,6 +299,5 @@ public class ColumnBlockManager {
 
 	public void setGrid(final Grid grid) {
 		this.grid = grid;
-
 	}
 }
