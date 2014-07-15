@@ -8,7 +8,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -123,8 +122,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		if (distance == null || distance.intValue() == Integer.MAX_VALUE) {
 			return null;
 		}
-
-		final int[] arrivalTimes = new int[] { loadTime, dischargeTime, returnTime };
 
 		final LoadSlot notionalLoadSlot = new LoadSlot();
 		notionalLoadSlot.setPort(loadPort);

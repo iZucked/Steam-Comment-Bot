@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -53,7 +52,6 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.InclusionType;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 
 /***
@@ -135,12 +133,8 @@ public class PeriodTransformer {
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
 		generateStartAndEndConditionsMap(output, startConditionMap, endConditionMap);
 
-		// Mapping between a cargo or vessel event and the related VesselAvailability instance
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
-		generateAssignableElementToVesselAvailabilityMap(cargoModel, mapCargoOrEventToVesselAvailability);
-
 		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, fleetModel, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		updateVesselAvailabilities(periodRecord, cargoModel, fleetModel, startConditionMap, endConditionMap);
 
 		// Filter out slots and cargoes
 		filterSlotsAndCargoes(internalDomain, periodRecord, cargoModel, mapping);
@@ -246,15 +240,15 @@ public class PeriodTransformer {
 	}
 
 	public void updateVesselAvailabilities(final PeriodRecord periodRecord, final CargoModel cargoModel, final FleetModel fleetModel, final Map<AssignableElement, PortVisit> startConditionMap,
-			final Map<AssignableElement, PortVisit> endConditionMap, final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability) {
+			final Map<AssignableElement, PortVisit> endConditionMap) {
 
 		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
 
-		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 	}
 
 	public void updateVesselAvailabilities(final PeriodRecord periodRecord, final List<CollectedAssignment> collectedAssignments, final Map<AssignableElement, PortVisit> startConditionMap,
-			final Map<AssignableElement, PortVisit> endConditionMap, final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability) {
+			final Map<AssignableElement, PortVisit> endConditionMap) {
 
 		// Here we loop through all the collected assignments, trimming the vessel availability to anything outside of the date range.
 		// This can handle out-of-order assignments by checking to see whether or not a cargo has already been trimmed out of the date range before updating
@@ -264,46 +258,23 @@ public class PeriodTransformer {
 			}
 
 			final List<AssignableElement> assignedObjects = collectedAssignment.getAssignedObjects();
-			final AVesselSet<? extends Vessel> vesselOrClass = collectedAssignment.getVesselOrClass();
-			if (vesselOrClass instanceof Vessel) {
+			final VesselAvailability vesselAvailability = collectedAssignment.getVesselAvailability();
+			if (vesselAvailability != null) {
 				for (final AssignableElement assignedObject : assignedObjects) {
-					final VesselAvailability vesselAvailability = mapCargoOrEventToVesselAvailability.get(assignedObject);
-					if (vesselAvailability != null) {
-						final Pair<InclusionType, Position> result = inclusionChecker.getObjectInclusionType(assignedObject, periodRecord);
-						if (result.getFirst() == InclusionType.Out) {
-							final Position position = result.getSecond();
+					final Pair<InclusionType, Position> result = inclusionChecker.getObjectInclusionType(assignedObject, periodRecord);
+					if (result.getFirst() == InclusionType.Out) {
+						final Position position = result.getSecond();
 
-							if (position == Position.Before) {
-								// Update availability start heel
-								updateStartConditions(vesselAvailability, assignedObject, startConditionMap);
-							} else if (position == Position.After) {
-								// Update availability end heel
-								updateEndConditions(vesselAvailability, assignedObject, endConditionMap);
-							}
-
+						if (position == Position.Before) {
+							// Update availability start heel
+							updateStartConditions(vesselAvailability, assignedObject, startConditionMap);
+						} else if (position == Position.After) {
+							// Update availability end heel
+							updateEndConditions(vesselAvailability, assignedObject, endConditionMap);
 						}
+
 					}
-					// } else {
-					// throw new IllegalStateException("No vessel set but Spot index is also not set");
 				}
-			}
-		}
-	}
-
-	public void generateAssignableElementToVesselAvailabilityMap(final CargoModel cargoModel, final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability) {
-		final Map<Vessel, VesselAvailability> vesselMap = new HashMap<>();
-		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-			vesselMap.put(vesselAvailability.getVessel(), vesselAvailability);
-		}
-
-		for (final Cargo cargo : cargoModel.getCargoes()) {
-			if (vesselMap.containsKey(cargo.getAssignment())) {
-				mapCargoOrEventToVesselAvailability.put(cargo, vesselMap.get(cargo.getAssignment()));
-			}
-		}
-		for (final VesselEvent vesselEvent : cargoModel.getVesselEvents()) {
-			if (vesselMap.containsKey(vesselEvent.getAssignment())) {
-				mapCargoOrEventToVesselAvailability.put(vesselEvent, vesselMap.get(vesselEvent.getAssignment()));
 			}
 		}
 	}

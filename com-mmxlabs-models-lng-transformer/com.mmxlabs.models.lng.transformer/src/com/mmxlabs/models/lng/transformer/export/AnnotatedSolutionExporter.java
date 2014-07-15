@@ -47,7 +47,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -156,7 +156,7 @@ public class AnnotatedSolutionExporter {
 
 		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
 		for (final IResource resource : resources) {
-			final IVessel vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 			final Sequence eSequence = factory.createSequence();
 
@@ -165,11 +165,11 @@ public class AnnotatedSolutionExporter {
 			boolean isDESSequence = false;
 
 			final ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
-			switch (vessel.getVesselInstanceType()) {
+			switch (vesselAvailability.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
 				eSequence.setSequenceType(SequenceType.VESSEL);
-				eSequence.setVesselAvailability(modelEntityMap.getModelObject(vessel, VesselAvailability.class));
+				eSequence.setVesselAvailability(modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class));
 				eSequence.unsetVesselClass();
 				break;
 			case FOB_SALE:
@@ -197,13 +197,13 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 2)
 					continue;
 
-				eSequence.setVesselClass(modelEntityMap.getModelObject(vessel.getVesselClass(), VesselClass.class));
+				eSequence.setVesselClass(modelEntityMap.getModelObject(vesselAvailability.getVessel().getVesselClass(), VesselClass.class));
 				eSequence.unsetVesselAvailability();
-				final AtomicInteger ai = counter.get(vessel.getVesselClass());
+				final AtomicInteger ai = counter.get(vesselAvailability.getVessel().getVesselClass());
 				int ix = 0;
 
 				if (ai == null) {
-					counter.put(vessel.getVesselClass(), new AtomicInteger(ix));
+					counter.put(vesselAvailability.getVessel().getVesselClass(), new AtomicInteger(ix));
 				} else {
 					ix = ai.incrementAndGet();
 				}
@@ -222,7 +222,7 @@ public class AnnotatedSolutionExporter {
 				break;
 			}
 
-			if (vessel.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vessel.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
+			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVesselAvailability() == null && eSequence.getVesselClass() == null)) {
 					log.error("No vessel set on sequence!?");
 				}

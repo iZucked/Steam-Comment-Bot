@@ -17,6 +17,7 @@ import com.google.inject.Provides;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -35,12 +36,15 @@ public class RestrictedElementsConstraintCheckerTest {
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
@@ -64,12 +68,14 @@ public class RestrictedElementsConstraintCheckerTest {
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> singleton(element2));
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> emptySet());
@@ -99,12 +105,15 @@ public class RestrictedElementsConstraintCheckerTest {
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));
 
@@ -134,18 +143,25 @@ public class RestrictedElementsConstraintCheckerTest {
 		Assert.assertEquals(name, checker.getName());
 
 		final IResource resource1 = Mockito.mock(IResource.class);
-		final IVessel vessel1 = Mockito.mock(IVessel.class);
 		final IResource resource2 = Mockito.mock(IResource.class);
+
+		final IVessel vessel1 = Mockito.mock(IVessel.class);
 		final IVessel vessel2 = Mockito.mock(IVessel.class);
+
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		final IVesselAvailability vesselAvailability2 = Mockito.mock(IVesselAvailability.class);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
+		Mockito.when(vesselAvailability2.getVessel()).thenReturn(vessel2);
 
-		Mockito.when(vesselProvider.getVessel(resource2)).thenReturn(vessel2);
-		Mockito.when(vessel2.getVesselInstanceType()).thenReturn(VesselInstanceType.CARGO_SHORTS);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+
+		Mockito.when(vesselProvider.getVesselAvailability(resource2)).thenReturn(vesselAvailability2);
+		Mockito.when(vesselAvailability2.getVesselInstanceType()).thenReturn(VesselInstanceType.CARGO_SHORTS);
 
 		Mockito.when(restrictedElementsProvider.getRestrictedFollowerElements(element1)).thenReturn(Collections.<ISequenceElement> emptySet());
 		Mockito.when(restrictedElementsProvider.getRestrictedPrecedingElements(element2)).thenReturn(Collections.<ISequenceElement> singleton(element1));

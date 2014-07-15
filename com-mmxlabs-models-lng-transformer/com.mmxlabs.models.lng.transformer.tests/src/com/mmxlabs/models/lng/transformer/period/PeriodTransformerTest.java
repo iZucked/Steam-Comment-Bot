@@ -38,7 +38,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.period.InclusionChecker.PeriodRecord;
 
@@ -152,7 +151,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		// Vessel before period
@@ -167,10 +165,10 @@ public class PeriodTransformerTest {
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
 			endConditionMap.put(c1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel1, c1));
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability1, c1));
 		}
 
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		// No change expected - vesselAvailability1
 		Assert.assertTrue(vesselAvailability1.getStartAt().isEmpty());
@@ -203,7 +201,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		// Vessel across lower bounds
@@ -229,13 +226,10 @@ public class PeriodTransformerTest {
 			endConditionMap.put(c2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1)));
 			startConditionMap.put(c2, PeriodTestUtils.createPortVisit(port4, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel2, c1, c2));
-
-			mapCargoOrEventToVesselAvailability.put(c1, vesselAvailability2);
-			mapCargoOrEventToVesselAvailability.put(c2, vesselAvailability2);
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability2, c1, c2));
 		}
 
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		// Changed
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability2.getStartAt());
@@ -269,7 +263,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		// vessel completely in
@@ -293,13 +286,9 @@ public class PeriodTransformerTest {
 			startConditionMap.put(c2, PeriodTestUtils.createPortVisit(port4, PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1)));
 			endConditionMap.put(c2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.JULY, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel3, c1, c2));
-
-			mapCargoOrEventToVesselAvailability.put(c1, vesselAvailability3);
-			mapCargoOrEventToVesselAvailability.put(c2, vesselAvailability3);
-
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability3, c1, c2));
 		}
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		// No change expected
 		Assert.assertTrue(vesselAvailability3.getStartAt().isEmpty());
@@ -332,7 +321,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		// vessel across both bounds
@@ -381,17 +369,9 @@ public class PeriodTransformerTest {
 			startConditionMap.put(c6, PeriodTestUtils.createPortVisit(port4, PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1)));
 			endConditionMap.put(c6, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel4, c1, c2, c3, c4, c5, c6));
-
-			mapCargoOrEventToVesselAvailability.put(c1, vesselAvailability4);
-			mapCargoOrEventToVesselAvailability.put(c2, vesselAvailability4);
-			mapCargoOrEventToVesselAvailability.put(c3, vesselAvailability4);
-			mapCargoOrEventToVesselAvailability.put(c4, vesselAvailability4);
-			mapCargoOrEventToVesselAvailability.put(c5, vesselAvailability4);
-			mapCargoOrEventToVesselAvailability.put(c6, vesselAvailability4);
-
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability4, c1, c2, c3, c4, c5, c6));
 		}
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability4.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability4.getStartAfter());
@@ -423,7 +403,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		// vessel across both bounds
@@ -468,17 +447,9 @@ public class PeriodTransformerTest {
 			startConditionMap.put(c6, PeriodTestUtils.createPortVisit(port4, PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1)));
 			endConditionMap.put(c6, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel5, c1, c2, c3, c4, c5, c6));
-
-			mapCargoOrEventToVesselAvailability.put(c1, vesselAvailability5);
-			mapCargoOrEventToVesselAvailability.put(c2, vesselAvailability5);
-			mapCargoOrEventToVesselAvailability.put(c3, vesselAvailability5);
-			mapCargoOrEventToVesselAvailability.put(c4, vesselAvailability5);
-			mapCargoOrEventToVesselAvailability.put(c5, vesselAvailability5);
-			mapCargoOrEventToVesselAvailability.put(c6, vesselAvailability5);
-
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability5, c1, c2, c3, c4, c5, c6));
 		}
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertEquals(Collections.singletonList(port3), vesselAvailability5.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), vesselAvailability5.getStartAfter());
@@ -510,7 +481,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		// vessel across upper bound
@@ -534,13 +504,9 @@ public class PeriodTransformerTest {
 			startConditionMap.put(c2, PeriodTestUtils.createPortVisit(port4, PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1)));
 			endConditionMap.put(c2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel6, c1, c2));
-
-			mapCargoOrEventToVesselAvailability.put(c1, vesselAvailability6);
-			mapCargoOrEventToVesselAvailability.put(c2, vesselAvailability6);
-
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability6, c1, c2));
 		}
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		// No change expected
 		Assert.assertTrue(vesselAvailability6.getStartAt().isEmpty());
@@ -574,7 +540,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		// vessel after period
@@ -588,7 +553,7 @@ public class PeriodTransformerTest {
 
 		// Need vessel event and cooldown also
 
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		// No change expected - vesselAvailability7
 		Assert.assertTrue(vesselAvailability7.getStartAt().isEmpty());
@@ -622,7 +587,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "Vessel");
@@ -640,14 +604,10 @@ public class PeriodTransformerTest {
 			startConditionMap.put(event2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
 			endConditionMap.put(event2, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel, event1, event2));
-
-			mapCargoOrEventToVesselAvailability.put(event1, vesselAvailability);
-			mapCargoOrEventToVesselAvailability.put(event2, vesselAvailability);
-
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability, event1, event2));
 		}
 
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
 		Assert.assertTrue(vesselAvailability.getEndAt().isEmpty());
@@ -680,7 +640,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "Vessel");
@@ -698,14 +657,10 @@ public class PeriodTransformerTest {
 			startConditionMap.put(event2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
 			endConditionMap.put(event2, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel, event1, event2));
-
-			mapCargoOrEventToVesselAvailability.put(event1, vesselAvailability);
-			mapCargoOrEventToVesselAvailability.put(event2, vesselAvailability);
-
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability, event1, event2));
 		}
 
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertEquals(Collections.singletonList(port2), vesselAvailability.getStartAt());
 		Assert.assertEquals(PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), vesselAvailability.getStartAfter());
@@ -739,7 +694,6 @@ public class PeriodTransformerTest {
 
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
 		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
-		final Map<AssignableElement, VesselAvailability> mapCargoOrEventToVesselAvailability = new HashMap<>();
 		final List<CollectedAssignment> collectedAssignments = new ArrayList<>(7);
 
 		final Vessel vessel = PeriodTestUtils.createVessel(scenarioModel, "Vessel");
@@ -757,14 +711,10 @@ public class PeriodTransformerTest {
 			startConditionMap.put(event2, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
 			endConditionMap.put(event2, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
 
-			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vessel, event1, event2));
-
-			mapCargoOrEventToVesselAvailability.put(event1, vesselAvailability);
-			mapCargoOrEventToVesselAvailability.put(event2, vesselAvailability);
-
+			collectedAssignments.add(PeriodTestUtils.createCollectedAssignment(vesselAvailability, event1, event2));
 		}
 
-		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap, mapCargoOrEventToVesselAvailability);
+		transformer.updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 
 		Assert.assertTrue(vesselAvailability.getStartAt().isEmpty());
 		Assert.assertNull(vesselAvailability.getStartAfter());

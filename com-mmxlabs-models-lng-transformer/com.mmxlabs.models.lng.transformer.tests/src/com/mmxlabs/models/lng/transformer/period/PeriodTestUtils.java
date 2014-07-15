@@ -298,9 +298,9 @@ public class PeriodTestUtils {
 		return ScheduleFactory.eINSTANCE.createCooldown();
 	}
 
-	public static CollectedAssignment createCollectedAssignment(final Vessel vessel, final AssignableElement... elements) {
+	public static CollectedAssignment createCollectedAssignment(final VesselAvailability vesselAvailability, final AssignableElement... elements) {
 
-		return new CollectedAssignment(Arrays.asList(elements), vessel, null);
+		return new CollectedAssignment(Arrays.asList(elements), vesselAvailability);
 	}
 
 	public static EditingDomain createEditingDomain(final LNGScenarioModel scenarioModel) {
