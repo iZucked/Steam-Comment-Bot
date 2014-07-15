@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public class HashMapVesselEditorTest {
 
@@ -19,14 +19,14 @@ public class HashMapVesselEditorTest {
 		final HashMapVesselEditor editor = new HashMapVesselEditor();
 
 		final IResource resource1 = Mockito.mock(IResource.class, "resource-1");
-		final IVessel vessel1 = Mockito.mock(IVessel.class, "vessel-1");
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class, "vessel-1");
 
-		Assert.assertNull(editor.getResource(vessel1));
-		Assert.assertNull(editor.getVessel(resource1));
+		Assert.assertNull(editor.getResource(vesselAvailability1));
+		Assert.assertNull(editor.getVesselAvailability(resource1));
 
-		editor.setVesselResource(resource1, vessel1);
+		editor.setVesselAvailabilityResource(resource1, vesselAvailability1);
 
-		Assert.assertSame(vessel1, editor.getVessel(resource1));
-		Assert.assertSame(resource1, editor.getResource(vessel1));
+		Assert.assertSame(vesselAvailability1, editor.getVesselAvailability(resource1));
+		Assert.assertSame(resource1, editor.getResource(vesselAvailability1));
 	}
 }

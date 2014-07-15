@@ -29,7 +29,7 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -230,7 +230,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			this.optionalMoveGenerator = null;
 		}
 		for (final IResource resource : data.getResources()) {
-			final IVessel vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
 			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
 				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
 				injector.injectMembers(swapElementsMoveGenerator);

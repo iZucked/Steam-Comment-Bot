@@ -8,9 +8,9 @@ import java.util.List;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -27,7 +27,7 @@ public final class AllocationRecord {
 	/** The LNG volume which the vessel starts with (the start heel) */
 	public final long startVolumeInM3;
 
-	public final IVessel resourceVessel;
+	public final IVesselAvailability vesselAvailability;
 	public final VoyagePlan resourceVoyagePlan;
 
 	public IVessel nominatedVessel;
@@ -71,9 +71,10 @@ public final class AllocationRecord {
 
 	public IPortTimesRecord portTimesRecord;
 
-	public AllocationRecord(final IVessel resourceVessel, final VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3, final long requiredFuelVolumeInM3,
-			final long minEndVolumeInM3, final List<IPortSlot> slots, final IPortTimesRecord portTimesRecord, final IPortSlot returnSlot, final List<Long> minVolumes, final List<Long> maxVolumes) {
-		this.resourceVessel = resourceVessel;
+	public AllocationRecord(final IVesselAvailability vesselAvailability, final VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3,
+			final long requiredFuelVolumeInM3, final long minEndVolumeInM3, final List<IPortSlot> slots, final IPortTimesRecord portTimesRecord, final IPortSlot returnSlot,
+			final List<Long> minVolumes, final List<Long> maxVolumes) {
+		this.vesselAvailability = vesselAvailability;
 		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.vesselStartTime = vesselStartTime;
 		this.startVolumeInM3 = startVolumeInM3;
@@ -84,7 +85,7 @@ public final class AllocationRecord {
 		this.returnSlot = returnSlot;
 		this.minVolumes = minVolumes;
 		this.maxVolumes = maxVolumes;
-		this.allocationMode = (resourceVessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || resourceVessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) ? AllocationMode.Transfer
+		this.allocationMode = (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) ? AllocationMode.Transfer
 				: AllocationMode.Shipped;
 	}
 }

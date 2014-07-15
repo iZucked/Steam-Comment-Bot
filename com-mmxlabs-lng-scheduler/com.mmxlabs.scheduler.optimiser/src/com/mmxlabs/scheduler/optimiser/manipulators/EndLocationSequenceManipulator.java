@@ -95,7 +95,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 	public void init(final IOptimisationData data) {
 
 		for (final IResource resource : data.getResources()) {
-			final VesselInstanceType vesselInstanceType = vesselProvider.getVessel(resource).getVesselInstanceType();
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				setEndLocationRule(resource, EndLocationRule.NONE);
 			} else if (vesselInstanceType == VesselInstanceType.CARGO_SHORTS) {

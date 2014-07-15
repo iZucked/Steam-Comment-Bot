@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -449,8 +449,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		final ISequence sequence = sequences.getSequence(sequenceIndex);
 		final IResource resource = sequences.getResources().get(sequenceIndex);
 
-		final IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			// TODO: Implement something here rather than rely on VoyagePlanner
 			return;
 		}
@@ -466,9 +466,9 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 		final boolean[] useTimeWindow = this.useTimeWindow[sequenceIndex];
 
-		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
+		final int maxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
 
-		final int minSpeed = vessel.getVesselClass().getMinSpeed();
+		final int minSpeed = vesselAvailability.getVessel().getVesselClass().getMinSpeed();
 
 		int index = 0;
 		ISequenceElement prevElement = null;
@@ -540,7 +540,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, port)) {
 					final int distance = entry.getValue();
 					if (distance != Integer.MAX_VALUE) {
-						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vessel.getVesselClass());
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vesselAvailability.getVessel().getVesselClass());
 						final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
 						final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
 						minTravelTime = Math.min(minTravelTime, minByRoute);

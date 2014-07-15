@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -88,8 +88,8 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		ISequenceElement prev, cur;
 		prev = cur = null;
 
-		final IVessel vessel = vesselProvider.getVessel(resource);
-		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final int maxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
 
 		while (iter.hasNext()) {
 			prev = cur;
@@ -124,9 +124,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	 * @return
 	 */
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		final IVessel vessel = vesselProvider.getVessel(resource);
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-		return checkPairwiseConstraint(first, second, resource, vessel.getVesselClass().getMaxSpeed());
+		return checkPairwiseConstraint(first, second, resource, vesselAvailability.getVessel().getVesselClass().getMaxSpeed());
 	}
 
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource, final int resourceMaxSpeed) {
@@ -139,7 +139,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 			return true;
 		}
 
-		final IVessel vessel = vesselProvider.getVessel(resource);
+		final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {

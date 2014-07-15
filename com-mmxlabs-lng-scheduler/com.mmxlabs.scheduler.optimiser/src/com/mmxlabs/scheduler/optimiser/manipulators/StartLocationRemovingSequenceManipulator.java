@@ -76,7 +76,7 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 	public void init(final IOptimisationData data) {
 
 		for (final IResource resource : data.getResources()) {
-			final VesselInstanceType vesselInstanceType = vesselProvider.getVessel(resource).getVesselInstanceType();
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 			if (vesselInstanceType == VesselInstanceType.CARGO_SHORTS) {
 				setShouldRemoveStartLocation(resource, true);
 			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {

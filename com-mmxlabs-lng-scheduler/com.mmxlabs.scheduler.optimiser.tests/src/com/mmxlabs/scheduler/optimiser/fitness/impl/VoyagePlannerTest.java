@@ -43,6 +43,7 @@ import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.DefaultVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.Port;
@@ -168,7 +169,7 @@ public final class VoyagePlannerTest {
 		portTypeProvider.setPortType(element4, PortType.Discharge);
 
 		final IResource resource = new Resource(index);
-		final Vessel vessel = new Vessel(index);
+		final Vessel vessel = new Vessel();
 		vessel.setName("Schedule1Vessel");
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
@@ -177,8 +178,11 @@ public final class VoyagePlannerTest {
 
 		vessel.setVesselClass(vesselClass);
 
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
+		vesselAvailability.setVessel(vessel);
+
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		vesselProvider.setVesselResource(resource, vessel);
+		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 
 		final List<ISequenceElement> elements = CollectionsUtil.makeArrayList(element1, element2, element3, element4);
 		final ISequence sequence = new ListSequence(elements);
@@ -435,7 +439,7 @@ public final class VoyagePlannerTest {
 		portTypeProvider.setPortType(element3, PortType.Load);
 
 		final IResource resource = new Resource(index);
-		final Vessel vessel = new Vessel(index);
+		final Vessel vessel = new Vessel();
 		vessel.setName("Schedule2Vessel");
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
@@ -443,8 +447,11 @@ public final class VoyagePlannerTest {
 		vesselClass.setCargoCapacity(100000);
 		vessel.setVesselClass(vesselClass);
 
+		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
+		vesselAvailability.setVessel(vessel);
+
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor();
-		vesselProvider.setVesselResource(resource, vessel);
+		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 
 		final List elements = CollectionsUtil.makeArrayList(element1, element2, element3);
 		final ISequence sequence = new ListSequence(elements);

@@ -6,11 +6,11 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public interface IVesselProvider extends IDataComponentProvider {
 
-	IVessel getVessel(IResource resource);
+	IVesselAvailability getVesselAvailability(IResource resource);
 
-	IResource getResource(IVessel vessel);
+	IResource getResource(IVesselAvailability vessel);
 }

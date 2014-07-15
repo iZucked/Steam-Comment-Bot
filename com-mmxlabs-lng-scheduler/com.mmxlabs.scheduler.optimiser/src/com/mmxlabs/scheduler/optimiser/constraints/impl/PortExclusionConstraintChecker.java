@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
@@ -64,10 +65,11 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 		if (portExclusionProvider.hasNoExclusions()) {
 			return true;
 		}
-		
+
 		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (vessel == null) {
-			vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			vessel = vesselAvailability.getVessel();
 		}
 		final Set<IPort> excludedPorts = getExclusionsForVessel(vessel);
 		if (excludedPorts.isEmpty()) {
@@ -79,7 +81,7 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 				if (messages == null) {
 					return false; // fail fast.
 				} else {
-					messages.add("Vessel " + vesselProvider.getVessel(resource).getName() + " is excluded from port " + portProvider.getPortForElement(sequence.get(j)).getName());
+					messages.add("Vessel " + vesselProvider.getVesselAvailability(resource).getVessel().getName() + " is excluded from port " + portProvider.getPortForElement(sequence.get(j)).getName());
 					valid = false;
 				}
 			}
@@ -129,9 +131,10 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 		IVessel vessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (vessel == null) {
-			vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			vessel = vesselAvailability.getVessel();
 		}
-		
+
 		// Get vessel exclusions,
 		final Set<IPort> exclusions = getExclusionsForVessel(vessel);
 		if (exclusions.isEmpty()) {

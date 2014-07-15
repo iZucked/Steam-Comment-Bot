@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -35,12 +36,13 @@ public class TimeSortConstraintCheckerTest {
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
-
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final IPortSlot slot1 = Mockito.mock(IPortSlot.class);
 		final IPortSlot slot2 = Mockito.mock(IPortSlot.class);
@@ -85,11 +87,14 @@ public class TimeSortConstraintCheckerTest {
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
 
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
+
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final IPortSlot slot1 = Mockito.mock(IPortSlot.class);
 		final IPortSlot slot2 = Mockito.mock(IPortSlot.class);
@@ -133,12 +138,14 @@ public class TimeSortConstraintCheckerTest {
 
 		final IResource resource1 = Mockito.mock(IResource.class);
 		final IVessel vessel1 = Mockito.mock(IVessel.class);
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
 
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final IPortSlot slot1 = Mockito.mock(IPortSlot.class);
 		final IPortSlot slot2 = Mockito.mock(IPortSlot.class);
@@ -186,14 +193,19 @@ public class TimeSortConstraintCheckerTest {
 		final IResource resource2 = Mockito.mock(IResource.class);
 		final IVessel vessel2 = Mockito.mock(IVessel.class);
 
+		final IVesselAvailability vesselAvailability1 = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability1.getVessel()).thenReturn(vessel1);
+		final IVesselAvailability vesselAvailability2 = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability2.getVessel()).thenReturn(vessel2);
+
 		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
 		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
 
-		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
-		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(vesselProvider.getVesselAvailability(resource1)).thenReturn(vesselAvailability1);
+		Mockito.when(vesselAvailability1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
-		Mockito.when(vesselProvider.getVessel(resource2)).thenReturn(vessel2);
-		Mockito.when(vessel2.getVesselInstanceType()).thenReturn(VesselInstanceType.CARGO_SHORTS);
+		Mockito.when(vesselProvider.getVesselAvailability(resource2)).thenReturn(vesselAvailability2);
+		Mockito.when(vesselAvailability2.getVesselInstanceType()).thenReturn(VesselInstanceType.CARGO_SHORTS);
 
 		final IPortSlot slot1 = Mockito.mock(IPortSlot.class);
 		final IPortSlot slot2 = Mockito.mock(IPortSlot.class);

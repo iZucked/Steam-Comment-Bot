@@ -69,7 +69,7 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 
 		final ScheduledSequences answer = new ScheduledSequences();
 
-		int[][] arrivalTimes = new int[sequences.size()][];
+		final int[][] arrivalTimes = new int[sequences.size()][];
 		int idx = 0;
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
 			arrivalTimes[idx++] = schedule(entry.getKey(), entry.getValue());
@@ -99,7 +99,7 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 
 				final int lastTimeWindowStart = arrivalTimes[idx - 1];
 				timeWindowStart = lastTimeWindowStart
-						+ Calculator.getTimeFromSpeedDistance(vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed(),
+						+ Calculator.getTimeFromSpeedDistance(vesselProvider.getVesselAvailability(resource).getVessel().getVesselClass().getMaxSpeed(),
 								distanceProvider.get(IMultiMatrixProvider.Default_Key).get(portProvider.getPortForElement(sequence.get(idx - 1)), portProvider.getPortForElement(element)));
 			} else {
 				for (final ITimeWindow window : timeWindows) {

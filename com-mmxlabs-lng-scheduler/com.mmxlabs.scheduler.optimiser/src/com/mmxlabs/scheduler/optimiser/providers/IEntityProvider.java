@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
@@ -30,7 +30,7 @@ public interface IEntityProvider extends IDataComponentProvider {
 	 */
 	IEntity getEntityForSlot(IPortSlot slot);
 
-	IEntity getEntityForVessel(IVessel vessel);
+	IEntity getEntityForVesselAvailability(IVesselAvailability vesselAvailability);
 
 	IEntityBook getEntityBook(IEntity entity, EntityBookType shipping);
 }

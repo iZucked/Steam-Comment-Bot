@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -22,12 +21,15 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortVisitDurationProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  */
@@ -46,7 +48,7 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	@Inject
-	private IElementDurationProvider durationProvider;
+	private IPortVisitDurationProvider portVisitDurationProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -68,8 +70,8 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 
 		for (final IResource resource : sequences.getResources()) {
-			final IVessel v = vesselProvider.getVessel(resource);
-			if (v.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || v.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
 				final ISequence sequence = sequences.getSequence(resource);
 				ISequenceElement prevElement = null;
@@ -95,8 +97,8 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
-		final IVessel v = vesselProvider.getVessel(resource);
-		if (v.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || v.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 
 			final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 			final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
@@ -150,8 +152,8 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 					// Get notional speed
 					final int maxSpeed = nominatedVessel.getVesselClass().getMaxSpeed();
 
-					final int loadDuration = durationProvider.getElementDuration(first, nominatedVessel);
-					final int dischargeDuration = durationProvider.getElementDuration(second, nominatedVessel);
+					final int loadDuration = portVisitDurationProvider.getVisitDuration(desPurchase.getPort(), PortType.Load);
+					final int dischargeDuration = portVisitDurationProvider.getVisitDuration(desSale.getPort(), PortType.Discharge);
 					final int ballastSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ballastDistance);
 
 					// This is the upper bound on laden travel time

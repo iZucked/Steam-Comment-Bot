@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -90,9 +90,9 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 		for (final IResource resource : sequences.getResources()) {
 
 			final ISequence sequence = sequences.getSequence(resource);
-			final IVessel vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-			final boolean isVirtualVessel = vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
 			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
 			if (checkSequence) {
 				for (final ISequenceElement element : sequence) {
@@ -125,10 +125,11 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 		for (final IResource resource : sequences.getResources()) {
 
 			final ISequence sequence = sequences.getSequence(resource);
-			final IVessel vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 			// Virtual vessels need special treatment. If there is only one element on the route, then it is considered not to be used.
-			final boolean isVirtualVessel = vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+			final boolean isVirtualVessel = vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE
+					|| vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
 			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
 			if (checkSequence) {
 				for (final ISequenceElement element : sequence) {

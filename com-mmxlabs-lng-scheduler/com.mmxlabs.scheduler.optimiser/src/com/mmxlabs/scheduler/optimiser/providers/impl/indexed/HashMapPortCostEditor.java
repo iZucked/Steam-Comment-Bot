@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers.impl.indexed;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.common.indexedobjects.IIndexMap;
 import com.mmxlabs.common.indexedobjects.impl.ArrayIndexMap;
@@ -12,22 +15,22 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
-public class IndexedPortCostEditor implements IPortCostProviderEditor {
+public class HashMapPortCostEditor implements IPortCostProviderEditor {
 
 	class PortCosts {
-		private final IIndexMap<IVessel, LongFastEnumMap<PortType>> contents = new ArrayIndexMap<IVessel, LongFastEnumMap<PortType>>();
+		private final Map<IVessel, LongFastEnumMap<PortType>> contents = new HashMap<>();
 
 		public void setPortCost(final IVessel vessel, final PortType type, final long cost) {
-			LongFastEnumMap<PortType> x = contents.maybeGet(vessel);
+			LongFastEnumMap<PortType> x = contents.get(vessel);
 			if (x == null) {
 				x = new LongFastEnumMap<PortType>(PortType.values().length);
-				contents.set(vessel, x);
+				contents.put(vessel, x);
 			}
 			x.put(type, cost);
 		}
 
 		public long getPortCost(final IVessel vessel, final PortType type) {
-			LongFastEnumMap<PortType> maybeGet = contents.maybeGet(vessel);
+			final LongFastEnumMap<PortType> maybeGet = contents.get(vessel);
 			if (maybeGet == null)
 				return 0;
 			return maybeGet.get(type);

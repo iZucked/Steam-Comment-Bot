@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 
 /**
@@ -19,13 +19,13 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
  */
 public final class HashMapVesselEditor implements IVesselProviderEditor {
 
-	private final Map<IResource, IVessel> resourceVesselMap = new HashMap<IResource, IVessel>();
-	private final Map<IVessel, IResource> vesselResourceMap = new HashMap<IVessel, IResource>();
+	private final Map<IResource, IVesselAvailability> resourceVesselAvailabilityMap = new HashMap<>();
+	private final Map<IVesselAvailability, IResource> vesselAvailabilityResourceMap = new HashMap<>();
 
 	@Override
-	public IVessel getVessel(final IResource resource) {
-		if (resourceVesselMap.containsKey(resource)) {
-			return resourceVesselMap.get(resource);
+	public IVesselAvailability getVesselAvailability(final IResource resource) {
+		if (resourceVesselAvailabilityMap.containsKey(resource)) {
+			return resourceVesselAvailabilityMap.get(resource);
 		}
 
 		// TODO: Error?
@@ -33,9 +33,9 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 	}
 
 	@Override
-	public IResource getResource(final IVessel vessel) {
-		if (vesselResourceMap.containsKey(vessel)) {
-			return vesselResourceMap.get(vessel);
+	public IResource getResource(final IVesselAvailability vesselAvailability) {
+		if (vesselAvailabilityResourceMap.containsKey(vesselAvailability)) {
+			return vesselAvailabilityResourceMap.get(vesselAvailability);
 		}
 
 		// TODO: Error?
@@ -43,8 +43,8 @@ public final class HashMapVesselEditor implements IVesselProviderEditor {
 	}
 
 	@Override
-	public void setVesselResource(final IResource resource, final IVessel vessel) {
-		vesselResourceMap.put(vessel, resource);
-		resourceVesselMap.put(resource, vessel);
+	public void setVesselAvailabilityResource(final IResource resource, final IVesselAvailability vesselAvailability) {
+		vesselAvailabilityResourceMap.put(vesselAvailability, resource);
+		resourceVesselAvailabilityMap.put(resource, vesselAvailability);
 	}
 }

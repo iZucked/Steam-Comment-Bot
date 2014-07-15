@@ -17,7 +17,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -78,7 +78,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		}
 
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
-			if (!checkSequence(entry.getValue(), messages, vesselProvider.getVessel(entry.getKey()).getVesselInstanceType())) {
+			if (!checkSequence(entry.getValue(), messages, vesselProvider.getVesselAvailability(entry.getKey()).getVesselInstanceType())) {
 				return false;
 			}
 		}
@@ -277,7 +277,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		}
 
 		// Check Virtual Routes
-		final IVessel vessel = vesselProvider.getVessel(resource);
+		final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 
 			if (firstType == PortType.Start && secondType == PortType.End) {
@@ -338,8 +338,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		}
 
 		// Check Virtual Routes
-		final IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			if (firstType.equals(PortType.Discharge)) {
 				return "Nothing can come after a discharge on a virtual vessel";
 			}

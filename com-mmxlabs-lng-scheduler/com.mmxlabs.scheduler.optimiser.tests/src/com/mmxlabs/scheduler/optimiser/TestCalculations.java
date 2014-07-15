@@ -35,8 +35,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
@@ -124,7 +126,8 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
+		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -149,7 +152,7 @@ public class TestCalculations {
 
 		final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-		final IResource resource = vesselProvider.getResource(vessel1);
+		final IResource resource = vesselProvider.getResource(vesselAvailability1);
 
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
@@ -522,7 +525,8 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
+		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -548,7 +552,7 @@ public class TestCalculations {
 
 		final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-		final IResource resource = vesselProvider.getResource(vessel1);
+		final IResource resource = vesselProvider.getResource(vesselAvailability1);
 
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
@@ -920,7 +924,8 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0, capacity);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
+		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2);
@@ -945,7 +950,7 @@ public class TestCalculations {
 
 		final ScheduleCalculator scheduler = injector.getInstance(ScheduleCalculator.class);
 
-		final IResource resource = vesselProvider.getResource(vessel1);
+		final IResource resource = vesselProvider.getResource(vesselAvailability1);
 
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
@@ -1298,7 +1303,7 @@ public class TestCalculations {
 				bind(IVolumeAllocator.class).toInstance(new IVolumeAllocator() {
 
 					@Override
-					public AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
+					public AllocationRecord createAllocationRecord(IVesselAvailability vesselAvailability, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
 						// TODO Auto-generated method stub
 						return null;
 					}
@@ -1310,7 +1315,7 @@ public class TestCalculations {
 					}
 
 					@Override
-					public IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
+					public IAllocationAnnotation allocate(IVesselAvailability vesselAvailability, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
 						// TODO Auto-generated method stub
 						return null;
 					}

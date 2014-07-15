@@ -48,9 +48,5 @@ public enum VesselInstanceType {
 	 * Sequence to store "short" cargoes.
 	 * 
 	 */
-	CARGO_SHORTS,
-	
-	/**
-	 */
-	REFERENCE
+	CARGO_SHORTS
 }

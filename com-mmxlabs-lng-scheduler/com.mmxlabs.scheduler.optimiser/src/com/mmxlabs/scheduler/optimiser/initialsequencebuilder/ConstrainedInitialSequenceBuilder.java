@@ -33,7 +33,7 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.lso.LegalSequencingChecker;
@@ -239,14 +239,14 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			Collections.sort(resources, new Comparator<IResource>() {
 				@Override
 				public int compare(final IResource o1, final IResource o2) {
-					final IVessel vessel1 = vesselProvider.getVessel(o1);
-					final IVessel vessel2 = vesselProvider.getVessel(o2);
-					final VesselInstanceType vit1 = vessel1.getVesselInstanceType();
-					final VesselInstanceType vit2 = vessel2.getVesselInstanceType();
+					final IVesselAvailability vesselAvailability1 = vesselProvider.getVesselAvailability(o1);
+					final IVesselAvailability vesselAvailability2 = vesselProvider.getVesselAvailability(o2);
+					final VesselInstanceType vit1 = vesselAvailability1.getVesselInstanceType();
+					final VesselInstanceType vit2 = vesselAvailability2.getVesselInstanceType();
 
 					int x = vit1.compareTo(vit2);
 					if (x == 0) {
-						x = ((Integer) vessel1.getVesselClass().getMaxSpeed()).compareTo(vessel2.getVesselClass().getMaxSpeed());
+						x = ((Integer) vesselAvailability1.getVessel().getVesselClass().getMaxSpeed()).compareTo(vesselAvailability2.getVessel().getVesselClass().getMaxSpeed());
 					}
 					return x;
 				}
@@ -514,7 +514,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 							}
 							here = there;
 							iterator.remove();
-							if (vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+							if (vesselProvider.getVesselAvailability(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
 								break; // only schedule one thing on each spot
 										// vessel
 							}
@@ -583,7 +583,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		if (chunks.isEmpty() == false) {
 			log.error("Could not schedule the following " + chunks.size() + " elements anywhere: " + chunks);
-			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks " + "could not be scheduled anywhere: " + chunks);
+			throw new RuntimeException("Scenario is too hard for ConstrainedInitialSequenceBuilder.\n\n Try manually assigning vessels.\n\n" + chunks.size() + " chunks "
+					+ "could not be scheduled anywhere: " + chunks);
 		}
 
 		// OK, we have done our best, now build the modifiablesequences
