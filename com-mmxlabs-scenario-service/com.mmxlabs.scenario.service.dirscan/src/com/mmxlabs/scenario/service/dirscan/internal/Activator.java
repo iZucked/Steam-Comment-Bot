@@ -285,7 +285,6 @@ public class Activator extends AbstractUIPlugin {
 		// });
 		// job.schedule();
 		// } else {
-		// int ii = 0;
 		// log.error(status.toString());
 		// }
 		//
