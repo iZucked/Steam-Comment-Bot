@@ -161,9 +161,6 @@ public class AssignmentEditorHelper {
 				l.add(assignableElement);
 
 			} else {
-if (assignableElement.toString().contains("8 Bonny")) {
-	int ii = 0;
-}
 				final Vessel vessel = (Vessel) assignableElement.getAssignment();
 				final VesselAvailability vesselAvailability = findVesselAvailability(vessel, assignableElement, cargoModel.getVesselAvailabilities());
 
