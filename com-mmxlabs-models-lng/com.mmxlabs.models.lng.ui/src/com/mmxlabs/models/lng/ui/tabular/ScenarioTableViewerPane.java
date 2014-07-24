@@ -360,7 +360,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	/**
 	 */
 	protected Action createAddAction(final EReference containment) {
-		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment));
+		return AddModelAction.create(containment.getEReferenceType(), getAddContext(containment), new Action [] {createDuplicateAction()});
 
 	}
 
@@ -427,6 +427,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 		addAction = createAddAction(containment);
 
+		/*
 		if (addAction != null) {
 			// if we can't add one, we can't duplicate one either.
 			final Action dupAction = createDuplicateAction();
@@ -437,6 +438,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
+		*/
 		deleteAction = createDeleteAction();
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
