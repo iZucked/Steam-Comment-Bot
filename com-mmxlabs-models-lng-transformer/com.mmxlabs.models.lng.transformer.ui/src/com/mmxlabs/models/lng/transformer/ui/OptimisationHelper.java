@@ -271,6 +271,10 @@ public final class OptimisationHelper {
 			if (!forEvaluation) {
 				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+				dialog.addOption(DataSection.Advanced, editingDomian, "Start Date", copy, defaultSettings, DataType.Date,
+						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+				dialog.addOption(DataSection.Advanced, editingDomian, "End Date", copy, defaultSettings, DataType.Date,
+						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
 			}
 
 			final int[] ret = new int[1];

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -29,12 +30,17 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+
+import com.mmxlabs.models.ui.dates.DateInlineEditor;
+
+import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 
@@ -47,7 +53,7 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	public enum DataType {
-		Boolean, PositiveInt
+		Boolean, PositiveInt, Date
 	}
 
 	public enum DataSection {
@@ -167,6 +173,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		case PositiveInt:
 			createNumberTextBox(parent, option);
 			break;
+		case Date:
+			createDateEditor(parent, option);
+			break;
 		default:
 			break;
 		}
@@ -227,7 +236,43 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 		return area;
 	}
+	
+	private Composite createDateEditor(final Composite parent, final Option option) {
+		final Composite area = toolkit.createComposite(parent, SWT.NONE);
+		area.setLayout(new GridLayout(2, false));
+		toolkit.createLabel(area, option.label);
 
+		final Text text = toolkit.createText(area, null, SWT.NONE);
+		
+		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
+		IObservableValue temp = prop.observe(option.data);
+		
+		DateTimeFormatter formatter = new DateTimeFormatter("dd/MM/yyyy HH:00");
+		//DateInlineEditor editor = new DateInlineEditor(prop.getStructuralFeature());
+		
+		//Control dateControl = editor.createControl(area, dbc, toolkit);
+		
+		final EMFUpdateValueStrategy strategy = new EMFUpdateValueStrategy();
+
+		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), strategy, null);
+		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
+		
+		return area;
+		
+	}
+
+
+	/**
+	 * Adds new elements to the dialog. 
+	 * 
+	 * @param dataSection
+	 * @param editingDomian
+	 * @param label
+	 * @param data
+	 * @param defaultData
+	 * @param dataType
+	 * @param features
+	 */
 	public void addOption(final DataSection dataSection, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData, final DataType dataType,
 			final EStructuralFeature... features) {
 		final Option option = new Option(dataSection, editingDomian, label, data, defaultData, dataType, features);
