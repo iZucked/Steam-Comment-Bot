@@ -31,6 +31,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.components.EMFReportView.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
@@ -569,12 +570,33 @@ public class ScheduleBasedReportBuilder {
 	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 		return scheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
 	}
+	
+	public EmfBlockColumnFactory getPinDiffColumnFactory() {
+		return new EmfBlockColumnFactory() {
 
+			@Override
+			public List<ColumnHandler> addColumns(EMFReportView report) {
+				ArrayList<ColumnHandler> result = new ArrayList<ColumnHandler>();
+				// Register columns that will be displayed when in Pin/Diff mode
+				result.add(report.addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef)));
+				result.add(report.addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef)));
+				result.add(report.addColumn("Permutation", ColumnType.DIFF, generatePermutationColumnFormatter(cargoAllocationRef)));
+				return result;
+			}
+
+			@Override
+			public ColumnHandler addColumn(EMFReportView report) {
+				return null;
+			}
+			
+		};
+		
+	}
+
+	
+	
 	public void createPinDiffColumns() {
-		// Register columns that will be displayed when in Pin/Diff mode
-		report.addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
-		report.addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
-		report.addColumn("Permutation", ColumnType.DIFF, generatePermutationColumnFormatter(cargoAllocationRef));
+		getPinDiffColumnFactory().addColumns(report);
 	}
 
 	/**
@@ -854,12 +876,25 @@ public class ScheduleBasedReportBuilder {
 	private final List<String> entityColumnNames = new ArrayList<String>();
 
 	public void createPNLColumnBlock() {
+		getEmptyPNLColumnBlockFactory().addColumn(report);
 
-		ColumnBlock block = report.blockManager.getBlockByName(COLUMN_BLOCK_PNL);
-		if (block == null) {
-			block = report.blockManager.createBlock(COLUMN_BLOCK_PNL, ColumnType.NORMAL);
-		}
-		block.setPlaceholder(true);
+	}
+	
+	public EmfBlockColumnFactory getEmptyPNLColumnBlockFactory() {
+		return new EmfBlockColumnFactory() {
+
+			@Override
+			public ColumnHandler addColumn(EMFReportView theReport) {
+				ColumnBlock block = theReport.blockManager.getBlockByName(COLUMN_BLOCK_PNL);
+				if (block == null) {
+					block = theReport.blockManager.createBlock(COLUMN_BLOCK_PNL, ColumnType.NORMAL);
+				}
+				block.setPlaceholder(true);
+				return null;
+			}
+
+			
+		};
 	}
 
 	public ITreeContentProvider createPNLColumnssContentProvider(final ITreeContentProvider superProvider) {
@@ -941,29 +976,39 @@ public class ScheduleBasedReportBuilder {
 		return handler;
 	}
 
-	public ColumnHandler addTotalPNLColumn(@Nullable final EStructuralFeature bookContainmentFeature) {
-		final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
-		final String title = String.format("P&L (%s)", book);
-
-		return report.addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
+	public EmfBlockColumnFactory getTotalPNLColumnFactory(@Nullable final EStructuralFeature bookContainmentFeature) {
+		return new EmfBlockColumnFactory() {			
 			@Override
-			public Integer getIntValue(final Object object) {
-				ProfitAndLossContainer container = null;
+			public ColumnHandler addColumn(EMFReportView theReport) {
+				final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
+				final String title = String.format("P&L (%s)", book);
 
-				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
-						|| object instanceof OpenSlotAllocation) {
-					container = (ProfitAndLossContainer) object;
-				}
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						container = slotVisit.getSlotAllocation().getCargoAllocation();
+				return theReport.addColumn(title, ColumnType.NORMAL, new IntegerFormatter() {
+					@Override
+					public Integer getIntValue(final Object object) {
+						ProfitAndLossContainer container = null;
+
+						if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
+								|| object instanceof OpenSlotAllocation) {
+							container = (ProfitAndLossContainer) object;
+						}
+						if (object instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) object;
+							if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+								container = slotVisit.getSlotAllocation().getCargoAllocation();
+							}
+						}
+
+						return getTotalEntityPNLEntry(container, bookContainmentFeature);
 					}
-				}
-
-				return getTotalEntityPNLEntry(container, bookContainmentFeature);
+				}, targetObjectRef);
 			}
-		}, targetObjectRef);
+		};
+		
+	}
+	
+	public ColumnHandler addTotalPNLColumn(@Nullable final EStructuralFeature bookContainmentFeature) {
+		return getTotalPNLColumnFactory(bookContainmentFeature).addColumn(report);
 	}
 
 	public ColumnHandler addPNLColumn(final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {

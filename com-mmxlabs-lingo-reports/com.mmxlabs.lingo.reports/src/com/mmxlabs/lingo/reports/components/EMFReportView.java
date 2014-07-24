@@ -707,15 +707,39 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	protected List<ColumnHandler> getHandlersInOrder() {
 		return handlersInOrder;
 	}
+
+	/**
+	 * Class to encapsulate information about an EMF report column, allowing the same
+	 * column to be added to multiple different reports in a class of similar 
+	 * reports. 
+	 * 
+	 * EmfBlockColumnFactory objects are used by the EMFReportColumnManager class.
+	 * 
+	 * Managed columns are assigned to particular column "blocks" which can be selectively 
+	 * hidden, displayed, or reordered by the user.  
+	 * 
+	 *  TODO: refactor all EMFReportView#addColumn calls through this class, so that column
+	 *  logic is uniform.  
+	 */
+	public static abstract class EmfBlockColumnFactory {
+		public abstract ColumnHandler addColumn(final EMFReportView report);
+
+		public List<ColumnHandler> addColumns(EMFReportView report) {
+			List<ColumnHandler> result = new ArrayList<>();
+			result.add(addColumn(report));
+			return result;
+		}
+	}
+		
 	
-	public static class EmfBlockColumnParameters {
+	public static class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 		final String columnName;
 		final String blockName;
 		final ColumnType columnType;
 		final IFormatter formatter;
 		final Object[] path;
 
-		public EmfBlockColumnParameters(final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		public SimpleEmfBlockColumnFactory(final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
 			this.columnName = title;
 			this.blockName = title;
 			this.columnType = columnType;
@@ -723,7 +747,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			this.path = path;					
 		}
 
-		public EmfBlockColumnParameters(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		public SimpleEmfBlockColumnFactory(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
 			this.columnName = title;
 			this.blockName = blockName;
 			this.columnType = columnType;
@@ -731,9 +755,10 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			this.path = path;					
 		}
 		
-		public void addColumn(final EMFReportView report) {
-			report.addColumn(columnName, blockName, columnType, formatter, path);
+		public ColumnHandler addColumn(final EMFReportView report) {
+			return report.addColumn(columnName, blockName, columnType, formatter, path);
 		}
+
 		
 	}
 }
