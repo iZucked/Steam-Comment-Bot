@@ -4,13 +4,17 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.Binding;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.conversion.Converter;
+import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -18,6 +22,9 @@ import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -30,17 +37,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-
-import com.mmxlabs.models.ui.dates.DateInlineEditor;
-
-import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 
@@ -237,24 +239,80 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		return area;
 	}
 	
+	
 	private Composite createDateEditor(final Composite parent, final Option option) {
 		final Composite area = toolkit.createComposite(parent, SWT.NONE);
 		area.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(area, option.label);
 
+		final String dateFormat = "yyyy-MM-dd";
+		final SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+
+		final IValidator validator = new IValidator() {
+			@Override
+			public IStatus validate(final Object value) {
+				if (value instanceof String) {
+					if (value.equals("") == false) {
+						try {
+							format.parse((String) value);
+						} catch (ParseException e) {
+							 return ValidationStatus.error(String.format("'%s' is not a valid %s date.", value, dateFormat));
+						}
+					}
+				}
+				return ValidationStatus.ok();					
+			}
+		};
+		
 		final Text text = toolkit.createText(area, null, SWT.NONE);
 		
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
-		IObservableValue temp = prop.observe(option.data);
 		
-		DateTimeFormatter formatter = new DateTimeFormatter("dd/MM/yyyy HH:00");
-		//DateInlineEditor editor = new DateInlineEditor(prop.getStructuralFeature());
+		final EMFUpdateValueStrategy strategy = new EMFUpdateValueStrategy() {
+			  @Override
+			  protected IConverter createConverter(Object fromType, Object toType)
+			  {
+			    if (fromType == String.class)
+			    {
+			      if (toType instanceof EAttribute)
+			      {
+			        return new Converter(fromType, toType)
+			          {
+			            public Object convert(Object fromObject)
+			            {
+			              String value = fromObject == null ? null : fromObject.toString();
+			              try {
+								return format.parse(value);
+							} catch (Exception e) {
+								return null;
+							}
+			            }
+			          };
+			      }
+			    }
+			    else if (toType == String.class)
+			    {
+			      if (fromType instanceof EAttribute)
+			      {
+			        return new Converter(fromType, toType)
+			          {
+			            public Object convert(Object fromObject)
+			            {
+			            	if (fromObject instanceof Date) {
+			            		return format.format(fromObject);
+			            	}
+			            	return null;
+			            }
+			          };
+			      }
+			    }
+			    return super.createConverter(fromType, toType);
+			  }			
+		};
 		
-		//Control dateControl = editor.createControl(area, dbc, toolkit);
-		
-		final EMFUpdateValueStrategy strategy = new EMFUpdateValueStrategy();
+		strategy.setAfterGetValidator(validator);
 
-		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), strategy, null);
+		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), strategy, strategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 		
 		return area;
