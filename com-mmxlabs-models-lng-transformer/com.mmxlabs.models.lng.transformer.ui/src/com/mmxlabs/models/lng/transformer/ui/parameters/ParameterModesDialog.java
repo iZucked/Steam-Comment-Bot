@@ -268,51 +268,48 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
 		
-		final EMFUpdateValueStrategy strategy = new EMFUpdateValueStrategy() {
+		final EMFUpdateValueStrategy stringToDateStrategy = new EMFUpdateValueStrategy() {
 			  @Override
 			  protected IConverter createConverter(Object fromType, Object toType)
 			  {
-			    if (fromType == String.class)
-			    {
-			      if (toType instanceof EAttribute)
-			      {
-			        return new Converter(fromType, toType)
-			          {
-			            public Object convert(Object fromObject)
-			            {
-			              String value = fromObject == null ? null : fromObject.toString();
-			              try {
-								return format.parse(value);
-							} catch (Exception e) {
-								return null;
-							}
-			            }
-			          };
-			      }
-			    }
-			    else if (toType == String.class)
-			    {
-			      if (fromType instanceof EAttribute)
-			      {
-			        return new Converter(fromType, toType)
-			          {
-			            public Object convert(Object fromObject)
-			            {
-			            	if (fromObject instanceof Date) {
-			            		return format.format(fromObject);
-			            	}
-			            	return null;
-			            }
-			          };
-			      }
-			    }
-			    return super.createConverter(fromType, toType);
+		        return new Converter(fromType, toType)
+		          {
+		            public Object convert(Object fromObject)
+		            {
+		              String value = fromObject == null ? null : fromObject.toString();
+		              try {
+							return format.parse(value);
+						} catch (Exception e) {
+							return null;
+						}
+		            }
+		          };
 			  }			
 		};
 		
-		strategy.setAfterGetValidator(validator);
+		
+		final EMFUpdateValueStrategy dateToStringStrategy = new EMFUpdateValueStrategy() {
+			  @Override
+			  protected IConverter createConverter(Object fromType, Object toType)
+			  {
+		        return new Converter(fromType, toType)
+		          {
+		            public Object convert(Object fromObject)
+		            {
+		            	if (fromObject instanceof Date) {
+		            		return format.format(fromObject);
+		            	}
+		            	return null;
+		            }
+		          };
+			  }			
+		};
+		
+		
+						
+		stringToDateStrategy.setAfterGetValidator(validator);
 
-		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), strategy, strategy);
+		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 		
 		return area;

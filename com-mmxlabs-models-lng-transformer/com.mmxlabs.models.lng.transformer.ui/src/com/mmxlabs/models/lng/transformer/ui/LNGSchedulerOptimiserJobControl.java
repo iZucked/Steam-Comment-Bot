@@ -111,10 +111,12 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			final OptimisationRange range = jobDescriptor.getOptimiserSettings().getRange();
 			if (range != null) {
 				if (range.getOptimiseAfter() != null || range.getOptimiseBefore() != null) {
-					periodMapping = new ScenarioEntityMapping();
+					// periodMapping = new ScenarioEntityMapping();
 				}
 			}
 		}
+		
+		periodMapping = null;
 
 		if (periodMapping != null) {
 
