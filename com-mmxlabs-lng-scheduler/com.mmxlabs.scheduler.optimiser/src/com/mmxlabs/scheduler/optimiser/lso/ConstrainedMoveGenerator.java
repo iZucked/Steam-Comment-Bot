@@ -186,11 +186,11 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		// Build of a map of special cargo elements for FOB/DES cargoes.
 		final Map<ISequenceElement, IResource> spotElementMap = new HashMap<>();
 		for (final IResource resource : data.getResources()) {
-			final IVessel vessel = vesselProvider.getVessel(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			if (vesselAvailability != null) {
 				final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
 				final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
-				final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVessel(vessel);
+				final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
 
 				spotElementMap.put(startElement, resource);
 				spotElementMap.put(endElement, resource);
