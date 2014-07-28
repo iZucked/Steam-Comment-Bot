@@ -6,10 +6,12 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 
 public interface IStartEndRequirementProviderEditor extends IStartEndRequirementProvider {
-	public void setStartEndRequirements(IResource resource, IStartEndRequirement startRequirement, IStartEndRequirement endRequirement);
 
-	public void setStartEndElements(IResource resource, ISequenceElement startElement, ISequenceElement endElement);
+	void setStartEndRequirements(IResource resource, IStartRequirement startRequirement, IEndRequirement endRequirement);
+
+	void setStartEndElements(IResource resource, ISequenceElement startElement, ISequenceElement endElement);
 }

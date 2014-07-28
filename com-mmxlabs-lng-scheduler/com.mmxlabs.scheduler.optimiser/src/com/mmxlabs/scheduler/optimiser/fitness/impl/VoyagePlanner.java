@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.HeelLevelAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -33,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -43,6 +45,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -101,9 +104,8 @@ public class VoyagePlanner {
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
-	//
-	// @Inject
-	// private ILNGVoyageCalculator voyageCalculator;
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	/**
 	 * Returns a voyage options object and extends the current VPO with appropriate choices for a particular journey. TODO: refactor this if possible to simplify it and make it stateless (it currently
@@ -191,6 +193,11 @@ public class VoyagePlanner {
 					optimiser.addChoice(new CooldownVoyagePlanChoice(options));
 				}
 			}
+		} else if (thisPortSlot.getPortType() == PortType.End) {
+			IResource resource = vesselProvider.getResource(vesselAvailability);
+			IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+			options.setShouldBeCold(endRequirement.isEndCold());
+			options.setAllowCooldown(false);
 		} else {
 			options.setShouldBeCold(false);
 		}
@@ -224,6 +231,9 @@ public class VoyagePlanner {
 		}
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER && thisPortSlot.getPortType() == PortType.End) {
+			// The SchedulerBuilder should set options to trigger these values to be set above
+			assert !options.getAllowCooldown();
+			assert options.shouldBeCold();
 			options.setAllowCooldown(false);
 			options.setShouldBeCold(true);
 		}
@@ -638,7 +648,7 @@ public class VoyagePlanner {
 	private long evaluateVoyagePlan(final IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap, final List<VoyagePlan> voyagePlansList, final IPortTimesRecord portTimesRecord,
 			final long startHeelVolumeInM3, VoyagePlan plan) {
-
+		assert startHeelVolumeInM3 >= 0;
 		// TODO: Handle LNG at end of charter out
 		long endHeelVolumeInM3 = 0;
 		boolean planSet = false;
@@ -690,6 +700,8 @@ public class VoyagePlanner {
 			}
 		}
 
+		assert endHeelVolumeInM3 >= 0;
+
 		// Generate heel level annotations
 		final Map<IPortSlot, IHeelLevelAnnotation> heelLevelAnnotations = new HashMap<IPortSlot, IHeelLevelAnnotation>();
 		{
@@ -719,9 +731,17 @@ public class VoyagePlanner {
 								// FIXME: This volume is optional use
 								final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) portSlot;
 								currentHeelInM3 = heelOptionsPortSlot.getHeelOptions().getHeelLimit();
-							} else if (portSlot.getPortType() != PortType.End) {
+							} else {
 								currentHeelInM3 = 0;
 							}
+					
+						}
+						assert currentHeelInM3 >= 0;
+
+					} else {
+						if (portSlot instanceof EndPortSlot) {
+							final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
+							assert currentHeelInM3 >= endPortSlot.getTargetHeelInM3();
 						}
 					}
 					final long end = currentHeelInM3;
@@ -737,7 +757,7 @@ public class VoyagePlanner {
 					}
 					totalVoyageBOG += voyageBOGInM3;
 					currentHeelInM3 -= voyageBOGInM3;
-
+					assert currentHeelInM3 >= 0;
 					voyageTime += voyageDetails.getTravelTime();
 					voyageTime += voyageDetails.getIdleTime();
 
@@ -752,6 +772,7 @@ public class VoyagePlanner {
 				// Update current heel - this will still be the start heel value as there was no boil-off
 				currentHeelInM3 = 0;
 			}
+			assert currentHeelInM3 >= 0;
 
 			// Sanity check these calculations match expected values
 			assert totalVoyageBOG == plan.getLNGFuelVolume();

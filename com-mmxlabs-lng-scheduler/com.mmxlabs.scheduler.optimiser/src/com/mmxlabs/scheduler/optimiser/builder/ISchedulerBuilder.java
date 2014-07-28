@@ -29,12 +29,15 @@ import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -229,6 +232,8 @@ public interface ISchedulerBuilder {
 	@NonNull
 	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, long cargoCapacity);
 
+	IHeelOptions createHeelOptions(final long heelLimitInM3, final int heelCVValue, final int heelUnitPrice);
+	
 	/**
 	 * Create a vessel availability for the with the given vessel .
 	 * 
@@ -239,63 +244,13 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, ICurve dailyCharterInPrice, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
-			final long heelLimit, final int heelCVValue, final int heelUnitPrice);
+	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, ICurve dailyCharterInPrice, VesselInstanceType vesselInstanceType, IStartRequirement start, IEndRequirement end);
 
-	/**
-	 * Create a start/end requirement which constrains nothing
-	 * 
-	 * @return
-	 */
 	@NonNull
-	IStartEndRequirement createStartEndRequirement();
+	public IStartRequirement createStartRequirement(IPort fixedPort, ITimeWindow timeWindow, IHeelOptions heelOptions);
 
-	/**
-	 * Create a requirement that the vessel start/end at the given port, but at an arbitrary time
-	 * 
-	 * @param fixedPort
-	 * @return
-	 */
 	@NonNull
-	IStartEndRequirement createStartEndRequirement(IPort fixedPort);
-
-	/**
-	 * Create a requirement that the vessel start/end at any port at the given time
-	 * 
-	 * @param fixedTime
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(ITimeWindow timeWindow);
-
-	/**
-	 * Create a requirement that the vessel start/end at the given port and time
-	 * 
-	 * @param fixedPort
-	 * @param fixedTime
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(IPort fixedPort, ITimeWindow timeWindow);
-
-	/**
-	 * Create a requirement that the vessel start/end at the closet in the given set of ports, but at an arbitrary time
-	 * 
-	 * @param portSet
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet);
-
-	/**
-	 * Create a requirement that the vessel start/end at the closet in the given set of ports and time
-	 * 
-	 * @param portSet
-	 * @param fixedTime
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet, ITimeWindow timeWindow);
+	public IEndRequirement createEndRequirement(Collection<IPort> portSet, ITimeWindow timeWindow, boolean endCold, long targetHeelInM3);
 
 	/**
 	 * Create a port with the given name and cooldown requirement
@@ -740,4 +695,5 @@ public interface ISchedulerBuilder {
 	 * @param charterOutStartTime
 	 */
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
+
 }

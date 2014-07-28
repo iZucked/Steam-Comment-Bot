@@ -58,6 +58,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -84,6 +85,7 @@ public class ScheduleCalculatorTest {
 		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
 		final ICharterRateCalculator charterRateCalculator = mock(ICharterRateCalculator.class);
 		final IActualsDataProvider actualsDataProvider = mock(IActualsDataProvider.class);
+		final IStartEndRequirementProvider startEndRequirementProvider = mock(IStartEndRequirementProvider.class);
 
 		class TestModule extends AbstractModule {
 			@Override
@@ -103,6 +105,7 @@ public class ScheduleCalculatorTest {
 				bind(IVoyagePlanOptimiser.class).toInstance(voyagePlanOptimiser);
 				bind(ICharterRateCalculator.class).toInstance(charterRateCalculator);
 				bind(IActualsDataProvider.class).toInstance(actualsDataProvider);
+				bind(IStartEndRequirementProvider.class).toInstance(startEndRequirementProvider);
 
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);

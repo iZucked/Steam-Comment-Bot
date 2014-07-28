@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -91,9 +92,12 @@ public class SimpleSchedulerTest {
 		IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
 		IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
 
-		builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVesselAvailability(vessel2, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVesselAvailability(vessel3, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
+		builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
+		builder.createVesselAvailability(vessel2, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
+		builder.createVesselAvailability(vessel3, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port6), null, false, 0));
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);

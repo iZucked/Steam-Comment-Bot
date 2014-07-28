@@ -30,10 +30,11 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -123,11 +124,11 @@ public class TestCalculations {
 		final int ballast_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.4);
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 				ballastConsumptionCalculator, 0);
-		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
-		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
+		final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
+		final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
 
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, 0, 0, 0);
+		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -522,11 +523,11 @@ public class TestCalculations {
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 				ballastConsumptionCalculator, 0);
 
-		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
-		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
+		final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
+		final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
 
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, 0, 0, 0);
+		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
@@ -921,11 +922,11 @@ public class TestCalculations {
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, ballast_nboRateInM3PerHour, ballast_idleNBORateInM3PerHour, ballast_idleConsumptionRateInMTPerHour,
 				ballastConsumptionCalculator, 0);
 
-		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
-		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
+		final IStartRequirement startRequirement = builder.createStartRequirement(port1, builder.createTimeWindow(0, 0), null);
+		final IEndRequirement endRequirement = builder.createEndRequirement(Collections.singleton(port4), builder.createTimeWindow(75, 75), false, 0);
 
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, capacity);
-		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement, 0, 0, 0);
+		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2);

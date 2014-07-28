@@ -836,7 +836,7 @@ public class LNGVoyageCalculatorTest {
 		final PortDetails dischargeDetails = new PortDetails();
 		dischargeDetails.setOptions(new PortOptions());
 
-		final PortSlot otherSlot = new StartPortSlot(0, 0, 0);
+		final PortSlot otherSlot = new StartPortSlot(null);
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
@@ -919,7 +919,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeDetails.setOptions(new PortOptions());
 		dischargeDetails.setFuelConsumption(FuelComponent.Base, 5000);
 
-		final PortSlot otherSlot = new StartPortSlot(0, 0, 0);
+		final PortSlot otherSlot = new StartPortSlot(null);
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 

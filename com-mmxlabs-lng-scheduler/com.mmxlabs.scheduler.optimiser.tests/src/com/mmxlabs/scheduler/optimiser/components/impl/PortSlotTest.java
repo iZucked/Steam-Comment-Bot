@@ -13,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 public class PortSlotTest {
 
-
 	@Test
 	public void testPortSlot() {
 		final String id = "id";
@@ -24,7 +23,8 @@ public class PortSlotTest {
 		final int heelUnitPrice = 2;
 		final int heelCVValue = 3;
 
-		final StartPortSlot slot = new StartPortSlot(id, port, tw, heelLimit, heelUnitPrice, heelCVValue);
+		HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
+		final StartPortSlot slot = new StartPortSlot(id, port, tw, heelOptions);
 
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
@@ -44,7 +44,8 @@ public class PortSlotTest {
 		final int heelUnitPrice = 2;
 		final int heelCVValue = 3;
 
-		final StartPortSlot slot = new StartPortSlot(heelLimit, heelUnitPrice, heelCVValue);
+		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
+		final StartPortSlot slot = new StartPortSlot(heelOptions);
 		Assert.assertNull(slot.getPort());
 		slot.setPort(port);
 		Assert.assertSame(port, slot.getPort());
@@ -61,7 +62,8 @@ public class PortSlotTest {
 		final int heelUnitPrice = 2;
 		final int heelCVValue = 3;
 
-		final StartPortSlot slot = new StartPortSlot(heelLimit, heelUnitPrice, heelCVValue);
+		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
+		final StartPortSlot slot = new StartPortSlot(heelOptions);
 		Assert.assertNull(slot.getTimeWindow());
 		slot.setTimeWindow(window);
 		Assert.assertSame(window, slot.getTimeWindow());
@@ -78,7 +80,8 @@ public class PortSlotTest {
 		final int heelUnitPrice = 2;
 		final int heelCVValue = 3;
 
-		final StartPortSlot slot = new StartPortSlot(heelLimit, heelUnitPrice, heelCVValue);
+		final HeelOptions heelOptions = new HeelOptions(heelLimit, heelCVValue, heelUnitPrice);
+		final StartPortSlot slot = new StartPortSlot(heelOptions);
 		Assert.assertNull(slot.getId());
 		slot.setId(id);
 
@@ -99,12 +102,16 @@ public class PortSlotTest {
 		final ITimeWindow tw1 = Mockito.mock(ITimeWindow.class, "tw1");
 		final ITimeWindow tw2 = Mockito.mock(ITimeWindow.class, "tw2");
 
-		final StartPortSlot slot1 = new StartPortSlot(id1, port1, tw1, 1, 2, 3);
-		final StartPortSlot slot2 = new StartPortSlot(id1, port1, tw1, 1, 2, 3);
+		HeelOptions heelOptions1 = new HeelOptions(1, 2, 3);
+		HeelOptions heelOptions2 = new HeelOptions(1, 2, 4);
 
-		final StartPortSlot slot3 = new StartPortSlot(id2, port1, tw1, 1, 2, 3);
-		final StartPortSlot slot4 = new StartPortSlot(id1, port2, tw1, 1, 2, 3);
-		final StartPortSlot slot5 = new StartPortSlot(id1, port1, tw2, 1, 2, 3);
+		final StartPortSlot slot1 = new StartPortSlot(id1, port1, tw1, heelOptions1);
+		final StartPortSlot slot2 = new StartPortSlot(id1, port1, tw1, heelOptions1);
+
+		final StartPortSlot slot3 = new StartPortSlot(id2, port1, tw1, heelOptions1);
+		final StartPortSlot slot4 = new StartPortSlot(id1, port2, tw1, heelOptions1);
+		final StartPortSlot slot5 = new StartPortSlot(id1, port1, tw2, heelOptions1);
+		final StartPortSlot slot6 = new StartPortSlot(id1, port1, tw1, heelOptions2);
 
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));
@@ -113,6 +120,7 @@ public class PortSlotTest {
 		Assert.assertFalse(slot1.equals(slot3));
 		Assert.assertFalse(slot1.equals(slot4));
 		Assert.assertFalse(slot1.equals(slot5));
+		Assert.assertFalse(slot1.equals(slot6));
 
 		Assert.assertFalse(slot1.equals(new Object()));
 	}
