@@ -33,7 +33,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -161,6 +163,12 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
+	@Inject
+	IVirtualVesselSlotProvider virtualVesselSlotProvider;
+
+	@Inject
+	IStartEndRequirementProvider startEndRequirementProvider;
+
 	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
 	}
@@ -174,6 +182,22 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		// LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
 		checker.disallowLateness();
 		final IOptimisationData data = context.getOptimisationData();
+
+		// Build of a map of special cargo elements for FOB/DES cargoes.
+		final Map<ISequenceElement, IResource> spotElementMap = new HashMap<>();
+		for (final IResource resource : data.getResources()) {
+			final IVessel vessel = vesselProvider.getVessel(resource);
+			if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+				final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
+				final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
+				final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVessel(vessel);
+
+				spotElementMap.put(startElement, resource);
+				spotElementMap.put(endElement, resource);
+				spotElementMap.put(virtualElement, resource);
+
+			}
+		}
 
 		// create a massive lookup table, caching all legal sequencing decisions
 		// this might be a terrible idea, we could just keep the checker instead
@@ -193,7 +217,25 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 					continue;
 				}
 
-				if (checker.allowSequence(e1, e2)) {
+				// Check for special cargo elements. A special element can only go on one resource and all three elements in the set must be on the same one.
+				if (spotElementMap.containsKey(e1) && spotElementMap.containsKey(e2)) {
+					final IResource r1 = spotElementMap.get(e1);
+					final IResource r2 = spotElementMap.get(e2);
+					if (r1 != r2) {
+						continue;
+					}
+				}
+
+				// If any of e1 or e2 is a special spot element then there is only one resource it is permitted to go on. Ignore the rest for sequencing checks.
+				IResource spotResource = null;
+				if (spotElementMap.containsKey(e1)) {
+					spotResource = spotElementMap.get(e1);
+				} else if (spotElementMap.containsKey(e2)) {
+					spotResource = spotElementMap.get(e2);
+				}
+
+				final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2) : checker.allowSequence(e1, e2, spotResource);
+				if (allowForwardSequence) {
 
 					if (followers.size() == 1) {
 						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, followers.iterator().next()));
@@ -204,7 +246,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 					}
 				}
 
-				if (checker.allowSequence(e2, e1)) {
+				final boolean allowReverseSequence = spotResource == null ? checker.allowSequence(e2, e1) : checker.allowSequence(e2, e1, spotResource);
+				if (allowReverseSequence) {
 					preceeders.add(e2);
 				}
 			}
