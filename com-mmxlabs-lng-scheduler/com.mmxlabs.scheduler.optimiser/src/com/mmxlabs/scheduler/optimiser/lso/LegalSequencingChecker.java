@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChecker;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -29,6 +30,8 @@ public class LegalSequencingChecker {
 
 	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
 	private final List<IResource> resources;
+
+	private IPairwiseConstraintChecker resourceAllocationChecker;
 
 	public LegalSequencingChecker(final IOptimisationContext context) {
 		this(context.getOptimisationData(), createPairwiseCheckers(context));
@@ -57,8 +60,16 @@ public class LegalSequencingChecker {
 
 	@Inject
 	public LegalSequencingChecker(final IOptimisationData data, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
-		this.pairwiseCheckers = pairwiseCheckers;
+		this.pairwiseCheckers = new ArrayList<>(pairwiseCheckers);
 		this.resources = data.getResources();
+
+		for (IPairwiseConstraintChecker checker : this.pairwiseCheckers) {
+			if (checker instanceof ResourceAllocationConstraintChecker) {
+				this.resourceAllocationChecker = checker;
+				this.pairwiseCheckers.remove(checker);
+				break;
+			}
+		}
 	}
 
 	/**
@@ -70,6 +81,13 @@ public class LegalSequencingChecker {
 	 */
 	public boolean allowSequence(final ISequenceElement e1, final ISequenceElement e2, final IResource resource) {
 		// Check with hard constraints like resource allocation and ordered elements
+
+		if (!resourceAllocationChecker.checkPairwiseConstraint(e1, e2, resource)) {
+			// if (log.isInfoEnabled()) {
+			// log.info("Rejected: " + pairwiseChecker.getName() + ": " + pairwiseChecker.explain(e1, e2, resource));
+			// }
+			return false;
+		}
 		for (final IPairwiseConstraintChecker pairwiseChecker : pairwiseCheckers) {
 			if (!pairwiseChecker.checkPairwiseConstraint(e1, e2, resource)) {
 				// if (log.isInfoEnabled()) {
