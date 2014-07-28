@@ -111,11 +111,13 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -2117,14 +2119,13 @@ public class LNGScenarioTransformer {
 		for (final VesselAvailability eVesselAvailability : sortedAvailabilities) {
 			final Vessel eVessel = eVesselAvailability.getVessel();
 
-			final IStartEndRequirement startRequirement = createRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfter() : null,
-					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartBy() : null, SetUtils.getObjects(eVesselAvailability.getStartAt()));
+			Set<Port> portSet = SetUtils.getObjects(eVesselAvailability.getStartAt());
+			Port startingPort = portSet.isEmpty() ? null : portSet.iterator().next();
+			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfter() : null,
+					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartBy() : null, startingPort, eVesselAvailability.getStartHeel());
 
-			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfter() : null,
-					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndBy() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()));
-
-			final long heelLimit = eVesselAvailability.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(eVesselAvailability.getStartHeel().getVolumeAvailable())
-					: 0;
+			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfter() : null,
+					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndBy() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), false, 0);
 
 			final ICurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
@@ -2137,8 +2138,7 @@ public class LNGScenarioTransformer {
 			assert vessel != null;
 
 			final IVesselAvailability vesselAvailability = builder.createVesselAvailability(vessel, dailyCharterInCurve, eVesselAvailability.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER
-					: VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit, OptimiserUnitConvertor.convertToInternalConversionFactor(eVesselAvailability.getStartHeel().getCvValue()),
-					OptimiserUnitConvertor.convertToInternalPrice(eVesselAvailability.getStartHeel().getPricePerMMBTU()));
+					: VesselInstanceType.FLEET, startRequirement, endRequirement);
 			vesselAvailabilityAssociation.add(eVesselAvailability, vesselAvailability);
 
 			modelEntityMap.addModelObject(eVesselAvailability, vesselAvailability);
@@ -2148,6 +2148,7 @@ public class LNGScenarioTransformer {
 			vesselToAvailabilities.get(vessel).add(vesselAvailability);
 		}
 
+		// Spot market generation
 		{
 			final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
 			int charterCount = 0;
@@ -2199,7 +2200,8 @@ public class LNGScenarioTransformer {
 	 * @param pat
 	 * @return
 	 */
-	private IStartEndRequirement createRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Set<Port> ports) {
+	private IStartRequirement createStartRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Port port,
+			HeelOptions eHeelOptions) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
@@ -2210,32 +2212,50 @@ public class LNGScenarioTransformer {
 			window = builder.createTimeWindow(convertTime(from), convertTime(to));
 		}
 
-		if (ports.isEmpty()) {
-			if (window != null) {
-				return builder.createStartEndRequirement(window);
-			}
+		IHeelOptions heelOptions;
+		if (eHeelOptions != null) {
+			final long heelLimitInM3 = eHeelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(eHeelOptions.getVolumeAvailable()) : 0;
+
+			int cvValue = OptimiserUnitConvertor.convertToInternalConversionFactor(eHeelOptions.getCvValue());
+			int pricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(eHeelOptions.getPricePerMMBTU());
+
+			heelOptions = builder.createHeelOptions(heelLimitInM3, cvValue, pricePerMMBTu);
 		} else {
-			if (ports.size() > 1) {
-				final Set<IPort> portSet = new HashSet<IPort>();
-				for (final Port p : ports) {
-					portSet.add(portAssociation.lookup(p));
-				}
-				if (window == null) {
-					return builder.createStartEndRequirement(portSet);
-				} else {
-					return builder.createStartEndRequirement(portSet, window);
-				}
-			} else {
-				final IPort port = portAssociation.lookup((Port) ports.iterator().next());
-				if (window == null) {
-					return builder.createStartEndRequirement(port);
-				} else {
-					return builder.createStartEndRequirement(port, window);
-				}
-			}
+			heelOptions = null;
+		}
+		return builder.createStartRequirement(portAssociation.lookup(port), window, heelOptions);
+	}
+
+	/**
+	 * Convert a PortAndTime from the EMF to an IStartEndRequirement for internal use; may be subject to change later.
+	 * 
+	 * @param builder
+	 * @param portAssociation
+	 * @param pat
+	 * @return
+	 */
+	private IEndRequirement createEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Set<Port> ports,
+			boolean endCold, int targetHeelInM3) {
+		ITimeWindow window = null;
+
+		if (from == null && to != null) {
+			window = builder.createTimeWindow(convertTime(earliestTime), convertTime(to));
+		} else if (from != null && to == null) {
+			window = builder.createTimeWindow(convertTime(from), convertTime(latestTime));
+		} else if (from != null && to != null) {
+			window = builder.createTimeWindow(convertTime(from), convertTime(to));
 		}
 
-		return builder.createStartEndRequirement();
+		final Set<IPort> portSet = new HashSet<IPort>();
+		for (final Port p : ports) {
+			portSet.add(portAssociation.lookup(p));
+		}
+		if (ports.isEmpty()) {
+			return builder.createEndRequirement(null, window, endCold, OptimiserUnitConvertor.convertToInternalVolume(targetHeelInM3));
+		} else {
+			return builder.createEndRequirement(portSet, window, endCold, OptimiserUnitConvertor.convertToInternalVolume(targetHeelInM3));
+		}
+
 	}
 
 	/**

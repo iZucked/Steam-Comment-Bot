@@ -20,8 +20,6 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.SequenceTester;
 
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
 

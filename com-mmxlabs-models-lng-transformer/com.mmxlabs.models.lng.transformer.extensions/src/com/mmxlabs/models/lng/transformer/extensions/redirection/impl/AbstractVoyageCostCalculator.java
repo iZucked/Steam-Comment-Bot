@@ -77,8 +77,8 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		voyageOptions.setFromPortSlot(from);
 		voyageOptions.setNBOSpeed(vessel.getVesselClass().getMinNBOSpeed(vesselState));
 		voyageOptions.setRoute(route);
-		voyageOptions.setShouldBeCold(true);
 		voyageOptions.setToPortSlot(to);
+		voyageOptions.setShouldBeCold(true);
 		voyageOptions.setUseFBOForSupplement(true);
 		voyageOptions.setUseNBOForIdle(true);
 		voyageOptions.setUseNBOForTravel(true);

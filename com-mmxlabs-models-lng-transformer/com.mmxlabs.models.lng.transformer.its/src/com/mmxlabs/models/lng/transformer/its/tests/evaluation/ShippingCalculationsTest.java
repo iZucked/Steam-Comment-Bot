@@ -9,14 +9,12 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.common.TimeUnitConvert;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -49,7 +47,6 @@ import com.mmxlabs.models.lng.transformer.its.tests.LddScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.StsScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
 import com.mmxlabs.models.lng.types.PortCapability;
 
 public class ShippingCalculationsTest extends AbstractShippingCalculationsTestClass {
@@ -863,6 +860,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final Sequence sequence = schedule.getSequences().get(0);
 
+//		Fails with a missin g Journel event - understandable as there is no journey, but why does it now not appear?
 		checker.check(sequence);
 
 	}

@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 
-import org.eclipse.core.commands.operations.ObjectUndoContext;
-
 import com.google.inject.Inject;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.BasicSlotPNLDetails;

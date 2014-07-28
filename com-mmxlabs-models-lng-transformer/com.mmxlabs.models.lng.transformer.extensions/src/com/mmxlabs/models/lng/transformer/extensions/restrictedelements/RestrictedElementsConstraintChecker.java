@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.google.inject.Inject;
