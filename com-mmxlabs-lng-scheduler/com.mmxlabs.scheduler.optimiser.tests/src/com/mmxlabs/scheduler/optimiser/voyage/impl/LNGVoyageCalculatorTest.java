@@ -741,7 +741,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
-		final IPortSlot otherSlot = new EndPortSlot();
+		final IPortSlot otherSlot = new EndPortSlot(null, null, null, false, 0l);
 
 		loadDetails.getOptions().setPortSlot(loadSlot);
 		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
@@ -954,7 +954,7 @@ public class LNGVoyageCalculatorTest {
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
-		
+
 		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();

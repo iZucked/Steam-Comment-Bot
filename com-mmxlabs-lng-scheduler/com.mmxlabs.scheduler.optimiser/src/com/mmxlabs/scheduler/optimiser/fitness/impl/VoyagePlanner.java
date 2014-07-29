@@ -741,7 +741,7 @@ public class VoyagePlanner {
 					} else {
 						if (portSlot instanceof EndPortSlot) {
 							final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
-							assert currentHeelInM3 >= endPortSlot.getTargetHeelInM3();
+							assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
 						}
 					}
 					final long end = currentHeelInM3;

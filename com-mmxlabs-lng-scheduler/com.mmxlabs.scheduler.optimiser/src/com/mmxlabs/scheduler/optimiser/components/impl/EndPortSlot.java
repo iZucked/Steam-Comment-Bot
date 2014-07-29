@@ -10,12 +10,29 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public final class EndPortSlot extends PortSlot {
 
-	public EndPortSlot(final String id, final IPort port, final ITimeWindow timeWindow) {
+	private boolean endCold;
+	private long targetEndHeelInM3;
+
+	public EndPortSlot(final String id, final IPort port, final ITimeWindow timeWindow, final boolean endCold, final long targetEndHeelInM3) {
 		super(id, port, timeWindow);
+		this.endCold = endCold;
+		this.targetEndHeelInM3 = targetEndHeelInM3;
 		setPortType(PortType.End);
 	}
 
-	public EndPortSlot() {
-		setPortType(PortType.End);
+	public boolean isEndCold() {
+		return endCold;
+	}
+
+	public void setEndCold(final boolean endCold) {
+		this.endCold = endCold;
+	}
+
+	public long getTargetEndHeelInM3() {
+		return targetEndHeelInM3;
+	}
+
+	public void setTargetEndHeelInM3(final long targetEndHeelInM3) {
+		this.targetEndHeelInM3 = targetEndHeelInM3;
 	}
 }

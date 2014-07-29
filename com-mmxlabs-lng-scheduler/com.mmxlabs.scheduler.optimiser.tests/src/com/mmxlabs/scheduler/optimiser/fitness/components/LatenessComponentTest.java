@@ -15,7 +15,6 @@ import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
@@ -96,7 +95,7 @@ public class LatenessComponentTest {
 		startDetails.getOptions().setPortSlot(startSlot);
 		final PortDetails endDetails = new PortDetails();
 		endDetails.setOptions(new PortOptions());
-		final EndPortSlot endSlot = new EndPortSlot();
+		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0l);
 		endDetails.getOptions().setPortSlot(endSlot);
 
 		final LoadSlot loadSlot = new LoadSlot();

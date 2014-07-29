@@ -568,15 +568,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	private void createReturnElements() {
 		for (final IResource resource : resources) {
+			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 			for (final IPort port : ports) {
-				returnElementProvider.setReturnElement(resource, port, createReturnElement(resource, port));
+				returnElementProvider.setReturnElement(resource, port, createReturnElement(resource, port, endRequirement));
 			}
 		}
 	}
 
-	private ISequenceElement createReturnElement(final IResource resource, final IPort port) {
+	private ISequenceElement createReturnElement(final IResource resource, final IPort port, final IEndRequirement endRequirement) {
 		final String name = "return-to-" + port.getName();
-		final EndPortSlot slot = new EndPortSlot(name, port, null);
+		final EndPortSlot slot = new EndPortSlot(name, port, null, endRequirement.isEndCold(), endRequirement.getTargetHeelInM3());
 		final SequenceElement element = new SequenceElement(indexingContext, "return-to-" + port.getName());
 
 		elementDurationsProvider.setElementDuration(element, 0);
@@ -779,9 +780,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		startSlot.setTimeWindow(startWindow);
 
-		final EndPortSlot endSlot = new EndPortSlot();
-		endSlot.setId("end-" + name);
-		endSlot.setPort((end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE);
+		final EndPortSlot endSlot = new EndPortSlot("end-" + name, (end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE, null, end.isEndCold(),
+				end.getTargetHeelInM3());
 
 		// Create start/end sequence elements for this route
 		final SequenceElement startElement = new SequenceElement(indexingContext);

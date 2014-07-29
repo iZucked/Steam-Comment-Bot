@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -21,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.StartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -55,7 +53,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
-	
+
 	/**
 	 * Calculate the fuel requirements between a pair of {@link IPortSlot}s. The {@link VoyageOptions} provides the specific choices to evaluate for this voyage (e.g. fuel choice, route, ...).
 	 * 
@@ -665,11 +663,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			int warmingTime = 0;
 			if (lastVoyageDetailsElement != null) {
 				// Gas on board
-//				final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
-//				if (toPortSlot.getPortType() == PortType.End) {
-//					IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement();
-//					expectedHeelLeftOnBoard = endRequirement.isEndCold();
-//				} else
+				// final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
+				// if (toPortSlot.getPortType() == PortType.End) {
+				// IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement();
+				// expectedHeelLeftOnBoard = endRequirement.isEndCold();
+				// } else
 				// Check based on fuel consumption
 				if (lastVoyageDetailsElement.getIdleTime() > 0) {
 					expectedHeelLeftOnBoard = lastVoyageDetailsElement.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3) > 0;
@@ -702,12 +700,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				if (expectedHeelLeftOnBoard) {
 					// Gas on board
 					final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
-					if (toPortSlot.getPortType() == PortType.End) {
-						IEndRequirement endRequirement  = startEndRequirementProvider.getEndRequirement(vesselProvider.getResource(vessel));
-						remainingHeelInM3 = endRequirement.getTargetHeelInM3();
-					} else {
+//					if (toPortSlot instanceof EndPortSlot) {
+//						final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+//						remainingHeelInM3 = endPortSlot.getTargetEndHeelInM3();
+//					} else {
 						remainingHeelInM3 = vesselClass.getSafetyHeel();
-					}
+//					}
 					voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 				} else {
 					// Warming time
