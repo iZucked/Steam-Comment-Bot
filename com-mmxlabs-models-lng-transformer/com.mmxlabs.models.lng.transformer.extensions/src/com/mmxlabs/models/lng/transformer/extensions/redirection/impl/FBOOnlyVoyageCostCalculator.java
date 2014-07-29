@@ -67,10 +67,9 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
 		notionalDischargeSlot.setDischargePriceCalculator(salesPrice);
 
-		final PortSlot notionalReturnSlot = new EndPortSlot();
-		notionalReturnSlot.setPort(loadPort);
-		notionalReturnSlot.setTimeWindow(new TimeWindow(notionalReturnTime, notionalReturnTime));
+		final PortSlot notionalReturnSlot = new EndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
+		
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
 		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
@@ -136,9 +135,7 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
 		notionalDischargeSlot.setDischargePriceCalculator(salesPrice);
 
-		final PortSlot notionalReturnSlot = new EndPortSlot();
-		notionalReturnSlot.setPort(loadPort);
-		notionalReturnSlot.setTimeWindow(new TimeWindow(returnTime, returnTime));
+		final PortSlot notionalReturnSlot = new EndPortSlot("notional-end", loadPort, new TimeWindow(returnTime, returnTime), true, vessel.getVesselClass().getSafetyHeel());
 
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
