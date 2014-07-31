@@ -75,6 +75,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.ConfigurableCargoReportView";
 	private static final String CONFIGURABLE_ROWS_ORDER = "CONFIGURABLE_ROWS_ORDER";
 	private static final String CARGO_REPORT_TYPE_ID = "CARGO_REPORT_TYPE_ID";
+	private static final String CONFIGURABLE_COLUMNS_REPORT_KEY = "CONFIGURABLE_COLUMNS_REPORT_KEY";
 
 	final List<String> entityColumnNames = new ArrayList<String>();
 
@@ -115,6 +116,10 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		
 	}
 	
+	protected String getColumnSettingsMementoKey() {
+		return CONFIGURABLE_COLUMNS_REPORT_KEY;
+	}
+	
 	private void setColumnsImmovable() {
 		if (viewer != null) {
 			for (GridColumn column: viewer.getGrid().getColumns()) {
@@ -136,8 +141,9 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	@Override
 	public void saveState(final IMemento memento) {
 		super.saveState(memento);
-		builder.saveToMemento(CONFIGURABLE_ROWS_ORDER, memento);
-		blockManager.saveToMemento(CONFIGURABLE_COLUMNS_ORDER, memento);
+		final IMemento configMemento = memento.createChild(getColumnSettingsMementoKey());
+		builder.saveToMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
+		blockManager.saveToMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 	}
 
 	@Override
@@ -148,8 +154,12 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 		viewer.setComparator(GenericEMFTableDataModel.createGroupComparator(viewer.getComparator(), tableDataModel));
 		if (memento != null) {
-			builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, memento);
-			blockManager.initFromMemento(CONFIGURABLE_COLUMNS_ORDER, memento);
+			final IMemento configMemento = memento.getChild(getColumnSettingsMementoKey());
+
+			if (configMemento != null) {
+				builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
+				blockManager.initFromMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
+			}
 		}
 
 	}
