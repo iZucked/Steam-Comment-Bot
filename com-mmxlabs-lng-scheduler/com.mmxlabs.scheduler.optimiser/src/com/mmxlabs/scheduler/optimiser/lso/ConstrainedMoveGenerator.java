@@ -226,13 +226,15 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 					}
 				}
 
+				// This code segment yields a large speed up, but breaks ITS
+				
 				// If any of e1 or e2 is a special spot element then there is only one resource it is permitted to go on. Ignore the rest for sequencing checks.
 				IResource spotResource = null;
-				if (spotElementMap.containsKey(e1)) {
-					spotResource = spotElementMap.get(e1);
-				} else if (spotElementMap.containsKey(e2)) {
-					spotResource = spotElementMap.get(e2);
-				}
+//				if (spotElementMap.containsKey(e1)) {
+//					spotResource = spotElementMap.get(e1);
+//				} else if (spotElementMap.containsKey(e2)) {
+//					spotResource = spotElementMap.get(e2);
+//				}
 
 				final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2) : checker.allowSequence(e1, e2, spotResource);
 				if (allowForwardSequence) {
