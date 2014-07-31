@@ -164,10 +164,10 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	IVirtualVesselSlotProvider virtualVesselSlotProvider;
+	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
 	@Inject
-	IStartEndRequirementProvider startEndRequirementProvider;
+	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
@@ -188,14 +188,14 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		for (final IResource resource : data.getResources()) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			if (vesselAvailability != null) {
-				final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
-				final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
-				final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
-
-				spotElementMap.put(startElement, resource);
-				spotElementMap.put(endElement, resource);
-				spotElementMap.put(virtualElement, resource);
-
+				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+					final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
+					final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
+					final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
+					spotElementMap.put(startElement, resource);
+					spotElementMap.put(endElement, resource);
+					spotElementMap.put(virtualElement, resource);
+				}
 			}
 		}
 
