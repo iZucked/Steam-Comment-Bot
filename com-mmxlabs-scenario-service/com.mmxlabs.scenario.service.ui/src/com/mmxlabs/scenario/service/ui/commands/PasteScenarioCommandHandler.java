@@ -172,7 +172,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	private void scanTree(final File root, final java.util.List<File> scenarioFiles, final Container container, final Map<File, Container> scenarioContainerMap) {
 
 		for (final File f : root.listFiles()) {
-			if (f.isFile() && Files.getFileExtension(f.getName()).equals("lingo")) {
+			if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
 				scenarioFiles.add(f);
 				scenarioContainerMap.put(f, container);
 			} else if (f.isDirectory()) {
@@ -214,7 +214,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 			final Map<File, Container> scenarioContainerMap = new HashMap<>();
 			for (final String filePath : files) {
 				final File f = new File(filePath);
-				if (f.isFile() && Files.getFileExtension(f.getName()).equals("lingo")) {
+				if (f.isFile() && Files.getFileExtension(f.getName()).toLowerCase().equals("lingo")) {
 					scenarioFiles.add(f);
 					scenarioContainerMap.put(f, container);
 				} else if (f.isDirectory()) {
@@ -257,10 +257,10 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 									// Get basic name
 									String scenarioName = f.getName();
-									if (scenarioName.endsWith(".lingo")) {
+									if (scenarioName.toLowerCase().toLowerCase().endsWith(".lingo")) {
 										// Guava 14+
 										// scenarioName = Files.getNameWithoutExtension(f);
-										scenarioName = scenarioName.replaceAll(".lingo", "");
+										scenarioName = scenarioName.replaceAll("(?i).lingo", "");
 									}
 
 									// Avoid name clashes
