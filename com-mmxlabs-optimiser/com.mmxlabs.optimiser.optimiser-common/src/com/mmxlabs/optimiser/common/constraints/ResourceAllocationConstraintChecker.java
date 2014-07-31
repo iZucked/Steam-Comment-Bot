@@ -90,10 +90,6 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		// FIX bugzID:576 - this prevented the move generator considering moves which appeared to sequence an end element onto the wrong vessel
-		// because end elements are handled as a special case in the moves, they don't actually get put on the wrong vessel
-		// disabling the pairwise version of this constraint shouldn't cause any overly bad problems, but it might be worth checking
-		// in the constrained initial sequence builder to make sure that it's not having a knock-on there.
 
 		return checkElement(first, resource) && checkElement(second, resource);
 	}
