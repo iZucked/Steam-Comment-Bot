@@ -1314,7 +1314,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
 					assert market instanceof DESPurchaseMarket;
-					if (market instanceof DESPurchaseMarket) {
+					if (market instanceof DESPurchaseMarket && market.isEnabled() == true) {
 						final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 						final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
 						final Set<IPort> marketPorts = new HashSet<IPort>();
@@ -1446,7 +1446,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
 					assert market instanceof FOBSalesMarket;
-					if (market instanceof FOBPurchasesMarket) {
+					if (market instanceof FOBPurchasesMarket && market.isEnabled() == true) {
 						final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) market;
 						final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
 						final Set<IPort> marketPorts = new HashSet<IPort>();
@@ -1570,7 +1570,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
 				assert market instanceof DESSalesMarket;
-				if (market instanceof DESSalesMarket) {
+				if (market instanceof DESSalesMarket && market.isEnabled() == true) {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 					final Port notionalAPort = desSalesMarket.getNotionalPort();
 					final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
@@ -1683,7 +1683,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : fobPurchaseSpotMarket.getMarkets()) {
 				assert market instanceof FOBPurchasesMarket;
-				if (market instanceof FOBPurchasesMarket) {
+				if (market instanceof FOBPurchasesMarket && market.isEnabled() == true) {
 					final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
 					final Port notionalAPort = fobPurchaseMarket.getNotionalPort();
 					final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);

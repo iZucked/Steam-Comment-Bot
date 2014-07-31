@@ -271,6 +271,10 @@ public final class OptimisationHelper {
 			if (!forEvaluation) {
 				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
+				dialog.addOption(DataSection.Advanced, editingDomian, "Start Date", copy, defaultSettings, DataType.Date,
+						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
+				dialog.addOption(DataSection.Advanced, editingDomian, "End Date", copy, defaultSettings, DataType.Date,
+						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
 			}
 
 			final int[] ret = new int[1];
@@ -303,7 +307,23 @@ public final class OptimisationHelper {
 	}
 
 	private static void mergeFields(final OptimiserSettings from, final OptimiserSettings to) {
+		// TODO: replace all this ugly code by a list of EStructuralFeatures and loop through 
+		// them doing the right thing
+		
+		if (from.getRange().isSetOptimiseAfter() == false) {
+			to.getRange().unsetOptimiseAfter();
+		}
+		else {
+			to.getRange().setOptimiseAfter(from.getRange().getOptimiseAfter());
+		}
 
+		if (from.getRange().isSetOptimiseBefore() == false) {
+			to.getRange().unsetOptimiseBefore();
+		}
+		else {
+			to.getRange().setOptimiseBefore(from.getRange().getOptimiseBefore());
+		}
+		
 		to.getAnnealingSettings().setIterations(from.getAnnealingSettings().getIterations());
 		to.setShippingOnly(from.isShippingOnly());
 		to.setGenerateCharterOuts(from.isGenerateCharterOuts());
