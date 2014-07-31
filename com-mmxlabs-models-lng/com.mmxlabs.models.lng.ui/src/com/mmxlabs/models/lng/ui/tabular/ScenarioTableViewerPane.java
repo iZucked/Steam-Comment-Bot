@@ -115,7 +115,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	/**
 	 */
 	protected Action addAction;
-
+	
 	private final ISelectionListener selectionListener = new ISelectionListener() {
 
 		@Override
@@ -427,18 +427,18 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 		addAction = createAddAction(containment);
 
-		/*
 		if (addAction != null) {
+			/*
 			// if we can't add one, we can't duplicate one either.
 			final Action dupAction = createDuplicateAction();
 
 			if (dupAction != null) {
 				toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
 			}
+			*/
 
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		}
-		*/
 		deleteAction = createDeleteAction();
 		if (deleteAction != null) {
 			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
