@@ -1569,6 +1569,37 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
+			{
+				final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
+				// Translate into real objects, not just row object!
+				final List<Object> selectedObjects = new LinkedList<Object>();
+				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+
+					final Iterator<?> itr = structuredSelection.iterator();
+					while (itr.hasNext()) {
+						final Object o = itr.next();
+						if (o instanceof RowData) {
+							final RowData rowData = (RowData) o;
+							// TODO: Check logic, a row may contain two distinct items
+							if (rowData.cargo != null) {
+								selectedObjects.add(rowData.cargo);
+								continue;
+							}
+							if (rowData.loadSlot != null) {
+								selectedObjects.add(rowData.loadSlot);
+							}
+							if (rowData.dischargeSlot != null) {
+								selectedObjects.add(rowData.dischargeSlot);
+							}
+						}
+					}
+				}
+
+				result.selectionChanged(new SelectionChangedEvent(scenarioViewer, new StructuredSelection(selectedObjects)));
+				addActionToMenu(result, menu);
+			}
+
 			final CargoModel cargoModel = getPortfolioModel().getCargoModel();
 
 			RowData discoveredRowData = null;
@@ -1904,35 +1935,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 *            the menu which is about to be displayed
 		 */
 		protected void populate(final Menu menu) {
-
-			final DuplicateAction result = new DuplicateAction(getJointModelEditorPart());
-			// Translate into real objects, not just row object!
-			final List<Object> selectedObjects = new LinkedList<Object>();
-			if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
-				final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
-
-				final Iterator<?> itr = structuredSelection.iterator();
-				while (itr.hasNext()) {
-					final Object o = itr.next();
-					if (o instanceof RowData) {
-						final RowData rowData = (RowData) o;
-						// TODO: Check logic, a row may contain two distinct items
-						if (rowData.cargo != null) {
-							selectedObjects.add(rowData.cargo);
-							continue;
-						}
-						if (rowData.loadSlot != null) {
-							selectedObjects.add(rowData.loadSlot);
-						}
-						if (rowData.dischargeSlot != null) {
-							selectedObjects.add(rowData.dischargeSlot);
-						}
-					}
-				}
-			}
-
-			result.selectionChanged(new SelectionChangedEvent(scenarioViewer, new StructuredSelection(selectedObjects)));
-			addActionToMenu(result, menu);
 
 			for (final CreateStripDialog.StripType stripType : CreateStripDialog.StripType.values()) {
 				final Action stripAction = new CreateStripAction(stripType.toString(), stripType);
