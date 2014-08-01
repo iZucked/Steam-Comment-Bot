@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -329,7 +330,10 @@ public class ScheduleBasedReportBuilder {
 						report.setInputEquivalents(row, Lists.<Object> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
 					} else if (a instanceof StartEvent) {
 						final StartEvent startEvent = (StartEvent) a;
-						report.setInputEquivalents(row, Lists.<Object> newArrayList(startEvent, startEvent.getSequence().getVesselAvailability().getVessel()));
+						final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
+						if (vesselAvailability != null) {
+							report.setInputEquivalents(row, Lists.<Object> newArrayList(startEvent, vesselAvailability.getVessel()));
+						}
 					} else if (a instanceof OpenSlotAllocation) {
 						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
 						report.setInputEquivalents(row, Lists.<Object> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
@@ -570,13 +574,13 @@ public class ScheduleBasedReportBuilder {
 	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 		return scheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
 	}
-	
+
 	public EmfBlockColumnFactory getPinDiffColumnFactory() {
 		return new EmfBlockColumnFactory() {
 
 			@Override
-			public List<ColumnHandler> addColumns(EMFReportView report) {
-				ArrayList<ColumnHandler> result = new ArrayList<ColumnHandler>();
+			public List<ColumnHandler> addColumns(final EMFReportView report) {
+				final ArrayList<ColumnHandler> result = new ArrayList<ColumnHandler>();
 				// Register columns that will be displayed when in Pin/Diff mode
 				result.add(report.addColumn("Prev. wiring", ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef)));
 				result.add(report.addColumn("Prev. Vessel", ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef)));
@@ -585,16 +589,14 @@ public class ScheduleBasedReportBuilder {
 			}
 
 			@Override
-			public ColumnHandler addColumn(EMFReportView report) {
+			public ColumnHandler addColumn(final EMFReportView report) {
 				return null;
 			}
-			
+
 		};
-		
+
 	}
 
-	
-	
 	public void createPinDiffColumns() {
 		getPinDiffColumnFactory().addColumns(report);
 	}
@@ -879,12 +881,12 @@ public class ScheduleBasedReportBuilder {
 		getEmptyPNLColumnBlockFactory().addColumn(report);
 
 	}
-	
+
 	public EmfBlockColumnFactory getEmptyPNLColumnBlockFactory() {
 		return new EmfBlockColumnFactory() {
 
 			@Override
-			public ColumnHandler addColumn(EMFReportView theReport) {
+			public ColumnHandler addColumn(final EMFReportView theReport) {
 				ColumnBlock block = theReport.blockManager.getBlockByName(COLUMN_BLOCK_PNL);
 				if (block == null) {
 					block = theReport.blockManager.createBlock(COLUMN_BLOCK_PNL, ColumnType.NORMAL);
@@ -893,7 +895,6 @@ public class ScheduleBasedReportBuilder {
 				return null;
 			}
 
-			
 		};
 	}
 
@@ -977,9 +978,9 @@ public class ScheduleBasedReportBuilder {
 	}
 
 	public EmfBlockColumnFactory getTotalPNLColumnFactory(@Nullable final EStructuralFeature bookContainmentFeature) {
-		return new EmfBlockColumnFactory() {			
+		return new EmfBlockColumnFactory() {
 			@Override
-			public ColumnHandler addColumn(EMFReportView theReport) {
+			public ColumnHandler addColumn(final EMFReportView theReport) {
 				final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
 				final String title = String.format("P&L (%s)", book);
 
@@ -1004,9 +1005,9 @@ public class ScheduleBasedReportBuilder {
 				}, targetObjectRef);
 			}
 		};
-		
+
 	}
-	
+
 	public ColumnHandler addTotalPNLColumn(@Nullable final EStructuralFeature bookContainmentFeature) {
 		return getTotalPNLColumnFactory(bookContainmentFeature).addColumn(report);
 	}
