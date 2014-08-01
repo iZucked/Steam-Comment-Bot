@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -2124,8 +2125,16 @@ public class LNGScenarioTransformer {
 			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfter() : null,
 					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartBy() : null, startingPort, eVesselAvailability.getStartHeel());
 
+			boolean endCold = false;
+			long targetEndHeelInM3 = 0;
+			EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
+			if (endHeel != null) {
+				endCold = endHeel.isEndCold();
+				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
+			}
+			
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfter() : null,
-					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndBy() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), false, 0);
+					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndBy() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3);
 
 			final ICurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
@@ -2235,7 +2244,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private IEndRequirement createEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Set<Port> ports,
-			boolean endCold, int targetHeelInM3) {
+			boolean endCold, long targetHeelInM3) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
@@ -2251,9 +2260,9 @@ public class LNGScenarioTransformer {
 			portSet.add(portAssociation.lookup(p));
 		}
 		if (ports.isEmpty()) {
-			return builder.createEndRequirement(null, window, endCold, OptimiserUnitConvertor.convertToInternalVolume(targetHeelInM3));
+			return builder.createEndRequirement(null, window, endCold, targetHeelInM3);
 		} else {
-			return builder.createEndRequirement(portSet, window, endCold, OptimiserUnitConvertor.convertToInternalVolume(targetHeelInM3));
+			return builder.createEndRequirement(portSet, window, endCold, targetHeelInM3);
 		}
 
 	}
