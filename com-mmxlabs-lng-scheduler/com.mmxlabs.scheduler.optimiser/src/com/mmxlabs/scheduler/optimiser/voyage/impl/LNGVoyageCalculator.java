@@ -658,12 +658,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			boolean expectedHeelLeftOnBoard = false;
 			int warmingTime = 0;
 			if (lastVoyageDetailsElement != null) {
-				// Gas on board
-				final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
-				if (toPortSlot instanceof EndPortSlot) {
-					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
-					expectedHeelLeftOnBoard = endPortSlot.isEndCold();
-				} else
 				// Check based on fuel consumption
 				if (lastVoyageDetailsElement.getIdleTime() > 0) {
 					expectedHeelLeftOnBoard = lastVoyageDetailsElement.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3) > 0;
@@ -746,7 +740,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
 					// TODO: Tricky here to get exact fuel volume, should there be some tolerance?
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
-//						++violationsCount;
+						// ++violationsCount;
 					}
 				}
 			}
@@ -853,7 +847,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final PortDetails loadDetails, final ILoadSlot loadSlot, final PortDetails dischargeDetails,
-			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3, final long heelToDischarge) {
+			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3, final long remainingHeelInM3) {
 
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
@@ -890,7 +884,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 
 		// The load should cover at least the fuel usage plus the heel (or the min discharge, whichever is greater)
-		if (Math.max(minDischargeVolumeInM3, heelToDischarge) + lngCommitmentInM3 > upperLoadLimitInM3 + startHeelInM3) {
+		if (minDischargeVolumeInM3 + remainingHeelInM3 + lngCommitmentInM3 > upperLoadLimitInM3 + startHeelInM3) {
 			++violationsCount;
 		}
 		return violationsCount;
