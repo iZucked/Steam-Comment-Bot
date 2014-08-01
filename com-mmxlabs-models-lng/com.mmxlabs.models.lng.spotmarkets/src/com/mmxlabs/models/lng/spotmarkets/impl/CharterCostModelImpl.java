@@ -25,6 +25,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl#getCharterInPrice <em>Charter In Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterCostModelImpl#getCharterOutPrice <em>Charter Out Price</em>}</li>
@@ -36,6 +37,26 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * @generated
  */
 public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostModel {
+	/**
+	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ENABLED_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean enabled = ENABLED_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -262,9 +283,32 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEnabled(boolean newEnabled) {
+		boolean oldEnabled = enabled;
+		enabled = newEnabled;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.CHARTER_COST_MODEL__ENABLED, oldEnabled, enabled));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SpotMarketsPackage.CHARTER_COST_MODEL__ENABLED:
+				return isEnabled();
 			case SpotMarketsPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
 				return getVesselClasses();
 			case SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
@@ -290,6 +334,9 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SpotMarketsPackage.CHARTER_COST_MODEL__ENABLED:
+				setEnabled((Boolean)newValue);
+				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
 				getVesselClasses().clear();
 				getVesselClasses().addAll((Collection<? extends VesselClass>)newValue);
@@ -318,6 +365,9 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SpotMarketsPackage.CHARTER_COST_MODEL__ENABLED:
+				setEnabled(ENABLED_EDEFAULT);
+				return;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
 				getVesselClasses().clear();
 				return;
@@ -345,6 +395,8 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SpotMarketsPackage.CHARTER_COST_MODEL__ENABLED:
+				return enabled != ENABLED_EDEFAULT;
 			case SpotMarketsPackage.CHARTER_COST_MODEL__VESSEL_CLASSES:
 				return vesselClasses != null && !vesselClasses.isEmpty();
 			case SpotMarketsPackage.CHARTER_COST_MODEL__CHARTER_IN_PRICE:
@@ -369,7 +421,9 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (spotCharterCount: ");
+		result.append(" (enabled: ");
+		result.append(enabled);
+		result.append(", spotCharterCount: ");
 		result.append(spotCharterCount);
 		result.append(", minCharterOutDuration: ");
 		result.append(minCharterOutDuration);

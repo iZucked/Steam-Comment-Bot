@@ -259,15 +259,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	public EReference getCharterCostModel_VesselClasses() {
-		return (EReference)charterCostModelEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getCharterCostModel_CharterInPrice() {
 		return (EReference)charterCostModelEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -276,7 +267,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCharterCostModel_CharterOutPrice() {
+	public EReference getCharterCostModel_CharterInPrice() {
 		return (EReference)charterCostModelEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -285,8 +276,17 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getCharterCostModel_CharterOutPrice() {
+		return (EReference)charterCostModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getCharterCostModel_SpotCharterCount() {
-		return (EAttribute)charterCostModelEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)charterCostModelEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -295,7 +295,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	public EAttribute getCharterCostModel_MinCharterOutDuration() {
-		return (EAttribute)charterCostModelEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)charterCostModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterCostModel_Enabled() {
+		return (EAttribute)charterCostModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -349,7 +358,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	public EReference getSpotMarket_Availability() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(0);
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -358,15 +367,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	public EAttribute getSpotMarket_MinQuantity() {
-		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSpotMarket_MaxQuantity() {
 		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -375,8 +375,17 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSpotMarket_MaxQuantity() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getSpotMarket_PriceInfo() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(3);
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -385,7 +394,16 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * @generated
 	 */
 	public EReference getSpotMarket_Entity() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(4);
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSpotMarket_Enabled() {
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -578,6 +596,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketsModelEClass, SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE);
 
 		charterCostModelEClass = createEClass(CHARTER_COST_MODEL);
+		createEAttribute(charterCostModelEClass, CHARTER_COST_MODEL__ENABLED);
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__VESSEL_CLASSES);
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__CHARTER_IN_PRICE);
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__CHARTER_OUT_PRICE);
@@ -590,6 +609,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketGroupEClass, SPOT_MARKET_GROUP__MARKETS);
 
 		spotMarketEClass = createEClass(SPOT_MARKET);
+		createEAttribute(spotMarketEClass, SPOT_MARKET__ENABLED);
 		createEReference(spotMarketEClass, SPOT_MARKET__AVAILABILITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MIN_QUANTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MAX_QUANTITY);
@@ -678,6 +698,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarketsModel_CharterOutStartDate(), this.getCharterOutStartDate(), null, "charterOutStartDate", null, 0, 1, SpotMarketsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(charterCostModelEClass, CharterCostModel.class, "CharterCostModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCharterCostModel_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterCostModel_VesselClasses(), theFleetPackage.getVesselClass(), null, "vesselClasses", null, 0, -1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterCostModel_CharterInPrice(), thePricingPackage.getCharterIndex(), null, "charterInPrice", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCharterCostModel_CharterOutPrice(), thePricingPackage.getCharterIndex(), null, "charterOutPrice", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -690,6 +711,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarketGroup_Markets(), this.getSpotMarket(), null, "markets", null, 0, -1, SpotMarketGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotMarketEClass, SpotMarket.class, "SpotMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSpotMarket_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarket_Availability(), this.getSpotAvailability(), null, "availability", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

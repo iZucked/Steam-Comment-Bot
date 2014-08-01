@@ -25,6 +25,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
@@ -55,6 +56,26 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean ENABLED_EDEFAULT = true;
+
+	/**
+	 * The cached value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isEnabled()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean enabled = ENABLED_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getAvailability() <em>Availability</em>}' containment reference.
@@ -337,6 +358,27 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEnabled(boolean newEnabled) {
+		boolean oldEnabled = enabled;
+		enabled = newEnabled;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__ENABLED, oldEnabled, enabled));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -358,6 +400,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		switch (featureID) {
 			case SpotMarketsPackage.SPOT_MARKET__NAME:
 				return getName();
+			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
+				return isEnabled();
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				return getAvailability();
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
@@ -384,6 +428,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		switch (featureID) {
 			case SpotMarketsPackage.SPOT_MARKET__NAME:
 				setName((String)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
+				setEnabled((Boolean)newValue);
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				setAvailability((SpotAvailability)newValue);
@@ -415,6 +462,9 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
+				setEnabled(ENABLED_EDEFAULT);
+				return;
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				setAvailability((SpotAvailability)null);
 				return;
@@ -444,6 +494,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		switch (featureID) {
 			case SpotMarketsPackage.SPOT_MARKET__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
+				return enabled != ENABLED_EDEFAULT;
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				return availability != null;
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
@@ -502,6 +554,8 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", enabled: ");
+		result.append(enabled);
 		result.append(", minQuantity: ");
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");

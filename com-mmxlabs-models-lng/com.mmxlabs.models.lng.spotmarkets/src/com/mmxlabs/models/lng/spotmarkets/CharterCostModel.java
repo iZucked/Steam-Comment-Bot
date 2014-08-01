@@ -17,6 +17,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <p>
  * The following features are supported:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#isEnabled <em>Enabled</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#getVesselClasses <em>Vessel Classes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#getCharterInPrice <em>Charter In Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#getCharterOutPrice <em>Charter Out Price</em>}</li>
@@ -149,6 +150,33 @@ public interface CharterCostModel extends MMXObject {
 	 * @generated
 	 */
 	void setMinCharterOutDuration(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Enabled</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Enabled</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Enabled</em>' attribute.
+	 * @see #setEnabled(boolean)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getCharterCostModel_Enabled()
+	 * @model default="true"
+	 * @generated
+	 */
+	boolean isEnabled();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel#isEnabled <em>Enabled</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Enabled</em>' attribute.
+	 * @see #isEnabled()
+	 * @generated
+	 */
+	void setEnabled(boolean value);
 
 } // end of  CharterCostModel
 

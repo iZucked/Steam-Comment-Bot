@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
@@ -48,33 +49,30 @@ public class SpotMarketGroupPane extends ScenarioTableViewerPane {
 		final SpotMarketsPackage pp = SpotMarketsPackage.eINSTANCE;
 
 		CommercialPackage ppp = CommercialPackage.eINSTANCE;
-		
+
 		final IReferenceValueProviderProvider provider = getReferenceValueProviderCache();
 
 		addTypicalColumn("Name", new BasicAttributeManipulator(mmx.getNamedObject_Name(), getEditingDomain()));
+		addTypicalColumn("Enabled", new BooleanAttributeManipulator(pp.getSpotMarket_Enabled(), getEditingDomain()));
 		switch (spotType) {
 		case DES_PURCHASE:
-			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getDESPurchaseMarket_Contract(), provider, getEditingDomain()));
 			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
 			addTypicalColumn("CV", new BasicAttributeManipulator(pp.getDESPurchaseMarket_Cv(), getEditingDomain()));
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
 			break;
 		case DES_SALE:
-			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getDESSalesMarket_Contract(), provider, getEditingDomain()));
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
 			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
 			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getDESSalesMarket_NotionalPort(), provider, getEditingDomain()));
 			break;
 		case FOB_PURCHASE:
-			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_Contract(), provider, getEditingDomain()));
 			addTypicalColumn("Count", new BasicAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
 			addTypicalColumn("CV", new NumericAttributeManipulator(pp.getFOBPurchasesMarket_Cv(), getEditingDomain()));
 			addTypicalColumn("Port", new SingleReferenceManipulator(pp.getFOBPurchasesMarket_NotionalPort(), provider, getEditingDomain()));
 			break;
 		case FOB_SALE:
-			// addTypicalColumn("Contract", new SingleReferenceManipulator(pp.getFOBSalesMarket_Contract(), provider, getEditingDomain()));
-			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo	());
+			addTypicalColumn("Price", new BasicAttributeManipulator(ppp.getExpressionPriceParameters_PriceExpression(), getEditingDomain()), pp.getSpotMarket_PriceInfo());
 			addTypicalColumn("Count", new NumericAttributeManipulator(pp.getSpotAvailability_Constant(), getEditingDomain()), pp.getSpotMarket_Availability());
 			addTypicalColumn("Ports", new MultipleReferenceManipulator(pp.getFOBSalesMarket_OriginPorts(), provider, getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 			break;
