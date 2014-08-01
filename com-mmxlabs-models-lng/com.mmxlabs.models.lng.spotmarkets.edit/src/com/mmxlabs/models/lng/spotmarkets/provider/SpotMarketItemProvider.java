@@ -64,6 +64,7 @@ public class SpotMarketItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addEnabledPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
 			addEntityPropertyDescriptor(object);
@@ -90,6 +91,28 @@ public class SpotMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Enabled feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEnabledPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotMarket_enabled_feature"),
+				 getString("_UI_SpotMarket_enabled_description"),
+				 SpotMarketsPackage.Literals.SPOT_MARKET__ENABLED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -240,6 +263,7 @@ public class SpotMarketItemProvider
 
 		switch (notification.getFeatureID(SpotMarket.class)) {
 			case SpotMarketsPackage.SPOT_MARKET__NAME:
+			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
 			case SpotMarketsPackage.SPOT_MARKET__MIN_QUANTITY:
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:

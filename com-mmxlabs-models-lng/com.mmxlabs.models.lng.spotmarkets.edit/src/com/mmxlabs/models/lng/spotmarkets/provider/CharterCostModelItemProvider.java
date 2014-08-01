@@ -59,6 +59,7 @@ public class CharterCostModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addEnabledPropertyDescriptor(object);
 			addVesselClassesPropertyDescriptor(object);
 			addCharterInPricePropertyDescriptor(object);
 			addCharterOutPricePropertyDescriptor(object);
@@ -66,6 +67,28 @@ public class CharterCostModelItemProvider
 			addMinCharterOutDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Enabled feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEnabledPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterCostModel_enabled_feature"),
+				 getString("_UI_CharterCostModel_enabled_description"),
+				 SpotMarketsPackage.Literals.CHARTER_COST_MODEL__ENABLED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -198,7 +221,7 @@ public class CharterCostModelItemProvider
 	@Override
 	public String getText(Object object) {
 		CharterCostModel charterCostModel = (CharterCostModel)object;
-		return getString("_UI_CharterCostModel_type") + " " + charterCostModel.getSpotCharterCount();
+		return getString("_UI_CharterCostModel_type") + " " + charterCostModel.isEnabled();
 	}
 
 	/**
@@ -213,6 +236,7 @@ public class CharterCostModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CharterCostModel.class)) {
+			case SpotMarketsPackage.CHARTER_COST_MODEL__ENABLED:
 			case SpotMarketsPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
 			case SpotMarketsPackage.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
