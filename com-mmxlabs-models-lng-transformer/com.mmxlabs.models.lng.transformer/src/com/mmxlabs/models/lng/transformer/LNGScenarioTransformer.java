@@ -1444,7 +1444,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : desPurchaseSpotMarket.getMarkets()) {
 					assert market instanceof DESPurchaseMarket;
-					if (market instanceof DESPurchaseMarket) {
+					if (market instanceof DESPurchaseMarket && market.isEnabled() == true) {
 						final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 						final Set<Port> portSet = SetUtils.getObjects(desPurchaseMarket.getDestinationPorts());
 						final Set<IPort> marketPorts = new HashSet<IPort>();
@@ -1575,7 +1575,7 @@ public class LNGScenarioTransformer {
 
 				for (final SpotMarket market : fobSalesSpotMarket.getMarkets()) {
 					assert market instanceof FOBSalesMarket;
-					if (market instanceof FOBPurchasesMarket) {
+					if (market instanceof FOBPurchasesMarket && market.isEnabled() == true) {
 						final FOBSalesMarket fobSaleMarket = (FOBSalesMarket) market;
 						final Set<Port> portSet = SetUtils.getObjects(fobSaleMarket.getOriginPorts());
 						final Set<IPort> marketPorts = new HashSet<IPort>();
@@ -1698,7 +1698,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
 				assert market instanceof DESSalesMarket;
-				if (market instanceof DESSalesMarket) {
+				if (market instanceof DESSalesMarket && market.isEnabled() == true) {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 					final Port notionalAPort = desSalesMarket.getNotionalPort();
 					final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
@@ -1811,7 +1811,7 @@ public class LNGScenarioTransformer {
 
 			for (final SpotMarket market : fobPurchaseSpotMarket.getMarkets()) {
 				assert market instanceof FOBPurchasesMarket;
-				if (market instanceof FOBPurchasesMarket) {
+				if (market instanceof FOBPurchasesMarket && market.isEnabled() == true) {
 					final FOBPurchasesMarket fobPurchaseMarket = (FOBPurchasesMarket) market;
 					final Port notionalAPort = fobPurchaseMarket.getNotionalPort();
 					final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
@@ -2311,13 +2311,16 @@ public class LNGScenarioTransformer {
 
 			for (final CharterCostModel charterCost : spotMarketsModel.getCharteringSpotMarkets()) {
 
+				if (!charterCost.isEnabled()) {
+					continue;
+				}
+
 				for (final VesselClass eVc : charterCost.getVesselClasses()) {
 					final ICurve charterInCurve;
 					if (charterCost.getCharterInPrice() == null) {
 						charterInCurve = new ConstantValueCurve(0);
 					} else {
 						charterInCurve = charterIndexAssociation.lookup(charterCost.getCharterInPrice());
-						// charterInCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterInPrice().getData(), 1.0f / 24.0f, false);
 					}
 
 					charterCount = charterCost.getSpotCharterCount();
@@ -2328,41 +2331,13 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						// final ICurve charterOutCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterOutPrice().getData(), 1.0f / 24.0f, false);
 						final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
 						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve, minDuration);
 					}
 				}
 			}
-
 		}
-		//
-		// /*
-		// * Create spot charter vessels with no start/end requirements
-		// */
-		// for (final VesselClass eVc : fleetModel.getVesselClasses()) {
-		// if (eVc.getSpotCharterCount() > 0) {
-		// final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), eVc.getSpotCharterCount());
-		// // TODO this is not necessarily ideal; if there is an initial
-		// // solution set we associate all the spot vessels with ones in
-		// // that solution.
-		// int vesselIndex = 0;
-		// if ((scenario.getOptimisation() != null) && (scenario.getOptimisation().getCurrentSettings() != null)) {
-		// final Schedule initialSchedule = scenario.getOptimisation().getCurrentSettings().getInitialSchedule();
-		// if (initialSchedule != null) {
-		// for (final AllocatedVessel allocatedVessel : initialSchedule.getFleet()) {
-		// if ((allocatedVessel instanceof SpotVessel) && (((SpotVessel) allocatedVessel).getVesselClass() == eVc)) {
-		// // map it to one of the ones we have just made
-		// assert vesselIndex < spots.size() : "Initial schedule should not have more spot vessels than fleet suggests";
-		// modelEntityMap.addModelObject(allocatedVessel, spots.get(vesselIndex));
-		// vesselIndex++;
-		// }
-		// }
-		// }
-		// }
-		// }
-		// }
 
 		return new Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(vesselClassAssociation, vesselAssociation);
 	}
