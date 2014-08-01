@@ -4,10 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
+import java.util.Date;
+
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -18,8 +22,12 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
+import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
+import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.SequenceTester;
+import com.mmxlabs.models.lng.types.PortCapability;
 
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
 
@@ -50,6 +58,40 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		// Min heel in m3
 		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
+		checker.setupOrdinaryFuelCosts();
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		checker.check(sequence);
+	}
+
+	@Test
+	public void testEndHeelGreaterThanVesselCapacity() {
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		msc.vc.setMinHeel(0);
+		msc.vesselAvailability.getEndHeel().setEndCold(true);
+		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+
+		Slot loadSlot = msc.cargo.getSlots().get(0);
+		Slot dischargeSlot = msc.cargo.getSlots().get(1);
+
+		loadSlot.setMaxQuantity(2000);
+		dischargeSlot.setMaxQuantity(2000);
+
+		msc.vessel.setCapacity(1000);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		SequenceTester checker = getDefaultTester();
+
+		checker.setExpectedValues(Expectations.LOAD_DISCHARGE, SlotVisit.class, new Integer[] { 1000, -970 });
+
+		// End heel in m3 - Unable to meet end heel level
+		checker.setExpectedValue(2000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		checker.setupOrdinaryFuelCosts();
 
@@ -521,4 +563,199 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 
 		checker.check(sequence);
 	}
+
+	@Test
+	public void testRegularCharterOutLoadToOrigin_WithEndHeel_NoViolation() {
+		System.err.println("\n\nTest regular charter out from load port to origin port.");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
+		event.getHeelOptions().setVolumeAvailable(2000);
+
+		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
+		// works.
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,
+				VesselEventVisit.class, Idle.class, EndEvent.class };
+		SequenceTester checker = getDefaultTester(classes);
+
+		// Set a target end heel
+		msc.vesselAvailability.getEndHeel().setEndCold(true);
+		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+
+		// expected durations of journeys
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
+
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 2 { duration in hours } * 10 { NBO rate }
+		// 0 (vessel empty)
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0 });
+
+		// expected base consumptions
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
+		// 30 = 2 { journey duration } * 15 { base fuel consumption } - 0 { LNG consumption }
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 30 });
+
+		// expected costs of journeys
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
+		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption }
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300 });
+
+		// expected durations of idles
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0, 0, 0 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0, 0 });
+
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0, 0, 0 });
+
+		// idle costs
+		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0, 0, 0 });
+
+		// expected charter out duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+
+		// expected charter out revenue
+		// 24 { revenue per day } * 1 { days }
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
+
+		// End heel in m3 - Unable to meet end heel level
+		checker.setExpectedValue(0, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+	}
+
+	@Test
+	public void testRegularCharterOutLoadToOrigin_WithEndHeel_Violation() {
+		System.err.println("\n\nTest regular charter out from load port to origin port.");
+
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		CharterOutEvent event = msc.makeCharterOut(msc, scenario, msc.loadPort, msc.originPort);
+		event.getHeelOptions().setVolumeAvailable(1000);
+
+		// FIXME: Note - there are three idle events in a row due to the way the internal optimisation represents the transition from charter start to charter end. Not great API but this is the way it
+		// works.
+		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, Idle.class, Idle.class,
+				VesselEventVisit.class, Idle.class, EndEvent.class };
+		SequenceTester checker = getDefaultTester(classes);
+
+		// Set a target end heel
+		msc.vesselAvailability.getEndHeel().setEndCold(true);
+		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+
+		// expected durations of journeys
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2 });
+
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 2 { duration in hours } * 10 { NBO rate }
+		// 0 (vessel empty)
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0 });
+
+		// expected base consumptions
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
+		// 30 = 2 { journey duration } * 15 { base fuel consumption } - 0 { LNG consumption }
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 30 });
+
+		// expected costs of journeys
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
+		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption }
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300 });
+
+		// expected durations of idles
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0, 0, 0 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0, 0, 0 });
+
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0, 0, 0 });
+
+		// idle costs
+		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0, 0, 0 });
+
+		// expected charter out duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+
+		// expected charter out revenue
+		// 24 { revenue per day } * 1 { days }
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
+
+		// End heel in m3 - Unable to meet end heel level
+		checker.setExpectedValue(1000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+
+		checker.check(sequence);
+	}
+
+	@Test
+	public void testDryDock() {
+		System.err.println("\n\nDry dock event inserted correctly.");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+		msc.setupCooldown(30);
+
+		// Set a target end heel
+		msc.vesselAvailability.getEndHeel().setEndCold(true);
+		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
+
+		// change to default: add a dry dock event 2-3 hrs after discharge window ends
+		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
+		final Date dryDockStartByDate = new Date(endLoad.getTime() + 3 * 3600 * 1000);
+		final Date dryDockStartAfterDate = new Date(endLoad.getTime() + 2 * 3600 * 1000);
+		msc.vesselEventCreator.createDryDockEvent("DryDock", msc.loadPort, dryDockStartByDate, dryDockStartAfterDate);
+
+		// set up a drydock pricing of 6
+		msc.portCreator.setPortCost(msc.loadPort, PortCapability.DRYDOCK, 6);
+
+		SequenceTester checker = getTesterForVesselEventPostDischargeWithEndCooldown();
+
+		// expected dry dock duration
+		checker.setExpectedValues(Expectations.DURATIONS, VesselEventVisit.class, new Integer[] { 24 });
+
+		// expected dry dock port cost
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { 6 });
+
+		// End heel in m3 - Unable to meet end heel level
+		checker.setExpectedValue(2000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		checker.check(sequence);
+	}
+
 }

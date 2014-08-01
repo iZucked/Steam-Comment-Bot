@@ -52,7 +52,7 @@ public class AbstractShippingCalculationsTestClass {
 		int endIndex;
 		boolean isCargo;
 
-		public PnlChunkIndexData(final int start, final int end, boolean cargo) {
+		public PnlChunkIndexData(final int start, final int end, final boolean cargo) {
 			startIndex = start;
 			endIndex = end;
 			isCargo = cargo;
@@ -111,7 +111,7 @@ public class AbstractShippingCalculationsTestClass {
 		}
 		case MIN_LOAD_VIOLATIONS: {
 			if (event instanceof CapacityViolationsHolder) {
-				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MIN_LOAD);
+				final Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MIN_LOAD);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
@@ -119,7 +119,7 @@ public class AbstractShippingCalculationsTestClass {
 		}
 		case MAX_LOAD_VIOLATIONS: {
 			if (event instanceof CapacityViolationsHolder) {
-				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MAX_LOAD);
+				final Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MAX_LOAD);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
@@ -127,7 +127,7 @@ public class AbstractShippingCalculationsTestClass {
 		}
 		case MIN_DISCHARGE_VIOLATIONS: {
 			if (event instanceof CapacityViolationsHolder) {
-				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MIN_DISCHARGE);
+				final Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.MIN_DISCHARGE);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
@@ -142,7 +142,7 @@ public class AbstractShippingCalculationsTestClass {
 		}
 		case VESSEL_CAPACITY_VIOLATIONS: {
 			if (event instanceof CapacityViolationsHolder) {
-				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.VESSEL_CAPACITY);
+				final Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.VESSEL_CAPACITY);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
@@ -150,7 +150,7 @@ public class AbstractShippingCalculationsTestClass {
 		}
 		case LOST_HEEL_VIOLATIONS: {
 			if (event instanceof CapacityViolationsHolder) {
-				Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.LOST_HEEL);
+				final Long value = ((CapacityViolationsHolder) event).getViolations().get(CapacityViolationType.LOST_HEEL);
 				return (value == null) ? 0 : (int) (long) value;
 			} else {
 				return null;
@@ -176,7 +176,7 @@ public class AbstractShippingCalculationsTestClass {
 	public List<String> checkValues(final Expectations field, final List<? extends Event> events, final Integer[] values) {
 		Assert.assertEquals(values.length, events.size());
 
-		List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<String>();
 
 		for (int i = 0; i < values.length; i++) {
 			final Event event = events.get(i);
@@ -197,7 +197,7 @@ public class AbstractShippingCalculationsTestClass {
 	public int getFuelConsumption(final Event event, final Fuel fuel) {
 		if (event instanceof FuelUsage) {
 			int result = 0;
-			FuelUnit unit = (fuel == Fuel.NBO || fuel == Fuel.FBO) ? FuelUnit.M3 : FuelUnit.MT;
+			final FuelUnit unit = (fuel == Fuel.NBO || fuel == Fuel.FBO) ? FuelUnit.M3 : FuelUnit.MT;
 
 			for (final FuelQuantity quantity : ((FuelUsage) event).getFuels()) {
 				if (quantity.getFuel() == fuel) {
@@ -213,7 +213,7 @@ public class AbstractShippingCalculationsTestClass {
 		return 0;
 	}
 
-	private GroupProfitAndLoss getPnlGroup(Event event) {
+	private GroupProfitAndLoss getPnlGroup(final Event event) {
 		ProfitAndLossContainer container = null;
 		if (event instanceof SlotVisit) {
 			// and find the cargo associated with it
@@ -232,7 +232,7 @@ public class AbstractShippingCalculationsTestClass {
 		return null;
 	}
 
-	public Long getEventPnl(Event event) {
+	public Long getEventPnl(final Event event) {
 		final GroupProfitAndLoss data = getPnlGroup(event);
 
 		if (data != null) {
@@ -249,12 +249,12 @@ public class AbstractShippingCalculationsTestClass {
 	 * @return
 	 */
 	public PnlChunkIndexData[] getPnlChunks(final List<? extends Event> events) {
-		ArrayList<Integer> boundaries = new ArrayList<Integer>();
+		final ArrayList<Integer> boundaries = new ArrayList<Integer>();
 		int index = 0;
 		GroupProfitAndLoss lastGroup = null;
 
 		// find the boundaries at which the PnL group changes
-		for (Event event : events) {
+		for (final Event event : events) {
 			final GroupProfitAndLoss data = getPnlGroup(event);
 			if (data != null && data != lastGroup) {
 				boundaries.add(index);
@@ -265,11 +265,11 @@ public class AbstractShippingCalculationsTestClass {
 
 		boundaries.add(index - 1);
 
-		PnlChunkIndexData[] result = new PnlChunkIndexData[boundaries.size() - 1];
+		final PnlChunkIndexData[] result = new PnlChunkIndexData[boundaries.size() - 1];
 		// construct Pnl chunks from the boundaries
 		for (int i = 0; i < boundaries.size() - 1; i++) {
-			int start = boundaries.get(i);
-			int end = boundaries.get(i + 1) - 1;
+			final int start = boundaries.get(i);
+			final int end = boundaries.get(i + 1) - 1;
 
 			// check if this chunk is a cargo
 			boolean isCargo = false;
@@ -294,13 +294,13 @@ public class AbstractShippingCalculationsTestClass {
 			for (int i = 0; i < pnls.length; i++) {
 				if (pnls[i] != null) {
 					for (int j = indices[i].startIndex; j <= indices[i].endIndex; j++) {
-						Event event = events.get(j);
-						Long pnl = getEventPnl(event);
+						final Event event = events.get(j);
+						final Long pnl = getEventPnl(event);
 						if (pnl != null && pnls[i] != null) {
 							// if ((int) pnls[i] != pnl.intValue()) {
 							// failures.add(String.format("PnL expected %d was %d for [%d] %s", pnls[i], pnl.intValue(), j, event.toString()));
 							// }
-							//allow small rounding error due to floating point arithmetic
+							// allow small rounding error due to floating point arithmetic
 							if (Math.abs((int) pnls[i] - pnl.intValue()) > 1) {
 								failures.add(String.format("PnL expected %d was %d for [%d] %s", pnls[i], pnl.intValue(), j, event.toString()));
 							}
@@ -317,7 +317,7 @@ public class AbstractShippingCalculationsTestClass {
 	private int getLoadDischarge(final Event event) {
 		if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
-			SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+			final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 			final CargoAllocation ca = slotAllocation.getCargoAllocation();
 			final Slot slot = slotAllocation.getSlot();
 
@@ -474,7 +474,7 @@ public class AbstractShippingCalculationsTestClass {
 		 * @param clazz
 		 * @param values
 		 */
-		public void setExpectedValuesIfMatching(Expectations field, Class<?> clazz, Integer[] values) {
+		public void setExpectedValuesIfMatching(final Expectations field, final Class<?> clazz, final Integer[] values) {
 			int count = 0;
 
 			for (int i = 0; i < classes.length; i++) {
@@ -720,8 +720,57 @@ public class AbstractShippingCalculationsTestClass {
 	}
 
 	public SequenceTester getTesterForVesselEventPostDischarge() {
-		Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class,
+		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class,
 				Journey.class, Idle.class, EndEvent.class };
+		final SequenceTester checker = getDefaultTester(classes);
+
+		// expected durations of journeys
+		checker.setExpectedValues(Expectations.DURATIONS, Journey.class, new Integer[] { 1, 2, 2, 1 });
+
+		// expected NBO consumptions of journeys
+		// 0 (no start heel)
+		// 20 = 2 { duration in hours } * 10 { NBO rate }
+		// 0 (vessel empty)
+		checker.setExpectedValues(Expectations.NBO_USAGE, Journey.class, new Integer[] { 0, 20, 0, 0 });
+
+		// expected base consumptions
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		// 10 = 2 { journey duration } * 15 { base fuel consumption } - 20 { LNG consumption }
+		// 30 = 2 { journey duration } * 15 { base fuel consumption } - 0 { LNG consumption }
+		// 15 = 1 { journey duration } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.BF_USAGE, Journey.class, new Integer[] { 15, 10, 30, 15 });
+
+		// expected costs of journeys
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		// 520 = 10 { base fuel unit cost } * 10 { base fuel consumption } + 21 { LNG CV } * 1 { LNG cost per MMBTU } * 20 { LNG consumption }
+		// 300 = 10 { base fuel unit cost } * 30 { base fuel consumption }
+		// 150 = 10 { base fuel unit cost } * 15 { base fuel consumption }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Journey.class, new Integer[] { 150, 520, 300, 150 });
+
+		// expected durations of idles
+		checker.setExpectedValues(Expectations.DURATIONS, Idle.class, new Integer[] { 0, 2, 0, 0 });
+
+		// expected base idle consumptions
+		// 0 = no idle (start)
+		// 0 = no idle (idle on NBO)
+		// 0 = no idle (end)
+		checker.setExpectedValues(Expectations.BF_USAGE, Idle.class, new Integer[] { 0, 0, 0, 0 });
+
+		// expected NBO idle consumptions
+		// 10 = 2 { idle duration } * 5 { idle NBO rate }
+		checker.setExpectedValues(Expectations.NBO_USAGE, Idle.class, new Integer[] { 0, 10, 0, 0 });
+
+		// idle costs
+		// 210 = 10 { LNG consumption } * 21 { LNG CV } * 1 { LNG cost per MMBTU }
+		checker.setExpectedValues(Expectations.FUEL_COSTS, Idle.class, new Integer[] { 0, 210, 0, 0 });
+
+		return checker;
+
+	}
+
+	public SequenceTester getTesterForVesselEventPostDischargeWithEndCooldown() {
+		final Class<?>[] classes = { StartEvent.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class, VesselEventVisit.class,
+				Journey.class, Idle.class, Cooldown.class, EndEvent.class };
 		final SequenceTester checker = getDefaultTester(classes);
 
 		// expected durations of journeys
