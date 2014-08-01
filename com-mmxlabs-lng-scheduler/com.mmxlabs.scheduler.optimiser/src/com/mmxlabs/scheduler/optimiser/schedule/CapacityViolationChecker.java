@@ -220,7 +220,7 @@ public class CapacityViolationChecker {
 				final IPortSlot toPortSlot = lastHeelDetails.getOptions().getPortSlot();
 				if (toPortSlot instanceof EndPortSlot) {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
-					if (remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
+					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
 						addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
 					}
 				}
