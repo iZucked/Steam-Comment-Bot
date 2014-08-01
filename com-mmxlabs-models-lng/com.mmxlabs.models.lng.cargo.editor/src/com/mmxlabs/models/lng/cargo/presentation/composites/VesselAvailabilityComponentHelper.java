@@ -68,6 +68,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
+		add_entityEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
 		add_startAtEditor(detailComposite, topClass);
 		add_startAfterEditor(detailComposite, topClass);
@@ -76,7 +77,7 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 		add_endAfterEditor(detailComposite, topClass);
 		add_endByEditor(detailComposite, topClass);
 		add_startHeelEditor(detailComposite, topClass);
-		add_entityEditor(detailComposite, topClass);
+		add_endHeelEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessel feature on VesselAvailability
@@ -150,6 +151,15 @@ public class VesselAvailabilityComponentHelper extends BaseComponentHelper {
 	protected void add_startHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL));
 	}
+	/**
+	 * Create the editor for the endHeel feature on VesselAvailability
+	 *
+	 * @generated
+	 */
+	protected void add_endHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL));
+	}
+
 	/**
 	 * Create the editor for the entity feature on VesselAvailability
 	 *

@@ -115,6 +115,12 @@
         id="com.mmxlabs.models.lng.cargo.presentation.composites.VesselTypeGroupComponentHelper"
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.cargo.VesselTypeGroup"/>
+         <componentHelper
+               helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.EndHeelOptionsComponentHelper"
+               id="com.mmxlabs.models.lng.cargo.presentation.composites.EndHeelOptionsComponentHelper"
+               inheritable="true"
+               modelClass="com.mmxlabs.models.lng.cargo.EndHeelOptions">
+         </componentHelper>
         
 	</extension>
  <extension
@@ -219,6 +225,12 @@
           eClass="com.mmxlabs.models.lng.cargo.DischargeSlot"
           factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.DischargeSlotCompositeFactory"
           id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.DischargeSlotCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.cargo.VesselAvailability"
+          factory="com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselAvailabilityCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.displaycomposites.VesselAvailabilityCompositeFactory"
           inheritable="true">
     </displayCompositeFactory>
  </extension>

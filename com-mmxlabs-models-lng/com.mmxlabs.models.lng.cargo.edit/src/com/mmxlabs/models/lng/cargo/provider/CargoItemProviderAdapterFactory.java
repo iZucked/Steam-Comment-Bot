@@ -363,6 +363,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.EndHeelOptions} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EndHeelOptionsItemProvider endHeelOptionsItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.EndHeelOptions}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEndHeelOptionsAdapter() {
+		if (endHeelOptionsItemProvider == null) {
+			endHeelOptionsItemProvider = new EndHeelOptionsItemProvider(this);
+		}
+
+		return endHeelOptionsItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -500,6 +523,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (dryDockEventItemProvider != null) dryDockEventItemProvider.dispose();
 		if (charterOutEventItemProvider != null) charterOutEventItemProvider.dispose();
 		if (vesselTypeGroupItemProvider != null) vesselTypeGroupItemProvider.dispose();
+		if (endHeelOptionsItemProvider != null) endHeelOptionsItemProvider.dispose();
 	}
 
 }

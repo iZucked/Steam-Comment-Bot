@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartAfter <em>Start After</em>}</li>
@@ -38,7 +39,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getStartHeel <em>Start Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}</li>
  * </ul>
  * </p>
  *
@@ -395,6 +396,32 @@ public interface VesselAvailability extends UUIDObject {
 	 * @generated
 	 */
 	void setStartHeel(HeelOptions value);
+
+	/**
+	 * Returns the value of the '<em><b>End Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>End Heel</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>End Heel</em>' containment reference.
+	 * @see #setEndHeel(EndHeelOptions)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_EndHeel()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EndHeelOptions getEndHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.VesselAvailability#getEndHeel <em>End Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>End Heel</em>' containment reference.
+	 * @see #getEndHeel()
+	 * @generated
+	 */
+	void setEndHeel(EndHeelOptions value);
 
 	/**
 	 * Returns the value of the '<em><b>Entity</b></em>' reference.

@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.cargo.impl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
@@ -43,6 +44,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getVessel <em>Vessel</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartAt <em>Start At</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartAfter <em>Start After</em>}</li>
@@ -51,7 +53,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndAfter <em>End After</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndBy <em>End By</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getStartHeel <em>Start Heel</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEntity <em>Entity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselAvailabilityImpl#getEndHeel <em>End Heel</em>}</li>
  * </ul>
  * </p>
  *
@@ -67,6 +69,16 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * @ordered
 	 */
 	protected Vessel vessel;
+
+	/**
+	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEntity()
+	 * @generated
+	 * @ordered
+	 */
+	protected BaseLegalEntity entity;
 
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
@@ -244,14 +256,14 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	protected HeelOptions startHeel;
 
 	/**
-	 * The cached value of the '{@link #getEntity() <em>Entity</em>}' reference.
+	 * The cached value of the '{@link #getEndHeel() <em>End Heel</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getEntity()
+	 * @see #getEndHeel()
 	 * @generated
 	 * @ordered
 	 */
-	protected BaseLegalEntity entity;
+	protected EndHeelOptions endHeel;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -635,6 +647,72 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EndHeelOptions getEndHeel() {
+		if (endHeel != null && endHeel.eIsProxy()) {
+			InternalEObject oldEndHeel = (InternalEObject)endHeel;
+			endHeel = (EndHeelOptions)eResolveProxy(oldEndHeel);
+			if (endHeel != oldEndHeel) {
+				InternalEObject newEndHeel = (InternalEObject)endHeel;
+				NotificationChain msgs = oldEndHeel.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__END_HEEL, null, null);
+				if (newEndHeel.eInternalContainer() == null) {
+					msgs = newEndHeel.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__END_HEEL, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_AVAILABILITY__END_HEEL, oldEndHeel, endHeel));
+			}
+		}
+		return endHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EndHeelOptions basicGetEndHeel() {
+		return endHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetEndHeel(EndHeelOptions newEndHeel, NotificationChain msgs) {
+		EndHeelOptions oldEndHeel = endHeel;
+		endHeel = newEndHeel;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__END_HEEL, oldEndHeel, newEndHeel);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEndHeel(EndHeelOptions newEndHeel) {
+		if (newEndHeel != endHeel) {
+			NotificationChain msgs = null;
+			if (endHeel != null)
+				msgs = ((InternalEObject)endHeel).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__END_HEEL, null, msgs);
+			if (newEndHeel != null)
+				msgs = ((InternalEObject)newEndHeel).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CargoPackage.VESSEL_AVAILABILITY__END_HEEL, null, msgs);
+			msgs = basicSetEndHeel(newEndHeel, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_AVAILABILITY__END_HEEL, newEndHeel, newEndHeel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public BaseLegalEntity getEntity() {
 		if (entity != null && entity.eIsProxy()) {
 			InternalEObject oldEntity = (InternalEObject)entity;
@@ -678,6 +756,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
 				return basicSetStartHeel(null, msgs);
+			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
+				return basicSetEndHeel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -693,6 +773,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
+			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
+				if (resolve) return getEntity();
+				return basicGetEntity();
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
@@ -710,9 +793,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
 				if (resolve) return getStartHeel();
 				return basicGetStartHeel();
-			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
-				if (resolve) return getEntity();
-				return basicGetEntity();
+			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
+				if (resolve) return getEndHeel();
+				return basicGetEndHeel();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -728,6 +811,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)newValue);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
+				setEntity((BaseLegalEntity)newValue);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				setTimeCharterRate((String)newValue);
@@ -755,8 +841,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
 				setStartHeel((HeelOptions)newValue);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
-				setEntity((BaseLegalEntity)newValue);
+			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
+				setEndHeel((EndHeelOptions)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -772,6 +858,9 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				setVessel((Vessel)null);
+				return;
+			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
+				setEntity((BaseLegalEntity)null);
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				unsetTimeCharterRate();
@@ -797,8 +886,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
 				setStartHeel((HeelOptions)null);
 				return;
-			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
-				setEntity((BaseLegalEntity)null);
+			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
+				setEndHeel((EndHeelOptions)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -814,6 +903,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 		switch (featureID) {
 			case CargoPackage.VESSEL_AVAILABILITY__VESSEL:
 				return vessel != null;
+			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
+				return entity != null;
 			case CargoPackage.VESSEL_AVAILABILITY__TIME_CHARTER_RATE:
 				return isSetTimeCharterRate();
 			case CargoPackage.VESSEL_AVAILABILITY__START_AT:
@@ -830,8 +921,8 @@ public class VesselAvailabilityImpl extends UUIDObjectImpl implements VesselAvai
 				return isSetEndBy();
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
 				return startHeel != null;
-			case CargoPackage.VESSEL_AVAILABILITY__ENTITY:
-				return entity != null;
+			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
+				return endHeel != null;
 		}
 		return super.eIsSet(featureID);
 	}
