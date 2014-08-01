@@ -734,14 +734,15 @@ public class VoyagePlanner {
 							} else {
 								currentHeelInM3 = 0;
 							}
-					
+
 						}
 						assert currentHeelInM3 >= 0;
 
 					} else {
 						if (portSlot instanceof EndPortSlot) {
 							final EndPortSlot endPortSlot = (EndPortSlot) portSlot;
-							assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
+							// Assert disabled as it is not always possible to arrive with target heel (thus capacity violation should be triggered)
+							// assert currentHeelInM3 >= endPortSlot.getTargetEndHeelInM3();
 						}
 					}
 					final long end = currentHeelInM3;
