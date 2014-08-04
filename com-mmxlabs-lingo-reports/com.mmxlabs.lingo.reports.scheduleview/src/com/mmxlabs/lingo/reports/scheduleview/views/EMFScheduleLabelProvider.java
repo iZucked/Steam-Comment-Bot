@@ -77,6 +77,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public EMFScheduleLabelProvider(final GanttChartViewer viewer, final IMemento memento) {
 		this.viewer = viewer;
 		this.memento = memento;
+		this.showCanals = memento.getBoolean(Show_Canals);
 	}
 
 	@Override
