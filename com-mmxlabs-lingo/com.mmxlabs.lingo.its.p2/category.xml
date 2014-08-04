@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<site>
+   <feature id="com.mmxlabs.lingo.its.feature" version="0.0.0">
+      <category name="all"/>
+   </feature>
+   <category-def name="all" label="LiNGO - ITS p2"/>
+</site>
