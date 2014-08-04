@@ -340,7 +340,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			public int calculateCooldownUnitPrice(final int time, final IPort port) {
 				return 0;
 			}
-		}, ""/* no timezone */);
+		}, "UTC"/* no timezone */);
 
 		// setup fake vessels for virtual elements.
 		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);

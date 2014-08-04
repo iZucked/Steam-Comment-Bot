@@ -46,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -103,6 +104,9 @@ public class VoyagePlanner {
 
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
+
+	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Inject
 	private IStartEndRequirementProvider startEndRequirementProvider;
@@ -378,7 +382,9 @@ public class VoyagePlanner {
 					// the
 					// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
 					if (!shortCargoEnd) {
-						final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, portTimesRecord.getFirstSlotTime());
+						final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
+						vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
+
 						final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 						if (plan == null) {
 							return null;
@@ -432,7 +438,9 @@ public class VoyagePlanner {
 				// Reset VPO ready for next iteration - some data may have been added
 				voyagePlanOptimiser.reset();
 			} else {
-				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, portTimesRecord.getFirstSlotTime());
+				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
+						vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
+
 				final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 				if (plan == null) {
 					return null;
@@ -453,7 +461,8 @@ public class VoyagePlanner {
 
 		final VoyagePlan plan = new VoyagePlan();
 		// Replace with actuals later if needed
-		plan.setCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vesselAvailability, vesselStartTime, portTimesRecord.getFirstSlotTime()));
+		plan.setCharterInRatePerDay(charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
+		vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot())));
 		plan.setStartingHeelInM3(startHeelVolumeInM3);
 		{
 
