@@ -278,9 +278,12 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				@Override
 				public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
 					log.debug("visitFile: " + file.normalize());
-
-					addFile(file);
-					newFiles.add(file.normalize().toString());
+					try {
+						addFile(file);
+						newFiles.add(file.normalize().toString());
+					} catch (Exception e) {
+						log.debug(e.getMessage(), e);
+					}
 					return super.visitFile(file, attrs);
 				}
 			});
