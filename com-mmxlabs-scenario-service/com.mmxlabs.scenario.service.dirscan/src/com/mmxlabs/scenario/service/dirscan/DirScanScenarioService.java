@@ -112,6 +112,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 						path.toFile().renameTo(newName.toFile());
 					} finally {
 						lock.readLock().unlock();
+						pokeWatchThread();
 					}
 				}
 			}
@@ -145,6 +146,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			}
 		} finally {
 			lock.readLock().unlock();
+			pokeWatchThread();
 		}
 	}
 
@@ -220,6 +222,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 				}
 			} finally {
 				lock.writeLock().unlock();
+				pokeWatchThread();
 			}
 		}
 
@@ -246,6 +249,12 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			};
 		};
 		watchThread.start();
+	}
+
+	private void pokeWatchThread() {
+		if (watchThread != null) {
+			watchThread.interrupt();
+		}
 	}
 
 	public void stop() {
@@ -543,6 +552,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			manifestResource.save(null);
 		} finally {
 			lock.readLock().unlock();
+			pokeWatchThread();
 		}
 		return null;
 	}
@@ -592,6 +602,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			}
 		} finally {
 			lock.readLock().unlock();
+			pokeWatchThread();
 		}
 	}
 
@@ -706,6 +717,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			newFolderPath.toFile().mkdirs();
 		} finally {
 			lock.readLock().unlock();
+			pokeWatchThread();
 		}
 	}
 
