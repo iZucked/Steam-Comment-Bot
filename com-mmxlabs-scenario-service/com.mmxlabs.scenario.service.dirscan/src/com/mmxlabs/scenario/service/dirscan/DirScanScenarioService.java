@@ -232,14 +232,15 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					lock.writeLock().lock();
 					try {
 						scanDirectory(getServiceModel(), dataPath.toPath());
-						// TODO: Make configurable
-						Thread.sleep(20000);
-					} catch (final InterruptedException e) {
-						// ignore
 					} catch (final Exception e) {
 						log.error(e.getMessage(), e);
 					} finally {
 						lock.writeLock().unlock();
+					}
+					try {
+						Thread.sleep(20000);
+					} catch (final InterruptedException e) {
+						// ignore
 					}
 				}
 			};
