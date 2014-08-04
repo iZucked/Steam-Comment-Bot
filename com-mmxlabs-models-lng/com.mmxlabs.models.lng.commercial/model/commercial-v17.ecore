@@ -93,10 +93,3 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleEntityBook" eSuperTypes="#//BaseEntityBook"/>
 </ecore:EPackage>
-  <eClassifiers xsi:type="ecore:EEnum" name="PricingEvent">
-    <eLiterals name="START_LOAD"/>
-    <eLiterals name="END_LOAD" value="1"/>
-    <eLiterals name="START_DISCHARGE" value="2"/>
-    <eLiterals name="END_DISCHARGE" value="3"/>
-  </eClassifiers>
-</ecore:EPackage>

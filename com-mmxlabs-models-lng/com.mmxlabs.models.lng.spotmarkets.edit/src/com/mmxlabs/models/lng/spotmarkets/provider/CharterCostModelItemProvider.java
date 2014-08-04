@@ -202,28 +202,6 @@ public class CharterCostModelItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Enabled feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEnabledPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_CharterCostModel_enabled_feature"),
-				 getString("_UI_CharterCostModel_enabled_description"),
-				 SpotMarketsPackage.Literals.CHARTER_COST_MODEL__ENABLED,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns CharterCostModel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

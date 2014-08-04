@@ -53,12 +53,6 @@ public class MigrateToV18 extends AbstractMigrationUnit {
 
 	@Override
 	protected void doMigration(final EObject model) {
-
-	}
-}
-
-	@Override
-	protected void doMigration(final EObject model) {
 		// Nothing to do, forwards compatible
 	}
 }
