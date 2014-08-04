@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
 
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.LinkedList;
@@ -22,9 +22,6 @@ import org.eclipse.emf.databinding.EMFUpdateValueStrategy;
 import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.databinding.edit.EMFEditProperties;
 import org.eclipse.emf.databinding.edit.IEMFEditValueProperty;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -238,15 +235,13 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
 		return area;
 	}
-	
-	
+
 	private Composite createDateEditor(final Composite parent, final Option option) {
 		final Composite area = toolkit.createComposite(parent, SWT.NONE);
 		area.setLayout(new GridLayout(2, false));
 		toolkit.createLabel(area, option.label);
 
-		final String dateFormat = "yyyy-MM-dd";
-		final SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+		final DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
 
 		final IValidator validator = new IValidator() {
 			@Override
@@ -256,69 +251,59 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 						try {
 							format.parse((String) value);
 						} catch (ParseException e) {
-							 return ValidationStatus.error(String.format("'%s' is not a valid %s date.", value, dateFormat));
+							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
 					}
 				}
-				return ValidationStatus.ok();					
+				return ValidationStatus.ok();
 			}
 		};
-		
+
 		final Text text = toolkit.createText(area, null, SWT.NONE);
-		
+
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
-		
+
 		final EMFUpdateValueStrategy stringToDateStrategy = new EMFUpdateValueStrategy() {
-			  @Override
-			  protected IConverter createConverter(Object fromType, Object toType)
-			  {
-		        return new Converter(fromType, toType)
-		          {
-		            public Object convert(Object fromObject)
-		            {
-		              String value = fromObject == null ? null : fromObject.toString();
-		              try {
+			@Override
+			protected IConverter createConverter(Object fromType, Object toType) {
+				return new Converter(fromType, toType) {
+					public Object convert(Object fromObject) {
+						String value = fromObject == null ? null : fromObject.toString();
+						try {
 							return format.parse(value);
 						} catch (Exception e) {
 							return null;
 						}
-		            }
-		          };
-			  }			
+					}
+				};
+			}
 		};
-		
-		
+
 		final EMFUpdateValueStrategy dateToStringStrategy = new EMFUpdateValueStrategy() {
-			  @Override
-			  protected IConverter createConverter(Object fromType, Object toType)
-			  {
-		        return new Converter(fromType, toType)
-		          {
-		            public Object convert(Object fromObject)
-		            {
-		            	if (fromObject instanceof Date) {
-		            		return format.format(fromObject);
-		            	}
-		            	return null;
-		            }
-		          };
-			  }			
+			@Override
+			protected IConverter createConverter(Object fromType, Object toType) {
+				return new Converter(fromType, toType) {
+					public Object convert(Object fromObject) {
+						if (fromObject instanceof Date) {
+							return format.format(fromObject);
+						}
+						return null;
+					}
+				};
+			}
 		};
-		
-		
-						
+
 		stringToDateStrategy.setAfterGetValidator(validator);
 
 		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
 		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
-		
+
 		return area;
-		
+
 	}
 
-
 	/**
-	 * Adds new elements to the dialog. 
+	 * Adds new elements to the dialog.
 	 * 
 	 * @param dataSection
 	 * @param editingDomian
