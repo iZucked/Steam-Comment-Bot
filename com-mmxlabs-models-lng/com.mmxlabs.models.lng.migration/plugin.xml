@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="18"
+            latestVersion="19"
             name="com.mmxlabs.lingo">
       </MigrationContext>
    </extension>
@@ -141,6 +141,13 @@
              from="17"
              id="com.mmxlabs.models.lng.migration.units.MigrateToV18"
              to="18">
+       </MigrationUnit>
+       <MigrationUnit
+             class="com.mmxlabs.models.lng.migration.units.MigrateToV19"
+             context="com.mmxlabs.lingo"
+             from="18"
+             id="com.mmxlabs.models.lng.migration.units.MigrateToV19"
+             to="19">
        </MigrationUnit>
    </extension>
 </plugin>

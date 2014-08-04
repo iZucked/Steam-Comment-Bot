@@ -64,12 +64,22 @@ public class CharterCostModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_enabledEditor(detailComposite, topClass);
 		add_vesselClassesEditor(detailComposite, topClass);
 		add_charterInPriceEditor(detailComposite, topClass);
 		add_charterOutPriceEditor(detailComposite, topClass);
 		add_spotCharterCountEditor(detailComposite, topClass);
 		add_minCharterOutDurationEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the enabled feature on CharterCostModel
+	 *
+	 * @generated
+	 */
+	protected void add_enabledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_COST_MODEL__ENABLED));
+	}
+
 	/**
 	 * Create the editor for the vesselClasses feature on CharterCostModel
 	 *

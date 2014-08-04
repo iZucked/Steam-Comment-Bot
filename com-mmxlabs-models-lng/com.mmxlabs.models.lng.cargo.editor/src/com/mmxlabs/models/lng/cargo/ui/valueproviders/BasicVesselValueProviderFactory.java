@@ -133,8 +133,10 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
 						if (spotMarketsModel != null) {
 							for (final CharterCostModel charteringSpotMarket : spotMarketsModel.getCharteringSpotMarkets()) {
-								if (charteringSpotMarket.getSpotCharterCount() > 0) {
-									availableSpotVesselClasses.addAll(charteringSpotMarket.getVesselClasses());
+								if (charteringSpotMarket.isEnabled()) {
+									if (charteringSpotMarket.getSpotCharterCount() > 0) {
+										availableSpotVesselClasses.addAll(charteringSpotMarket.getVesselClasses());
+									}
 								}
 							}
 						}
