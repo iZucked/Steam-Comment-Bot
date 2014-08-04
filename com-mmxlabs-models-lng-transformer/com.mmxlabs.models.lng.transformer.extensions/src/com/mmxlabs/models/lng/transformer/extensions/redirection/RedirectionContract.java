@@ -137,7 +137,7 @@ public class RedirectionContract implements ILoadPriceCalculator {
 				if (actualsDataProvider.hasActuals(loadSlot)) {
 					vesselCharterInRatePerDay = actualsDataProvider.getCharterRatePerDay(loadSlot);
 				} else {
-					vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
+					vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel,/** FIXME: not utc*/ vesselStartTime, timeZoneToUtcOffsetProvider.UTC(originalLoadTime, loadSlot));
 				}
 
 				final VoyagePlan plan = redirVCC.calculateShippingCosts(loadSlot.getPort(), baseSalesMarketPort, originalLoadTime, loadDuration, baseDischargeTime, dischargeDuration, vessel,
