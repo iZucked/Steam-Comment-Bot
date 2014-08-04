@@ -108,7 +108,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 				for (final String filePath : files) {
 					// Expect this type of extension
-					if (!(filePath.endsWith(".sc2") || filePath.endsWith(".scn") || filePath.endsWith(".scenario") || filePath.endsWith(".lingo"))) {
+					final String lowerFilePath = filePath.toLowerCase();
+					if (!(lowerFilePath.endsWith(".sc2") || lowerFilePath.endsWith(".scn") || lowerFilePath.endsWith(".scenario") || lowerFilePath.endsWith(".lingo"))) {
 						return Status.CANCEL_STATUS;
 
 					}
@@ -243,8 +244,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 											try {
 												// Get basic name
 												String scenarioName = new File(filePath).getName();
-												if (scenarioName.endsWith(".lingo")) {
-													scenarioName = scenarioName.replaceAll(".lingo", "");
+												if (scenarioName.toLowerCase().endsWith(".lingo")) {
+													scenarioName = scenarioName.replaceAll("(?i).lingo", "");
 												}
 
 												// Avoid name clashes
