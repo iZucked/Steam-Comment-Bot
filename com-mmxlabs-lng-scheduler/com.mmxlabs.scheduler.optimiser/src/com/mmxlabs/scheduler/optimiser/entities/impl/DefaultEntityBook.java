@@ -22,7 +22,7 @@ public class DefaultEntityBook implements IEntityBook {
 	private final ICurve taxCurve;
 	private final EntityBookType entityBookType;
 
-	public DefaultEntityBook(IEntity entity, final EntityBookType entityBookType, final ICurve taxCurve) {
+	public DefaultEntityBook(final IEntity entity, final EntityBookType entityBookType, final ICurve taxCurve) {
 		this.entity = entity;
 		this.entityBookType = entityBookType;
 		this.taxCurve = taxCurve;
