@@ -193,9 +193,13 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 					final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
 					final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
 					spotElementMap.put(startElement, resource);
-					spotElementMap.put(endElement, resource);
 					spotElementMap.put(virtualElement, resource);
-				}
+				// Including the end element here causes ITS to fail. The only reason I can think of is related to the following section in the ScheduleBuilder;
+
+				// >> BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
+				// >> resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
+
+				// spotElementMap.put(endElement, resource);
 			}
 		}
 
@@ -227,14 +231,14 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 				}
 
 				// This code segment yields a large speed up, but breaks ITS
-				
+
 				// If any of e1 or e2 is a special spot element then there is only one resource it is permitted to go on. Ignore the rest for sequencing checks.
 				IResource spotResource = null;
-//				if (spotElementMap.containsKey(e1)) {
-//					spotResource = spotElementMap.get(e1);
-//				} else if (spotElementMap.containsKey(e2)) {
-//					spotResource = spotElementMap.get(e2);
-//				}
+				if (spotElementMap.containsKey(e1)) {
+					spotResource = spotElementMap.get(e1);
+				} else if (spotElementMap.containsKey(e2)) {
+					spotResource = spotElementMap.get(e2);
+				}
 
 				final boolean allowForwardSequence = spotResource == null ? checker.allowSequence(e1, e2) : checker.allowSequence(e1, e2, spotResource);
 				if (allowForwardSequence) {
