@@ -37,6 +37,8 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -175,6 +177,47 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__OPERATIONS_START);
 									statuses.add(failure);
 
+								}
+							}
+
+							final HeelOptions startHeel = va.getStartHeel();
+							if (loadActuals.getStartingHeelM3() > 0) {
+								if (!startHeel.isSetVolumeAvailable() || loadActuals.getStartingHeelM3() != startHeel.getVolumeAvailable()) {
+									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%d - %d)", getID(assignment),
+											getVesselName(va.getVessel()), loadActuals.getStartingHeelM3(), startHeel.getVolumeAvailable());
+
+									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+									failure.addEObjectAndFeature(startHeel, FleetPackage.Literals.HEEL_OPTIONS__VOLUME_AVAILABLE);
+									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
+
+									statuses.add(failure);
+
+								}
+								if (Math.abs(loadActuals.getCV() - startHeel.getCvValue()) > 0.001) {
+									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel CV do not match (%.3f - %.3f)", getID(assignment), getVesselName(va.getVessel()),
+											loadActuals.getCV(), startHeel.getCvValue());
+
+									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+									failure.addEObjectAndFeature(startHeel, FleetPackage.Literals.HEEL_OPTIONS__CV_VALUE);
+									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.SLOT_ACTUALS__CV);
+
+									statuses.add(failure);
+
+								}
+							} else {
+								if (startHeel.isSetVolumeAvailable() || loadActuals.getStartingHeelM3() > 0) {
+									// Error
+									final String msg = String.format("Actualised Cargo %s and vessel %s starting heel quantities do not match (%d - %d)", getID(assignment),
+											getVesselName(va.getVessel()), loadActuals.getStartingHeelM3(), startHeel.getVolumeAvailable());
+
+									final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg), IStatus.ERROR);
+									failure.addEObjectAndFeature(va, CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+									failure.addEObjectAndFeature(startHeel, FleetPackage.Literals.HEEL_OPTIONS__VOLUME_AVAILABLE);
+									failure.addEObjectAndFeature(cargoActualsMap.get(assignment), ActualsPackage.Literals.LOAD_ACTUALS__STARTING_HEEL_M3);
+
+									statuses.add(failure);
 								}
 							}
 						}
