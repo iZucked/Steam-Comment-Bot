@@ -120,4 +120,13 @@ public class CharterCostModelComponentHelper extends BaseComponentHelper {
 	protected void add_minCharterOutDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION));
 	}
+
+	/**
+	 * Create the editor for the enabled feature on CharterCostModel
+	 *
+	 * @generated
+	 */
+	protected void add_enabledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.CHARTER_COST_MODEL__ENABLED));
+	}
 }

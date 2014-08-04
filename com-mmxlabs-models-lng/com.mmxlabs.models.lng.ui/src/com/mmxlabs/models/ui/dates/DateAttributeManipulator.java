@@ -53,6 +53,24 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 				}
 				return superValue;
 			}
+
+			@Override
+			protected void doSetValue(final Object value) {
+
+				if (value instanceof Date) {
+					final Calendar cal = Calendar.getInstance(LocalDateUtil.getTimeZone(object, (EAttribute) field));
+					cal.setTime((Date) value);
+					final int currentYear = cal.get(Calendar.YEAR);
+					if (currentYear < 2000) {
+						// Strip first two year digits and add to the year 2000
+						cal.set(Calendar.YEAR, 2000 + currentYear % 100);
+					}
+					super.doSetValue(cal.getTime());
+					return;
+				}
+
+				super.doSetValue(value);
+			}
 		};
 		final DateFormatter formatter = new DateFormatter();
 		formatter.setTimeZone(LocalDateUtil.getTimeZone(object, (EAttribute) field));

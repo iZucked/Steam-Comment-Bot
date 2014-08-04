@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.tabular.manipulators.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
@@ -52,6 +53,8 @@ public class CharterMarketPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Vessel Classes", new MultipleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterCostModel_VesselClasses(), getReferenceValueProviderCache(), getEditingDomain(),
 				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 
+		addTypicalColumn("Enabled", new BooleanAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterCostModel_Enabled(), getEditingDomain()));
+
 		addTypicalColumn("Spot Count", new NumericAttributeManipulator(SpotMarketsPackage.eINSTANCE.getCharterCostModel_SpotCharterCount(), getEditingDomain()));
 
 		addTypicalColumn("Hiring Index", new SingleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterCostModel_CharterInPrice(), getReferenceValueProviderCache(), getEditingDomain()));
@@ -74,7 +77,8 @@ public class CharterMarketPane extends ScenarioTableViewerPane {
 							CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
 							if (charterOutStartDate == null) {
 								charterOutStartDate = SpotMarketsFactory.eINSTANCE.createCharterOutStartDate();
-								final Command cmd = SetCommand.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE, charterOutStartDate);
+								final Command cmd = SetCommand
+										.create(getEditingDomain(), spotMarketsModel, SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE, charterOutStartDate);
 								getEditingDomain().getCommandStack().execute(cmd);
 							}
 

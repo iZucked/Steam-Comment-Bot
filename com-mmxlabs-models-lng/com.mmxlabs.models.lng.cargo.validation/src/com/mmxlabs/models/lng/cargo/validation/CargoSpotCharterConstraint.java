@@ -30,22 +30,26 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class CargoSpotCharterConstraint extends AbstractModelMultiConstraint {
-	
+
 	private boolean isMatchingSpotMarketExist(final MMXRootObject rootObject, final VesselClass vc) {
 		if (rootObject instanceof LNGScenarioModel) {
 			final SpotMarketsModel spotModel = ((LNGScenarioModel) rootObject).getSpotMarketsModel();
 			if (spotModel == null) {
 				return false;
 			}
-			for (final CharterCostModel market: spotModel.getCharteringSpotMarkets()) {
+			for (final CharterCostModel market : spotModel.getCharteringSpotMarkets()) {
+				if (!market.isEnabled()) {
+					continue;
+				}
+
 				if (market.getVesselClasses().contains(vc)) {
 					return true;
 				}
-			}			
-		}		
+			}
+		}
 		return false;
 	}
-	
+
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
@@ -56,8 +60,8 @@ public class CargoSpotCharterConstraint extends AbstractModelMultiConstraint {
 				final String message = String.format("No charter market provides %s vessels as required by cargo '%s'", assignment.getName(), cargo.getName());
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(target, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
-				statuses.add(dcsd);				
-			}			
+				statuses.add(dcsd);
+			}
 		}
 		return Activator.PLUGIN_ID;
 	}

@@ -44,7 +44,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contractType" eType="#//ContractType"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricingEvent" eType="#//PricingEvent"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
@@ -93,6 +92,7 @@
         eType="#//TaxRate" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleEntityBook" eSuperTypes="#//BaseEntityBook"/>
+</ecore:EPackage>
   <eClassifiers xsi:type="ecore:EEnum" name="PricingEvent">
     <eLiterals name="START_LOAD"/>
     <eLiterals name="END_LOAD" value="1"/>
