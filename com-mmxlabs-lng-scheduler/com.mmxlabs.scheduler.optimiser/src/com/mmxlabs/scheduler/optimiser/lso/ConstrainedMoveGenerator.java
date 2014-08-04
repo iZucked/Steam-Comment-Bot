@@ -190,16 +190,18 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			if (vesselAvailability != null) {
 				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 					final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
+					@SuppressWarnings("unused")
 					final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
 					final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
+
 					spotElementMap.put(startElement, resource);
 					spotElementMap.put(virtualElement, resource);
-				// Including the end element here causes ITS to fail. The only reason I can think of is related to the following section in the ScheduleBuilder;
+					// Including the end element here causes ITS to fail. The only reason I can think of is related to the following section in the ScheduleBuilder;
+					// >> BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
+					// >> resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
 
-				// >> BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
-				// >> resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
-
-				// spotElementMap.put(endElement, resource);
+					// spotElementMap.put(endElement, resource);
+				}
 			}
 		}
 
