@@ -420,15 +420,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getSpotMarket_Enabled() {
-		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(6);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getDESPurchaseMarket() {
 		return desPurchaseMarketEClass;
 	}
@@ -497,7 +488,7 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -634,7 +625,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		createEReference(spotMarketEClass, SPOT_MARKET__PRICE_INFO);
 		createEReference(spotMarketEClass, SPOT_MARKET__ENTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__PRICING_EVENT);
-		createEAttribute(spotMarketEClass, SPOT_MARKET__ENABLED);
 
 		desPurchaseMarketEClass = createEClass(DES_PURCHASE_MARKET);
 		createEAttribute(desPurchaseMarketEClass, DES_PURCHASE_MARKET__CV);
@@ -738,7 +728,6 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		initEReference(getSpotMarket_PriceInfo(), theCommercialPackage.getLNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarket_Entity(), theCommercialPackage.getBaseLegalEntity(), null, "entity", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_PricingEvent(), theCommercialPackage.getPricingEvent(), "pricingEvent", null, 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSpotMarket_Enabled(), ecorePackage.getEBoolean(), "enabled", "true", 0, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desPurchaseMarketEClass, DESPurchaseMarket.class, "DESPurchaseMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDESPurchaseMarket_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, DESPurchaseMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

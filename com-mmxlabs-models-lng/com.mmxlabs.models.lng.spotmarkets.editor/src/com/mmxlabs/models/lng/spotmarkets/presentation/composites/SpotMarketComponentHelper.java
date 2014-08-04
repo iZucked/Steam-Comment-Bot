@@ -72,7 +72,6 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 		add_priceInfoEditor(detailComposite, topClass);
 		add_entityEditor(detailComposite, topClass);
 		add_pricingEventEditor(detailComposite, topClass);
-		add_enabledEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the enabled feature on SpotMarket
@@ -133,14 +132,5 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_pricingEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__PRICING_EVENT));
-	}
-
-	/**
-	 * Create the editor for the enabled feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_enabledEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_MARKET__ENABLED));
 	}
 }

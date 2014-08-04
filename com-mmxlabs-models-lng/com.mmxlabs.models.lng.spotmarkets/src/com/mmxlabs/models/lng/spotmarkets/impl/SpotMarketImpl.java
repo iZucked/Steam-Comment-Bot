@@ -33,7 +33,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPriceInfo <em>Price Info</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPricingEvent <em>Pricing Event</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#isEnabled <em>Enabled</em>}</li>
  * </ul>
  * </p>
  *
@@ -171,26 +170,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 	protected PricingEvent pricingEvent = PRICING_EVENT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isEnabled()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean ENABLED_EDEFAULT = true;
-
-	/**
-	 * The cached value of the '{@link #isEnabled() <em>Enabled</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isEnabled()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean enabled = ENABLED_EDEFAULT;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -228,27 +207,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__NAME, oldName, name));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setEnabled(boolean newEnabled) {
-		boolean oldEnabled = enabled;
-		enabled = newEnabled;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__ENABLED, oldEnabled, enabled));
 	}
 
 	/**
@@ -500,8 +458,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return basicGetEntity();
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				return getPricingEvent();
-			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
-				return isEnabled();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -539,9 +495,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				setPricingEvent((PricingEvent)newValue);
 				return;
-			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
-				setEnabled((Boolean)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -578,9 +531,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				setPricingEvent(PRICING_EVENT_EDEFAULT);
 				return;
-			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
-				setEnabled(ENABLED_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -609,8 +559,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 				return entity != null;
 			case SpotMarketsPackage.SPOT_MARKET__PRICING_EVENT:
 				return pricingEvent != PRICING_EVENT_EDEFAULT;
-			case SpotMarketsPackage.SPOT_MARKET__ENABLED:
-				return enabled != ENABLED_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -667,8 +615,6 @@ public abstract class SpotMarketImpl extends UUIDObjectImpl implements SpotMarke
 		result.append(maxQuantity);
 		result.append(", pricingEvent: ");
 		result.append(pricingEvent);
-		result.append(", enabled: ");
-		result.append(enabled);
 		result.append(')');
 		return result.toString();
 	}

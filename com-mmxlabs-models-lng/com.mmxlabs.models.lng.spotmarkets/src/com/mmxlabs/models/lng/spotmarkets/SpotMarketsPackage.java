@@ -389,15 +389,6 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__PRICING_EVENT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKET__ENABLED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
-
-	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -505,15 +496,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DES_PURCHASE_MARKET__ENABLED = SPOT_MARKET__ENABLED;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -643,15 +625,6 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
 
 	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DES_SALES_MARKET__ENABLED = SPOT_MARKET__ENABLED;
-
-	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -768,15 +741,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FOB_PURCHASES_MARKET__ENABLED = SPOT_MARKET__ENABLED;
 
 	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
@@ -913,15 +877,6 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__PRICING_EVENT = SPOT_MARKET__PRICING_EVENT;
-
-	/**
-	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FOB_SALES_MARKET__ENABLED = SPOT_MARKET__ENABLED;
 
 	/**
 	 * The feature id for the '<em><b>Origin Ports</b></em>' reference list.
@@ -1300,17 +1255,6 @@ public interface SpotMarketsPackage extends EPackage {
 	EAttribute getSpotMarket_PricingEvent();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#isEnabled <em>Enabled</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Enabled</em>'.
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#isEnabled()
-	 * @see #getSpotMarket()
-	 * @generated
-	 */
-	EAttribute getSpotMarket_Enabled();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket <em>DES Purchase Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1673,22 +1617,6 @@ public interface SpotMarketsPackage extends EPackage {
 		EClass SPOT_MARKET = eINSTANCE.getSpotMarket();
 
 		/**
-		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SPOT_MARKET__ENABLED = eINSTANCE.getSpotMarket_Enabled();
-
-		/**
-		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SPOT_MARKET__AVAILABILITY = eINSTANCE.getSpotMarket_Availability();
-
-		/**
 		 * The meta object literal for the '<em><b>Min Quantity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1735,6 +1663,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPOT_MARKET__ENABLED = eINSTANCE.getSpotMarket_Enabled();
+
+		/**
+		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__AVAILABILITY = eINSTANCE.getSpotMarket_Availability();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
