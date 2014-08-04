@@ -11,6 +11,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 
 /***
  * 
@@ -161,8 +163,12 @@ public class PeriodExporter {
 
 		// Post process
 		{
-			// Make sure spot slot Ids are unique.
+			// Make sure spot slot Ids are unique. ...
 		}
+
+		// Copy params model
+		cmd.append(SetCommand.create(editingDomain, originalScenario.getPortfolioModel(), LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_Parameters(),
+				EcoreUtil.copy(periodScenario.getPortfolioModel().getParameters())));
 
 		if (cmd.isEmpty()) {
 			return IdentityCommand.INSTANCE;
