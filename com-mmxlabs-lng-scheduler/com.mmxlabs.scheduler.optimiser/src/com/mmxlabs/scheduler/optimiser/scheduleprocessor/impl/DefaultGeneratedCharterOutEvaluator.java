@@ -28,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.RouteVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
@@ -62,6 +63,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	private IActualsDataProvider actualsDataProvider;
 
+	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final List<Integer> arrivalTimes) {
 
@@ -72,7 +76,8 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		// TODO: Extract out further for custom base fuel pricing logic?
 		// Use forecast BF, but check for actuals later
 		int baseFuelUnitPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, vesselStartTime, arrivalTimes.get(0));
+		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, /** FIXME: Not UTC */
+		vesselStartTime, timeZoneToUtcOffsetProvider.UTC(arrivalTimes.get(0), ((PortDetails) vp.getSequence()[0]).getOptions().getPortSlot()));
 
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
 		// First step, find a ballast leg which is long enough to charter-out
