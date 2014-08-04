@@ -24,6 +24,7 @@ import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
@@ -146,6 +147,9 @@ public class PeriodTransformer {
 		// Filter out vessels
 		filterVesselAvailabilities(internalDomain, periodRecord, cargoModel, mapping);
 
+		// Remove schedule model
+		output.getPortfolioModel().getScheduleModel().setSchedule(null);
+		
 		return output;
 	}
 
@@ -300,8 +304,6 @@ public class PeriodTransformer {
 							++nextCounter;
 						}
 
-						// Only expect getNextEvent to be called once
-						assert nextCounter < 2;
 						startConditionMap.put(cargo, (PortVisit) segmentEnd);
 
 					} else if (event instanceof VesselEventVisit) {
@@ -401,6 +403,9 @@ public class PeriodTransformer {
 			// Set must arrive cold with target heel volume
 			final int heel = portVisit.getHeelAtStart();
 			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
+				if (vesselAvailability.getEndHeel() == null) {
+					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
+				}
 				vesselAvailability.getEndHeel().setEndCold(true);
 				vesselAvailability.getEndHeel().setTargetEndHeel(heel);
 			}
