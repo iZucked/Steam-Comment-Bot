@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
@@ -196,7 +197,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			}
 		} catch (final Exception e) {
 			// Unable to parse file for some reason
-			log.error("Unable to find manifest for " + scenario, e);
+			log.debug("Unable to find manifest for " + scenario, e);
 		}
 		return null;
 	}
@@ -281,7 +282,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 					try {
 						addFile(file);
 						newFiles.add(file.normalize().toString());
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						log.debug(e.getMessage(), e);
 					}
 					return super.visitFile(file, attrs);
@@ -434,7 +435,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		removeFile(c);
 	}
 
-	protected void removeFile(ScenarioInstance c) {
+	protected void removeFile(final ScenarioInstance c) {
 
 		if (c != null) {
 			detachSubTree(c);
@@ -494,7 +495,24 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		try {
 
 			final ResourceSet instanceResourceSet = createResourceSet();
-			final URI scenarioURI = URI.createFileURI(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
+			final File target = new File(dataPath.toString() + sb.toString() + File.separator + original.getName() + ".lingo");
+			if (target.exists()) {
+				final boolean[] response = new boolean[1];
+				final Display display = PlatformUI.getWorkbench().getDisplay();
+				display.syncExec(new Runnable() {
+
+					@Override
+					public void run() {
+						response[0] = MessageDialog.openQuestion(display.getActiveShell(), "Target exists - overwrite?",
+								String.format("File \"%s\" already exists. Do you want to overwrite?", target.getAbsoluteFile()));
+
+					}
+				});
+				if (!response[0]) {
+					return null;
+				}
+			}
+			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
 
 			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
 			if (original.getInstance() == null) {
