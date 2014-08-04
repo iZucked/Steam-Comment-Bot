@@ -173,7 +173,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	private ScenarioInstance scenarioInstance;
 
 	private AdapterImpl lockedAdapter;
-	private AdapterImpl scenarioNameAdapter;
+	private AdapterImpl scenarioAttributeAdapter;
 
 	private TreeViewer selectionViewer;
 
@@ -449,15 +449,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		};
 		editorLock.eAdapters().add(lockedAdapter);
 
-		scenarioNameAdapter = new AdapterImpl() {
+		scenarioAttributeAdapter = new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification msg) {
 				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
 					setPartName(msg.getNewStringValue());
 				}
+				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty()) {
+					firePropertyChange(PROP_DIRTY);
+				}
 			}
 		};
-		instance.eAdapters().add(scenarioNameAdapter);
+		instance.eAdapters().add(scenarioAttributeAdapter);
 
 		if (ro instanceof MMXRootObject) {
 			root = (MMXRootObject) ro;
@@ -590,9 +593,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 			editorLock.eAdapters().remove(lockedAdapter);
 			this.editorLock = null;
 		}
-		if (scenarioNameAdapter != null) {
-			scenarioInstance.eAdapters().remove(scenarioNameAdapter);
-			this.scenarioNameAdapter = null;
+		if (scenarioAttributeAdapter != null) {
+			scenarioInstance.eAdapters().remove(scenarioAttributeAdapter);
+			this.scenarioAttributeAdapter = null;
 		}
 
 		for (final IJointModelEditorContribution contribution : contributions) {
