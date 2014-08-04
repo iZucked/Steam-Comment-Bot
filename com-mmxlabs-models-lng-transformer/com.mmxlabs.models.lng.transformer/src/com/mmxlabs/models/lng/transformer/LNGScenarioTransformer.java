@@ -2171,13 +2171,16 @@ public class LNGScenarioTransformer {
 
 			for (final CharterCostModel charterCost : spotMarketsModel.getCharteringSpotMarkets()) {
 
+				if (!charterCost.isEnabled()) {
+					continue;
+				}
+
 				for (final VesselClass eVesselClass : charterCost.getVesselClasses()) {
 					final ICurve charterInCurve;
 					if (charterCost.getCharterInPrice() == null) {
 						charterInCurve = new ConstantValueCurve(0);
 					} else {
 						charterInCurve = charterIndexAssociation.lookup(charterCost.getCharterInPrice());
-						// charterInCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterInPrice().getData(), 1.0f / 24.0f, false);
 					}
 
 					charterCount = charterCost.getSpotCharterCount();
@@ -2188,14 +2191,12 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						// final ICurve charterOutCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterOutPrice().getData(), 1.0f / 24.0f, false);
 						final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
 						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVesselClass), charterOutCurve, minDuration);
 					}
 				}
 			}
-
 		}
 
 		return new Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>>(vesselClassAssociation, vesselAssociation);
