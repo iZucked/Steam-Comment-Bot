@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -397,8 +398,12 @@ public class PeriodTransformer {
 			vesselAvailability.setEndAfter(portVisit.getStart());
 			vesselAvailability.setEndBy(portVisit.getStart());
 
-			// TODO: Set must arrive cold with target heel volume
-			// vesselAvailability.getEndHeel().setVolumeAvailable(portVisit.getHeelAtStart());
+			// Set must arrive cold with target heel volume
+			final int heel = portVisit.getHeelAtStart();
+			if (heel > 0 || portVisit.getPreviousEvent() instanceof Cooldown) {
+				vesselAvailability.getEndHeel().setEndCold(true);
+				vesselAvailability.getEndHeel().setTargetEndHeel(heel);
+			}
 		}
 	}
 
