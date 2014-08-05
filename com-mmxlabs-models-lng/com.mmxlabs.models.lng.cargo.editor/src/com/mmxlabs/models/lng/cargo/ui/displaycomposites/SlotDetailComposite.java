@@ -18,6 +18,7 @@ import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
@@ -247,7 +248,7 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 	}
 
 	@Override
-	public void createControls(final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
+	public void createControls(IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc) {
 
 		toolkit.adapt(this);
 
@@ -270,11 +271,11 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 		contentComposite.setLayout(layout);
 
 		for (final EStructuralFeature[] fs : nameFeatures) {
-			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
+			EditorControlFactory.makeControls(dialogContext, root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 
 		for (final EStructuralFeature[] fs : mainFeatures) {
-			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
+			EditorControlFactory.makeControls(dialogContext, root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 
 		createSpacer();
@@ -292,13 +293,13 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			missedFeaturesList.remove(f);
 		}
 
-		makeExpandable(root, object, dbc, esPricing, pricingFeatures, pricingTitleFeatures, false);
+		makeExpandable(dialogContext, root, object, dbc, esPricing, pricingFeatures, pricingTitleFeatures, false);
 
 		createSpacer();
-		makeExpandable(root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, false);
+		makeExpandable(dialogContext, root, object, dbc, esWindow, windowFeatures, windowTitleFeatures, false);
 
 		createSpacer();
-		makeExpandable(root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
+		makeExpandable(dialogContext, root, object, dbc, esTerms, isLoad ? loadTermsFeatures : dischargeTermsFeatures, null, false);
 
 		if (!missedFeaturesList.isEmpty()) {
 
@@ -314,18 +315,18 @@ public class SlotDetailComposite extends DefaultDetailComposite implements IDisp
 			// System.out.println(eStructuralFeature);
 			// }
 			// }
-			makeExpandable(root, object, dbc, esOther, missedFeatures, null, false);
+			makeExpandable(dialogContext, root, object, dbc, esOther, missedFeatures, null, false);
 		}
 
 		for (final EStructuralFeature[] fs : noteFeatures) {
-			EditorControlFactory.makeControls(root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
+			EditorControlFactory.makeControls(dialogContext, root, object, contentComposite, fs, feature2Editor, dbc, layoutProvider, toolkit);
 		}
 	}
 
-	private void makeExpandable(final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc, final ExpandableSet expandable, final List<EStructuralFeature[]> features,
-			final Set<EStructuralFeature> titleFeatures, final boolean expanded) {
+	private void makeExpandable(IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final EMFDataBindingContext dbc, final ExpandableSet expandable,
+			final List<EStructuralFeature[]> features, final Set<EStructuralFeature> titleFeatures, final boolean expanded) {
 		expandable.setFeatures(features, titleFeatures);
-		expandable.create(contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
+		expandable.create(dialogContext, contentComposite, root, object, feature2Editor, dbc, layoutProvider, toolkit);
 		expandable.setExpanded(expanded);
 	}
 

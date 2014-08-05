@@ -25,9 +25,11 @@ import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
 import com.mmxlabs.models.ui.editors.util.EditorControlFactory;
 
 class ExpandableSet implements DisposeListener {
@@ -66,7 +68,7 @@ class ExpandableSet implements DisposeListener {
 		};	
 	}	
 	
-	void create(Composite contentComposite, MMXRootObject root, EObject object,  Map<EStructuralFeature, IInlineEditor> feature2Editor, EMFDataBindingContext dbc, IDisplayCompositeLayoutProvider lp, FormToolkit toolkit){
+	void create(IDialogEditingContext dialogContext, Composite contentComposite, MMXRootObject root, EObject object,  Map<EStructuralFeature, IInlineEditor> feature2Editor, EMFDataBindingContext dbc, IDisplayCompositeLayoutProvider lp, FormToolkit toolkit){
 //		ec = toolkit.createSection(contentComposite, Section.TITLE_BAR | ExpandableComposite.TWISTIE);
 		ec = toolkit.createSection(contentComposite, ExpandableComposite.TWISTIE);
 		Composite c = createExpandable(ec, toolkit);
@@ -74,7 +76,7 @@ class ExpandableSet implements DisposeListener {
 		// feature editors
 		boolean visible = false;
 		for (EStructuralFeature[] fs : featureLines) {		
-			EditorControlFactory.makeControls(root, object, c, fs, feature2Editor, dbc, lp, toolkit);
+			EditorControlFactory.makeControls(dialogContext,  root, object, c, fs, feature2Editor, dbc, lp, toolkit);
 			visible = true;
 		}
 		ec.setExpanded(true);

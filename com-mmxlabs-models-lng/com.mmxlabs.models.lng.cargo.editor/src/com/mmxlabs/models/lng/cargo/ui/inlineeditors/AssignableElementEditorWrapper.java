@@ -86,10 +86,10 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 
 		if (enabled) {
 			super.display(dialogContext, scenario, object, range);
-			setEditorVisible(true);
+			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 		} else {
 			super.display(dialogContext, scenario, null, range);
-			setEditorVisible(false);
+			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
 		}
 	}
 
