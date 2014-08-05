@@ -7,10 +7,10 @@
 	<parent>
 		<groupId>com.mmxlabs.common</groupId>
 		<artifactId>common-util-parent</artifactId>
-		<version>2.5.1-SNAPSHOT</version>
+		<version>2.5.0.RELEASE</version>
 	</parent>
 
-	<version>2.5.1-SNAPSHOT</version>
+	<version>2.5.0.RELEASE</version>
 	<artifactId>com.mmxlabs.common.util.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
 </project>
