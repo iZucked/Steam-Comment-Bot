@@ -49,9 +49,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -162,6 +160,11 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			if (DetailCompositeDialog.this.selectionViewer != null) {
 				DetailCompositeDialog.this.selectionViewer.refresh();
 			}
+		}
+		
+		@Override
+		public void relayout() {
+			updateEditor();
 		}
 	};
 
@@ -391,28 +394,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), new DefaultDialogEditingContext(dialogController, location, false), toolkit);
 
-		/**
-		 * Allow the child composites to trigger a complete redisplay of the editor components. E.g.
-		 * 
-		 * <code>
-		 * for (final Listener l : this.getListeners(SWT.CLOSE)) { 
-		 * 		l.handleEvent(new Event()); 
-		 * }
-		 * </code>
-		 * 
-		 * A recursive listener & firing code will need to be present in the top-level and sub-level composites
-		 * 
-		 * FIXME: Expose a proper API for this!
-		 * 
-		 */
-		displayComposite.getComposite().addListener(SWT.CLOSE, new Listener() {
-
-			@Override
-			public void handleEvent(final Event event) {
-				updateEditor();
-			}
-		});
-
 		// Create a new instance with the current adapter factory.
 		// TODO: Dispose?
 		copyDialogToClipboardEditorWrapper = new CopyDialogToClipboard(sel.getAdapterFactory());
@@ -597,6 +578,11 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				}
 				selectionViewer.refresh();
 				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size() - 1)));
+				
+				// If inputs is now one (i.e. initially zero) trigger a relayout
+				if (inputs.size() == 1) {
+					updateEditor();
+				}
 			}
 		};
 	}

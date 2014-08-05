@@ -13,4 +13,9 @@ public interface IDialogController {
 	 * unable to use the dialog command handler.
 	 */
 	void validate();
+
+	/**
+	 * Request the editor be redrawn from the top-down disposing and recreating child composites.
+	 */
+	void relayout();
 }

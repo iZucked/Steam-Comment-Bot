@@ -16,4 +16,9 @@ public class NullDialogController implements IDialogController {
 	public void validate() {
 
 	}
+
+	@Override
+	public void relayout() {
+
+	}
 }
