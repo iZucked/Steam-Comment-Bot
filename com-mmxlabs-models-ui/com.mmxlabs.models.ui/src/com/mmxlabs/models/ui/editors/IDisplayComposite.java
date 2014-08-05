@@ -64,4 +64,11 @@ public interface IDisplayComposite {
 	 * @param status
 	 */
 	public void displayValidationStatus(IStatus status);
+
+	/**
+	 * Checks the current editor visiblilty and updates the UI state. Returns true if UI state is changed.
+	 * @param context
+	 * @return
+	 */
+	boolean checkVisibility(IDialogEditingContext context);
 }

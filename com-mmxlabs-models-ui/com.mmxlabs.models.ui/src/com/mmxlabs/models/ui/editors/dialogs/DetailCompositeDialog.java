@@ -60,6 +60,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.PairKeyedMap;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -153,6 +154,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	private final IDialogController dialogController = new IDialogController() {
 
+		private final PairKeyedMap<EObject, EStructuralFeature, Boolean> visibilityMap = new PairKeyedMap<>();
+
 		@Override
 		public void validate() {
 			DetailCompositeDialog.this.validate();
@@ -161,10 +164,32 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				DetailCompositeDialog.this.selectionViewer.refresh();
 			}
 		}
-		
+
 		@Override
 		public void relayout() {
 			updateEditor();
+		}
+
+		@Override
+		public void updateEditorVisibility() {
+			// Trigger the recursive UI update
+			if (displayComposite != null) {
+				displayComposite.checkVisibility(dialogContext);
+			}
+		}
+
+		@Override
+		public void setEditorVisibility(final EObject object, final EStructuralFeature feature, final boolean visible) {
+			visibilityMap.put(object, feature, visible);
+
+		}
+
+		@Override
+		public boolean getEditorVisibility(final EObject object, final EStructuralFeature feature) {
+			if (visibilityMap.contains(object, feature)) {
+				return visibilityMap.get(object, feature).booleanValue();
+			}
+			return true;
 		}
 	};
 
@@ -302,6 +327,9 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 				validate();
 
+				// Check for UI state changes after command execution
+				displayComposite.checkVisibility(dialogContext);
+
 				if (selectionViewer != null)
 					selectionViewer.refresh(true);
 			}
@@ -377,7 +405,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		String text = returnDuplicates ? "Duplicating " : "Editing ";
 		text += EditorUtils.unmangle(selection.eClass().getName()).toLowerCase() + " ";
 		if (selection instanceof NamedObject) {
-			String name = ((NamedObject) selection).getName();
+			final String name = ((NamedObject) selection).getName();
 			text += name != null ? "\"" + name + "\"" : "<unspecified>";
 		} else {
 			final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) FACTORY.adapt(selection, IItemLabelProvider.class);
@@ -391,7 +419,8 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
-		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), new DefaultDialogEditingContext(dialogController, location, false), toolkit);
+		dialogContext = new DefaultDialogEditingContext(dialogController, location, false);
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), dialogContext, toolkit);
 
 		// Create a new instance with the current adapter factory.
 		// TODO: Dispose?
@@ -414,7 +443,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		displayComposite.display(new DefaultDialogEditingContext(dialogController, location, false), rootObject, duplicate, ranges.get(selection), dbc);
+		displayComposite.display(dialogContext, rootObject, duplicate, ranges.get(selection), dbc);
 
 		getShell().layout(true, true);
 
@@ -426,6 +455,9 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 			getShell().setText(text2 + " (Editor Locked - reopen to edit)");
 			disableControls(displayComposite.getComposite());
 		}
+
+		// Trigger update of inline editor visibility and UI state update
+		dialogController.updateEditorVisibility();
 	}
 
 	/**
@@ -577,7 +609,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				}
 				selectionViewer.refresh();
 				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size() - 1)));
-				
+
 				// If inputs is now one (i.e. initially zero) trigger a relayout
 				if (inputs.size() == 1) {
 					updateEditor();
@@ -718,6 +750,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 
 	// private IDialogEditingContext dialogContext;
 	private IScenarioEditingLocation location;
+	private DefaultDialogEditingContext dialogContext;
 
 	/**
 	 * This version of the open method also displays the sidebar and allows for creation and deletion of objects in the sidebar.
@@ -782,7 +815,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				if (!addedInputs.isEmpty()) {
 					final Command delete = DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs);
 					if (delete.canExecute()) {
-						// System.err.println("Execute delete");
 						delete.execute();
 					} else {
 						log.error("Cannot execute delete", new RuntimeException());

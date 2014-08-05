@@ -46,17 +46,12 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected ICommandHandler commandHandler;
 	protected IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 	protected IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
-	//protected IScenarioEditingLocation location;
 	protected IDialogEditingContext dialogContext;
-	/**
-	 */
 	protected FormToolkit toolkit;
 
-	/**
-	 */
 	public DefaultTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style);
-		//this.location = location;
+		// this.location = location;
 		this.dialogContext = dialogContext;
 		this.toolkit = toolkit;
 		toolkit.adapt(this);
@@ -97,7 +92,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 			if (shouldDisplay(ref)) {
 				if (ref.isMany()) {
 					final List values = (List) object.eGet(ref);
-					for (Object o : values) {
+					for (final Object o : values) {
 						if (o instanceof EObject) {
 							createChildArea(root, object, parent, ref, (EObject) o);
 						}
@@ -170,5 +165,16 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 	public void setLayoutProvider(final IDisplayCompositeLayoutProvider layoutProvider) {
 		this.layoutProvider = layoutProvider;
+	}
+
+	@Override
+	public boolean checkVisibility(final IDialogEditingContext context) {
+
+		boolean changed = false;
+		topLevel.checkVisibility(context);
+		for (final IDisplayComposite child : childComposites) {
+			changed |= child.checkVisibility(context);
+		}
+		return changed;
 	}
 }
