@@ -4,7 +4,7 @@ Bundle-Name: Common-Util: tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-SymbolicName: com.mmxlabs.common.common-util.tests
 Bundle-Vendor: Minimax Labs Ltd.
-Bundle-Version: 2.4.1.qualifier
+Bundle-Version: 2.5.0.RELEASE
 Fragment-Host: com.mmxlabs.common.common-util
 Require-Bundle: org.junit;bundle-version="4.8.2",
  ch.qos.logback.classic;bundle-version="1.0.0",
