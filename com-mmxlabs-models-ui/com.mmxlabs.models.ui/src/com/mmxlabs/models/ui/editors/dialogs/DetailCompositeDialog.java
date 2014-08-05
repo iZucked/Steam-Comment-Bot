@@ -366,7 +366,6 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 				displayComposite.getComposite().dispose();
 				displayComposite = null;
 			}
-			// TODO display a message?
 			return;
 		}
 		final EObject selection = inputs.get(selectedObjectIndex);
