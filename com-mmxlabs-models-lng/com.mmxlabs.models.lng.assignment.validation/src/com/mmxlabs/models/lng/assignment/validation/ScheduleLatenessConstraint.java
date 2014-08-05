@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
@@ -113,6 +114,9 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot slot = sortedSlots.get(0);
+			if (slot instanceof SpotSlot) {
+				return null;
+			}
 			return slot.getWindowStartWithSlotOrPortTime();
 		} else if (uuidObject instanceof VesselEvent) {
 			final VesselEvent vesselEvent = (VesselEvent) uuidObject;
@@ -128,6 +132,9 @@ public class ScheduleLatenessConstraint extends AbstractModelMultiConstraint {
 			final Cargo cargo = (Cargo) uuidObject;
 			final EList<Slot> sortedSlots = cargo.getSortedSlots();
 			final Slot slot = sortedSlots.get(sortedSlots.size() - 1);
+			if (slot instanceof SpotSlot) {
+				return null;
+			}
 			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(slot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
 			final Date windowStartWithSlotOrPortTime = slot.getWindowStartWithSlotOrPortTime();
 			if (windowStartWithSlotOrPortTime != null) {
