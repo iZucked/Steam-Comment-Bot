@@ -19,7 +19,7 @@ Require-Bundle: com.google.inject;bundle-version="3.0.0",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="2.0.0",
  com.mmxlabs.optimiser.optimiser-ga;bundle-version="2.0.0",
  com.mmxlabs.optimiser.optimiser-lso;bundle-version="2.0.0",
- com.mmxlabs.common.common-util;bundle-version="[2.4.0,3.0.0)",
+ com.mmxlabs.common.common-util;bundle-version="[2.5.0,3.0.0)",
  joda-time;bundle-version="2.3.0"
 Export-Package: com.mmxlabs.scheduler.optimiser,
  com.mmxlabs.scheduler.optimiser.annotations,
