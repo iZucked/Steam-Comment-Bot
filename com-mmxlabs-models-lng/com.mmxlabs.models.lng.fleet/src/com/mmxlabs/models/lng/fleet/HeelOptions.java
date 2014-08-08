@@ -38,7 +38,7 @@ public interface HeelOptions extends MMXObject {
 	 * @see #setVolumeAvailable(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getHeelOptions_VolumeAvailable()
 	 * @model unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getVolumeAvailable();
@@ -90,6 +90,7 @@ public interface HeelOptions extends MMXObject {
 	 * @see #setCvValue(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getHeelOptions_CvValue()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getCvValue();
@@ -116,6 +117,7 @@ public interface HeelOptions extends MMXObject {
 	 * @see #setPricePerMMBTU(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getHeelOptions_PricePerMMBTU()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/mmBtu' formatString='#0.###'"
 	 * @generated
 	 */
 	double getPricePerMMBTU();

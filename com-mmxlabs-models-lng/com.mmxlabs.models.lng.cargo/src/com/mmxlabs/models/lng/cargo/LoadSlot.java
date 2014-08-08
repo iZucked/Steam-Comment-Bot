@@ -41,6 +41,7 @@ public interface LoadSlot extends Slot {
 	 * @see #setCargoCV(double)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_CargoCV()
 	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
 	 * @generated
 	 */
 	double getCargoCV();

@@ -98,6 +98,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @see #setLoadDuration(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_LoadDuration()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getLoadDuration();
@@ -124,6 +125,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @see #setDischargeDuration(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DischargeDuration()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getDischargeDuration();
@@ -177,6 +179,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @see #setCvValue(double)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_CvValue()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getCvValue();
@@ -255,6 +258,7 @@ public interface Port extends APortSet<Port>, OtherNamesObject {
 	 * @see #setDefaultWindowSize(int)
 	 * @see com.mmxlabs.models.lng.port.PortPackage#getPort_DefaultWindowSize()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##,##0'"
 	 * @generated
 	 */
 	int getDefaultWindowSize();

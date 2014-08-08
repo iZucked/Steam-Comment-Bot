@@ -200,6 +200,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #setWindowSize(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_WindowSize()
 	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
 	 * @generated
 	 */
 	int getWindowSize();
@@ -305,6 +306,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #setDuration(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Duration()
 	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='##,##0'"
 	 * @generated
 	 */
 	int getDuration();
@@ -358,6 +360,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #setMinQuantity(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_MinQuantity()
 	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getMinQuantity();
@@ -412,6 +415,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_MaxQuantity()
 	 * @model default="140000" unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getMaxQuantity();
@@ -674,7 +678,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @return the value of the '<em>Shipping Days Restriction</em>' attribute.
 	 * @see #setShippingDaysRestriction(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_ShippingDaysRestriction()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='days' formatString='###'"
 	 * @generated
 	 */
 	int getShippingDaysRestriction();
@@ -884,7 +888,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @return the value of the '<em>Hedges</em>' attribute.
 	 * @see #setHedges(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Hedges()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='-########0'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='-###,###,##0'"
 	 * @generated
 	 */
 	int getHedges();
@@ -929,7 +933,7 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @see #setCancellationFee(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_CancellationFee()
 	 * @model unsettable="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='###,###,##0'"
 	 * @generated
 	 */
 	int getCancellationFee();

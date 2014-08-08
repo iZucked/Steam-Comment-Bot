@@ -817,10 +817,46 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	protected void createNumberFormatAnnotations() {
 		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
 		addAnnotation
+		  (getContract_MinQuantity(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0"
+		   });		
+		addAnnotation
+		  (getContract_MaxQuantity(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0"
+		   });		
+		addAnnotation
 		  (getContract_CancellationFee(), 
 		   source, 
 		   new String[] {
+			 "formatString", "###,###,##0",
 			 "unitPrefix", "$"
+		   });		
+		addAnnotation
+		  (getSalesContract_MinCvValue(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getSalesContract_MaxCvValue(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getPurchaseContract_CargoCV(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.###"
 		   });
 	}
 

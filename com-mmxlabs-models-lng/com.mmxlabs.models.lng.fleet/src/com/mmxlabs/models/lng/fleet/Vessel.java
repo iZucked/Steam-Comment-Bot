@@ -85,7 +85,7 @@ public interface Vessel extends AVesselSet<Vessel> {
 	 * @see #setCapacity(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_Capacity()
 	 * @model unsettable="true" required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getCapacity();

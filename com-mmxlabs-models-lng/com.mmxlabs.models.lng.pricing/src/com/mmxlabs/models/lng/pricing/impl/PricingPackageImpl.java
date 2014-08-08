@@ -964,6 +964,48 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/ui/numberFormat
+		createNumberFormatAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/numberFormat</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNumberFormatAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
+		addAnnotation
+		  (getRouteCost_LadenCost(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });		
+		addAnnotation
+		  (getRouteCost_BallastCost(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });			
+		addAnnotation
+		  (getPortCost_ReferenceCapacity(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "#,###,##0"
+		   });		
+		addAnnotation
+		  (getPortCostEntry_Cost(), 
+		   source, 
+		   new String[] {
+			 "unitPrefix", "$",
+			 "formatString", "##,###,##0"
+		   });
 	}
 
 } //PricingPackageImpl

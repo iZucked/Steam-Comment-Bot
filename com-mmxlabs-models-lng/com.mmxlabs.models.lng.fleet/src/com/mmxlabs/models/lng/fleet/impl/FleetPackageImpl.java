@@ -837,10 +837,18 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	protected void createNumberFormatAnnotations() {
 		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
 		addAnnotation
+		  (getBaseFuel_EquivalenceFactor(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3/MT",
+			 "formatString", "##.##"
+		   });		
+		addAnnotation
 		  (getVessel_Capacity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m3"
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0"
 		   });		
 		addAnnotation
 		  (getVessel_FillCapacity(), 
@@ -854,7 +862,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVesselClass_Capacity(), 
 		   source, 
 		   new String[] {
-			 "unit", "m3"
+			 "unit", "m\u00b3",
+			 "formatString", "###,###"
 		   });		
 		addAnnotation
 		  (getVesselClass_FillCapacity(), 
@@ -868,79 +877,148 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getVesselClass_MinSpeed(), 
 		   source, 
 		   new String[] {
-			 "unit", "kts"
+			 "unit", "kts",
+			 "formatString", "#0.###"
 		   });		
 		addAnnotation
 		  (getVesselClass_MaxSpeed(), 
 		   source, 
 		   new String[] {
-			 "unit", "kts"
+			 "unit", "kts",
+			 "formatString", "#0.###"
 		   });		
 		addAnnotation
 		  (getVesselClass_MinHeel(), 
 		   source, 
 		   new String[] {
-			 "unit", "m3"
+			 "formatString", "###,##0",
+			 "unit", "m\u00b3"
 		   });		
 		addAnnotation
 		  (getVesselClass_WarmingTime(), 
 		   source, 
 		   new String[] {
-			 "unit", "hrs"
+			 "unit", "hrs",
+			 "formatString", "##0"
 		   });		
 		addAnnotation
 		  (getVesselClass_CoolingVolume(), 
 		   source, 
 		   new String[] {
-			 "unit", "m3"
+			 "unit", "m\u00b3",
+			 "formatString", "##0,###"
 		   });		
 		addAnnotation
 		  (getVesselClass_PilotLightRate(), 
 		   source, 
 		   new String[] {
-			 "unit", "MT/d"
+			 "unit", "MT/day",
+			 "formatString", "##0.###"
 		   });		
 		addAnnotation
 		  (getVesselClass_MinBaseFuelConsumption(), 
 		   source, 
 		   new String[] {
-			 "unit", "MT/d"
+			 "unit", "MT/day",
+			 "formatString", "###,###"
 		   });		
 		addAnnotation
 		  (getHeelOptions_VolumeAvailable(), 
 		   source, 
 		   new String[] {
-			 "unit", "m3"
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0"
+		   });		
+		addAnnotation
+		  (getHeelOptions_CvValue(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getHeelOptions_PricePerMMBTU(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/mmBtu",
+			 "formatString", "#0.###"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_NboRate(), 
 		   source, 
 		   new String[] {
-			 "unit", "m3/d"
+			 "unit", "m\u00b3/day",
+			 "formatString", "##0.###"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_IdleNBORate(), 
 		   source, 
 		   new String[] {
-			 "unit", "m3/d"
+			 "unit", "m\u00b3/day",
+			 "formatString", "##0.###"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_IdleBaseRate(), 
 		   source, 
 		   new String[] {
-			 "unit", "MT/d"
+			 "unit", "MT/day",
+			 "formatString", "##0.###"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_InPortBaseRate(), 
 		   source, 
 		   new String[] {
-			 "unit", "MT/d"
+			 "unit", "MT/day",
+			 "formatString", "##0.###"
 		   });		
 		addAnnotation
 		  (getVesselStateAttributes_ServiceSpeed(), 
 		   source, 
 		   new String[] {
-			 "unit", "kts"
+			 "unit", "kts",
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getFuelConsumption_Speed(), 
+		   source, 
+		   new String[] {
+			 "unit", "kts",
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getFuelConsumption_Consumption(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/day",
+			 "formatString", "##0.###"
+		   });		
+		addAnnotation
+		  (getVesselClassRouteParameters_LadenConsumptionRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/day",
+			 "formatString", "##0.###"
+		   });		
+		addAnnotation
+		  (getVesselClassRouteParameters_LadenNBORate(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3/day",
+			 "formatString", "##0.###"
+		   });		
+		addAnnotation
+		  (getVesselClassRouteParameters_BallastConsumptionRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/day",
+			 "formatString", "##0.###"
+		   });		
+		addAnnotation
+		  (getVesselClassRouteParameters_BallastNBORate(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3/day",
+			 "formatString", "##0.###"
 		   });
 	}
 

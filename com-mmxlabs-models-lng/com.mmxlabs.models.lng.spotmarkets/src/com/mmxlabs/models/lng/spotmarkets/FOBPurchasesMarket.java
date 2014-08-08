@@ -63,7 +63,7 @@ public interface FOBPurchasesMarket extends SpotMarket {
 	 * @return the value of the '<em>Cv</em>' attribute.
 	 * @see #setCv(double)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getFOBPurchasesMarket_Cv()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getCv();

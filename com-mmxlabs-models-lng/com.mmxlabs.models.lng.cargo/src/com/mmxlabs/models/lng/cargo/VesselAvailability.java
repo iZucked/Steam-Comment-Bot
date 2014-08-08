@@ -87,6 +87,7 @@ public interface VesselAvailability extends UUIDObject {
 	 * @see #setTimeCharterRate(String)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselAvailability_TimeCharterRate()
 	 * @model unsettable="true" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day'"
 	 * @generated
 	 */
 	String getTimeCharterRate();
