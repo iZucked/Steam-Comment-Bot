@@ -819,8 +819,8 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getSlotActuals_OperationsStart(), ecorePackage.getEDate(), "operationsStart", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_OperationsEnd(), ecorePackage.getEDate(), "operationsEnd", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotActuals_TitleTransferPoint(), thePortPackage.getPort(), null, "titleTransferPoint", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotActuals_VolumeInM3(), ecorePackage.getEFloat(), "volumeInM3", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlotActuals_VolumeInMMBtu(), ecorePackage.getEInt(), "volumeInMMBtu", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_VolumeInM3(), ecorePackage.getEDouble(), "volumeInM3", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotActuals_VolumeInMMBtu(), ecorePackage.getEDouble(), "volumeInMMBtu", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_PriceDOL(), ecorePackage.getEDouble(), "priceDOL", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_Penalty(), this.getPenaltyType(), "penalty", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlotActuals_Notes(), ecorePackage.getEString(), "notes", null, 0, 1, SlotActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -847,25 +847,25 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		initEAttribute(getCargoActuals_CargoReference(), ecorePackage.getEString(), "cargoReference", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_CargoReferenceSeller(), ecorePackage.getEString(), "cargoReferenceSeller", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoActuals_Vessel(), theFleetPackage.getVessel(), null, "vessel", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getCargoActuals_CharterRatePerDay(), ecorePackage.getEInt(), "charterRatePerDay", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCargoActuals_CharterRatePerDay(), ecorePackage.getEDouble(), "charterRatePerDay", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargoActuals_Cargo(), theCargoPackage.getCargo(), null, "cargo", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargoActuals_InsurancePremium(), ecorePackage.getEInt(), "insurancePremium", null, 0, 1, CargoActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(loadActualsEClass, LoadActuals.class, "LoadActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLoadActuals_ContractType(), ecorePackage.getEString(), "contractType", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLoadActuals_StartingHeelM3(), ecorePackage.getEInt(), "startingHeelM3", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getLoadActuals_StartingHeelMMBTu(), ecorePackage.getEInt(), "startingHeelMMBTu", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadActuals_StartingHeelM3(), ecorePackage.getEDouble(), "startingHeelM3", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLoadActuals_StartingHeelMMBTu(), ecorePackage.getEDouble(), "startingHeelMMBTu", null, 0, 1, LoadActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dischargeActualsEClass, DischargeActuals.class, "DischargeActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDischargeActuals_DeliveryType(), ecorePackage.getEString(), "deliveryType", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDischargeActuals_EndHeelM3(), ecorePackage.getEInt(), "endHeelM3", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getDischargeActuals_EndHeelMMBTu(), ecorePackage.getEInt(), "endHeelMMBTu", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDischargeActuals_EndHeelM3(), ecorePackage.getEDouble(), "endHeelM3", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDischargeActuals_EndHeelMMBTu(), ecorePackage.getEDouble(), "endHeelMMBTu", null, 0, 1, DischargeActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(returnActualsEClass, ReturnActuals.class, "ReturnActuals", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getReturnActuals_TitleTransferPoint(), thePortPackage.getPort(), null, "titleTransferPoint", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getReturnActuals_OperationsStart(), ecorePackage.getEDate(), "operationsStart", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getReturnActuals_EndHeelM3(), ecorePackage.getEInt(), "endHeelM3", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getReturnActuals_EndHeelM3(), ecorePackage.getEDouble(), "endHeelM3", null, 0, 1, ReturnActuals.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getReturnActuals__GetLocalStart(), this.getCalendar(), "getLocalStart", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -879,6 +879,145 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/ui/numberFormat
+		createNumberFormatAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/numberFormat</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNumberFormatAnnotations() {
+		String source = "http://www.mmxlabs.com/models/ui/numberFormat";		
+		addAnnotation
+		  (getSlotActuals_VolumeInM3(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "#,###,###.###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_VolumeInMMBtu(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu",
+			 "formatString", "#,###,###.###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_PriceDOL(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/mmBtu",
+			 "formatString", "##.###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_CV(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "##.###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_BaseFuelConsumption(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT",
+			 "formatString", "###,###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_RouteCosts(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
+			 "formatString", "###,###,###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_CrewBonus(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
+			 "formatString", "###,###,###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_PortCharges(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
+			 "formatString", "###,###,###"
+		   });		
+		addAnnotation
+		  (getSlotActuals_CapacityCharges(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
+			 "formatString", "###,###,###"
+		   });		
+		addAnnotation
+		  (getCargoActuals_ContractYear(), 
+		   source, 
+		   new String[] {
+			 "formatString", "####"
+		   });		
+		addAnnotation
+		  (getCargoActuals_CharterRatePerDay(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/day",
+			 "formatString", "###,###.##"
+		   });		
+		addAnnotation
+		  (getCargoActuals_BaseFuelPrice(), 
+		   source, 
+		   new String[] {
+			 "unit", "MT/d",
+			 "formatString", "#,###.###"
+		   });		
+		addAnnotation
+		  (getCargoActuals_InsurancePremium(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
+			 "formatString", "###,###,###"
+		   });		
+		addAnnotation
+		  (getLoadActuals_StartingHeelM3(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "#,###,###.###"
+		   });		
+		addAnnotation
+		  (getLoadActuals_StartingHeelMMBTu(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu",
+			 "formatString", "#,###,###.###"
+		   });		
+		addAnnotation
+		  (getDischargeActuals_EndHeelM3(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "#,###,###.###"
+		   });		
+		addAnnotation
+		  (getDischargeActuals_EndHeelMMBTu(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu",
+			 "formatString", "#,###,###.###"
+		   });		
+		addAnnotation
+		  (getReturnActuals_EndHeelM3(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "#,###,###.###"
+		   });
 	}
 
 } //ActualsPackageImpl

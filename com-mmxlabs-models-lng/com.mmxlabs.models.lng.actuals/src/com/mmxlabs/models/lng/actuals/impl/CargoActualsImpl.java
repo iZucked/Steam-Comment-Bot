@@ -213,7 +213,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int CHARTER_RATE_PER_DAY_EDEFAULT = 0;
+	protected static final double CHARTER_RATE_PER_DAY_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getCharterRatePerDay() <em>Charter Rate Per Day</em>}' attribute.
@@ -223,7 +223,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected int charterRatePerDay = CHARTER_RATE_PER_DAY_EDEFAULT;
+	protected double charterRatePerDay = CHARTER_RATE_PER_DAY_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getCargo() <em>Cargo</em>}' reference.
@@ -605,7 +605,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * @generated
 	 */
 	@Override
-	public int getCharterRatePerDay() {
+	public double getCharterRatePerDay() {
 		return charterRatePerDay;
 	}
 
@@ -614,9 +614,8 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setCharterRatePerDay(int newCharterRatePerDay) {
-		int oldCharterRatePerDay = charterRatePerDay;
+	public void setCharterRatePerDay(double newCharterRatePerDay) {
+		double oldCharterRatePerDay = charterRatePerDay;
 		charterRatePerDay = newCharterRatePerDay;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY, oldCharterRatePerDay, charterRatePerDay));
@@ -757,7 +756,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 				setVessel((Vessel)newValue);
 				return;
 			case ActualsPackage.CARGO_ACTUALS__CHARTER_RATE_PER_DAY:
-				setCharterRatePerDay((Integer)newValue);
+				setCharterRatePerDay((Double)newValue);
 				return;
 			case ActualsPackage.CARGO_ACTUALS__CARGO:
 				setCargo((Cargo)newValue);

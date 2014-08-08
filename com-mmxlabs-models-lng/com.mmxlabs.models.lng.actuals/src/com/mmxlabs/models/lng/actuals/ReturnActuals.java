@@ -93,12 +93,12 @@ public interface ReturnActuals extends ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End Heel M3</em>' attribute.
-	 * @see #setEndHeelM3(int)
+	 * @see #setEndHeelM3(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getReturnActuals_EndHeelM3()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='#,###,###.###'"
 	 * @generated
 	 */
-	int getEndHeelM3();
+	double getEndHeelM3();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.ReturnActuals#getEndHeelM3 <em>End Heel M3</em>}' attribute.
@@ -108,7 +108,7 @@ public interface ReturnActuals extends ITimezoneProvider {
 	 * @see #getEndHeelM3()
 	 * @generated
 	 */
-	void setEndHeelM3(int value);
+	void setEndHeelM3(double value);
 
 	/**
 	 * <!-- begin-user-doc -->
