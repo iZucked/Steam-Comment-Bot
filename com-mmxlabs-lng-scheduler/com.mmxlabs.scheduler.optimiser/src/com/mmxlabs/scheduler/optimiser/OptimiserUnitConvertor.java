@@ -87,6 +87,10 @@ public final class OptimiserUnitConvertor {
 		return (long) volume * (long) Calculator.ScaleFactor;
 	}
 
+	public static long convertToInternalVolume(final double volume) {
+		return (long) Math.round(volume * (double) Calculator.ScaleFactor);
+	}
+
 	public static int convertToExternalVolume(final long volume) {
 		return (int) (volume / (long) Calculator.ScaleFactor);
 	}
@@ -99,6 +103,10 @@ public final class OptimiserUnitConvertor {
 	 */
 	public static long convertToInternalDailyCost(final int dailyCost) {
 		return (long) dailyCost * (long) Calculator.ScaleFactor;
+	}
+
+	public static long convertToInternalDailyCost(final double dailyCost) {
+		return (long) Math.round(dailyCost * (double) Calculator.ScaleFactor);
 	}
 
 	public static int convertToExternalDailyCost(final long dailyCost) {
