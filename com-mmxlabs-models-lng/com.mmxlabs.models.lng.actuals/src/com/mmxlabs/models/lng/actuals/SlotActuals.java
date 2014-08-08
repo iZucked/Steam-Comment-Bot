@@ -58,7 +58,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>CV</em>' attribute.
 	 * @see #setCV(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_CV()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='##.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getCV();
@@ -84,7 +84,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Port Charges</em>' attribute.
 	 * @see #setPortCharges(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_PortCharges()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,##0'"
 	 * @generated
 	 */
 	int getPortCharges();
@@ -110,7 +110,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Capacity Charges</em>' attribute.
 	 * @see #setCapacityCharges(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_CapacityCharges()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,##0'"
 	 * @generated
 	 */
 	int getCapacityCharges();
@@ -136,7 +136,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Base Fuel Consumption</em>' attribute.
 	 * @see #setBaseFuelConsumption(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_BaseFuelConsumption()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT' formatString='###,###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT' formatString='###,##0'"
 	 * @generated
 	 */
 	int getBaseFuelConsumption();
@@ -214,7 +214,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Route Costs</em>' attribute.
 	 * @see #setRouteCosts(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_RouteCosts()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,##0'"
 	 * @generated
 	 */
 	int getRouteCosts();
@@ -240,7 +240,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Crew Bonus</em>' attribute.
 	 * @see #setCrewBonus(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_CrewBonus()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,##0'"
 	 * @generated
 	 */
 	int getCrewBonus();
@@ -412,7 +412,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Volume In M3</em>' attribute.
 	 * @see #setVolumeInM3(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_VolumeInM3()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='#,###,###.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
 	 * @generated
 	 */
 	double getVolumeInM3();
@@ -438,7 +438,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Volume In MM Btu</em>' attribute.
 	 * @see #setVolumeInMMBtu(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_VolumeInMMBtu()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu' formatString='#,###,###.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu' formatString='##,###,##0.###'"
 	 * @generated
 	 */
 	double getVolumeInMMBtu();
@@ -464,7 +464,7 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @return the value of the '<em>Price DOL</em>' attribute.
 	 * @see #setPriceDOL(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_PriceDOL()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/mmBtu' formatString='##.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/mmBtu' formatString='#0.###'"
 	 * @generated
 	 */
 	double getPriceDOL();

@@ -898,63 +898,63 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		   source, 
 		   new String[] {
 			 "unit", "m\u00b3",
-			 "formatString", "#,###,###.###"
+			 "formatString", "###,##0.###"
 		   });		
 		addAnnotation
 		  (getSlotActuals_VolumeInMMBtu(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu",
-			 "formatString", "#,###,###.###"
+			 "formatString", "##,###,##0.###"
 		   });		
 		addAnnotation
 		  (getSlotActuals_PriceDOL(), 
 		   source, 
 		   new String[] {
 			 "unit", "$/mmBtu",
-			 "formatString", "##.###"
+			 "formatString", "#0.###"
 		   });		
 		addAnnotation
 		  (getSlotActuals_CV(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu/m\u00b3",
-			 "formatString", "##.###"
+			 "formatString", "#0.###"
 		   });		
 		addAnnotation
 		  (getSlotActuals_BaseFuelConsumption(), 
 		   source, 
 		   new String[] {
 			 "unit", "MT",
-			 "formatString", "###,###"
+			 "formatString", "###,##0"
 		   });		
 		addAnnotation
 		  (getSlotActuals_RouteCosts(), 
 		   source, 
 		   new String[] {
 			 "unit", "$",
-			 "formatString", "###,###,###"
+			 "formatString", "###,###,##0"
 		   });		
 		addAnnotation
 		  (getSlotActuals_CrewBonus(), 
 		   source, 
 		   new String[] {
 			 "unit", "$",
-			 "formatString", "###,###,###"
+			 "formatString", "###,###,##0"
 		   });		
 		addAnnotation
 		  (getSlotActuals_PortCharges(), 
 		   source, 
 		   new String[] {
 			 "unit", "$",
-			 "formatString", "###,###,###"
+			 "formatString", "###,###,##0"
 		   });		
 		addAnnotation
 		  (getSlotActuals_CapacityCharges(), 
 		   source, 
 		   new String[] {
 			 "unit", "$",
-			 "formatString", "###,###,###"
+			 "formatString", "###,###,##0"
 		   });		
 		addAnnotation
 		  (getCargoActuals_ContractYear(), 
@@ -967,56 +967,56 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 		   source, 
 		   new String[] {
 			 "unit", "$/day",
-			 "formatString", "###,###.##"
+			 "formatString", "###,##0.##"
 		   });		
 		addAnnotation
 		  (getCargoActuals_BaseFuelPrice(), 
 		   source, 
 		   new String[] {
 			 "unit", "MT/d",
-			 "formatString", "#,###.###"
+			 "formatString", "#,##0.###"
 		   });		
 		addAnnotation
 		  (getCargoActuals_InsurancePremium(), 
 		   source, 
 		   new String[] {
 			 "unit", "$",
-			 "formatString", "###,###,###"
+			 "formatString", "###,###,##0"
 		   });		
 		addAnnotation
 		  (getLoadActuals_StartingHeelM3(), 
 		   source, 
 		   new String[] {
 			 "unit", "m\u00b3",
-			 "formatString", "#,###,###.###"
+			 "formatString", "###,##0.###"
 		   });		
 		addAnnotation
 		  (getLoadActuals_StartingHeelMMBTu(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu",
-			 "formatString", "#,###,###.###"
+			 "formatString", "##,###,##0.###"
 		   });		
 		addAnnotation
 		  (getDischargeActuals_EndHeelM3(), 
 		   source, 
 		   new String[] {
 			 "unit", "m\u00b3",
-			 "formatString", "#,###,###.###"
+			 "formatString", "###,##0.###"
 		   });		
 		addAnnotation
 		  (getDischargeActuals_EndHeelMMBTu(), 
 		   source, 
 		   new String[] {
 			 "unit", "mmBtu",
-			 "formatString", "#,###,###.###"
+			 "formatString", "##,###,##0.###"
 		   });		
 		addAnnotation
 		  (getReturnActuals_EndHeelM3(), 
 		   source, 
 		   new String[] {
 			 "unit", "m\u00b3",
-			 "formatString", "#,###,###.###"
+			 "formatString", "###,##0.###"
 		   });
 	}
 

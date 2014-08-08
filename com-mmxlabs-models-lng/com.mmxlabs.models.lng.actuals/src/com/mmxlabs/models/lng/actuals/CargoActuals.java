@@ -52,7 +52,7 @@ public interface CargoActuals extends EObject {
 	 * @return the value of the '<em>Base Fuel Price</em>' attribute.
 	 * @see #setBaseFuelPrice(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_BaseFuelPrice()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d' formatString='#,###.###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d' formatString='#,##0.###'"
 	 * @generated
 	 */
 	double getBaseFuelPrice();
@@ -78,7 +78,7 @@ public interface CargoActuals extends EObject {
 	 * @return the value of the '<em>Insurance Premium</em>' attribute.
 	 * @see #setInsurancePremium(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_InsurancePremium()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,###'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,##0'"
 	 * @generated
 	 */
 	int getInsurancePremium();
@@ -328,7 +328,7 @@ public interface CargoActuals extends EObject {
 	 * @return the value of the '<em>Charter Rate Per Day</em>' attribute.
 	 * @see #setCharterRatePerDay(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_CharterRatePerDay()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day' formatString='###,###.##'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day' formatString='###,##0.##'"
 	 * @generated
 	 */
 	double getCharterRatePerDay();
