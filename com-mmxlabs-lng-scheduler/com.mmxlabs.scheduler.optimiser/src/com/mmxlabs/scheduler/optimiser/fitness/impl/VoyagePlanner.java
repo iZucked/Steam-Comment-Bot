@@ -497,6 +497,11 @@ public class VoyagePlanner {
 
 						}
 					}
+					portDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
+					portDetails.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricePerMT);
+					portDetails.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
+					portDetails.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
+					portDetails.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
 
 					detailedSequence[idx] = portDetails;
 				} else if (element instanceof VoyageOptions) {
@@ -514,6 +519,11 @@ public class VoyagePlanner {
 					// Base Fuel
 
 					voyageDetails.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
+					voyageDetails.setFuelUnitPrice(FuelComponent.IdleBase, baseFuelPricePerMT);
+					voyageDetails.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
+					voyageDetails.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
+					voyageDetails.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
+
 
 					final long baseFuelConsumptionInMt = actualsDataProvider.getNextVoyageBaseFuelConsumptionInMT(voyageOptions.getFromPortSlot());
 					voyageDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, baseFuelConsumptionInMt);
