@@ -41,7 +41,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setNboRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_NboRate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3/d'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getNboRate();
@@ -68,7 +68,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setIdleNBORate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_IdleNBORate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3/d'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getIdleNBORate();
@@ -95,7 +95,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setIdleBaseRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_IdleBaseRate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getIdleBaseRate();
@@ -122,7 +122,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setInPortBaseRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_InPortBaseRate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getInPortBaseRate();
@@ -165,7 +165,7 @@ public interface VesselStateAttributes extends MMXObject {
 	 * @see #setServiceSpeed(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselStateAttributes_ServiceSpeed()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts' formatString='#0.###'"
 	 * @generated
 	 */
 	double getServiceSpeed();

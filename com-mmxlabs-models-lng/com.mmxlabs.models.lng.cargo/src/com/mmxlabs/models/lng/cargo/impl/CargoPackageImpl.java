@@ -1600,7 +1600,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		   source, 
 		   new String[] {
 			 "showTime", "false"
-		   });		
+		   });														
 	}
 
 	/**
@@ -1612,17 +1612,96 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	protected void createNumberFormatAnnotations() {
 		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
 		addAnnotation
+		  (getSlot_WindowSize(), 
+		   source, 
+		   new String[] {
+			 "formatString", "##,##0"
+		   });		
+		addAnnotation
+		  (getSlot_Duration(), 
+		   source, 
+		   new String[] {
+			 "formatString", "##,##0"
+		   });		
+		addAnnotation
+		  (getSlot_MinQuantity(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0"
+		   });		
+		addAnnotation
+		  (getSlot_MaxQuantity(), 
+		   source, 
+		   new String[] {
+			 "unit", "m\u00b3",
+			 "formatString", "###,##0"
+		   });		
+		addAnnotation
+		  (getSlot_ShippingDaysRestriction(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "###"
+		   });		
+		addAnnotation
 		  (getSlot_Hedges(), 
 		   source, 
 		   new String[] {
 			 "unitPrefix", "$",
-			 "formatString", "-########0"
+			 "formatString", "-###,###,##0"
 		   });		
 		addAnnotation
 		  (getSlot_CancellationFee(), 
 		   source, 
 		   new String[] {
-			 "unitPrefix", "$"
+			 "unitPrefix", "$",
+			 "formatString", "###,###,##0"
+		   });		
+		addAnnotation
+		  (getLoadSlot_CargoCV(), 
+		   source, 
+		   new String[] {
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getDischargeSlot_MinCvValue(), 
+		   source, 
+		   new String[] {
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getDischargeSlot_MaxCvValue(), 
+		   source, 
+		   new String[] {
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getVesselAvailability_TimeCharterRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/day"
+		   });		
+		addAnnotation
+		  (getVesselEvent_DurationInDays(), 
+		   source, 
+		   new String[] {
+			 "unit", "days",
+			 "formatString", "##0"
+		   });		
+		addAnnotation
+		  (getCharterOutEvent_RepositioningFee(), 
+		   source, 
+		   new String[] {
+			 "unit", "$",
+			 "formatString", "###,##0"
+		   });		
+		addAnnotation
+		  (getCharterOutEvent_HireRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/day",
+			 "formatString", "###,##0"
 		   });
 	}
 

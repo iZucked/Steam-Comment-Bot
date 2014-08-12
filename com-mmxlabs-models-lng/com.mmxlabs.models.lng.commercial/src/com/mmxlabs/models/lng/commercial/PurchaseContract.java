@@ -40,6 +40,7 @@ public interface PurchaseContract extends Contract {
 	 * @see #setCargoCV(double)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract_CargoCV()
 	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getCargoCV();

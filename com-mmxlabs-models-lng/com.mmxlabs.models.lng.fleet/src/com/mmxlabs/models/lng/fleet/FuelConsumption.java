@@ -35,6 +35,7 @@ public interface FuelConsumption extends EObject {
 	 * @see #setSpeed(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFuelConsumption_Speed()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts' formatString='#0.###'"
 	 * @generated
 	 */
 	double getSpeed();
@@ -61,6 +62,7 @@ public interface FuelConsumption extends EObject {
 	 * @see #setConsumption(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFuelConsumption_Consumption()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getConsumption();

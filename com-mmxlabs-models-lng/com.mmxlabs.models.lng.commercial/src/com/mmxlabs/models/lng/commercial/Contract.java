@@ -119,6 +119,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see #setMinQuantity(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MinQuantity()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getMinQuantity();
@@ -146,6 +147,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MaxQuantity()
 	 * @model default="140000" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getMaxQuantity();
@@ -341,7 +343,7 @@ public interface Contract extends UUIDObject, NamedObject {
 	 * @see #setCancellationFee(int)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_CancellationFee()
 	 * @model default="0"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='###,###,##0' unitPrefix='$'"
 	 * @generated
 	 */
 	int getCancellationFee();

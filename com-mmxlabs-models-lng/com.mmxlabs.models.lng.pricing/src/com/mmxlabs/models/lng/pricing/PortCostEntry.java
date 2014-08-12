@@ -66,6 +66,7 @@ public interface PortCostEntry extends EObject {
 	 * @see #setCost(int)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortCostEntry_Cost()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='##,###,##0'"
 	 * @generated
 	 */
 	int getCost();

@@ -153,6 +153,7 @@ public interface DischargeSlot extends Slot {
 	 * @see #setMinCvValue(double)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_MinCvValue()
 	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
 	 * @generated
 	 */
 	double getMinCvValue();
@@ -206,6 +207,7 @@ public interface DischargeSlot extends Slot {
 	 * @see #setMaxCvValue(double)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_MaxCvValue()
 	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='#0.###'"
 	 * @generated
 	 */
 	double getMaxCvValue();
