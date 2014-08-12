@@ -145,7 +145,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected static final float VOLUME_IN_M3_EDEFAULT = 0.0F;
+	protected static final double VOLUME_IN_M3_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getVolumeInM3() <em>Volume In M3</em>}' attribute.
@@ -155,7 +155,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected float volumeInM3 = VOLUME_IN_M3_EDEFAULT;
+	protected double volumeInM3 = VOLUME_IN_M3_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getVolumeInMMBtu() <em>Volume In MM Btu</em>}' attribute.
@@ -165,7 +165,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int VOLUME_IN_MM_BTU_EDEFAULT = 0;
+	protected static final double VOLUME_IN_MM_BTU_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getVolumeInMMBtu() <em>Volume In MM Btu</em>}' attribute.
@@ -175,7 +175,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 * @ordered
 	 */
-	protected int volumeInMMBtu = VOLUME_IN_MM_BTU_EDEFAULT;
+	protected double volumeInMMBtu = VOLUME_IN_MM_BTU_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getPriceDOL() <em>Price DOL</em>}' attribute.
@@ -808,7 +808,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public float getVolumeInM3() {
+	public double getVolumeInM3() {
 		return volumeInM3;
 	}
 
@@ -817,9 +817,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setVolumeInM3(float newVolumeInM3) {
-		float oldVolumeInM3 = volumeInM3;
+	public void setVolumeInM3(double newVolumeInM3) {
+		double oldVolumeInM3 = volumeInM3;
 		volumeInM3 = newVolumeInM3;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3, oldVolumeInM3, volumeInM3));
@@ -831,7 +830,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * @generated
 	 */
 	@Override
-	public int getVolumeInMMBtu() {
+	public double getVolumeInMMBtu() {
 		return volumeInMMBtu;
 	}
 
@@ -840,9 +839,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setVolumeInMMBtu(int newVolumeInMMBtu) {
-		int oldVolumeInMMBtu = volumeInMMBtu;
+	public void setVolumeInMMBtu(double newVolumeInMMBtu) {
+		double oldVolumeInMMBtu = volumeInMMBtu;
 		volumeInMMBtu = newVolumeInMMBtu;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU, oldVolumeInMMBtu, volumeInMMBtu));
@@ -992,10 +990,10 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				setTitleTransferPoint((Port)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_M3:
-				setVolumeInM3((Float)newValue);
+				setVolumeInM3((Double)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__VOLUME_IN_MM_BTU:
-				setVolumeInMMBtu((Integer)newValue);
+				setVolumeInMMBtu((Double)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__PRICE_DOL:
 				setPriceDOL((Double)newValue);

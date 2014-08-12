@@ -56,7 +56,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int STARTING_HEEL_M3_EDEFAULT = 0;
+	protected static final double STARTING_HEEL_M3_EDEFAULT = 0.0;
 	/**
 	 * The cached value of the '{@link #getStartingHeelM3() <em>Starting Heel M3</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -65,7 +65,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected int startingHeelM3 = STARTING_HEEL_M3_EDEFAULT;
+	protected double startingHeelM3 = STARTING_HEEL_M3_EDEFAULT;
 	/**
 	 * The default value of the '{@link #getStartingHeelMMBTu() <em>Starting Heel MMB Tu</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -74,7 +74,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int STARTING_HEEL_MMB_TU_EDEFAULT = 0;
+	protected static final double STARTING_HEEL_MMB_TU_EDEFAULT = 0.0;
 	/**
 	 * The cached value of the '{@link #getStartingHeelMMBTu() <em>Starting Heel MMB Tu</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -83,7 +83,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected int startingHeelMMBTu = STARTING_HEEL_MMB_TU_EDEFAULT;
+	protected double startingHeelMMBTu = STARTING_HEEL_MMB_TU_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -133,7 +133,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @generated
 	 */
 	@Override
-	public int getStartingHeelM3() {
+	public double getStartingHeelM3() {
 		return startingHeelM3;
 	}
 
@@ -142,9 +142,8 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setStartingHeelM3(int newStartingHeelM3) {
-		int oldStartingHeelM3 = startingHeelM3;
+	public void setStartingHeelM3(double newStartingHeelM3) {
+		double oldStartingHeelM3 = startingHeelM3;
 		startingHeelM3 = newStartingHeelM3;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3, oldStartingHeelM3, startingHeelM3));
@@ -156,7 +155,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * @generated
 	 */
 	@Override
-	public int getStartingHeelMMBTu() {
+	public double getStartingHeelMMBTu() {
 		return startingHeelMMBTu;
 	}
 
@@ -165,9 +164,8 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setStartingHeelMMBTu(int newStartingHeelMMBTu) {
-		int oldStartingHeelMMBTu = startingHeelMMBTu;
+	public void setStartingHeelMMBTu(double newStartingHeelMMBTu) {
+		double oldStartingHeelMMBTu = startingHeelMMBTu;
 		startingHeelMMBTu = newStartingHeelMMBTu;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU, oldStartingHeelMMBTu, startingHeelMMBTu));
@@ -203,10 +201,10 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 				setContractType((String)newValue);
 				return;
 			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_M3:
-				setStartingHeelM3((Integer)newValue);
+				setStartingHeelM3((Double)newValue);
 				return;
 			case ActualsPackage.LOAD_ACTUALS__STARTING_HEEL_MMB_TU:
-				setStartingHeelMMBTu((Integer)newValue);
+				setStartingHeelMMBTu((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

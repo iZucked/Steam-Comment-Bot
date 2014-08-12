@@ -52,7 +52,7 @@ public interface CargoActuals extends EObject {
 	 * @return the value of the '<em>Base Fuel Price</em>' attribute.
 	 * @see #setBaseFuelPrice(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_BaseFuelPrice()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d' formatString='#,##0.###'"
 	 * @generated
 	 */
 	double getBaseFuelPrice();
@@ -78,7 +78,7 @@ public interface CargoActuals extends EObject {
 	 * @return the value of the '<em>Insurance Premium</em>' attribute.
 	 * @see #setInsurancePremium(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_InsurancePremium()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$' formatString='###,###,##0'"
 	 * @generated
 	 */
 	int getInsurancePremium();
@@ -146,7 +146,7 @@ public interface CargoActuals extends EObject {
 	 * @return the value of the '<em>Contract Year</em>' attribute.
 	 * @see #setContractYear(int)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_ContractYear()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='####'"
 	 * @generated
 	 */
 	int getContractYear();
@@ -326,12 +326,12 @@ public interface CargoActuals extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Charter Rate Per Day</em>' attribute.
-	 * @see #setCharterRatePerDay(int)
+	 * @see #setCharterRatePerDay(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getCargoActuals_CharterRatePerDay()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='$/day' formatString='###,##0.##'"
 	 * @generated
 	 */
-	int getCharterRatePerDay();
+	double getCharterRatePerDay();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.CargoActuals#getCharterRatePerDay <em>Charter Rate Per Day</em>}' attribute.
@@ -341,7 +341,7 @@ public interface CargoActuals extends EObject {
 	 * @see #getCharterRatePerDay()
 	 * @generated
 	 */
-	void setCharterRatePerDay(int value);
+	void setCharterRatePerDay(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Cargo</b></em>' reference.

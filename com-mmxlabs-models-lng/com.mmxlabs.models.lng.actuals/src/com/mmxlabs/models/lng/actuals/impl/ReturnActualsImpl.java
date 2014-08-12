@@ -77,7 +77,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int END_HEEL_M3_EDEFAULT = 0;
+	protected static final double END_HEEL_M3_EDEFAULT = 0.0;
 
 	/**
 	 * The cached value of the '{@link #getEndHeelM3() <em>End Heel M3</em>}' attribute.
@@ -87,7 +87,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated
 	 * @ordered
 	 */
-	protected int endHeelM3 = END_HEEL_M3_EDEFAULT;
+	protected double endHeelM3 = END_HEEL_M3_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -177,7 +177,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * @generated
 	 */
 	@Override
-	public int getEndHeelM3() {
+	public double getEndHeelM3() {
 		return endHeelM3;
 	}
 
@@ -186,9 +186,8 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setEndHeelM3(int newEndHeelM3) {
-		int oldEndHeelM3 = endHeelM3;
+	public void setEndHeelM3(double newEndHeelM3) {
+		double oldEndHeelM3 = endHeelM3;
 		endHeelM3 = newEndHeelM3;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.RETURN_ACTUALS__END_HEEL_M3, oldEndHeelM3, endHeelM3));
@@ -257,7 +256,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 				setOperationsStart((Date)newValue);
 				return;
 			case ActualsPackage.RETURN_ACTUALS__END_HEEL_M3:
-				setEndHeelM3((Integer)newValue);
+				setEndHeelM3((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
