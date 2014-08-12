@@ -56,7 +56,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int END_HEEL_M3_EDEFAULT = 0;
+	protected static final double END_HEEL_M3_EDEFAULT = 0.0;
 	/**
 	 * The cached value of the '{@link #getEndHeelM3() <em>End Heel M3</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -65,7 +65,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @generated
 	 * @ordered
 	 */
-	protected int endHeelM3 = END_HEEL_M3_EDEFAULT;
+	protected double endHeelM3 = END_HEEL_M3_EDEFAULT;
 	/**
 	 * The default value of the '{@link #getEndHeelMMBTu() <em>End Heel MMB Tu</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -74,7 +74,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int END_HEEL_MMB_TU_EDEFAULT = 0;
+	protected static final double END_HEEL_MMB_TU_EDEFAULT = 0.0;
 	/**
 	 * The cached value of the '{@link #getEndHeelMMBTu() <em>End Heel MMB Tu</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -83,7 +83,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @generated
 	 * @ordered
 	 */
-	protected int endHeelMMBTu = END_HEEL_MMB_TU_EDEFAULT;
+	protected double endHeelMMBTu = END_HEEL_MMB_TU_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -133,7 +133,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @generated
 	 */
 	@Override
-	public int getEndHeelM3() {
+	public double getEndHeelM3() {
 		return endHeelM3;
 	}
 
@@ -142,9 +142,8 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setEndHeelM3(int newEndHeelM3) {
-		int oldEndHeelM3 = endHeelM3;
+	public void setEndHeelM3(double newEndHeelM3) {
+		double oldEndHeelM3 = endHeelM3;
 		endHeelM3 = newEndHeelM3;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_M3, oldEndHeelM3, endHeelM3));
@@ -156,7 +155,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * @generated
 	 */
 	@Override
-	public int getEndHeelMMBTu() {
+	public double getEndHeelMMBTu() {
 		return endHeelMMBTu;
 	}
 
@@ -165,9 +164,8 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setEndHeelMMBTu(int newEndHeelMMBTu) {
-		int oldEndHeelMMBTu = endHeelMMBTu;
+	public void setEndHeelMMBTu(double newEndHeelMMBTu) {
+		double oldEndHeelMMBTu = endHeelMMBTu;
 		endHeelMMBTu = newEndHeelMMBTu;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_MMB_TU, oldEndHeelMMBTu, endHeelMMBTu));
@@ -203,10 +201,10 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 				setDeliveryType((String)newValue);
 				return;
 			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_M3:
-				setEndHeelM3((Integer)newValue);
+				setEndHeelM3((Double)newValue);
 				return;
 			case ActualsPackage.DISCHARGE_ACTUALS__END_HEEL_MMB_TU:
-				setEndHeelMMBTu((Integer)newValue);
+				setEndHeelMMBTu((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);

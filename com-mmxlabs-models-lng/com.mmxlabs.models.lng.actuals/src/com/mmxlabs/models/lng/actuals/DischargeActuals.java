@@ -61,12 +61,12 @@ public interface DischargeActuals extends SlotActuals {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End Heel M3</em>' attribute.
-	 * @see #setEndHeelM3(int)
+	 * @see #setEndHeelM3(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getDischargeActuals_EndHeelM3()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
 	 * @generated
 	 */
-	int getEndHeelM3();
+	double getEndHeelM3();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelM3 <em>End Heel M3</em>}' attribute.
@@ -76,7 +76,7 @@ public interface DischargeActuals extends SlotActuals {
 	 * @see #getEndHeelM3()
 	 * @generated
 	 */
-	void setEndHeelM3(int value);
+	void setEndHeelM3(double value);
 
 	/**
 	 * Returns the value of the '<em><b>End Heel MMB Tu</b></em>' attribute.
@@ -87,12 +87,12 @@ public interface DischargeActuals extends SlotActuals {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>End Heel MMB Tu</em>' attribute.
-	 * @see #setEndHeelMMBTu(int)
+	 * @see #setEndHeelMMBTu(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getDischargeActuals_EndHeelMMBTu()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu' formatString='##,###,##0.###'"
 	 * @generated
 	 */
-	int getEndHeelMMBTu();
+	double getEndHeelMMBTu();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.DischargeActuals#getEndHeelMMBTu <em>End Heel MMB Tu</em>}' attribute.
@@ -102,5 +102,5 @@ public interface DischargeActuals extends SlotActuals {
 	 * @see #getEndHeelMMBTu()
 	 * @generated
 	 */
-	void setEndHeelMMBTu(int value);
+	void setEndHeelMMBTu(double value);
 } // DischargeActuals

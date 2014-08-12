@@ -17,19 +17,19 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeInM3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="m³"/>
-        <details key="formatString" value="###,##0.###"/>
+        <details key="formatString" value="#,###,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="volumeInMMBtu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="mmBtu"/>
-        <details key="formatString" value="##,###,##0.###"/>
+        <details key="formatString" value="#,###,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceDOL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$/mmBtu"/>
-        <details key="formatString" value="#0.###"/>
+        <details key="formatString" value="##.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="penalty" eType="#//PenaltyType"/>
@@ -37,13 +37,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="CV" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="mmBtu/m³"/>
-        <details key="formatString" value="#0.###"/>
+        <details key="formatString" value="##.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelConsumption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="MT"/>
-        <details key="formatString" value="###,##0"/>
+        <details key="formatString" value="###,###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="route" eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Route"/>
@@ -51,25 +51,25 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="routeCosts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$"/>
-        <details key="formatString" value="###,###,##0"/>
+        <details key="formatString" value="###,###,###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="crewBonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$"/>
-        <details key="formatString" value="###,###,##0"/>
+        <details key="formatString" value="###,###,###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCharges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$"/>
-        <details key="formatString" value="###,###,##0"/>
+        <details key="formatString" value="###,###,###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacityCharges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$"/>
-        <details key="formatString" value="###,###,##0"/>
+        <details key="formatString" value="###,###,###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -92,20 +92,20 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="charterRatePerDay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$/day"/>
-        <details key="formatString" value="###,##0.##"/>
+        <details key="formatString" value="###,###.##"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//Cargo"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="MT/d"/>
-        <details key="formatString" value="#,##0.###"/>
+        <details key="formatString" value="#,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="insurancePremium" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="$"/>
-        <details key="formatString" value="###,###,##0"/>
+        <details key="formatString" value="###,###,###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -114,13 +114,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startingHeelM3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="m³"/>
-        <details key="formatString" value="###,##0.###"/>
+        <details key="formatString" value="#,###,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startingHeelMMBTu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="mmBtu"/>
-        <details key="formatString" value="##,###,##0.###"/>
+        <details key="formatString" value="#,###,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -129,13 +129,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endHeelM3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="m³"/>
-        <details key="formatString" value="###,##0.###"/>
+        <details key="formatString" value="#,###,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endHeelMMBTu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="mmBtu"/>
-        <details key="formatString" value="##,###,##0.###"/>
+        <details key="formatString" value="#,###,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
@@ -146,7 +146,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endHeelM3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="m³"/>
-        <details key="formatString" value="###,##0.###"/>
+        <details key="formatString" value="#,###,###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>

@@ -61,12 +61,12 @@ public interface LoadActuals extends SlotActuals {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Starting Heel M3</em>' attribute.
-	 * @see #setStartingHeelM3(int)
+	 * @see #setStartingHeelM3(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getLoadActuals_StartingHeelM3()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0.###'"
 	 * @generated
 	 */
-	int getStartingHeelM3();
+	double getStartingHeelM3();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelM3 <em>Starting Heel M3</em>}' attribute.
@@ -76,7 +76,7 @@ public interface LoadActuals extends SlotActuals {
 	 * @see #getStartingHeelM3()
 	 * @generated
 	 */
-	void setStartingHeelM3(int value);
+	void setStartingHeelM3(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Starting Heel MMB Tu</b></em>' attribute.
@@ -87,12 +87,12 @@ public interface LoadActuals extends SlotActuals {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Starting Heel MMB Tu</em>' attribute.
-	 * @see #setStartingHeelMMBTu(int)
+	 * @see #setStartingHeelMMBTu(double)
 	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getLoadActuals_StartingHeelMMBTu()
-	 * @model
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu' formatString='##,###,##0.###'"
 	 * @generated
 	 */
-	int getStartingHeelMMBTu();
+	double getStartingHeelMMBTu();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.LoadActuals#getStartingHeelMMBTu <em>Starting Heel MMB Tu</em>}' attribute.
@@ -102,5 +102,5 @@ public interface LoadActuals extends SlotActuals {
 	 * @see #getStartingHeelMMBTu()
 	 * @generated
 	 */
-	void setStartingHeelMMBTu(int value);
+	void setStartingHeelMMBTu(double value);
 } // LoadActuals
