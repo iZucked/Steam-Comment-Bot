@@ -28,9 +28,19 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPort" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="140000"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="140000">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="m³"/>
+        <details key="formatString" value="###,##0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedContracts" upperBound="-1"
@@ -48,21 +58,37 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cancellationFee" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
         defaultValueLiteral="0">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="formatString" value="###,###,##0"/>
         <details key="unitPrefix" value="$"/>
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-        unsettable="true"/>
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-        unsettable="true"/>
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" eSuperTypes="#//Contract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoCV" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
-        unsettable="true"/>
+        unsettable="true">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="mmBtu/m³"/>
+        <details key="formatString" value="#0.###"/>
+      </eAnnotations>
+    </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesDeliveryType" eType="ecore:EEnum ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
         defaultValueLiteral="Any"/>
   </eClassifiers>

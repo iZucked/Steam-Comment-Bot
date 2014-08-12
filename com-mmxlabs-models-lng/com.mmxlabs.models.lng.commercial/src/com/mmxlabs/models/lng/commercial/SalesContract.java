@@ -40,6 +40,7 @@ public interface SalesContract extends Contract {
 	 * @see #setMinCvValue(double)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract_MinCvValue()
 	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getMinCvValue();
@@ -93,6 +94,7 @@ public interface SalesContract extends Contract {
 	 * @see #setMaxCvValue(double)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract_MaxCvValue()
 	 * @model unsettable="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='mmBtu/m\263' formatString='#0.###'"
 	 * @generated
 	 */
 	double getMaxCvValue();

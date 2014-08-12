@@ -91,6 +91,7 @@ public interface RouteCost extends MMXObject {
 	 * @see #setLadenCost(int)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_LadenCost()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='##,###,##0'"
 	 * @generated
 	 */
 	int getLadenCost();
@@ -117,6 +118,7 @@ public interface RouteCost extends MMXObject {
 	 * @see #setBallastCost(int)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getRouteCost_BallastCost()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unitPrefix='$' formatString='##,###,##0'"
 	 * @generated
 	 */
 	int getBallastCost();

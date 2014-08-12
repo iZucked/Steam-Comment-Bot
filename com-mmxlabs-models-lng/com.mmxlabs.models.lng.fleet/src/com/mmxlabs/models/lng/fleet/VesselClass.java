@@ -93,7 +93,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setCapacity(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_Capacity()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,###'"
 	 * @generated
 	 */
 	int getCapacity();
@@ -200,7 +200,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setMinSpeed(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinSpeed()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts' formatString='#0.###'"
 	 * @generated
 	 */
 	double getMinSpeed();
@@ -227,7 +227,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setMaxSpeed(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MaxSpeed()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='kts' formatString='#0.###'"
 	 * @generated
 	 */
 	double getMaxSpeed();
@@ -258,7 +258,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setMinHeel(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinHeel()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='###,##0' unit='m\263'"
 	 * @generated
 	 */
 	int getMinHeel();
@@ -285,7 +285,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setWarmingTime(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_WarmingTime()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs' formatString='##0'"
 	 * @generated
 	 */
 	int getWarmingTime();
@@ -312,7 +312,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setCoolingVolume(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_CoolingVolume()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m3'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='##0,###'"
 	 * @generated
 	 */
 	int getCoolingVolume();
@@ -355,7 +355,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setPilotLightRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_PilotLightRate()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getPilotLightRate();
@@ -381,7 +381,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @return the value of the '<em>Min Base Fuel Consumption</em>' attribute.
 	 * @see #setMinBaseFuelConsumption(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_MinBaseFuelConsumption()
-	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/d'"
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='###,###'"
 	 * @generated
 	 */
 	double getMinBaseFuelConsumption();

@@ -20,7 +20,6 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
@@ -176,8 +175,7 @@ public class RouteCostItemProvider
 	@Override
 	public String getText(Object object) {
 		RouteCost routeCost = (RouteCost)object;
-		VesselClass vc = routeCost.getVesselClass();
-		return getString("_UI_RouteCost_type") + " " + routeCost.getRoute() + (vc!=null ? " " + vc.getName() : "");
+		return getString("_UI_RouteCost_type") + " " + routeCost.getLadenCost();
 	}
 
 	/**

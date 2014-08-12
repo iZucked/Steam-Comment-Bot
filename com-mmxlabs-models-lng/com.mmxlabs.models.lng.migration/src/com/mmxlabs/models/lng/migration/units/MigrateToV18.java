@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-
 import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;

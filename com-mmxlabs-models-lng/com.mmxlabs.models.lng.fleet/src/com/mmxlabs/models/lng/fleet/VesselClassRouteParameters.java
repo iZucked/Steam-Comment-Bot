@@ -92,6 +92,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #setLadenConsumptionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_LadenConsumptionRate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getLadenConsumptionRate();
@@ -118,6 +119,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #setLadenNBORate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_LadenNBORate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getLadenNBORate();
@@ -144,6 +146,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #setBallastConsumptionRate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_BallastConsumptionRate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getBallastConsumptionRate();
@@ -170,6 +173,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #setBallastNBORate(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_BallastNBORate()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/day' formatString='##0.###'"
 	 * @generated
 	 */
 	double getBallastNBORate();

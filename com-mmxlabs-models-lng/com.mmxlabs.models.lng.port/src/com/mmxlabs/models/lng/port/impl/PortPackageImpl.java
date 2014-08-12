@@ -684,7 +684,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		   source, 
 		   new String[] {
 			 "showOtherNames", "true"
-		   });		
+		   });						
 	}
 
 	/**
@@ -696,16 +696,44 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	protected void createNumberFormatAnnotations() {
 		String source = "http://www.mmxlabs.com/models/ui/numberFormat";			
 		addAnnotation
+		  (getPort_LoadDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });		
+		addAnnotation
+		  (getPort_DischargeDuration(), 
+		   source, 
+		   new String[] {
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });		
+		addAnnotation
+		  (getPort_CvValue(), 
+		   source, 
+		   new String[] {
+			 "unit", "mmBtu/m\u00b3",
+			 "formatString", "#0.###"
+		   });		
+		addAnnotation
+		  (getPort_DefaultWindowSize(), 
+		   source, 
+		   new String[] {
+			 "unit", "hours",
+			 "formatString", "##,##0"
+		   });		
+		addAnnotation
 		  (getLocation_Lat(), 
 		   source, 
 		   new String[] {
-			 "formatString", "-##.###"
+			 "formatString", "-###.###"
 		   });		
 		addAnnotation
 		  (getLocation_Lon(), 
 		   source, 
 		   new String[] {
-			 "formatString", "-##.###"
+			 "formatString", "-###.###"
 		   });
 	}
 

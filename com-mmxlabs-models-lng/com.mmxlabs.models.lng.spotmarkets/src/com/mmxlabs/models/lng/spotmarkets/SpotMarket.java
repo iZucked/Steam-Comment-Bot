@@ -97,6 +97,7 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * @see #setMinQuantity(int)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_MinQuantity()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getMinQuantity();
@@ -123,6 +124,7 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 * @see #setMaxQuantity(int)
 	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_MaxQuantity()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getMaxQuantity();

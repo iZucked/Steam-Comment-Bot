@@ -53,6 +53,7 @@ public interface VesselEvent extends UUIDObject, NamedObject, ITimezoneProvider,
 	 * @see #setDurationInDays(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getVesselEvent_DurationInDays()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='days' formatString='##0'"
 	 * @generated
 	 */
 	int getDurationInDays();
