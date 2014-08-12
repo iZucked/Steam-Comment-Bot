@@ -727,13 +727,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		  (getLocation_Lat(), 
 		   source, 
 		   new String[] {
-			 "formatString", "-##.###"
+			 "formatString", "-###.###"
 		   });		
 		addAnnotation
 		  (getLocation_Lon(), 
 		   source, 
 		   new String[] {
-			 "formatString", "-##.###"
+			 "formatString", "-###.###"
 		   });
 	}
 
