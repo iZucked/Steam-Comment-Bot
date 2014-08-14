@@ -312,7 +312,7 @@ public interface VesselClass extends AVesselSet<Vessel> {
 	 * @see #setCoolingVolume(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClass_CoolingVolume()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='##0,###'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263' formatString='###,##0'"
 	 * @generated
 	 */
 	int getCoolingVolume();
