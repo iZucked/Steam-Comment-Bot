@@ -477,6 +477,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		for (final ISequenceElement element : sequence) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 			final List<ITimeWindow> windows;
+			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
+			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
 				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
@@ -497,8 +499,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 					// but can be overridden by the specified end requirement
 					final ITimeWindow timeWindow = endRequirement.getTimeWindow();
 					if (timeWindow != null) {
-						// Make sure we always use the time window
-						useTimeWindow[index] = true;
+						// Make sure we always use the time window [This never worked - value was overwritten]
+						// useTimeWindow[index] = true;
 						windows = Collections.singletonList(timeWindow);
 					} else {
 						windows = timeWindowProvider.getTimeWindows(element);
@@ -515,9 +517,13 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 						int a = actualsDataProvider.getArrivalTime(slot);
 						int b = actualsDataProvider.getReturnTime(prevSlot);
 						assert a == b;
+
 					}
+					useTimeWindow[index] = true;
 				} else if (actualsDataProvider.hasActuals(slot)) {
 					windows = Collections.singletonList(actualsDataProvider.getArrivalTimeWindow(slot));
+					useTimeWindow[index] = true;
+
 				} else {
 					// "windows" defaults to whatever windows are specified by the time window provider
 					windows = timeWindowProvider.getTimeWindows(element);
@@ -525,8 +531,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
-			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
-			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
 
 			// Calculate minimum inter-element durations
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
