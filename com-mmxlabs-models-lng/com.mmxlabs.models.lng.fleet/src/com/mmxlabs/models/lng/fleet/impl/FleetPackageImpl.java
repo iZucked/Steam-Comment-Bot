@@ -906,7 +906,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source, 
 		   new String[] {
 			 "unit", "m\u00b3",
-			 "formatString", "##0,###"
+			 "formatString", "###,##0"
 		   });		
 		addAnnotation
 		  (getVesselClass_PilotLightRate(), 

@@ -109,7 +109,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="m³"/>
-        <details key="formatString" value="##0,###"/>
+        <details key="formatString" value="###,##0"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routeParameters" upperBound="-1"
