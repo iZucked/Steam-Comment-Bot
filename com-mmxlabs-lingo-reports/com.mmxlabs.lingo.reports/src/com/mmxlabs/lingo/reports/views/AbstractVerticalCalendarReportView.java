@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -91,6 +92,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected LNGScenarioModel root = null;
 	protected Date[] dates = null;
 	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
+	protected final HashMap<Event, Vessel> vesselsByEvent = new HashMap<>();
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -203,6 +205,17 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 				if (root != null) {
 					createCols(data);
+				}
+				
+				// regenerate the map linking events to vessels
+				vesselsByEvent.clear();
+				for (Sequence sequence: data.vessels) {					
+					Vessel vessel = sequence.getVesselAvailability().getVessel();
+					if (vessel != null) {
+						for (Event event: sequence.getEvents()) {
+							vesselsByEvent.put(event, vessel);
+						}
+					}
 				}
 
 				gridViewer.refresh();
