@@ -1,8 +1,9 @@
 package com.mmxlabs.lingo.reports.components;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -34,7 +35,7 @@ public class ColumnBlockManager {
 		return null;
 	}
 
-	protected ColumnBlock getBlockByName(final String name) {
+	public ColumnBlock getBlockByName(final String name) {
 		for (final ColumnBlock block : blocks) {
 			if (block.name.equals(name)) {
 				return block;
@@ -97,14 +98,22 @@ public class ColumnBlockManager {
 	}
 
 	public void setNameOrder(final List<String> order) {
+		final Set<ColumnBlock> omittedBlocks = new HashSet<>();
+		omittedBlocks.addAll(blocks);
+		
 		final List<ColumnBlock> blockOrder = new ArrayList<>();
 		for (String name: order) {
 			ColumnBlock block = getBlockByName(name);
 			blockOrder.add(block);
+			omittedBlocks.remove(block);
 		}
+		blockOrder.addAll(omittedBlocks);
 		setVisibleBlockOrder(blockOrder);
+		
 		blockOrderByName.clear();
-		blockOrderByName.addAll(order);
+		for (ColumnBlock block: blockOrder) {
+			blockOrderByName.add(block.name);
+		}
 	}	
 	
 	/**

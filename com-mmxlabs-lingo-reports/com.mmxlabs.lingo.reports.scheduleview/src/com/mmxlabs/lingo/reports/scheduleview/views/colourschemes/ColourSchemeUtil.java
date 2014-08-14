@@ -13,6 +13,10 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -24,6 +28,45 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public class ColourSchemeUtil {
 
+	/**
+	 * Checks to see if a journey is "tight", i.e. when idle time after the journey is taken into consideration,
+	 * is there less than a specified amount of leeway travelling at a vessel-specified "service speed"?
+	 * 
+	 * @param journey
+	 * @return
+	 */
+	public static boolean isJourneyTight(final Journey journey, final int leewayInHrs) {
+		int distance = journey.getDistance();
+		int journeyPlusIdleTime = journey.getDuration(); 
+
+		
+		Sequence sequence = journey.getSequence();		
+		if (sequence == null) return false;
+		// get vessel class directly from the sequence if it is a spot charter
+		VesselClass vesselClass = sequence.getVesselClass();
+		// otherwise get it from the vessel allocation
+		if (vesselClass == null) {		
+			VesselAvailability avail = sequence.getVesselAvailability();
+			if (avail == null) return false;
+			Vessel vessel = avail.getVessel();
+			if (vessel == null) return false;
+			vesselClass = vessel.getVesselClass();
+		}
+		
+		
+		VesselStateAttributes attr = journey.isLaden() ? vesselClass.getLadenAttributes() : vesselClass.getBallastAttributes();
+		double speed = attr.getServiceSpeed();
+		
+		Event nextEvent = journey.getNextEvent();
+		if (nextEvent instanceof Idle) {
+			journeyPlusIdleTime += nextEvent.getDuration();
+		}
+								
+		double serviceTime = distance / speed;
+		
+		return journeyPlusIdleTime - serviceTime < leewayInHrs;		
+	}
+	
 	public static boolean isOutsideTimeWindow(Event ev) {
 		Date start = ev.getStart();
 		if ((ev instanceof VesselEventVisit) && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())) {

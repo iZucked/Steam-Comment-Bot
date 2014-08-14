@@ -448,6 +448,14 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	}
 	
+	protected void applyDefaultColumnConfiguration(final EMFReportColumnManager manager) {
+		String [] defaultColumns = new String [] { 
+			"L-ID", "D-ID", "Vessel", "P&L (Total)", "P&L (Trading)", "P&L (Shipping)", "Purchase Price", "Sales Price", 
+			"Unit Ship. Cost", "Purchase Vol", "Sale Vol", "Shipping Cost", "Upside", "Next Port", "Next Date", "Laden Days",
+			"Ballast Days", "Idle Days", "Type" 
+		};
+	}
+	
 	protected void registerSpecialFormatColumns(final EMFReportColumnManager manager) {
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
 		manager.registerColumn(CARGO_REPORT_TYPE_ID, "Vessel", ColumnType.NORMAL, new BaseFormatter() {

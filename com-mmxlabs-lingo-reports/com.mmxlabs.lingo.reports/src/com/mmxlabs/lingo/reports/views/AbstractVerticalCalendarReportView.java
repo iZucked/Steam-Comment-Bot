@@ -209,11 +209,13 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				
 				// regenerate the map linking events to vessels
 				vesselsByEvent.clear();
-				for (Sequence sequence: data.vessels) {					
-					Vessel vessel = sequence.getVesselAvailability().getVessel();
-					if (vessel != null) {
-						for (Event event: sequence.getEvents()) {
-							vesselsByEvent.put(event, vessel);
+				if (data != null && data.vessels != null) {
+					for (Sequence sequence: data.vessels) {					
+						Vessel vessel = sequence.getVesselAvailability().getVessel();
+						if (vessel != null) {
+							for (Event event: sequence.getEvents()) {
+								vesselsByEvent.put(event, vessel);
+							}
 						}
 					}
 				}
