@@ -111,6 +111,10 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 * the route. Also used for actuals where forcast travel time is irrelevant.
 	 */
 	private boolean[][] useTimeWindow;
+	/**
+	 * Boolean indicating time is actualised and cannot be changed.
+	 */
+	private boolean[][] actualisedTimeWindow;
 
 	/**
 	 * A list of ship-to-ship binding information in <D_i, D_j, L_i, L_j> quadruples where D_i, D_j are the indices of the sequence and the position within the sequence of the discharge element, and
@@ -258,6 +262,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			maxTimeToNextElement = new int[size][];
 			isVirtual = new boolean[size][];
 			useTimeWindow = new boolean[size][];
+			actualisedTimeWindow = new boolean[size][];
 			sizes = new int[size];
 		}
 
@@ -340,11 +345,12 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		final int[] endTimes = windowEndTime[seqIndex];
 		final int[] minTravelTimes = minTimeToNextElement[seqIndex];
 		final boolean[] useRawTimeWindow = useTimeWindow[seqIndex];
+		final boolean[] actualiseTimeWindows = this.actualisedTimeWindow[seqIndex];
 		// time windows after the first one have their start time clipped, so
 		// they don't start any earlier
 		// than you could get to them without being late.
 		for (int i = 1; i < startTimes.length; i++) {
-			if (!useRawTimeWindow[i]) {
+			if (actualiseTimeWindows[i] && !useRawTimeWindow[i]) {
 				startTimes[i] = Math.max(startTimes[i], startTimes[i - 1] + minTravelTimes[i - 1]);
 				endTimes[i] = Math.max(endTimes[i], startTimes[i]);
 			}
@@ -356,7 +362,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			// trim the end of this time window so that the next element is
 			// reachable without lateness
 			// (but never so that the end time is before the start time)
-			if (!useRawTimeWindow[i + 1]) {
+			if (actualiseTimeWindows[i] && !useRawTimeWindow[i + 1]) {
 				endTimes[i] = Math.max(startTimes[i], Math.min(endTimes[i], endTimes[i + 1] - minTravelTimes[i]));
 			}
 		}
@@ -465,6 +471,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex];
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 		final boolean[] useTimeWindow = this.useTimeWindow[sequenceIndex];
+		final boolean[] actualisedTimeWindow = this.actualisedTimeWindow[sequenceIndex];
 
 		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
 
@@ -477,8 +484,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		for (final ISequenceElement element : sequence) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 			final List<ITimeWindow> windows;
-			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
-			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
 			// Take element start window into account
 			if (portTypeProvider.getPortType(element) == PortType.Start) {
 				final IStartEndRequirement startRequirement = startEndRequirementProvider.getStartRequirement(resource);
@@ -500,7 +505,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 					final ITimeWindow timeWindow = endRequirement.getTimeWindow();
 					if (timeWindow != null) {
 						// Make sure we always use the time window [This never worked - value was overwritten]
-						// useTimeWindow[index] = true;
+						useTimeWindow[index] = true;
 						windows = Collections.singletonList(timeWindow);
 					} else {
 						windows = timeWindowProvider.getTimeWindows(element);
@@ -519,10 +524,10 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 						assert a == b;
 
 					}
-					useTimeWindow[index] = true;
+					actualisedTimeWindow[index] = true;
 				} else if (actualsDataProvider.hasActuals(slot)) {
 					windows = Collections.singletonList(actualsDataProvider.getArrivalTimeWindow(slot));
-					useTimeWindow[index] = true;
+					actualisedTimeWindow[index] = true;
 
 				} else {
 					// "windows" defaults to whatever windows are specified by the time window provider
@@ -532,6 +537,8 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 				recordShipToShipBindings(sequenceIndex, index, element);
 			}
 
+			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
+			useTimeWindow[index] = prevElement == null ? false : portTypeProvider.getPortType(prevElement) == PortType.Short_Cargo_End;
 			// Calculate minimum inter-element durations
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
 
@@ -579,7 +586,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 					// they don't start any earlier
 					// than you could get to them without being late.
 					windowEndTime[index] = window.getEnd();
-					if (useTimeWindow[index]) {
+					if (useTimeWindow[index] || actualisedTimeWindow[index]) {
 						// Cargo shorts - pretend this is a start element
 						// Actuals - use window directly
 						windowStartTime[index] = window.getStart();
@@ -600,9 +607,18 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			// trim the end of this time window so that the next element is
 			// reachable without lateness
 			// (but never so that the end time is before the start time)
-			if (!useTimeWindow[index + 1]) {
+
+			if (actualisedTimeWindow[index] && actualisedTimeWindow[index + 1]) {
+				// Skip, windows should already match.
+			} else if (actualisedTimeWindow[index + 1] && !actualisedTimeWindow[index]) {
+				// Current window if flexible, next window is fixed, bring end window back
+				windowEndTime[index] = windowEndTime[index + 1] - minTimeToNextElement[index];
+			} else if (!useTimeWindow[index + 1]) {
 				windowEndTime[index] = Math.max(windowStartTime[index], Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
 			}
+
+			// Make sure end if >= start - this may shift the end forward again violating min travel time.
+			windowEndTime[index] = Math.max(windowStartTime[index], windowEndTime[index]);
 		}
 
 		// Compute separation points
@@ -699,7 +715,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			// getMaxArrivalTime().
 
 			return arrivalTimes[seq][index - 1];
-		} else if (useTimeWindow[seq][index]) {
+		} else if (useTimeWindow[seq][index] || actualisedTimeWindow[seq][index]) {
 			return windowStartTime[seq][index];
 		} else {
 			// whichever is later: previous arrival time + travel, or
@@ -721,7 +737,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			// if this is a virtual element, or the previous element was
 			// virtual, enforce zero travel time
 			return arrivalTimes[seq][index - 1];
-		} else if (useTimeWindow[seq][index]) {
+		} else if (useTimeWindow[seq][index] || actualisedTimeWindow[seq][index]) {
 			return windowStartTime[seq][index];
 		} else {
 			return Math.max(getMinArrivalTime(seq, index), // the latest we can
@@ -824,6 +840,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 		resize(isVirtual, sequenceIndex, size);
 		resize(useTimeWindow, sequenceIndex, size);
+		resize(actualisedTimeWindow, sequenceIndex, size);
 
 		sizes[sequenceIndex] = size;
 	}
