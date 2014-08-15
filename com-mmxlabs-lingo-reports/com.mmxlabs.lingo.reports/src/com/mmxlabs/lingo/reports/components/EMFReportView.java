@@ -268,6 +268,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		return handler;
 	}
 
+	public void makeAllBlocksVisible() {
+		for (ColumnHandler handler : handlers) {
+			handler.block.setUserVisible(true);
+		}
+	}
+
 	/**
 	 * Finds the view index of the specified column handler, i.e. the index from left to right of the column in the grid's display.
 	 * 

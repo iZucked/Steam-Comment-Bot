@@ -101,6 +101,9 @@ public class CooldownReportView extends EMFReportView {
 				return null;
 			}
 		});
+		
+		makeAllBlocksVisible();
+
 	}
 
 	@Override

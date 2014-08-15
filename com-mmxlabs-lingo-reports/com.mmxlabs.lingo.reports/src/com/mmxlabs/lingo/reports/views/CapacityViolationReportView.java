@@ -73,6 +73,9 @@ public class CapacityViolationReportView extends EMFReportView {
 
 		addColumn("violation", "Violation", ColumnType.NORMAL, objectFormatter, attrib_Row_Type);
 		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, objectFormatter, attrib_Row_Quantity);
+		
+		makeAllBlocksVisible();
+
 	}
 
 	@Override

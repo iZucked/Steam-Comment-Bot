@@ -288,6 +288,8 @@ public class PortRotationReportView extends EMFReportView {
 				return (int) total;
 			}
 		});
+		
+		makeAllBlocksVisible();
 	}
 
 	// private final List<String> entityColumnNames = new ArrayList<String>();

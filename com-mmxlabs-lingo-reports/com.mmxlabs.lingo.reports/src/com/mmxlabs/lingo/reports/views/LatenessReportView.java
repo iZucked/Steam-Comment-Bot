@@ -105,6 +105,7 @@ public class LatenessReportView extends EMFReportView {
 		});
 		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
 
+		makeAllBlocksVisible();
 	}
 
 	private Calendar getWindowStartDate(final Object object) {
