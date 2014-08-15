@@ -91,11 +91,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "D-ID", null, ColumnType.NORMAL, objectFormatter, name2ObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.cargotype":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "TEST", ColumnType.NORMAL, objectFormatter, cargoAllocationRef,
-					s.getCargoAllocation_InputCargo(), c.getCargo__GetCargoType()));
+			view.registerColumn(
+					CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "TEST", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c
+							.getCargo__GetCargoType()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total":
-			
+
 			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "P&L", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
@@ -118,14 +120,50 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					return null;
 				}
 			}));
-			
-			
-			
+
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
+			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new BaseFormatter() {
+				@Override
+				public String format(final Object object) {
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, objectFormatter, cargoAllocationRef,
-					s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName()));
+					if (object instanceof CargoAllocation) {
+						final CargoAllocation cargoAllocation = (CargoAllocation) object;
+						final Sequence sequence = cargoAllocation.getSequence();
+						if (sequence != null) {
+							return sequence.getName();
+						}
+					} else if (object instanceof Event) {
+						final Event event = (Event) object;
+						final Sequence sequence = event.getSequence();
+						if (sequence != null) {
+							return sequence.getName();
+						}
+					}
+
+					return null;
+				}
+
+				@Override
+				public Comparable<?> getComparable(final Object object) {
+
+					if (object instanceof CargoAllocation) {
+						final CargoAllocation cargoAllocation = (CargoAllocation) object;
+						final Sequence sequence = cargoAllocation.getSequence();
+						if (sequence != null) {
+							return sequence.getName();
+						}
+					} else if (object instanceof Event) {
+						final Event event = (Event) object;
+						final Sequence sequence = event.getSequence();
+						if (sequence != null) {
+							return sequence.getName();
+						}
+					}
+					return "";
+				}
+
+			}, targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate":
 
@@ -191,8 +229,48 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					new SimpleEmfBlockColumnFactory(columnID, "Sell Volume", null, ColumnType.NORMAL, integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_mmbtu":
+			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof SlotAllocation) {
+						SlotAllocation slotAllocation = (SlotAllocation) object;
+
+						final Slot slot = slotAllocation.getSlot();
+						if (slot instanceof LoadSlot) {
+							double cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
+							return (int) Math.round(cv * (double) slotAllocation.getVolumeTransferred());
+						}
+					}
+					return null;
+
+				}
+			}, loadAllocationRef));
+
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_mmbtu":
+			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof SlotAllocation) {
+						SlotAllocation slotAllocation = (SlotAllocation) object;
+
+						double cv = 0.0;
+						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+						if (cargoAllocation != null) {
+							for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+								final Slot slot = sa.getSlot();
+								if (slot instanceof LoadSlot) {
+									cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
+									break;
+								}
+							}
+						}
+						return (int) Math.round(cv * (double) slotAllocation.getVolumeTransferred());
+					}
+					return null;
+
+				}
+			}, dischargeAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ladencost":
 
