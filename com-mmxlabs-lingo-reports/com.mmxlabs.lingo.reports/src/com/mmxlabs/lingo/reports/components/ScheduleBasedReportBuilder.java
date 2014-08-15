@@ -972,7 +972,8 @@ public class ScheduleBasedReportBuilder {
 				final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
 				final String title = String.format("P&L (%s)", book);
 
-				return theReport.addColumn(columnId, title, title, ColumnType.NORMAL, new IntegerFormatter() {
+				final ColumnBlock block = report.createBlock(columnId, title, ColumnType.NORMAL);
+				return theReport.createColumn(block, title, new IntegerFormatter() {
 					@Override
 					public Integer getIntValue(final Object object) {
 						ProfitAndLossContainer container = null;
@@ -1008,7 +1009,7 @@ public class ScheduleBasedReportBuilder {
 			entityColumnNames.add(title);
 		}
 
-		return report.addColumn(blockId, title, title, ColumnType.NORMAL, new IntegerFormatter() {
+		return report.createColumn(report.blockManager.getBlockByID(COLUMN_BLOCK_PNL), title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;

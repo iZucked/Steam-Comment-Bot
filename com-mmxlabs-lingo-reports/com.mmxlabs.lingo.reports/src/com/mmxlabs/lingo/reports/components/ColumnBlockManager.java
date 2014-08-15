@@ -23,7 +23,7 @@ public class ColumnBlockManager {
 
 	private final List<ColumnBlock> blocks = new ArrayList<>();
 	private Grid grid;
-	private List<String> blockOrderByID = new ArrayList<>();
+	private final List<String> blockOrderByID = new ArrayList<>();
 
 	protected ColumnBlock findColumnBlock(final GridColumn column) {
 		for (final ColumnBlock block : blocks) {
@@ -45,53 +45,8 @@ public class ColumnBlockManager {
 		return null;
 	}
 
-	/**
-	 * Associates the specified column handler with a column block specified by the given name, removing it from any block it is already attached to. If no block exists with that name, one is created
-	 * unless the name is null. In the case of a null name, this method merely removes the handler from all currently known blocks.
-	 * 
-	 * @param handler
-	 * @param blockName
-	 */
-	public ColumnBlock setHandlerBlockID(final ColumnHandler handler, final String blockID, final String blockName, final ColumnType columnType) {
-		ColumnBlock namedBlock = null;
-		final List<ColumnBlock> blocksToPurge = new ArrayList<>();
-
-		for (final ColumnBlock block : blocks) {
-			if (block.blockID.equals(blockID)) {
-				namedBlock = block;
-			} else {
-				block.columnHandlers.remove(handler);
-				if (block.columnHandlers.isEmpty()) {
-					blocksToPurge.add(block);
-				}
-			}
-		}
-
-		if (namedBlock == null && blockID != null) {
-			namedBlock = createBlock(blockID, blockName, columnType);
-		}
-
-		if (namedBlock != null) {
-			namedBlock.setColumnType(columnType);
-		}
-
-		if (namedBlock != null && namedBlock.columnHandlers.contains(handler) == false) {
-			namedBlock.addColumn(handler);
-		}
-
-		if (blocksToPurge.isEmpty() == false) {
-			for (final ColumnBlock block : blocksToPurge) {
-				// Do not purge placeholder columns
-				if (!block.isPlaceholder()) {
-					blocks.remove(block);
-				}
-			}
-		}
-		return namedBlock;
-	}
-
-	public ColumnBlock createBlock(final String blockID, String blockName, final ColumnType columnType) {
-		ColumnBlock namedBlock = new ColumnBlock(blockID, blockName, columnType);
+	public ColumnBlock createBlock(final String blockID, final String blockName, final ColumnType columnType) {
+		final ColumnBlock namedBlock = new ColumnBlock(blockID, blockName, columnType);
 		blocks.add(namedBlock);
 		return namedBlock;
 	}
@@ -101,8 +56,8 @@ public class ColumnBlockManager {
 		omittedBlocks.addAll(blocks);
 
 		final List<ColumnBlock> blockOrder = new ArrayList<>();
-		for (String name : order) {
-			ColumnBlock block = getBlockByID(name);
+		for (final String name : order) {
+			final ColumnBlock block = getBlockByID(name);
 			blockOrder.add(block);
 			omittedBlocks.remove(block);
 		}
@@ -110,10 +65,8 @@ public class ColumnBlockManager {
 		setVisibleBlockOrder(blockOrder);
 
 		blockOrderByID.clear();
-		for (ColumnBlock block : blockOrder) {
-			if (block != null) {
-				blockOrderByID.add(block.blockID);
-			}
+		for (final ColumnBlock block : blockOrder) {
+			blockOrderByID.add(block.blockID);
 		}
 	}
 
@@ -160,7 +113,7 @@ public class ColumnBlockManager {
 	 */
 	public List<String> getBlockIDOrder() {
 		final List<String> result = new ArrayList<String>(blockOrderByID);
-		for (ColumnBlock block : blocks) {
+		for (final ColumnBlock block : blocks) {
 			if (result.contains(block.blockID) == false) {
 				result.add(block.blockID);
 			}
@@ -175,8 +128,8 @@ public class ColumnBlockManager {
 	 */
 	public List<ColumnBlock> getBlocksInVisibleOrder() {
 		final ArrayList<ColumnBlock> result = new ArrayList<ColumnBlock>();
-		for (String blockID : getBlockIDOrder()) {
-			ColumnBlock block = getBlockByID(blockID);
+		for (final String blockID : getBlockIDOrder()) {
+			final ColumnBlock block = getBlockByID(blockID);
 			result.add(block);
 		}
 		return result;
@@ -202,7 +155,7 @@ public class ColumnBlockManager {
 
 		// Java won't allow initialising a List<Integer> directly from an int []
 		final List<Integer> missingIndices = new ArrayList<>();
-		for (int i : colOrder) {
+		for (final int i : colOrder) {
 			missingIndices.add(i);
 		}
 
@@ -227,7 +180,7 @@ public class ColumnBlockManager {
 		// if there are any columns missing from the specified order, something is wrong
 		if (missingIndices.isEmpty() == false) {
 			System.err.println(String.format("Available blocks only account for %d out of %d columns.", index, colOrder.length));
-			for (int i : missingIndices) {
+			for (final int i : missingIndices) {
 				colOrder[index] = i;
 				index += 1;
 			}
@@ -237,7 +190,7 @@ public class ColumnBlockManager {
 	}
 
 	public void swapBlockOrder(final ColumnBlock block1, final ColumnBlock block2) {
-		List<String> order = getBlockIDOrder();
+		final List<String> order = getBlockIDOrder();
 		final int index1 = order.indexOf(block1.blockID);
 		final int index2 = order.indexOf(block2.blockID);
 		order.set(index1, block2.blockID);
@@ -276,7 +229,7 @@ public class ColumnBlockManager {
 	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento blocksInfo = memento.createChild(uniqueConfigKey);
 		for (final String blockID : getBlockIDOrder()) {
-			ColumnBlock block = getBlockByID(blockID);
+			final ColumnBlock block = getBlockByID(blockID);
 			final IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, blockID);
 			blockInfo.putBoolean(BLOCK_VISIBLE_MEMENTO, getBlockVisible(block));
 		}
@@ -296,9 +249,9 @@ public class ColumnBlockManager {
 
 			for (final IMemento blockInfo : blocksInfo.getChildren(COLUMN_BLOCK_CONFIG_MEMENTO)) {
 				final String blockID = blockInfo.getID();
-				ColumnBlock block = getBlockByID(blockID);
+				final ColumnBlock block = getBlockByID(blockID);
 				if (block == null) {
-					block = createBlock(blockID, "", ColumnType.NORMAL);
+					continue;
 				}
 				final Boolean visible = blockInfo.getBoolean(BLOCK_VISIBLE_MEMENTO);
 				if (visible != null) {

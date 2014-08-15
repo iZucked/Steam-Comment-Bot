@@ -15,9 +15,12 @@ import org.eclipse.jface.viewers.Viewer;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -286,5 +289,10 @@ public class LatenessReportView extends EMFReportView {
 	@Override
 	protected boolean handleSelections() {
 		return true;
+	}
+
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		final ColumnBlock block = createBlock(blockID, title, columnType);
+		return createColumn(block, title, formatter, path);
 	}
 }

@@ -9,9 +9,12 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -106,7 +109,7 @@ public class CooldownReportView extends EMFReportView {
 		return new ITreeContentProvider() {
 
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
 			}
 
@@ -116,23 +119,23 @@ public class CooldownReportView extends EMFReportView {
 			}
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				return superProvider.hasChildren(element);
 			}
 
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				return superProvider.getParent(element);
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				clearInputEquivalents();
 				return superProvider.getElements(inputElement);
 			}
 
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				return superProvider.getChildren(parentElement);
 			}
 		};
@@ -142,7 +145,7 @@ public class CooldownReportView extends EMFReportView {
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduledEventCollector() {
 			@Override
-			protected boolean filter(Event event) {
+			protected boolean filter(final Event event) {
 				return event instanceof Cooldown;
 			}
 
@@ -156,5 +159,10 @@ public class CooldownReportView extends EMFReportView {
 	@Override
 	protected boolean handleSelections() {
 		return true;
+	}
+
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		final ColumnBlock block = createBlock(blockID, title, columnType);
+		return createColumn(block, title, formatter, path);
 	}
 }

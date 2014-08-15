@@ -246,32 +246,21 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		};
 	}
 
-	// protected ColumnHandler addScheduleColumn(final String title, final IFormatter formatter, final Object... path) {
-	// final ColumnHandler handler = addColumn(title, ColumnType.MULTIPLE, formatter, path);
-	// return handler;
-	// }
+	public ColumnBlock createBlock(final String blockID, final String blockName, final ColumnType columnType) {
+		return blockManager.createBlock(blockID, blockName, columnType);
 
-	public ColumnHandler addColumn(String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
-		return addColumn(blockID, title, (String) null, columnType, formatter, path);
 	}
 
-	public ColumnHandler addColumn(String blockID, final String title, String blockDisplayName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
-		final ColumnHandler handler = new ColumnHandler(blockManager, formatter, path, title);
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final IFormatter formatter, final Object... path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title);
 
 		handlers.add(handler);
 		handlersInOrder.add(handler);
-		if (blockDisplayName == null) {
-			blockDisplayName = title;
-		}
 
-		ColumnBlock block = blockManager.getBlockByID(blockID);
-		if (block == null) {
-			block = handler.setBlockName(blockID, blockDisplayName, columnType);
-		} else {
-			block.columnHandlers.add(handler);
-		}
+		block.columnHandlers.add(handler);
+
 		if (viewer != null) {
-			GridColumn column = handler.createColumn(viewer).getColumn();
+			final GridColumn column = handler.createColumn(viewer).getColumn();
 			column.setVisible(block.getVisible());
 			column.pack();
 
@@ -472,7 +461,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		viewer.getGrid().setLinesVisible(true);
 
 		for (final ColumnHandler handler : handlersInOrder) {
-			handler.createColumn(viewer).getColumn().pack();
+			final GridColumn column = handler.createColumn(viewer).getColumn();
+			column.setVisible(handler.block.getVisible());
+			column.pack();
 		}
 
 		if (helpContextId != null) {
@@ -596,7 +587,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				viewer.removeColumn(h.column);
 				handlers.remove(h);
 				handlersInOrder.remove(h);
-				h.setBlockName(null, null, null);
+				h.block.columnHandlers.remove(h);
 				break;
 			}
 		}
@@ -731,8 +722,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	public static abstract class EmfBlockColumnFactory {
 		public abstract ColumnHandler addColumn(final EMFReportView report);
 
-		public List<ColumnHandler> addColumns(EMFReportView report) {
-			List<ColumnHandler> result = new ArrayList<>();
+		public List<ColumnHandler> addColumns(final EMFReportView report) {
+			final List<ColumnHandler> result = new ArrayList<>();
 			result.add(addColumn(report));
 			return result;
 		}
@@ -757,7 +748,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			this.path = path;
 		}
 
-		public SimpleEmfBlockColumnFactory(final String blockID, final String title, String blockName, String tooltip, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String blockName, final String tooltip, final ColumnType columnType, final IFormatter formatter,
+				final Object... path) {
 			this.blockID = blockID;
 			this.columnName = title;
 			this.blockDisplayName = blockName;
@@ -769,7 +761,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		@Override
 		public ColumnHandler addColumn(final EMFReportView report) {
-			return report.addColumn(blockID, columnName, blockDisplayName, columnType, formatter, path);
+			final ColumnBlock block = report.createBlock(blockID, blockDisplayName, columnType);
+			return report.createColumn(block, columnName, formatter, path);
 		}
 
 	}

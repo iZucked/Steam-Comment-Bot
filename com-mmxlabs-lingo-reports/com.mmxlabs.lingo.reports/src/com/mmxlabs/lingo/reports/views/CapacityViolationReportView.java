@@ -22,9 +22,12 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.models.lng.schedule.CapacityViolationType;
 import com.mmxlabs.models.lng.schedule.CapacityViolationsHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -222,5 +225,10 @@ public class CapacityViolationReportView extends EMFReportView {
 		row.eSet(attrib_Row_Quantity, qty);
 
 		return row;
+	}
+	
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		final ColumnBlock block = createBlock(blockID, title, columnType);
+		return createColumn(block, title, formatter, path);
 	}
 }

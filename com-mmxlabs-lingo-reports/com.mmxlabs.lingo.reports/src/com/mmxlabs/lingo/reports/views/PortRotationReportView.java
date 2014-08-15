@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
@@ -418,6 +419,8 @@ public class PortRotationReportView extends EMFReportView {
 	// }
 
 	public ColumnHandler addColumn(final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
-		return addColumn(title, title, (String) null, columnType, formatter, path);
+		ColumnBlock block = createBlock(title, title, columnType);
+		return createColumn(block, title, formatter, path);
 	}
+
 }

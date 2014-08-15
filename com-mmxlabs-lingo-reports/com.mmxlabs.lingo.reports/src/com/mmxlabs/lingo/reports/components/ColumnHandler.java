@@ -25,14 +25,14 @@ public class ColumnHandler {
 	private String tooltip;
 	public GridViewerColumn column;
 	public int viewIndex;
-	private final ColumnBlockManager blockManager;
+	public final ColumnBlock block;
 
-	public ColumnHandler(final ColumnBlockManager blockManager, final IFormatter formatter, final Object[] features, final String title) {
+	public ColumnHandler(final ColumnBlock block, final IFormatter formatter, final Object[] features, final String title) {
 		super();
 		this.formatter = formatter;
 		this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);
 		this.title = title;
-		this.blockManager = blockManager;
+		this.block = block;
 	}
 
 	public GridViewerColumn createColumn(final EObjectTableViewer viewer) {
@@ -74,9 +74,5 @@ public class ColumnHandler {
 
 	public void setTooltip(final String tooltip) {
 		this.tooltip = tooltip;
-	}
-
-	public ColumnBlock setBlockName(final String blockID, final String blockName, final ColumnType columnType) {
-		return this.blockManager.setHandlerBlockID(this, blockID, blockName, columnType);
 	}
 }
