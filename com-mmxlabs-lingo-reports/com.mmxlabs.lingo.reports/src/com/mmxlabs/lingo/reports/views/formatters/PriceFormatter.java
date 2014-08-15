@@ -1,14 +1,13 @@
 package com.mmxlabs.lingo.reports.views.formatters;
 
-
 /**
  */
 public class PriceFormatter implements IFormatter {
 
-	private final boolean includeUnits;
+	private final String formatString;
 
-	public PriceFormatter(final boolean includeUnits) {
-		this.includeUnits = includeUnits;
+	public PriceFormatter(final boolean includeUnits, int dp) {
+		this.formatString = (includeUnits ? "$" : "") + "%,." + Integer.toString(dp) + "f";
 	}
 
 	public Double getDoubleValue(final Object object) {
@@ -27,7 +26,7 @@ public class PriceFormatter implements IFormatter {
 		if (x == null) {
 			return "";
 		}
-		return String.format(includeUnits ? "$%,.2f" : "%,.2f", x);
+		return String.format(formatString, x);
 	}
 
 	@Override

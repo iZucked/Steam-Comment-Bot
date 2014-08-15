@@ -15,6 +15,7 @@ import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -45,13 +46,6 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	private static final String CARGO_REPORT_TYPE_ID = "CARGO_REPORT_TYPE_ID";
 
-	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
-		@Override
-		public String format(final Object object) {
-			return "SCHEDULE";// view.synchronizerOutput.getScenarioInstance(object).getName();
-		}
-
-	};
 	protected final IFormatter objectFormatter = new BaseFormatter();
 
 	protected final IFormatter calendarFormatter = new CalendarFormatter(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT), true);
@@ -79,6 +73,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.schedule":
+			final IFormatter containingScheduleFormatter = new BaseFormatter() {
+				@Override
+				public String format(final Object object) {
+					return builder.getReport().getSynchronizerOutput().getScenarioInstance(object).getName();
+				}
+
+			};
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Scenario", null, ColumnType.MULTIPLE, containingScheduleFormatter);
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
@@ -196,14 +197,14 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyprice":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(), loadAllocationRef,
-					s.getSlotAllocation_Price()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Buy Price", null, ColumnType.NORMAL, new PriceFormatter(false, 3), loadAllocationRef, s.getSlotAllocation_Price()));
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellprice":
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(),
-					dischargeAllocationRef, s.getSlotAllocation_Price()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, new PriceFormatter(false, 3), dischargeAllocationRef, s.getSlotAllocation_Price()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract":
 
@@ -469,27 +470,5 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 		}
 		return null;
-	}
-
-	private IFormatter createSlotAllocationPriceFormatter() {
-		return new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) object;
-					return String.format("%,.3f", slotAllocation.getPrice());
-				}
-				return null;
-			}
-
-			@Override
-			public Comparable getComparable(final Object object) {
-				if (object instanceof SlotAllocation) {
-					final SlotAllocation slotAllocation = (SlotAllocation) object;
-					return slotAllocation.getPrice();
-				}
-				return 0.0;
-			}
-		};
 	}
 }

@@ -199,7 +199,7 @@ public class PortRotationReportView extends EMFReportView {
 					}
 				}
 			}).setTooltip("In " + fuelQuanityUnits.get(fuelName));
-			addColumn(fuelName + " Unit Price", ColumnType.NORMAL, new PriceFormatter(true) {
+			addColumn(fuelName + " Unit Price", ColumnType.NORMAL, new PriceFormatter(true, 2) {
 				@Override
 				public Double getDoubleValue(final Object object) {
 					if (object instanceof FuelUsage) {

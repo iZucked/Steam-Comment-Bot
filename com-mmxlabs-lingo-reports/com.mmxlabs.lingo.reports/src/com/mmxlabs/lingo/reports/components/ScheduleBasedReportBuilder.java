@@ -166,6 +166,10 @@ public class ScheduleBasedReportBuilder {
 		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
 	}
 
+	public EMFReportView getReport() {
+		return report;
+	}
+
 	public void setReport(final EMFReportView report) {
 		this.report = report;
 	}

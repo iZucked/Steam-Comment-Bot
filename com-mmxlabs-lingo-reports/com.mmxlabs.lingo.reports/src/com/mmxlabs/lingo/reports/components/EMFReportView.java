@@ -766,4 +766,13 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 
 	}
+
+	/**
+	 * Return the current IScenarioViewerSynchronizerOutput instance, or null. This object could change over time.
+	 * 
+	 * @return
+	 */
+	public IScenarioViewerSynchronizerOutput getSynchronizerOutput() {
+		return synchronizerOutput;
+	}
 }
