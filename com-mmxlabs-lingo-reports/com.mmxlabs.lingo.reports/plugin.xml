@@ -27,7 +27,7 @@
       </view>
       
       <view
-            name="Configurable Report"
+            name="Schedule Report"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView"
