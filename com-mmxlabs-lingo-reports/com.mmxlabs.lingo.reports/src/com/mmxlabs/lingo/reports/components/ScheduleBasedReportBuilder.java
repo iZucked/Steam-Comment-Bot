@@ -965,15 +965,6 @@ public class ScheduleBasedReportBuilder {
 		};
 	}
 
-	public void addPNLColumn(final String columnId, final EStructuralFeature bookContainmentFeature) {
-		addPNLColumn(columnId, "Group Total", null, bookContainmentFeature);
-	}
-
-	public ColumnHandler addSpecificEntityPNLColumn(final String entityName, final EStructuralFeature bookContainmentFeature) {
-		final ColumnHandler handler = addPNLColumn(COLUMN_BLOCK_PNL, entityName, entityName, bookContainmentFeature);
-		return handler;
-	}
-
 	public EmfBlockColumnFactory getTotalPNLColumnFactory(final String columnId, @Nullable final EStructuralFeature bookContainmentFeature) {
 		return new EmfBlockColumnFactory() {
 			@Override
@@ -981,7 +972,7 @@ public class ScheduleBasedReportBuilder {
 				final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
 				final String title = String.format("P&L (%s)", book);
 
-				return theReport.addColumn(columnId, title, title, ColumnType.NORMAL, null, new IntegerFormatter() {
+				return theReport.addColumn(columnId, title, title, ColumnType.NORMAL, new IntegerFormatter() {
 					@Override
 					public Integer getIntValue(final Object object) {
 						ProfitAndLossContainer container = null;
@@ -997,7 +988,7 @@ public class ScheduleBasedReportBuilder {
 							}
 						}
 
-						return getTotalEntityPNLEntry(container, bookContainmentFeature);
+						return getEntityPNLEntry(container, null, bookContainmentFeature);
 					}
 				}, targetObjectRef);
 			}
@@ -1005,11 +996,7 @@ public class ScheduleBasedReportBuilder {
 
 	}
 
-	public ColumnHandler addTotalPNLColumn(String columnId, @Nullable final EStructuralFeature bookContainmentFeature) {
-		return getTotalPNLColumnFactory(columnId, bookContainmentFeature).addColumn(report);
-	}
-
-	public ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
+	private ColumnHandler addPNLColumn(final String blockId, final String entityLabel, final String entityKey, final EStructuralFeature bookContainmentFeature) {
 		final String book = bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading";
 		final String title = String.format("P&L (%s - %s)", entityLabel, book);
 
@@ -1043,41 +1030,13 @@ public class ScheduleBasedReportBuilder {
 	}
 
 	/**
-	 * Get combined book P&L
+	 * Returns the P&L. If entity is null, then the P&L for the given book across all entities. If book is null, assume trading book.
 	 * 
 	 * @param container
+	 * @param entity
 	 * @param bookContainmentFeature
 	 * @return
 	 */
-	private Integer getTotalEntityPNLEntry(final ProfitAndLossContainer container, @Nullable final EStructuralFeature bookContainmentFeature) {
-		if (container == null) {
-			return null;
-		}
-
-		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLoss();
-		if (groupProfitAndLoss == null) {
-			return null;
-		}
-
-		int groupTotal = 0;
-		boolean foundValue = false;
-		for (final EntityProfitAndLoss entityPNL : groupProfitAndLoss.getEntityProfitAndLosses()) {
-			foundValue = true;
-			final BaseEntityBook entityBook = entityPNL.getEntityBook();
-			if (entityBook == null) {
-				continue;
-			}
-			if (bookContainmentFeature == null || entityBook.eContainmentFeature() == bookContainmentFeature) {
-				groupTotal += entityPNL.getProfitAndLoss();
-			}
-		}
-		if (foundValue) {
-			return groupTotal;
-		}
-		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
-		return null;
-	}
-
 	private Integer getEntityPNLEntry(final ProfitAndLossContainer container, final String entity, final EStructuralFeature bookContainmentFeature) {
 		if (container == null) {
 			return null;
@@ -1109,7 +1068,6 @@ public class ScheduleBasedReportBuilder {
 		if (foundValue) {
 			return groupTotal;
 		}
-		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		return null;
 	}
 

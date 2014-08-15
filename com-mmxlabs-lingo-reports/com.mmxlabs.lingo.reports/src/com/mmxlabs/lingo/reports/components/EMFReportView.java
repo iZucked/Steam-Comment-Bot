@@ -263,10 +263,18 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		if (blockDisplayName == null) {
 			blockDisplayName = title;
 		}
-		handler.setBlockName(blockID, blockDisplayName, columnType);
 
+		ColumnBlock block = blockManager.getBlockByID(blockID);
+		if (block == null) {
+			block = handler.setBlockName(blockID, blockDisplayName, columnType);
+		} else {
+			block.columnHandlers.add(handler);
+		}
 		if (viewer != null) {
-			handler.createColumn(viewer).getColumn().pack();
+			GridColumn column = handler.createColumn(viewer).getColumn();
+			column.setVisible(block.getVisible());
+			column.pack();
+
 		}
 		return handler;
 	}
@@ -582,6 +590,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	public void removeColumn(final String title) {
+
 		for (final ColumnHandler h : handlers) {
 			if (h.title.equals(title)) {
 				viewer.removeColumn(h.column);

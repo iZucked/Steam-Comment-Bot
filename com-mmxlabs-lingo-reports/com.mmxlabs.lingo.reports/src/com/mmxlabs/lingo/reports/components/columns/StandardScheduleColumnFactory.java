@@ -32,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -62,7 +63,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 	protected final IntegerFormatter integerFormatter = new IntegerFormatter();
 
 	@Override
-	public void registerColumn(final String columnID, final EMFReportColumnManager view, final ScheduleBasedReportBuilder builder) {
+	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, final ScheduleBasedReportBuilder builder) {
 
 		final CargoPackage c = CargoPackage.eINSTANCE;
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
@@ -78,52 +79,27 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 		switch (columnID) {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.schedule":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Scenario", null, ColumnType.MULTIPLE, containingScheduleFormatter);
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Scenario", null, ColumnType.MULTIPLE, containingScheduleFormatter);
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName()));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.l-id":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, objectFormatter, nameObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, objectFormatter, nameObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.d-id":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "D-ID", null, ColumnType.NORMAL, objectFormatter, name2ObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "D-ID", null, ColumnType.NORMAL, objectFormatter, name2ObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.cargotype":
-			view.registerColumn(
+			columnManager.registerColumn(
 					CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "TEST", ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c
 							.getCargo__GetCargoType()));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total":
-
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "P&L", null, ColumnType.NORMAL, new IntegerFormatter() {
-				@Override
-				public Integer getIntValue(final Object object) {
-
-					if (object instanceof EObject) {
-						final EObject eObj = (EObject) object;
-
-						final Object featureObj = eObj.eGet(cargoAllocationRef);
-
-						if (featureObj instanceof CargoAllocation) {
-
-							final CargoAllocation cargoAllocation = (CargoAllocation) featureObj;
-							final GroupProfitAndLoss dataWithKey = cargoAllocation.getGroupProfitAndLoss();
-							if (dataWithKey != null) {
-								return (int) dataWithKey.getProfitAndLoss();
-							}
-						}
-					}
-
-					return null;
-				}
-			}));
-
-			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new BaseFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Vessel", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
 				public String format(final Object object) {
 
@@ -199,69 +175,70 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Load Date", null, ColumnType.NORMAL, datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart()));
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.loadtime":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Load Time", null, ColumnType.NORMAL, timePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Discharge Date", null, ColumnType.NORMAL, datePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargetime":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Discharge Time", null, ColumnType.NORMAL, timePartFormatter, dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyprice":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(), loadAllocationRef, s.getSlotAllocation_Price()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(), loadAllocationRef,
+					s.getSlotAllocation_Price()));
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellprice":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(), dischargeAllocationRef, s.getSlotAllocation_Price()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(),
+					dischargeAllocationRef, s.getSlotAllocation_Price()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Purchase Contract", null, ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation__GetContract(), name));
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.salescontract":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Sales Contract", null, ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetContract(), name));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyport":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Port", null, ColumnType.NORMAL, objectFormatter, loadAllocationRef,
-					s.getSlotAllocation__GetPort(), name));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
+					new SimpleEmfBlockColumnFactory(columnID, "Buy Port", null, ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation__GetPort(), name));
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellport":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Sell Port", null, ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation__GetPort(), name));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Buy Volume", null, ColumnType.NORMAL, integerFormatter, loadAllocationRef, s.getSlotAllocation_VolumeTransferred()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID,
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
 					new SimpleEmfBlockColumnFactory(columnID, "Sell Volume", null, ColumnType.NORMAL, integerFormatter, dischargeAllocationRef, s.getSlotAllocation_VolumeTransferred()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_mmbtu":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof SlotAllocation) {
@@ -280,7 +257,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_mmbtu":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sell Volume (mmBtu)", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof SlotAllocation) {
@@ -306,7 +283,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ladencost":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Laden Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 
@@ -317,7 +294,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.ballastcost":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Ballast Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 
@@ -327,7 +304,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.totalcost":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Total Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Total Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof CargoAllocation) {
@@ -358,16 +335,46 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				}
 			}, cargoAllocationRef));
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total":
 
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "P&L", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+
+					ProfitAndLossContainer container = null;
+
+					if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut
+							|| object instanceof OpenSlotAllocation) {
+						container = (ProfitAndLossContainer) object;
+					}
+					if (object instanceof SlotVisit) {
+						final SlotVisit slotVisit = (SlotVisit) object;
+						if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+							container = slotVisit.getSlotAllocation().getCargoAllocation();
+						}
+					}
+
+					if (container != null) {
+
+						final GroupProfitAndLoss dataWithKey = container.getGroupProfitAndLoss();
+						if (dataWithKey != null) {
+							return (int) dataWithKey.getProfitAndLoss();
+						}
+					}
+
+					return null;
+				}
+			}, targetObjectRef));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_trading":
-			builder.addPNLColumn(columnID, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getTotalPNLColumnFactory(columnID, CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_shipping":
-			builder.addPNLColumn(columnID, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getTotalPNLColumnFactory(columnID, CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.type":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Type", null, ColumnType.NORMAL, new BaseFormatter() {
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Type", null, ColumnType.NORMAL, new BaseFormatter() {
 				@Override
 				public String format(final Object object) {
 					if (object instanceof OpenSlotAllocation) {
@@ -401,16 +408,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			}, targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, builder.generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, builder.generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. wiring", null, ColumnType.DIFF, builder.generatePreviousWiringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. wiring", null, ColumnType.DIFF, builder.generatePreviousWiringColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, builder.generatePermutationColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, builder.generatePermutationColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group":
-			view.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());
 			break;
 		}
 	}

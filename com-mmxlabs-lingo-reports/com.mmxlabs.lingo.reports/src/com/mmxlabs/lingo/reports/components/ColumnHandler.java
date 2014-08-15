@@ -76,7 +76,7 @@ public class ColumnHandler {
 		this.tooltip = tooltip;
 	}
 
-	public void setBlockName(final String blockID, final String blockName, final ColumnType columnType) {
-		this.blockManager.setHandlerBlockID(this, blockID, blockName, columnType);
+	public ColumnBlock setBlockName(final String blockID, final String blockName, final ColumnType columnType) {
+		return this.blockManager.setHandlerBlockID(this, blockID, blockName, columnType);
 	}
 }
