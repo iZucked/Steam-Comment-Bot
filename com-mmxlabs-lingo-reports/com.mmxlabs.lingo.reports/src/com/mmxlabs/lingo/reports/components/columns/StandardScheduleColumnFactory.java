@@ -4,13 +4,11 @@ import java.text.DateFormat;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EMFReportView;
-import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.components.EMFReportView.SimpleEmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
@@ -25,7 +23,7 @@ import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -39,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
@@ -131,6 +130,38 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						final CargoAllocation cargoAllocation = (CargoAllocation) object;
 						final Sequence sequence = cargoAllocation.getSequence();
 						if (sequence != null) {
+							if (!sequence.isFleetVessel()) {
+								switch (cargoAllocation.getInputCargo().getCargoType()) {
+								case DES:
+									for (final Slot slot : cargoAllocation.getInputCargo().getSortedSlots()) {
+										if (slot instanceof LoadSlot) {
+											LoadSlot loadSlot = (LoadSlot) slot;
+											if (loadSlot.isDESPurchase()) {
+												final AVesselSet<? extends Vessel> assignment = slot.getAssignment();
+												if (assignment != null) {
+													return assignment.getName();
+												}
+												break;
+											}
+										}
+									}
+								case FOB:
+									for (final Slot slot : cargoAllocation.getInputCargo().getSortedSlots()) {
+										if (slot instanceof DischargeSlot) {
+											final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+											if (dischargeSlot.isFOBSale()) {
+												final AVesselSet<? extends Vessel> assignment = slot.getAssignment();
+												if (assignment != null) {
+													return assignment.getName();
+												}
+												break;
+											}
+										}
+									}
+								default:
+									break;
+								}
+							}
 							return sequence.getName();
 						}
 					} else if (object instanceof Event) {
@@ -233,11 +264,11 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof SlotAllocation) {
-						SlotAllocation slotAllocation = (SlotAllocation) object;
+						final SlotAllocation slotAllocation = (SlotAllocation) object;
 
 						final Slot slot = slotAllocation.getSlot();
 						if (slot instanceof LoadSlot) {
-							double cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
+							final double cv = ((LoadSlot) slot).getSlotOrDelegatedCV();
 							return (int) Math.round(cv * (double) slotAllocation.getVolumeTransferred());
 						}
 					}
@@ -252,7 +283,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Integer getIntValue(final Object object) {
 					if (object instanceof SlotAllocation) {
-						SlotAllocation slotAllocation = (SlotAllocation) object;
+						final SlotAllocation slotAllocation = (SlotAllocation) object;
 
 						double cv = 0.0;
 						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
@@ -339,7 +370,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public String format(final Object object) {
 					if (object instanceof OpenSlotAllocation) {
-						OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
+						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) object;
 						String type = "Open Slot";
 						final Slot slot = openSlotAllocation.getSlot();
 						if (slot instanceof LoadSlot) {
@@ -383,7 +414,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		}
 	}
 
-	private Integer calculateLegCost(final Object object, EStructuralFeature cargoAllocationRef, EStructuralFeature allocationRef) {
+	private Integer calculateLegCost(final Object object, final EStructuralFeature cargoAllocationRef, final EStructuralFeature allocationRef) {
 		if (object instanceof EObject) {
 			final EObject eObject = (EObject) object;
 			final CargoAllocation cargoAllocation = (CargoAllocation) eObject.eGet(cargoAllocationRef);
