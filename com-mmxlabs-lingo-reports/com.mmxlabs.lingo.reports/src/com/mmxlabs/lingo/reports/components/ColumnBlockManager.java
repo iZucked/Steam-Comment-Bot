@@ -2,6 +2,7 @@ package com.mmxlabs.lingo.reports.components;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +47,13 @@ public class ColumnBlockManager {
 	}
 
 	public ColumnBlock createBlock(final String blockID, final String blockName, final ColumnType columnType) {
+
+		for (final ColumnBlock block : blocks) {
+			if (block.blockID.equals(blockID)) {
+				throw new IllegalStateException("Duplicate block ID " + blockID);
+			}
+		}
+
 		final ColumnBlock namedBlock = new ColumnBlock(blockID, blockName, columnType);
 		blocks.add(namedBlock);
 		return namedBlock;
@@ -243,7 +251,7 @@ public class ColumnBlockManager {
 	 */
 	public void initFromMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento blocksInfo = memento.getChild(uniqueConfigKey);
-		final List<String> order = new ArrayList<>();
+		final LinkedHashSet<String> order = new LinkedHashSet<>();
 
 		if (blocksInfo != null) {
 
@@ -260,7 +268,7 @@ public class ColumnBlockManager {
 				order.add(blockID);
 			}
 
-			setBlockIDOrder(order);
+			setBlockIDOrder(new ArrayList<>(order));
 		}
 	}
 

@@ -28,6 +28,7 @@ import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -783,14 +784,14 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	/**
 	 * Internal helper to @see {@link ColumnConfigurationDialog#getLabelProvider()}
 	 */
-	ITableLabelProvider doGetLabelProvider() {
+	IBaseLabelProvider doGetLabelProvider() {
 		return getLabelProvider();
 	}
 
 	/**
 	 * The tables-columns need to be displayed appropriately. The supplied column objects are adapted to text and image as dictacted by this {@link ITableLabelProvider}
 	 */
-	protected abstract ITableLabelProvider getLabelProvider();
+	protected abstract IBaseLabelProvider getLabelProvider();
 
 	/**
 	 * Internal helper to @see {@link ColumnConfigurationDialog#getColumnInfoProvider()}
@@ -1047,7 +1048,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 				}
 
 				@Override
-				protected ITableLabelProvider getLabelProvider() {
+				protected IBaseLabelProvider getLabelProvider() {
 					return new TableLabelProvider();
 				}
 

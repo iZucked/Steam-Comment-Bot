@@ -762,6 +762,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		@Override
 		public ColumnHandler addColumn(final EMFReportView report) {
 			final ColumnBlock block = report.createBlock(blockID, blockDisplayName, columnType);
+			block.tooltip = tooltip;
 			return report.createColumn(block, columnName, formatter, path);
 		}
 

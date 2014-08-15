@@ -80,18 +80,21 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				}
 
 			};
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Scenario", null, ColumnType.MULTIPLE, containingScheduleFormatter);
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Scenario", "The scenario name. Only shown when multiple scenarios are selected", ColumnType.MULTIPLE,
+					containingScheduleFormatter);
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.id":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, objectFormatter, cargoAllocationRef, s.getCargoAllocation__GetName()));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all including discharge slots", ColumnType.NORMAL, objectFormatter,
+					cargoAllocationRef, s.getCargoAllocation__GetName()));
 			break;
 
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.l-id":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", null, ColumnType.NORMAL, objectFormatter, nameObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "ID", "The main ID for all except discharge slots", ColumnType.NORMAL, objectFormatter,
+					nameObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.d-id":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "D-ID", null, ColumnType.NORMAL, objectFormatter, name2ObjectRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "D-ID", "The discharge ID for discharge slots", ColumnType.NORMAL, objectFormatter,
+					name2ObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.cargotype":
 			columnManager.registerColumn(
@@ -304,7 +307,6 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			}));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.totalcost":
-
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Total Cost", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
@@ -336,6 +338,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 				}
 			}, cargoAllocationRef));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total":
 
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "P&L", null, ColumnType.NORMAL, new IntegerFormatter() {

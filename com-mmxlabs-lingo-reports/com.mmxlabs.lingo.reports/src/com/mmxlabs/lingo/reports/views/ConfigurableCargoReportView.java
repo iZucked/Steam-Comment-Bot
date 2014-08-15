@@ -11,11 +11,11 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -35,7 +35,6 @@ import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
-import com.mmxlabs.lingo.reports.components.EMFReportView.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnExtension;
 import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnFactoryExtension;
@@ -44,27 +43,6 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
@@ -285,16 +263,16 @@ public class ConfigurableCargoReportView extends EMFReportView {
 					}
 
 					@Override
-					protected ITableLabelProvider getLabelProvider() {
-						return new TableLabelProvider() {
+					protected ColumnLabelProvider getLabelProvider() {
+						return new ColumnLabelProvider() {
 							@Override
-							public String getColumnText(final Object element, final int columnIndex) {
+							public String getText(final Object element) {
 								final ColumnBlock block = (ColumnBlock) element;
 								return block.blockName;
 							}
 
 							@Override
-							public Image getColumnImage(final Object element, final int columnIndex) {
+							public Image getImage(final Object element) {
 								final ColumnBlock block = (ColumnBlock) element;
 								if (block.isModeVisible()) {
 									return visibleIcon;
@@ -306,7 +284,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 							@Override
 							public String getToolTipText(final Object element) {
 								final ColumnBlock block = (ColumnBlock) element;
-								return block.blockID;
+								return block.tooltip;
 							}
 						};
 					}
