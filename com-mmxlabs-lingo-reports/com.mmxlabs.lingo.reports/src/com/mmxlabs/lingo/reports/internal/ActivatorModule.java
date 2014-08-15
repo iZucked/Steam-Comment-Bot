@@ -8,8 +8,8 @@ import static org.ops4j.peaberry.Peaberry.service;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
-import com.mmxlabs.lingo.reports.components.columns.IScheduleBasedColumnExtension;
-import com.mmxlabs.lingo.reports.components.columns.IScheduleBasedColumnFactoryExtension;
+import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnExtension;
+import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnFactoryExtension;
 
 /**
  * An activation module.

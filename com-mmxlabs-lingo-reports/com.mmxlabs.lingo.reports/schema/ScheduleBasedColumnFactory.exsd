@@ -62,7 +62,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":com.mmxlabs.lingo.reports.components.columns.IScheduleColumnFactory"/>
+                  <meta.attribute kind="java" basedOn=":com.mmxlabs.lingo.reports.extensions.IScheduleColumnFactory"/>
                </appinfo>
             </annotation>
          </attribute>

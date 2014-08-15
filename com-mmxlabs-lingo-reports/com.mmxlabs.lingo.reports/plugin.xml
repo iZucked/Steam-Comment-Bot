@@ -18,38 +18,6 @@
             id="com.mmxlabs.shiplingo.platform.reports">
       </category>
       
-      <view
-            name="Cargo Costs"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.CargoReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.CargoReportView">
-      </view>
-      
-      <view
-            name="Schedule Report"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.ConfigurableCargoReportView">
-      </view>
-      
-      <view
-            name="Cargo"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.BasicCargoReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView">
-      </view>
-      
-       <view
-            name="Cargo PnL"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.CargoPnLReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView">
-      </view>
-      
        <view
             name="Index Exposures"
             icon="icons/cview16/exec_statistic_view.gif"
@@ -65,14 +33,15 @@
             class="com.mmxlabs.lingo.reports.views.VolumeTrackingReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.VolumeTrackingReportView">
       </view>
-      
+
       <view
-            name="Schedule PnL"
+            name="Schedule Report"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.SchedulePnLReport"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
       </view>
+
       
       <view
             category="com.mmxlabs.shiplingo.platform.reports"

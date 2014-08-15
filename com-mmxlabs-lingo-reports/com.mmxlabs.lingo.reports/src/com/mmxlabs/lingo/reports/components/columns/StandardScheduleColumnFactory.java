@@ -10,6 +10,7 @@ import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
+import com.mmxlabs.lingo.reports.extensions.IScheduleColumnFactory;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
@@ -219,13 +220,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyprice":
 
-			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Price", null, ColumnType.NORMAL, objectFormatter, loadAllocationRef, s.getSlotAllocation_Price()));
+			view.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Buy Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(), loadAllocationRef, s.getSlotAllocation_Price()));
 
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellprice":
 
 			view.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, objectFormatter, dischargeAllocationRef, s.getSlotAllocation_Price()));
+					new SimpleEmfBlockColumnFactory(columnID, "Sell Price", null, ColumnType.NORMAL, createSlotAllocationPriceFormatter(), dischargeAllocationRef, s.getSlotAllocation_Price()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract":
 
@@ -463,4 +464,25 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		return null;
 	}
 
+	private IFormatter createSlotAllocationPriceFormatter() {
+		return new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return String.format("%,.3f", slotAllocation.getPrice());
+				}
+				return null;
+			}
+
+			@Override
+			public Comparable getComparable(final Object object) {
+				if (object instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) object;
+					return slotAllocation.getPrice();
+				}
+				return 0.0;
+			}
+		};
+	}
 }

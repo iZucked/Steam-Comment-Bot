@@ -35,6 +35,8 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -58,6 +60,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.internal.Activator;
 
 /**
@@ -441,6 +444,19 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			}
 		});
 		nonVisibleViewer.setInput(getNonVisible());
+
+		nonVisibleViewer.setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+
+				if (e1 instanceof ColumnBlock && e2 instanceof ColumnBlock) {
+					ColumnBlock b1 = (ColumnBlock) e1;
+					ColumnBlock b2 = (ColumnBlock) e2;
+					return b1.blockName.compareTo(b2.blockName);
+				}
+				return super.compare(viewer, e1, e2);
+			}
+		});
 		return table;
 	}
 
@@ -742,26 +758,26 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			// TODO Auto-generated method stub
 			return null;
 		}
-//		@Override
-//		public Image getColumnImage(final Object element, final int columnIndex) {
-//			return null;
-//		}
-//
-//		@Override
-//		public String getColumnText(final Object element, final int columnIndex) {
-//			return getColumnText(element, columnIndex);
-//		}
-//		
-//		@Override
-//		public String getToolTipText(Object element) {
-//			return super.getToolTipText(element);
-//		}
-//
-//		@Override
-//		public void update(ViewerCell cell) {
-//			// TODO Auto-generated method stub
-//			
-//		}
+		// @Override
+		// public Image getColumnImage(final Object element, final int columnIndex) {
+		// return null;
+		// }
+		//
+		// @Override
+		// public String getColumnText(final Object element, final int columnIndex) {
+		// return getColumnText(element, columnIndex);
+		// }
+		//
+		// @Override
+		// public String getToolTipText(Object element) {
+		// return super.getToolTipText(element);
+		// }
+		//
+		// @Override
+		// public void update(ViewerCell cell) {
+		// // TODO Auto-generated method stub
+		//
+		// }
 	}
 
 	/**
