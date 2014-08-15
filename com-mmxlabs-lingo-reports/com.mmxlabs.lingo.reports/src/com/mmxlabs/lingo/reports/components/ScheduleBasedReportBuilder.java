@@ -575,32 +575,6 @@ public class ScheduleBasedReportBuilder {
 		return scheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
 	}
 
-	// public EmfBlockColumnFactory getPinDiffColumnFactory() {
-	// return new EmfBlockColumnFactory() {
-	//
-	// @Override
-	// public List<ColumnHandler> addColumns(final EMFReportView report) {
-	// final ArrayList<ColumnHandler> result = new ArrayList<ColumnHandler>();
-	// // Register columns that will be displayed when in Pin/Diff mode
-	// result.add(report.addColumn("Prev. wiring", "Prev. wiring", ColumnType.DIFF, null, generatePreviousWiringColumnFormatter(cargoAllocationRef)));
-	// result.add(report.addColumn("Prev. Vessel", "Prev. Vessel", ColumnType.DIFF, null, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef)));
-	// result.add(report.addColumn("Permutation", "Permutation", ColumnType.DIFF, null, generatePermutationColumnFormatter(cargoAllocationRef)));
-	// return result;
-	// }
-	//
-	// @Override
-	// public ColumnHandler addColumn(final EMFReportView report) {
-	// return null;
-	// }
-	//
-	// };
-	//
-	// }
-	//
-	// public void createPinDiffColumns() {
-	// getPinDiffColumnFactory().addColumns(report);
-	// }
-
 	/**
 	 * Generate a new formatter for the previous-vessel-assignment column
 	 * 
@@ -876,11 +850,6 @@ public class ScheduleBasedReportBuilder {
 	// //// P&L Columns
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
-
-	// public void createPNLColumnBlock() {
-	// getEmptyPNLColumnBlockFactory().addColumn(report);
-	//
-	// }
 
 	public EmfBlockColumnFactory getEmptyPNLColumnBlockFactory() {
 		return new EmfBlockColumnFactory() {
