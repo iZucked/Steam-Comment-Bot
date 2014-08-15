@@ -13,23 +13,28 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
  * 
  */
 public class ColumnBlock {
-	public List<ColumnHandler> blockHandlers = new ArrayList<>();
-	private boolean userVisible = true;
-	private boolean modeVisible = true;
-	public String name;
+	public List<ColumnHandler> columnHandlers = new ArrayList<>();
+	private boolean userVisible = false;
+	
+	
+	private boolean modeVisible = false;
+	public String blockID;
+	public String blockName;
 	private ColumnType columnType;
 	/**
 	 * Place holder columns are not purged.
 	 */
 	private boolean placeholder;
+	public String tooltip;
 
-	public ColumnBlock(final String name, final ColumnType columnType) {
-		this.name = name;
+	public ColumnBlock(final String blockID, final String blockName, final ColumnType columnType) {
+		this.blockID = blockID;
+		this.blockName = blockName;
 		this.columnType = columnType;
 	}
 
 	public void addColumn(final ColumnHandler handler) {
-		blockHandlers.add(handler);
+		columnHandlers.add(handler);
 		if (handler.column != null) {
 			final GridColumn column = handler.column.getColumn();
 			if (!column.isDisposed()) {
@@ -44,7 +49,7 @@ public class ColumnBlock {
 	}
 
 	protected void updateVisibility() {
-		for (final ColumnHandler handler : blockHandlers) {
+		for (final ColumnHandler handler : columnHandlers) {
 			if (handler.column != null) {
 				final GridColumn column = handler.column.getColumn();
 				if (!column.isDisposed()) {
@@ -75,7 +80,7 @@ public class ColumnBlock {
 	}
 
 	public ColumnHandler findHandler(final GridColumn column) {
-		for (final ColumnHandler handler : blockHandlers) {
+		for (final ColumnHandler handler : columnHandlers) {
 			if (handler.column.getColumn() == column) {
 				return handler;
 			}

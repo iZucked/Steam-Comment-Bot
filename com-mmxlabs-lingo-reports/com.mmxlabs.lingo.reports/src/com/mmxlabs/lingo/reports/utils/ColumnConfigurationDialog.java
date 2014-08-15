@@ -25,13 +25,13 @@ import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
-import org.eclipse.jface.viewers.AbstractTableViewer;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -103,14 +103,12 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	};
 
 	final List<CheckboxInfoManager> checkboxInfo = new ArrayList<>();
-	
-	/*
-	private Set<String> rowCheckBoxStore;
-	private String[] rowCheckBoxStrings;
 
-	private Set<String> diffCheckBoxStore;
-	private String[] diffCheckBoxStrings;
-	*/
+	/*
+	 * private Set<String> rowCheckBoxStore; private String[] rowCheckBoxStrings;
+	 * 
+	 * private Set<String> diffCheckBoxStore; private String[] diffCheckBoxStrings;
+	 */
 
 	/**
 	 * Create a new instance of the receiver.
@@ -145,6 +143,9 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		Object data = null;
 		for (int i = 0; i < columnObjs.length; i++) {
 			data = columnObjs[i];
+			if (data == null) {
+				continue;
+			}
 			// final int index = columnInfo.getColumnIndex(data);
 			if (columnInfo.isColumnVisible(data)) {
 				updater.setColumnVisible(data, true);
@@ -196,7 +197,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
 
-		for (CheckboxInfoManager manager: checkboxInfo) {
+		for (CheckboxInfoManager manager : checkboxInfo) {
 			createCheckBoxes(composite, manager);
 		}
 		// createWidthArea(composite);
@@ -206,7 +207,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		visibleViewer.getTable().setFocus();
 		return composite;
 	}
-	
+
 	private Control createCheckBoxes(final Composite parent, final CheckboxInfoManager manager) {
 		final Composite composite = new Composite(parent, SWT.NONE);
 		if (manager != null && manager.strings != null && manager.strings.length > 0) {
@@ -215,7 +216,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			compositeLayout.marginWidth = 0;
 			composite.setLayout(compositeLayout);
 			composite.setLayoutData(new GridData(SWT.NONE, SWT.FILL, false, true));
-	
+
 			final Label label = new Label(composite, SWT.NONE);
 			label.setText(manager.title);
 			final Set<String> store = manager.store;
@@ -237,7 +238,6 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		}
 		return composite;
 	}
-
 
 	/**
 	 * The Up and Down button to change column ordering.
@@ -351,6 +351,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		label.setText("Enabled Columns");
 
 		final Table table = new Table(composite, SWT.BORDER | SWT.MULTI);
+
 		final GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.widthHint = convertWidthInCharsToPixels(20);
 		data.heightHint = table.getItemHeight() * 15;
@@ -367,6 +368,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		table.addListener(SWT.Resize, columnResize);
 
 		visibleViewer = new TableViewer(table);
+		ColumnViewerToolTipSupport.enableFor(visibleViewer);
 		visibleViewer.setLabelProvider(doGetLabelProvider());
 		visibleViewer.setContentProvider(ArrayContentProvider.getInstance());
 		visibleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -422,6 +424,8 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		table.addListener(SWT.Resize, columnResize);
 
 		nonVisibleViewer = new TableViewer(table);
+		ColumnViewerToolTipSupport.enableFor(nonVisibleViewer);
+
 		nonVisibleViewer.setLabelProvider(doGetLabelProvider());
 		nonVisibleViewer.setContentProvider(ArrayContentProvider.getInstance());
 		nonVisibleViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -448,14 +452,13 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 */
 	Control createMoveButtons(final Composite parent) {
 		// create the manager and bind to a widget
-		LocalResourceManager resManager = 
-		  new LocalResourceManager(JFaceResources.getResources(), parent);
-		
+		LocalResourceManager resManager = new LocalResourceManager(JFaceResources.getResources(), parent);
+
 		final ImageDescriptor leftImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/nav_backward.gif");
 		final Image leftImage = resManager.createImage(leftImageDescriptor);
 		final ImageDescriptor rightImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/nav_forward.gif");
 		final Image rightImage = resManager.createImage(rightImageDescriptor);
-		
+
 		final Composite composite = new Composite(parent, SWT.NONE);
 		final GridLayout compositeLayout = new GridLayout();
 		compositeLayout.marginHeight = 0;
@@ -726,16 +729,39 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 * An adapter class to {@link ITableLabelProvider}
 	 * 
 	 */
-	public class TableLabelProvider extends LabelProvider implements ITableLabelProvider {
+	public class TableLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
+
 		@Override
-		public Image getColumnImage(final Object element, final int columnIndex) {
+		public Image getColumnImage(Object element, int columnIndex) {
+			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public String getColumnText(final Object element, final int columnIndex) {
-			return getText(element);
+		public String getColumnText(Object element, int columnIndex) {
+			// TODO Auto-generated method stub
+			return null;
 		}
+//		@Override
+//		public Image getColumnImage(final Object element, final int columnIndex) {
+//			return null;
+//		}
+//
+//		@Override
+//		public String getColumnText(final Object element, final int columnIndex) {
+//			return getColumnText(element, columnIndex);
+//		}
+//		
+//		@Override
+//		public String getToolTipText(Object element) {
+//			return super.getToolTipText(element);
+//		}
+//
+//		@Override
+//		public void update(ViewerCell cell) {
+//			// TODO Auto-generated method stub
+//			
+//		}
 	}
 
 	/**
@@ -1159,8 +1185,8 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		}
 
 	}
-	
-	public void addCheckBoxInfo(final String title, final String [] strings, final Set<String> store) {
+
+	public void addCheckBoxInfo(final String title, final String[] strings, final Set<String> store) {
 		checkboxInfo.add(new CheckboxInfoManager(title, strings, store));
 	}
 
@@ -1169,14 +1195,13 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		final String title;
 		final String[] strings;
 		final Set<String> store;
-		
-		public CheckboxInfoManager(String title, String[] strings,
-				Set<String> store) {
+
+		public CheckboxInfoManager(String title, String[] strings, Set<String> store) {
 			this.title = title;
 			this.strings = strings;
 			this.store = store;
 		}
-		
+
 	}
 
 }

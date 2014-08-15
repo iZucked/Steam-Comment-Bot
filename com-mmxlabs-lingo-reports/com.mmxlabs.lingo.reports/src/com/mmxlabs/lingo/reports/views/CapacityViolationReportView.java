@@ -60,16 +60,16 @@ public class CapacityViolationReportView extends EMFReportView {
 
 		createDataModel();
 
-		addScheduleColumn("Schedule", containingScheduleFormatter);
+		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("ID", ColumnType.NORMAL, objectFormatter, ref_Row_Owner, sp.getEvent__Name());
+		addColumn("id", "ID", ColumnType.NORMAL, objectFormatter, ref_Row_Owner, sp.getEvent__Name());
 
-		addColumn("Type", ColumnType.NORMAL, objectFormatter, ref_Row_Owner, sp.getEvent__Type());
+		addColumn("type", "Type", ColumnType.NORMAL, objectFormatter, ref_Row_Owner, sp.getEvent__Type());
 
-		addColumn("Violation", ColumnType.NORMAL, objectFormatter, attrib_Row_Type);
-		addColumn("Quantity (m³)", ColumnType.NORMAL, objectFormatter, attrib_Row_Quantity);
+		addColumn("violation", "Violation", ColumnType.NORMAL, objectFormatter, attrib_Row_Type);
+		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, objectFormatter, attrib_Row_Quantity);
 	}
 
 	@Override

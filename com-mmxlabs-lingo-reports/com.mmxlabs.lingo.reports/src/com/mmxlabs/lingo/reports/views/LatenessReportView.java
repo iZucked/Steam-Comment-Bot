@@ -37,14 +37,14 @@ public class LatenessReportView extends EMFReportView {
 
 	public LatenessReportView() {
 		super();
-		addScheduleColumn("Schedule", containingScheduleFormatter);
+		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("ID", ColumnType.NORMAL, objectFormatter, sp.getEvent__Name());
+		addColumn("id", "ID", ColumnType.NORMAL, objectFormatter, sp.getEvent__Name());
 
-		addColumn("Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
-		addColumn("Lateness", ColumnType.NORMAL, new BaseFormatter() {
+		addColumn("type", "Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
+		addColumn("lateness", "Lateness", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 
@@ -94,13 +94,13 @@ public class LatenessReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Start by", ColumnType.NORMAL, new BaseFormatter() {
+		addColumn("startby", "Start by", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				return calendarFormatterNoTZ.format(getWindowEndDate(object));
 			}
 		});
-		addColumn("Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
+		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
 
 	}
 

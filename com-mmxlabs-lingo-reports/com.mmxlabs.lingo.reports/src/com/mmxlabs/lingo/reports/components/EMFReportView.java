@@ -148,7 +148,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					// Add Difference/Change columns when in Pin/Diff mode
 					final boolean pinDiffMode = numberOfSchedules > 1 && currentlyPinned;
 					for (final ColumnBlock handler : blockManager.getBlocksInVisibleOrder()) {
-						handler.setViewState(numberOfSchedules > 1, pinDiffMode);
+						if (handler != null) {
+							handler.setViewState(numberOfSchedules > 1, pinDiffMode);
+						}
 					}
 				}
 			}
@@ -244,24 +246,24 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		};
 	}
 
-	protected ColumnHandler addScheduleColumn(final String title, final IFormatter formatter, final Object... path) {
-		final ColumnHandler handler = addColumn(title, ColumnType.MULTIPLE, formatter, path);
-		return handler;
+	// protected ColumnHandler addScheduleColumn(final String title, final IFormatter formatter, final Object... path) {
+	// final ColumnHandler handler = addColumn(title, ColumnType.MULTIPLE, formatter, path);
+	// return handler;
+	// }
+
+	public ColumnHandler addColumn(String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		return addColumn(blockID, title, (String) null, columnType, formatter, path);
 	}
 
-	public ColumnHandler addColumn(final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
-		return addColumn(title, (String) null, columnType, formatter, path);
-	}
-
-	public ColumnHandler addColumn(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+	public ColumnHandler addColumn(String blockID, final String title, String blockDisplayName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
 		final ColumnHandler handler = new ColumnHandler(blockManager, formatter, path, title);
 
 		handlers.add(handler);
 		handlersInOrder.add(handler);
-		if (blockName == null) {
-			blockName = title;
+		if (blockDisplayName == null) {
+			blockDisplayName = title;
 		}
-		handler.setBlockName(blockName, columnType);
+		handler.setBlockName(blockID, blockDisplayName, columnType);
 
 		if (viewer != null) {
 			handler.createColumn(viewer).getColumn().pack();
@@ -585,7 +587,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				viewer.removeColumn(h.column);
 				handlers.remove(h);
 				handlersInOrder.remove(h);
-				h.setBlockName(null, null);
+				h.setBlockName(null, null, null);
 				break;
 			}
 		}
@@ -709,17 +711,13 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	/**
-	 * Class to encapsulate information about an EMF report column, allowing the same
-	 * column to be added to multiple different reports in a class of similar 
-	 * reports. 
+	 * Class to encapsulate information about an EMF report column, allowing the same column to be added to multiple different reports in a class of similar reports.
 	 * 
 	 * EmfBlockColumnFactory objects are used by the EMFReportColumnManager class.
 	 * 
-	 * Managed columns are assigned to particular column "blocks" which can be selectively 
-	 * hidden, displayed, or reordered by the user.  
+	 * Managed columns are assigned to particular column "blocks" which can be selectively hidden, displayed, or reordered by the user.
 	 * 
-	 *  TODO: refactor all EMFReportView#addColumn calls through this class, so that column
-	 *  logic is uniform.  
+	 * TODO: refactor all EMFReportView#addColumn calls through this class, so that column logic is uniform.
 	 */
 	public static abstract class EmfBlockColumnFactory {
 		public abstract ColumnHandler addColumn(final EMFReportView report);
@@ -730,35 +728,40 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			return result;
 		}
 	}
-		
-	
+
 	public static class SimpleEmfBlockColumnFactory extends EmfBlockColumnFactory {
 		final String columnName;
-		final String blockName;
+		final String blockID;
+		final String blockDisplayName;
+		final String tooltip;
 		final ColumnType columnType;
 		final IFormatter formatter;
 		final Object[] path;
 
-		public SimpleEmfBlockColumnFactory(final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+			this.blockID = blockID;
 			this.columnName = title;
-			this.blockName = title;
+			this.blockDisplayName = title;
+			this.tooltip = tooltip;
 			this.columnType = columnType;
 			this.formatter = formatter;
-			this.path = path;					
+			this.path = path;
 		}
 
-		public SimpleEmfBlockColumnFactory(final String title, String blockName, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		public SimpleEmfBlockColumnFactory(final String blockID, final String title, String blockName, String tooltip, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+			this.blockID = blockID;
 			this.columnName = title;
-			this.blockName = blockName;
+			this.blockDisplayName = blockName;
+			this.tooltip = tooltip;
 			this.columnType = columnType;
 			this.formatter = formatter;
-			this.path = path;					
+			this.path = path;
 		}
-		
+
+		@Override
 		public ColumnHandler addColumn(final EMFReportView report) {
-			return report.addColumn(columnName, blockName, columnType, formatter, path);
+			return report.addColumn(blockID, columnName, blockDisplayName, columnType, formatter, path);
 		}
 
-		
 	}
 }

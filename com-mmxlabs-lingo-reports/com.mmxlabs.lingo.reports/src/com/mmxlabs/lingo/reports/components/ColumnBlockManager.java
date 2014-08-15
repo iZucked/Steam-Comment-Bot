@@ -23,7 +23,7 @@ public class ColumnBlockManager {
 
 	private final List<ColumnBlock> blocks = new ArrayList<>();
 	private Grid grid;
-	private List<String> blockOrderByName = new ArrayList<>();
+	private List<String> blockOrderByID = new ArrayList<>();
 
 	protected ColumnBlock findColumnBlock(final GridColumn column) {
 		for (final ColumnBlock block : blocks) {
@@ -35,9 +35,9 @@ public class ColumnBlockManager {
 		return null;
 	}
 
-	public ColumnBlock getBlockByName(final String name) {
+	public ColumnBlock getBlockByID(final String blockID) {
 		for (final ColumnBlock block : blocks) {
-			if (block.name.equals(name)) {
+			if (block.blockID.equals(blockID)) {
 				return block;
 			}
 		}
@@ -52,30 +52,30 @@ public class ColumnBlockManager {
 	 * @param handler
 	 * @param blockName
 	 */
-	public void setHandlerBlockName(final ColumnHandler handler, final String blockName, final ColumnType columnType) {
+	public ColumnBlock setHandlerBlockID(final ColumnHandler handler, final String blockID, final String blockName, final ColumnType columnType) {
 		ColumnBlock namedBlock = null;
 		final List<ColumnBlock> blocksToPurge = new ArrayList<>();
 
 		for (final ColumnBlock block : blocks) {
-			if (block.name.equals(blockName)) {
+			if (block.blockID.equals(blockID)) {
 				namedBlock = block;
 			} else {
-				block.blockHandlers.remove(handler);
-				if (block.blockHandlers.isEmpty()) {
+				block.columnHandlers.remove(handler);
+				if (block.columnHandlers.isEmpty()) {
 					blocksToPurge.add(block);
 				}
 			}
 		}
 
-		if (namedBlock == null && blockName != null) {
-			namedBlock = createBlock(blockName, columnType);
+		if (namedBlock == null && blockID != null) {
+			namedBlock = createBlock(blockID, blockName, columnType);
 		}
 
 		if (namedBlock != null) {
 			namedBlock.setColumnType(columnType);
 		}
 
-		if (namedBlock != null && namedBlock.blockHandlers.contains(handler) == false) {
+		if (namedBlock != null && namedBlock.columnHandlers.contains(handler) == false) {
 			namedBlock.addColumn(handler);
 		}
 
@@ -87,35 +87,36 @@ public class ColumnBlockManager {
 				}
 			}
 		}
-
+		return namedBlock;
 	}
 
-	public ColumnBlock createBlock(final String blockName, final ColumnType columnType) {
-		ColumnBlock namedBlock;
-		namedBlock = new ColumnBlock(blockName, columnType);
+	public ColumnBlock createBlock(final String blockID, String blockName, final ColumnType columnType) {
+		ColumnBlock namedBlock = new ColumnBlock(blockID, blockName, columnType);
 		blocks.add(namedBlock);
 		return namedBlock;
 	}
 
-	public void setNameOrder(final List<String> order) {
+	public void setBlockIDOrder(final List<String> order) {
 		final Set<ColumnBlock> omittedBlocks = new HashSet<>();
 		omittedBlocks.addAll(blocks);
-		
+
 		final List<ColumnBlock> blockOrder = new ArrayList<>();
-		for (String name: order) {
-			ColumnBlock block = getBlockByName(name);
+		for (String name : order) {
+			ColumnBlock block = getBlockByID(name);
 			blockOrder.add(block);
 			omittedBlocks.remove(block);
 		}
 		blockOrder.addAll(omittedBlocks);
 		setVisibleBlockOrder(blockOrder);
-		
-		blockOrderByName.clear();
-		for (ColumnBlock block: blockOrder) {
-			blockOrderByName.add(block.name);
+
+		blockOrderByID.clear();
+		for (ColumnBlock block : blockOrder) {
+			if (block != null) {
+				blockOrderByID.add(block.blockID);
+			}
 		}
-	}	
-	
+	}
+
 	/**
 	 * Returns the block order for the grid widget. Assumes that the column display order on the widget respects the managed column blocks (i.e. all columns in a block are displayed contiguously).
 	 * Returns null and prints an error if there is an inconsistency.
@@ -151,35 +152,36 @@ public class ColumnBlockManager {
 
 		return result;
 	}
-	
+
 	/**
-	 * Returns a list of block names in currently specified order. This will automatically
-	 * append any block names which were not listed in the last setNameOrder() call.
+	 * Returns a list of block names in currently specified order. This will automatically append any block names which were not listed in the last setNameOrder() call.
+	 * 
 	 * @return
 	 */
-	public List<String> getNameOrder() {		
-		final List<String> result = new ArrayList<String>(blockOrderByName);
-		for (ColumnBlock block: blocks) {
-			if (result.contains(block.name) == false) {
-				result.add(block.name);
+	public List<String> getBlockIDOrder() {
+		final List<String> result = new ArrayList<String>(blockOrderByID);
+		for (ColumnBlock block : blocks) {
+			if (result.contains(block.blockID) == false) {
+				result.add(block.blockID);
 			}
 		}
 		return result;
 	}
-	
+
 	/**
-	 * Returns a list of all blocks in the order they should appear in. 
+	 * Returns a list of all blocks in the order they should appear in.
+	 * 
 	 * @return
 	 */
 	public List<ColumnBlock> getBlocksInVisibleOrder() {
 		final ArrayList<ColumnBlock> result = new ArrayList<ColumnBlock>();
-		for (String name: getNameOrder()) {
-			ColumnBlock block = getBlockByName(name);
-			result.add(getBlockByName(name));
+		for (String blockID : getBlockIDOrder()) {
+			ColumnBlock block = getBlockByID(blockID);
+			result.add(block);
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Sets the column ordering on a nebula grid widget to respect the desired ordering of column blocks.
 	 * 
@@ -190,39 +192,42 @@ public class ColumnBlockManager {
 		final int[] colOrder = grid.getColumnOrder();
 
 		final List<ColumnBlock> finalOrder = new ArrayList<ColumnBlock>(order);
-		
-		// detect any visible blocks missing from the specified order and append them  
-		for (final ColumnBlock block: blocks) {
+
+		// detect any visible blocks missing from the specified order and append them
+		for (final ColumnBlock block : blocks) {
 			if (getBlockVisible(block) && finalOrder.contains(block) == false) {
 				finalOrder.add(block);
 			}
 		}
-		
+
 		// Java won't allow initialising a List<Integer> directly from an int []
 		final List<Integer> missingIndices = new ArrayList<>();
-		for (int i: colOrder) {
+		for (int i : colOrder) {
 			missingIndices.add(i);
 		}
-		
+
 		// go through blocks in order
 		for (final ColumnBlock block : finalOrder) {
+			if (block == null) {
+				continue;
+			}
 			// adding the columns in each block to the grid in the correct order
-			for (final ColumnHandler handler : block.blockHandlers) {
+			for (final ColumnHandler handler : block.columnHandlers) {
 				final GridColumn column = handler.column.getColumn();
 				// sanity check to make sure nothing is bad
 				if (column != null && column.isDisposed() == false) {
 					// the next column in the grid display will be the given column
 					colOrder[index] = grid.indexOf(column);
-					missingIndices.remove((Object) colOrder[index]); 
+					missingIndices.remove((Object) colOrder[index]);
 					index += 1;
 				}
 			}
 		}
-		
+
 		// if there are any columns missing from the specified order, something is wrong
 		if (missingIndices.isEmpty() == false) {
 			System.err.println(String.format("Available blocks only account for %d out of %d columns.", index, colOrder.length));
-			for (int i: missingIndices) {
+			for (int i : missingIndices) {
 				colOrder[index] = i;
 				index += 1;
 			}
@@ -232,18 +237,18 @@ public class ColumnBlockManager {
 	}
 
 	public void swapBlockOrder(final ColumnBlock block1, final ColumnBlock block2) {
-		List<String> order = getNameOrder();
-		final int index1 = order.indexOf(block1.name);
-		final int index2 = order.indexOf(block2.name);
-		order.set(index1, block2.name);
-		order.set(index2, block1.name);
-		setNameOrder(order);
+		List<String> order = getBlockIDOrder();
+		final int index1 = order.indexOf(block1.blockID);
+		final int index2 = order.indexOf(block2.blockID);
+		order.set(index1, block2.blockID);
+		order.set(index2, block1.blockID);
+		setBlockIDOrder(order);
 	}
 
 	public int getBlockIndex(final ColumnBlock block) {
 		return getBlocksInVisibleOrder().indexOf(block);
 	}
-	
+
 	public boolean getBlockVisible(final ColumnBlock block) {
 		return block.getVisible();
 	}
@@ -251,7 +256,7 @@ public class ColumnBlockManager {
 	@SuppressWarnings("null")
 	public boolean getBlockReallyVisible(final ColumnBlock block) {
 		Boolean result = null;
-		for (final ColumnHandler handler : block.blockHandlers) {
+		for (final ColumnHandler handler : block.columnHandlers) {
 			final GridColumn column = handler.column.getColumn();
 			if (result != null && !column.isDisposed() && column.getVisible() != result) {
 				System.err.println(String.format("Column block has inconsistent visibility: %s.", column.toString()));
@@ -270,9 +275,9 @@ public class ColumnBlockManager {
 	 */
 	public void saveToMemento(final String uniqueConfigKey, final IMemento memento) {
 		final IMemento blocksInfo = memento.createChild(uniqueConfigKey);
-		for (final String name: getNameOrder()) {
-			ColumnBlock block = getBlockByName(name);
-			final IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, name);
+		for (final String blockID : getBlockIDOrder()) {
+			ColumnBlock block = getBlockByID(blockID);
+			final IMemento blockInfo = blocksInfo.createChild(COLUMN_BLOCK_CONFIG_MEMENTO, blockID);
 			blockInfo.putBoolean(BLOCK_VISIBLE_MEMENTO, getBlockVisible(block));
 		}
 	}
@@ -290,19 +295,19 @@ public class ColumnBlockManager {
 		if (blocksInfo != null) {
 
 			for (final IMemento blockInfo : blocksInfo.getChildren(COLUMN_BLOCK_CONFIG_MEMENTO)) {
-				final String blockName = blockInfo.getID();
-				ColumnBlock block = getBlockByName(blockName);
+				final String blockID = blockInfo.getID();
+				ColumnBlock block = getBlockByID(blockID);
 				if (block == null) {
-					block = createBlock(blockName, ColumnType.NORMAL);
+					block = createBlock(blockID, "", ColumnType.NORMAL);
 				}
 				final Boolean visible = blockInfo.getBoolean(BLOCK_VISIBLE_MEMENTO);
 				if (visible != null) {
 					block.setUserVisible(visible);
 				}
-				order.add(blockName);
+				order.add(blockID);
 			}
 
-			setNameOrder(order);
+			setBlockIDOrder(order);
 		}
 	}
 

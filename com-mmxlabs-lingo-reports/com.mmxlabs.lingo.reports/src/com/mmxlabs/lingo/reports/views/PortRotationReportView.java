@@ -22,6 +22,7 @@ import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.NumberOfDPFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
@@ -86,7 +87,7 @@ public class PortRotationReportView extends EMFReportView {
 
 		final EStructuralFeature name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
 
-		addScheduleColumn("Schedule", containingScheduleFormatter);
+		addColumn("Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
 
 		vesselColumn = addColumn("Vessel", ColumnType.NORMAL, objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), sp.getSequence__GetName());
 
@@ -415,4 +416,8 @@ public class PortRotationReportView extends EMFReportView {
 	// }
 	// });
 	// }
+
+	public ColumnHandler addColumn(final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		return addColumn(title, title, (String) null, columnType, formatter, path);
+	}
 }
