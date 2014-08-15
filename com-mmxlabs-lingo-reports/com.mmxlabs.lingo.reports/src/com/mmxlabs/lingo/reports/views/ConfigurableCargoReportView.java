@@ -28,11 +28,14 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
+import com.mmxlabs.lingo.reports.components.EMFReportView.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.columns.IScheduleBasedColumnExtension;
 import com.mmxlabs.lingo.reports.components.columns.IScheduleBasedColumnFactoryExtension;
 import com.mmxlabs.lingo.reports.components.columns.IScheduleColumnFactory;
@@ -41,6 +44,27 @@ import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
+import com.mmxlabs.models.lng.cargo.CharterOutEvent;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
+import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
@@ -120,6 +144,31 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		registerReportColumns(manager, builder);
 
 		super.createPartControl(parent);
+
+		// Set default visibility - hardcoded for now, TODO take from ext point.
+		{
+			final List<String> defaultOrder = Lists.newArrayList("com.mmxlabs.lingo.reports.components.columns.schedule.schedule", "com.mmxlabs.lingo.reports.components.columns.schedule.l-id",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.d-id", "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.type", "com.mmxlabs.lingo.reports.components.columns.schedule.vessel",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel", "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.buyport", "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.sellport", "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate", "com.mmxlabs.lingo.reports.components.columns.schedule.salescontract",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.buyprice", "com.mmxlabs.lingo.reports.components.columns.schedule.sellprice",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3", "com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3",
+					"com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation");
+
+			for (final String blockID : defaultOrder) {
+				ColumnBlock block = blockManager.getBlockByID(blockID);
+				if (block == null) {
+					block = blockManager.createBlock(blockID, "", ColumnType.NORMAL);
+				}
+				block.setUserVisible(true);
+
+				blockManager.setBlockIDOrder(defaultOrder);
+			}
+			builder.setRowFilter(ScheduleBasedReportBuilder.ROW_FILTER_ALL);
+		}
 
 		// force the columns to be immovable except by using the config dialog
 		setColumnsImmovable();
@@ -255,7 +304,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 							}
 
 							@Override
-							public String getToolTipText(Object element) {
+							public String getToolTipText(final Object element) {
 								final ColumnBlock block = (ColumnBlock) element;
 								return block.blockID;
 							}
@@ -313,10 +362,5 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 		// Create the actual columns
 		manager.addColumns(CARGO_REPORT_TYPE_ID, this);
-	}
-
-	protected void applyDefaultColumnConfiguration(final EMFReportColumnManager manager) {
-		final String[] defaultColumns = new String[] { "L-ID", "D-ID", "Vessel", "P&L (Total)", "P&L (Trading)", "P&L (Shipping)", "Purchase Price", "Sales Price", "Unit Ship. Cost", "Purchase Vol",
-				"Sale Vol", "Shipping Cost", "Upside", "Next Port", "Next Date", "Laden Days", "Ballast Days", "Idle Days", "Type" };
 	}
 }
