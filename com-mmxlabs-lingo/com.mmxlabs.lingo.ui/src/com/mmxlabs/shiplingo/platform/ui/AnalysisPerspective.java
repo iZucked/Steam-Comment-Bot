@@ -9,19 +9,16 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import com.mmxlabs.lingo.reports.scheduleview.views.SchedulerView;
-import com.mmxlabs.lingo.reports.views.BasicCargoReportView;
 import com.mmxlabs.lingo.reports.views.CapacityViolationReportView;
-import com.mmxlabs.lingo.reports.views.CargoPnLReportView;
-import com.mmxlabs.lingo.reports.views.CargoReportView;
 import com.mmxlabs.lingo.reports.views.CooldownReportView;
 import com.mmxlabs.lingo.reports.views.FitnessReportView;
 import com.mmxlabs.lingo.reports.views.HorizontalKPIReportView;
 import com.mmxlabs.lingo.reports.views.KPIReportView;
 import com.mmxlabs.lingo.reports.views.LatenessReportView;
 import com.mmxlabs.lingo.reports.views.PortRotationReportView;
-import com.mmxlabs.lingo.reports.views.SchedulePnLReport;
 import com.mmxlabs.lingo.reports.views.TotalsHierarchyView;
 import com.mmxlabs.lingo.reports.views.TotalsReportView;
+import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
 
 public class AnalysisPerspective implements IPerspectiveFactory {
 
@@ -43,28 +40,21 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 
 		// reportsFolder.addView(KPIReportView.ID);
 		reportsFolder.addView(SchedulerView.ID);
-		// reportsFolder.addView(CargoPnLReportView.ID);
-		reportsFolder.addView(CargoReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
-		reportsFolder.addPlaceholder(BasicCargoReportView.ID);
-		reportsFolder.addPlaceholder(SchedulePnLReport.ID);
+		reportsFolder.addPlaceholder(ConfigurableScheduleReportView.ID);
 		reportsFolder.addPlaceholder(PortRotationReportView.ID);
 		reportsFolder.addPlaceholder(LatenessReportView.ID);
 		reportsFolder.addPlaceholder(CooldownReportView.ID);
 		reportsFolder.addPlaceholder(FitnessReportView.ID);
 		reportsFolder.addPlaceholder(CapacityViolationReportView.ID);
 
-
 		// layout.addView(CargoEconsReport.ID, IPageLayout.RIGHT, 0.85f, IPageLayout.ID_EDITOR_AREA);
 
 		layout.addShowViewShortcut(KPIReportView.ID);
-		layout.addShowViewShortcut(CargoReportView.ID);
-		layout.addShowViewShortcut(CargoPnLReportView.ID);
-		layout.addShowViewShortcut(SchedulePnLReport.ID);
+		layout.addShowViewShortcut(ConfigurableScheduleReportView.ID);
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
 		layout.addShowViewShortcut(TotalsHierarchyView.ID);
-		layout.addShowViewShortcut(BasicCargoReportView.ID);
 		layout.addShowViewShortcut(PortRotationReportView.ID);
 		layout.addShowViewShortcut(LatenessReportView.ID);
 		layout.addShowViewShortcut(CooldownReportView.ID);
