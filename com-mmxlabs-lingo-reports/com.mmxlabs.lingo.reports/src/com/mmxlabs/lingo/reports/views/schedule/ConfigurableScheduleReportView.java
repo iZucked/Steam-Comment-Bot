@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.views;
+package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,24 +33,22 @@ import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
-import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnExtension;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnFactoryExtension;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension.InitialColumn;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension.InitialRowType;
-import com.mmxlabs.lingo.reports.extensions.IScheduleColumnFactory;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnInfoProvider;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.IColumnUpdater;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnExtension;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnFactoryExtension;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialColumn;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
  */
-public class ConfigurableCargoReportView extends EMFReportView {
+public class ConfigurableScheduleReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -80,7 +78,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 	private boolean customisableReport = true;
 
 	@Inject
-	public ConfigurableCargoReportView(final ScheduleBasedReportBuilder builder) {
+	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
 		super(ID);
 
 		this.builder = builder;
@@ -117,7 +115,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		super.saveState(memento);
 		final IMemento configMemento = memento.createChild(getColumnSettingsMementoKey());
 		builder.saveToMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
-		blockManager.saveToMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
+		getBlockManager().saveToMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 	}
 
 	@Override
@@ -125,7 +123,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		final EMFReportColumnManager manager = new EMFReportColumnManager();
 
 		// See ActivatorModule
-		Activator.getDefault().getInjector().injectMembers(this);
+//		Activator.getDefault().getInjector().injectMembers(this);
 
 		registerReportColumns(manager, builder);
 
@@ -145,7 +143,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 			if (configMemento != null) {
 				builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
-				blockManager.initFromMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
+				getBlockManager().initFromMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 			}
 		}
 
@@ -184,15 +182,15 @@ public class ConfigurableCargoReportView extends EMFReportView {
 						final List<String> defaultOrder = new LinkedList<>();
 						for (final InitialColumn col : initialColumns) {
 							final String blockID = col.getID();
-							ColumnBlock block = blockManager.getBlockByID(blockID);
+							ColumnBlock block = getBlockManager().getBlockByID(blockID);
 							if (block == null) {
-								block = blockManager.createBlock(blockID, "", ColumnType.NORMAL);
+								block = getBlockManager().createBlock(blockID, "", ColumnType.NORMAL);
 							}
 							block.setUserVisible(true);
 							defaultOrder.add(blockID);
 
 						}
-						blockManager.setBlockIDOrder(defaultOrder);
+						getBlockManager().setBlockIDOrder(defaultOrder);
 					}
 					{
 						final List<String> rowFilter = new ArrayList<>(ScheduleBasedReportBuilder.ROW_FILTER_ALL.length);
@@ -309,12 +307,12 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 						@Override
 						public int getColumnIndex(final Object columnObj) {
-							return blockManager.getBlockIndex((ColumnBlock) columnObj);
+							return getBlockManager().getBlockIndex((ColumnBlock) columnObj);
 						}
 
 						@Override
 						public boolean isColumnVisible(final Object columnObj) {
-							return blockManager.getBlockVisible((ColumnBlock) columnObj);
+							return getBlockManager().getBlockVisible((ColumnBlock) columnObj);
 						}
 
 					};
@@ -331,7 +329,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 						@Override
 						public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
-							blockManager.swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
+							getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
 							viewer.refresh();
 						}
 
@@ -379,7 +377,7 @@ public class ConfigurableCargoReportView extends EMFReportView {
 							return updater;
 						}
 					};
-					dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
+					dialog.setColumnsObjs(getBlockManager().getBlocksInVisibleOrder().toArray());
 					// dialog.setRowCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
 					// dialog.setDiffCheckBoxInfo(ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
 					dialog.addCheckBoxInfo("Row Filters", ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());

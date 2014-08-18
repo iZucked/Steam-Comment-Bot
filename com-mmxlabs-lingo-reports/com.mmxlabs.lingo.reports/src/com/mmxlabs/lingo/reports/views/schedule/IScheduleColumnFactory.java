@@ -1,6 +1,6 @@
-package com.mmxlabs.lingo.reports.extensions;
+package com.mmxlabs.lingo.reports.views.schedule;
 
-import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
+import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 
 public interface IScheduleColumnFactory {
 

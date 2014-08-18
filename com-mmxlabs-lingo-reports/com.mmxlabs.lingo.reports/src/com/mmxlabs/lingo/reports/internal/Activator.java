@@ -16,6 +16,7 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.lingo.reports.views.schedule.extpoint.ScheduleBasedReportModule;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 /**
@@ -50,7 +51,7 @@ public class Activator extends AbstractUIPlugin {
 		scenarioServiceSelectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(context, IScenarioServiceSelectionProvider.class, null);
 		scenarioServiceSelectionProviderTracker.open();
 		
-		injector = Guice.createInjector(Peaberry.osgiModule(context, eclipseRegistry()), new ActivatorModule());
+		injector = Guice.createInjector(Peaberry.osgiModule(context, eclipseRegistry()), new ScheduleBasedReportModule());
 	}
 
 	/*

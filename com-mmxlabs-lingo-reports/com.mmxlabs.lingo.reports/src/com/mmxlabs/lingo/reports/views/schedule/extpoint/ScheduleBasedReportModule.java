@@ -2,15 +2,14 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.internal;
+package com.mmxlabs.lingo.reports.views.schedule.extpoint;
 
 import static org.ops4j.peaberry.Peaberry.service;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnExtension;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnFactoryExtension;
-import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension;
+import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
+import com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder;
 
 /**
  * An activation module.
@@ -18,11 +17,14 @@ import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExte
  * @author Simon Goodall
  * 
  */
-public class ActivatorModule extends AbstractModule {
+public class ScheduleBasedReportModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-
+		
+		bind(ScheduleBasedReportBuilder.class);
+		
+		bind(iterable(ICustomRelatedSlotHandlerExtension.class)).toProvider(service(ICustomRelatedSlotHandlerExtension.class).multiple());
 		bind(iterable(IScheduleBasedColumnFactoryExtension.class)).toProvider(service(IScheduleBasedColumnFactoryExtension.class).multiple());
 		bind(iterable(IScheduleBasedColumnExtension.class)).toProvider(service(IScheduleBasedColumnExtension.class).multiple());
 		bind(iterable(IScheduleBasedReportInitialStateExtension.class)).toProvider(service(IScheduleBasedReportInitialStateExtension.class).multiple());

@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.components.columns;
+package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.text.DateFormat;
 
@@ -8,9 +8,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView.SimpleEmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
-import com.mmxlabs.lingo.reports.extensions.IScheduleColumnFactory;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CalendarFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;

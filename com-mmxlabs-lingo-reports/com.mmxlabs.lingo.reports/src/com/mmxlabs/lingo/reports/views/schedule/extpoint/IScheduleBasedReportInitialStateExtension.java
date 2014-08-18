@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
-package com.mmxlabs.lingo.reports.extensions;
+package com.mmxlabs.lingo.reports.views.schedule.extpoint;
 
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;

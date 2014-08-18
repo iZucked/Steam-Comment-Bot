@@ -85,7 +85,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<>();
 	private final Map<String, Integer> keyPresentInSchedulesCount = new LinkedHashMap<>();
 
-	protected final ColumnBlockManager blockManager = new ColumnBlockManager();
+	private final ColumnBlockManager blockManager = new ColumnBlockManager();
 
 	protected EMFReportView() {
 		this(null);
@@ -147,7 +147,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 					// Add Difference/Change columns when in Pin/Diff mode
 					final boolean pinDiffMode = numberOfSchedules > 1 && currentlyPinned;
-					for (final ColumnBlock handler : blockManager.getBlocksInVisibleOrder()) {
+					for (final ColumnBlock handler : getBlockManager().getBlocksInVisibleOrder()) {
 						if (handler != null) {
 							handler.setViewState(numberOfSchedules > 1, pinDiffMode);
 						}
@@ -247,7 +247,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	public ColumnBlock createBlock(final String blockID, final String blockName, final ColumnType columnType) {
-		return blockManager.createBlock(blockID, blockName, columnType);
+		return getBlockManager().createBlock(blockID, blockName, columnType);
 
 	}
 
@@ -367,7 +367,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
 	private final HashSet<Object> contents = new HashSet<Object>();
 
-	protected void setInputEquivalents(final Object input, final Collection<Object> objectEquivalents) {
+	public void setInputEquivalents(final Object input, final Collection<Object> objectEquivalents) {
 		for (final Object o : objectEquivalents) {
 			equivalents.put(o, input);
 		}
@@ -430,7 +430,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			}
 		};
 
-		blockManager.setGrid(viewer.getGrid());
+		getBlockManager().setGrid(viewer.getGrid());
 
 		filterField.setFilterSupport(viewer.getFilterSupport());
 
@@ -781,5 +781,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 */
 	public IScenarioViewerSynchronizerOutput getSynchronizerOutput() {
 		return synchronizerOutput;
+	}
+
+	public ColumnBlockManager getBlockManager() {
+		return blockManager;
 	}
 }

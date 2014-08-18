@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.components;
+package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +31,10 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScheduleElementCollector;
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
+import com.mmxlabs.lingo.reports.components.ColumnType;
+import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.components.EMFReportView.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
@@ -38,7 +42,6 @@ import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
 import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
-import com.mmxlabs.lingo.reports.views.ConfigurableCargoReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
@@ -93,14 +96,14 @@ public class ScheduleBasedReportBuilder {
 	public static final String ROW_FILTER_CHARTER_OUT_ROW = "Charter Outs (Virt)";
 	public static final String ROW_FILTER_CARGO_ROW = "Cargoes";
 
-	/** All filters (note this order is also used in the {@link ConfigurableCargoReportView} dialog */
+	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
 	public static final String[] ROW_FILTER_ALL = new String[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
 			ROW_FILTER_VESSEL_START_ROW };
 
 	public static final String DIFF_FILTER_PINNDED_SCENARIO = "Pinned Scenario";
 	public static final String DIFF_FILTER_VESSEL_CHANGES = "Vessel Changes";
 
-	/** All filters (note this order is also used in the {@link ConfigurableCargoReportView} dialog */
+	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
 	public static final String[] DIFF_FILTER_ALL = new String[] { DIFF_FILTER_PINNDED_SCENARIO, DIFF_FILTER_VESSEL_CHANGES };
 
 	private static final String ROW_FILTER_MEMENTO = "ROW_FILTER";
@@ -860,9 +863,9 @@ public class ScheduleBasedReportBuilder {
 
 			@Override
 			public ColumnHandler addColumn(final EMFReportView theReport) {
-				ColumnBlock block = theReport.blockManager.getBlockByID(COLUMN_BLOCK_PNL);
+				ColumnBlock block = theReport.getBlockManager().getBlockByID(COLUMN_BLOCK_PNL);
 				if (block == null) {
-					block = theReport.blockManager.createBlock(COLUMN_BLOCK_PNL, "[P&L]", ColumnType.NORMAL);
+					block = theReport.getBlockManager().createBlock(COLUMN_BLOCK_PNL, "[P&L]", ColumnType.NORMAL);
 				}
 				block.setPlaceholder(true);
 				return null;
@@ -982,7 +985,7 @@ public class ScheduleBasedReportBuilder {
 			entityColumnNames.add(title);
 		}
 
-		return report.createColumn(report.blockManager.getBlockByID(COLUMN_BLOCK_PNL), title, new IntegerFormatter() {
+		return report.createColumn(report.getBlockManager().getBlockByID(COLUMN_BLOCK_PNL), title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
