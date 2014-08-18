@@ -108,6 +108,8 @@ public interface IActualsDataProvider extends IDataComponentProvider {
 	 */
 	int getCharterRatePerDay(IPortSlot slot);
 
+	long getPortBaseFuelConsumptionInMT(IPortSlot slot);
+
 	/**
 	 * Returns the actual base fuel used in the next voyage. This includes and load and discharge port fuel consumptions.
 	 * 
