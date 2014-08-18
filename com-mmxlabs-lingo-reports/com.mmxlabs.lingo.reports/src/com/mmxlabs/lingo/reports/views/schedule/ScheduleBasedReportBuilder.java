@@ -84,6 +84,7 @@ import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
  * 
  */
 public class ScheduleBasedReportBuilder {
+	public static final String CARGO_REPORT_TYPE_ID = "CARGO_REPORT_TYPE_ID";
 
 	public static final String COLUMN_BLOCK_PNL = "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group";
 
@@ -887,6 +888,9 @@ public class ScheduleBasedReportBuilder {
 							return;
 						}
 
+						
+						// TODO: Need to be able to register a listener for columns to react to this stuff.
+						
 						// Clear existing entity columns
 						for (final String s : entityColumnNames) {
 							report.removeColumn(s);

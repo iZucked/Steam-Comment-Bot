@@ -31,6 +31,7 @@ Export-Package: com.mmxlabs.lingo.reports,
  com.mmxlabs.lingo.reports.utils,
  com.mmxlabs.lingo.reports.views,
  com.mmxlabs.lingo.reports.views.formatters,
+ com.mmxlabs.lingo.reports.views.portrotation,
  com.mmxlabs.lingo.reports.views.schedule
 Import-Package: javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"

@@ -46,7 +46,7 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 	private final IScenarioInstanceElementCollector collector;
 
 	private final Map<ScenarioInstance, ModelReference> scenarioReferenes = new HashMap<>();
-	
+
 	public ScenarioViewerSynchronizer(final Viewer viewer, final IScenarioInstanceElementCollector collector) {
 		this.viewer = viewer;
 		this.collector = collector;
@@ -173,7 +173,7 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 			if (scenarioService == null) {
 				continue;
 			}
-			
+
 			final ModelReference modelReference = scenarioReferenes.get(job);
 			if (modelReference != null) {
 				final EObject instance = modelReference.getInstance();
@@ -245,7 +245,9 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 	}
 
 	public static void deregisterView(final ScenarioViewerSynchronizer l) {
-		l.dispose();
+		if (l != null) {
+			l.dispose();
+		}
 	}
 
 	@Override
