@@ -6,6 +6,7 @@ package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,6 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -28,7 +28,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
@@ -38,6 +37,10 @@ import com.mmxlabs.lingo.reports.components.ScheduleBasedReportBuilder;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnExtension;
 import com.mmxlabs.lingo.reports.extensions.IScheduleBasedColumnFactoryExtension;
+import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension;
+import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension.InitialColumn;
+import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
+import com.mmxlabs.lingo.reports.extensions.IScheduleBasedReportInitialStateExtension.InitialRowType;
 import com.mmxlabs.lingo.reports.extensions.IScheduleColumnFactory;
 import com.mmxlabs.lingo.reports.internal.Activator;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
@@ -70,6 +73,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedColumnExtension> columnExtensions;
+
+	@Inject(optional = true)
+	private Iterable<IScheduleBasedReportInitialStateExtension> initialStates;
+
+	private boolean customisableReport = true;
 
 	@Inject
 	public ConfigurableCargoReportView(final ScheduleBasedReportBuilder builder) {
@@ -121,32 +129,11 @@ public class ConfigurableCargoReportView extends EMFReportView {
 
 		registerReportColumns(manager, builder);
 
+		customisableReport = checkCustomisable();
 		super.createPartControl(parent);
 
 		// Set default visibility - hardcoded for now, TODO take from ext point.
-		{
-			final List<String> defaultOrder = Lists.newArrayList("com.mmxlabs.lingo.reports.components.columns.schedule.schedule", "com.mmxlabs.lingo.reports.components.columns.schedule.l-id",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.d-id", "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.type", "com.mmxlabs.lingo.reports.components.columns.schedule.vessel",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel", "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.buyport", "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.sellport", "com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate", "com.mmxlabs.lingo.reports.components.columns.schedule.salescontract",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.buyprice", "com.mmxlabs.lingo.reports.components.columns.schedule.sellprice",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3", "com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3",
-					"com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation");
-
-			for (final String blockID : defaultOrder) {
-				ColumnBlock block = blockManager.getBlockByID(blockID);
-				if (block == null) {
-					block = blockManager.createBlock(blockID, "", ColumnType.NORMAL);
-				}
-				block.setUserVisible(true);
-
-				blockManager.setBlockIDOrder(defaultOrder);
-			}
-			builder.setRowFilter(ScheduleBasedReportBuilder.ROW_FILTER_ALL);
-		}
+		setInitialState();
 
 		// force the columns to be immovable except by using the config dialog
 		setColumnsImmovable();
@@ -162,6 +149,104 @@ public class ConfigurableCargoReportView extends EMFReportView {
 			}
 		}
 
+	}
+
+	protected boolean checkCustomisable() {
+
+		if (initialStates != null) {
+
+			for (final IScheduleBasedReportInitialStateExtension ext : initialStates) {
+
+				final String viewId = ext.getViewID();
+
+				if (viewId != null && viewId.equals(getViewSite().getId())) {
+					final String customisableString = ext.getCustomisable();
+					if (customisableString != null) {
+						return customisableString.equals("true");
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	protected void setInitialState() {
+
+		if (initialStates != null) {
+
+			for (final IScheduleBasedReportInitialStateExtension ext : initialStates) {
+
+				final String viewId = ext.getViewID();
+
+				if (viewId != null && viewId.equals(getViewSite().getId())) {
+					final InitialColumn[] initialColumns = ext.getInitialColumns();
+					if (initialColumns != null) {
+						final List<String> defaultOrder = new LinkedList<>();
+						for (final InitialColumn col : initialColumns) {
+							final String blockID = col.getID();
+							ColumnBlock block = blockManager.getBlockByID(blockID);
+							if (block == null) {
+								block = blockManager.createBlock(blockID, "", ColumnType.NORMAL);
+							}
+							block.setUserVisible(true);
+							defaultOrder.add(blockID);
+
+						}
+						blockManager.setBlockIDOrder(defaultOrder);
+					}
+					{
+						final List<String> rowFilter = new ArrayList<>(ScheduleBasedReportBuilder.ROW_FILTER_ALL.length);
+						final InitialRowType[] initialRows = ext.getInitialRows();
+						if (initialRows != null) {
+							for (final InitialRowType row : initialRows) {
+
+								switch (row.getRowType()) {
+								case "cargo":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CARGO_ROW);
+									break;
+								case "long":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_LONG_CARGOES);
+									break;
+								case "short":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_SHORT_CARGOES);
+									break;
+								case "virtualcharters":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CHARTER_OUT_ROW);
+									break;
+								case "event":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_EVENT_ROW);
+									break;
+								case "orphanlegs":
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_START_ROW);
+									break;
+								}
+							}
+						}
+						builder.setRowFilter(rowFilter.toArray(new String[0]));
+					}
+					{
+						final List<String> diffOptions = new ArrayList<>(ScheduleBasedReportBuilder.DIFF_FILTER_ALL.length);
+						final InitialDiffOption[] initialDiffOptions = ext.getInitialDiffOptions();
+						if (initialDiffOptions != null) {
+							for (final InitialDiffOption diffOption : initialDiffOptions) {
+
+								switch (diffOption.getOption()) {
+
+								case "vessel":
+									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_VESSEL_CHANGES);
+									break;
+								case "scenario":
+									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO);
+									break;
+								}
+							}
+						}
+						builder.setDiffFilter(diffOptions.toArray(new String[0]));
+					}
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -216,102 +301,104 @@ public class ConfigurableCargoReportView extends EMFReportView {
 		super.fillLocalPullDown(manager);
 		final IWorkbench wb = PlatformUI.getWorkbench();
 		final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+		if (customisableReport) {
+			Action configureColumnsAction = new Action("Configure Contents") {
+				@Override
+				public void run() {
+					final IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
 
-		final Action configureColumnsAction = new Action("Configure Contents") {
-			@Override
-			public void run() {
-				final IColumnInfoProvider infoProvider = new ColumnConfigurationDialog.ColumnInfoAdapter() {
+						@Override
+						public int getColumnIndex(final Object columnObj) {
+							return blockManager.getBlockIndex((ColumnBlock) columnObj);
+						}
 
-					@Override
-					public int getColumnIndex(final Object columnObj) {
-						return blockManager.getBlockIndex((ColumnBlock) columnObj);
-					}
+						@Override
+						public boolean isColumnVisible(final Object columnObj) {
+							return blockManager.getBlockVisible((ColumnBlock) columnObj);
+						}
 
-					@Override
-					public boolean isColumnVisible(final Object columnObj) {
-						return blockManager.getBlockVisible((ColumnBlock) columnObj);
-					}
+					};
 
-				};
+					final IColumnUpdater updater = new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
 
-				final IColumnUpdater updater = new ColumnConfigurationDialog.ColumnUpdaterAdapter() {
+						@Override
+						public void setColumnVisible(final Object columnObj, final boolean visible) {
 
-					@Override
-					public void setColumnVisible(final Object columnObj, final boolean visible) {
+							((ColumnBlock) columnObj).setUserVisible(visible);
+							viewer.refresh();
 
-						((ColumnBlock) columnObj).setUserVisible(visible);
-						viewer.refresh();
+						}
 
-					}
+						@Override
+						public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
+							blockManager.swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
+							viewer.refresh();
+						}
 
-					@Override
-					public void swapColumnPositions(final Object columnObj1, final Object columnObj2) {
-						blockManager.swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
-						viewer.refresh();
-					}
+					};
 
-				};
+					final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
+					final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
 
-				final Image nonVisibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj_disabled.gif").createImage();
-				final Image visibleIcon = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/read_obj.gif").createImage();
+					final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
 
-				final ColumnConfigurationDialog dialog = new ColumnConfigurationDialog(win.getShell()) {
+						@Override
+						protected IColumnInfoProvider getColumnInfoProvider() {
+							return infoProvider;
+						}
 
-					@Override
-					protected IColumnInfoProvider getColumnInfoProvider() {
-						return infoProvider;
-					}
-
-					@Override
-					protected ColumnLabelProvider getLabelProvider() {
-						return new ColumnLabelProvider() {
-							@Override
-							public String getText(final Object element) {
-								final ColumnBlock block = (ColumnBlock) element;
-								return block.blockName;
-							}
-
-							@Override
-							public Image getImage(final Object element) {
-								final ColumnBlock block = (ColumnBlock) element;
-								if (block.isModeVisible()) {
-									return visibleIcon;
-								} else {
-									return nonVisibleIcon;
+						@Override
+						protected ColumnLabelProvider getLabelProvider() {
+							return new ColumnLabelProvider() {
+								@Override
+								public String getText(final Object element) {
+									final ColumnBlock block = (ColumnBlock) element;
+									return block.blockName;
 								}
-							}
 
-							@Override
-							public String getToolTipText(final Object element) {
-								final ColumnBlock block = (ColumnBlock) element;
-								return block.tooltip;
-							}
-						};
-					}
+								@Override
+								public Image getImage(final Object element) {
+									final ColumnBlock block = (ColumnBlock) element;
+									if (block.isModeVisible()) {
+										return visibleIcon;
+									} else {
+										return nonVisibleIcon;
+									}
+								}
 
-					@Override
-					protected IColumnUpdater getColumnUpdater() {
-						return updater;
-					}
-				};
-				dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
-				// dialog.setRowCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
-				// dialog.setDiffCheckBoxInfo(ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
-				dialog.addCheckBoxInfo("Row Filters", ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
-				dialog.addCheckBoxInfo("Diff Filters", ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
-				dialog.open();
+								@Override
+								public String getToolTipText(final Object element) {
+									final ColumnBlock block = (ColumnBlock) element;
+									return block.tooltip;
+								}
+							};
+						}
 
-				builder.refreshDiffOptions();
+						@Override
+						protected IColumnUpdater getColumnUpdater() {
+							return updater;
+						}
+					};
+					dialog.setColumnsObjs(blockManager.getBlocksInVisibleOrder().toArray());
+					// dialog.setRowCheckBoxInfo(ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+					// dialog.setDiffCheckBoxInfo(ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
+					dialog.addCheckBoxInfo("Row Filters", ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+					dialog.addCheckBoxInfo("Diff Filters", ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
+					dialog.open();
 
-				nonVisibleIcon.dispose();
-				visibleIcon.dispose();
+					builder.refreshDiffOptions();
 
-				synchronizer.refreshViewer();
+					nonVisibleIcon.dispose();
+					visibleIcon.dispose();
 
-			}
+					synchronizer.refreshViewer();
 
-		};
-		manager.appendToGroup("additions", configureColumnsAction);
+				}
+
+			};
+			manager.appendToGroup("additions", configureColumnsAction);
+		}
+
 	}
 
 	private void registerReportColumns(final EMFReportColumnManager manager, final ScheduleBasedReportBuilder builder) {

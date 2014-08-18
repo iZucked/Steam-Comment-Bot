@@ -10,6 +10,7 @@
    <extension-point id="CustomRelatedSlotHandlerExtension" name="CustomRelatedSlotHandlerExtension" schema="schema/CustomRelatedSlotHandlerExtension.exsd"/>
    <extension-point id="ScheduleBasedColumn" name="ScheduleBasedColumn" schema="schema/ScheduleBasedColumn.exsd"/>
    <extension-point id="ScheduleBasedColumnFactory" name="ScheduleBasedColumnFactory" schema="schema/ScheduleBasedColumnFactory.exsd"/>
+   <extension-point id="ScheduleBasedReportInitialState" name="ScheduleBasedReportInitialState" schema="schema/ScheduleBasedReportInitialState.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
@@ -284,5 +285,90 @@
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
       </ScheduleBasedColumn>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
+      <ScheduleBasedReportInitialState
+            customisable="true"
+            id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
+         <InitialRowType
+               rowType="cargo">
+         </InitialRowType>
+         <InitialRowType
+               rowType="long">
+         </InitialRowType>
+         <InitialRowType
+               rowType="short">
+         </InitialRowType>
+         <InitialRowType
+               rowType="virtualcharters">
+         </InitialRowType>
+         <InitialRowType
+               rowType="event">
+         </InitialRowType>
+         <InitialRowType
+               rowType="orphanlegs">
+         </InitialRowType>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.schedule">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.l-id">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.d-id">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.type">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.vessel">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyport">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.loaddate">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellport">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyprice">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellprice">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
+         </InitialColumn>
+         <InitialDiffOption
+               option="scenario">
+         </InitialDiffOption>
+         <InitialDiffOption
+               option="vessel">
+         </InitialDiffOption>
+      </ScheduleBasedReportInitialState>
    </extension>
 </plugin>
