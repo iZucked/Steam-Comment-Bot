@@ -15,9 +15,9 @@ import com.mmxlabs.lingo.reports.views.FitnessReportView;
 import com.mmxlabs.lingo.reports.views.HorizontalKPIReportView;
 import com.mmxlabs.lingo.reports.views.KPIReportView;
 import com.mmxlabs.lingo.reports.views.LatenessReportView;
-import com.mmxlabs.lingo.reports.views.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.TotalsHierarchyView;
 import com.mmxlabs.lingo.reports.views.TotalsReportView;
+import com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView;
 import com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView;
 
 public class AnalysisPerspective implements IPerspectiveFactory {
