@@ -4,19 +4,13 @@
  */
 package com.mmxlabs.lingo.reports.internal;
 
-import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.mmxlabs.lingo.reports.views.schedule.extpoint.ScheduleBasedReportModule;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 /**
@@ -30,7 +24,6 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> scenarioServiceSelectionProviderTracker;
-	private Injector injector;
 
 	/**
 	 * The constructor
@@ -50,8 +43,6 @@ public class Activator extends AbstractUIPlugin {
 
 		scenarioServiceSelectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(context, IScenarioServiceSelectionProvider.class, null);
 		scenarioServiceSelectionProviderTracker.open();
-		
-		injector = Guice.createInjector(Peaberry.osgiModule(context, eclipseRegistry()), new ScheduleBasedReportModule());
 	}
 
 	/*
@@ -117,9 +108,4 @@ public class Activator extends AbstractUIPlugin {
 		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message, t);
 		getDefault().getLog().log(status);
 	}
-	
-	public Injector getInjector() {
-		return injector;
-	}
-
 }

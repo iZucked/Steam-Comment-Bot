@@ -47,18 +47,20 @@ import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportIni
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
+ * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
+ * for the user to change the default settings.
  */
 public class ConfigurableScheduleReportView extends EMFReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.schedule.ConfigurableScheduleReportView";
+
+	// Memto keys
 	private static final String CONFIGURABLE_COLUMNS_ORDER = "CONFIGURABLE_COLUMNS_ORDER";
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.ConfigurableCargoReportView";
 	private static final String CONFIGURABLE_ROWS_ORDER = "CONFIGURABLE_ROWS_ORDER";
 	private static final String CARGO_REPORT_TYPE_ID = "CARGO_REPORT_TYPE_ID";
 	private static final String CONFIGURABLE_COLUMNS_REPORT_KEY = "CONFIGURABLE_COLUMNS_REPORT_KEY";
-
-	final List<String> entityColumnNames = new ArrayList<String>();
 
 	private final ScheduleBasedReportBuilder builder;
 
@@ -81,6 +83,7 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
 		super(ID);
 
+		// Setup the builder hooks.
 		this.builder = builder;
 		builder.setReport(this);
 		builder.setPinDiffModeHelper(pinDiffModeHelper);
@@ -120,24 +123,24 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		final EMFReportColumnManager manager = new EMFReportColumnManager();
 
-		// See ActivatorModule
-//		Activator.getDefault().getInjector().injectMembers(this);
+		// Find the column definitions
+		registerReportColumns();
 
-		registerReportColumns(manager, builder);
-
+		// Check ext point to see if we can enable the customise action (created within createPartControl)
 		customisableReport = checkCustomisable();
 		super.createPartControl(parent);
 
-		// Set default visibility - hardcoded for now, TODO take from ext point.
+		// Look at the extension points for the initial visibilities, rows and diff options
 		setInitialState();
 
 		// force the columns to be immovable except by using the config dialog
 		setColumnsImmovable();
 
+		// Set the sorter
 		viewer.setComparator(GenericEMFTableDataModel.createGroupComparator(viewer.getComparator(), tableDataModel));
 
+		// Restore state from memto if possible.
 		if (memento != null) {
 			final IMemento configMemento = memento.getChild(getColumnSettingsMementoKey());
 
@@ -149,6 +152,11 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 
 	}
 
+	/**
+	 * Check the view extension point to see if we can enable the customise dialog
+	 * 
+	 * @return
+	 */
 	protected boolean checkCustomisable() {
 
 		if (initialStates != null) {
@@ -168,6 +176,9 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 		return true;
 	}
 
+	/**
+	 * Examine the view extension point to determine the default set of columns, order,row types and diff options.
+	 */
 	protected void setInitialState() {
 
 		if (initialStates != null) {
@@ -176,22 +187,27 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 
 				final String viewId = ext.getViewID();
 
+				// Is this a matching view definition?
 				if (viewId != null && viewId.equals(getViewSite().getId())) {
-					final InitialColumn[] initialColumns = ext.getInitialColumns();
-					if (initialColumns != null) {
-						final List<String> defaultOrder = new LinkedList<>();
-						for (final InitialColumn col : initialColumns) {
-							final String blockID = col.getID();
-							ColumnBlock block = getBlockManager().getBlockByID(blockID);
-							if (block == null) {
-								block = getBlockManager().createBlock(blockID, "", ColumnType.NORMAL);
-							}
-							block.setUserVisible(true);
-							defaultOrder.add(blockID);
+					// Get visibile columns and order
+					{
+						final InitialColumn[] initialColumns = ext.getInitialColumns();
+						if (initialColumns != null) {
+							final List<String> defaultOrder = new LinkedList<>();
+							for (final InitialColumn col : initialColumns) {
+								final String blockID = col.getID();
+								ColumnBlock block = getBlockManager().getBlockByID(blockID);
+								if (block == null) {
+									block = getBlockManager().createBlock(blockID, "", ColumnType.NORMAL);
+								}
+								block.setUserVisible(true);
+								defaultOrder.add(blockID);
 
+							}
+							getBlockManager().setBlockIDOrder(defaultOrder);
 						}
-						getBlockManager().setBlockIDOrder(defaultOrder);
 					}
+					// Get row types
 					{
 						final List<String> rowFilter = new ArrayList<>(ScheduleBasedReportBuilder.ROW_FILTER_ALL.length);
 						final InitialRowType[] initialRows = ext.getInitialRows();
@@ -222,6 +238,7 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 						}
 						builder.setRowFilter(rowFilter.toArray(new String[0]));
 					}
+					// Get diff options
 					{
 						final List<String> diffOptions = new ArrayList<>(ScheduleBasedReportBuilder.DIFF_FILTER_ALL.length);
 						final InitialDiffOption[] initialDiffOptions = ext.getInitialDiffOptions();
@@ -299,6 +316,8 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 		super.fillLocalPullDown(manager);
 		final IWorkbench wb = PlatformUI.getWorkbench();
 		final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+
+		// Only create action if permitted.
 		if (customisableReport) {
 			Action configureColumnsAction = new Action("Configure Contents") {
 				@Override
@@ -399,8 +418,14 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 
 	}
 
-	private void registerReportColumns(final EMFReportColumnManager manager, final ScheduleBasedReportBuilder builder) {
+	/**
+	 * Examine the eclipse registry for defined columns for this report and hook them in.
+	 */
+	private void registerReportColumns() {
 
+		final EMFReportColumnManager manager = new EMFReportColumnManager();
+
+		// Find any shared column factories and install.
 		final Map<String, IScheduleColumnFactory> handlerMap = new HashMap<>();
 		if (columnFactoryExtensions != null) {
 			for (final IScheduleBasedColumnFactoryExtension ext : columnFactoryExtensions) {
@@ -408,6 +433,8 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 				handlerMap.put(handlerID, ext.getFactory());
 			}
 		}
+
+		// Now find the column definitions themselves.
 		if (columnExtensions != null) {
 
 			for (final IScheduleBasedColumnExtension ext : columnExtensions) {
@@ -423,7 +450,7 @@ public class ConfigurableScheduleReportView extends EMFReportView {
 			}
 		}
 
-		// Create the actual columns
+		// Create the actual columns instances.
 		manager.addColumns(CARGO_REPORT_TYPE_ID, this);
 	}
 }
