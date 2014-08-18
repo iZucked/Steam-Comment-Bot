@@ -45,6 +45,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getPortBaseFuelConsumption <em>Port Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.impl.SlotActualsImpl#getRouteCosts <em>Route Costs</em>}</li>
@@ -278,6 +279,26 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	protected int baseFuelConsumption = BASE_FUEL_CONSUMPTION_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getPortBaseFuelConsumption() <em>Port Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortBaseFuelConsumption()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PORT_BASE_FUEL_CONSUMPTION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getPortBaseFuelConsumption() <em>Port Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortBaseFuelConsumption()
+	 * @generated
+	 * @ordered
+	 */
+	protected int portBaseFuelConsumption = PORT_BASE_FUEL_CONSUMPTION_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getRoute() <em>Route</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -496,6 +517,27 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		baseFuelConsumption = newBaseFuelConsumption;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION, oldBaseFuelConsumption, baseFuelConsumption));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getPortBaseFuelConsumption() {
+		return portBaseFuelConsumption;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortBaseFuelConsumption(int newPortBaseFuelConsumption) {
+		int oldPortBaseFuelConsumption = portBaseFuelConsumption;
+		portBaseFuelConsumption = newPortBaseFuelConsumption;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION, oldPortBaseFuelConsumption, portBaseFuelConsumption));
 	}
 
 	/**
@@ -949,6 +991,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return getCV();
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return getBaseFuelConsumption();
+			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
+				return getPortBaseFuelConsumption();
 			case ActualsPackage.SLOT_ACTUALS__ROUTE:
 				if (resolve) return getRoute();
 				return basicGetRoute();
@@ -1009,6 +1053,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption((Integer)newValue);
+				return;
+			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
+				setPortBaseFuelConsumption((Integer)newValue);
 				return;
 			case ActualsPackage.SLOT_ACTUALS__ROUTE:
 				setRoute((Route)newValue);
@@ -1076,6 +1123,9 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				setBaseFuelConsumption(BASE_FUEL_CONSUMPTION_EDEFAULT);
 				return;
+			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
+				setPortBaseFuelConsumption(PORT_BASE_FUEL_CONSUMPTION_EDEFAULT);
+				return;
 			case ActualsPackage.SLOT_ACTUALS__ROUTE:
 				setRoute((Route)null);
 				return;
@@ -1130,6 +1180,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 				return cv != CV_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
 				return baseFuelConsumption != BASE_FUEL_CONSUMPTION_EDEFAULT;
+			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
+				return portBaseFuelConsumption != PORT_BASE_FUEL_CONSUMPTION_EDEFAULT;
 			case ActualsPackage.SLOT_ACTUALS__ROUTE:
 				return route != null;
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
@@ -1194,6 +1246,8 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 		result.append(cv);
 		result.append(", baseFuelConsumption: ");
 		result.append(baseFuelConsumption);
+		result.append(", portBaseFuelConsumption: ");
+		result.append(portBaseFuelConsumption);
 		result.append(", distance: ");
 		result.append(distance);
 		result.append(", routeCosts: ");

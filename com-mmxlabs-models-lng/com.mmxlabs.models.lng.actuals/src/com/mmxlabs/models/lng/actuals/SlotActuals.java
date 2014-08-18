@@ -33,6 +33,7 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getNotes <em>Notes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getCV <em>CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getBaseFuelConsumption <em>Base Fuel Consumption</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortBaseFuelConsumption <em>Port Base Fuel Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRoute <em>Route</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getDistance <em>Distance</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRouteCosts <em>Route Costs</em>}</li>
@@ -150,6 +151,32 @@ public interface SlotActuals extends ITimezoneProvider {
 	 * @generated
 	 */
 	void setBaseFuelConsumption(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Port Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Port Base Fuel Consumption</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Port Base Fuel Consumption</em>' attribute.
+	 * @see #setPortBaseFuelConsumption(int)
+	 * @see com.mmxlabs.models.lng.actuals.ActualsPackage#getSlotActuals_PortBaseFuelConsumption()
+	 * @model annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='MT' formatString='###,##0'"
+	 * @generated
+	 */
+	int getPortBaseFuelConsumption();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortBaseFuelConsumption <em>Port Base Fuel Consumption</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Port Base Fuel Consumption</em>' attribute.
+	 * @see #getPortBaseFuelConsumption()
+	 * @generated
+	 */
+	void setPortBaseFuelConsumption(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Route</b></em>' reference.
