@@ -77,6 +77,7 @@ public class SlotActualsItemProvider
 			addNotesPropertyDescriptor(object);
 			addCVPropertyDescriptor(object);
 			addBaseFuelConsumptionPropertyDescriptor(object);
+			addPortBaseFuelConsumptionPropertyDescriptor(object);
 			addRoutePropertyDescriptor(object);
 			addDistancePropertyDescriptor(object);
 			addRouteCostsPropertyDescriptor(object);
@@ -167,6 +168,28 @@ public class SlotActualsItemProvider
 				 getString("_UI_SlotActuals_baseFuelConsumption_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_baseFuelConsumption_feature", "_UI_SlotActuals_type"),
 				 ActualsPackage.Literals.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Port Base Fuel Consumption feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPortBaseFuelConsumptionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotActuals_portBaseFuelConsumption_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotActuals_portBaseFuelConsumption_feature", "_UI_SlotActuals_type"),
+				 ActualsPackage.Literals.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION,
 				 true,
 				 false,
 				 false,
@@ -549,6 +572,7 @@ public class SlotActualsItemProvider
 			case ActualsPackage.SLOT_ACTUALS__NOTES:
 			case ActualsPackage.SLOT_ACTUALS__CV:
 			case ActualsPackage.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION:
+			case ActualsPackage.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION:
 			case ActualsPackage.SLOT_ACTUALS__DISTANCE:
 			case ActualsPackage.SLOT_ACTUALS__ROUTE_COSTS:
 			case ActualsPackage.SLOT_ACTUALS__CREW_BONUS:

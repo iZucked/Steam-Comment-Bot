@@ -220,13 +220,22 @@ public interface ActualsPackage extends EPackage {
 	int SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 11;
 
 	/**
+	 * The feature id for the '<em><b>Port Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 12;
+
+	/**
 	 * The feature id for the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__ROUTE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 12;
+	int SLOT_ACTUALS__ROUTE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Distance</b></em>' attribute.
@@ -235,7 +244,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__DISTANCE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 13;
+	int SLOT_ACTUALS__DISTANCE = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Route Costs</b></em>' attribute.
@@ -244,7 +253,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__ROUTE_COSTS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 14;
+	int SLOT_ACTUALS__ROUTE_COSTS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Crew Bonus</b></em>' attribute.
@@ -253,7 +262,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__CREW_BONUS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 15;
+	int SLOT_ACTUALS__CREW_BONUS = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Port Charges</b></em>' attribute.
@@ -262,7 +271,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__PORT_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 16;
+	int SLOT_ACTUALS__PORT_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Capacity Charges</b></em>' attribute.
@@ -271,7 +280,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS__CAPACITY_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 17;
+	int SLOT_ACTUALS__CAPACITY_CHARGES = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 18;
 
 	/**
 	 * The number of structural features of the '<em>Slot Actuals</em>' class.
@@ -280,7 +289,7 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 18;
+	int SLOT_ACTUALS_FEATURE_COUNT = TypesPackage.ITIMEZONE_PROVIDER_FEATURE_COUNT + 19;
 
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
@@ -582,6 +591,15 @@ public interface ActualsPackage extends EPackage {
 	int LOAD_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
 
 	/**
+	 * The feature id for the '<em><b>Port Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION;
+
+	/**
 	 * The feature id for the '<em><b>Route</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -824,6 +842,15 @@ public interface ActualsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_ACTUALS__BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__BASE_FUEL_CONSUMPTION;
+
+	/**
+	 * The feature id for the '<em><b>Port Base Fuel Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION;
 
 	/**
 	 * The feature id for the '<em><b>Route</b></em>' reference.
@@ -1120,6 +1147,17 @@ public interface ActualsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlotActuals_BaseFuelConsumption();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getPortBaseFuelConsumption <em>Port Base Fuel Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Base Fuel Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.actuals.SlotActuals#getPortBaseFuelConsumption()
+	 * @see #getSlotActuals()
+	 * @generated
+	 */
+	EAttribute getSlotActuals_PortBaseFuelConsumption();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.actuals.SlotActuals#getRoute <em>Route</em>}'.
@@ -1690,6 +1728,14 @@ public interface ActualsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT_ACTUALS__BASE_FUEL_CONSUMPTION = eINSTANCE.getSlotActuals_BaseFuelConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Base Fuel Consumption</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION = eINSTANCE.getSlotActuals_PortBaseFuelConsumption();
 
 		/**
 		 * The meta object literal for the '<em><b>Route</b></em>' reference feature.

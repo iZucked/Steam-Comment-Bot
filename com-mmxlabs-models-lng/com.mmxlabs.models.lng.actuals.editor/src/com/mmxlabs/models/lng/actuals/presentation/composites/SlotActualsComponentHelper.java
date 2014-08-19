@@ -78,6 +78,7 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 		add_notesEditor(detailComposite, topClass);
 		add_CVEditor(detailComposite, topClass);
 		add_baseFuelConsumptionEditor(detailComposite, topClass);
+		add_portBaseFuelConsumptionEditor(detailComposite, topClass);
 		add_routeEditor(detailComposite, topClass);
 		add_distanceEditor(detailComposite, topClass);
 		add_routeCostsEditor(detailComposite, topClass);
@@ -117,6 +118,15 @@ public class SlotActualsComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseFuelConsumptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__BASE_FUEL_CONSUMPTION));
+	}
+
+	/**
+	 * Create the editor for the portBaseFuelConsumption feature on SlotActuals
+	 *
+	 * @generated
+	 */
+	protected void add_portBaseFuelConsumptionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, ActualsPackage.Literals.SLOT_ACTUALS__PORT_BASE_FUEL_CONSUMPTION));
 	}
 
 	/**
