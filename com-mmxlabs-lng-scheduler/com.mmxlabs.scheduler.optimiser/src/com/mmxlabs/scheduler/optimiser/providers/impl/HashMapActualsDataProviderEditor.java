@@ -28,6 +28,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	private final Map<IPortSlot, Long> volumeInM3 = new HashMap<>();
 	private final Map<IPortSlot, Long> volumeInMMBTu = new HashMap<>();
 	private final Map<IPortSlot, Long> baseFuelConsumptionInMT = new HashMap<>();
+	private final Map<IPortSlot, Long> portBaseFuelConsumptionInMT = new HashMap<>();
 	private final Map<IPortSlot, Long> startHeelInM3 = new HashMap<>();
 	private final Map<IPortSlot, Long> endHeelInM3 = new HashMap<>();
 
@@ -102,6 +103,11 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 	}
 
 	@Override
+	public long getPortBaseFuelConsumptionInMT(final IPortSlot slot) {
+		return portBaseFuelConsumptionInMT.get(slot);
+	}
+	
+	@Override
 	public long getNextVoyageBaseFuelConsumptionInMT(final IPortSlot slot) {
 		return baseFuelConsumptionInMT.get(slot);
 	}
@@ -128,7 +134,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 	@Override
 	public void createLoadSlotActuals(final ILoadOption slot, final int arrivalTime, final int visitDuration, final long portCosts, final int cargoCV, final long startHeelInM3,
-			final long lngLoadVolumeInM3, final long lngLoadVolumeInMMBTu, final int purchasePricePerMMBTu, final long ladenBaseFuelConsumptionInMT, final int baseFuelPricePerMT,
+			final long lngLoadVolumeInM3, final long lngLoadVolumeInMMBTu, final int purchasePricePerMMBTu, final long portBaseFuelConsumptionInMT, final long ladenBaseFuelConsumptionInMT, final int baseFuelPricePerMT,
 			final int charterRatePerDay, final int distance, final long routeCosts, final String route) {
 
 		this.actualsPresent.put(slot, true);
@@ -141,6 +147,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.volumeInM3.put(slot, lngLoadVolumeInM3);
 		this.volumeInMMBTu.put(slot, lngLoadVolumeInMMBTu);
 		this.baseFuelConsumptionInMT.put(slot, ladenBaseFuelConsumptionInMT);
+		this.portBaseFuelConsumptionInMT.put(slot, portBaseFuelConsumptionInMT);
 		this.startHeelInM3.put(slot, startHeelInM3);
 		this.endHeelInM3.put(slot, 0l);
 		this.lngPricePerMMBTu.put(slot, purchasePricePerMMBTu);
@@ -153,7 +160,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 
 	@Override
 	public void createDischargeSlotActuals(final IDischargeOption slot, final int arrivalTime, final int visitDuration, final long portCosts, final int cargoCV, final long endHeelInM3,
-			final long lngDischargeVolumeInM3, final long lngDischargeVolumeInMMBTu, final int salesPricePerMMBTu, final long ballastBaseFuelConsumptionInMT, final int distance,
+			final long lngDischargeVolumeInM3, final long lngDischargeVolumeInMMBTu, final int salesPricePerMMBTu, final long dischargePortBaseFuelConsumptionInMT, final long ballastBaseFuelConsumptionInMT, final int distance,
 			final long routeCosts, final String route) {
 		this.actualsPresent.put(slot, true);
 
@@ -165,6 +172,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.volumeInM3.put(slot, lngDischargeVolumeInM3);
 		this.volumeInMMBTu.put(slot, lngDischargeVolumeInMMBTu);
 		this.baseFuelConsumptionInMT.put(slot, ballastBaseFuelConsumptionInMT);
+		this.portBaseFuelConsumptionInMT.put(slot, dischargePortBaseFuelConsumptionInMT);
 		this.startHeelInM3.put(slot, 0l);
 		this.endHeelInM3.put(slot, endHeelInM3);
 		this.lngPricePerMMBTu.put(slot, salesPricePerMMBTu);
