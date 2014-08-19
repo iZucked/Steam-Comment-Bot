@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.inject.Inject;
-
 import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Inject;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -29,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
+import com.mmxlabs.models.lng.cargo.editor.utils.IAssignableElementComparatorFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
@@ -77,6 +77,9 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
+
+	@Inject(optional = true)
+	private IAssignableElementComparatorFactory assignableElementComparator;
 
 	/*
 	 * (non-Javadoc)
@@ -220,7 +223,12 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		// }
 
 		// Process initial vessel assignments list
-		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
+		final List<CollectedAssignment> assignments;
+		if (assignableElementComparator != null) {
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, assignableElementComparator.create(rootObject));
+		} else {
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
+		}
 		for (final CollectedAssignment seq : assignments) {
 			IVesselAvailability vesselAvailability = null;
 			if (seq.getVesselAvailability() != null) {
