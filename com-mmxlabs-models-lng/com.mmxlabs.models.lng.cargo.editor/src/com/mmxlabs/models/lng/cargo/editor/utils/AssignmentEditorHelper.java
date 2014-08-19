@@ -148,7 +148,7 @@ public class AssignmentEditorHelper {
 		}
 
 		for (final Triple<AVesselSet<? extends Vessel>, Integer, Integer> k : grouping.keySet()) {
-			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getThird()));
+			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getThird(), assignableElementComparator));
 		}
 
 		return result;
