@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
  */
 public class CollectedAssignment {
 
+	private final VesselAvailability vesselAvailability;
 	private final VesselClass vesselClass;
 	private final ArrayList<AssignableElement> assignedObjects = new ArrayList<AssignableElement>();
 	private List<AssignableElement> assignments = null;
@@ -41,30 +42,12 @@ public class CollectedAssignment {
 		sortAssignments(new AssignableElementDateComparator());
 	}
 
-	public CollectedAssignment(final List<AssignableElement> assignments, final VesselAvailability vesselAvailability) {
+	public CollectedAssignment(final List<AssignableElement> assignments, final VesselAvailability vesselAvailability, final IAssignableElementComparator comparator) {
 		this.vesselAvailability = vesselAvailability;
 		this.vesselClass = null;
 		this.spotIndex = null;
 		this.assignments = assignments;
-		sortAssignments(new AssignableElementDateComparator());
-	}
-
-	public CollectedAssignment(final List<AssignableElement> assignments, final VesselClass vesselClass, final int spotIndex) {
-		this.vesselAvailability = null;
-		this.vesselClass = vesselClass;
-		this.assignments = assignments;
-		this.spotIndex = spotIndex;
-		sortAssignments(new AssignableElementDateComparator());
-	}
-
-
-	
-	public CollectedAssignment(final List<AssignableElement> assignments, final AVesselSet<? extends Vessel> vessel, final Integer spotIndex, final IAssignableElementComparator comparator) {
-		this.vesselAvailability = vesselAvailability;
-		this.vesselClass = null;
-		this.spotIndex = null;
-		this.assignments = assignments;
-		sortAssignments();
+		sortAssignments(comparator);
 	}
 
 	public CollectedAssignment(final List<AssignableElement> assignments, final VesselClass vesselClass, final int spotIndex, final IAssignableElementComparator comparator) {
@@ -74,6 +57,7 @@ public class CollectedAssignment {
 		this.spotIndex = spotIndex;
 		sortAssignments(comparator);
 	}
+
 	private void sortAssignments(final IAssignableElementComparator comparator) {
 
 		Collections.sort(assignments, comparator);
