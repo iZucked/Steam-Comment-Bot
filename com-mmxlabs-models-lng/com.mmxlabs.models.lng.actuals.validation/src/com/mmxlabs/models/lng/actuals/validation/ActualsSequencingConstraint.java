@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
 import com.mmxlabs.models.lng.actuals.ReturnActuals;
 import com.mmxlabs.models.lng.actuals.SlotActuals;
+import com.mmxlabs.models.lng.actuals.util.ActualsAssignableElementComparator;
 import com.mmxlabs.models.lng.actuals.validation.internal.Activator;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -97,7 +98,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, new ActualsAssignableElementComparator(actualsModel));
 
 			// Check sequencing for each grouping
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {

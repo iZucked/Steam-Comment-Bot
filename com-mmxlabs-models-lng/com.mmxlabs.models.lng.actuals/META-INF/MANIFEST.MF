@@ -19,5 +19,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.mmxcore;visibility:=reexport,
  com.mmxlabs.models.lng.port;visibility:=reexport,
  com.mmxlabs.models.lng.pricing;visibility:=reexport,
- com.mmxlabs.models.lng.spotmarkets;visibility:=reexport
+ com.mmxlabs.models.lng.spotmarkets;visibility:=reexport,
+ com.mmxlabs.models.lng.cargo.editor
 Bundle-ActivationPolicy: lazy
