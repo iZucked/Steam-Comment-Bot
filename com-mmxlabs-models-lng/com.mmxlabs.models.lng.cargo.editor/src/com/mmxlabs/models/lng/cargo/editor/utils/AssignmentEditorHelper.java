@@ -80,6 +80,10 @@ public class AssignmentEditorHelper {
 	}
 
 	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel) {
+		return collectAssignments(cargoModel, fleetModel, null);
+	}
+
+	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel, IAssignableElementComparator assignableElementComparator) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
 		// Enforce consistent order
 		final Map<Triple<AVesselSet<? extends Vessel>, Integer, Integer>, List<AssignableElement>> grouping = new TreeMap<Triple<AVesselSet<? extends Vessel>, Integer, Integer>, List<AssignableElement>>(
@@ -144,7 +148,7 @@ public class AssignmentEditorHelper {
 		}
 
 		for (final Triple<AVesselSet<? extends Vessel>, Integer, Integer> k : grouping.keySet()) {
-			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getThird()));
+			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getThird(), assignableElementComparator));
 		}
 
 		return result;
@@ -211,8 +215,8 @@ public class AssignmentEditorHelper {
 		maxSpot++;
 		return maxSpot;
 	}
-	
-	public static boolean compileAllowedVessels(List allowedVessels, EObject target){
+
+	public static boolean compileAllowedVessels(List allowedVessels, EObject target) {
 		// The slot intersection may mean no vessels are permitted at all!
 		boolean noVesselsAllowed = false;
 		// populate the list of allowed vessels for the target object
@@ -231,7 +235,7 @@ public class AssignmentEditorHelper {
 				} else {
 					// TODO: hmm, should we check classes vs vessels here?
 					Set<AVesselSet<Vessel>> matchedByClass = new LinkedHashSet<>();
-					// 
+					//
 					for (AVesselSet<Vessel> v1 : vessels) {
 						if (v1 instanceof Vessel) {
 							for (AVesselSet<Vessel> v2 : slotVessels) {
