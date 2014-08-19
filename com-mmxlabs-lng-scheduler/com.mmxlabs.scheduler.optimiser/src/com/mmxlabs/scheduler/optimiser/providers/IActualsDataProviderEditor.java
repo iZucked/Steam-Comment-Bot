@@ -17,10 +17,10 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 public interface IActualsDataProviderEditor extends IActualsDataProvider {
 
 	void createLoadSlotActuals(ILoadOption slot, int arrivalTime, int visitDuration, long portCosts, int cargoCV, long startHeelInM3, long lngLoadVolumeInM3, long lngLoadVolumeInMMBTu,
-			int purchasePricePerMMBTu, long ladenBaseFuelConsumptionInMT, int baseFuelPricePerMT, int charterRatePerDay, int ladenDistance, long ladenRouteCosts, String route);
+			int purchasePricePerMMBTu, long portBaseFuelConsumptionInMT, long ladenBaseFuelConsumptionInMT, int baseFuelPricePerMT, int charterRatePerDay, int ladenDistance, long ladenRouteCosts, String route);
 
 	void createDischargeSlotActuals(IDischargeOption slot, int arrivalTime, int visitDuration, long portCosts, int cargoCV, long endHeelInM3, long lngDischargeVolumeInM3,
-			long lngDischargeVolumeInMMBTu, int salesPricePerMMBTu, long ballastBaseFuelConsumptionInMT, int ballastDistance, long ballastRouteCosts, String route);
+			long lngDischargeVolumeInMMBTu, int salesPricePerMMBTu,long portBaseFuelConsumptionInMT,  long ballastBaseFuelConsumptionInMT, int ballastDistance, long ballastRouteCosts, String route);
 
 	void setNextDestinationActuals(IPortSlot lastSlot, IPort returnPort, int returnTime, long endHeelInM3);
 

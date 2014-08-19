@@ -494,10 +494,6 @@ public class VoyagePlanner {
 					final PortDetails portDetails = new PortDetails();
 					portDetails.setOptions(portOptions);
 
-					// No port fuel consumption, rolled into the voyage details.
-					// portDetails.setFuelConsumption(fuel, consumption);
-					// portDetails.setFuelUnitPrice(fuel, price);
-
 					if (actualsDataProvider.hasActuals(portOptions.getPortSlot())) {
 						portDetails.setPortCosts(actualsDataProvider.getPortCosts(portOptions.getPortSlot()));
 					}
@@ -519,6 +515,13 @@ public class VoyagePlanner {
 					portDetails.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
 					portDetails.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
 
+					// Port Fuel Consumption
+					if (idx < voyageOrPortOptions.size() - 1) {
+						final long baseFuelConsumptionInMt = actualsDataProvider.getPortBaseFuelConsumptionInMT(portOptions.getPortSlot());
+						fuelConsumptions[FuelComponent.Base.ordinal()] += baseFuelConsumptionInMt;
+						fuelCosts[FuelComponent.Base.ordinal()] += Calculator.costFromConsumption(baseFuelConsumptionInMt, baseFuelPricePerMT);
+						portDetails.setFuelConsumption(FuelComponent.Base, baseFuelConsumptionInMt);
+					}
 					detailedSequence[idx] = portDetails;
 				} else if (element instanceof VoyageOptions) {
 					final VoyageOptions voyageOptions = (VoyageOptions) element;
@@ -539,7 +542,6 @@ public class VoyagePlanner {
 					voyageDetails.setFuelUnitPrice(FuelComponent.Base_Supplemental, baseFuelPricePerMT);
 					voyageDetails.setFuelUnitPrice(FuelComponent.PilotLight, baseFuelPricePerMT);
 					voyageDetails.setFuelUnitPrice(FuelComponent.IdlePilotLight, baseFuelPricePerMT);
-
 
 					final long baseFuelConsumptionInMt = actualsDataProvider.getNextVoyageBaseFuelConsumptionInMT(voyageOptions.getFromPortSlot());
 					voyageDetails.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, baseFuelConsumptionInMt);
