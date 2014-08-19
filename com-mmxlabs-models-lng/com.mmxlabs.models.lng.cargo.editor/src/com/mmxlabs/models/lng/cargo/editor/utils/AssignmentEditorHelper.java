@@ -82,6 +82,10 @@ public class AssignmentEditorHelper {
 	}
 
 	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel) {
+		return collectAssignments(cargoModel, fleetModel, null);
+	}
+
+	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel, IAssignableElementComparator assignableElementComparator) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
 		// Enforce consistent order
 		final Map<Pair<VesselAvailability, Integer>, List<AssignableElement>> fleetGrouping = new TreeMap<Pair<VesselAvailability, Integer>, List<AssignableElement>>(
@@ -176,7 +180,7 @@ public class AssignmentEditorHelper {
 		}
 
 		for (final Pair<VesselAvailability, Integer> k : fleetGrouping.keySet()) {
-			result.add(new CollectedAssignment(fleetGrouping.get(k), k.getFirst()));
+			result.add(new CollectedAssignment(fleetGrouping.get(k), k.getFirst(), assignableElementComparator));
 		}
 		for (final Triple<VesselClass, Integer, Integer> k : spotGrouping.keySet()) {
 			result.add(new CollectedAssignment(spotGrouping.get(k), k.getFirst(), k.getThird()));
