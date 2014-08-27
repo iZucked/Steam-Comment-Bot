@@ -427,7 +427,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		assert (loadIdx < 0 && dischargeIdx < 0) || (loadIdx >= 0 && dischargeIdx >= 0);
 
 		for (int i = 0; i < sequence.length; ++i) {
-			if ((i % 2) == 1) {
+			if ((i % 2) != 0) {
 				// Voyage
 				final VoyageDetails details = (VoyageDetails) sequence[i];
 
