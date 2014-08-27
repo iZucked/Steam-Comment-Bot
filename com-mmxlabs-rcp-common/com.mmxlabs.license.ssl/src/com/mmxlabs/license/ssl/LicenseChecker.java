@@ -38,8 +38,8 @@ public final class LicenseChecker {
 	/**
 	 */
 	public static enum LicenseState {
-		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid("License is not valid yet. Please contact Minimax Labs."), 
-		KeystoreNotFound("Unable to find license file");
+		Valid, Expired("License has expired. Please contact Minimax Labs."), Unknown("Unkown problem validating license file."), NotYetValid("License is not valid yet. Please contact Minimax Labs."), KeystoreNotFound(
+				"Unable to find license file");
 
 		private final String message;
 
@@ -69,11 +69,11 @@ public final class LicenseChecker {
 			final KeyStore keyStore = KeyStore.getInstance("JKS");
 			// TODO: Load from bundle resource
 			final URL keyStoreUrl = Activator.getDefault().getBundle().getResource("keystore.jks");
-			final InputStream astream = keyStoreUrl.openStream();
-			try {
+			if (keyStoreUrl == null) {
+				return LicenseState.KeystoreNotFound;
+			}
+			try (final InputStream astream = keyStoreUrl.openStream()) {
 				keyStore.load(astream, password.toCharArray());
-			} finally {
-				astream.close();
 			}
 
 			final Certificate rootCertificate = keyStore.getCertificate("rootca");
