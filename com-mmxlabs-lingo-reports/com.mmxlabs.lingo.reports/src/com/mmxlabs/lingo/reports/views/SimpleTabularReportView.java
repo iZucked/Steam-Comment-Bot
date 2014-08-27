@@ -66,8 +66,8 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	private ScenarioViewerSynchronizer viewerSynchronizer;
 
-	private SimpleContentAndColumnProvider<T> contentProvider;
-	
+	// private SimpleContentAndColumnProvider<T> contentProvider;
+
 	public class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
 		public ViewLabelProvider() {
@@ -75,10 +75,10 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 		@Override
 		public void dispose() {
-			for (ColumnManager<T> manager: columnManagers) {
+			for (ColumnManager<T> manager : columnManagers) {
 				manager.dispose();
 			}
-			
+
 			super.dispose();
 		}
 
@@ -88,7 +88,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			if (index >= columnManagers.size()) {
 				return "";
 			}
-			return columnManagers.get(index).getColumnText((T) obj);				
+			return columnManagers.get(index).getColumnText((T) obj);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -166,12 +166,12 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
-		final SimpleContentAndColumnProvider<T> contentProvider = createContentProvider(); 
-		this.contentProvider = contentProvider;
-		
+		final SimpleContentAndColumnProvider<T> contentProvider = createContentProvider();
+		// this.contentProvider = contentProvider;
+
 		viewer = new GridTreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION) {
 			final List<GridViewerColumn> viewerColumns = new ArrayList<GridViewerColumn>();
-			
+
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
@@ -179,7 +179,7 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
 				final boolean oldInputEmpty = (oldInput == null)
 						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
-								
+
 				columnManagers.clear();
 				columnManagers.addAll(contentProvider.getColumnManagers());
 				clearColumns();
@@ -193,9 +193,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					}
 				}
 			};
-			
+
 			protected void addColumns() {
-				for (ColumnManager<T> cv: columnManagers) {
+				for (ColumnManager<T> cv : columnManagers) {
 					String name = cv.getName();
 					GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
 					viewerColumns.add(gvc);
@@ -209,9 +209,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 					}
 				}
 			}
-			
+
 			protected void clearColumns() {
-				for (GridViewerColumn gvc: viewerColumns) {
+				for (GridViewerColumn gvc : viewerColumns) {
 					gvc.getColumn().dispose();
 				}
 				viewerColumns.clear();
@@ -219,25 +219,15 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 		};
 		viewer.setContentProvider(contentProvider);
 		viewer.setInput(getViewSite());
-		
-		
+
 		// get a list of column managers from the content / column provider
-		List<ColumnManager<T>> columnManagers = contentProvider.getColumnManagers();
-		
-		
+		// List<ColumnManager<T>> columnManagers = contentProvider.getColumnManagers();
+
 		/*
-		// add corresponding columns to the report
-		for (ColumnManager<T> cv: columnManagers) {
-			String name = cv.getName();
-			GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE);
-			GridColumn gc = gvc.getColumn();
-			gc.setText(name);
-			gc.pack();
-			addSortSelectionListener(gc, cv);
-		}
-		*/
-		
-			
+		 * // add corresponding columns to the report for (ColumnManager<T> cv: columnManagers) { String name = cv.getName(); GridViewerColumn gvc = new GridViewerColumn(viewer, SWT.NONE); GridColumn
+		 * gc = gvc.getColumn(); gc.setText(name); gc.pack(); addSortSelectionListener(gc, cv); }
+		 */
+
 		viewer.setLabelProvider(new ViewLabelProvider());
 
 		viewer.getGrid().setLinesVisible(true);
@@ -248,9 +238,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 				final int d = inverseSort ? -1 : 1;
-				for (ColumnManager<T> cm: sortColumns) {
+				for (ColumnManager<T> cm : sortColumns) {
 					int sort = cm.compare((T) e1, (T) e2);
-					if (sort != 0) { 
+					if (sort != 0) {
 						return d * sort;
 					}
 				}
@@ -290,14 +280,13 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 	}
 
 	/**
-	 * Must be implemented by descendant classes to produce a SimpleContentAndColumnProvider
-	 * object, which will provide column manager information (a list of columns with: names, sort
-	 * comparators, and methods to get display text from a row object)
+	 * Must be implemented by descendant classes to produce a SimpleContentAndColumnProvider object, which will provide column manager information (a list of columns with: names, sort comparators, and
+	 * methods to get display text from a row object)
 	 * 
 	 * @return
 	 */
-	abstract protected SimpleContentAndColumnProvider<T> createContentProvider(); 
-	
+	abstract protected SimpleContentAndColumnProvider<T> createContentProvider();
+
 	private void hookContextMenu() {
 		final MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -379,8 +368,9 @@ public abstract class SimpleTabularReportView<T> extends ViewPart {
 
 	@Override
 	public void dispose() {
-
-		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
+		if (viewerSynchronizer != null) {
+			ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
+		}
 		super.dispose();
 	}
 
