@@ -34,8 +34,6 @@ public final class VesselClass implements IVesselClass {
 
 	private long idlePilotLightRate;
 
-	private final EnumMap<VesselState, Integer> minNBOSpeed = new EnumMap<VesselState, Integer>(VesselState.class);
-
 	private long safetyHeel;
 
 	private int minBaseFuelConsumptionInMTPerDay;
@@ -130,15 +128,6 @@ public final class VesselClass implements IVesselClass {
 	@Override
 	public long getSafetyHeel() {
 		return safetyHeel;
-	}
-
-	@Override
-	public int getMinNBOSpeed(final VesselState vesselState) {
-		return CollectionsUtil.getValue(minNBOSpeed, vesselState, 0);
-	}
-
-	public void setMinNBOSpeed(final VesselState vesselState, final int minNBOSpeed) {
-		this.minNBOSpeed.put(vesselState, minNBOSpeed);
 	}
 
 	public void setSafetyHeel(final long safetyHeel) {

@@ -131,9 +131,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	protected final void calculateRouteAdditionalFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
 			final int additionalRouteTimeInHours) {
 
-		final int equivalenceFactorM3ToMT = vesselClass.getBaseFuelConversionFactor();
+		final int equivalenceFactorMMBTuToMT = vesselClass.getBaseFuelConversionFactor();
 
 		final long routeRequiredConsumptionInMT = Calculator.quantityFromRateTime(routeCostProvider.getRouteFuelUsage(options.getRoute(), vesselClass, vesselState), additionalRouteTimeInHours) / 24l;
+		final int cargoCVValue = options.getCargoCVValue();
 
 		if (routeRequiredConsumptionInMT > 0) {
 
@@ -148,7 +149,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				/**
 				 * How much NBO is produced while in the canal (MTBFE)
 				 */
-				final long routeNboProvidedInMT = Calculator.convertM3ToMT(routeNboProvidedInM3, equivalenceFactorM3ToMT);
+
+				final long routeNboProvidedInMT = Calculator.convertM3ToMT(routeNboProvidedInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
 				/**
 				 * How much FBO is produced while in the canal (M3)
@@ -174,7 +176,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					if (options.useFBOForSupplement()) {
 						routeDiffInMT = 0;
 						routeFboProvidedInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
-						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, equivalenceFactorM3ToMT);
+						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
 
 						final long pilotLightRateINMTPerDay = vesselClass.getPilotLightRate();
 						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerDay, additionalRouteTimeInHours) / 24l;
@@ -232,8 +234,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final long idleNBORateInM3PerDay = vesselClass.getIdleNBORate(vesselState);
 
 			if (options.useNBOForIdle()) {
+				final int cargoCVValue = options.getCargoCVValue();
 				final long nboRequiredInM3 = Calculator.quantityFromRateTime(idleNBORateInM3PerDay, idleTimeInHours) / 24l;
-				final long nboRequiredInMT = Calculator.convertM3ToMT(nboRequiredInM3, equivalenceFactorM3ToMT);
+				final long nboRequiredInMT = Calculator.convertM3ToMT(nboRequiredInM3, cargoCVValue, equivalenceFactorM3ToMT);
 
 				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3, nboRequiredInM3);
 				output.setFuelConsumption(FuelComponent.IdleNBO, FuelUnit.MT, nboRequiredInMT);
@@ -259,7 +262,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	protected final void calculateTravelFuelRequirements(final VoyageOptions options, final VoyageDetails output, final IVesselClass vesselClass, final VesselState vesselState,
 			final int travelTimeInHours, final int speed) {
 
-		final int equivalenceFactorM3ToMT = vesselClass.getBaseFuelConversionFactor();
+		final int equivalenceFactorMMBTuToMT = vesselClass.getBaseFuelConversionFactor();
 
 		/**
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this journey
@@ -271,6 +274,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerDay, travelTimeInHours) / 24l;
 
 		if (options.useNBOForTravel()) {
+			final int cargoCVValue = options.getCargoCVValue();
+
 			final long nboRateInM3PerDay = vesselClass.getNBORate(vesselState);
 			/**
 			 * The total quantity of LNG inevitably boiled off in this journey, in M3
@@ -279,7 +284,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			/**
 			 * The total quantity of LNG inevitably boiled off in this journey, in MT. Normally less than the amount boiled off in M3
 			 */
-			final long nboProvidedInMT = Calculator.convertM3ToMT(nboProvidedInM3, equivalenceFactorM3ToMT);
+			final long nboProvidedInMT = Calculator.convertM3ToMT(nboProvidedInM3, cargoCVValue, equivalenceFactorMMBTuToMT);
 
 			if (nboProvidedInMT < requiredConsumptionInMT) {
 				/**
@@ -288,7 +293,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final long diffInMT = requiredConsumptionInMT - nboProvidedInMT;
 				if (options.useFBOForSupplement()) {
 					// Use FBO for remaining quantity
-					final long diffInM3 = Calculator.convertMTToM3(diffInMT, equivalenceFactorM3ToMT);
+					final long diffInM3 = Calculator.convertMTToM3(diffInMT, cargoCVValue, equivalenceFactorMMBTuToMT);
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.M3, diffInM3);
 					output.setFuelConsumption(FuelComponent.FBO, FuelUnit.MT, diffInMT);
 					output.setFuelConsumption(FuelComponent.Base_Supplemental, FuelUnit.MT, 0);
@@ -625,8 +630,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// If load or discharge has been set, then the other must be too.
 		assert ((loadIdx == -1) == (dischargeIdx == -1));
 
-		int cargoCVValue = 0;
-
 		// the LNG which will be required to complete the sequence, including
 		// NBO, FBO and any safety heel if travelling on NBO
 		long lngCommitmentInM3;
@@ -637,9 +640,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 			final PortDetails dischargeDetails = (PortDetails) sequence[dischargeIdx];
 			final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
-
-			// Store cargoCVValue
-			cargoCVValue = loadSlot.getCargoCVValue();
 
 			// the LNG which would by default be consumed for the given fuel usage choices during travel & idle
 			lngCommitmentInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
@@ -748,7 +748,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final IPortSlot firstSlot = ((PortDetails) sequence[0]).getOptions().getPortSlot();
 			if (firstSlot instanceof IHeelOptionsPortSlot) {
 				final IHeelOptions options = ((IHeelOptionsPortSlot) firstSlot).getHeelOptions();
-				cargoCVValue = options.getHeelCVValue();
 
 				// If we have not been able to use NBO, assume there was no LNG..
 				// .. unless we have a zero length voyage in which case we would not have used any BOG.
@@ -778,6 +777,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			final Object element = sequence[i];
 			if (element instanceof VoyageDetails) {
 				final VoyageDetails details = (VoyageDetails) element;
+				final int cargoCVValue = details.getOptions().getCargoCVValue();
 				for (final FuelComponent fc : FuelComponent.getLNGFuelComponents()) {
 					// Existing consumption data is in M3, also store the MMBtu values
 					final long consumptionInM3 = details.getFuelConsumption(fc, fc.getDefaultFuelUnit()) + details.getRouteAdditionalConsumption(fc, fc.getDefaultFuelUnit());

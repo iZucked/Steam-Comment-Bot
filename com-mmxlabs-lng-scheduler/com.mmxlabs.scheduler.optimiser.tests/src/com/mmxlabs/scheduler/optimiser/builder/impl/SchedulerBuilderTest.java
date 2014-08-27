@@ -194,7 +194,7 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = createScheduleBuilder();
 
-		builder.setVesselClassStateParameters(vc, null, 0, 0, 0, null, 0, 0);
+		builder.setVesselClassStateParameters(vc, null, 0, 0, 0, null, 0);
 	}
 
 	private SchedulerBuilder createScheduleBuilder() {

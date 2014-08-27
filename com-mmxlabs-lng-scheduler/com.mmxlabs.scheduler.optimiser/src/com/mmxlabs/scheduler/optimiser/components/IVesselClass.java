@@ -94,21 +94,15 @@ public interface IVesselClass {
 	long getSafetyHeel();
 
 	/**
-	 * Returns the speed the vessel must travel at to use up all NBO.
-	 * 
-	 * @return
-	 */
-	int getMinNBOSpeed(VesselState vesselState);
-
-	/**
 	 * Returns the slowest usable speed of this vessel.
 	 * 
 	 * @return
 	 */
 	int getMinSpeed();
-	
+
 	/**
 	 * Returns the vessels "service" speed. Used in e.g. P&L based calculations
+	 * 
 	 * @return
 	 */
 	int getServiceSpeed(VesselState vesselState);
@@ -153,6 +147,7 @@ public interface IVesselClass {
 
 	/**
 	 * MT/day of base fuel required as a *minimum* consumption for all events (port, travel & idle).
+	 * 
 	 * @return
 	 */
 	int getMinBaseFuelConsumptionInMTPerDay();

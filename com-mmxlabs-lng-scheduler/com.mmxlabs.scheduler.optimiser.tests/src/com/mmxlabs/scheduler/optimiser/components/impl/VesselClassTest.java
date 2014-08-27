@@ -74,21 +74,6 @@ public class VesselClassTest {
 	}
 
 	@Test
-	public void testGetSetMinNBOSpeed() {
-		final VesselState state1 = VesselState.Laden;
-		final VesselState state2 = VesselState.Ballast;
-
-		final int value = 100;
-		final VesselClass vesselClass = new VesselClass();
-		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state1));
-		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state2));
-		vesselClass.setMinNBOSpeed(state1, value);
-		Assert.assertEquals(value, vesselClass.getMinNBOSpeed(state1));
-		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state2));
-
-	}
-
-	@Test
 	public void testGetSetNBORate() {
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
@@ -131,20 +116,6 @@ public class VesselClassTest {
 		Assert.assertSame(calc, vesselClass.getConsumptionRate(state1));
 		Assert.assertNull(vesselClass.getConsumptionRate(state2));
 
-	}
-
-	@Test
-	public void testGetSetNBOSpeed() {
-		final VesselState state1 = VesselState.Laden;
-		final VesselState state2 = VesselState.Ballast;
-
-		final int value = 100;
-		final VesselClass vesselClass = new VesselClass();
-		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state1));
-		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state2));
-		vesselClass.setMinNBOSpeed(state1, value);
-		Assert.assertEquals(value, vesselClass.getMinNBOSpeed(state1));
-		Assert.assertEquals(0, vesselClass.getMinNBOSpeed(state2));
 	}
 
 	@Test

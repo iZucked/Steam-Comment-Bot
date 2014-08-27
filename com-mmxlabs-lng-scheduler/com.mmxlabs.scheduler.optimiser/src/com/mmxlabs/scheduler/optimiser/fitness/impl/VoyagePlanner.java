@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
@@ -127,7 +128,7 @@ public class VoyagePlanner {
 	private VoyageOptions getVoyageOptionsAndSetVpoChoices(final IVesselAvailability vesselAvailability, final VesselState vesselState, final int availableTime, final ISequenceElement element,
 			final ISequenceElement prevElement, final VoyageOptions previousOptions, final IVoyagePlanOptimiser optimiser, boolean useNBO) {
 
-		final int nboSpeed = vesselAvailability.getVessel().getVesselClass().getMinNBOSpeed(vesselState);
+		final IVesselClass vesselClass = vesselAvailability.getVessel().getVesselClass();
 
 		final IPort thisPort = portProvider.getPortForElement(element);
 		final IPort prevPort = portProvider.getPortForElement(prevElement);
@@ -140,7 +141,6 @@ public class VoyagePlanner {
 		options.setVessel(vesselAvailability.getVessel());
 		options.setFromPortSlot(prevPortSlot);
 		options.setToPortSlot(thisPortSlot);
-		options.setNBOSpeed(nboSpeed);
 		options.setVesselState(vesselState);
 		options.setAvailableTime(availableTime);
 
@@ -151,17 +151,28 @@ public class VoyagePlanner {
 			useNBO = true;
 		}
 
-		if (prevPortSlot instanceof IHeelOptionsPortSlot) {
+		final int cargoCV;
+		if (actualsDataProvider.hasActuals(prevPortSlot)) {
+			cargoCV = actualsDataProvider.getCVValue(prevPortSlot);
+		} else if (prevPortSlot instanceof IHeelOptionsPortSlot) {
 			final IHeelOptionsPortSlot heelOptionsSlot = (IHeelOptionsPortSlot) prevPortSlot;
-			// options.setAvailableLNG(Math.min(vessel.getVesselClass().getCargoCapacity(), heelOptions.getHeelOptions().getHeelLimit()));
 			if (heelOptionsSlot.getHeelOptions().getHeelLimit() > 0) {
 				useNBO = true;
 				forceNBO = false;
 			} else {
 				useNBO = false;
 				forceNBO = false;
+				// FIXME: Setting 0 here breaks most unit tests....
+				// cargoCV = 0;
 			}
+			cargoCV = heelOptionsSlot.getHeelOptions().getHeelCVValue();
+		} else if (prevPortSlot instanceof ILoadOption) {
+			ILoadOption loadOption = (ILoadOption) prevPortSlot;
+			cargoCV = loadOption.getCargoCVValue();
+		} else {
+			cargoCV = previousOptions.getCargoCVValue();
 		}
+
 
 		if ((prevPortType == PortType.DryDock) || (prevPortType == PortType.Maintenance)) {
 			options.setWarm(true);
@@ -169,6 +180,13 @@ public class VoyagePlanner {
 			options.setWarm(false);
 		}
 
+		options.setCargoCVValue(cargoCV);
+
+		// Convert rate to MT equivalent per day
+		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(vesselState), cargoCV, vesselClass.getBaseFuelConversionFactor());
+		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
+		options.setNBOSpeed(nboSpeed);
+		
 		// Determined by voyage plan optimiser
 		options.setUseNBOForTravel(useNBO);
 		options.setUseFBOForSupplement(false);
@@ -337,7 +355,6 @@ public class VoyagePlanner {
 
 				final VoyageOptions options = getVoyageOptionsAndSetVpoChoices(vesselAvailability, states[idx], availableTime, element, prevElement, previousOptions, voyagePlanOptimiser, useNBO);
 				useNBO = options.useNBOForTravel();
-
 				voyageOrPortOptions.add(options);
 				previousOptions = options;
 			}
@@ -439,7 +456,7 @@ public class VoyagePlanner {
 				voyagePlanOptimiser.reset();
 			} else {
 				final int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: not utc */
-						vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
+				vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 
 				final VoyagePlan plan = getOptimisedVoyagePlan(voyageOrPortOptions, portTimesRecord, voyagePlanOptimiser, heelVolumeInM3, vesselCharterInRatePerDay);
 				if (plan == null) {

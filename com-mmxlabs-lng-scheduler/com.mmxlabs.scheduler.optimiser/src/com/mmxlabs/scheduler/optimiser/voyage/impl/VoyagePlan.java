@@ -116,7 +116,7 @@ public final class VoyagePlan implements Cloneable {
 			// Ensure all fields are present here
 			// @formatter:off
 			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
-					&& Objects.equal(sequence, plan.sequence)
+					&& Arrays.deepEquals(sequence, plan.sequence)
 					&& Objects.equal(charterInRatePerDay, plan.charterInRatePerDay)
 					&& Objects.equal(violationsCount, plan.violationsCount)
 					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)

@@ -36,7 +36,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -97,28 +96,6 @@ public interface ISchedulerBuilder {
 	@NonNull
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long safetyHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
 			int warmupTimeInHours, long cooldownVolumeInM3, int minBaseFuelConsumptionPerDay);
-
-	/**
-	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
-	 * 
-	 * @param vesselClass
-	 * @param state
-	 * @param nboRateInM3PerHour
-	 *            Hourly scaled M3 of LNG rate of boil-off when travelling
-	 * @param idleNBORateInM3PerHour
-	 *            Hourly scaled M3 of LNG rate of boil-off when idling
-	 * @param idleConsumptionRateInMTPerHour
-	 *            Hourly scaled MT of base fuel consumption rate when idle
-	 * @param inPortConsumptionRateInMTPerHour
-	 *            Hourly scale MT of base fuel consumption when in port.
-	 * @param consumptionRateCalculatorInMTPerHour
-	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
-	 * @param nboSpeed
-	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling. * @param serviceSpeed Service speed of vessel in scaled knots
-	 * 
-	 */
-	void setVesselClassStateParameters(@NonNull IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed, int serviceSpeed);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -233,7 +210,7 @@ public interface ISchedulerBuilder {
 	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, long cargoCapacity);
 
 	IHeelOptions createHeelOptions(final long heelLimitInM3, final int heelCVValue, final int heelUnitPrice);
-	
+
 	/**
 	 * Create a vessel availability for the with the given vessel .
 	 * 
