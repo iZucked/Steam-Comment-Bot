@@ -401,6 +401,7 @@ public class InclusionCheckerTest {
 		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
 	}
 
+	@Test
 	public void getObjectInVesselAvailabilityRangeTest() {
 
 		final InclusionChecker checker = new InclusionChecker();
@@ -413,7 +414,7 @@ public class InclusionCheckerTest {
 		Mockito.when(portVisit.getEnd()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 
 		// No bounds, so always in
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assert.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
 
 		// Completely in
 		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
@@ -426,7 +427,7 @@ public class InclusionCheckerTest {
 		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10));
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assert.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
 
 		// Partially in
 		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
@@ -439,7 +440,7 @@ public class InclusionCheckerTest {
 		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
 		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 10));
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assert.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
 
 		// Partially in
 		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
@@ -452,7 +453,7 @@ public class InclusionCheckerTest {
 		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
 		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8, 1));
 
-		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assert.assertEquals(InclusionType.In, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
 
 		// Completely out
 		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
@@ -464,7 +465,7 @@ public class InclusionCheckerTest {
 		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
 		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7));
 		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23));
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Unknown), checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assert.assertEquals(InclusionType.Out, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
 
 		// Completely out
 		Mockito.when(vesselAvailability.isSetStartAfter()).thenReturn(Boolean.TRUE);
@@ -476,7 +477,7 @@ public class InclusionCheckerTest {
 		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
 		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 11));
 		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 12));
-		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Unknown), checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
+		Assert.assertEquals(InclusionType.Out, checker.getObjectInVesselAvailabilityRange(portVisit, vesselAvailability));
 
 	}
 }
