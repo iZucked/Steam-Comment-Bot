@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -32,7 +30,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.port.PortGroup;
@@ -41,7 +38,6 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -81,44 +77,44 @@ public class PortGroupView extends ScenarioInstanceView {
 	};
 
 	private IContentProvider portProvider = new IStructuredContentProvider() {
-		Viewer viewer;
-		private MMXContentAdapter contentAdapter = new MMXContentAdapter() {
-			@Override
-			public void reallyNotifyChanged(Notification notification) {
-				if (notification.isTouch() == false)
-					refresh();
-			}
+		// Viewer viewer;
+		// private MMXContentAdapter contentAdapter = new MMXContentAdapter() {
+		// @Override
+		// public void reallyNotifyChanged(Notification notification) {
+		// if (notification.isTouch() == false)
+		// refresh();
+		// }
+		//
+		// private void refresh() {
+		// if (viewer != null && viewer.getControl().isDisposed()) {
+		// // remove myself
+		// if (lastInput != null)
+		// lastInput.eAdapters().remove(this);
+		// } else {
+		// Display.getDefault().asyncExec(new Runnable() {
+		// @Override
+		// public void run() {
+		// if (viewer != null && !viewer.getControl().isDisposed())
+		// viewer.refresh();
+		// }
+		// });
+		// }
+		// }
+		// };
 
-			private void refresh() {
-				if (viewer != null && viewer.getControl().isDisposed()) {
-					// remove myself
-					if (lastInput != null)
-						lastInput.eAdapters().remove(this);
-				} else {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if (viewer != null && !viewer.getControl().isDisposed())
-								viewer.refresh();
-						}
-					});
-				}
-			}
-		};
-
-		EObject lastInput;
+		// private EObject lastInput;
 
 		@Override
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-			if (oldInput instanceof EObject) {
-				((EObject) oldInput).eAdapters().remove(contentAdapter);
-			}
-			if (newInput instanceof EObject) {
-				((EObject) newInput).eAdapters().add(contentAdapter);
-				lastInput = (EObject) newInput;
-			} else {
-				lastInput = null;
-			}
+			// if (oldInput instanceof EObject) {
+			// ((EObject) oldInput).eAdapters().remove(contentAdapter);
+			// }
+			// if (newInput instanceof EObject) {
+			// // ((EObject) newInput).eAdapters().add(contentAdapter);
+			// lastInput = (EObject) newInput;
+			// } else {
+			// lastInput = null;
+			// }
 
 			if (newInput != oldInput)
 				viewer.refresh();
@@ -126,17 +122,17 @@ public class PortGroupView extends ScenarioInstanceView {
 
 		@Override
 		public void dispose() {
-			if (lastInput != null) {
-				lastInput.eAdapters().remove(contentAdapter);
-			}
-			lastInput = null;
+			// if (lastInput != null) {
+			// lastInput.eAdapters().remove(contentAdapter);
+			// }
+			// lastInput = null;
 		}
 
 		@Override
 		public Object[] getElements(Object inputElement) {
 			if (inputElement instanceof PortModel) {
-				Object[] array = ((PortModel) inputElement).getPorts().toArray();
-				Arrays.sort(array, (Comparator) new Comparator<NamedObject>() {
+				NamedObject[] array = ((PortModel) inputElement).getPorts().toArray(new NamedObject[0]);
+				Arrays.sort(array, new Comparator<NamedObject>() {
 					@Override
 					public int compare(NamedObject o1, NamedObject o2) {
 						return o1.getName().compareTo(o2.getName());
