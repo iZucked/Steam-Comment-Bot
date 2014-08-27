@@ -10,8 +10,10 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.transformer.extensions.redirection.IVoyageCostCalculator;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -58,10 +60,10 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 
 	protected @NonNull
 	VoyageDetails calculateVoyageDetails(@NonNull final VesselState vesselState, @NonNull final IVessel vessel, @NonNull final String route, final int distance, final int availableTime,
-			@NonNull final PortSlot from, @NonNull final PortSlot to) {
+			@NonNull final PortSlot from, @NonNull final PortSlot to, final int cargoCV) {
 		final VoyageDetails voyageDetails = new VoyageDetails();
 		{
-			final VoyageOptions voyageOptions = createVoyageOptions(vesselState, vessel, route, distance, availableTime, from, to);
+			final VoyageOptions voyageOptions = createVoyageOptions(vesselState, vessel, route, distance, availableTime, from, to, cargoCV);
 
 			voyageCalculator.calculateVoyageFuelRequirements(voyageOptions, voyageDetails);
 		}
@@ -69,13 +71,13 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 	}
 
 	protected @NonNull
-	VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final String route, final int distance, final int availableTime, final PortSlot from, final PortSlot to) {
+	VoyageOptions createVoyageOptions(final VesselState vesselState, final IVessel vessel, final String route, final int distance, final int availableTime, final PortSlot from, final PortSlot to,
+			final int cargoCV) {
 		final VoyageOptions voyageOptions = new VoyageOptions();
 		voyageOptions.setAvailableTime(availableTime);
 		voyageOptions.setAllowCooldown(false);
 		voyageOptions.setDistance(distance);
 		voyageOptions.setFromPortSlot(from);
-		voyageOptions.setNBOSpeed(vessel.getVesselClass().getMinNBOSpeed(vesselState));
 		voyageOptions.setRoute(route);
 		voyageOptions.setToPortSlot(to);
 		voyageOptions.setShouldBeCold(true);
@@ -85,6 +87,12 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		voyageOptions.setVessel(vessel);
 		voyageOptions.setVesselState(vesselState);
 		voyageOptions.setWarm(false);
+
+		final IVesselClass vesselClass = vessel.getVesselClass();
+		// Convert rate to MT equivalent per day
+		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(vesselState), cargoCV, vesselClass.getBaseFuelConversionFactor());
+		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
+		voyageOptions.setNBOSpeed(nboSpeed);
 		return voyageOptions;
 	}
 
