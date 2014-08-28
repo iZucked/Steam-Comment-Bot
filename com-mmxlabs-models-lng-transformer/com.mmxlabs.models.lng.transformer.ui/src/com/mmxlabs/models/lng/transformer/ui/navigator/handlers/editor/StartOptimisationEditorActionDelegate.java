@@ -48,11 +48,11 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
-
+		assert action != null;
 		super.setActiveEditor(action, targetEditor);
 
 		final boolean enabled = false;
-		if (action != null && targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+		if (targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
 			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) targetEditor.getEditorInput();
