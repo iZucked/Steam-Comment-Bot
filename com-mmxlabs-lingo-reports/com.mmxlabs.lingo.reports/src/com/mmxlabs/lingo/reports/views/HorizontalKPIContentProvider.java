@@ -5,10 +5,7 @@
 package com.mmxlabs.lingo.reports.views;
 
 import java.util.ArrayList;
-import java.util.EventObject;
 
-import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -43,17 +40,6 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 class HorizontalKPIContentProvider implements IStructuredContentProvider {
-
-	private final CommandStackListener commandStackListener = new CommandStackListener() {
-
-		@Override
-		public void commandStackChanged(final EventObject event) {
-			currentViewer.setInput(currentViewer.getInput());
-		}
-	};
-
-	private CommandStack currentCommandStack;
-	private Viewer currentViewer;
 
 	public static class RowData {
 		public RowData(final String scheduleName, final Long totalPNL, final Long tradingPNL, final Long shippingPNL, final Long mtmPnl, final Long shippingCost, final Long idleTime) {
@@ -182,11 +168,6 @@ class HorizontalKPIContentProvider implements IStructuredContentProvider {
 
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
-		if (currentCommandStack != null) {
-			currentCommandStack.removeCommandStackListener(commandStackListener);
-		}
-		currentViewer = viewer;
 
 		rowData = new RowData[0];
 
