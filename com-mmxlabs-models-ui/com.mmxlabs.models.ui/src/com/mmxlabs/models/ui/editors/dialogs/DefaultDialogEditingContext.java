@@ -24,6 +24,15 @@ public class DefaultDialogEditingContext implements IDialogEditingContext {
 
 	private PairKeyedMap<EObject, EStructuralFeature, List<Control>> objectControls = new PairKeyedMap<>();
 
+	/**
+	 * Creates an object encapsulating relevant information about the editing context.
+	 * 
+	 * 
+	 * @param dc
+	 * @param sel
+	 * @param multiEdit
+	 * @param newEdit
+	 */
 	public DefaultDialogEditingContext(@NonNull final IDialogController dc, @NonNull final IScenarioEditingLocation sel, final boolean multiEdit, final boolean newEdit) {
 		dialogController = dc;
 		scenarioEditingLocation = sel;
