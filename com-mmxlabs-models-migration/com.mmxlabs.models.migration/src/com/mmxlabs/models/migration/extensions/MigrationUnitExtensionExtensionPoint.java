@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.migration.extensions;
 
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.NonNull;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
@@ -16,10 +16,10 @@ import com.mmxlabs.models.migration.IMigrationUnitExtension;
 public interface MigrationUnitExtensionExtensionPoint {
 
 	@MapName("migrationUnit")
-	@Nullable
+	@NonNull
 	String getMigrationUnitID();
 
 	@MapName("class")
-	@Nullable
+	@NonNull
 	IMigrationUnitExtension createMigrationUnitExtension();
 }
