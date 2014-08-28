@@ -370,8 +370,16 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		commandHandler.getEditingDomain().getCommandStack().execute(command);
 	}
 
+	/**
+	 * Opens a multiple detail editor dialog allowing the user to edit multiple
+	 * existing objects in place. 
+	 *  
+	 * @param location
+	 * @param objects
+	 * @return
+	 */
 	public int open(final IScenarioEditingLocation location, final List<EObject> objects) {
-		this.dialogContext = new DefaultDialogEditingContext(null, location, true);
+		this.dialogContext = new DefaultDialogEditingContext(null, location, true, false);
 
 		this.editedObjects = objects;
 		editingClass = EMFUtils.findCommonSuperclass(objects);

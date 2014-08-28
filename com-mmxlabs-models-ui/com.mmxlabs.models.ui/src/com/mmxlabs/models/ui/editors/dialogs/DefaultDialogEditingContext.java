@@ -20,13 +20,15 @@ public class DefaultDialogEditingContext implements IDialogEditingContext {
 	private final IDialogController dialogController;
 	private final IScenarioEditingLocation scenarioEditingLocation;
 	private final boolean multiEdit;
+	private final boolean newEdit;
 
 	private PairKeyedMap<EObject, EStructuralFeature, List<Control>> objectControls = new PairKeyedMap<>();
 
-	public DefaultDialogEditingContext(@NonNull final IDialogController dc, @NonNull final IScenarioEditingLocation sel, final boolean multiEdit) {
+	public DefaultDialogEditingContext(@NonNull final IDialogController dc, @NonNull final IScenarioEditingLocation sel, final boolean multiEdit, final boolean newEdit) {
 		dialogController = dc;
 		scenarioEditingLocation = sel;
 		this.multiEdit = multiEdit;
+		this.newEdit = newEdit;
 	}
 
 	@Override
@@ -65,6 +67,12 @@ public class DefaultDialogEditingContext implements IDialogEditingContext {
 	@Override
 	public boolean isMultiEdit() {
 		return multiEdit;
+	}
+	
+	@Override
+	public boolean isNewEdit() {
+		// TODO Auto-generated method stub
+		return newEdit;
 	}
 
 }
