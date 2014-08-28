@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scenario.service.util;
 
+import java.util.Objects;
+
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -44,5 +46,10 @@ public class ScenarioInstanceSchedulingRule implements ISchedulingRule {
 		}
 
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(scenarioInstance);
 	}
 }
