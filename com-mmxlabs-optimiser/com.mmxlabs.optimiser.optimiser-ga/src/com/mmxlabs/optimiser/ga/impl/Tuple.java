@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.ga.impl;
 
+import java.util.Objects;
 import java.util.TreeSet;
 
 import com.mmxlabs.common.Equality;
@@ -56,5 +57,10 @@ public final class Tuple<I> implements Comparable<Tuple<I>> {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(i, idx, f);
 	}
 }
