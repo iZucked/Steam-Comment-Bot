@@ -9,7 +9,8 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.mmxlabs.models.lng.pricing.importers,
- com.mmxlabs.models.lng.pricing.presentation
+ com.mmxlabs.models.lng.pricing.presentation,
+ com.mmxlabs.models.lng.pricing.presentation.composites
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.core.resources;visibility:=reexport,
  org.eclipse.ui.ide;bundle-version="3.7.0",

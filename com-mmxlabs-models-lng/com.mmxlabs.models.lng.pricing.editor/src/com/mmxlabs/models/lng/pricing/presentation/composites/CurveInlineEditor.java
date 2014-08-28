@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.pricing.presentation.composites;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
@@ -34,6 +35,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
 import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
@@ -76,7 +78,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	
 	// we need to override the layout set by the default display composite
 	final GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	private SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 
 	/**
 	 * Creates a curve inline editor for Index<clazz> objects. We need to know
@@ -191,7 +193,10 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		dateColumn.setEditingSupport(new ColumnEditingSupport(viewer, PricingPackage.Literals.INDEX_POINT__DATE) {
 			@Override
 			protected CellEditor getCellEditor(Object element) {
-				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
+				
+				final FormattedTextCellEditor ed = new FormattedDateCellEditor(table);
+				DateFormatter df = new DateFormatter("MM/yyyy");
+				ed.setFormatter(df);
 				return ed;
 			}
 						
@@ -214,7 +219,8 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		valueColumn.setEditingSupport(new ColumnEditingSupport(viewer, PricingPackage.Literals.INDEX_POINT__VALUE) {
 			@Override
 			protected CellEditor getCellEditor(Object element) {
-				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
+				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table) {
+				};
 				
 				if (indexRawType.equals(EcorePackage.Literals.EINTEGER_OBJECT) || indexRawType.equals(EcorePackage.Literals.EINT)) {
 					ed.setFormatter(new IntegerFormatter());
@@ -301,7 +307,16 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 							point.setValue(null);
 							newPoint = point;
 						}
-						newPoint.setDate(new Date());
+						// add a new Date with zero time 
+						final Calendar cal = Calendar.getInstance();
+						cal.setTime(new Date());
+						cal.set(Calendar.MILLISECOND, 0);
+						cal.set(Calendar.SECOND, 0);
+						cal.set(Calendar.MINUTE, 0);
+						cal.set(Calendar.HOUR, 0);
+						cal.set(Calendar.DAY_OF_MONTH, 1);
+						
+						newPoint.setDate(cal.getTime());
 						
 						commandHandler.handleCommand(
 								AddCommand.create(commandHandler.getEditingDomain(), index, indexPointsFeature, newPoint),
@@ -385,6 +400,49 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 			Control control, Label label) {
 		// TODO Auto-generated method stub
 		return new GridData(SWT.RIGHT, SWT.TOP, false, false);
+	}
+	
+	static class FormattedDateCellEditor extends FormattedTextCellEditor {
+		public FormattedDateCellEditor(Composite parent) {
+			super(parent);
+		}
+
+		@Override
+		protected Object doGetValue() {
+			final Object superValue = super.doGetValue();
+			
+			final Calendar cal = Calendar.getInstance();
+			if (superValue != null) {
+				cal.setTime((Date) superValue);
+			}
+			
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.HOUR, 0);
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			return cal.getTime();
+		}
+
+		@Override
+		protected void doSetValue(final Object value) {
+
+			if (value instanceof Date) {
+				final Calendar cal = Calendar.getInstance();
+				cal.setTime((Date) value);
+				final int currentYear = cal.get(Calendar.YEAR);
+				if (currentYear < 2000) {
+					// Strip first two year digits and add to the year 2000
+					cal.set(Calendar.YEAR, 2000 + currentYear % 100);
+				}
+				super.doSetValue(cal.getTime());
+				return;
+			}
+
+			super.doSetValue(value);
+		}
+		
+		
 	}
 
 }
