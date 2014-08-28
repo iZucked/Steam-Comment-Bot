@@ -95,8 +95,11 @@ public class CSVReader implements Closeable {
 		while (firstTry || state == State.ESCAPED && line != null) {
 			if (firstTry == false) {
 				line = reader.readLine();
-				lineNumber++;
 				temp.append("\n");
+				if (line == null) {
+					break;
+				}
+				lineNumber++;
 			}
 			firstTry = false;
 			for (int i = 0; i < line.length(); i++) {
