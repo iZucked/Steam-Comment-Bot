@@ -90,17 +90,18 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 				try {
 					final ISelection sel = getLastSelection();
 					if (sel instanceof IStructuredSelection) {
+						final IStructuredSelection structuredSelection = (IStructuredSelection) sel;
 						final EditingDomain ed = part.getEditingDomain();
 						// Copy selection
-						final ArrayList<Object> selectedObjects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
+						final ArrayList<?> selectedObjects = new ArrayList<>((List<?>)structuredSelection.toList());
 						// Set up a list of objects for deletion
 						// This will include the cargoes but may also include load or discharge slots
 						final Set<Object> trash = new LinkedHashSet<Object>();
 						trash.addAll(selectedObjects);
 						// Filter out slots which are already linked to a cargo - this dialog below will re-add them if required.
-						for (Object obj : selectedObjects) {
+						for (final Object obj : selectedObjects) {
 							if (obj instanceof Cargo) {
-								Cargo cargo = (Cargo) obj;
+								final Cargo cargo = (Cargo) obj;
 								trash.removeAll(cargo.getSlots());
 							}
 						}
@@ -120,7 +121,7 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 								int spotLoadSlotCount = 0;
 								int spotDischargeSlotCount = 0;
 
-								for (Slot slot : cargo.getSlots()) {
+								for (final Slot slot : cargo.getSlots()) {
 									if (slot instanceof LoadSlot) {
 										loadSlotCount++;
 										if (slot instanceof SpotLoadSlot) {
@@ -209,8 +210,8 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 
 							final boolean deleteLoad = (dialogResponse == ALLBUTTON);
 							final boolean deleteDischarge = (dialogResponse == ALLBUTTON);
-							{
-								for (Slot slot : cargo.getSlots()) {
+							if (cargo != null) {
+								for (final Slot slot : cargo.getSlots()) {
 
 									if (slot instanceof LoadSlot) {
 										final LoadSlot loadSlot = (LoadSlot) slot;
