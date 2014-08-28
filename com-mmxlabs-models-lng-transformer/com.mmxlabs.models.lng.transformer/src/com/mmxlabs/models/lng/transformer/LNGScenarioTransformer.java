@@ -626,7 +626,8 @@ public class LNGScenarioTransformer {
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getVesselEvents());
 
 		for (final AssignableElement assignableElement : assignableElements) {
-			if (assignableElement.getAssignment() == null) {
+			final AVesselSet<? extends Vessel> vesselSet = assignableElement.getAssignment();
+			if (vesselSet == null) {
 				continue;
 			}
 			boolean freeze = assignableElement.isLocked();
@@ -651,7 +652,6 @@ public class LNGScenarioTransformer {
 				continue;
 			}
 
-			final AVesselSet<? extends Vessel> vesselSet = assignableElement.getAssignment();
 			final IVessel vessel;
 			if (vesselSet instanceof VesselClass) {
 				final List<IVessel> spots = spotVesselsByClass.get(vesselSet);
@@ -678,16 +678,14 @@ public class LNGScenarioTransformer {
 				IPortSlot prevSlot = null;
 				for (final Slot slot : cargo.getSortedSlots()) {
 					final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
-					if (cargo != null) {
-						// bind slots to vessel
-						builder.freezeSlotToVessel(portSlot, vessel);
-						// bind sequencing as well - this forces
-						// previousSlot to come before currentSlot.
-						if (prevSlot != null) {
-							builder.constrainSlotAdjacency(prevSlot, portSlot);
-						}
-						prevSlot = portSlot;
+					// bind slots to vessel
+					builder.freezeSlotToVessel(portSlot, vessel);
+					// bind sequencing as well - this forces
+					// previousSlot to come before currentSlot.
+					if (prevSlot != null) {
+						builder.constrainSlotAdjacency(prevSlot, portSlot);
 					}
+					prevSlot = portSlot;
 				}
 			} else if (assignableElement instanceof VesselEvent) {
 				final IVesselEventPortSlot slot = modelEntityMap.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);

@@ -39,7 +39,7 @@ public final class SlotContractHelper {
 		final IDetailTree detailTree = annotation.getDetails();
 		if (detailTree != null) {
 			for (final IDetailTree child : detailTree.getChildren()) {
-				if (child.getKey() == annotationKey) {
+				if (child.getKey().equals(annotationKey)) {
 					if (cls.isInstance(child.getValue())) {
 						return cls.cast(child.getValue());
 					}
@@ -54,7 +54,7 @@ public final class SlotContractHelper {
 			final IDetailTree detailTree = e.getDetails();
 			if (detailTree != null) {
 				for (final IDetailTree child : detailTree.getChildren()) {
-					if (child.getKey() == annotationKey) {
+					if (child.getKey().equals(annotationKey)) {
 						if (cls.isInstance(child.getValue())) {
 							return cls.cast(child.getValue());
 						}
@@ -70,7 +70,7 @@ public final class SlotContractHelper {
 			final IDetailTree detailTree = e.getDetails();
 			if (detailTree != null) {
 				for (final IDetailTree child : detailTree.getChildren()) {
-					if (child.getKey() == annotationKey) {
+					if (child.getKey().equals(annotationKey)) {
 						return e.getEntityBook().getEntity();
 					}
 				}
