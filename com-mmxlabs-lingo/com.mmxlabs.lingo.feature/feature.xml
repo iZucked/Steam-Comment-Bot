@@ -25,10 +25,6 @@
    </license>
 
    <includes
-         id="com.mmxlabs.datasources.feature"
-         version="0.0.0"/>
-
-   <includes
          id="com.mmxlabs.jobmanager.feature"
          version="0.0.0"/>
 

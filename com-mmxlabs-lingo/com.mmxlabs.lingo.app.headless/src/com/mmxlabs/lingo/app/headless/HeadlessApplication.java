@@ -190,6 +190,7 @@ public class HeadlessApplication implements IApplication {
 
 		final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
 		final String versionContext = migrationRegistry.getDefaultMigrationContext();
+		assert versionContext != null;
 		int version = migrationRegistry.getLatestContextVersion(versionContext);
 		if (version < 0) {
 			version = migrationRegistry.getLastReleaseVersion(versionContext);
