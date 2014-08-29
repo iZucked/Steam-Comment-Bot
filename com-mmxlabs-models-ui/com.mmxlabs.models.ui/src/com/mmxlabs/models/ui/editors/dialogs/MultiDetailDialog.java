@@ -371,7 +371,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 	}
 
 	public int open(final IScenarioEditingLocation location, final List<EObject> objects) {
-		this.dialogContext = new DefaultDialogEditingContext(null, location, true);
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), location, true);
 
 		this.editedObjects = objects;
 		editingClass = EMFUtils.findCommonSuperclass(objects);
