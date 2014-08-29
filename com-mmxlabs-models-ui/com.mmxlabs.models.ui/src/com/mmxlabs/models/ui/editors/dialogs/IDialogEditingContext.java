@@ -18,6 +18,12 @@ public interface IDialogEditingContext {
 	IScenarioEditingLocation getScenarioEditingLocation();
 
 	boolean isMultiEdit();
+	
+	/** 
+	 * Returns true if the dialog is editing a new copy of an object, or false
+	 * if it is editing an existing object directly.
+	 */
+	boolean isNewEdit();
 
 	/**
 	 * Returns all the controls of interest for the given object feature.
