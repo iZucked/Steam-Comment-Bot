@@ -14,7 +14,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryRegistryImpl;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.NonNull;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -143,17 +143,18 @@ public class MetamodelLoader {
 	public EPackage loadEPackage(final URI location, final String nsURI, final String resourceURI) {
 		return loadEPackage(location, resourceURI);
 	}
-	
-	@Nullable
+
+	@NonNull
 	private static IScenarioCipherProvider getScenarioCipherProvider() {
 		final BundleContext bundleContext = FrameworkUtil.getBundle(MetamodelLoader.class).getBundleContext();
 		final ServiceReference<IScenarioCipherProvider> serviceReference = bundleContext.getServiceReference(IScenarioCipherProvider.class);
 		if (serviceReference != null) {
-			return bundleContext.getService(serviceReference);
+			final IScenarioCipherProvider service = bundleContext.getService(serviceReference);
+			if (service != null) {
+				return service;
+			}
 		}
-		
+
 		return new PassthroughCipherProvider();
-		
-//		return null;
 	}
 }
