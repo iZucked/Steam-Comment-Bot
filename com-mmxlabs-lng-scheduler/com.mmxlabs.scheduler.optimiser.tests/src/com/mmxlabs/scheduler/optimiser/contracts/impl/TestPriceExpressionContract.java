@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 import org.junit.Test;
-
+import org.mockito.Mockito;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -23,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
@@ -98,6 +99,9 @@ public class TestPriceExpressionContract {
 		final ILoadSlot loadSlotNoPricingDate = mock(ILoadSlot.class);
 		when(loadSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
+		when(loadSlotNoPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
+		when(loadSlotWithPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_LOAD);
+
 		final IDischargeSlot dischargeSlot = mock(IDischargeSlot.class);
 
 		final int dischargeTime = 170;
@@ -118,22 +122,24 @@ public class TestPriceExpressionContract {
 		when(allocationAnnotation.getSlotVolumeInM3(loadSlotWithPricingDate)).thenReturn(loadVolumeInM3);
 		when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
 
-		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel, vesselStartTime, plan,
-				annotations);
+		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel,
+				vesselStartTime, plan, annotations);
 
-		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel, vesselStartTime, plan,
-				annotations);
+		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel, vesselStartTime,
+				plan, annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);
 		verify(curve).getValueAtPoint(loadTime);
 		verifyNoMoreInteractions(curve);
 
-		verify(loadSlotWithPricingDate).getPricingDate();
-		verify(loadSlotWithPricingDate).getPort();
+		verify(loadSlotWithPricingDate, Mockito.atLeastOnce()).getPricingDate();
+		verify(loadSlotWithPricingDate, Mockito.never()).getPricingEvent();
+		verify(loadSlotWithPricingDate, Mockito.atLeastOnce()).getPort();
 		verifyNoMoreInteractions(loadSlotWithPricingDate);
 
-		verify(loadSlotNoPricingDate).getPort();
-		verify(loadSlotNoPricingDate).getPricingDate();
+		verify(loadSlotNoPricingDate, Mockito.atLeastOnce()).getPort();
+		verify(loadSlotNoPricingDate, Mockito.atLeastOnce()).getPricingDate();
+		verify(loadSlotNoPricingDate, Mockito.atLeastOnce()).getPricingEvent();
 		verifyNoMoreInteractions(loadSlotNoPricingDate);
 
 		// check that the returned results are correct
@@ -163,20 +169,24 @@ public class TestPriceExpressionContract {
 		when(dischargeSlotWithPricingDate.getPort()).thenReturn(port);
 		when(dischargeSlotWithPricingDate.getPricingDate()).thenReturn(pricingDate);
 
+		when(dischargeSlotWithPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
+
 		final IDischargeSlot dischargeSlotNoPricingDate = mock(IDischargeSlot.class);
 		when(dischargeSlotNoPricingDate.getPricingDate()).thenReturn(IPortSlot.NO_PRICING_DATE);
 
 		IPortTimesRecord portTimesRecord1 = mock(IPortTimesRecord.class);
 		when(portTimesRecord1.getSlotTime(dischargeSlotWithPricingDate)).thenReturn(dischargeTime);
 
+		when(dischargeSlotNoPricingDate.getPricingEvent()).thenReturn(PricingEventType.START_OF_DISCHARGE);
+
 		final int salesPriceWithPricingDate = contract.estimateSalesUnitPrice(dischargeSlotWithPricingDate, portTimesRecord1, null);
+		verify(curve).getValueAtPoint(pricingDate);
 
 		IPortTimesRecord portTimesRecord2 = mock(IPortTimesRecord.class);
 		when(portTimesRecord2.getSlotTime(dischargeSlotNoPricingDate)).thenReturn(dischargeTime);
 
 		final int salesPriceNoPricingDate = contract.estimateSalesUnitPrice(dischargeSlotNoPricingDate, portTimesRecord2, null);
 
-		verify(curve).getValueAtPoint(pricingDate);
 		verify(curve).getValueAtPoint(dischargeTime);
 		verifyNoMoreInteractions(curve);
 

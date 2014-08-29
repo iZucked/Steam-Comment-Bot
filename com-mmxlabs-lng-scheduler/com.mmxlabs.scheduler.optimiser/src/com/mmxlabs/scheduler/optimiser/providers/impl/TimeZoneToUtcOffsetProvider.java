@@ -81,7 +81,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 	 */
 	@Override
 	public int UTC(final int localTime, final String timezoneId) {
-		final DateTimeZone tz = DateTimeZone.forID(timezoneId);
+		final DateTimeZone tz = timezoneId == null ? DateTimeZone.forID("UTC") : DateTimeZone.forID(timezoneId);
 
 		// for now, re-throw any exceptions
 		try {

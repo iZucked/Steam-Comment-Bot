@@ -4,13 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TreeMap;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
@@ -998,6 +995,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedCooldownPrice = 1000;
 
 		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.setCooldownPerformed(true);
 		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, 1000);
 
 		// Expect the non-load slot branch - time 3 == time of next Port
@@ -1070,6 +1068,7 @@ public class NewLNGVoyageCalculatorTest {
 		final int expectedCooldownPrice = 1000;
 
 		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.setCooldownPerformed(true);
 		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, 1000);
 
 		// Expect the load slot branch - time 3 == time of next Port
