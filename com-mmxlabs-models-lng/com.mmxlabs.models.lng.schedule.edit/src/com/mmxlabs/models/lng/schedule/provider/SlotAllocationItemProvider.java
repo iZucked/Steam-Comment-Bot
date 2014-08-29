@@ -68,6 +68,8 @@ public class SlotAllocationItemProvider
 			addSlotVisitPropertyDescriptor(object);
 			addPricePropertyDescriptor(object);
 			addVolumeTransferredPropertyDescriptor(object);
+			addEnergyTransferredPropertyDescriptor(object);
+			addCvPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -227,6 +229,50 @@ public class SlotAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Energy Transferred feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addEnergyTransferredPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_energyTransferred_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_energyTransferred_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Cv feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCvPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_cv_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_cv_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__CV,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -298,6 +344,8 @@ public class SlotAllocationItemProvider
 		switch (notification.getFeatureID(SlotAllocation.class)) {
 			case SchedulePackage.SLOT_ALLOCATION__PRICE:
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
+			case SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED:
+			case SchedulePackage.SLOT_ALLOCATION__CV:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

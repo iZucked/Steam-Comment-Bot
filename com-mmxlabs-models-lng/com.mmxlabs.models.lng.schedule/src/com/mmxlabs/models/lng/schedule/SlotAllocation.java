@@ -26,6 +26,8 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getVolumeTransferred <em>Volume Transferred</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getEnergyTransferred <em>Energy Transferred</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCv <em>Cv</em>}</li>
  * </ul>
  * </p>
  *
@@ -302,6 +304,58 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	void setVolumeTransferred(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Energy Transferred</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Energy Transferred</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Energy Transferred</em>' attribute.
+	 * @see #setEnergyTransferred(int)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_EnergyTransferred()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getEnergyTransferred();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getEnergyTransferred <em>Energy Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Energy Transferred</em>' attribute.
+	 * @see #getEnergyTransferred()
+	 * @generated
+	 */
+	void setEnergyTransferred(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Cv</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cv</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cv</em>' attribute.
+	 * @see #setCv(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_Cv()
+	 * @model required="true"
+	 * @generated
+	 */
+	double getCv();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCv <em>Cv</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Cv</em>' attribute.
+	 * @see #getCv()
+	 * @generated
+	 */
+	void setCv(double value);
 
 	/**
 	 * <!-- begin-user-doc -->

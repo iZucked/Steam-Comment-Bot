@@ -150,7 +150,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		int rawI = 0;
 		for (final float midpoint : terminalPositions) {
 			// Map back between current row (sorted) and data (unsorted)
-			final int i = (reverseSortedIndices == null || rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
+			final int i = (reverseSortedIndices != null && rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
 			// -1 indicates filtered row
 			if (i == -1) {
 				continue;
@@ -259,7 +259,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		rawI = 0;
 		for (final float midpoint : terminalPositions) {
 			// Map back between current row (sorted) and data (unsorted)
-			final int i = (reverseSortedIndices == null || rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
+			final int i = (reverseSortedIndices != null && rawI < reverseSortedIndices.length) ? reverseSortedIndices[rawI] : rawI;
 			// -1 indicates filtered row
 			if (i == -1) {
 				continue;

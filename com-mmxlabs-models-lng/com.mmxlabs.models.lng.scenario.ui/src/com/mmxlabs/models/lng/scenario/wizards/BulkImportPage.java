@@ -336,7 +336,7 @@ public class BulkImportPage extends WizardPage {
 			gl.marginWidth = 0;
 			setLayout(gl);
 			group.setLayout(new GridLayout(labels.length, false));
-			GridData groupLayoutData = new GridData();
+//			GridData groupLayoutData = new GridData();
 //			group.setLayoutData(groupLayoutData);
 			group.setText(title);
 			this.values = values;

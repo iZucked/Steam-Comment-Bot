@@ -39,6 +39,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlotVisit <em>Slot Visit</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getPrice <em>Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getVolumeTransferred <em>Volume Transferred</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getEnergyTransferred <em>Energy Transferred</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCv <em>Cv</em>}</li>
  * </ul>
  * </p>
  *
@@ -161,6 +163,46 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected int volumeTransferred = VOLUME_TRANSFERRED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getEnergyTransferred() <em>Energy Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEnergyTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int ENERGY_TRANSFERRED_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getEnergyTransferred() <em>Energy Transferred</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getEnergyTransferred()
+	 * @generated
+	 * @ordered
+	 */
+	protected int energyTransferred = ENERGY_TRANSFERRED_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getCv() <em>Cv</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCv()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double CV_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getCv() <em>Cv</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCv()
+	 * @generated
+	 * @ordered
+	 */
+	protected double cv = CV_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -584,6 +626,48 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getEnergyTransferred() {
+		return energyTransferred;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setEnergyTransferred(int newEnergyTransferred) {
+		int oldEnergyTransferred = energyTransferred;
+		energyTransferred = newEnergyTransferred;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED, oldEnergyTransferred, energyTransferred));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getCv() {
+		return cv;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCv(double newCv) {
+		double oldCv = cv;
+		cv = newCv;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__CV, oldCv, cv));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public Port getPort() {
@@ -723,6 +807,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return getPrice();
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
 				return getVolumeTransferred();
+			case SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED:
+				return getEnergyTransferred();
+			case SchedulePackage.SLOT_ALLOCATION__CV:
+				return getCv();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -755,6 +843,12 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
 				setVolumeTransferred((Integer)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED:
+				setEnergyTransferred((Integer)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__CV:
+				setCv((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -789,6 +883,12 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
 				setVolumeTransferred(VOLUME_TRANSFERRED_EDEFAULT);
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED:
+				setEnergyTransferred(ENERGY_TRANSFERRED_EDEFAULT);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__CV:
+				setCv(CV_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -815,6 +915,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return price != PRICE_EDEFAULT;
 			case SchedulePackage.SLOT_ALLOCATION__VOLUME_TRANSFERRED:
 				return volumeTransferred != VOLUME_TRANSFERRED_EDEFAULT;
+			case SchedulePackage.SLOT_ALLOCATION__ENERGY_TRANSFERRED:
+				return energyTransferred != ENERGY_TRANSFERRED_EDEFAULT;
+			case SchedulePackage.SLOT_ALLOCATION__CV:
+				return cv != CV_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -855,6 +959,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		result.append(price);
 		result.append(", volumeTransferred: ");
 		result.append(volumeTransferred);
+		result.append(", energyTransferred: ");
+		result.append(energyTransferred);
+		result.append(", cv: ");
+		result.append(cv);
 		result.append(')');
 		return result.toString();
 	}
