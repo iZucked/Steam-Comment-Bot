@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.schedule;
 
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
@@ -38,7 +37,6 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
-import com.mmxlabs.scheduler.optimiser.components.IMarkToMarketOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -60,10 +58,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class ScheduleCalculatorTest {
@@ -109,6 +108,7 @@ public class ScheduleCalculatorTest {
 
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);
+				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());
