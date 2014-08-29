@@ -114,7 +114,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 					lastPart = part;
 					if (scenarioInstance != null) {
-						selectionChanged(part, new StructuredSelection(scenarioInstance));
+						try {
+							selectionChanged(part, new StructuredSelection(scenarioInstance));
+						} catch (final Exception e) {
+							selectionChanged(part, new StructuredSelection());
+						}
 					} else {
 						selectionChanged(part, new StructuredSelection());
 					}
@@ -155,7 +159,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		}
 
 		scenarioInstance = null;
-		
+
 		// getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		getSite().getPage().removePartListener(partListener);
 		super.dispose();
@@ -200,7 +204,6 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 		scenarioInstance = null;
 
-		
 		if (instance != null) {
 			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(instance);
 			this.scenarioInstance = instance;
@@ -301,7 +304,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		if (modelReference == null) {
 			return null;
 		}
-		return (MMXRootObject)modelReference.getInstance();
+		return (MMXRootObject) modelReference.getInstance();
 	}
 
 	@Override
