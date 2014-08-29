@@ -282,12 +282,8 @@ public class CargoEconsReport extends ViewPart {
 				long cost = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlot() instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-
-						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
-						final double cv = loadSlot.getSlotOrDelegatedCV();
-						final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
-						cost += volumeInMMBTu * allocation.getPrice();
+						final int volumeInMMBTu = allocation.getEnergyTransferred();
+						cost += (double) volumeInMMBTu * allocation.getPrice();
 					}
 				}
 				return cost;
@@ -297,11 +293,7 @@ public class CargoEconsReport extends ViewPart {
 				long cost = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlot() instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-
-						final int loadVolumeVolumeInM3 = allocation.getVolumeTransferred();
-						final double cv = loadSlot.getSlotOrDelegatedCV();
-						final double volumeInMMBTu = (loadVolumeVolumeInM3 * cv);
+						final int volumeInMMBTu = allocation.getEnergyTransferred();
 						cost += volumeInMMBTu;
 					}
 				}
@@ -318,9 +310,9 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(cargoAllocation);
 			}
-//			case PNL_TOTAL_NO_TC: {
-//				return CargoEconsReport.getPNLValueNoTC(cargoAllocation);
-//			}
+			// case PNL_TOTAL_NO_TC: {
+			// return CargoEconsReport.getPNLValueNoTC(cargoAllocation);
+			// }
 			case SELL_REVENUE_TOTAL: {
 				double cv = 0.0;
 				// Find the CV
@@ -336,30 +328,17 @@ public class CargoEconsReport extends ViewPart {
 				long revenue = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlot() instanceof DischargeSlot) {
-						final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
-						final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
-						revenue += volumeInMMBTu * allocation.getPrice();
+						final int volumeInMMBTu = allocation.getEnergyTransferred();
+						revenue += (double) volumeInMMBTu * allocation.getPrice();
 					}
 				}
 				return revenue;
 			}
 			case SELL_VOLUME_IN_MMBTU: {
-				double cv = 0.0;
-				// Find the CV
-				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
-					if (allocation.getSlot() instanceof LoadSlot) {
-						final LoadSlot loadSlot = (LoadSlot) allocation.getSlot();
-
-						// TODO: Avg CV
-						cv = loadSlot.getSlotOrDelegatedCV();
-						break;
-					}
-				}
 				long dischargeVolume = 0;
 				for (final SlotAllocation allocation : cargoAllocation.getSlotAllocations()) {
 					if (allocation.getSlot() instanceof DischargeSlot) {
-						final int dischargeVolumeInM3 = allocation.getVolumeTransferred();
-						final double volumeInMMBTu = (dischargeVolumeInM3 * cv);
+						final int volumeInMMBTu = allocation.getEnergyTransferred();
 						dischargeVolume += volumeInMMBTu;
 					}
 				}
@@ -505,9 +484,9 @@ public class CargoEconsReport extends ViewPart {
 			case PNL_TOTAL: {
 				return CargoEconsReport.getPNLValue(marketAllocation);
 			}
-//			case PNL_TOTAL_NO_TC: {
-//				return CargoEconsReport.getPNLValueNoTC(marketAllocation);
-//			}
+			// case PNL_TOTAL_NO_TC: {
+			// return CargoEconsReport.getPNLValueNoTC(marketAllocation);
+			// }
 			case SELL_REVENUE_TOTAL: {
 				// Find the CV & price
 				final double cv;
@@ -825,25 +804,25 @@ public class CargoEconsReport extends ViewPart {
 		return (int) groupProfitAndLoss.getProfitAndLoss();
 	}
 
-//	/**
-//	 * Get total cargo PNL value excluding time charter rate
-//	 * 
-//	 * @param container
-//	 * @param entity
-//	 * @return
-//	 */
-//	private static Integer getPNLValueNoTC(final ProfitAndLossContainer container) {
-//		if (container == null) {
-//			return null;
-//		}
-//
-//		final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLossNoTimeCharter();
-//		if (groupProfitAndLoss == null) {
-//			return null;
-//		}
-//		// Rounding!
-//		return (int) groupProfitAndLoss.getProfitAndLoss();
-//	}
+	// /**
+	// * Get total cargo PNL value excluding time charter rate
+	// *
+	// * @param container
+	// * @param entity
+	// * @return
+	// */
+	// private static Integer getPNLValueNoTC(final ProfitAndLossContainer container) {
+	// if (container == null) {
+	// return null;
+	// }
+	//
+	// final GroupProfitAndLoss groupProfitAndLoss = container.getGroupProfitAndLossNoTimeCharter();
+	// if (groupProfitAndLoss == null) {
+	// return null;
+	// }
+	// // Rounding!
+	// return (int) groupProfitAndLoss.getProfitAndLoss();
+	// }
 
 	protected static Integer getShippingCost(final CargoAllocation cargoAllocation) {
 
