@@ -153,6 +153,20 @@ public class PortRotationReportView extends EMFReportView {
 				return null;
 			}
 		}).setTooltip("In m³");
+		addColumn("Transfer Energy", ColumnType.NORMAL, new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				if (object instanceof SlotVisit) {
+					final SlotVisit sv = (SlotVisit) object;
+					final SlotAllocation sa = sv.getSlotAllocation();
+					if (sa == null) {
+						return null;
+					}
+					return sa.getEnergyTransferred();
+				}
+				return null;
+			}
+		}).setTooltip("In mmBtu");
 		addColumn("Heel Start", ColumnType.NORMAL, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
