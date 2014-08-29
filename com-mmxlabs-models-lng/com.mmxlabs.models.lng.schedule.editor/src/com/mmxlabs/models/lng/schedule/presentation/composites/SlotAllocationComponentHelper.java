@@ -71,6 +71,8 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 		add_slotVisitEditor(detailComposite, topClass);
 		add_priceEditor(detailComposite, topClass);
 		add_volumeTransferredEditor(detailComposite, topClass);
+		add_energyTransferredEditor(detailComposite, topClass);
+		add_cvEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the slot feature on SlotAllocation
@@ -132,5 +134,23 @@ public class SlotAllocationComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_volumeTransferredEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__VOLUME_TRANSFERRED));
+	}
+
+	/**
+	 * Create the editor for the energyTransferred feature on SlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_energyTransferredEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__ENERGY_TRANSFERRED));
+	}
+
+	/**
+	 * Create the editor for the cv feature on SlotAllocation
+	 *
+	 * @generated
+	 */
+	protected void add_cvEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SLOT_ALLOCATION__CV));
 	}
 }
