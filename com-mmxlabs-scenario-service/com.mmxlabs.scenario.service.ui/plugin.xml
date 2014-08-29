@@ -100,7 +100,7 @@
             </parentExpression>
          </commonSorter>
          <actionProvider
-               class="org.eclipse.ui.navigator.resources.GoIntoActionProvider"
+               class="com.mmxlabs.scenario.service.ui.internal.GoIntoActionProvider"
                id="com.mmxlabs.scenario.service.ui.GoIntoActionProvider">
          </actionProvider>
       </navigatorContent>
