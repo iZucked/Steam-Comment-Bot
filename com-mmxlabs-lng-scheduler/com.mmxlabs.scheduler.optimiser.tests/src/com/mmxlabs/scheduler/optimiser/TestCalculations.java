@@ -10,6 +10,8 @@ import java.util.TreeMap;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
@@ -49,7 +51,6 @@ import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
@@ -86,8 +87,9 @@ public class TestCalculations {
 	@SuppressWarnings({ "unused" })
 	@Test
 	public void testCalculations1() {
+		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
+		final Injector injector = createTestInjector(volumeAllocator);
 
-		final Injector injector = createTestInjector();
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		final IPort port1 = builder.createPort("port-1", false, null, "UTC");
@@ -159,6 +161,13 @@ public class TestCalculations {
 		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
+
+		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0l);
+		// Load enough to cover boil-off
+		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(2200l);
+		Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0l);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -480,7 +489,8 @@ public class TestCalculations {
 	@Test
 	public void testCalculations2() {
 
-		final Injector injector = createTestInjector();
+		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
+		final Injector injector = createTestInjector(volumeAllocator);
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		final IPort port1 = builder.createPort("port-1", false, null, "UTC");
@@ -559,6 +569,13 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
+
+		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0l);
+		// Load enough to cover boil-off
+		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(3300l);
+		Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0l);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -879,7 +896,8 @@ public class TestCalculations {
 	@Test
 	public void testCalculations3() {
 
-		final Injector injector = createTestInjector();
+		final IVolumeAllocator volumeAllocator = Mockito.mock(IVolumeAllocator.class);
+		final Injector injector = createTestInjector(volumeAllocator);
 		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		final IPort port1 = builder.createPort("port-1", false, null, "UTC");
@@ -955,6 +973,13 @@ public class TestCalculations {
 		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
+
+		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0l);
+		// Load enough to cover boil-off
+		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(1150l);
+		Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0l);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -1285,7 +1310,7 @@ public class TestCalculations {
 		}
 	}
 
-	private Injector createTestInjector() {
+	private Injector createTestInjector(final IVolumeAllocator volumeAllocator) {
 
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new AbstractModule() {
 			@Override
@@ -1295,27 +1320,7 @@ public class TestCalculations {
 				bind(VoyagePlanner.class);
 				bind(ScheduleCalculator.class);
 				bind(ICharterRateCalculator.class).to(VesselStartDateCharterRateCalculator.class);
-				bind(IVolumeAllocator.class).toInstance(new IVolumeAllocator() {
-
-					@Override
-					public AllocationRecord createAllocationRecord(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
-						// TODO Auto-generated method stub
-						return null;
-					}
-
-					@Override
-					public IAllocationAnnotation allocate(AllocationRecord allocationRecord) {
-						// TODO Auto-generated method stub
-						return null;
-					}
-
-					@Override
-					public IAllocationAnnotation allocate(IVessel vessel, int vesselStartTime, VoyagePlan plan, IPortTimesRecord portTimesRecord) {
-						// TODO Auto-generated method stub
-						return null;
-					}
-				});
-				;
+				bind(IVolumeAllocator.class).toInstance(volumeAllocator);
 				bind(SchedulerBuilder.class);
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
