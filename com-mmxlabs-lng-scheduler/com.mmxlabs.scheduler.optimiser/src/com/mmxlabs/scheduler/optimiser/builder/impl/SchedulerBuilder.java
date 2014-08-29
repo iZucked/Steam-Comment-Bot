@@ -1547,7 +1547,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		unrestrictedSlots.addAll(dischargeSlots);
 		// Note this might not be the correct behaviour for event slots - although typically we expect them to be part of the restrictedSlots array.
 		unrestrictedSlots.addAll(vesselEvents);
-		unrestrictedSlots.removeAll(unshippedElements);
+//		unrestrictedSlots.removeAll(unshippedElements);
+		for (final ISequenceElement unshippedElement : unshippedElements) {
+			unrestrictedSlots.add(portSlotsProvider.getPortSlot(unshippedElement));
+		}
 		unrestrictedSlots.removeAll(restrictedSlots);
 		for (final IPortSlot slot : unrestrictedSlots) {
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
