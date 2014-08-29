@@ -181,6 +181,22 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 				}
 			});// .setTooltip("In m³");
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_mmbtu":
+			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Transfer Energy", null, ColumnType.NORMAL, new IntegerFormatter() {
+				@Override
+				public Integer getIntValue(final Object object) {
+					if (object instanceof SlotVisit) {
+						final SlotVisit sv = (SlotVisit) object;
+						final SlotAllocation sa = sv.getSlotAllocation();
+						if (sa == null) {
+							return null;
+						}
+						return sa.getEnergyTransferred();
+					}
+					return null;
+				}
+			});// .setTooltip("In mmBtu");
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.heelstart":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Heel Start", null, ColumnType.NORMAL, new IntegerFormatter() {
 				@Override
