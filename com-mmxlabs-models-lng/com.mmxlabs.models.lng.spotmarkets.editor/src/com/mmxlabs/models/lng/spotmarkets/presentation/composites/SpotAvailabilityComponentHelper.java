@@ -11,6 +11,7 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.lng.pricing.presentation.composites.CurveInlineEditor;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -79,6 +80,6 @@ public class SpotAvailabilityComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_curveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.SPOT_AVAILABILITY__CURVE));
+		detailComposite.addInlineEditor(new CurveInlineEditor(SpotMarketsPackage.Literals.SPOT_AVAILABILITY__CURVE));
 	}
 }

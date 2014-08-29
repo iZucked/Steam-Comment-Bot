@@ -141,7 +141,7 @@ public class CargoEditorMenuHelper {
 		public void run() {
 
 			if (target instanceof Cargo) {
-				editLDDCargo((Cargo) target);
+				editLDDCargo((Cargo) target, false);
 			}
 
 		}
@@ -1358,13 +1358,13 @@ public class CargoEditorMenuHelper {
 
 	/**
 	 */
-	public void editLDDCargo(final Cargo cargo) {
+	public void editLDDCargo(final Cargo cargo, final boolean isNew) {
 		final ScenarioLock editorLock = scenarioEditingLocation.getEditorLock();
 		try {
 			editorLock.claim();
 			scenarioEditingLocation.setDisableUpdates(true);
 
-			final ComplexCargoEditor editor = new ComplexCargoEditor(shell, scenarioEditingLocation);
+			final ComplexCargoEditor editor = new ComplexCargoEditor(shell, scenarioEditingLocation, false);
 			// editor.setBlockOnOpen(true);
 
 			final int ret = editor.open(cargo);
