@@ -167,34 +167,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.ltk.core.refactoring"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ltk.ui.refactoring"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.team.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.team.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.text"
          download-size="0"
          install-size="0"
@@ -224,13 +196,6 @@
 
    <plugin
          id="org.eclipse.ui.navigator"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.navigator.resources"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -1195,13 +1160,6 @@
 
    <plugin
          id="org.eclipse.emf.ecore.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.google.inject"
          download-size="0"
          install-size="0"
          version="0.0.0"
