@@ -244,17 +244,6 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 						if (schedule != null) {
 							for (final CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 								if (cargoAllocation.getInputCargo() == cargo) {
-
-									double cargoCV = 0.0;
-									// Find cargo cv
-									for (final SlotAllocation slotAllocation : cargoAllocation.getSlotAllocations()) {
-										if (slotAllocation.getSlot() instanceof LoadSlot) {
-											final LoadSlot loadSlot = (LoadSlot) slotAllocation.getSlot();
-											cargoCV = loadSlot.getSlotOrDelegatedCV();
-											break;
-										}
-									}
-
 									int ladenBaseFuelConsumptionInMT = 0;
 									int ballastBaseFuelConsumptionInMT = 0;
 
@@ -342,8 +331,8 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 										slotActuals.setOperationsEnd(slotAllocation.getLocalEnd().getTime());
 										slotActuals.setTitleTransferPoint(slotAllocation.getPort());
 										slotActuals.setVolumeInM3(slotAllocation.getVolumeTransferred());
-										slotActuals.setCV(cargoCV);
-										slotActuals.setVolumeInMMBtu((int) Math.round(cargoCV * (double) slotAllocation.getVolumeTransferred()));
+										slotActuals.setCV(slotAllocation.getCv());
+										slotActuals.setVolumeInMMBtu(slotAllocation.getEnergyTransferred());
 
 										slotActuals.setPriceDOL(slotAllocation.getPrice());
 										slotActuals.setPortCharges(slotAllocation.getSlotVisit().getPortCost());
@@ -352,7 +341,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 
 											final LoadActuals loadActuals = (LoadActuals) slotActuals;
 											loadActuals.setStartingHeelM3(slotAllocation.getSlotVisit().getHeelAtStart());
-											loadActuals.setStartingHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * cargoCV));
+											loadActuals.setStartingHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtStart() * slotAllocation.getCv()));
 											slotActuals.setBaseFuelConsumption(ladenBaseFuelConsumptionInMT);
 											slotActuals.setRouteCosts(ladenRouteCosts);
 											slotActuals.setDistance(ladenDistance);
@@ -365,7 +354,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 											ladenRoute = null;
 										} else if (slotActuals instanceof DischargeActuals) {
 											((DischargeActuals) slotActuals).setEndHeelM3(slotAllocation.getSlotVisit().getHeelAtEnd());
-											((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * cargoCV));
+											((DischargeActuals) slotActuals).setEndHeelMMBTu((int) Math.round(slotAllocation.getSlotVisit().getHeelAtEnd() * slotAllocation.getCv()));
 											slotActuals.setBaseFuelConsumption(ballastBaseFuelConsumptionInMT);
 											slotActuals.setRouteCosts(ballastRouteCosts);
 											slotActuals.setDistance(ballastDistance);
