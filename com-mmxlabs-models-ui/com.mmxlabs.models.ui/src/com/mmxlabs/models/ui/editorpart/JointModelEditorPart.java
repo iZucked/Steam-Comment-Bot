@@ -112,7 +112,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/**
 	 * The root object from {@link #jointModel}
 	 */
-	 private MMXRootObject rootObject;
+	private MMXRootObject rootObject;
 
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 
@@ -444,7 +444,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					setPartName(msg.getNewStringValue());
 				}
 				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty()) {
-					firePropertyChange(PROP_DIRTY);
+					if (!getContainer().isDisposed()) {
+						getContainer().getDisplay().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								firePropertyChange(IEditorPart.PROP_DIRTY);
+							}
+						});
+					}
 				}
 			}
 		};
