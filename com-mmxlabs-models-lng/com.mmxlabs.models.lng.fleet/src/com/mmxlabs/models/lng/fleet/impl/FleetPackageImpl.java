@@ -920,7 +920,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source, 
 		   new String[] {
 			 "unit", "MT/day",
-			 "formatString", "###,###"
+			 "formatString", "###.###"
 		   });		
 		addAnnotation
 		  (getHeelOptions_VolumeAvailable(), 
@@ -991,6 +991,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   new String[] {
 			 "unit", "MT/day",
 			 "formatString", "##0.###"
+		   });		
+		addAnnotation
+		  (getVesselClassRouteParameters_ExtraTransitTime(), 
+		   source, 
+		   new String[] {
+			 "unit", "hours",
+			 "formatString", "##0"
 		   });		
 		addAnnotation
 		  (getVesselClassRouteParameters_LadenConsumptionRate(), 

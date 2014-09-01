@@ -26,41 +26,38 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class LatenessConstraint extends AbstractModelMultiConstraint {
-	
+
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		
-		if (target instanceof Event) {	
+
+		if (target instanceof Event) {
 			if (LatenessUtils.isLate((Event) target)) {
 				EObject obj = null;
 				EStructuralFeature feature = null;
 				String message = null;
-				
-				if (target instanceof SlotVisit) {					
+
+				if (target instanceof SlotVisit) {
 					SlotAllocation allocation = ((SlotVisit) target).getSlotAllocation();
 					if (allocation != null) {
 						obj = allocation.getSlot();
-						message = String.format("Vessel reaches %s late in generated schedule.", ((Slot) obj).getName());
+						message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Vessel reaches %s late in schedule.", ((Slot) obj).getName());
 						feature = CargoPackage.Literals.SLOT__WINDOW_START;
 					}
-				}
-				else if (target instanceof VesselEventVisit) {
+				} else if (target instanceof VesselEventVisit) {
 					VesselEvent ve = ((VesselEventVisit) target).getVesselEvent();
-					message = String.format("Vessel reaches %s late in generated schedule.", ve.getName());
+					message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Vessel reaches %s late in schedule.", ve.getName());
 					obj = ve;
 					feature = CargoPackage.Literals.VESSEL_EVENT__START_BY;
-				}
-				else if (target instanceof EndEvent) {
+				} else if (target instanceof EndEvent) {
 					EndEvent event = (EndEvent) target;
 					obj = event.getSequence().getVesselAvailability();
 					feature = CargoPackage.Literals.VESSEL_AVAILABILITY__END_BY;
-					message = "Generated schedule has vessel travelling after it is no longer available.";					
+					message = Constants.GENERATED_SCHEDULE_LABEL + " Schedule has vessel travelling after it is no longer available.";
+				} else {
+					message = Constants.GENERATED_SCHEDULE_LABEL + " Late arrival in schedule.";
 				}
-				else {
-					message = "Late arrival in generated schedule.";					
-				}
-				
+
 				if (message != null) {
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					if (obj != null) {
@@ -68,10 +65,10 @@ public class LatenessConstraint extends AbstractModelMultiConstraint {
 					}
 					statuses.add(failure);
 				}
-				
+
 			}
 		}
-		
+
 		return Activator.PLUGIN_ID;
 	}
 }
