@@ -79,10 +79,12 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 					final List<EObject> search = new LinkedList<>(filtered);
 					while (!search.isEmpty()) {
 						final Container container = (Container) search.remove(0);
-						search.addAll(container.getElements());
 						if (container instanceof ScenarioInstance) {
 							final ScenarioInstance scenarioInstance = (ScenarioInstance) container;
 							scenarios.add(scenarioInstance);
+						} else {
+							// Only search non-scenario instances as delete scenario will also delete children 
+							search.addAll(container.getElements());
 						}
 					}
 					for (final ScenarioInstance scenarioInstance : scenarios) {
