@@ -327,13 +327,4 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		editor.addNotificationChangedListener(new PricingEventInlineEditorChangedListener());
 		detailComposite.addInlineEditor(editor);		
 	}
-
-	/**
-	 * Create the editor for the fixedPrice feature on Slot
-	 * 
-	 * @generated NOT
-	 */
-	protected void add_fixedPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__FIXED_PRICE));
-	}
 }
