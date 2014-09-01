@@ -66,6 +66,7 @@ public interface VesselClassRouteParameters extends MMXObject {
 	 * @see #setExtraTransitTime(int)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselClassRouteParameters_ExtraTransitTime()
 	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hours' formatString='##0'"
 	 * @generated
 	 */
 	int getExtraTransitTime();

@@ -993,6 +993,13 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 			 "formatString", "##0.###"
 		   });		
 		addAnnotation
+		  (getVesselClassRouteParameters_ExtraTransitTime(), 
+		   source, 
+		   new String[] {
+			 "unit", "hours",
+			 "formatString", "##0"
+		   });		
+		addAnnotation
 		  (getVesselClassRouteParameters_LadenConsumptionRate(), 
 		   source, 
 		   new String[] {
