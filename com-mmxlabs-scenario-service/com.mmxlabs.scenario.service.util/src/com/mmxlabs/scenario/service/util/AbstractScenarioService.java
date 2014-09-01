@@ -229,6 +229,12 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				if (metadata != null) {
 					metadata.setLastModified(new Date());
 				}
+
+				final BasicCommandStack commandStack = (BasicCommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
+				if (commandStack != null) {
+					commandStack.saveIsDone();
+				}
+
 				scenarioInstance.setDirty(false);
 
 				fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
