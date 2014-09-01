@@ -148,7 +148,7 @@ public class ScenarioInstanceMigrator {
 				.getMigrationChain(scenarioContext, currentScenarioVersion, latestScenarioVersion, clientContext, currentClientVersion, latestClientVersion);
 
 		int scenarioVersion = currentScenarioVersion;
-		int clientVersion = currentScenarioVersion;
+		int clientVersion = currentClientVersion;
 		for (final IMigrationUnit unit : chain) {
 
 			unit.migrate(tmpURI, Collections.<URI, PackageData> emptyMap());

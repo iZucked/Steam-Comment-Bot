@@ -183,7 +183,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 					final IClientMigrationUnit nextUnit = clientFroms.get(currentClientVersion);
 					// Is there another unit?
 					if (nextUnit == null) {
-						throw new RuntimeException(String.format("Unable to find migration chain between verions %d and %d for client context %s.", fromClientVersion, toClientVersion, clientContext));
+						throw new RuntimeException(String.format("Unable to find migration chain between versions %d and %d for client context %s.", fromClientVersion, toClientVersion, clientContext));
 					}
 
 					if (nextUnit.getScenarioDestinationVersion() != currentScenarioVersion) {
