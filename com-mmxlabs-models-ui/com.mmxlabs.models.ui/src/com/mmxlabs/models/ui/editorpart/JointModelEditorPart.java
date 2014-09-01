@@ -112,7 +112,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 	/**
 	 * The root object from {@link #jointModel}
 	 */
-	 private MMXRootObject rootObject;
+	private MMXRootObject rootObject;
 
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 
@@ -152,7 +152,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		}
 	};
 
-	private IPartGotoTarget partGotoTarget = new IPartGotoTarget() {
+	private final IPartGotoTarget partGotoTarget = new IPartGotoTarget() {
 
 		@Override
 		public void gotoTarget(final Object object) {
@@ -262,7 +262,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 				public void run(final IProgressMonitor monitor) throws CoreException {
 					try {
 						saving = true;
-						monitor.beginTask("Saving", 1);
 						scenarioInstance.save();
 						monitor.worked(1);
 					} catch (final IOException e) {
@@ -270,7 +269,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					} finally {
 						monitor.done();
 						saving = false;
-						commandStack.saveIsDone();
 						firePropertyChange(PROP_DIRTY);
 					}
 				}
@@ -415,7 +413,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 		editorLock = instance.getLock(ScenarioLock.EDITORS);
 
 		modelReference = instance.getReference();
-		EObject ro = modelReference.getInstance();
+		final EObject ro = modelReference.getInstance();
 		if (ro == null) {
 			throw new RuntimeException("Instance was not loaded");
 		}
@@ -444,7 +442,15 @@ public class JointModelEditorPart extends MultiPageEditorPart implements ISelect
 					setPartName(msg.getNewStringValue());
 				}
 				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Dirty()) {
-					firePropertyChange(PROP_DIRTY);
+					if (!getContainer().isDisposed()) {
+						final Display display = getContainer().getDisplay();
+						display.asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								firePropertyChange(IEditorPart.PROP_DIRTY);
+							}
+						});
+					}
 				}
 			}
 		};

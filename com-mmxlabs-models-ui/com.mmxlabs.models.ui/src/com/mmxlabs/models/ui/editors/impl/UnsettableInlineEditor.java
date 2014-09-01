@@ -104,7 +104,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 						doSetValue(lastSetValue, true);
 						setControlEnabled(inner, true);
 						currentlySettingValue = true;
-						updateValueDisplay(lastSetValue);
+						updateValueDisplay(getValue());
 						currentlySettingValue = false;
 					} else {
 						// unset value

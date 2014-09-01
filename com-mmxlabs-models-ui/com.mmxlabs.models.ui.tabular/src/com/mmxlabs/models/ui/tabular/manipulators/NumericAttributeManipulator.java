@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.tabular.manipulators;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -22,65 +23,53 @@ import org.eclipse.swt.widgets.Composite;
  * 
  */
 public class NumericAttributeManipulator extends BasicAttributeManipulator {
-	public NumericAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
-		super(field, editingDomain);
+
+	private final EDataType type;
+
+	private NumberFormatter formatter;
+	private int scale = 1;
+
+	public NumericAttributeManipulator(final EStructuralFeature feature, final EditingDomain editingDomain) {
+		super(feature, editingDomain);
+		type = (EDataType) feature.getEType();
+
+		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
+		String format = null;
+
+		if (annotation != null) {
+			if (annotation.getDetails().containsKey("formatString")) {
+				format = annotation.getDetails().get("formatString");
+			}
+
+			if (annotation.getDetails().containsKey("scale")) {
+				scale = Integer.parseInt(annotation.getDetails().get("scale"));
+			}
+		}
+
+		if (type == EcorePackage.eINSTANCE.getELong()) {
+			formatter = format == null ? new LongFormatter() : new LongFormatter(format);
+		} else if (type == EcorePackage.eINSTANCE.getEInt()) {
+			formatter = format == null ? new IntegerFormatter() : new IntegerFormatter(format);
+		} else if (type == EcorePackage.eINSTANCE.getEFloat()) {
+			formatter = format == null ? new FloatFormatter() : new FloatFormatter(format);
+		} else if (type == EcorePackage.eINSTANCE.getEDouble()) {
+			formatter = format == null ? new DoubleFormatter() : new DoubleFormatter(format);
+		}
+		if (format == null)
+			formatter.setFixedLengths(false, false);
+
 	}
 
+	//
 	@Override
 	public Object getValue(final Object object) {
 		final Object value = super.getValue(object);
-		return value;
-	}
-
-	@Override
-	public String renderSetValue(final Object o, final Object val) {
-		if (val == null) {
-			return "";
-		}
-		if (val instanceof Integer) {
-			return String.format("%,d", (Integer) val);
-		} else {
-			return val.toString();
-		}
-	}
-
-	@Override
-	public CellEditor createCellEditor(final Composite c, final Object object) {
-		final EDataType eType = (EDataType) field.getEType();
-
-		final FormattedTextCellEditor result = new FormattedTextCellEditor(c);
-		final NumberFormatter formatter;
-		if (eType.equals(EcorePackage.eINSTANCE.getEInt())) {
-			formatter = new IntegerFormatter();
-		} else if (eType.equals(EcorePackage.eINSTANCE.getELong())) {
-			formatter = new LongFormatter();
-		} else if (eType.equals(EcorePackage.eINSTANCE.getEFloat())) {
-			formatter = new FloatFormatter();
-		} else if (eType.equals(EcorePackage.eINSTANCE.getEDouble())) {
-			formatter = new DoubleFormatter();
-		} else {
-			formatter = null;
-		}
-
-		if (formatter != null) {
-			formatter.setFixedLengths(false, false);
-			result.setFormatter(formatter);
-		}
-		return result;
+		return scale(value);
 	}
 
 	@Override
 	public void doSetValue(final Object object, Object value) {
-		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
-			value = Integer.valueOf(((Number) value).intValue());
-		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
-			value = Long.valueOf(((Number) value).longValue());
-		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEFloat())) {
-			value = Float.valueOf(((Number) value).floatValue());
-		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEDouble())) {
-			value = Double.valueOf(((Number) value).doubleValue());
-		}
-		super.runSetCommand(object, value);
+		super.doSetValue(object, descale(value));
 	}
 
 	@Override
@@ -89,5 +78,39 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 		if (object2 instanceof Comparable)
 			return (Comparable) object2;
 		return -Integer.MAX_VALUE;
+	}
+
+	@Override
+	protected CellEditor createCellEditor(final Composite c, final Object object) {
+		FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
+
+		editor.setFormatter(formatter);
+		return editor;
+	}
+
+	private Object scale(final Object internalValue) {
+		if (internalValue instanceof Integer) {
+			return ((Integer) internalValue).intValue() * scale;
+		} else if (internalValue instanceof Long) {
+			return ((Long) internalValue).longValue() * scale;
+		} else if (internalValue instanceof Float) {
+			return ((Float) internalValue).floatValue() * scale;
+		} else if (internalValue instanceof Double) {
+			return ((Double) internalValue).doubleValue() * scale;
+		}
+		return internalValue;
+	}
+
+	private Object descale(final Object displayValue) {
+		if (displayValue instanceof Integer) {
+			return ((Integer) displayValue).intValue() / scale;
+		} else if (displayValue instanceof Long) {
+			return ((Long) displayValue).longValue() / scale;
+		} else if (displayValue instanceof Float) {
+			return ((Float) displayValue).floatValue() / scale;
+		} else if (displayValue instanceof Double) {
+			return ((Double) displayValue).doubleValue() / scale;
+		}
+		return displayValue;
 	}
 }
