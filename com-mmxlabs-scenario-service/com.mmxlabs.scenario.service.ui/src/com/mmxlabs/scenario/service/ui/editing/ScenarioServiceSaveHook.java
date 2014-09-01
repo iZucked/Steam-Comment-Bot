@@ -6,10 +6,12 @@ package com.mmxlabs.scenario.service.ui.editing;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -80,108 +82,105 @@ public class ScenarioServiceSaveHook {
 		}
 
 		final ITreeContentProvider contentProvider = new ITreeContentProvider() {
-			
+
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void dispose() {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public boolean hasChildren(Object element) {
+			public boolean hasChildren(final Object element) {
 				// TODO Auto-generated method stub
 				return false;
 			}
-			
+
 			@Override
-			public Object getParent(Object element) {
+			public Object getParent(final Object element) {
 				// TODO Auto-generated method stub
 				return null;
 			}
-			
+
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				// TODO Auto-generated method stub
 				return dirtyScenarios.toArray();
 			}
-			
+
 			@Override
-			public Object[] getChildren(Object parentElement) {
+			public Object[] getChildren(final Object parentElement) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 		};
-		
+
 		final ILabelProvider labelProvider = new ILabelProvider() {
-			
+
 			@Override
-			public void removeListener(ILabelProviderListener listener) {
+			public void removeListener(final ILabelProviderListener listener) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public boolean isLabelProperty(Object element, String property) {
+			public boolean isLabelProperty(final Object element, final String property) {
 				// TODO Auto-generated method stub
 				return false;
 			}
-			
+
 			@Override
 			public void dispose() {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public void addListener(ILabelProviderListener listener) {
+			public void addListener(final ILabelProviderListener listener) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public String getText(Object element) {
-				ScenarioInstance scenario = (ScenarioInstance) element;
+			public String getText(final Object element) {
+				final ScenarioInstance scenario = (ScenarioInstance) element;
 				return scenario.getName();
 			}
-			
+
 			@Override
-			public Image getImage(Object element) {
+			public Image getImage(final Object element) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 		};
-		
+
 		final SelectionDialog sd = new ListSelectionDialog(Display.getDefault().getActiveShell(), dirtyScenarios, contentProvider, labelProvider, "Save unsaved scenarios?");
 		sd.setInitialSelections(dirtyScenarios.toArray());
 		final int ret = sd.open();
-		
-		final Object [] scenariosToSave = sd.getResult(); 
-		
-		if (ret == 2  || ret == -1) {
+
+		final Object[] scenariosToSave = sd.getResult();
+
+		if (ret == 2 || ret == -1) {
 			// Cancel
 			return false;
-		} 
-		
+		}
+
 		if (scenariosToSave == null) {
 			// Not sure why this could happen, but it did once...
 			// SG - 2013-02-18
 			return false;
-		} 
-		
-		/*else if (ret == 1) {
-			// Discard
-			return true;
 		}
-		// Save All
-		 * 
+
+		/*
+		 * else if (ret == 1) { // Discard return true; } // Save All
 		 */
 
+		final Set<ScenarioInstance> ignoredInstances = new HashSet<>(dirtyScenarios);
 		final boolean[] success = new boolean[1];
 		try {
 			final ProgressMonitorDialog p = new ProgressMonitorDialog(null);
@@ -194,11 +193,19 @@ public class ScenarioServiceSaveHook {
 					try {
 
 						for (final Object instance : scenariosToSave) {
-							ScenarioInstance scenario = (ScenarioInstance) instance;
+							final ScenarioInstance scenario = (ScenarioInstance) instance;
 							monitor.setTaskName("Saving: " + scenario.getName());
 							scenario.save();
 							monitor.worked(1);
+
+							ignoredInstances.remove(scenario);
 						}
+
+						// Forcibly set dirty to false to avoid eclipse framework from prompting to save again.
+						for (final ScenarioInstance ignoredInstance : ignoredInstances) {
+							ignoredInstance.setDirty(false);
+						}
+
 						success[0] = true;
 					} catch (final Exception e) {
 						log.error(e.getMessage(), e);
