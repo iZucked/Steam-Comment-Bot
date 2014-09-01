@@ -24,40 +24,36 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
-	
+
 	private IStatus createCapacityViolationStatus(final IValidationContext ctx, final CapacityViolationType type, final Long amount) {
 		EObject target = ctx.getTarget();
-		
+
 		// delegate attention to the "real target"
 		if (target instanceof SlotVisit) {
 			if (((SlotVisit) target).getSlotAllocation() != null) {
 				target = ((SlotVisit) target).getSlotAllocation().getSlot();
 			}
 		}
-		
-		final String nameString = target instanceof NamedObject ? String.format("[%s] ", ((NamedObject) target).getName()) : ""; 
+
+		final String nameString = target instanceof NamedObject ? String.format("[%s] ", ((NamedObject) target).getName()) : "";
 		final String message;
-		
+
 		// make the right message for the violation type
-		
+
 		// fits into a standard message template?
 		final String simpleViolation;
 		if (type == CapacityViolationType.MAX_DISCHARGE) {
 			simpleViolation = "maximum discharge";
-		}
-		else if (type == CapacityViolationType.MAX_LOAD) {
+		} else if (type == CapacityViolationType.MAX_LOAD) {
 			simpleViolation = "maximum load";
-		}
-		else if (type == CapacityViolationType.MIN_DISCHARGE) {
+		} else if (type == CapacityViolationType.MIN_DISCHARGE) {
 			simpleViolation = "minimum discharge";
-		}
-		else if (type == CapacityViolationType.MIN_LOAD) {
+		} else if (type == CapacityViolationType.MIN_LOAD) {
 			simpleViolation = "minimum load";
-		}
-		else {
+		} else {
 			simpleViolation = null;
 		}
-		
+
 		// standard message template
 		if (simpleViolation != null) {
 			message = String.format("%sCan't meet %s in generated schedule.", nameString, simpleViolation);
@@ -65,47 +61,44 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 		// non-standard message
 		else {
 			if (type == CapacityViolationType.FORCED_COOLDOWN) {
-				message = String.format("Cooldown is required in generated schedule but is not permitted at load %s", nameString);
-			}
-			else if (type == CapacityViolationType.VESSEL_CAPACITY) {
-				message = String.format("Generated schedule requires exceeding vessel capacity at load %s", nameString);
-			}
-			else {
-				message = String.format("%sCapacity violation %s in generated schedule.", nameString, type.getName());
+				message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Cooldown is required in schedule but is not permitted at load %s", nameString);
+			} else if (type == CapacityViolationType.VESSEL_CAPACITY) {
+				message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " Schedule requires exceeding vessel capacity at load %s", nameString);
+			} else {
+				message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " %sCapacity violation %s in schedule.", nameString, type.getName());
 			}
 		}
-		
+
 		final DetailConstraintStatusDecorator result = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-		
+
 		if (target instanceof Slot) {
 			result.addEObjectAndFeature(target, CargoPackage.Literals.SLOT__MAX_QUANTITY);
 			result.addEObjectAndFeature(target, CargoPackage.Literals.SLOT__MIN_QUANTITY);
-		}
-		else {
+		} else {
 			target.getClass();
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
-		
-		if (target instanceof CapacityViolationsHolder) {			
+
+		if (target instanceof CapacityViolationsHolder) {
 			EMap<CapacityViolationType, Long> violations = ((CapacityViolationsHolder) target).getViolations();
-			
+
 			if (violations.isEmpty() == false) {
-				
-				for (Entry<CapacityViolationType, Long> entry: violations) {	
+
+				for (Entry<CapacityViolationType, Long> entry : violations) {
 					if (entry.getValue() != 0) {
 						statuses.add(createCapacityViolationStatus(ctx, entry.getKey(), entry.getValue()));
 					}
 				}
-				
+
 			}
 		}
-		
+
 		return Activator.PLUGIN_ID;
 	}
 }
