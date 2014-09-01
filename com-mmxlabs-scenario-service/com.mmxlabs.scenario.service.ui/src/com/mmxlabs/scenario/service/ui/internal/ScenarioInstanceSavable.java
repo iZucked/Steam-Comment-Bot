@@ -33,7 +33,7 @@ public class ScenarioInstanceSavable extends Saveable {
 	private final ScenarioInstance scenarioInstance;
 
 	private boolean deleted = false;
-	
+
 	public ScenarioInstanceSavable(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 	}
@@ -61,7 +61,6 @@ public class ScenarioInstanceSavable extends Saveable {
 			ResourcesPlugin.getWorkspace().run(new IWorkspaceRunnable() {
 				@Override
 				public void run(final IProgressMonitor monitor) throws CoreException {
-					final BasicCommandStack commandStack = (BasicCommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
 					try {
 						// saving = true;
 						monitor.beginTask("Saving", 1);
@@ -71,7 +70,6 @@ public class ScenarioInstanceSavable extends Saveable {
 						log.error("IO Error during save", e);
 					} finally {
 						monitor.done();
-						commandStack.saveIsDone();
 					}
 				}
 
