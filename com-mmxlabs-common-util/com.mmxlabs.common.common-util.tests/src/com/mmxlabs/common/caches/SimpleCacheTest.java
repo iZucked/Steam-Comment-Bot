@@ -46,15 +46,4 @@ public class SimpleCacheTest {
 		Assert.assertEquals(maxMisses, cache.evictionThreshold);
 
 	}
-
-	@Test
-	public void testSimpleCache3() {
-		final String name = "name";
-		final IKeyEvaluator<String, Object> evaluator = Mockito.mock(IKeyEvaluator.class);
-		final int binCount = 21;
-		final int maxMisses = 30;
-
-		final SimpleCache<String, Object> cache = new SimpleCache<String, Object>(name, evaluator, binCount, maxMisses);
-
-	}
 }
