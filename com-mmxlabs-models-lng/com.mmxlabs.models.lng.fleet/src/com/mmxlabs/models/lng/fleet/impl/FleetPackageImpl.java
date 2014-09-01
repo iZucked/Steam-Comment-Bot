@@ -920,7 +920,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		   source, 
 		   new String[] {
 			 "unit", "MT/day",
-			 "formatString", "###,###"
+			 "formatString", "###.###"
 		   });		
 		addAnnotation
 		  (getHeelOptions_VolumeAvailable(), 

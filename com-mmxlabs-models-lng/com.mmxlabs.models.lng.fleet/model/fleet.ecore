@@ -125,7 +125,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unit" value="MT/day"/>
-        <details key="formatString" value="###,###"/>
+        <details key="formatString" value="###.###"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eGenericSuperTypes eClassifier="ecore:EClass ../../com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
