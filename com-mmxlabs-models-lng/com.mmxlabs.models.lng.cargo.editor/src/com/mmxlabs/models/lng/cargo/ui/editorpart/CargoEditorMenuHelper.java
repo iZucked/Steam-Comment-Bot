@@ -1281,7 +1281,7 @@ public class CargoEditorMenuHelper {
 	private void createFOBDESSwitchMenu(final IMenuManager manager, final Slot slot) {
 
 		final Contract contract = slot.getContract();
-		assert (contract != null && contract.getContractType() == ContractType.BOTH);
+		assert (contract == null || contract.getContractType() == ContractType.BOTH);
 
 		if (slot instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) slot;
