@@ -275,7 +275,9 @@ public class HorizontalKPIReportView extends ViewPart {
 				if (currentActiveEditor == part) {
 					activeEditorChange(null);
 				}
-				viewerSynchronizer.refreshViewer();
+				if (viewerSynchronizer != null) {
+					viewerSynchronizer.refreshViewer();
+				}
 			}
 
 			@Override
@@ -284,7 +286,9 @@ public class HorizontalKPIReportView extends ViewPart {
 					// Active editor changed
 					activeEditorChange((IEditorPart) part);
 				}
-				viewerSynchronizer.refreshViewer();
+				if (viewerSynchronizer != null) {
+					viewerSynchronizer.refreshViewer();
+				}
 			}
 
 			@Override
@@ -293,7 +297,9 @@ public class HorizontalKPIReportView extends ViewPart {
 					// Active editor changed
 					activeEditorChange((IEditorPart) part);
 				}
-				viewerSynchronizer.refreshViewer();
+				if (viewerSynchronizer != null) {
+					viewerSynchronizer.refreshViewer();
+				}
 			}
 
 		};
@@ -350,15 +356,17 @@ public class HorizontalKPIReportView extends ViewPart {
 
 	@Override
 	public void dispose() {
-		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
-		viewerSynchronizer = null;
-
+		if (viewerSynchronizer != null) {
+			ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
+			viewerSynchronizer = null;
+		}
 		if (modelReference != null) {
 			modelReference.close();
 			modelReference = null;
 		}
 
 		getSite().getPage().removePartListener(partListener);
+
 		super.dispose();
 	}
 
