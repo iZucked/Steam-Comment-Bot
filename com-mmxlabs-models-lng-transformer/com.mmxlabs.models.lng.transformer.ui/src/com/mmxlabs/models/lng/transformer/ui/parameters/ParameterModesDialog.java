@@ -4,12 +4,17 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.parameters;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.databinding.Binding;
+import org.eclipse.core.databinding.conversion.Converter;
+import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -47,7 +52,7 @@ import com.mmxlabs.models.ui.forms.AbstractDataBindingFormDialog;
 public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 	public enum DataType {
-		Boolean, PositiveInt
+		Boolean, PositiveInt, Date
 	}
 
 	public enum DataSection {
@@ -167,6 +172,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		case PositiveInt:
 			createNumberTextBox(parent, option);
 			break;
+		case Date:
+			createDateEditor(parent, option);
+			break;
 		default:
 			break;
 		}
@@ -228,6 +236,83 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		return area;
 	}
 
+	private Composite createDateEditor(final Composite parent, final Option option) {
+		final Composite area = toolkit.createComposite(parent, SWT.NONE);
+		area.setLayout(new GridLayout(2, false));
+		toolkit.createLabel(area, option.label);
+
+		final DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
+
+		final IValidator validator = new IValidator() {
+			@Override
+			public IStatus validate(final Object value) {
+				if (value instanceof String) {
+					if (value.equals("") == false) {
+						try {
+							format.parse((String) value);
+						} catch (ParseException e) {
+							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
+						}
+					}
+				}
+				return ValidationStatus.ok();
+			}
+		};
+
+		final Text text = toolkit.createText(area, null, SWT.NONE);
+
+		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
+
+		final EMFUpdateValueStrategy stringToDateStrategy = new EMFUpdateValueStrategy() {
+			@Override
+			protected IConverter createConverter(Object fromType, Object toType) {
+				return new Converter(fromType, toType) {
+					public Object convert(Object fromObject) {
+						String value = fromObject == null ? null : fromObject.toString();
+						try {
+							return format.parse(value);
+						} catch (Exception e) {
+							return null;
+						}
+					}
+				};
+			}
+		};
+
+		final EMFUpdateValueStrategy dateToStringStrategy = new EMFUpdateValueStrategy() {
+			@Override
+			protected IConverter createConverter(Object fromType, Object toType) {
+				return new Converter(fromType, toType) {
+					public Object convert(Object fromObject) {
+						if (fromObject instanceof Date) {
+							return format.format(fromObject);
+						}
+						return null;
+					}
+				};
+			}
+		};
+
+		stringToDateStrategy.setAfterGetValidator(validator);
+
+		final Binding bindValue = dbc.bindValue(WidgetProperties.text(SWT.Modify).observeDelayed(500, text), prop.observe(option.data), stringToDateStrategy, dateToStringStrategy);
+		ControlDecorationSupport.create(bindValue, SWT.TOP | SWT.LEFT);
+
+		return area;
+
+	}
+
+	/**
+	 * Adds new elements to the dialog.
+	 * 
+	 * @param dataSection
+	 * @param editingDomian
+	 * @param label
+	 * @param data
+	 * @param defaultData
+	 * @param dataType
+	 * @param features
+	 */
 	public void addOption(final DataSection dataSection, final EditingDomain editingDomian, final String label, final EObject data, final EObject defaultData, final DataType dataType,
 			final EStructuralFeature... features) {
 		final Option option = new Option(dataSection, editingDomian, label, data, defaultData, dataType, features);

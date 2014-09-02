@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.EndHeelOptions;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -235,6 +236,12 @@ public class DefaultScenarioCreator {
 			result.setVolumeAvailable(startHeelVolume);
 			return result;
 		}
+		public EndHeelOptions createDefaultEndHeelOptions() {
+			final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
+			result.setEndCold(false);
+			result.setTargetEndHeel(0);
+			return result;
+		}
 
 		public void setBaseFuelPrice(final BaseFuelCost bfc, final double price) {
 			BaseFuelIndex bfi = bfc.getIndex();
@@ -346,6 +353,7 @@ public class DefaultScenarioCreator {
 
 			availability.setVessel(vessel);
 			availability.setStartHeel(createDefaultHeelOptions());
+			availability.setEndHeel(createDefaultEndHeelOptions());
 			availability.setEntity(shippingEntity);
 
 			fleetModel.getVessels().add(vessel);

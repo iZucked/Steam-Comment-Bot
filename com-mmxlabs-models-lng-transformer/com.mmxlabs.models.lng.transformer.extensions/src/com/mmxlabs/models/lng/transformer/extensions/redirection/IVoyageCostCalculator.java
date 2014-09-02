@@ -14,8 +14,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public interface IVoyageCostCalculator {
 
 	@Nullable
-	VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, @NonNull IVessel vessel,
-			int vesselCharterInRatePerDay, long startHeelInM3, int notionalBallastSpeed, int cargoCVValue, @NonNull String route, int baseFuelPricePerMT, int salesPricePerMMBTu);
+	VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration,
+			@NonNull IVessel vessel, int vesselCharterInRatePerDay, long startHeelInM3, int notionalBallastSpeed, int cargoCVValue, @NonNull String route,
+			int baseFuelPricePerMT, int salesPricePerMMBTu);
 
 	@Nullable
 	VoyagePlan calculateShippingCosts(@NonNull IPort loadPort, @NonNull IPort dischargePort, int loadTime, int loadDuration, int dischargeTime, int dischargeDuration, int returnTime,

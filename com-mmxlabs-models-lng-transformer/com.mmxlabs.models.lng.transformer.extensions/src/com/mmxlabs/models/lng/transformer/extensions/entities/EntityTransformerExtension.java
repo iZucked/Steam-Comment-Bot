@@ -23,7 +23,7 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.EntityTransformerUtils;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
@@ -95,10 +95,10 @@ public class EntityTransformerExtension implements ITransformerExtension {
 
 		// Generic stuff -> split into separate extension
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
-		for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
-			final IVessel vessel = modelEntityMap.getOptimiserObject(vesselAvailability, IVessel.class);
-			final IEntity entity = modelEntityMap.getOptimiserObject(vesselAvailability.getEntity(), IEntity.class);
-			entityProvider.setEntityForVessel(entity, vessel);
+		for (final VesselAvailability eVesselAvailability : cargoModel.getVesselAvailabilities()) {
+			final IVesselAvailability vesselAvailability = modelEntityMap.getOptimiserObject(eVesselAvailability, IVesselAvailability.class);
+			final IEntity entity = modelEntityMap.getOptimiserObject(eVesselAvailability.getEntity(), IEntity.class);
+			entityProvider.setEntityForVesselAvailability(entity, vesselAvailability);
 		}
 
 		// set up contract association or slot association or whatever

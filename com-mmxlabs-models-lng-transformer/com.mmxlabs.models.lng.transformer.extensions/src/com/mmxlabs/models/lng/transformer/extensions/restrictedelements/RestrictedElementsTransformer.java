@@ -113,10 +113,6 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 				restrictedElements = permissive;
 			}
 
-			if (restrictedElements.toString().contains("Dahej")) {
-				int ii = 0;
-			}
-
 			// register each prohibited pair
 			for (final ISequenceElement source : sourceElements) {
 				switch (type) {
@@ -167,9 +163,6 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 					}
 				}
 
-				if (slot.getName().contains("RG2")) {
-					int ii = 0;
-				}
 				registerRestrictedElements(slot, restrictedContracts, isPermissive, RestrictionType.FOLLOWER);
 				registerRestrictedElements(slot, restrictedPorts, isPermissive, RestrictionType.FOLLOWER);
 			}

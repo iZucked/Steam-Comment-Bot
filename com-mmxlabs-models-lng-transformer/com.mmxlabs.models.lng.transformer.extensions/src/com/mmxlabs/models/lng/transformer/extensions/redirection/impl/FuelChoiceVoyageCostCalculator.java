@@ -117,9 +117,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 		notionalDischargeSlot.setTimeWindow(new TimeWindow(dischargeTime, dischargeTime));
 		notionalDischargeSlot.setDischargePriceCalculator(salesPriceCalculator);
 
-		final PortSlot notionalReturnSlot = new EndPortSlot();
-		notionalReturnSlot.setPort(loadPort);
-		notionalReturnSlot.setTimeWindow(new TimeWindow(notionalReturnTime, notionalReturnTime));
+		final PortSlot notionalReturnSlot = new EndPortSlot("notional-return", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
 		final VoyagePlanOptimiser vpo = vpoProvider.get();
 

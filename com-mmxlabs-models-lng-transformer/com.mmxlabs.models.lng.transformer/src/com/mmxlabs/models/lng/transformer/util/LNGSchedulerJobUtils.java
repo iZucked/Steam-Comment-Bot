@@ -113,8 +113,7 @@ public class LNGSchedulerJobUtils {
 		final ScheduleModel scheduleModel = portfolioModel.getScheduleModel();
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
 
-		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
-		final CompoundCommand command = new CompoundCommand(label);
+		final CompoundCommand command = createBlankCommand(solutionCurrentProgress);
 
 		try {
 
@@ -150,6 +149,12 @@ public class LNGSchedulerJobUtils {
 		// However the dirty adapter sets dirty to true outside of a command...
 		scheduleModel.setDirty(false);
 		return schedule;
+	}
+
+	public static CompoundCommand createBlankCommand(final int solutionCurrentProgress) {
+		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
+		final CompoundCommand command = new CompoundCommand(label);
+		return command;
 	}
 
 	public static void undoPreviousOptimsationStep(final EditingDomain editingDomain, final int solutionCurrentProgress) {

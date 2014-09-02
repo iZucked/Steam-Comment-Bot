@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions.restrictedelements;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -77,7 +76,7 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
-		final VesselInstanceType instanceType = vesselProvider.getVessel(resource).getVesselInstanceType();
+		final VesselInstanceType instanceType = vesselProvider.getVesselAvailability(resource).getVesselInstanceType();
 		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
 			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
 			final PortType t1 = portTypeProvider.getPortType(first);

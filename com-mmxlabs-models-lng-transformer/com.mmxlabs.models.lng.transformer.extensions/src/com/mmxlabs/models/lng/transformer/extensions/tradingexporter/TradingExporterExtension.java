@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
@@ -305,10 +306,10 @@ public class TradingExporterExtension implements IExporterExtension {
 					}
 					// Find the matching
 					final IResource res = annotatedSolution.getSequences().getResources().get(i);
-					final IVessel iVessel = modelEntityMap.getOptimiserObject(vesselAvailability, IVessel.class);
+					final IVesselAvailability iVesselAvailability = modelEntityMap.getOptimiserObject(vesselAvailability, IVesselAvailability.class);
 
 					// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
-					if (iVessel == vesselProvider.getVessel(res)) {
+					if (iVesselAvailability == vesselProvider.getVesselAvailability(res)) {
 						if (sequence.getEvents().size() > 0) {
 							final Event evt = sequence.getEvents().get(0);
 							if (evt instanceof StartEvent) {
