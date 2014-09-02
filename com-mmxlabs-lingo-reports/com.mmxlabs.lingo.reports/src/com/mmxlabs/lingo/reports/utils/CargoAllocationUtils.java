@@ -101,7 +101,7 @@ public class CargoAllocationUtils {
 				} else {
 					first = false;
 				}
-				sb.append(sa != null ? sa.getName() : "()");
+				sb.append(sa.getName());
 			}
 		}
 
@@ -127,7 +127,7 @@ public class CargoAllocationUtils {
 				} else {
 					first = false;
 				}
-				sb.append(sa != null ? sa.getName() : "()");
+				sb.append(sa.getName());
 			}
 		}
 
