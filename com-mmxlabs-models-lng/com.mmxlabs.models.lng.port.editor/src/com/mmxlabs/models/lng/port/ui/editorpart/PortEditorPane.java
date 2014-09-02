@@ -121,46 +121,46 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		}
 		getToolBarManager().update(true);
 
-		final Action tzAction = new Action("Update timezones") {
-
-			@Override
-			public void run() {
-
-				final ITimezoneProvider tzProvider = new GoogleTimezoneProvider();
-
-				final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
-				final ISelection selection = getScenarioViewer().getSelection();
-				if (selection instanceof IStructuredSelection) {
-					final CompoundCommand cc = new CompoundCommand("Update Port Timezones");
-					final IStructuredSelection ss = (IStructuredSelection) selection;
-					final Iterator<?> itr = ss.iterator();
-					while (itr.hasNext()) {
-
-						final Object next = itr.next();
-
-						if (next instanceof Port) {
-							final Port p = (Port) next;
-							if (p.getLocation() != null) {
-								final Location l = p.getLocation();
-								try {
-									final TimeZone tz = tzProvider.findTimeZone((float) l.getLat(), (float) l.getLon());
-									if (tz != null) {
-										final Command cmd = SetCommand.create(ed, p, PortPackage.eINSTANCE.getPort_TimeZone(), tz.getID());
-										cc.append(cmd);
-									}
-								} catch (final Exception e) {
-									// Ignore - but could provide some feeback to user?
-								}
-							}
-						}
-					}
-					if (!cc.isEmpty()) {
-						ed.getCommandStack().execute(cc);
-					}
-				}
-				super.run();
-			}
-		};
+		// final Action tzAction = new Action("Update timezones") {
+		//
+		// @Override
+		// public void run() {
+		//
+		// final ITimezoneProvider tzProvider = new GoogleTimezoneProvider();
+		//
+		// final EditingDomain ed = scenarioEditingLocation.getEditingDomain();
+		// final ISelection selection = getScenarioViewer().getSelection();
+		// if (selection instanceof IStructuredSelection) {
+		// final CompoundCommand cc = new CompoundCommand("Update Port Timezones");
+		// final IStructuredSelection ss = (IStructuredSelection) selection;
+		// final Iterator<?> itr = ss.iterator();
+		// while (itr.hasNext()) {
+		//
+		// final Object next = itr.next();
+		//
+		// if (next instanceof Port) {
+		// final Port p = (Port) next;
+		// if (p.getLocation() != null) {
+		// final Location l = p.getLocation();
+		// try {
+		// final TimeZone tz = tzProvider.findTimeZone((float) l.getLat(), (float) l.getLon());
+		// if (tz != null) {
+		// final Command cmd = SetCommand.create(ed, p, PortPackage.eINSTANCE.getPort_TimeZone(), tz.getID());
+		// cc.append(cmd);
+		// }
+		// } catch (final Exception e) {
+		// // Ignore - but could provide some feeback to user?
+		// }
+		// }
+		// }
+		// }
+		// if (!cc.isEmpty()) {
+		// ed.getCommandStack().execute(cc);
+		// }
+		// }
+		// super.run();
+		// }
+		// };
 		// getMenuManager().add(tzAction);
 		// getMenuManager().update(true);
 
