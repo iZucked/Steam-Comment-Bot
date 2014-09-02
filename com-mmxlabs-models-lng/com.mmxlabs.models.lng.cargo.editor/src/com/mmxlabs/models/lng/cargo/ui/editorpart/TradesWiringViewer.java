@@ -1744,7 +1744,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				editorLock.claim();
 				scenarioEditingLocation.setDisableUpdates(true);
 
-				final ComplexCargoEditor editor = new ComplexCargoEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation);
+				final ComplexCargoEditor editor = new ComplexCargoEditor(getScenarioViewer().getGrid().getShell(), scenarioEditingLocation, true);
 				// editor.setBlockOnOpen(true);
 
 				final Cargo cargo = CargoFactory.eINSTANCE.createCargo();

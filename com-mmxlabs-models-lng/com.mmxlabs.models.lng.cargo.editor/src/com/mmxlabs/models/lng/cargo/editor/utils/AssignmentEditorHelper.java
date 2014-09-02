@@ -82,7 +82,7 @@ public class AssignmentEditorHelper {
 	}
 
 	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel) {
-		return collectAssignments(cargoModel, fleetModel, null);
+		return collectAssignments(cargoModel, fleetModel, new AssignableElementDateComparator());
 	}
 
 	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel, IAssignableElementComparator assignableElementComparator) {

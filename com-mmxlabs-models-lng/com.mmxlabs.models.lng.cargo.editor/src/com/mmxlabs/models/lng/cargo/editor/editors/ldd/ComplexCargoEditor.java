@@ -105,14 +105,14 @@ public class ComplexCargoEditor extends Dialog {
 	private IDialogEditingContext dialogContext;
 
 
-	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
+	public ComplexCargoEditor(final IShellProvider parentShell, final IScenarioEditingLocation scenarioEditingLocation, final boolean isCargoObjectNew) {
 		super(parentShell);
-		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false, isCargoObjectNew);
 	}
 
-	public ComplexCargoEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation) {
+	public ComplexCargoEditor(final Shell parentShell, final IScenarioEditingLocation scenarioEditingLocation, final boolean isCargoObjectNew) {
 		super(parentShell);
-		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false);
+		this.dialogContext = new DefaultDialogEditingContext(new NullDialogController(), scenarioEditingLocation, false, isCargoObjectNew);
 	}
 
 	@Override
