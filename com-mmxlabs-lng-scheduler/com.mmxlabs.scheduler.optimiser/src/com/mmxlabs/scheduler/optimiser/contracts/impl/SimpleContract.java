@@ -53,7 +53,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		}
 
 		final int pricingDate = pricingEventHelper.getLoadPricingDate(loadSlot, dischargeSlot, allocationAnnotation);
-		final IPort port = loadSlot == null ? null : loadSlot.getPort();
+		final IPort port = loadSlot.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
@@ -65,7 +65,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		}
 
 		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, voyageRecord);
-		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
+		final IPort port = dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
@@ -77,7 +77,7 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		}
 
 		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, allocationAnnotation);
-		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
+		final IPort port = dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
