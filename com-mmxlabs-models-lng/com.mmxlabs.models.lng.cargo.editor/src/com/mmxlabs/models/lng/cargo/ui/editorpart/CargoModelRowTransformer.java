@@ -18,6 +18,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
+import com.google.common.hash.HashCode;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -513,6 +514,12 @@ public class CargoModelRowTransformer {
 			}
 
 			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			// Implemented to "fix" findbugs warning.
+			return super.hashCode();
 		}
 
 		public void setCargo(final Cargo cargo) {
