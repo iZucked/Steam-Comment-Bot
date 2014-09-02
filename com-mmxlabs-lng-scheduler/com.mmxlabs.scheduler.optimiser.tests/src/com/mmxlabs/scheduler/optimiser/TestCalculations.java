@@ -167,7 +167,7 @@ public class TestCalculations {
 		final ISequence sequence = new ListSequence(sequenceList);
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0l);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(2200l);
@@ -576,7 +576,7 @@ public class TestCalculations {
 		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0l);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(3300l);
@@ -981,7 +981,7 @@ public class TestCalculations {
 		final ISequence sequence = new ListSequence(sequenceList);
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVessel> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0l);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(1150l);
