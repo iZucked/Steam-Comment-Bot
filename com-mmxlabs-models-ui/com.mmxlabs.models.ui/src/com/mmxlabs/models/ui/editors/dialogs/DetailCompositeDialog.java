@@ -419,7 +419,7 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		}
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
-		dialogContext = new DefaultDialogEditingContext(dialogController, location, false);
+		dialogContext = new DefaultDialogEditingContext(dialogController, location, false, true);
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), dialogContext, toolkit);
 
 		// Create a new instance with the current adapter factory.
