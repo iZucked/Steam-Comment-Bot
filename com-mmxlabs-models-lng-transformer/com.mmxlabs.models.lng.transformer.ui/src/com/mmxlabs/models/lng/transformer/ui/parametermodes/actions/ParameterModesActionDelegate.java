@@ -129,7 +129,7 @@ public abstract class ParameterModesActionDelegate extends ActionDelegate implem
 				// Add edit menu
 				{
 
-					MenuItem sep = new MenuItem(m, SWT.SEPARATOR);
+					/* MenuItem sep = */ new MenuItem(m, SWT.SEPARATOR);
 
 					final MenuItem item = new MenuItem(m, SWT.DEFAULT);
 					item.setText("Customise...");
