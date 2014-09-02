@@ -445,6 +445,10 @@
       </PortRotationBasedColumn>
       <PortRotationBasedColumn
             handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_mmbtu">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.portrotation.heelstart">
       </PortRotationBasedColumn>
       <PortRotationBasedColumn
