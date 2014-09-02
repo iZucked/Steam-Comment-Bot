@@ -866,33 +866,4 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		}
 		return element.toString();
 	}
-
-	private int getEventDuration(final Event event) {
-
-		int duration = event.getDuration();
-		Event next = event.getNextEvent();
-		while (next != null && !isSegmentStart(next)) {
-			duration += next.getDuration();
-			next = next.getNextEvent();
-		}
-		return duration;
-
-	}
-
-	private boolean isSegmentStart(final Event event) {
-		if (event instanceof VesselEventVisit) {
-			return true;
-		} else if (event instanceof GeneratedCharterOut) {
-			return true;
-		} else if (event instanceof StartEvent) {
-			return true;
-		} else if (event instanceof EndEvent) {
-			return true;
-		} else if (event instanceof SlotVisit) {
-			if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
-				return true;
-			}
-		}
-		return false;
-	}
 }

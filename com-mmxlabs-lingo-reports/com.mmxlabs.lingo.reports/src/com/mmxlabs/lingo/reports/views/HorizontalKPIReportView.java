@@ -305,8 +305,11 @@ public class HorizontalKPIReportView extends ViewPart {
 		};
 		getSite().getPage().addPartListener(partListener);
 		// Set initial active editor
-		activeEditorChange(getSite().getPage().getActiveEditor());
-
+		try {
+			activeEditorChange(getSite().getPage().getActiveEditor());
+		} catch (final Throwable t) {
+			// Ignore these errors
+		}
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 			// private boolean hasPin = false;
 			// private int numberOfSchedules;

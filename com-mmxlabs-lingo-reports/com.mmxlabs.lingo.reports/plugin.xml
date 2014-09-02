@@ -8,6 +8,12 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="CustomRelatedSlotHandlerExtension" name="CustomRelatedSlotHandlerExtension" schema="schema/CustomRelatedSlotHandlerExtension.exsd"/>
+   <extension-point id="ScheduleBasedColumn" name="ScheduleBasedColumn" schema="schema/ScheduleBasedColumn.exsd"/>
+   <extension-point id="ScheduleBasedColumnFactory" name="ScheduleBasedColumnFactory" schema="schema/ScheduleBasedColumnFactory.exsd"/>
+   <extension-point id="ScheduleBasedReportInitialState" name="ScheduleBasedReportInitialState" schema="schema/ScheduleBasedReportInitialState.exsd"/>
+   <extension-point id="PortRotationBasedColumn" name="PortRotationBasedColumn" schema="schema/PortRotationBasedColumn.exsd"/>
+   <extension-point id="PortRotationBasedColumnFactory" name="PortRotationBasedColumnFactory" schema="schema/PortRotationBasedColumnFactory.exsd"/>
+   <extension-point id="PortRotationBasedReportInitialState" name="PortRotationBasedReportInitialState" schema="schema/PortRotationBasedReportInitialState.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
@@ -15,30 +21,6 @@
             name="Reports"
             id="com.mmxlabs.shiplingo.platform.reports">
       </category>
-      
-      <view
-            name="Cargo Costs"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.CargoReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.CargoReportView">
-      </view>
-      
-      <view
-            name="Cargo"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.BasicCargoReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView">
-      </view>
-      
-       <view
-            name="Cargo PnL"
-            icon="icons/cview16/exec_statistic_view.gif"
-            category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.CargoPnLReportView"
-            id="com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView">
-      </view>
       
        <view
             name="Index Exposures"
@@ -55,14 +37,15 @@
             class="com.mmxlabs.lingo.reports.views.VolumeTrackingReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.VolumeTrackingReportView">
       </view>
-      
+
       <view
-            name="Schedule PnL"
+            name="Schedule Report"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.SchedulePnLReport"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.schedule.ConfigurableScheduleReportView"
             id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
       </view>
+
       
       <view
             category="com.mmxlabs.shiplingo.platform.reports"
@@ -88,7 +71,7 @@
       
        <view
             category="com.mmxlabs.shiplingo.platform.reports"
-            class="com.mmxlabs.lingo.reports.views.PortRotationReportView"
+            class="org.ops4j.peaberry.eclipse.GuiceExtensionFactory:com.mmxlabs.lingo.reports.views.portrotation.PortRotationReportView"
             icon="icons/cview16/exec_flow_view.gif"
             id="com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView"
             name="Port Rotation">
@@ -171,5 +154,395 @@
       <module
             class="com.mmxlabs.lingo.reports.components.ReportComponentModule">
       </module>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.ScheduleBasedColumnFactory">
+      <ScheduleBasedColumnFactory
+            factory="com.mmxlabs.lingo.reports.views.schedule.StandardScheduleColumnFactory"
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory">
+      </ScheduleBasedColumnFactory>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.ScheduleBasedColumn">
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.schedule">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.id">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.l-id">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.d-id">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.type">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.cargotype">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_trading">
+      </ScheduleBasedColumn>
+            <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_shipping">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.vessel">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.loaddate">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.loadtime">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.dischargetime">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.buyprice">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.sellprice">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.salescontract">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.buyport">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.sellport">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_mmbtu">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_mmbtu">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ladencost">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.ballastcost">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.totalcost">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
+      </ScheduleBasedColumn>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.ScheduleBasedReportInitialState">
+      <ScheduleBasedReportInitialState
+            customisable="true"
+            id="com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport">
+         <InitialRowType
+               rowType="cargo">
+         </InitialRowType>
+         <InitialRowType
+               rowType="long">
+         </InitialRowType>
+         <InitialRowType
+               rowType="short">
+         </InitialRowType>
+         <InitialRowType
+               rowType="virtualcharters">
+         </InitialRowType>
+         <InitialRowType
+               rowType="event">
+         </InitialRowType>
+         <InitialRowType
+               rowType="orphanlegs">
+         </InitialRowType>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.schedule">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.l-id">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.d-id">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.type">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.vessel">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.pnl_total">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyport">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.loaddate">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellport">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.purchasecontract">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyprice">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellprice">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.sellvolume_m3">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
+         </InitialColumn>
+         <InitialDiffOption
+               option="scenario">
+         </InitialDiffOption>
+         <InitialDiffOption
+               option="vessel">
+         </InitialDiffOption>
+      </ScheduleBasedReportInitialState>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.PortRotationBasedColumnFactory">
+      <PortRotationBasedColumnFactory
+            factory="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory">
+      </PortRotationBasedColumnFactory>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.PortRotationBasedColumn">
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.schedule">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.vessel">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.type">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.id">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.contract">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.startdate">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.enddate">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.duration">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.speed">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.distance">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.toport">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.fromport">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.atport">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.route">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_m3">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.heelstart">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.heelend">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.fuels">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.fuelcost">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.routecost">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.portcosts">
+      </PortRotationBasedColumn>
+      <PortRotationBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.views.portrotation.StandardPortRotationColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.totalcosts">
+      </PortRotationBasedColumn>
+   </extension>
+   <extension
+         point="com.mmxlabs.lingo.reports.PortRotationBasedReportInitialState">
+      <PortRotationBasedReportInitialState
+            customisable="true"
+            id="com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView">
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.portrotation.schedule">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.portrotation.vessel">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.type">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.portrotation.id">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.contract">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.startdate">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.enddate">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.duration">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.speed">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.distance">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.toport">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.fromport">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.atport">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.route">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.transfervolume_m3">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.heelstart">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.heelend">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.fuels">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.fuelcost">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.routecost">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.portcosts">
+         </InitialColumn>
+         <InitialColumn
+            id="com.mmxlabs.lingo.reports.components.columns.portrotation.totalcosts">
+         </InitialColumn>
+      </PortRotationBasedReportInitialState>
    </extension>
 </plugin>

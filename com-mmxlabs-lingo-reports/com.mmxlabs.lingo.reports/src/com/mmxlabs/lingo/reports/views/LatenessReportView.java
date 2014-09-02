@@ -15,9 +15,12 @@ import org.eclipse.jface.viewers.Viewer;
 import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScheduledEventCollector;
+import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -37,14 +40,14 @@ public class LatenessReportView extends EMFReportView {
 
 	public LatenessReportView() {
 		super();
-		addScheduleColumn("Schedule", containingScheduleFormatter);
+		addColumn("schedule", "Schedule", ColumnType.MULTIPLE, containingScheduleFormatter);
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("ID", ColumnType.NORMAL, objectFormatter, sp.getEvent__Name());
+		addColumn("id", "ID", ColumnType.NORMAL, objectFormatter, sp.getEvent__Name());
 
-		addColumn("Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
-		addColumn("Lateness", ColumnType.NORMAL, new BaseFormatter() {
+		addColumn("type", "Type", ColumnType.NORMAL, objectFormatter, sp.getEvent__Type());
+		addColumn("lateness", "Lateness", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 
@@ -94,14 +97,15 @@ public class LatenessReportView extends EMFReportView {
 			}
 		});
 
-		addColumn("Start by", ColumnType.NORMAL, new BaseFormatter() {
+		addColumn("startby", "Start by", ColumnType.NORMAL, new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				return calendarFormatterNoTZ.format(getWindowEndDate(object));
 			}
 		});
-		addColumn("Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
+		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
 
+		makeAllBlocksVisible();
 	}
 
 	private Calendar getWindowStartDate(final Object object) {
@@ -286,5 +290,10 @@ public class LatenessReportView extends EMFReportView {
 	@Override
 	protected boolean handleSelections() {
 		return true;
+	}
+
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		final ColumnBlock block = createBlock(blockID, title, columnType);
+		return createColumn(block, title, formatter, path);
 	}
 }
