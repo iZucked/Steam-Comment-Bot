@@ -156,6 +156,11 @@ public class ActualsModelRowTransformer {
 			return false;
 		}
 
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
+		
 		public void setCargo(final CargoActuals cargo) {
 			this.cargo = cargo;
 		}
