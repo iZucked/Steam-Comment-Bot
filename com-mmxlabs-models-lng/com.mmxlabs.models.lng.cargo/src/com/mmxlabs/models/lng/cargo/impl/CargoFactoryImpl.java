@@ -79,6 +79,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.DRY_DOCK_EVENT: return createDryDockEvent();
 			case CargoPackage.CHARTER_OUT_EVENT: return createCharterOutEvent();
 			case CargoPackage.VESSEL_TYPE_GROUP: return createVesselTypeGroup();
+			case CargoPackage.END_HEEL_OPTIONS: return createEndHeelOptions();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -236,6 +237,16 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public VesselTypeGroup createVesselTypeGroup() {
 		VesselTypeGroupImpl vesselTypeGroup = new VesselTypeGroupImpl();
 		return vesselTypeGroup;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EndHeelOptions createEndHeelOptions() {
+		EndHeelOptionsImpl endHeelOptions = new EndHeelOptionsImpl();
+		return endHeelOptions;
 	}
 
 	/**

@@ -2,17 +2,17 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.cargo.validation;singleton:=true
-Bundle-Version: 3.4.0.qualifier
+Bundle-Version: 3.5.0.qualifier
 Bundle-Activator: com.mmxlabs.models.lng.cargo.validation.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.scenario.model;bundle-version="[3.4.0,4.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[3.4.0,4.0.0)",
- com.mmxlabs.scheduler.optimiser;bundle-version="[3.4.0,4.0.0)",
+ com.mmxlabs.models.lng.scenario.model;bundle-version="[3.5.0,4.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[3.5.0,4.0.0)",
+ com.mmxlabs.scheduler.optimiser;bundle-version="[3.5.0,4.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[2.5.0,3.0.0)",
- com.mmxlabs.models.lng.pricing.validation;bundle-version="[3.4.0,4.0.0)",
- com.mmxlabs.models.lng.commercial.editor;bundle-version="[3.4.0,4.0.0)",
+ com.mmxlabs.models.lng.pricing.validation;bundle-version="[3.5.0,4.0.0)",
+ com.mmxlabs.models.lng.commercial.editor;bundle-version="[3.5.0,4.0.0)",
  joda-time
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

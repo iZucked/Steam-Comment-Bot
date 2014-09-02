@@ -325,4 +325,9 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	public void setEditorWrapper(IInlineEditorWrapper wrapper) {
 		delegate.setEditorWrapper(wrapper);
 	}
+
+	@Override
+	public boolean checkVisibility(IDialogEditingContext context) {
+		return delegate.checkVisibility(context);
+	}
 }

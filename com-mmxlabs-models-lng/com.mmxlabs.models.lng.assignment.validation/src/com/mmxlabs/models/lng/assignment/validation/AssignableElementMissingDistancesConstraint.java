@@ -80,17 +80,9 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 				Port startPort = null;
 				Set<Port> endPorts = null;
 				VesselAvailability vesselAvailability = null;
-				if (collectedAssignment.getVesselOrClass() instanceof Vessel) {
+				if (collectedAssignment.getVesselAvailability() != null) {
 					// Find start port
-					final Vessel vessel = (Vessel) collectedAssignment.getVesselOrClass();
-
-					for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
-						if (va.getVessel() == vessel) {
-							vesselAvailability = va;
-							break;
-
-						}
-					}
+					vesselAvailability = collectedAssignment.getVesselAvailability();
 					if (vesselAvailability != null) {
 						final Set<Port> startPorts = SetUtils.getObjects(vesselAvailability.getStartAt());
 						if (startPorts.size() == 1) {
@@ -170,8 +162,8 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 					}
 					if (!foundDistance) {
 
-						final String msg = String.format("Missing distance between port (%s) and vessel (%s) end port(s) and (%s to %s).", getPortName(prevPort),
-								getVesselName(vesselAvailability), getID(prevObject, prevFeature), getID(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT));
+						final String msg = String.format("Missing distance between port (%s) and vessel (%s) end port(s) and (%s to %s).", getPortName(prevPort), getVesselName(vesselAvailability),
+								getID(prevObject, prevFeature), getID(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT));
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
 						failure.addEObjectAndFeature(prevPort, prevFeature);
 						failure.addEObjectAndFeature(vesselAvailability, CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT);
@@ -251,11 +243,11 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 	}
 
 	private boolean hasDistance(final Map<Pair<Port, Port>, Boolean> map, final Port from, final Port to) {
-		
+
 		if (from == to) {
 			return true;
 		}
-		
+
 		final Pair<Port, Port> key = new Pair<>(from, to);
 		if (map.containsKey(key)) {
 			return map.get(key);

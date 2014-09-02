@@ -9,9 +9,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
  * Utility class representing a sequence from the input model. Because the input model is now held as per-element assignment classes, this is needed to glom everything together.
@@ -21,23 +20,42 @@ import com.mmxlabs.models.lng.types.AVesselSet;
  */
 public class CollectedAssignment {
 
-	final AVesselSet<? extends Vessel> vessel;
-	final ArrayList<AssignableElement> assignedObjects = new ArrayList<AssignableElement>();
-	List<AssignableElement> assignments = null;
+	private final VesselAvailability vesselAvailability;
+	private final VesselClass vesselClass;
+	private final ArrayList<AssignableElement> assignedObjects = new ArrayList<AssignableElement>();
+	private List<AssignableElement> assignments = null;
 	private final Integer spotIndex;
 
-	public CollectedAssignment(final List<AssignableElement> assignments, final AVesselSet<? extends Vessel> vessel, final Integer spotIndex) {
-		this.vessel = vessel;
+	public CollectedAssignment(final List<AssignableElement> assignments, final VesselAvailability vesselAvailability) {
+		this.vesselAvailability = vesselAvailability;
+		this.vesselClass = null;
+		this.spotIndex = null;
+		this.assignments = assignments;
+		sortAssignments(new AssignableElementDateComparator());
+	}
+
+	public CollectedAssignment(final List<AssignableElement> assignments, final VesselClass vesselClass, final int spotIndex) {
+		this.vesselAvailability = null;
+		this.vesselClass = vesselClass;
 		this.assignments = assignments;
 		this.spotIndex = spotIndex;
 		sortAssignments(new AssignableElementDateComparator());
 	}
 
-	public CollectedAssignment(final List<AssignableElement> assignments, final AVesselSet<? extends Vessel> vessel, final Integer spotIndex, final IAssignableElementComparator comparator) {
-		this.vessel = vessel;
+	public CollectedAssignment(final List<AssignableElement> assignments, final VesselAvailability vesselAvailability, final IAssignableElementComparator comparator) {
+		this.vesselAvailability = vesselAvailability;
+		this.vesselClass = null;
+		this.spotIndex = null;
+		this.assignments = assignments;
+		sortAssignments(comparator);
+	}
+
+	public CollectedAssignment(final List<AssignableElement> assignments, final VesselClass vesselClass, final int spotIndex, final IAssignableElementComparator comparator) {
+		this.vesselAvailability = null;
+		this.vesselClass = vesselClass;
 		this.assignments = assignments;
 		this.spotIndex = spotIndex;
-		sortAssignments(comparator == null ? new AssignableElementDateComparator() : comparator);
+		sortAssignments(comparator);
 	}
 
 	private void sortAssignments(final IAssignableElementComparator comparator) {
@@ -54,11 +72,15 @@ public class CollectedAssignment {
 	}
 
 	public boolean isSpotVessel() {
-		return vessel instanceof VesselClass;
+		return vesselAvailability == null;
 	}
 
-	public AVesselSet<? extends Vessel> getVesselOrClass() {
-		return vessel;
+	public VesselClass getVesselClass() {
+		return vesselClass;
+	}
+
+	public VesselAvailability getVesselAvailability() {
+		return vesselAvailability;
 	}
 
 	public boolean isSetSpotIndex() {

@@ -1617,22 +1617,6 @@ public interface SpotMarketsPackage extends EPackage {
 		EClass SPOT_MARKET = eINSTANCE.getSpotMarket();
 
 		/**
-		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SPOT_MARKET__ENABLED = eINSTANCE.getSpotMarket_Enabled();
-
-		/**
-		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SPOT_MARKET__AVAILABILITY = eINSTANCE.getSpotMarket_Availability();
-
-		/**
 		 * The meta object literal for the '<em><b>Min Quantity</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1671,6 +1655,22 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPOT_MARKET__PRICING_EVENT = eINSTANCE.getSpotMarket_PricingEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKET__ENABLED = eINSTANCE.getSpotMarket_Enabled();
+
+		/**
+		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__AVAILABILITY = eINSTANCE.getSpotMarket_Availability();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.

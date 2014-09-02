@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.cargo.provider;
 
 
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import java.util.Collection;
 import java.util.List;
 
@@ -65,6 +66,7 @@ public class VesselAvailabilityItemProvider
 			super.getPropertyDescriptors(object);
 
 			addVesselPropertyDescriptor(object);
+			addEntityPropertyDescriptor(object);
 			addTimeCharterRatePropertyDescriptor(object);
 			addStartAtPropertyDescriptor(object);
 			addStartAfterPropertyDescriptor(object);
@@ -72,7 +74,6 @@ public class VesselAvailabilityItemProvider
 			addEndAtPropertyDescriptor(object);
 			addEndAfterPropertyDescriptor(object);
 			addEndByPropertyDescriptor(object);
-			addEntityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -288,6 +289,7 @@ public class VesselAvailabilityItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL);
+			childrenFeatures.add(CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL);
 		}
 		return childrenFeatures;
 	}
@@ -354,6 +356,7 @@ public class VesselAvailabilityItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CargoPackage.VESSEL_AVAILABILITY__START_HEEL:
+			case CargoPackage.VESSEL_AVAILABILITY__END_HEEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -375,6 +378,11 @@ public class VesselAvailabilityItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.VESSEL_AVAILABILITY__START_HEEL,
 				 FleetFactory.eINSTANCE.createHeelOptions()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.VESSEL_AVAILABILITY__END_HEEL,
+				 CargoFactory.eINSTANCE.createEndHeelOptions()));
 	}
 
 }

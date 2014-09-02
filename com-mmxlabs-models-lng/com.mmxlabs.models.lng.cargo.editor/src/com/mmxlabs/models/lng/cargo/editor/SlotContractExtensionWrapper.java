@@ -53,6 +53,7 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 	@Override
 	protected boolean respondToNotification(final Notification notification) {
 
+		final EObject object = (EObject) notification.getNotifier();
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getSlot_Contract()) {
 			if (notification.getNotifier() instanceof Slot) {
 				final Slot slot = (Slot) notification.getNotifier();
@@ -65,18 +66,17 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 						for (final EObject r : slot.getExtensions()) {
 							if (slotContractParamsClass.isInstance(r)) {
 								enabled = true;
+								dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
+								dialogContext.getDialogController().updateEditorVisibility();
 								super.display(dialogContext, scenario, r, range);
-								setEditorVisible(enabled);
 								getLabel().pack();
 								return true;
 							}
 						}
 					}
 				}
-
-				setEditorVisible(false);
-
-				// setEditorVisible(enabled);
+				dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
+				dialogContext.getDialogController().updateEditorVisibility();
 				return true;
 			}
 		} else if (notification.getFeature() == MMXCorePackage.eINSTANCE.getMMXObject_Extensions()) {
@@ -84,15 +84,17 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 				// If an instance of the slot specific code has just been added, then display it
 				if (slotContractParamsClass.isInstance(notification.getNewValue())) {
 					enabled = true;
+					dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
+					dialogContext.getDialogController().updateEditorVisibility();
 					super.display(dialogContext, scenario, slotContractParamsClass.cast(notification.getNewValue()), range);
-					setEditorVisible(enabled);
 					getLabel().pack();
+
 					return true;
 
 				}
 				enabled = false;
-				super.display(dialogContext, scenario, null, range);
-				setEditorVisible(false);
+				dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
+				dialogContext.getDialogController().updateEditorVisibility();
 				return true;
 			}
 
@@ -128,18 +130,20 @@ public class SlotContractExtensionWrapper<T extends LNGPriceCalculatorParameters
 			if (range != null) {
 				for (final EObject r : range) {
 					if (slotContractParamsClass.isInstance(r)) {
+						dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 						super.display(dialogContext, scenario, r, range);
-						setEditorVisible(true);
+						getLabel().pack();
 						return;
 					}
 				}
 			}
+			enabled = false;
+			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
 			super.display(dialogContext, scenario, null, range);
-			setEditorVisible(true);
 		} else {
 			enabled = false;
+			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
 			super.display(dialogContext, scenario, null, range);
-			setEditorVisible(false);
 		}
 	}
 

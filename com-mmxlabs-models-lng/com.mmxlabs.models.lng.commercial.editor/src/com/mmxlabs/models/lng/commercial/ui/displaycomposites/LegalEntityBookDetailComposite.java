@@ -378,4 +378,9 @@ public class LegalEntityBookDetailComposite extends Composite implements IDispla
 		delegate.setEditorWrapper(wrapper);
 	}
 
+	@Override
+	public boolean checkVisibility(IDialogEditingContext context) {
+		return delegate.checkVisibility(context);
+	}
+
 }

@@ -220,14 +220,6 @@ public interface SpotMarket extends UUIDObject, NamedObject {
 	 */
 	void setPricingEvent(PricingEvent value);
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation"
-	 * @generated
-	 */
-//	AContract getContract();
-
 } // end of  SpotMarket
 
 // finish type fixing
