@@ -12,11 +12,20 @@ import org.apache.shiro.subject.Subject;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.equinox.internal.p2.garbagecollector.GarbageCollector;
+import org.eclipse.equinox.p2.core.IProvisioningAgent;
+import org.eclipse.equinox.p2.core.IProvisioningAgentProvider;
+import org.eclipse.equinox.p2.core.ProvisionException;
+import org.eclipse.equinox.p2.engine.IProfile;
+import org.eclipse.equinox.p2.engine.IProfileRegistry;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 import com.mmxlabs.license.features.LicenseFeatures;
 import com.mmxlabs.license.ssl.LicenseChecker;
@@ -26,6 +35,7 @@ import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 /**
  * This class controls all aspects of the application's execution
  */
+@SuppressWarnings("restriction")
 public class Application implements IApplication {
 
 	/*
@@ -37,7 +47,7 @@ public class Application implements IApplication {
 	public Object start(final IApplicationContext context) {
 
 		final Display display = PlatformUI.createDisplay();
-		LicenseState validity = LicenseChecker.checkLicense();
+		final LicenseState validity = LicenseChecker.checkLicense();
 		if (validity != LicenseState.Valid) {
 
 			MessageDialog.openError(display.getActiveShell(), "License Error", "Unable to validate license: " + validity.getMessage());
@@ -47,6 +57,8 @@ public class Application implements IApplication {
 		}
 
 		initAccessControl();
+
+		cleanupP2();
 
 		final DelayedOpenFileProcessor processor = new DelayedOpenFileProcessor(display);
 
@@ -85,6 +97,42 @@ public class Application implements IApplication {
 			}
 		}
 		return IApplication.EXIT_OK;
+	}
+
+	/**
+	 */
+	private void cleanupP2() {
+		final BundleContext context = FrameworkUtil.getBundle(Application.class).getBundleContext();
+		final ServiceReference<IProvisioningAgentProvider> providerRef = context.getServiceReference(IProvisioningAgentProvider.class);
+		if (providerRef == null) {
+			throw new RuntimeException("No provisioning agent provider is available"); //$NON-NLS-1$
+		}
+		try {
+			final IProvisioningAgentProvider provider = context.getService(providerRef);
+			if (provider == null) {
+				throw new RuntimeException("No provisioning agent provider is available"); //$NON-NLS-1$
+			}
+
+			// See http://wiki.eclipse.org/Equinox/p2/FAQ#But_why_aren.27t_uninstalled_bundles.2Ffeatures_immediately_removed.3F
+			// IProvisioningAgentProvider provider = // obtain the IProvisioningAgentProvider using OSGi services
+			final IProvisioningAgent agent = provider.createAgent(null); // null = location for running system
+			if (agent == null)
+				throw new RuntimeException("Location was not provisioned by p2");
+			final IProfileRegistry profileRegistry = (IProfileRegistry) agent.getService(IProfileRegistry.SERVICE_NAME);
+			if (profileRegistry == null)
+				throw new RuntimeException("Unable to acquire the profile registry service.");
+			// can also use IProfileRegistry.SELF for the current profile
+			final IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
+			final GarbageCollector gc = (GarbageCollector) agent.getService(GarbageCollector.SERVICE_NAME);
+			gc.runGC(profile);
+		} catch (final ProvisionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// When you're done, make sure you 'unget' the service.
+			context.ungetService(providerRef);
+		}
+		// return result;
 	}
 
 	private void initAccessControl() {
