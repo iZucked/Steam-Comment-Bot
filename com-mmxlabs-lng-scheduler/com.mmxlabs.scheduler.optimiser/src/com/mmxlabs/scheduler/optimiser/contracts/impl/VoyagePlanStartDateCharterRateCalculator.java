@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.contracts.impl;
 import javax.inject.Inject;
 
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselCharterInRateProvider;
 
@@ -23,8 +23,8 @@ public class VoyagePlanStartDateCharterRateCalculator implements ICharterRateCal
 	private IVesselCharterInRateProvider IVesselCharterInRateProvider;
 
 	@Override
-	public int getCharterRatePerDay(IVessel vessel, int vesselStartTime, int voyagePlanStartTime) {
-		ICurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vessel);
+	public int getCharterRatePerDay(final IVesselAvailability vesselAvailability, final int vesselStartTime, final int voyagePlanStartTime) {
+		final ICurve rate = IVesselCharterInRateProvider.getCharterInRatePerDay(vesselAvailability);
 		if (rate != null) {
 			return rate.getValueAtPoint(voyagePlanStartTime);
 		}

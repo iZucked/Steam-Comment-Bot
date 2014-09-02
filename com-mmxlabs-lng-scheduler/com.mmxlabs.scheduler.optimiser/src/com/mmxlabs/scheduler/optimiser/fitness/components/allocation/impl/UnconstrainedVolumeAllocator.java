@@ -56,7 +56,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		final AllocationAnnotation annotation = new AllocationAnnotation();
 
-		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.resourceVessel;
+		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.vesselAvailability.getVessel();
 		if (allocationRecord.allocationMode == AllocationMode.Actuals) {
 
 			// Work out used fuel volume - adjust for heel positions and transfer volumes

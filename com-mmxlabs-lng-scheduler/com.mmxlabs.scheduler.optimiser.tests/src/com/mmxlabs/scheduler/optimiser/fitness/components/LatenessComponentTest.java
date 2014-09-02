@@ -14,7 +14,8 @@ import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -76,8 +77,8 @@ public class LatenessComponentTest {
 
 		final IResource resource = Mockito.mock(IResource.class);
 
-		final IStartEndRequirement startRequirement = Mockito.mock(IStartEndRequirement.class, "Start");
-		final IStartEndRequirement endRequirement = Mockito.mock(IStartEndRequirement.class, "End");
+		final IStartRequirement startRequirement = Mockito.mock(IStartRequirement.class, "Start");
+		final IEndRequirement endRequirement = Mockito.mock(IEndRequirement.class, "End");
 
 		Mockito.when(startEndRequirementProvider.getStartRequirement(resource)).thenReturn(startRequirement);
 		Mockito.when(startEndRequirementProvider.getEndRequirement(resource)).thenReturn(endRequirement);
@@ -90,11 +91,11 @@ public class LatenessComponentTest {
 
 		final PortDetails startDetails = new PortDetails();
 		startDetails.setOptions(new PortOptions());
-		final StartPortSlot startSlot = new StartPortSlot(0, 0, 0);
+		final StartPortSlot startSlot = new StartPortSlot(null);
 		startDetails.getOptions().setPortSlot(startSlot);
 		final PortDetails endDetails = new PortDetails();
 		endDetails.setOptions(new PortOptions());
-		final EndPortSlot endSlot = new EndPortSlot();
+		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0l);
 		endDetails.getOptions().setPortSlot(endSlot);
 
 		final LoadSlot loadSlot = new LoadSlot();

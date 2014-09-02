@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -35,8 +36,10 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -85,9 +88,16 @@ public class SimpleSchedulerTest {
 				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 15000, 0);
 
 		// TODO: Setup start/end ports correctly
-		builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0, 150000000);
-		builder.createVessel("vessel-2", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0, 150000000);
-		builder.createVessel("vessel-3", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0, 150000000);
+		IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 150000000);
+		IVessel vessel2 = builder.createVessel("vessel-2", vesselClass1, 150000000);
+		IVessel vessel3 = builder.createVessel("vessel-3", vesselClass1, 150000000);
+
+		builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
+		builder.createVesselAvailability(vessel2, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port2), null, false, 0));
+		builder.createVesselAvailability(vessel3, new ConstantValueCurve(0), VesselInstanceType.FLEET, builder.createStartRequirement(port1, null, null),
+				builder.createEndRequirement(Collections.singleton(port6), null, false, 0));
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);

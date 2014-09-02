@@ -34,12 +34,13 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketLoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.MarkToMarketVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -124,9 +125,9 @@ public class ScheduleCalculator {
 	 * @throws InfeasibleVoyageException
 	 */
 	private ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
-		final IVessel vessel = vesselProvider.getVessel(resource);
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
-		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			// Virtual vessels are those operated by a third party, for FOB and DES situations.
 			// Should we compute a schedule for them anyway? The arrival times don't mean much,
 			// but contracts need this kind of information to make up numbers with.
@@ -134,7 +135,7 @@ public class ScheduleCalculator {
 		}
 
 		// If this is the cargo shorts sequence, but we have no data (i.e. there are no short cargoes), return the basic data structure to avoid any exceptions
-		final boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+		final boolean isShortsSequence = vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 		if (isShortsSequence && arrivalTimes.length == 0) {
 			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
 		}
@@ -236,11 +237,11 @@ public class ScheduleCalculator {
 
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
 
-		final IVessel vessel = vesselProvider.getVessel(resource);
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		final int vesselStartTime = startTime;
 
 		// TODO: This is not the place!
-		final IAllocationAnnotation annotation = volumeAllocator.allocate(vessel, vesselStartTime, currentPlan, portTimesRecord);
+		final IAllocationAnnotation annotation = volumeAllocator.allocate(vesselAvailability, vesselStartTime, currentPlan, portTimesRecord);
 		scheduledSequence.getAllocations().put(currentPlan, annotation);
 
 		return scheduledSequence;
@@ -381,7 +382,7 @@ public class ScheduleCalculator {
 			}
 		}
 		for (final ScheduledSequence sequence : scheduledSequences) {
-			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(sequence.getResource());
 
 			int time = sequence.getStartTime();
 
@@ -398,7 +399,7 @@ public class ScheduleCalculator {
 					}
 
 					// TODO: this logic looks decidedly shaky - plan sequence length could change with logic changes
-					final boolean isDesFobCase = ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan
+					final boolean isDesFobCase = ((vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan
 							.getSequence().length == 4);
 
 					final IAllocationAnnotation currentAllocation = allocations.get(plan);
@@ -413,20 +414,20 @@ public class ScheduleCalculator {
 							final ILoadOption loadSlot = (ILoadOption) currentAllocation.getSlots().get(0);
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
 							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 
 						} else {
 							final PortDetails firstDetails = portDetails.get(0);
 							cargo = true;
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, sequence.getStartTime(), annotatedSolution);
 							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
 						}
 					}
 				}
 
 				if (!cargo) {
-					final long otherGroupValue = entityValueCalculator.evaluate(plan, vessel, time, sequence.getStartTime(), annotatedSolution);
+					final long otherGroupValue = entityValueCalculator.evaluate(plan, vesselAvailability, time, sequence.getStartTime(), annotatedSolution);
 					final PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
 					firstDetails.setTotalGroupProfitAndLoss(otherGroupValue);
 				}
@@ -478,7 +479,7 @@ public class ScheduleCalculator {
 			final IDischargeOption dischargeOption;
 			final int time;
 
-			final IVessel vessel;
+			final IVesselAvailability vesselAvailability;
 			if (portSlot instanceof ILoadOption) {
 				loadOption = (ILoadOption) portSlot;
 				if (loadOption instanceof ILoadSlot) {
@@ -487,7 +488,7 @@ public class ScheduleCalculator {
 					dischargeOption = new MarkToMarketDischargeSlot(market, loadOption);
 				}
 				time = loadOption.getTimeWindow().getStart();
-				vessel = new MarkToMarketVessel(market, loadOption);
+				vesselAvailability = new MarkToMarketVesselAvailability(market, loadOption);
 			} else if (portSlot instanceof IDischargeOption) {
 				dischargeOption = (IDischargeOption) portSlot;
 				if (dischargeOption instanceof IDischargeSlot) {
@@ -496,7 +497,7 @@ public class ScheduleCalculator {
 					loadOption = new MarkToMarketLoadSlot(market, dischargeOption);
 				}
 				time = dischargeOption.getTimeWindow().getStart();
-				vessel = new MarkToMarketVessel(market, dischargeOption);
+				vesselAvailability = new MarkToMarketVesselAvailability(market, dischargeOption);
 			} else {
 				continue;
 			}
@@ -526,12 +527,12 @@ public class ScheduleCalculator {
 			}
 			voyagePlan.setIgnoreEnd(false);
 			// Create an allocation annotation.
-			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vessel, time, voyagePlan, portTimesRecord);
+			final IAllocationAnnotation allocationAnnotation = volumeAllocator.allocate(vesselAvailability, time, voyagePlan, portTimesRecord);
 			if (allocationAnnotation != null) {
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_volumeAllocationInfo, allocationAnnotation);
 
 				// Calculate P&L
-				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vessel, time, annotatedSolution);
+				entityValueCalculator.evaluate(voyagePlan, allocationAnnotation, vesselAvailability, time, annotatedSolution);
 			}
 		}
 	}

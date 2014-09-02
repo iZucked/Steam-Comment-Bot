@@ -24,7 +24,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Sequences;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
@@ -70,12 +70,11 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final IResource r = Mockito.mock(IResource.class);
+		final IVesselAvailability va = Mockito.mock(IVesselAvailability.class);
 
-		final IVessel v = Mockito.mock(IVessel.class);
+		vesselProvider.setVesselAvailabilityResource(r, va);
 
-		vesselProvider.setVesselResource(r, v);
-
-		Mockito.when(v.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
@@ -108,12 +107,11 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final IResource r = Mockito.mock(IResource.class);
+		final IVesselAvailability va = Mockito.mock(IVesselAvailability.class);
 
-		final IVessel v = Mockito.mock(IVessel.class);
+		vesselProvider.setVesselAvailabilityResource(r, va);
 
-		vesselProvider.setVesselResource(r, v);
-
-		Mockito.when(v.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
@@ -146,11 +144,11 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final IResource r = Mockito.mock(IResource.class);
-		final IVessel v = Mockito.mock(IVessel.class);
+		final IVesselAvailability va = Mockito.mock(IVesselAvailability.class);
 
-		vesselProvider.setVesselResource(r, v);
+		vesselProvider.setVesselAvailabilityResource(r, va);
 
-		Mockito.when(v.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);
@@ -184,11 +182,11 @@ public class PortTypeConstraintCheckerTest {
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o3, o4, o5, o6));
 
 		final IResource r = Mockito.mock(IResource.class);
-		final IVessel v = Mockito.mock(IVessel.class);
+		final IVesselAvailability va = Mockito.mock(IVesselAvailability.class);
 
-		vesselProvider.setVesselResource(r, v);
+		vesselProvider.setVesselAvailabilityResource(r, va);
 
-		Mockito.when(v.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+		Mockito.when(va.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
 
 		final Map<IResource, ISequence> m = CollectionsUtil.makeHashMap(r, sequence);
 		final Sequences sequences = new Sequences(CollectionsUtil.makeArrayList(r), m);

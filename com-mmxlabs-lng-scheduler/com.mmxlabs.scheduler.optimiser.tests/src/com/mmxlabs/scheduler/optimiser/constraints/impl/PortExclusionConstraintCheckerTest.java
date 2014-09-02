@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
@@ -75,7 +76,10 @@ public class PortExclusionConstraintCheckerTest {
 
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 
-		vesselProvider.setVesselResource(resource, vessel);
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
+
+		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 
 		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
 		final ISequence sequence = new ListSequence(CollectionsUtil.makeArrayList(o1, o2, o4));
@@ -94,7 +98,6 @@ public class PortExclusionConstraintCheckerTest {
 		Assert.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
 
 	}
-
 
 	@Test
 	public void testConstraintNominatedVessel() {
@@ -128,10 +131,13 @@ public class PortExclusionConstraintCheckerTest {
 		final IVesselClass nominatedVesselClass = Mockito.mock(IVesselClass.class);
 		final IResource resource = Mockito.mock(IResource.class);
 
+		final IVesselAvailability vesselAvailability = Mockito.mock(IVesselAvailability.class);
+		Mockito.when(vesselAvailability.getVessel()).thenReturn(vessel);
+
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(nominatedVessel.getVesselClass()).thenReturn(nominatedVesselClass);
 
-		vesselProvider.setVesselResource(resource, vessel);
+		vesselProvider.setVesselAvailabilityResource(resource, vesselAvailability);
 		nominatedVesselProviderEditor.setNominatedVessel(o2, resource, nominatedVessel);
 
 		Assert.assertTrue(checker.checkPairwiseConstraint(o1, o2, resource));
@@ -152,7 +158,6 @@ public class PortExclusionConstraintCheckerTest {
 
 	}
 
-	
 	private PortExclusionConstraintChecker createChecker(final String name, final IVesselProvider vesselProvider, final INominatedVesselProvider nominatedVesselProvider,
 			final IPortProvider portProvider, final IPortExclusionProvider portExclusionProvider) {
 		final Injector injector = Guice.createInjector(new AbstractModule() {

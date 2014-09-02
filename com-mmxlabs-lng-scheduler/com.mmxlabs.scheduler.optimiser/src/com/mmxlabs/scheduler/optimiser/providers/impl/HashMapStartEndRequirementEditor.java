@@ -8,29 +8,30 @@ import java.util.HashMap;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 
 public class HashMapStartEndRequirementEditor implements IStartEndRequirementProviderEditor {
 
-	protected HashMap<IResource, IStartEndRequirement> startRequirements = new HashMap<IResource, IStartEndRequirement>();
-	protected HashMap<IResource, IStartEndRequirement> endRequirements = new HashMap<IResource, IStartEndRequirement>();
+	protected HashMap<IResource, IStartRequirement> startRequirements = new HashMap<>();
+	protected HashMap<IResource, IEndRequirement> endRequirements = new HashMap<>();
 
 	protected HashMap<IResource, ISequenceElement> startElements = new HashMap<IResource, ISequenceElement>();
 	protected HashMap<IResource, ISequenceElement> endElements = new HashMap<IResource, ISequenceElement>();
 
 	@Override
-	public IStartEndRequirement getStartRequirement(final IResource resource) {
+	public IStartRequirement getStartRequirement(final IResource resource) {
 		return startRequirements.get(resource);
 	}
 
 	@Override
-	public IStartEndRequirement getEndRequirement(final IResource resource) {
+	public IEndRequirement getEndRequirement(final IResource resource) {
 		return endRequirements.get(resource);
 	}
 
 	@Override
-	public void setStartEndRequirements(final IResource resource, final IStartEndRequirement startRequirement, final IStartEndRequirement endRequirement) {
+	public void setStartEndRequirements(final IResource resource, final IStartRequirement startRequirement, final IEndRequirement endRequirement) {
 		startRequirements.put(resource, startRequirement);
 		endRequirements.put(resource, endRequirement);
 	}

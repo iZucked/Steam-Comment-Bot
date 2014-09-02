@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
@@ -68,16 +68,16 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Override
-	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVessel vessel, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
+	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
 
-		if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+		if (!(vesselAvailability.getVesselInstanceType() == VesselInstanceType.FLEET || vesselAvailability.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 			return null; // continue;
 		}
 
 		// TODO: Extract out further for custom base fuel pricing logic?
 		// Use forecast BF, but check for actuals later
-		int baseFuelUnitPricePerMT = vessel.getVesselClass().getBaseFuelUnitPrice();
-		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vessel, /** FIXME: Not UTC */
+		int baseFuelUnitPricePerMT = vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice();
+		int vesselCharterInRatePerDay = charterRateCalculator.getCharterRatePerDay(vesselAvailability, /** FIXME: Not UTC */
 		vesselStartTime, timeZoneToUtcOffsetProvider.UTC(portTimesRecord.getFirstSlotTime(), portTimesRecord.getFirstSlot()));
 
 		final long startingHeelInM3 = vp.getStartingHeelInM3();
@@ -151,7 +151,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		}
 
 		// Scan all the markets for a match
-		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
+		for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vesselAvailability.getVessel().getVesselClass(), time)) {
 			if (availableCharteringTime >= option.getMinDuration() && option.getCharterPrice() > bestDailyPrice) {
 				foundMarketPrice = true;
 				bestDailyPrice = option.getCharterPrice();
@@ -188,7 +188,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		vpo.reset();
 
-		vpo.setVessel(vessel, baseFuelUnitPricePerMT);
+		vpo.setVessel(vesselAvailability.getVessel(), baseFuelUnitPricePerMT);
 		vpo.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 		vpo.setStartHeel(startingHeelInM3);
 		// Install our new alternative sequence
@@ -226,15 +226,15 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 		if (isCargoPlan) {
 			// Get the new cargo allocation.
 
-			final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vesselStartTime, vp, portTimesRecord);
-			newAllocation = cargoAllocator.allocate(vessel, vesselStartTime, newVoyagePlan, portTimesRecord);
+			final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, vp, portTimesRecord);
+			newAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
 
-			originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, vesselStartTime, null);
-			newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, vesselStartTime, null);
+			originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vesselAvailability, vesselStartTime, null);
+			newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null);
 
 		} else {
-			originalOption = entityValueCalculator.evaluate(vp, vessel, portTimesRecord.getFirstSlotTime(), vesselStartTime, null);
-			newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, portTimesRecord.getFirstSlotTime(), vesselStartTime, null);
+			originalOption = entityValueCalculator.evaluate(vp, vesselAvailability, portTimesRecord.getFirstSlotTime(), vesselStartTime, null);
+			newOption = entityValueCalculator.evaluate(newVoyagePlan, vesselAvailability, portTimesRecord.getFirstSlotTime(), vesselStartTime, null);
 			newAllocation = null;
 		}
 		// TODO: This should be recorded based on market availability groups and then processed.

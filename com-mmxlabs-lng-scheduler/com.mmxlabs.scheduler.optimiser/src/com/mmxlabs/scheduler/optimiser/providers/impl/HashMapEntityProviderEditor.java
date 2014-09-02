@@ -11,7 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.entities.EntityBookType;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityBook;
@@ -27,7 +27,7 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 
 	private final LinkedHashSet<IEntity> entities = new LinkedHashSet<>();
 	private final Map<IPortSlot, IEntity> entitiesBySlot = new HashMap<>();
-	private final Map<IVessel, IEntity> entitiesByVessel = new HashMap<>();
+	private final Map<IVesselAvailability, IEntity> entitiesByVesselAvailability = new HashMap<>();
 	private final Map<IEntity, Map<EntityBookType, IEntityBook>> entitiesBooksMap = new HashMap<>();
 
 	@Override
@@ -44,14 +44,14 @@ public class HashMapEntityProviderEditor implements IEntityProvider {
 		entities.add(entity);
 	}
 
-	public void setEntityForVessel(final IEntity entity, final IVessel vessel) {
-		this.entitiesByVessel.put(vessel, entity);
+	public void setEntityForVesselAvailability(final IEntity entity, final IVesselAvailability vesselAvailability) {
+		this.entitiesByVesselAvailability.put(vesselAvailability, entity);
 		entities.add(entity);
 	}
 
 	@Override
-	public IEntity getEntityForVessel(final IVessel vessel) {
-		return entitiesByVessel.get(vessel);
+	public IEntity getEntityForVesselAvailability(final IVesselAvailability vesselAvailability) {
+		return entitiesByVesselAvailability.get(vesselAvailability);
 	}
 
 	@Override

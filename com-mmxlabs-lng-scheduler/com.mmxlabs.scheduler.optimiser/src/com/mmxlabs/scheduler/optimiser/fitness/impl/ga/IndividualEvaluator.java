@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.ga.Individual;
 import com.mmxlabs.optimiser.ga.bytearray.ByteArrayIndividual;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
@@ -84,9 +84,9 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 	 */
 	private int[] windowStarts;
 
-//	@Inject
-//	private VoyagePlanIterator voyagePlanIterator;
-//	private ICargoSchedulerFitnessComponent[] iteratingComponents;
+	// @Inject
+	// private VoyagePlanIterator voyagePlanIterator;
+	// private ICargoSchedulerFitnessComponent[] iteratingComponents;
 
 	// private List<ICargoSchedulerFitnessComponent> iteratingComponents =
 	// new ArrayList<ICargoSchedulerFitnessComponent>();
@@ -252,8 +252,8 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 		windowStarts = new int[numElements];
 		multiplier = new int[numElements];
 
-		final IVessel vessel = vesselProvider.getVessel(resource);
-		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+		final int maxSpeed = vesselAvailability.getVessel().getVesselClass().getMaxSpeed();
 
 		// Loop through sequence, extract time windows and determine number of
 		// bite required to represent them.

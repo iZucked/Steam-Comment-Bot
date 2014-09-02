@@ -4,9 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 
 public interface ICharterRateCalculator extends ICalculator {
-	int getCharterRatePerDay(IVessel vessel, int vesselStartTime, int voyagePlanStartTime);
+	int getCharterRatePerDay(IVesselAvailability vesselAvailability, int vesselStartTime, int voyagePlanStartTime);
 }

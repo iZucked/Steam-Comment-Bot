@@ -29,7 +29,7 @@ import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -164,10 +164,10 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
-	IVirtualVesselSlotProvider virtualVesselSlotProvider;
+	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
 	@Inject
-	IStartEndRequirementProvider startEndRequirementProvider;
+	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
@@ -186,21 +186,22 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		// Build of a map of special cargo elements for FOB/DES cargoes.
 		final Map<ISequenceElement, IResource> spotElementMap = new HashMap<>();
 		for (final IResource resource : data.getResources()) {
-			final IVessel vessel = vesselProvider.getVessel(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-				final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
-				final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
-				final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVessel(vessel);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			if (vesselAvailability != null) {
+				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+					final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
+					@SuppressWarnings("unused")
+					final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
+					final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
 
-				spotElementMap.put(startElement, resource);
-				spotElementMap.put(virtualElement, resource);
-				// Including the end element here causes ITS to fail. The only reason I can think of is related to the following section in the ScheduleBuilder;
+					spotElementMap.put(startElement, resource);
+					spotElementMap.put(virtualElement, resource);
+					// Including the end element here causes ITS to fail. The only reason I can think of is related to the following section in the ScheduleBuilder;
+					// >> BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
+					// >> resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
 
-				// >> BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
-				// >> resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
-
-				// spotElementMap.put(endElement, resource);
-
+					// spotElementMap.put(endElement, resource);
+				}
 			}
 		}
 
@@ -280,7 +281,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			this.optionalMoveGenerator = null;
 		}
 		for (final IResource resource : data.getResources()) {
-			final IVessel vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vessel = vesselProvider.getVesselAvailability(resource);
 			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
 				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
 				injector.injectMembers(swapElementsMoveGenerator);

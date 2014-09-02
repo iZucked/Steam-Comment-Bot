@@ -29,13 +29,17 @@ import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
@@ -206,9 +210,9 @@ public interface ISchedulerBuilder {
 	 * Add a single vessel to the list of vessels which can service the given {@link IVesselEventPortSlot}
 	 * 
 	 * @param charterOut
-	 * @param vessel
+	 * @param slotVesselAvailabilityRestrictions
 	 */
-	void addVesselEventVessel(@NonNull IVesselEventPortSlot event, IVessel vessel);
+	void addVesselEventVessel(@NonNull IVesselEventPortSlot event, IVesselAvailability slotVesselAvailabilityRestrictions);
 
 	/**
 	 * Add all the vessels in a given class to the vessels which can service the given event slot.
@@ -219,84 +223,34 @@ public interface ISchedulerBuilder {
 	void addVesselEventVesselClass(@NonNull IVesselEventPortSlot event, IVesselClass vesselClass);
 
 	/**
-	 * Create a core fleet vessel with the given name and class.
+	 * Create a vessel with the given name, class and capacity.
 	 * 
 	 * @param name
 	 * @param vesselClass
 	 * @return
 	 */
 	@NonNull
-	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve hourlyCharterInRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint, final long heelLimit,
-			final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
+	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, long cargoCapacity);
 
+	IHeelOptions createHeelOptions(final long heelLimitInM3, final int heelCVValue, final int heelUnitPrice);
+	
 	/**
-	 * Create a fleet vessel with the given name, class and instance type.
+	 * Create a vessel availability for the with the given vessel .
 	 * 
-	 * @param name
-	 * @param vesselClass
+	 * @param vessel
 	 * @param vesselInstanceType
 	 * @param start
 	 * @param end
 	 * @return
 	 */
 	@NonNull
-	IVessel createVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
-			final long heelLimit, final int heelCVValue, final int heelUnitPrice, final long cargoCapacity);
+	IVesselAvailability createVesselAvailability(@NonNull IVessel vessel, ICurve dailyCharterInPrice, VesselInstanceType vesselInstanceType, IStartRequirement start, IEndRequirement end);
 
-	/**
-	 * Create a start/end requirement which constrains nothing
-	 * 
-	 * @return
-	 */
 	@NonNull
-	IStartEndRequirement createStartEndRequirement();
+	public IStartRequirement createStartRequirement(IPort fixedPort, ITimeWindow timeWindow, IHeelOptions heelOptions);
 
-	/**
-	 * Create a requirement that the vessel start/end at the given port, but at an arbitrary time
-	 * 
-	 * @param fixedPort
-	 * @return
-	 */
 	@NonNull
-	IStartEndRequirement createStartEndRequirement(IPort fixedPort);
-
-	/**
-	 * Create a requirement that the vessel start/end at any port at the given time
-	 * 
-	 * @param fixedTime
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(ITimeWindow timeWindow);
-
-	/**
-	 * Create a requirement that the vessel start/end at the given port and time
-	 * 
-	 * @param fixedPort
-	 * @param fixedTime
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(IPort fixedPort, ITimeWindow timeWindow);
-
-	/**
-	 * Create a requirement that the vessel start/end at the closet in the given set of ports, but at an arbitrary time
-	 * 
-	 * @param portSet
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet);
-
-	/**
-	 * Create a requirement that the vessel start/end at the closet in the given set of ports and time
-	 * 
-	 * @param portSet
-	 * @param fixedTime
-	 * @return
-	 */
-	@NonNull
-	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet, ITimeWindow timeWindow);
+	public IEndRequirement createEndRequirement(Collection<IPort> portSet, ITimeWindow timeWindow, boolean endCold, long targetHeelInM3);
 
 	/**
 	 * Create a port with the given name and cooldown requirement
@@ -343,7 +297,7 @@ public interface ISchedulerBuilder {
 	 * @param vessels
 	 *            a set of vessels on which this cargo may be carried
 	 */
-	void setSlotVesselRestriction(IPortSlot slot, Set<IVessel> vessels);
+	void setSlotVesselAvailabilityRestriction(IPortSlot slot, Set<IVesselAvailability> vessels);
 
 	/**
 	 * Create a time window with the specified start and end time.
@@ -501,7 +455,7 @@ public interface ISchedulerBuilder {
 	 *            $/Hour rate to charter-in vessels
 	 * @return
 	 */
-	List<IVessel> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve dailyCharterInPrice);
+	List<IVesselAvailability> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve dailyCharterInPrice);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
@@ -513,7 +467,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IVessel createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice);
+	IVesselAvailability createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice);
 
 	/**
 	 * Set the list of ports this vessel is not permitted to travel to.
@@ -560,12 +514,12 @@ public interface ISchedulerBuilder {
 	 * @param vessel
 	 *            the vessel to keep this slot on
 	 */
-	void constrainSlotToVessels(@NonNull IPortSlot slot, Set<IVessel> vessels);
+	void constrainSlotToVesselAvailabilities(@NonNull IPortSlot slot, Set<IVesselAvailability> vessels);
 
 	/**
 	 * Constrains the given slot to lie only on vessels with the given classes.
 	 * 
-	 * In the end the slot will be on the union of vessels with these classes and any vessels set with {@link #constrainSlotToVessels(IPortSlot, Set)}.
+	 * In the end the slot will be on the union of vessels with these classes and any vessels set with {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)}.
 	 * 
 	 * Passing an empty or null set will clear any constraint.
 	 * 
@@ -584,7 +538,7 @@ public interface ISchedulerBuilder {
 	 * Notes:
 	 * <ol>
 	 * <li>This does nothing to ensure the compatibility of other constraints, so if you constrain two slots to be adjacent and then restrict them to different vessels with
-	 * {@link #constrainSlotToVessels(IPortSlot, IVessel)} (for example) you will have an unsolvable scenario.</li>
+	 * {@link #constrainSlotToVesselAvailabilities(IPortSlot, IVessel)} (for example) you will have an unsolvable scenario.</li>
 	 * <li>Slots do not always relate directly to sequence elements; slots which produce a redirection, like some charter outs, can result in the creation of several sequence elements (although those
 	 * elements have their own slots, they are internal). This method does account for that, so if you constrain something to come before a charter out with a redirection the virtual elements
 	 * introduced for the redirection won't be a problem.</li>
@@ -727,13 +681,13 @@ public interface ISchedulerBuilder {
 	void setShippingHoursRestriction(@NonNull IPortSlot slot, @NonNull ITimeWindow baseTime, int hours);
 
 	/**
-	 * Freeze a {@link IPortSlot} to a single {@link IVessel}. Unlike {@link #constrainSlotToVessels(IPortSlot, Set)} which still permits allocations to special vessels, this method restricts purely
-	 * to the specified {@link IVessel}
+	 * Freeze a {@link IPortSlot} to a single {@link IVesselAvailability}. Unlike {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)} which still permits allocations to special vessels, this
+	 * method restricts purely to the specified {@link IVessel}
 	 * 
 	 * @param portSlot
-	 * @param vessel
+	 * @param vesselAvailability
 	 */
-	void freezeSlotToVessel(@NonNull IPortSlot portSlot, @NonNull IVessel vessel);
+	void freezeSlotToVesselAvailability(@NonNull IPortSlot portSlot, @NonNull IVesselAvailability vesselAvailability);
 
 	/**
 	 * Set the earliest time we can start generating charter outs.
@@ -741,4 +695,5 @@ public interface ISchedulerBuilder {
 	 * @param charterOutStartTime
 	 */
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
+
 }

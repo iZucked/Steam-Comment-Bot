@@ -4,12 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.common.indexedobjects.IIndexingContext;
-import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 
 /**
  * Default implementation of {@link IVessel}.
@@ -17,21 +13,18 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
  * @author Simon Goodall
  * 
  */
-public final class Vessel extends IndexedObject implements IVessel {
-
-	public Vessel(final IIndexingContext provider) {
-		super(provider);
-	}
+public final class Vessel implements IVessel {
 
 	private String name;
 
 	private IVesselClass vesselClass;
 
-	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
-
-	private ICurve dailyCharterInRate;
-	
 	private long cargoCapacity;
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 
 	@Override
 	public String getName() {
@@ -52,42 +45,11 @@ public final class Vessel extends IndexedObject implements IVessel {
 	}
 
 	@Override
-	public VesselInstanceType getVesselInstanceType() {
-		return vesselInstanceType;
-	}
-
-	public void setVesselInstanceType(final VesselInstanceType vesselInstanceType) {
-		this.vesselInstanceType = vesselInstanceType;
-	}
-
-	@Override
-	public String toString() {
-		return getName();
-	}
-
-	/**
-	 */
-	@Override
-	public ICurve getDailyCharterInPrice() {
-		return dailyCharterInRate;
-	}
-
-	/**
-	 */
-	public void setDailyCharterInPrice(final ICurve dailyCharterInRate) {
-		this.dailyCharterInRate = dailyCharterInRate;
-	}
-
-	/**
-	 */
-	@Override
 	public long getCargoCapacity() {
 		return cargoCapacity;
 	}
-	
-	/**
-	 */
-	public void setCargoCapacity(long value) {
+
+	public void setCargoCapacity(final long value) {
 		cargoCapacity = value;
 	}
 }

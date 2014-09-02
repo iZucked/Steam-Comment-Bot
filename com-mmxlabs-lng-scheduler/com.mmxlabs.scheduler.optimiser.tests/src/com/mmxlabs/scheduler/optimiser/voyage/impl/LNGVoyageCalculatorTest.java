@@ -741,7 +741,7 @@ public class LNGVoyageCalculatorTest {
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
-		final IPortSlot otherSlot = new EndPortSlot();
+		final IPortSlot otherSlot = new EndPortSlot(null, null, null, false, 0l);
 
 		loadDetails.getOptions().setPortSlot(loadSlot);
 		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
@@ -836,7 +836,7 @@ public class LNGVoyageCalculatorTest {
 		final PortDetails dischargeDetails = new PortDetails();
 		dischargeDetails.setOptions(new PortOptions());
 
-		final PortSlot otherSlot = new StartPortSlot(0, 0, 0);
+		final PortSlot otherSlot = new StartPortSlot(null);
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
@@ -919,7 +919,7 @@ public class LNGVoyageCalculatorTest {
 		dischargeDetails.setOptions(new PortOptions());
 		dischargeDetails.setFuelConsumption(FuelComponent.Base, 5000);
 
-		final PortSlot otherSlot = new StartPortSlot(0, 0, 0);
+		final PortSlot otherSlot = new StartPortSlot(null);
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
@@ -954,7 +954,7 @@ public class LNGVoyageCalculatorTest {
 
 		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
 		Mockito.when(portTimesRecord.getSlotTime(Matchers.<IPortSlot> any())).thenReturn(0);
-		
+
 		calc.calculateVoyagePlan(plan, vessel, 0, baseFuelInternalPrice, portTimesRecord, sequence);
 
 		final VoyagePlan expectedPlan = new VoyagePlan();

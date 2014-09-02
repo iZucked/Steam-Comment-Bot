@@ -126,7 +126,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVirtualVesselSlotPr
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.LazyDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
-import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCostEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.HashMapPortCostEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
@@ -255,7 +255,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
 
-		final IPortCostProviderEditor portCosts = new IndexedPortCostEditor();
+		final IPortCostProviderEditor portCosts = new HashMapPortCostEditor();
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
 

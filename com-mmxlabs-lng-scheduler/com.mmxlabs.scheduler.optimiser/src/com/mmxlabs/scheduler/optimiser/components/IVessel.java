@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
 
 /**
@@ -14,14 +13,13 @@ import com.mmxlabs.optimiser.core.IResource;
  * 
  * @author Simon Goodall
  */
-public interface IVessel extends IResource {
+public interface IVessel {
 
 	/**
 	 * Returns the name of the vessel.
 	 * 
 	 * @return
 	 */
-	@Override
 	String getName();
 
 	/**
@@ -32,22 +30,11 @@ public interface IVessel extends IResource {
 	IVesselClass getVesselClass();
 
 	/**
-	 * Returns the {@link VesselInstanceType} of this {@link IVessel} instance.
+	 * Returns the capacity of this vessel
 	 * 
-	 * @return
-	 */
-	VesselInstanceType getVesselInstanceType();
-
-	/**
-	 * Returns the capacity of this vessel 
 	 * @return
 	 */
 	long getCargoCapacity();
-	
-	/**
-	 * Returns the hourly rate at which this vessel can be chartered in.
-	 * 
-	 * @return hourly charter in price
-	 */
-	ICurve getDailyCharterInPrice();
+
+
 }

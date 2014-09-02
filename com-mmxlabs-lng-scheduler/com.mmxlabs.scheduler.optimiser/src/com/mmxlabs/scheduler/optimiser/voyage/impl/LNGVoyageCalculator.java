@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -688,7 +689,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				// No cooldown performed, but we expected to arrive cold, thus either we still have gas on board, or we are within warming time.
 				if (expectedHeelLeftOnBoard) {
 					// Gas on board
-					remainingHeelInM3 = vesselClass.getSafetyHeel();
+					final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
+					if (toPortSlot instanceof EndPortSlot) {
+						final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+						remainingHeelInM3 = endPortSlot.getTargetEndHeelInM3();
+					} else {
+						remainingHeelInM3 = vesselClass.getSafetyHeel();
+					}
 					voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 				} else {
 					// Warming time
@@ -727,7 +734,16 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			} else if (remainingHeelInM3 > 0) {
 				voyagePlan.setRemainingHeelInM3(remainingHeelInM3);
 			}
-
+			if (lastVoyageDetailsElement != null) {
+				final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
+				if (toPortSlot instanceof EndPortSlot) {
+					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+					// TODO: Tricky here to get exact fuel volume, should there be some tolerance?
+					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
+						// ++violationsCount;
+					}
+				}
+			}
 			// Look up the heel options CV value if present
 			final IPortSlot firstSlot = ((PortDetails) sequence[0]).getOptions().getPortSlot();
 			if (firstSlot instanceof IHeelOptionsPortSlot) {
@@ -831,7 +847,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	protected int checkCargoCapacityViolations(final long startHeelInM3, final long lngCommitmentInM3, final PortDetails loadDetails, final ILoadSlot loadSlot, final PortDetails dischargeDetails,
-			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3, final long heelToDischarge) {
+			final IDischargeSlot dischargeSlot, final long minDischargeVolumeInM3, final long cargoCapacityInM3, final long remainingHeelInM3) {
 
 		int violationsCount = 0;
 		final long minLoadVolumeInM3 = loadSlot.getMinLoadVolume();
@@ -868,7 +884,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		}
 
 		// The load should cover at least the fuel usage plus the heel (or the min discharge, whichever is greater)
-		if (Math.max(minDischargeVolumeInM3, heelToDischarge) + lngCommitmentInM3 > upperLoadLimitInM3 + startHeelInM3) {
+		if (minDischargeVolumeInM3 + remainingHeelInM3 + lngCommitmentInM3 > upperLoadLimitInM3 + startHeelInM3) {
 			++violationsCount;
 		}
 		return violationsCount;

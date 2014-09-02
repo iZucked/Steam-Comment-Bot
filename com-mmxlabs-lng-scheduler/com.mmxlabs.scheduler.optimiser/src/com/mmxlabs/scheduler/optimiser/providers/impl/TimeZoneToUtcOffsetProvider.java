@@ -88,7 +88,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 			// check for illegal/wrong timezoneId
 			if (tz != null) {
 				final long localTimeInMillis = convertInternalToMillis(localTime);
-				//final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
+				// final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
 				final long utcInMillis = localTimeInMillis + tz.getOffsetFromLocal(localTimeInMillis);
 
 				return convertMillisToInternal(utcInMillis);
@@ -103,7 +103,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 
 	@Override
 	public int UTC(final int localTime, final IPort port) {
-		
+
 		String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
 		if (timeZoneId == null || timeZoneId.isEmpty()) {
 			timeZoneId = "UTC";
@@ -118,8 +118,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 
 		return UTC(localTime, timeZoneId);
 	}
-	
-	
+
 	@Override
 	public int localTime(final int utcTime, final String timezoneId) {
 		final DateTimeZone tz = DateTimeZone.forID(timezoneId);
@@ -129,7 +128,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 			// check for illegal/wrong timezoneId
 			if (tz != null) {
 				final long utcTimeInMillis = convertInternalToMillis(utcTime);
-				//final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
+				// final long utcInMillis = tz.convertLocalToUTC(localTimeInMillis, true);
 				final long localInMillis = utcTimeInMillis - tz.getOffsetFromLocal(utcTimeInMillis);
 
 				return convertMillisToInternal(localInMillis);
@@ -144,7 +143,7 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 
 	@Override
 	public int localTime(final int utcTime, final IPort port) {
-		
+
 		String timeZoneId = port == null ? "UTC" : port.getTimeZoneId();
 		if (timeZoneId == null || timeZoneId.isEmpty()) {
 			timeZoneId = "UTC";

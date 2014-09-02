@@ -13,7 +13,7 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -45,7 +45,7 @@ public class ScheduledDataLookupProvider {
 	private ISequences currentSequences;
 
 	private final Map<IPortSlot, VoyagePlan> slotToVoyagePlanCache = new HashMap<>();
-	private final Map<IPortSlot, IVessel> slotToVesselCache = new HashMap<>();
+	private final Map<IPortSlot, IVesselAvailability> slotToVesselCache = new HashMap<>();
 	private final Map<IPortSlot, IAllocationAnnotation> slotToAllocationAnnotationCache = new HashMap<>();
 	private final Map<IPortSlot, Integer> slotToVesselStartTimeCache = new HashMap<>();
 	private final Map<IPortSlot, Integer> slotToArrivalTimeCache = new HashMap<>();
@@ -79,7 +79,7 @@ public class ScheduledDataLookupProvider {
 		for (final ScheduledSequence scheduledSequence : currentScheduledSequences) {
 
 			final IResource resource = scheduledSequence.getResource();
-			final IVessel vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			final ISequence sequence = currentSequences.getSequence(resource);
 
 			int[] arrivalTimes = scheduledSequence.getArrivalTimes();
@@ -88,7 +88,7 @@ public class ScheduledDataLookupProvider {
 			for (final ISequenceElement element : sequence) {
 				final IPortSlot slot = portSlotProvider.getPortSlot(element);
 				if (slot != null) {
-					slotToVesselCache.put(slot, vessel);
+					slotToVesselCache.put(slot, vesselAvailability);
 					slotToVesselStartTimeCache.put(slot, vesselStartTime);
 					slotToArrivalTimeCache.put(slot, arrivalTimes[idx]);
 				}
@@ -114,7 +114,7 @@ public class ScheduledDataLookupProvider {
 		return slotToVoyagePlanCache.get(portSlot);
 	}
 
-	public IVessel getVessel(final IPortSlot portSlot) {
+	public IVesselAvailability getVesselAvailability(final IPortSlot portSlot) {
 
 		if (dirty) {
 			buildCache();

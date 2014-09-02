@@ -20,6 +20,8 @@ import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil;
 import com.mmxlabs.scheduler.optimiser.components.util.CargoTypeUtil.CargoType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -79,15 +81,15 @@ public class CapacityViolationChecker {
 		// Loop over all sequences
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
 			final IResource resource = scheduledSequence.getResource();
-			final IVessel vessel = vesselProvider.getVessel(resource);
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 			final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 
 			// Determine vessel capacity
 			long vesselCapacityInM3 = Long.MAX_VALUE;
 			if (nominatedVessel != null) {
 				vesselCapacityInM3 = nominatedVessel.getCargoCapacity();
-			} else if (vessel != null) {
-				vesselCapacityInM3 = vessel.getCargoCapacity();
+			} else if (vesselAvailability != null) {
+				vesselCapacityInM3 = vesselAvailability.getVessel().getCargoCapacity();
 			}
 
 			// Forced cooldown volumes are stored on the VoyageDetails, so record the last one for use in the next iteration so we can record the cooldown at the port
@@ -214,9 +216,20 @@ public class CapacityViolationChecker {
 			}
 
 			// Handle anything left over at the end of the schedule
-			if (remainingHeelInM3 > 0) {
-				// addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, remainingHeelInM3);
+			if (lastHeelDetails != null) {
+				final IPortSlot toPortSlot = lastHeelDetails.getOptions().getPortSlot();
+				if (toPortSlot instanceof EndPortSlot) {
+					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
+					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
+						addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+					}
+				}
+				if (lastForcedCooldownVolume > 0) {
+					// Record the previously detected forced cooldown problem
+					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, lastForcedCooldownVolume);
+				}
 			}
+
 		}
 	}
 

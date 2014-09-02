@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IVolumeAllocator;
@@ -55,8 +56,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public IAllocationAnnotation allocate(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
-		final AllocationRecord allocationRecord = createAllocationRecord(vessel, vesselStartTime, plan, portTimesRecord);
+	public IAllocationAnnotation allocate(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
+		final AllocationRecord allocationRecord = createAllocationRecord(vesselAvailability, vesselStartTime, plan, portTimesRecord);
 		if (allocationRecord == null) {
 			return null;
 		}
@@ -68,7 +69,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 
 	@Override
 	@Nullable
-	public AllocationRecord createAllocationRecord(final IVessel vessel, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
+	public AllocationRecord createAllocationRecord(final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IPortTimesRecord portTimesRecord) {
 
 		final long minEndVolumeInM3 = plan.getRemainingHeelInM3();
 
@@ -87,7 +88,7 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final int adjust = plan.isIgnoreEnd() ? 1 : 0;
 		// Assume true, unless a slot has said otherwise
 		boolean hasActuals = true;
-		
+
 		// how to get this port slot?
 		IPortSlot returnSlot = null;
 		for (int i = 0; i < sequence.length - adjust; ++i) {
@@ -96,10 +97,10 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			if (element instanceof PortDetails) {
 				final PortDetails pd = (PortDetails) element;
 				final IPortSlot slot = pd.getOptions().getPortSlot();
-				
+
 				// Update each time
-				returnSlot = slot; 
-				
+				returnSlot = slot;
+
 				// Special case for FOB/DES
 				// Need better bit#
 				if (slot instanceof StartPortSlot) {
@@ -152,10 +153,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			return null;
 		}
 
-	
-
-		final AllocationRecord allocationRecord = new AllocationRecord(vessel, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, portTimesRecord,
-				returnSlot, minVolumes, maxVolumes);
+		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots,
+				portTimesRecord, returnSlot, minVolumes, maxVolumes);
 
 		if (hasActuals) {
 			allocationRecord.allocationMode = AllocationMode.Actuals;

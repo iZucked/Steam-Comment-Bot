@@ -11,7 +11,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -27,7 +27,7 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluate(@NonNull VoyagePlan plan, @NonNull IAllocationAnnotation currentAllocation, @NonNull IVessel vessel, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
+	long evaluate(@NonNull VoyagePlan plan, @NonNull IAllocationAnnotation currentAllocation, @NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate a non-cargo based {@link VoyagePlan} returning the post tax P&L value
@@ -39,7 +39,7 @@ public interface IEntityValueCalculator {
 	 * @param annotatedSolution
 	 * @return
 	 */
-	long evaluate(@NonNull VoyagePlan plan, @NonNull IVessel vessel, int planStartTime, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
+	long evaluate(@NonNull VoyagePlan plan, @NonNull IVesselAvailability vesselAvailability, int planStartTime, int vesselStartTime, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Evaluate an unused port slot for P&L contributions (e.g. cancellation fees). The port slot is expected to be an instanceof {@link ILoadOption} or {@link IDischargeOption}.

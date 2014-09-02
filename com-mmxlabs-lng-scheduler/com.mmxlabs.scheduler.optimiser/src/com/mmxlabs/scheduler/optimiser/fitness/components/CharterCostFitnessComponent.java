@@ -10,7 +10,7 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -39,19 +39,19 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	 */
 	@Override
 	protected boolean reallyStartSequence(final IResource resource) {
-		final IVessel vessel = vesselProvider.getVessel(resource);
+		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
 		// FIXME: Use VoyagePlans to get charter in rate
 		final ICurve hireRate;
-		switch (vessel.getVesselInstanceType()) {
+		switch (vesselAvailability.getVesselInstanceType()) {
 		case SPOT_CHARTER:
-			hireRate = vessel.getDailyCharterInPrice();
+			hireRate = vesselAvailability.getDailyCharterInRate();
 			break;
 		case TIME_CHARTER:
-			hireRate = vessel.getDailyCharterInPrice();
+			hireRate = vesselAvailability.getDailyCharterInRate();
 			break;
 		case CARGO_SHORTS:
-			hireRate = vessel.getDailyCharterInPrice();
+			hireRate = vesselAvailability.getDailyCharterInRate();
 			break;
 		default:
 			// we are not interested in this sequence - we won't
@@ -63,7 +63,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		firstLoadTime = -1;
 		lastTime = -1;
 
-		if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+		if (vesselAvailability.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
 			loadPortType = PortType.Load;
 		} else {
 			loadPortType = PortType.Start;

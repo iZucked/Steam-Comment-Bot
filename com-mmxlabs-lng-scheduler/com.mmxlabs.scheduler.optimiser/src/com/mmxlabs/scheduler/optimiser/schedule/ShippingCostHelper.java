@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -90,7 +91,7 @@ public class ShippingCostHelper {
 		return planDuration;
 	}
 
-	public long getGeneratedCharterOutRevenue(final VoyagePlan plan, final IVessel vessel) {
+	public long getGeneratedCharterOutRevenue(final VoyagePlan plan, final IVesselAvailability vesselAvailability) {
 		long charterRevenue = 0;
 
 		for (final Object obj : plan.getSequence()) {
@@ -138,14 +139,14 @@ public class ShippingCostHelper {
 		return hireCosts;
 	}
 
-	public long getShippingCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final boolean includeCharterCosts) {
+	public long getShippingCosts(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterCosts) {
 
-		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return 0l;
 		}
 
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan, includeLNG);
-		final long portCosts = getPortCosts(vessel, plan);
+		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
 		final long hireCosts = includeCharterCosts ? getHireCosts(plan) : 0l;
 
 		return shippingCosts + portCosts + hireCosts;

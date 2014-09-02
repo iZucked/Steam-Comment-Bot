@@ -5,10 +5,10 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 public interface IVesselProviderEditor extends IVesselProvider {
 
-	void setVesselResource(IResource resource, IVessel vessel);
+	void setVesselAvailabilityResource(IResource resource, IVesselAvailability vesselAvailability);
 
 }

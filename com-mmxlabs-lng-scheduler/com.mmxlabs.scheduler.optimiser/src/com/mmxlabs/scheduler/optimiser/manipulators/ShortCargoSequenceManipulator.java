@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.DisconnectedSegment;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProvider;
@@ -47,8 +47,8 @@ public class ShortCargoSequenceManipulator implements ISequencesManipulator {
 	public void manipulate(final IModifiableSequences sequences) {
 
 		for (final IResource resource : sequences.getResources()) {
-			final IVessel vessel = vesselProvider.getVessel(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
 				final IModifiableSequence seq = sequences.getModifiableSequence(resource);
 				final int size = seq.size();
 				// Loop backwards to avoid needing to update index by inserted item count

@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 
 /**
  * Editor interface for {@link IVirtualVesselSlotProvider}
@@ -16,5 +16,5 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
  */
 public interface IVirtualVesselSlotProviderEditor extends IVirtualVesselSlotProvider {
 
-	void setVesselForElement(IVessel vessel, ISequenceElement element);
+	void setVesselAvailabilityForElement(IVesselAvailability vesselAvailability, ISequenceElement element);
 }

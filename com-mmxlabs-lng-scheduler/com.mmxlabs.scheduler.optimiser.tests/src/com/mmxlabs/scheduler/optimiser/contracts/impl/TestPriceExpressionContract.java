@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
@@ -109,7 +109,7 @@ public class TestPriceExpressionContract {
 		final long dischargeVolumeInM3 = 100;
 		final long loadVolumeInM3 = 200;
 		int vesselStartTime = 0;
-		final IVessel vessel = mock(IVessel.class);
+		final IVesselAvailability vesselAvailability = mock(IVesselAvailability.class);
 		final VoyagePlan plan = new VoyagePlan();
 		final IDetailTree annotations = mock(IDetailTree.class);
 
@@ -122,10 +122,10 @@ public class TestPriceExpressionContract {
 		when(allocationAnnotation.getSlotVolumeInM3(loadSlotWithPricingDate)).thenReturn(loadVolumeInM3);
 		when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(dischargeVolumeInM3);
 
-		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel,
+		final int loadPriceWithPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotWithPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability,
 				vesselStartTime, plan, annotations);
 
-		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vessel, vesselStartTime,
+		final int loadPriceNoPricingDate = contract.calculateFOBPricePerMMBTu(loadSlotNoPricingDate, dischargeSlot, dischargePricePerMMBTu, allocationAnnotation, vesselAvailability, vesselStartTime,
 				plan, annotations);
 
 		verify(curve).getValueAtPoint(loadPricingDate);
