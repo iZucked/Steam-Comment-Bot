@@ -74,29 +74,6 @@ public class DefaultDialogEditingContext implements IDialogEditingContext {
 	}
 
 	@Override
-	public List<Control> getEditorControls(EObject target, EStructuralFeature feature) {
-
-		if (objectControls.contains(target, feature)) {
-			return objectControls.get(target, feature);
-		} else {
-			return Collections.emptyList();
-		}
-	}
-
-	@Override
-	public void registerEditorControl(EObject target, EStructuralFeature feature, Control control) {
-
-		List<Control> controls;
-		if (objectControls.contains(target, feature)) {
-			controls = objectControls.get(target, feature);
-		} else {
-			controls = new LinkedList<>();
-			objectControls.put(target, feature, controls);
-		}
-		controls.add(control);
-	}
-
-	@Override
 	public boolean isMultiEdit() {
 		return multiEdit;
 	}
