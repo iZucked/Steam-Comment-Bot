@@ -273,7 +273,11 @@ public class HorizontalKPIReportView extends ViewPart {
 			public void partClosed(final IWorkbenchPart part) {
 
 				if (currentActiveEditor == part) {
-					activeEditorChange(null);
+					try {
+						activeEditorChange(null);
+					} catch (final Exception e) {
+						// Ignore
+					} 
 				}
 				if (viewerSynchronizer != null) {
 					viewerSynchronizer.refreshViewer();
@@ -284,7 +288,11 @@ public class HorizontalKPIReportView extends ViewPart {
 			public void partBroughtToTop(final IWorkbenchPart part) {
 				if (part instanceof IEditorPart) {
 					// Active editor changed
-					activeEditorChange((IEditorPart) part);
+					try {
+						activeEditorChange((IEditorPart) part);
+					} catch (final Exception e) {
+						// Ignore
+					} 
 				}
 				if (viewerSynchronizer != null) {
 					viewerSynchronizer.refreshViewer();
@@ -295,7 +303,11 @@ public class HorizontalKPIReportView extends ViewPart {
 			public void partActivated(final IWorkbenchPart part) {
 				if (part instanceof IEditorPart) {
 					// Active editor changed
-					activeEditorChange((IEditorPart) part);
+					try {
+						activeEditorChange((IEditorPart) part);
+					} catch (final Exception e) {
+						// Ignore
+					} 
 				}
 				if (viewerSynchronizer != null) {
 					viewerSynchronizer.refreshViewer();
@@ -305,8 +317,11 @@ public class HorizontalKPIReportView extends ViewPart {
 		};
 		getSite().getPage().addPartListener(partListener);
 		// Set initial active editor
-		activeEditorChange(getSite().getPage().getActiveEditor());
-
+		try {
+			activeEditorChange(getSite().getPage().getActiveEditor());
+		} catch (final Throwable t) {
+			// Ignore these errors
+		}
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 			// private boolean hasPin = false;
 			// private int numberOfSchedules;
