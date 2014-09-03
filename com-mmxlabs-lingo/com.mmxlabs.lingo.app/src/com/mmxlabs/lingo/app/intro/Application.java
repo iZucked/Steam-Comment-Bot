@@ -123,8 +123,11 @@ public class Application implements IApplication {
 				throw new RuntimeException("Unable to acquire the profile registry service.");
 			// can also use IProfileRegistry.SELF for the current profile
 			final IProfile profile = profileRegistry.getProfile(IProfileRegistry.SELF);
-			final GarbageCollector gc = (GarbageCollector) agent.getService(GarbageCollector.SERVICE_NAME);
-			gc.runGC(profile);
+			// Profile can be null if we have not enabled p2 support in the runtime config in eclipse. Generated product should be fine.
+			if (profile != null) {
+				final GarbageCollector gc = (GarbageCollector) agent.getService(GarbageCollector.SERVICE_NAME);
+				gc.runGC(profile);
+			}
 		} catch (final ProvisionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
