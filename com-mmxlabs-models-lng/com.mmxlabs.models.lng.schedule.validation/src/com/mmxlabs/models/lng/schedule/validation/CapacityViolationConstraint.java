@@ -56,7 +56,7 @@ public class CapacityViolationConstraint extends AbstractModelMultiConstraint {
 
 		// standard message template
 		if (simpleViolation != null) {
-			message = String.format("%sCan't meet %s in generated schedule.", nameString, simpleViolation);
+			message = String.format(Constants.GENERATED_SCHEDULE_LABEL + " %sCan't meet %s in schedule.", nameString, simpleViolation);
 		}
 		// non-standard message
 		else {
