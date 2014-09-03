@@ -196,12 +196,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 					spotElementMap.put(startElement, resource);
 					spotElementMap.put(virtualElement, resource);
-					// Including the end element here causes ITS to fail. The only reason I can think of is related to the following section in the ScheduleBuilder;
-					// >> BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
-					// >> resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
-
-					// spotElementMap.put(endElement, resource);
-				}
+					spotElementMap.put(endElement, resource);
 			}
 		}
 
