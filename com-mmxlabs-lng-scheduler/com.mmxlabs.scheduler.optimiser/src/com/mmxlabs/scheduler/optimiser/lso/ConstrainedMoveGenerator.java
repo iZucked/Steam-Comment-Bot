@@ -190,13 +190,13 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			if (vesselAvailability != null) {
 				if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 					final ISequenceElement startElement = startEndRequirementProvider.getStartElement(resource);
-					@SuppressWarnings("unused")
 					final ISequenceElement endElement = startEndRequirementProvider.getEndElement(resource);
 					final ISequenceElement virtualElement = virtualVesselSlotProvider.getElementForVesselAvailability(vesselAvailability);
 
 					spotElementMap.put(startElement, resource);
 					spotElementMap.put(virtualElement, resource);
 					spotElementMap.put(endElement, resource);
+				}
 			}
 		}
 
