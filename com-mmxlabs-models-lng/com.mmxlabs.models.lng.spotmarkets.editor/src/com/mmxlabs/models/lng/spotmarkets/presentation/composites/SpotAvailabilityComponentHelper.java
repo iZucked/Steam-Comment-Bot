@@ -77,7 +77,7 @@ public class SpotAvailabilityComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the curve feature on SpotAvailability
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_curveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new CurveInlineEditor(SpotMarketsPackage.Literals.SPOT_AVAILABILITY__CURVE));
