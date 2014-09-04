@@ -12,7 +12,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 /**
- * The {@link IMappingDescriptor} describes the relationship between two instances of the same containment feature.
+ * The {@link IMappingDescriptor} describes the relationship between two instances of the same containment feature. 
+ * i.e. given two instances of the same EMF class, compare their sub-structure for a specified EMF sub-field described by
+ * a containment feature. This will typically be a containment list.  
  * 
  * @author Simon Goodall
  */

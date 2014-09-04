@@ -103,6 +103,8 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	}
 
 	public void shareGlobalActions(final IPage page, final IActionBars actionBars) {
+		// register undo and redo global (hotkey / menu) actions for any editor which
+		// is controlled by the JointModelEditorContributor
 		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), undoAction);
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), redoAction);
 	}

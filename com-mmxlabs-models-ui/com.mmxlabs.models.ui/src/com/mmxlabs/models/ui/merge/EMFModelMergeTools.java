@@ -133,7 +133,10 @@ public class EMFModelMergeTools {
 	public static void rewriteMappingDescriptors(final List<IMappingDescriptor> descriptors, final EObject sourceRoot, final EObject destinationRoot) {
 
 		// Find the set of source object references are going to be transferred.
+		
+		// transferredObjects are objects which can "safely"(ish) be directly transferred into target data model 
 		final Set<EObject> transferredObjects = new HashSet<EObject>();
+		// remainingObjects are objects which need an equivalent to be found because they were non-contained objects
 		final Set<EObject> remainingObjects = new HashSet<EObject>();
 
 		final Map<EObject, EObject> sourceToDestinationMapping = new HashMap<EObject, EObject>();
@@ -156,6 +159,7 @@ public class EMFModelMergeTools {
 		// Make sure remaining objects are really the remaining objects
 		remainingObjects.removeAll(transferredObjects);
 
+		// match up non-contained object references to corresponding objects if possible
 		while (!remainingObjects.isEmpty()) {
 			final EObject eObj = remainingObjects.iterator().next();
 			final List<EReference> path = new LinkedList<EReference>();
@@ -240,6 +244,14 @@ public class EMFModelMergeTools {
 
 	}
 
+	/**
+	 * Updates "transferredObjects" to include all recursively contained references of "eObj", adding non-contained references 
+	 * (including those of recursively contained objects) to "remainingObjects"
+	 * 
+	 * @param eObj  
+	 * @param transferredObjects   
+	 * @param remainingObjects
+	 */
 	private static void processObject(final EObject eObj, final Set<EObject> transferredObjects, final Set<EObject> remainingObjects) {
 		final EClass eClass = eObj.eClass();
 		for (final EReference ref : eClass.getEAllReferences()) {
