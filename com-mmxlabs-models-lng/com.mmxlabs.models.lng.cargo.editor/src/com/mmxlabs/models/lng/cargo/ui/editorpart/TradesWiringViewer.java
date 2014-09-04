@@ -739,6 +739,26 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (actionBars != null) {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
+		
+		// TODO: uncomment lines below, to add relevant actions to trades wiring tool bar 
+		
+		/*
+		copyAction = createCopyAction();
+		if (copyAction != null) {
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, copyAction);			
+		}
+		if (actionBars != null) {
+			actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
+		}
+		
+		pasteAction = createPasteAction();
+		if (pasteAction != null) {
+			toolbar.appendToGroup(ADD_REMOVE_GROUP, pasteAction);			
+		}
+		if (actionBars != null) {
+			actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), pasteAction);
+		}
+		*/				
 
 		Action copyToClipboardAction = null;
 		if (viewer instanceof TableViewer) {
