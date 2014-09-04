@@ -5,9 +5,12 @@
 package com.mmxlabs.models.lng.fleet.presentation.composites;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 
@@ -31,6 +34,13 @@ public class HeelOptionsInlineEditorWrapper extends IInlineEditorEnablementWrapp
 		HeelOptions options = (HeelOptions) input;
 		Integer vol = options.getVolumeAvailable();
 		return vol > 0;
+	}
+
+	@Override
+	public Object createLayoutData(MMXRootObject root, EObject value,
+			Control control) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

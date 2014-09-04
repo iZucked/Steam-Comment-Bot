@@ -76,8 +76,6 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	final EClassifier indexRawType;
 	EStructuralFeature indexPointsFeature = PricingPackage.Literals.DATA_INDEX__POINTS;
 	
-	// we need to override the layout set by the default display composite
-	final GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
 	private SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 
 	/**
@@ -185,6 +183,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		
+		final GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
 		layoutData.heightHint = 200;
 		table.setLayoutData(layoutData);
 		
@@ -263,24 +262,6 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	public Control createControl(Composite parent, final EMFDataBindingContext dbc, final FormToolkit toolkit) {
 		final Composite composite = new Composite(parent, SWT.FULL_SELECTION);
 		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(layoutData);
-		
-		/* 
-		// failed attempt to use TableLayoutColumn layout to manage table column width:
-		// it reduced the table height to zero!
-		final Composite tableComposite = new Composite(composite, SWT.FULL_SELECTION);
-		final TableColumnLayout layout = new TableColumnLayout() {
-			@Override
-			protected Point computeSize(Composite comp, int wHint, int hHint, boolean flushCache) {
-				Point result = super.computeSize(comp, hHint, hHint, flushCache);
-				result.y = 200;
-				return result;
-			}
-		};
-		tableComposite.setLayout(layout);
-		//layout.setLayoutData(layoutData);
-		createTable(tableComposite, layout);
-		*/
 		createTable(composite);
 		createButtons(composite);		
 		
@@ -389,8 +370,6 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		// override the layout data set by default
-		control.setLayoutData(layoutData);
 		originalInput = input;
 		super.display(dialogContext, context, input, range);
 	}
@@ -443,6 +422,22 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 		}
 		
 		
+	}
+
+	@Override
+	public boolean hasLabel() {
+		return false;
+	}
+	
+	/**
+	 * Overrides the default layout data for the editing control, forcing it to span two columns instead of one.
+	 */
+	@Override
+	public Object createLayoutData(MMXRootObject root, EObject value,
+			Control control) {
+		GridData result = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1);
+		result.heightHint = 200;
+		return result;
 	}
 
 }

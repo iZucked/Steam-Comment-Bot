@@ -481,4 +481,16 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 		// TODO Auto-generated method stub
 
 	}
+
+	public boolean hasLabel() {
+		return true;
+	}
+
+	@Override
+	public Object createLayoutData(MMXRootObject root, EObject value,
+			Control control) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

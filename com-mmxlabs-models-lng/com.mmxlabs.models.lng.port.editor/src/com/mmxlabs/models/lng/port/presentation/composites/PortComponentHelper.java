@@ -15,6 +15,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -324,6 +326,13 @@ public class PortComponentHelper extends BaseComponentHelper {
 		@Override
 		protected boolean isEnabled() {
 			return ((Port) input).getCapabilities().contains(capability);
+		}
+
+		@Override
+		public Object createLayoutData(MMXRootObject root, EObject value,
+				Control control) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}

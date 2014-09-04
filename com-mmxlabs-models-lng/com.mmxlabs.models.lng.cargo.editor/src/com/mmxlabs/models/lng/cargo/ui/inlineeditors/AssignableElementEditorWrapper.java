@@ -98,4 +98,13 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 		control = super.createControl(parent, dbc, toolkit);
 		return control;
 	}
+
+	@Override
+	public Object createLayoutData(MMXRootObject root, EObject value,
+			Control control) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 }
