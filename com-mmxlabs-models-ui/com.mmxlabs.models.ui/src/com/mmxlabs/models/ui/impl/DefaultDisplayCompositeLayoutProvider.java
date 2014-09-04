@@ -23,7 +23,8 @@ public class DefaultDisplayCompositeLayoutProvider implements
 	@Override
 	public boolean showLabelFor(MMXRootObject root, EObject value,
 			IInlineEditor editor) {
-		return true;
+		//return true;
+		return editor.hasLabel();
 	}
 
 	@Override
@@ -33,13 +34,21 @@ public class DefaultDisplayCompositeLayoutProvider implements
 
 	@Override
 	public Layout createDetailLayout(MMXRootObject root, EObject value) {
+		// TODO: replace this with a GridBagLayout or GroupLayout; for editors without a label,
+		// we want the editor to take up two cells rather than one.
 		return new GridLayout(2, false);
 	}
 
 	@Override
 	public Object createEditorLayoutData(MMXRootObject root, EObject value,
 			IInlineEditor editor, Control control) {
-		return new GridData(SWT.FILL, SWT.CENTER, true, false);
+		final Object result = editor.createLayoutData(root, value, control);
+		if (result == null) {
+			return new GridData(SWT.FILL, SWT.CENTER, true, false);
+		}
+		else {
+			return result;
+		}
 	}
 
 	@Override

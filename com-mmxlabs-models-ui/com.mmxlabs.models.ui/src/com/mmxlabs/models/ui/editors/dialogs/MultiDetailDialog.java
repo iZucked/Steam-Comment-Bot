@@ -602,6 +602,19 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 					// TODO Auto-generated method stub
 
 				}
+				
+				@Override
+				public boolean hasLabel() {
+					return true;
+				}
+
+				@Override
+				public Object createLayoutData(MMXRootObject root,
+						EObject value, Control control) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
 			};
 		}
 	}

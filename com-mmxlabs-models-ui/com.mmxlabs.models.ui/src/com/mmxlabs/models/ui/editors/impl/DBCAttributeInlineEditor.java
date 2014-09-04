@@ -513,4 +513,9 @@ public abstract class DBCAttributeInlineEditor implements IInlineEditor {
 			}
 		}
 	}
+
+	public boolean hasLabel() {
+		return true;
+	}
+
 }

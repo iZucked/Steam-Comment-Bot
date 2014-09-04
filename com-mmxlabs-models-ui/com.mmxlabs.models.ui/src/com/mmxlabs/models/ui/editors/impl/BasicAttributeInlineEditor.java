@@ -565,4 +565,15 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	protected boolean isFeatureReadonly() {
 		return propertyDescriptor == null ? false : !propertyDescriptor.canSetProperty(input);
 	}
+	
+	@Override
+	public boolean hasLabel() {
+		return true;
+	}
+	
+	@Override
+	public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
+		return null;
+	}
+		
 }

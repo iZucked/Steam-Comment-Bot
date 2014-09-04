@@ -86,6 +86,20 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	/**
+	 * SPECULATIVE DOCUMENTATION
+	 *
+	 * Creates a series of display components for all of the "reference" subcomponents of an object,
+	 * for the purpose of a GUI editor.
+	 *  
+	 * Silently populates the following fields:
+	 *		childReferences
+	 *		childComposites
+	 *		childObjects
+	 * 
+	 * @param root The root object for the entire data model
+	 * @param object The object being edited
+	 * @param eClass The object's class
+	 * @param parent The GUI component to add sub-components to
 	 */
 	protected void createChildComposites(final MMXRootObject root, final EObject object, final EClass eClass, final Composite parent) {
 		for (final EReference ref : eClass.getEAllReferences()) {
@@ -106,7 +120,23 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		}
 	}
 
+
 	/**
+	 * SPECULATIVE DOCUMENTATION
+	 * 
+	 * Creates a "sub level composite" display component for a GUI editor on the object "object"
+	 * which allows editing of one of its subcomponents. 
+	 * 
+	 * Silently modifies the following fields:
+	 *		childReferences
+	 *		childComposites
+	 *		childObjects
+	 * 
+	 * @param root The root object for the entire data model
+	 * @param object The parent data object being edited
+	 * @param parent The display component to add relevant new visual sub-components to
+	 * @param ref The EReference representing the field metadata
+	 * @param value The object's sub-component value (which may be one of many, if the field is a list)
 	 */
 	protected void createChildArea(final MMXRootObject root, final EObject object, final Composite parent, final EReference ref, final EObject value) {
 		if (value != null) {

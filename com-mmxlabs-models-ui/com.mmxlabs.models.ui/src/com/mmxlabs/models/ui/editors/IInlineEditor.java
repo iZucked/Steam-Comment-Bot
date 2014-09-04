@@ -85,4 +85,10 @@ public interface IInlineEditor {
 	 */
 	void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener);
 
+	/** Returns true if the editor has a label for display, false otherwise. */
+	boolean hasLabel();
+
+	public Object createLayoutData(MMXRootObject root, EObject value,
+			Control control);
+
 }
