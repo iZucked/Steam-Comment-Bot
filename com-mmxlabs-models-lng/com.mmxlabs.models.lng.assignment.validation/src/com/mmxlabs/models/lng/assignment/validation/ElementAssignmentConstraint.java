@@ -46,9 +46,9 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 		if (object instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) object;
 
-			if (assignableElement.getAssignment() == null) {
-				return Activator.PLUGIN_ID;
-			}
+//			if (assignableElement.getAssignment() == null) {
+//				return Activator.PLUGIN_ID;
+//			}
 
 			final AVesselSet<? extends Vessel> vessel = assignableElement.getAssignment();
 
@@ -59,10 +59,10 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 				event = (VesselEvent) assignableElement;
 			} else if (assignableElement instanceof LoadSlot) {
 				slot = (LoadSlot) assignableElement;
-				cargo = slot.getCargo();
+//				cargo = slot.getCargo();
 			} else if (assignableElement instanceof DischargeSlot) {
 				slot = (DischargeSlot) assignableElement;
-				cargo = slot.getCargo();
+//				cargo = slot.getCargo();
 			} else if (assignableElement instanceof Cargo) {
 				cargo = (Cargo) assignableElement;
 			}
@@ -98,6 +98,13 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 
 							failures.add(failure);
 						}
+					} else if (vessel == null) {
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Fleet cargo " + cargo.getName()
+								+ " has no vessel assignment. This may cause problems evaluating scenario."), IStatus.WARNING);
+						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+
+						failures.add(failure);
+
 					}
 				} else { // FOD/DES cargo
 					if (vessel instanceof Vessel) {
