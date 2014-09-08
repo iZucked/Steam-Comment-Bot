@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.utils;
 
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
