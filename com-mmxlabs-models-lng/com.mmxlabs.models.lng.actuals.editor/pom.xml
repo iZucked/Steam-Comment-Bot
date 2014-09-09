@@ -6,11 +6,11 @@
 	<parent>
 		<artifactId>com.mmxlabs.lingo.eni.parent</artifactId>
 		<groupId>com.mmxlabs.lingo.eni</groupId>
-		<version>3.4.0.RELEASE</version>
+		<version>3.4.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.actuals.editor</artifactId>
-	<version>3.4.0.RELEASE</version>
+	<version>3.4.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
