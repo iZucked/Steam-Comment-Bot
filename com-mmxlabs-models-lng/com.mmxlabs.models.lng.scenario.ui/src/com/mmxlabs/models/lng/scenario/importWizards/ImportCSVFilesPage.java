@@ -26,6 +26,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -33,6 +34,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.forms.events.ExpansionEvent;
+import org.eclipse.ui.forms.events.IExpansionListener;
+import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -219,7 +223,44 @@ public class ImportCSVFilesPage extends WizardPage {
 		// use it to populate the editor
 		csvSelectionGroup.setSelectedIndex(delimiterValue);
 		decimalSelectionGroup.setSelectedIndex(decimalValue);
-		//
+		
+		final ExpandableComposite fieldComposite = new ExpandableComposite(top, SWT.NONE);
+		fieldComposite.setText("Custom Files");
+		fieldComposite.setLayout(new GridLayout(1, false));
+		fieldComposite.setLayoutData(new GridData(400, 600));
+		
+		final ScrolledComposite fieldScroller = new ScrolledComposite(fieldComposite, SWT.BORDER | SWT.V_SCROLL);
+		fieldScroller.setLayout(new GridLayout(1, false));
+		fieldScroller.setLayoutData(new GridData(400, 600));
+		
+		//final Composite inner = new Composite(fieldComposite, SWT.NONE);
+		final Composite inner = new Composite(fieldScroller, SWT.NONE);		
+		inner.setLayout(new GridLayout(1, false));
+		inner.setLayoutData(new GridData(400, 600));
+
+		/*
+		fieldComposite.addExpansionListener(new IExpansionListener() {
+			
+			@Override
+			public void expansionStateChanging(ExpansionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void expansionStateChanged(ExpansionEvent e) {
+				inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				inner.layout();
+				fieldScroller.setSize(fieldScroller.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				fieldScroller.layout();
+				fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+				fieldComposite.layout();
+			}
+		});
+		*/
+		
+		
+		// add a load of fields to the editor based on registered submodel importers
 		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
 			if (importer == null) {
 				continue;
@@ -231,7 +272,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			chunk.friendlyNames.putAll(parts);
 			if (parts.keySet().isEmpty())
 				continue;
-			final Group g = new Group(top, SWT.NONE);
+			final Group g = new Group(inner, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
 			g.setText(EditorUtils.unmangle(subModelClass.getName()));
@@ -252,6 +293,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			}
 		}
 
+		
 		for (final IExtraModelImporter importer : Activator.getDefault().getImporterRegistry().getExtraModelImporters()) {
 			if (importer == null) {
 				continue;
@@ -262,7 +304,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			chunk.friendlyNames.putAll(parts);
 			if (parts.keySet().isEmpty())
 				continue;
-			final Group g = new Group(top, SWT.NONE);
+			final Group g = new Group(inner, SWT.NONE);
 			g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			g.setLayout(new RowLayout(SWT.VERTICAL));
 			// g.setText(EditorUtils.unmangle(subModelClass.getName()));
@@ -283,6 +325,13 @@ public class ImportCSVFilesPage extends WizardPage {
 			}
 		}
 
+		fieldComposite.setClient(fieldScroller);
+		fieldScroller.setContent(inner);
+		fieldScroller.setExpandHorizontal(true);
+		fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		
+		
 		c1.setContent(top);
 		// c1.setExpandVertical(true);
 		c1.setExpandHorizontal(true);
