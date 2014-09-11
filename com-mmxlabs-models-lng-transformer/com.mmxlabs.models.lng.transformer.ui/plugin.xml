@@ -273,12 +273,7 @@
                           property="com.mmxlabs.scenario.service.ui.flags.readonly"
                           forcePluginActivation="true">
                      </test></not>
-                              <not>
-                                 <test
-                                       forcePluginActivation="true"
-                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
-                                 </test>
-                              </not>
+
                            </iterate>
                         </with>
                         <count
@@ -308,12 +303,7 @@
                           property="com.mmxlabs.scenario.service.ui.caps.forking"
                           forcePluginActivation="true">
                      </test>
-                              <not>
-                                 <test
-                                       forcePluginActivation="true"
-                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
-                                 </test>
-                              </not>
+
                            </iterate>
                         </with>
                         <count
