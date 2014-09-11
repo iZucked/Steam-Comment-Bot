@@ -41,8 +41,10 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -92,7 +94,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected LNGScenarioModel root = null;
 	protected Date[] dates = null;
 	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
-	protected final HashMap<Event, Vessel> vesselsByEvent = new HashMap<>();
+	protected final HashMap<Event, Object> vesselsByEvent = new HashMap<>();
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -207,14 +209,16 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					createCols(data);
 				}
 				
-				// regenerate the map linking events to vessels
+				// regenerate the map linking events to vessels (or vessel classes if the event is handled by a chartered-in vessel)
 				vesselsByEvent.clear();
 				if (data != null && data.vessels != null) {
-					for (Sequence sequence: data.vessels) {					
-						Vessel vessel = sequence.getVesselAvailability().getVessel();
-						if (vessel != null) {
+					for (Sequence sequence: data.vessels) {
+						// check to see if we are dealing with a specific vessel from the fleet or a nameless chartered-in vessel												
+						Object vesselOrClass = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVesselAvailability().getVessel();
+						
+						if (vesselOrClass != null) {
 							for (Event event: sequence.getEvents()) {
-								vesselsByEvent.put(event, vessel);
+								vesselsByEvent.put(event, vesselOrClass);
 							}
 						}
 					}
