@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -92,7 +93,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected LNGScenarioModel root = null;
 	protected Date[] dates = null;
 	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
-	protected final HashMap<Event, Vessel> vesselsByEvent = new HashMap<>();
+	protected final HashMap<Event, Object> vesselsByEvent = new HashMap<>();
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -192,17 +193,24 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					createCols(data);
 				}
 
-				// regenerate the map linking events to vessels
+				// regenerate the map linking events to vessels (or vessel classes if the event is handled by a chartered-in vessel)
 				vesselsByEvent.clear();
 				if (data != null && data.vessels != null) {
 					for (final Sequence sequence : data.vessels) {
-						final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-						if (vesselAvailability != null) {
-							final Vessel vessel = vesselAvailability.getVessel();
-							if (vessel != null) {
-								for (final Event event : sequence.getEvents()) {
-									vesselsByEvent.put(event, vessel);
-								}
+						// check to see if we are dealing with a specific vessel from the fleet or a nameless chartered-in vessel												
+						Object vesselOrClass = null;
+						if (sequence.isSpotVessel()) {
+							vesselOrClass = sequence.getVesselClass();
+						} else {
+							final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
+							if (vesselAvailability != null) {
+								vesselOrClass = vesselAvailability.getVessel();
+							}
+						}
+					
+						if (vesselOrClass != null) {
+							for (final Event event : sequence.getEvents()) {
+								vesselsByEvent.put(event, vesselOrClass);
 							}
 						}
 					}
