@@ -506,12 +506,7 @@
                         <instanceof
                               value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                         </instanceof>
-                        <not>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
-                           </test>
-                        </not>
+
                      </iterate>
                   </with>
                   <count
@@ -534,12 +529,7 @@
                         <instanceof
                               value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                         </instanceof>
-                        <not>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
-                           </test>
-                        </not>
+
                      </iterate>
                   </with>
                   <count
