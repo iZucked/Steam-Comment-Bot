@@ -36,7 +36,7 @@ public interface BaseFuel extends UUIDObject, NamedObject {
 	 * @see #setEquivalenceFactor(double)
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getBaseFuel_EquivalenceFactor()
 	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/MT' formatString='##.##'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='m\263/MT' formatString='##.###'"
 	 * @generated
 	 */
 	double getEquivalenceFactor();
