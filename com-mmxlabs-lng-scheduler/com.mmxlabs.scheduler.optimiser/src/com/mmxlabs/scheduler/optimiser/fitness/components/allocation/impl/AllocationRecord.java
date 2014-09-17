@@ -10,7 +10,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -21,7 +20,22 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class AllocationRecord {
 
 	public enum AllocationMode {
-		Actuals, Shipped, Transfer
+		/**
+		 * Take actuals data directly and infer missing variables
+		 */
+		Actuals,
+		/**
+		 * Actuals data, but currently for DES deals where discharge volume is the purchase volume.
+		 */
+		Actuals_Transfer,
+		/**
+		 * FOB Purchase to DES Sales. BOG adjusts volumes
+		 */
+		Shipped,
+		/**
+		 * Typically DES or FOB deals. BOG ignored in volumes
+		 */
+		Transfer
 	}
 
 	/** The LNG volume which the vessel starts with (the start heel) */
@@ -51,11 +65,15 @@ public final class AllocationRecord {
 	/**
 	 * The minimum transfer volume indexed by port slot
 	 */
-	public final List<Long> minVolumes;
+	public final List<Long> minVolumesInM3;
 	/**
 	 * The maximum transfer volume indexed by port slot
 	 */
-	public final List<Long> maxVolumes;
+	public final List<Long> maxVolumesInM3;
+
+	public final List<Long> minVolumesInMMBtu;
+	public final List<Long> maxVolumesInMMBtu;
+	public final List<Integer> slotCV;
 
 	// Set to false to maximise load volume and push gas into next loading
 	public boolean preferShortLoadOverLeftoverHeel = true;
@@ -72,7 +90,8 @@ public final class AllocationRecord {
 	public IPortTimesRecord portTimesRecord;
 
 	public AllocationRecord(final IVessel resourceVessel, final VoyagePlan resourceVoyagePlan, final int vesselStartTime, final long startVolumeInM3, final long requiredFuelVolumeInM3,
-			final long minEndVolumeInM3, final List<IPortSlot> slots, final IPortTimesRecord portTimesRecord, final IPortSlot returnSlot, final List<Long> minVolumes, final List<Long> maxVolumes) {
+			final long minEndVolumeInM3, final List<IPortSlot> slots, final IPortTimesRecord portTimesRecord, final IPortSlot returnSlot, final List<Long> minVolumesInM3,
+			final List<Long> maxVolumesInM3, List<Long> minVolumesInMMBtu, List<Long> maxVolumesInMMBtu, List<Integer> slotCV) {
 		this.resourceVessel = resourceVessel;
 		this.resourceVoyagePlan = resourceVoyagePlan;
 		this.vesselStartTime = vesselStartTime;
@@ -82,8 +101,11 @@ public final class AllocationRecord {
 		this.slots = slots;
 		this.portTimesRecord = portTimesRecord;
 		this.returnSlot = returnSlot;
-		this.minVolumes = minVolumes;
-		this.maxVolumes = maxVolumes;
+		this.minVolumesInM3 = minVolumesInM3;
+		this.maxVolumesInM3 = maxVolumesInM3;
+		this.minVolumesInMMBtu = minVolumesInMMBtu;
+		this.maxVolumesInMMBtu = maxVolumesInMMBtu;
+		this.slotCV = slotCV;
 		this.allocationMode = (resourceVessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || resourceVessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) ? AllocationMode.Transfer
 				: AllocationMode.Shipped;
 	}
