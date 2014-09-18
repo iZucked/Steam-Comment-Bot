@@ -142,6 +142,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartingHeelM3(double newStartingHeelM3) {
 		double oldStartingHeelM3 = startingHeelM3;
 		startingHeelM3 = newStartingHeelM3;
@@ -164,6 +165,7 @@ public class LoadActualsImpl extends SlotActualsImpl implements LoadActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setStartingHeelMMBTu(double newStartingHeelMMBTu) {
 		double oldStartingHeelMMBTu = startingHeelMMBTu;
 		startingHeelMMBTu = newStartingHeelMMBTu;
