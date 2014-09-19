@@ -57,7 +57,30 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 		final AllocationAnnotation annotation = new AllocationAnnotation();
 
 		final IVessel vessel = allocationRecord.nominatedVessel != null ? allocationRecord.nominatedVessel : allocationRecord.vesselAvailability.getVessel();
-		if (allocationRecord.allocationMode == AllocationMode.Actuals) {
+		if (allocationRecord.allocationMode == AllocationMode.Actuals_Transfer) {
+
+			// Second slot - assume the DES Sale
+			IPortSlot salesSlot = allocationRecord.slots.get(1);
+			for (int i = 0; i < slots.size(); i++) {
+				final IPortSlot slot = allocationRecord.slots.get(i);
+				if (actualsDataProvider.hasActuals(slot) == false) {
+					throw new IllegalStateException("Actuals Volume Mode, but no actuals specified");
+				}
+				annotation.getSlots().add(slot);
+				// TODO: This is keyed to E DES sale actuals requirements. Needs further customisability...
+				// Actuals mode, take values directly from sale
+				annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(salesSlot));
+				annotation.setSlotDuration(slot, 0);
+				
+				annotation.setSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
+				annotation.setSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+				annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
+			}
+
+			// break out before we get to the m3 to mmbtu calcs which would overwrite the actuals data
+			return annotation;
+
+		} else if (allocationRecord.allocationMode == AllocationMode.Actuals) {
 
 			// Work out used fuel volume - adjust for heel positions and transfer volumes
 			// Actuals data will give us;
@@ -83,9 +106,9 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
 
 				// Actuals mode, take values directly
-				annotation.setSlotVolumeInM3(slot, actualsDataProvider.getVolumeInM3(slot));
-				annotation.setSlotVolumeInMMBTu(slot, actualsDataProvider.getVolumeInMMBtu(slot));
-				annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));
+				annotation.setSlotVolumeInM3(slot, allocationRecord.maxVolumesInM3.get(i));
+				annotation.setSlotVolumeInMMBTu(slot, allocationRecord.maxVolumesInMMBtu.get(i));
+				annotation.setSlotCargoCV(slot, allocationRecord.slotCV.get(i));
 
 				// First slot
 				if (i == 0) {
@@ -132,7 +155,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			final long availableCargoSpace = vessel.getCargoCapacity() - allocationRecord.startVolumeInM3;
 			long transferVolume = availableCargoSpace;
 			for (int i = 0; i < slots.size(); ++i) {
-				transferVolume = capValueWithZeroDefault(allocationRecord.maxVolumes.get(i), transferVolume);
+				transferVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(i), transferVolume);
 
 			}
 			for (int i = 0; i < slots.size(); ++i) {
@@ -149,7 +172,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			final long fuelDeficit = allocationRecord.requiredFuelVolumeInM3 - allocationRecord.startVolumeInM3;
 
 			// greedy assumption: always load as much as possible
-			long loadVolume = capValueWithZeroDefault(allocationRecord.maxVolumes.get(0), availableCargoSpace);
+			long loadVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(0), availableCargoSpace);
 			// violate maximum load volume constraint when it has to be done to fuel the vessel
 			if (loadVolume < fuelDeficit) {
 				loadVolume = fuelDeficit;
@@ -170,7 +193,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(1);
 
 				// greedy assumption: always discharge as much as possible
-				final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumes.get(1), unusedVolume);
+				final long dischargeVolume = capValueWithZeroDefault(allocationRecord.maxVolumesInM3.get(1), unusedVolume);
 				annotation.setSlotVolumeInM3(dischargeSlot, dischargeVolume);
 				unusedVolume -= dischargeVolume;
 
@@ -186,7 +209,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 				// assign the minimum amount per discharge slot
 				for (int i = 1; i < slots.size(); i++) {
 					final IDischargeOption dischargeSlot = (IDischargeOption) slots.get(i);
-					final long minDischargeVolume = allocationRecord.minVolumes.get(i);
+					final long minDischargeVolume = allocationRecord.minVolumesInM3.get(i);
 
 					// assign the minimum amount per discharge slot
 					final long dischargeVolume;
@@ -215,7 +238,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 					final IDischargeOption slot = (IDischargeOption) slots.get(index);
 					// discharge all remaining volume at this slot, up to the different in slot maximum and minimum
-					final long volume = Math.min(allocationRecord.maxVolumes.get(index) - allocationRecord.minVolumes.get(index), unusedVolume);
+					final long volume = Math.min(allocationRecord.maxVolumesInM3.get(index) - allocationRecord.minVolumesInM3.get(index), unusedVolume);
 					// reduce the remaining available volume
 					unusedVolume -= volume;
 					final long currentVolumeInM3 = annotation.getSlotVolumeInM3(slot);

@@ -253,12 +253,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			// Sanity checks for actuals DCP
 			if (actualsDataProvider.hasActuals(slot)) {
-				assert cargoPNLData.arrivalTimes[idx] == actualsDataProvider.getArrivalTime(slot);
-				assert cargoPNLData.visitDurations[idx] == actualsDataProvider.getVisitDuration(slot);
-				assert cargoPNLData.slotCargoCV[idx] == actualsDataProvider.getCVValue(slot);
-				assert cargoPNLData.slotVolumeInM3[idx] == actualsDataProvider.getVolumeInM3(slot);
-				assert cargoPNLData.slotVolumeInMMBTu[idx] == actualsDataProvider.getVolumeInMMBtu(slot);
-				assert cargoPNLData.slotPricePerMMBTu[idx] == actualsDataProvider.getLNGPricePerMMBTu(slot);
+				// Disable as not correct for DES cases
+//				assert cargoPNLData.arrivalTimes[idx] == actualsDataProvider.getArrivalTime(slot);
+//				assert cargoPNLData.visitDurations[idx] == actualsDataProvider.getVisitDuration(slot);
+//				assert cargoPNLData.slotCargoCV[idx] == actualsDataProvider.getCVValue(slot);
+//				assert cargoPNLData.slotVolumeInM3[idx] == actualsDataProvider.getVolumeInM3(slot);
+//				assert cargoPNLData.slotVolumeInMMBTu[idx] == actualsDataProvider.getVolumeInMMBtu(slot);
+//				assert cargoPNLData.slotPricePerMMBTu[idx] == actualsDataProvider.getLNGPricePerMMBTu(slot);
 			}
 
 			idx++;
