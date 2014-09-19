@@ -14,7 +14,7 @@
 	<packaging>eclipse-plugin</packaging>
 
 	<properties>
-		<sonar.exclusions>file:src/com/mmxlabs/scenario/service/model/*.java,file:src/com/mmxlabs/scenario/service/model/impl/*.java,file:src/com/mmxlabs/scenario/service/model/util/*.java</sonar.exclusions>
+		<sonar.exclusions>file:**/com/mmxlabs/scenario/service/model/*.java,file:**/com/mmxlabs/scenario/service/model/impl/*.java,file:**/com/mmxlabs/scenario/service/model/util/*.java</sonar.exclusions>
 	</properties>
 
 </project>
