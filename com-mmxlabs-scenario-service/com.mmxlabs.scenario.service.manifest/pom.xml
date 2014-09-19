@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.scenario.service.manifest</artifactId>
 	<version>3.6.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/scenario/service/manifest/*.java,file:**/com/mmxlabs/scenario/service/manifest/impl/*.java,file:**/com/mmxlabs/scenario/service/manifest/util/*.java</sonar.exclusions>
+	</properties>
 </project>
