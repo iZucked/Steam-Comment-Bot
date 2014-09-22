@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.models.lng.port</artifactId>
 	<version>3.4.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/port/*.java,file:**/com/mmxlabs/models/lng/port/impl/*.java,file:**/com/mmxlabs/models/lng/port/util/*.java</sonar.exclusions>
+	</properties>
 </project>

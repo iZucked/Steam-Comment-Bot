@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.models.lng.parameters.edit</artifactId>
 	<version>3.4.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/parameters/provider/*.java</sonar.exclusions>
+	</properties>
 </project>
