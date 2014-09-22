@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.models.mmxcore</artifactId>
 	<version>5.0.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/mmxcore/*.java,file:**/com/mmxlabs/models/mmxcore/impl/*.java,file:**/com/mmxlabs/models/mmxcore/util/*.java</sonar.exclusions>
+	</properties>
 </project>
