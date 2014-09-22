@@ -26,7 +26,7 @@ public class ReflectiveMethodSetterTest {
 		Mockito.verify(mock).setField(source);
 	}
 
-	interface MockClass {
+	public static interface MockClass {
 
 		public void setField(String field);
 	}
