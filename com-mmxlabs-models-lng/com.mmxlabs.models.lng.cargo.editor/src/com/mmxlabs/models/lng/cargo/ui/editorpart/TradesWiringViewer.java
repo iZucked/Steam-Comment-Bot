@@ -456,7 +456,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public String getToolTipText(final Object element) {
-				final RowData rd = ((RowData) element);
+				final RowData rd = (RowData) element;
 				final LoadSlot ls = rd.getLoadSlot();
 				final DischargeSlot ds = rd.getDischargeSlot();
 
@@ -739,26 +739,16 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (actionBars != null) {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
-		
-		// TODO: uncomment lines below, to add relevant actions to trades wiring tool bar 
-		
+
+		// TODO: uncomment lines below, to add relevant actions to trades wiring tool bar
+
 		/*
-		copyAction = createCopyAction();
-		if (copyAction != null) {
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, copyAction);			
-		}
-		if (actionBars != null) {
-			actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
-		}
-		
-		pasteAction = createPasteAction();
-		if (pasteAction != null) {
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, pasteAction);			
-		}
-		if (actionBars != null) {
-			actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), pasteAction);
-		}
-		*/				
+		 * copyAction = createCopyAction(); if (copyAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, copyAction); } if (actionBars != null) {
+		 * actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction); }
+		 * 
+		 * pasteAction = createPasteAction(); if (pasteAction != null) { toolbar.appendToGroup(ADD_REMOVE_GROUP, pasteAction); } if (actionBars != null) {
+		 * actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), pasteAction); }
+		 */
 
 		Action copyToClipboardAction = null;
 		if (viewer instanceof TableViewer) {
@@ -969,7 +959,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				// Determine the mid-point in each row and generate an ordered list of heights.
 
 				// +1 to to make loop simpler
-				final int heights[] = new int[rootData.getRows().size() + 1];
+				final int[] heights = new int[rootData.getRows().size() + 1];
 				heights[0] = getScenarioViewer().getGrid().getHeaderHeight();
 
 				// Pass one, get heights
@@ -1040,9 +1030,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				// This used to be based in column index, now for some reason it is px based. If the old behaviour re-appears, then this value is the second for loop initialiser value.
 				offset -= getScenarioViewer().getGrid().getHorizontalBar().getSelection();
 				// TODO: Take into account h scroll final int colWidth = getScenarioViewer().getGrid().getColumn(wiringColumnIndex).getWidth();
-				final Rectangle r = new Rectangle(area.x + offset, area.y + getScenarioViewer().getGrid().getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
-
-				return r;
+				return new Rectangle(area.x + offset, area.y + getScenarioViewer().getGrid().getHeaderHeight(), wiringColumn.getColumn().getWidth(), area.height);
 			}
 		};
 		wiringDiagram.setSortOrder(rootData, sortedIndices, reverseSortedIndices);
@@ -1498,7 +1486,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		 */
 		@Override
 		protected void populate(final Menu menu) {
-			final LNGScenarioModel scenario = ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
+			final LNGScenarioModel scenario = (LNGScenarioModel) scenarioEditingLocation.getRootObject();
 			final CommercialModel commercialModel = scenario.getCommercialModel();
 			final FleetModel fleetModel = scenario.getFleetModel();
 
@@ -1879,11 +1867,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 							item2 = getScenarioViewer().getGrid().getPreviousVisibleItem(item);
 
 						}
-						if (item2 != null) {
-							if (vScroll != 0) {
-								// Almost! it will show part of the item, but it may be obscured by the h.scroll bar
-								getScenarioViewer().getGrid().showItem(item2);
-							}
+						if (item2 != null && vScroll != 0) {
+							// Almost! it will show part of the item, but it may be obscured by the h.scroll bar
+							getScenarioViewer().getGrid().showItem(item2);
 						}
 						getScenarioViewer().refresh();
 					}
