@@ -45,16 +45,16 @@ public class ScenarioSelectionPage extends WizardPage {
 	protected Control control = null;
 	protected RadioSelectionGroup scenarioSelectionGroup;
 	protected CheckboxTreeViewer scenarioTreeViewer;
-	final protected ScenarioInstance currentScenario;
+	protected final ScenarioInstance currentScenario;
 
 	public final static int CHOICE_COMMODITY_INDICES = 0;
-	public final static int CHOICE_CARGOES = CHOICE_COMMODITY_INDICES + 1;
+	public static final int CHOICE_CARGOES = CHOICE_COMMODITY_INDICES + 1;
 
-	public final static int CHOICE_ALL_SCENARIOS = 0;
-	public final static int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
-	public final static int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
+	public static final int CHOICE_ALL_SCENARIOS = 0;
+	public static final int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
+	public static final int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
 
-	public ScenarioSelectionPage(String pageName, ScenarioInstance currentScenario) {
+	public ScenarioSelectionPage(final String pageName, final ScenarioInstance currentScenario) {
 		super(pageName);
 		this.currentScenario = currentScenario;
 		setTitle("Select data and scenarios");
@@ -69,7 +69,7 @@ public class ScenarioSelectionPage extends WizardPage {
 	 */
 	class ScenarioLabelProvider implements ILabelProvider {
 		@Override
-		public void addListener(ILabelProviderListener listener) {
+		public void addListener(final ILabelProviderListener listener) {
 		}
 
 		@Override
@@ -77,21 +77,21 @@ public class ScenarioSelectionPage extends WizardPage {
 		}
 
 		@Override
-		public boolean isLabelProperty(Object element, String property) {
+		public boolean isLabelProperty(final Object element, final String property) {
 			return false;
 		}
 
 		@Override
-		public void removeListener(ILabelProviderListener listener) {
+		public void removeListener(final ILabelProviderListener listener) {
 		}
 
 		@Override
-		public Image getImage(Object element) {
+		public Image getImage(final Object element) {
 			return null;
 		}
 
 		@Override
-		public String getText(Object element) {
+		public String getText(final Object element) {
 			if (element instanceof Folder) {
 				return ((Folder) element).getName();
 			}
@@ -127,12 +127,12 @@ public class ScenarioSelectionPage extends WizardPage {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 			services = (EList<ScenarioService>) newInput;
 		}
 
 		@Override
-		public Object[] getElements(Object inputElement) {
+		public Object[] getElements(final Object inputElement) {
 			if (services.size() == 1) {
 				return getChildren(services.get(0));
 			} else {
@@ -141,11 +141,11 @@ public class ScenarioSelectionPage extends WizardPage {
 		}
 
 		@Override
-		public Object[] getChildren(Object parentElement) {
-			LinkedList<Object> result = new LinkedList<Object>();
+		public Object[] getChildren(final Object parentElement) {
+			final LinkedList<Object> result = new LinkedList<Object>();
 
 			if (parentElement instanceof Container) {
-				for (Object element : ((Container) parentElement).getElements()) {
+				for (final Object element : ((Container) parentElement).getElements()) {
 					if (element instanceof ScenarioInstance) {
 						result.add(element);
 					} else if (element instanceof Container) {
@@ -161,16 +161,16 @@ public class ScenarioSelectionPage extends WizardPage {
 		}
 
 		@Override
-		public boolean hasChildren(Object element) {
+		public boolean hasChildren(final Object element) {
 			if (!(element instanceof Container)) {
 				return false;
 			}
-			Container container = (Container) element;
+			final Container container = (Container) element;
 			return !(container.getElements().isEmpty());
 		}
 
 		@Override
-		public Object getParent(Object element) {
+		public Object getParent(final Object element) {
 			return null;
 		}
 
@@ -182,9 +182,9 @@ public class ScenarioSelectionPage extends WizardPage {
 	 * @return
 	 */
 	protected List<ScenarioInstance> getCheckedScenariosFromTree() {
-		List<ScenarioInstance> result = new ArrayList<ScenarioInstance>();
+		final List<ScenarioInstance> result = new ArrayList<ScenarioInstance>();
 
-		for (Object object : scenarioTreeViewer.getCheckedElements()) {
+		for (final Object object : scenarioTreeViewer.getCheckedElements()) {
 			if (object instanceof ScenarioInstance) {
 				result.add((ScenarioInstance) object);
 			}
@@ -199,9 +199,9 @@ public class ScenarioSelectionPage extends WizardPage {
 	 * @return
 	 */
 	protected List<ScenarioInstance> getAllAvailableScenarioInstances() {
-		List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
+		final List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
 
-		for (ScenarioService service : getServices()) {
+		for (final ScenarioService service : getServices()) {
 			result.addAll(getAllDescendantScenarioInstances(service));
 		}
 
@@ -214,10 +214,10 @@ public class ScenarioSelectionPage extends WizardPage {
 	 * @param parent
 	 * @return
 	 */
-	protected List<ScenarioInstance> getAllDescendantScenarioInstances(Container parent) {
-		List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
+	protected List<ScenarioInstance> getAllDescendantScenarioInstances(final Container parent) {
+		final List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
 
-		for (Object object : parent.getElements()) {
+		for (final Object object : parent.getElements()) {
 			if (object instanceof ScenarioInstance) {
 				result.add((ScenarioInstance) object);
 			}
@@ -262,7 +262,7 @@ public class ScenarioSelectionPage extends WizardPage {
 	 * @return
 	 */
 	private EList<ScenarioService> getServices() {
-		ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
+		final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
 				.getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 		final ScenarioModel scenarioModel = tracker.getService().getScenarioModel();
@@ -305,21 +305,21 @@ public class ScenarioSelectionPage extends WizardPage {
 		final Group group;
 		final int[] values;
 
-		public RadioSelectionGroup(Composite parent, String title, int style, String[] labels, int[] values) {
+		public RadioSelectionGroup(final Composite parent, final String title, final int style, final String[] labels, final int[] values) {
 			super(parent, style);
 			group = new Group(parent, style);
-			for (String label : labels) {
+			for (final String label : labels) {
 				addButton(label);
 			}
 			setLayout(new GridLayout(1, false));
 			group.setLayout(new GridLayout(labels.length, false));
-			GridData groupLayoutData = new GridData();
+			final GridData groupLayoutData = new GridData();
 			group.setLayoutData(groupLayoutData);
 			group.setText(title);
 			this.values = values;
 		}
 
-		public Button addButton(String text) {
+		public Button addButton(final String text) {
 			final int index = buttons.size();
 
 			final Button button = new Button(group, SWT.RADIO);
@@ -329,7 +329,7 @@ public class ScenarioSelectionPage extends WizardPage {
 			button.addSelectionListener(new SelectionListener() {
 
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					if (button.getSelection()) {
 						RadioSelectionGroup.this.selectedIndex = index;
 					}
@@ -337,7 +337,7 @@ public class ScenarioSelectionPage extends WizardPage {
 				}
 
 				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
+				public void widgetDefaultSelected(final SelectionEvent e) {
 				}
 
 			});
@@ -349,7 +349,7 @@ public class ScenarioSelectionPage extends WizardPage {
 			return selectedIndex;
 		}
 
-		public void setSelectedIndex(int value) {
+		public void setSelectedIndex(final int value) {
 			buttons.get(value).setSelection(true);
 			selectedIndex = value;
 		}
@@ -361,19 +361,19 @@ public class ScenarioSelectionPage extends WizardPage {
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		final Composite container = new Composite(parent, SWT.BORDER);
 
 		// set the layout for the whole functional region
 		final GridLayout layout = new GridLayout(1, true);
 		layout.verticalSpacing = 9;
 		container.setLayout(layout);
-		GridData ld = new GridData();
+		final GridData ld = new GridData();
 		ld.widthHint = 400;
 		container.setLayoutData(ld);
 
 		// create a radiobutton group for specifying how scenarios are selected
-		String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
+		final String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
 		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
 				CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
 		// scenarioSelectionGroup.setSelectedIndex(0);
@@ -381,7 +381,7 @@ public class ScenarioSelectionPage extends WizardPage {
 		// create a container for the scenario tree control (so we can hide it)
 		final Composite viewerComposite = new Composite(container, SWT.BORDER);
 		viewerComposite.setLayout(new GridLayout(1, true));
-		GridData viewerCompositeLayoutData = new GridData();
+		final GridData viewerCompositeLayoutData = new GridData();
 		viewerCompositeLayoutData.widthHint = 450;
 		viewerCompositeLayoutData.grabExcessVerticalSpace = true;
 		viewerCompositeLayoutData.verticalAlignment = SWT.FILL;
@@ -393,7 +393,7 @@ public class ScenarioSelectionPage extends WizardPage {
 		scenarioTreeViewer.setLabelProvider(new ScenarioLabelProvider());
 		scenarioTreeViewer.setAutoExpandLevel(3);
 		scenarioTreeViewer.setInput(getServices());
-		GridData viewerLayoutData = new GridData();
+		final GridData viewerLayoutData = new GridData();
 		viewerLayoutData.widthHint = 400;
 		viewerLayoutData.grabExcessVerticalSpace = true;
 		viewerLayoutData.verticalAlignment = SWT.FILL;
@@ -402,8 +402,8 @@ public class ScenarioSelectionPage extends WizardPage {
 		// when a parent element checkbox is clicked in the tree, propagate the change to its descendants
 		scenarioTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				Object element = event.getElement();
+			public void checkStateChanged(final CheckStateChangedEvent event) {
+				final Object element = event.getElement();
 				if (!(element instanceof ScenarioInstance)) {
 					scenarioTreeViewer.setSubtreeChecked(element, event.getChecked());
 				}
@@ -416,19 +416,19 @@ public class ScenarioSelectionPage extends WizardPage {
 		scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 		selectedOnlyButton.addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 				dialogChanged();
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
 
 		setControl(container);
 		control = container;
-		
+
 		dialogChanged();
 	}
 

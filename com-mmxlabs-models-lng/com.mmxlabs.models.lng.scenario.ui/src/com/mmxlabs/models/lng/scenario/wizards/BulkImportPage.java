@@ -58,22 +58,24 @@ public class BulkImportPage extends WizardPage {
 	protected RadioSelectionGroup decimalSelectionGroup;
 	protected CheckboxTreeViewer scenarioTreeViewer;
 	protected FileFieldEditor importFileEditor;
-	final protected FieldChoice importField;
+	protected final FieldChoice importField;
 
-	final protected ScenarioInstance currentScenario;
+	protected final ScenarioInstance currentScenario;
 
 	// TODO: refactor to remove dependence on this enumeration
-	public enum FieldChoice { CHOICE_COMMODITY_INDICES, CHOICE_CARGOES, CHOICE_CHARTER_INDICES, CHOICE_BASE_FUEL_CURVES }; 
-	
-	public final static int CHOICE_COMMA = 0;
-	public final static int CHOICE_SEMICOLON = CHOICE_COMMA + 1;
-	public final static int CHOICE_PERIOD = CHOICE_COMMA + 1;
+	public enum FieldChoice {
+		CHOICE_COMMODITY_INDICES, CHOICE_CARGOES, CHOICE_CHARTER_INDICES, CHOICE_BASE_FUEL_CURVES
+	};
 
-	public final static int CHOICE_ALL_SCENARIOS = 0;
-	public final static int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
-	public final static int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
+	public static final int CHOICE_COMMA = 0;
+	public static final int CHOICE_SEMICOLON = CHOICE_COMMA + 1;
+	public static final int CHOICE_PERIOD = CHOICE_COMMA + 1;
 
-	public BulkImportPage(String pageName, final FieldChoice fieldChoice, ScenarioInstance currentScenario) {
+	public static final int CHOICE_ALL_SCENARIOS = 0;
+	public static final int CHOICE_CURRENT_SCENARIO = CHOICE_ALL_SCENARIOS + 1;
+	public static final int CHOICE_SELECTED_SCENARIOS = CHOICE_CURRENT_SCENARIO + 1;
+
+	public BulkImportPage(final String pageName, final FieldChoice fieldChoice, final ScenarioInstance currentScenario) {
 		super(pageName);
 		this.currentScenario = currentScenario;
 		this.importField = fieldChoice;
@@ -89,7 +91,7 @@ public class BulkImportPage extends WizardPage {
 	 */
 	class ScenarioLabelProvider implements ILabelProvider {
 		@Override
-		public void addListener(ILabelProviderListener listener) {
+		public void addListener(final ILabelProviderListener listener) {
 		}
 
 		@Override
@@ -97,21 +99,21 @@ public class BulkImportPage extends WizardPage {
 		}
 
 		@Override
-		public boolean isLabelProperty(Object element, String property) {
+		public boolean isLabelProperty(final Object element, final String property) {
 			return false;
 		}
 
 		@Override
-		public void removeListener(ILabelProviderListener listener) {
+		public void removeListener(final ILabelProviderListener listener) {
 		}
 
 		@Override
-		public Image getImage(Object element) {
+		public Image getImage(final Object element) {
 			return null;
 		}
 
 		@Override
-		public String getText(Object element) {
+		public String getText(final Object element) {
 			if (element instanceof Folder) {
 				return ((Folder) element).getName();
 			}
@@ -147,12 +149,12 @@ public class BulkImportPage extends WizardPage {
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 			services = (EList<ScenarioService>) newInput;
 		}
 
 		@Override
-		public Object[] getElements(Object inputElement) {
+		public Object[] getElements(final Object inputElement) {
 			if (services.size() == 1) {
 				return getChildren(services.get(0));
 			} else {
@@ -161,11 +163,11 @@ public class BulkImportPage extends WizardPage {
 		}
 
 		@Override
-		public Object[] getChildren(Object parentElement) {
-			LinkedList<Object> result = new LinkedList<Object>();
+		public Object[] getChildren(final Object parentElement) {
+			final LinkedList<Object> result = new LinkedList<Object>();
 
 			if (parentElement instanceof Container) {
-				for (Object element : ((Container) parentElement).getElements()) {
+				for (final Object element : ((Container) parentElement).getElements()) {
 					if (element instanceof ScenarioInstance) {
 						result.add(element);
 					} else if (element instanceof Container) {
@@ -181,16 +183,16 @@ public class BulkImportPage extends WizardPage {
 		}
 
 		@Override
-		public boolean hasChildren(Object element) {
+		public boolean hasChildren(final Object element) {
 			if (!(element instanceof Container)) {
 				return false;
 			}
-			Container container = (Container) element;
+			final Container container = (Container) element;
 			return !(container.getElements().isEmpty());
 		}
 
 		@Override
-		public Object getParent(Object element) {
+		public Object getParent(final Object element) {
 			return null;
 		}
 
@@ -202,9 +204,9 @@ public class BulkImportPage extends WizardPage {
 	 * @return
 	 */
 	protected List<ScenarioInstance> getCheckedScenariosFromTree() {
-		List<ScenarioInstance> result = new ArrayList<ScenarioInstance>();
+		final List<ScenarioInstance> result = new ArrayList<ScenarioInstance>();
 
-		for (Object object : scenarioTreeViewer.getCheckedElements()) {
+		for (final Object object : scenarioTreeViewer.getCheckedElements()) {
 			if (object instanceof ScenarioInstance) {
 				result.add((ScenarioInstance) object);
 			}
@@ -219,9 +221,9 @@ public class BulkImportPage extends WizardPage {
 	 * @return
 	 */
 	protected List<ScenarioInstance> getAllAvailableScenarioInstances() {
-		List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
+		final List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
 
-		for (ScenarioService service : getServices()) {
+		for (final ScenarioService service : getServices()) {
 			result.addAll(getAllDescendantScenarioInstances(service));
 		}
 
@@ -234,10 +236,10 @@ public class BulkImportPage extends WizardPage {
 	 * @param parent
 	 * @return
 	 */
-	protected List<ScenarioInstance> getAllDescendantScenarioInstances(Container parent) {
-		List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
+	protected List<ScenarioInstance> getAllDescendantScenarioInstances(final Container parent) {
+		final List<ScenarioInstance> result = new LinkedList<ScenarioInstance>();
 
-		for (Object object : parent.getElements()) {
+		for (final Object object : parent.getElements()) {
 			if (object instanceof ScenarioInstance) {
 				result.add((ScenarioInstance) object);
 			}
@@ -294,7 +296,7 @@ public class BulkImportPage extends WizardPage {
 	 * @return
 	 */
 	EList<ScenarioService> getServices() {
-		ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
+		final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker = new ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry>(Activator.getDefault().getBundle()
 				.getBundleContext(), ScenarioServiceRegistry.class, null);
 		tracker.open();
 		final ScenarioModel scenarioModel = tracker.getService().getScenarioModel();
@@ -313,58 +315,58 @@ public class BulkImportPage extends WizardPage {
 		final Group group;
 		final int[] values;
 
-		public RadioSelectionGroup(Composite parent, String title, int style, String[] labels, int[] values) {
+		public RadioSelectionGroup(final Composite parent, final String title, final int style, final String[] labels, final int[] values) {
 			super(parent, style);
-			
-			GridLayout layout = new GridLayout(1, true);
-//			layout.marginRight = 0;
+
+			final GridLayout layout = new GridLayout(1, true);
+			// layout.marginRight = 0;
 			layout.marginWidth = 0;
 			setLayout(layout);
-//			GridData gd = new GridData();
-//			gd.verticalIndent = 0;
-//			gd.horizontalIndent = 0;
-//			gd.grabExcessHorizontalSpace = true;
-//			setLayoutData(gd);
-			
+			// GridData gd = new GridData();
+			// gd.verticalIndent = 0;
+			// gd.horizontalIndent = 0;
+			// gd.grabExcessHorizontalSpace = true;
+			// setLayoutData(gd);
+
 			group = new Group(this, style);
-			for (String label : labels) {
+			for (final String label : labels) {
 				addButton(label);
 			}
-			GridLayout gl = new GridLayout(1, false);
+			final GridLayout gl = new GridLayout(1, false);
 			gl.marginLeft = 0;
 			gl.marginRight = 0;
 			gl.marginWidth = 0;
 			setLayout(gl);
 			group.setLayout(new GridLayout(labels.length, false));
-//			GridData groupLayoutData = new GridData();
-//			group.setLayoutData(groupLayoutData);
+			// GridData groupLayoutData = new GridData();
+			// group.setLayoutData(groupLayoutData);
 			group.setText(title);
 			this.values = values;
 		}
 
-		public Button addButton(String text) {
+		public Button addButton(final String text) {
 			final int index = buttons.size();
 
 			final Button button = new Button(group, SWT.RADIO);
 			buttons.add(button);
 
 			button.setText(text);
-//			GridData gd = new GridData();
-////			gd.verticalIndent = 0;
-////			gd.horizontalIndent = 0;
-////			gd.grabExcessHorizontalSpace = true;
-//			button.setLayoutData(gd);
+			// GridData gd = new GridData();
+			// // gd.verticalIndent = 0;
+			// // gd.horizontalIndent = 0;
+			// // gd.grabExcessHorizontalSpace = true;
+			// button.setLayoutData(gd);
 			button.addSelectionListener(new SelectionListener() {
 
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void widgetSelected(final SelectionEvent e) {
 					if (button.getSelection()) {
 						RadioSelectionGroup.this.selectedIndex = index;
 					}
 				}
 
 				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
+				public void widgetDefaultSelected(final SelectionEvent e) {
 				}
 
 			});
@@ -376,7 +378,7 @@ public class BulkImportPage extends WizardPage {
 			return selectedIndex;
 		}
 
-		public void setSelectedIndex(int value) {
+		public void setSelectedIndex(final int value) {
 			buttons.get(value).setSelection(true);
 			selectedIndex = value;
 		}
@@ -388,7 +390,7 @@ public class BulkImportPage extends WizardPage {
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		final Composite container = new Composite(parent, SWT.NONE);
 
 		// set the layout for the whole functional region
@@ -398,63 +400,63 @@ public class BulkImportPage extends WizardPage {
 		layout.marginRight = 0;
 		layout.marginWidth = 0;
 		container.setLayout(layout);
-		GridData ld = new GridData();
+		final GridData ld = new GridData();
 		ld.verticalIndent = 0;
 		ld.horizontalAlignment = SWT.FILL;
 		ld.grabExcessHorizontalSpace = true;
 		container.setLayoutData(ld);
 
-		Composite datafileC = new Composite(container, SWT.NONE);
-		GridData gd = new GridData();
+		final Composite datafileC = new Composite(container, SWT.NONE);
+		final GridData gd = new GridData();
 		gd.horizontalAlignment = SWT.FILL;
 		gd.grabExcessHorizontalSpace = true;
 		gd.horizontalSpan = 2;
 		datafileC.setLayoutData(gd);
-		
+
 		importFileEditor = new FileFieldEditor("Data file", "Data file", datafileC);
 		importFileEditor.setFileExtensions(new String[] { "*.csv" });
 		importFileEditor.getTextControl(datafileC).addModifyListener(new ModifyListener() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				BulkImportPage.this.getContainer().updateButtons();
 			}
 		});
 
-//		Composite separatorsC = new Composite(container, SWT.BORDER);
-//		final RowLayout l = new RowLayout();//(2, false);
-//		l.marginLeft = 0;
-//		l.marginRight = 0;
-//		l.marginWidth = 0;
-//
-//////		layout.verticalSpacing = 9;
-////		layout.marginWidth = 0;
-////		layout.verticalSpacing= 0;
-////		layout.horizontalSpacing= 0;
-//		separatorsC.setLayout(l);
-//		GridData gd2 = new GridData();
-////		gd.horizontalIndent = 0;
-//		gd2.horizontalAlignment = SWT.FILL;
-//		gd2.horizontalSpan = 2;
-////		gd2.verticalIndent = 0;
-//		separatorsC.setLayoutData(gd2);
-//		
+		// Composite separatorsC = new Composite(container, SWT.BORDER);
+		// final RowLayout l = new RowLayout();//(2, false);
+		// l.marginLeft = 0;
+		// l.marginRight = 0;
+		// l.marginWidth = 0;
+		//
+		// //// layout.verticalSpacing = 9;
+		// // layout.marginWidth = 0;
+		// // layout.verticalSpacing= 0;
+		// // layout.horizontalSpacing= 0;
+		// separatorsC.setLayout(l);
+		// GridData gd2 = new GridData();
+		// // gd.horizontalIndent = 0;
+		// gd2.horizontalAlignment = SWT.FILL;
+		// gd2.horizontalSpan = 2;
+		// // gd2.verticalIndent = 0;
+		// separatorsC.setLayoutData(gd2);
+		//
 		// create a radiobutton group for specifying CSV import
 		csvSelectionGroup = new RadioSelectionGroup(container, "Format separator", SWT.NONE, new String[] { "comma (\",\")", "semicolon (\";\")" }, new int[] { CHOICE_COMMA, CHOICE_SEMICOLON });
-				GridData csvLayoutData = new GridData();
-//		csvLayoutData.widthHint = 220;
-//		csvLayoutData.horizontalIndent = 0;
-//		csvLayoutData.verticalIndent = 0;
+		final GridData csvLayoutData = new GridData();
+		// csvLayoutData.widthHint = 220;
+		// csvLayoutData.horizontalIndent = 0;
+		// csvLayoutData.verticalIndent = 0;
 		csvLayoutData.grabExcessHorizontalSpace = true;
 		csvLayoutData.horizontalAlignment = SWT.FILL;
 		csvSelectionGroup.setLayoutData(csvLayoutData);
 
 		// create a radiobutton group for specifying CSV import
 		decimalSelectionGroup = new RadioSelectionGroup(container, "Decimal separator", SWT.NONE, new String[] { "comma (\",\")", "period (\".\")" }, new int[] { CHOICE_COMMA, CHOICE_PERIOD });
-		GridData decimalLayoutData = new GridData();
-//		decimalLayoutData.widthHint = 220;	
-//		decimalLayoutData.horizontalIndent = 0;
-//		decimalLayoutData.verticalIndent = 0;
+		final GridData decimalLayoutData = new GridData();
+		// decimalLayoutData.widthHint = 220;
+		// decimalLayoutData.horizontalIndent = 0;
+		// decimalLayoutData.verticalIndent = 0;
 		decimalLayoutData.grabExcessHorizontalSpace = true;
 		decimalLayoutData.horizontalAlignment = SWT.FILL;
 		decimalSelectionGroup.setLayoutData(decimalLayoutData);
@@ -475,21 +477,21 @@ public class BulkImportPage extends WizardPage {
 		decimalSelectionGroup.setSelectedIndex(decimalValue);
 
 		// create a radiobutton group for specifying how scenarios are selected
-		String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
+		final String currentScenarioOption = String.format("Current ('%s')", currentScenario.getName());
 		scenarioSelectionGroup = new RadioSelectionGroup(container, "Scenarios", SWT.NONE, new String[] { "All", currentScenarioOption, "Selected" }, new int[] { CHOICE_ALL_SCENARIOS,
 				CHOICE_CURRENT_SCENARIO, CHOICE_SELECTED_SCENARIOS });
 		scenarioSelectionGroup.setSelectedIndex(0);
-		GridData gd3 = new GridData() ;
+		final GridData gd3 = new GridData();
 		gd3.horizontalAlignment = SWT.FILL;
-		gd3.grabExcessHorizontalSpace= true;
+		gd3.grabExcessHorizontalSpace = true;
 		gd3.horizontalSpan = 2;
 		scenarioSelectionGroup.setLayoutData(gd3);
 
 		// create a container for the scenario tree control (so we can hide it)
 		final Composite viewerComposite = new Composite(container, SWT.NONE);
 		viewerComposite.setLayout(new GridLayout(1, true));
-		GridData viewerCompositeLayoutData = new GridData();
-//		viewerCompositeLayoutData.widthHint = 250;
+		final GridData viewerCompositeLayoutData = new GridData();
+		// viewerCompositeLayoutData.widthHint = 250;
 		viewerCompositeLayoutData.grabExcessVerticalSpace = true;
 		viewerCompositeLayoutData.grabExcessHorizontalSpace = true;
 		viewerCompositeLayoutData.verticalAlignment = SWT.FILL;
@@ -503,7 +505,7 @@ public class BulkImportPage extends WizardPage {
 		scenarioTreeViewer.setLabelProvider(new ScenarioLabelProvider());
 		scenarioTreeViewer.setAutoExpandLevel(3);
 		scenarioTreeViewer.setInput(getServices());
-		GridData viewerLayoutData = new GridData();
+		final GridData viewerLayoutData = new GridData();
 		viewerLayoutData.grabExcessVerticalSpace = true;
 		viewerLayoutData.grabExcessHorizontalSpace = true;
 		viewerLayoutData.verticalAlignment = SWT.FILL;
@@ -513,8 +515,8 @@ public class BulkImportPage extends WizardPage {
 		// when a parent element checkbox is clicked in the tree, propagate the change to its descendants
 		scenarioTreeViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				Object element = event.getElement();
+			public void checkStateChanged(final CheckStateChangedEvent event) {
+				final Object element = event.getElement();
 				if (!(element instanceof ScenarioInstance)) {
 					scenarioTreeViewer.setSubtreeChecked(element, event.getChecked());
 				}
@@ -526,12 +528,12 @@ public class BulkImportPage extends WizardPage {
 		scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 		selectedOnlyButton.addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				scenarioTreeViewer.getTree().setEnabled(selectedOnlyButton.getSelection());
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 			}
 		});
 

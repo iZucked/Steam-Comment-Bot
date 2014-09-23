@@ -1410,7 +1410,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			return lastMenu;
 		}
 
-		abstract protected void populate(Menu menu);
+		protected abstract void populate(Menu menu);
 
 		@Override
 		public Menu getMenu(final Menu parent) {
@@ -1511,9 +1511,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private class FilterAction extends DefaultMenuCreatorAction {
-		final private EObject sourceObject;
-		final private EStructuralFeature sourceFeature;
-		final private EMFPath filterPath;
+		private final EObject sourceObject;
+		private final EStructuralFeature sourceFeature;
+		private final EMFPath filterPath;
 
 		/**
 		 * An action which updates the filter on the trades wiring table and refreshes the table.
