@@ -74,7 +74,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 					}
 				}
-			} catch (final Throwable e) {
+			} catch (final Exception e) {
 				log.error(e.getMessage(), e);
 				kill();
 				setJobState(EJobState.CANCELLED);
