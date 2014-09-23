@@ -461,11 +461,7 @@ public class CargoEditorMenuHelper {
 				manager.add(newMenuManager);
 				if (slot instanceof LoadSlot) {
 					final LoadSlot loadSlot = (LoadSlot) slot;
-					if (loadSlot.isDESPurchase()) {
-						// createNewSlotMenu(newMenuManager, loadSlot, true);
-						// createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
-					} else {
-						// createNewSlotMenu(newMenuManager, loadSlot, true);
+					if (!loadSlot.isDESPurchase()) {
 						final List<Slot> filteredSlots = new LinkedList<Slot>();
 						for (final LoadSlot s : cargoModel.getLoadSlots()) {
 							if (!s.isDESPurchase()) {
@@ -474,32 +470,20 @@ public class CargoEditorMenuHelper {
 						}
 
 						createSwapWithMenus(manager, loadSlot, filteredSlots, true);
-						// createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
-						// createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 					}
 
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-					if (dischargeSlot.isFOBSale()) {
-						// createNewSlotMenu(newMenuManager, dischargeSlot, false);
-						// createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
-					} else {
+					if (!dischargeSlot.isFOBSale()) {
 						final List<Slot> filteredSlots = new LinkedList<Slot>();
 						for (final DischargeSlot s : cargoModel.getDischargeSlots()) {
 							if (!s.isFOBSale()) {
 								filteredSlots.add(s);
 							}
 						}
-						// createNewSlotMenu(newMenuManager, dischargeSlot, false);
 						createSwapWithMenus(manager, dischargeSlot, filteredSlots, false);
-						// createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
-						// createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 					}
 				}
-
-				// createEditMenu(manager, slot, slot.getCargo());
-				// createEditContractMenu(manager, slot, slot.getContract());
-				// createDeleteSlotMenu(manager, slot);
 			}
 		};
 		return l;
@@ -514,35 +498,9 @@ public class CargoEditorMenuHelper {
 
 		for (final Slot target : possibleTargets) {
 
-			final int daysDifference;
 			// Perform some filtering on the possible targets
-			{
-				// final Slot otherSlot;
-				// final DischargeSlot dischargeSlot;
-				// if (sourceIsLoad) {
-				// loadSlot = (LoadSlot) source;
-				// dischargeSlot = (DischargeSlot) target;
-				// } else {
-				// loadSlot = (LoadSlot) target;
-				// dischargeSlot = (DischargeSlot) source;
-				// }
-				// Filter out current pairing
-				if (source.getCargo().getSlots().contains(target)) {
-					continue;
-				}
-
-				// // Filter backwards pairings
-				// if (loadSlot.getWindowStart() == null) {
-				// continue;
-				// }
-				// if (dischargeSlot.getWindowStart() == null) {
-				// continue;
-				// }
-				// if (loadSlot.getWindowStart().after(dischargeSlot.getWindowStart())) {
-				// continue;
-				// }
-				// final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
-				// daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
+			if (source.getCargo().getSlots().contains(target)) {
+				continue;
 			}
 
 			final Contract contract = target.getContract();
@@ -553,37 +511,17 @@ public class CargoEditorMenuHelper {
 			if (port != null) {
 				addTargetByDateToSortedSet(target, port.getName(), slotsByPort);
 			}
-
-			// if (daysDifference < 5) {
-			// addSlotToTargets(target, "Less than 5 Days", slotsByDate);
-			// }
-			// if (daysDifference < 10) {
-			// addSlotToTargets(target, "Less than 10 Days", slotsByDate);
-			// }
-			// if (daysDifference < 20) {
-			// addSlotToTargets(target, "Less than 20 Days", slotsByDate);
-			// }
-			// if (daysDifference < 30) {
-			// addSlotToTargets(target, "Less than 30 Days", slotsByDate);
-			// }
-			// if (daysDifference < 60) {
-			// addSlotToTargets(target, "Less than 60 Days", slotsByDate);
-			// }
 			addTargetByDateToSortedSet(target, "Any", slotsByDate);
-
 		}
 		{
 			buildSwapMenu(manager, "Swap Slots By Contract", source, slotsByContract, sourceIsLoad, false, true);
-			// buildSubMenu(manager, "Slots By Date", source, sourceIsLoad, slotsByDate, true, true);
 			buildSwapMenu(manager, "Swap Slots By Port", source, slotsByPort, sourceIsLoad, true, false);
 		}
 	}
 
 	/**
-	 * Returns a list of slots among the specified possible targets which are compatible with the specified source slot.
-	 * FOB purchases may be paired with DES sales or with FOB sales (which must be at the same port unless the sale
-	 * is divertible), while DES purchases may be paired only with DES sales (which must be at the same port unless the 
-	 * purchase is divertible). 
+	 * Returns a list of slots among the specified possible targets which are compatible with the specified source slot. FOB purchases may be paired with DES sales or with FOB sales (which must be at
+	 * the same port unless the sale is divertible), while DES purchases may be paired only with DES sales (which must be at the same port unless the purchase is divertible).
 	 * 
 	 * @param source
 	 * @param possibleTargets
@@ -591,8 +529,8 @@ public class CargoEditorMenuHelper {
 	 */
 	private List<Slot> filterSlotsByCompatibility(final Slot source, final List<? extends Slot> possibleTargets) {
 
-		final List<Slot> filteredSlots = new LinkedList<Slot>();		
-		
+		final List<Slot> filteredSlots = new LinkedList<Slot>();
+
 		for (final Slot slot : possibleTargets) {
 			// Check restrictions on both slots
 			if (areUnsortedSlotsCompatible(source, slot) == false) {
@@ -606,7 +544,6 @@ public class CargoEditorMenuHelper {
 		return filteredSlots;
 	}
 
-	
 	private boolean areSlotWindowsCompatible(final LoadSlot load, final DischargeSlot discharge) {
 		Date loadStart = load.getWindowStartWithSlotOrPortTime();
 		Date loadEnd = load.getWindowEndWithSlotOrPortTime();
@@ -618,16 +555,16 @@ public class CargoEditorMenuHelper {
 			return false;
 		}
 
-		// can never load before discharging 
+		// can never load before discharging
 		if (loadStart.after(dischargeEnd)) {
 			return false;
 		}
-		
+
 		boolean overlap = (dischargeStart.before(loadEnd));
-		
+
 		final long diff = dischargeEnd.getTime() - loadStart.getTime();
 		int daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
-		
+
 		// DES load
 		if (load.isDESPurchase()) {
 			// divertible DES - discharge time should be within shipping restriction window for load slot
@@ -651,20 +588,20 @@ public class CargoEditorMenuHelper {
 				return true;
 			}
 		}
-		
+
 	}
-	
+
 	private boolean areSlotsCompatible(final LoadSlot load, final DischargeSlot discharge) {
 		// DES purchase not compatible with FOB sale
 		if (load.isDESPurchase() && discharge.isFOBSale()) {
 			return false;
 		}
-		
+
 		// check that window timings are compatible
 		if (areSlotWindowsCompatible(load, discharge) == false) {
 			return false;
-		}		
-		
+		}
+
 		// DES purchase
 		if (load.isDESPurchase() == true) {
 			// FOB sale - incompatible
@@ -674,9 +611,9 @@ public class CargoEditorMenuHelper {
 			// DES sale - only at the same port or divertible
 			else {
 				return load.isDivertible() || (load.getPort() == discharge.getPort());
-			}			
+			}
 		}
-		// FOB purchase 
+		// FOB purchase
 		else {
 			// FOB sale - only at the same port or divertible
 			if (discharge.isFOBSale() == true) {
@@ -687,11 +624,12 @@ public class CargoEditorMenuHelper {
 				return true;
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Decides whether two slots are compatible.
+	 * 
 	 * @param a
 	 * @param b
 	 * @return
@@ -700,15 +638,13 @@ public class CargoEditorMenuHelper {
 		// need load / discharge or discharge / load
 		if (a instanceof LoadSlot && b instanceof DischargeSlot) {
 			return areSlotsCompatible((LoadSlot) a, (DischargeSlot) b);
-		}
-		else if (a instanceof DischargeSlot && b instanceof LoadSlot) {
+		} else if (a instanceof DischargeSlot && b instanceof LoadSlot) {
 			return areSlotsCompatible((LoadSlot) b, (DischargeSlot) a);
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Given a source slot, check that the target slot is compatible with the source slot contract restrictions.
 	 * 
@@ -765,19 +701,6 @@ public class CargoEditorMenuHelper {
 				if (sourceCargo != null && sourceCargo == targetCargo) {
 					continue;
 				}
-				// Filter null windows and backwards pairings
-				// no - this should be done in filterSlots...
-				/*
-				if (loadSlot.getWindowStart() == null) {
-					continue;
-				}
-				if (dischargeSlot.getWindowStart() == null) {
-					continue;
-				}
-				if (loadSlot.getWindowStart().after(dischargeSlot.getWindowStart())) {
-					continue;
-				}
-				*/
 				final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
 				daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
 			}
@@ -794,20 +717,6 @@ public class CargoEditorMenuHelper {
 			if (port != null) {
 				addTargetByDateToSortedSet(target, port.getName(), slotsByPort);
 			}
-
-			// if (daysDifference < 5) {
-			// addTargetByDateToSortedSet(target, "Less than 5 Days", slotsByDate);
-			// // addTargetByDateToSortedSet(target, "near", nearSlotsByDate);
-			// nearSlotsByDate.add(target);
-			// }
-			// if (daysDifference < 10) {
-			// addTargetByDateToSortedSet(target, "Less than 10 Days", slotsByDate);
-			// nearSlotsByDate.add(target);
-			// }
-			// if (daysDifference < 20) {
-			// addTargetByDateToSortedSet(target, "Less than 20 Days", slotsByDate);
-			// nearSlotsByDate.add(target);
-			// }
 			if (daysDifference <= 60) {
 				// addTargetByDateToSortedSet(target, "Less than 30 Days", slotsByDate);
 				nearSlotsByDate.add(target);
@@ -815,10 +724,6 @@ public class CargoEditorMenuHelper {
 			if (daysDifference > 60 && daysDifference <= 90) {
 				addTargetByDateToSortedSet(target, "[>60 Days]", slotsByDate);
 			}
-			// if (daysDifference < 60) {
-			// addTargetByDateToSortedSet(target, "Less than 60 Days", slotsByDate);
-			// }
-			// addTargetByDateToSortedSet(target, "Any", slotsByDate);
 		}
 		{
 			buildSubMenu(manager, sourceIsLoad ? "Shorts" : "Longs", source, sourceIsLoad, unusedSlotsByDate, false, true);
@@ -977,38 +882,16 @@ public class CargoEditorMenuHelper {
 			}
 			sb.append(df.format(slot.getWindowStart()));
 		}
-		{
-			// sb.append(" '"+ slot.getName()+ "'");
-		}
-		// if (slot instanceof LoadSlot) {
-		// if (((LoadSlot) slot).isDESPurchase()) {
-		// sb.append(", DES");
-		// }
-		// c = ((LoadSlot) slot).getCargo();
-		// }
-		// if (slot instanceof DischargeSlot) {
-		// if (((DischargeSlot) slot).isFOBSale()) {
-		// sb.append(", FOB ");
-		// }
-		// c = ((DischargeSlot) slot).getCargo();
-		// }
 		if (includePort && slot.getPort() != null) {
 			sb.append(", " + slot.getPort().getName());
 		}
 		if (slot instanceof SpotSlot) {
 			sb.append(", " + ((SpotSlot) slot).getMarket().getName());
 		}
-		// if (includeContract && slot.getContract() != null) {
-		// sb.append(slot.getContract().getName());
-		// sb.append(", ");
-		// }
-		// sb.append(" | ");
 		final Cargo c = isLoad ? ((LoadSlot) slot).getCargo() : ((DischargeSlot) slot).getCargo();
 		if (c != null) {
 			sb.append(" -- ");
 			sb.append("cargo '" + c.getName() + "'");
-		} else {
-			// sb.append(isLoad ? "Long" : "Short");
 		}
 		return sb.toString();
 	}
@@ -1261,9 +1144,6 @@ public class CargoEditorMenuHelper {
 							continue;
 						}
 
-						// if (slot instanceof DischargeSlot) {
-						// continue;
-						// }
 						final Date slotDate = slot.getWindowStartWithSlotOrPortTime();
 						if (slotDate == null || target.getWindowEndWithSlotOrPortTime().before(slotDate)) {
 							currentWiringCommand.append(SetCommand.create(scenarioEditingLocation.getEditingDomain(), c, MMXCorePackage.eINSTANCE.getNamedObject_Name(), target.getName()));
