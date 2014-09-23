@@ -193,6 +193,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			return;
 		case PAUSED:
 			resume();
+			break;
 		case RUNNING:
 			runner.cancel();
 			setJobState(EJobState.CANCELLING);
