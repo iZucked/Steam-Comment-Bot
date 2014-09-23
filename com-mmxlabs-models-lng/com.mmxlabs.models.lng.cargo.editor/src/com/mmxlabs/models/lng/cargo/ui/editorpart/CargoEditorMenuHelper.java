@@ -234,7 +234,7 @@ public class CargoEditorMenuHelper {
 
 	IMenuListener createDischargeSlotMenuListener(final List<DischargeSlot> dischargeSlots, final int index) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
-		final IMenuListener l = new IMenuListener() {
+		return new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
@@ -263,8 +263,6 @@ public class CargoEditorMenuHelper {
 			}
 
 		};
-		return l;
-
 	}
 
 	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, final Contract contract, final Cargo cargo) {
@@ -363,7 +361,7 @@ public class CargoEditorMenuHelper {
 
 	public IMenuListener createMultipleSelectionMenuListener(final Set<Cargo> cargoes) {
 
-		final IMenuListener l = new IMenuListener() {
+		return new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
@@ -412,12 +410,11 @@ public class CargoEditorMenuHelper {
 			}
 
 		};
-		return l;
 	}
 
 	public IMenuListener createLoadSlotMenuListener(final List<LoadSlot> loadSlots, final int index) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
-		final IMenuListener l = new IMenuListener() {
+		return new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
@@ -444,15 +441,13 @@ public class CargoEditorMenuHelper {
 			}
 
 		};
-		return l;
-
 	}
 
 	/**
 	 */
 	public IMenuListener createSwapSlotsMenuListener(final List<Slot> slots, final int index) {
 		final CargoModel cargoModel = portfolioModel.getCargoModel();
-		final IMenuListener l = new IMenuListener() {
+		return new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
@@ -486,8 +481,6 @@ public class CargoEditorMenuHelper {
 				}
 			}
 		};
-		return l;
-
 	}
 
 	private void createSwapWithMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
