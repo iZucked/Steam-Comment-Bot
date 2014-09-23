@@ -542,7 +542,7 @@ public class CargoEditorMenuHelper {
 				// continue;
 				// }
 				// final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
-				// daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
+				// daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
 			}
 
 			final Contract contract = target.getContract();
@@ -626,7 +626,7 @@ public class CargoEditorMenuHelper {
 		boolean overlap = (dischargeStart.before(loadEnd));
 		
 		final long diff = dischargeEnd.getTime() - loadStart.getTime();
-		int daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
+		int daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
 		
 		// DES load
 		if (load.isDESPurchase()) {
@@ -779,7 +779,7 @@ public class CargoEditorMenuHelper {
 				}
 				*/
 				final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
-				daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
+				daysDifference = (int) (diff / 1000L / 60L / 60L / 24L);
 			}
 
 			if (targetCargo == null) {
@@ -1104,7 +1104,7 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setWindowStartTime(0);
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
-						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
+						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000L / 60L / 60L));
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
@@ -1150,7 +1150,7 @@ public class CargoEditorMenuHelper {
 						loadSlot.setWindowStartTime(0);
 						cal.add(Calendar.MONTH, 1);
 						final Date endDate = cal.getTime();
-						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000l / 60l / 60l));
+						loadSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000L / 60L / 60L));
 
 						// Get existing names
 						final Set<String> usedIDStrings = new HashSet<>();
