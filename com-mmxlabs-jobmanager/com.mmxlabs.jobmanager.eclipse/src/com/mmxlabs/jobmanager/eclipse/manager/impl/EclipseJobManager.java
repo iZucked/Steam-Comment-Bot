@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
@@ -195,7 +196,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 			return jobManagers.values().iterator().next();
 		}
 
-		final TreeSet<MatchResult> results = new TreeSet<MatchResult>();
+		final SortedSet<MatchResult> results = new TreeSet<MatchResult>();
 		for (final IJobManager mgr : jobManagers.values()) {
 			final int score = jobMatcher.matchJob(job, mgr);
 			results.add(new MatchResult(mgr, score));
