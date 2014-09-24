@@ -102,7 +102,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		}
 	}
 
-	private final LinkedList<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
+	private final List<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
 	private final Runner runner;
 	private EJobState currentState = EJobState.UNKNOWN;
 	private int progress = 0;
