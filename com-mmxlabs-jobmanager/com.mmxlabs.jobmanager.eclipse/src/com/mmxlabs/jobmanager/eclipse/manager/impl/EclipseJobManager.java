@@ -147,9 +147,9 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> local_jobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
+		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
 
-		for (final IEclipseJobManagerListener l : local_jobManagerListeners) {
+		for (final IEclipseJobManagerListener l : localJobManagerListeners) {
 			l.jobAdded(this, job, jobControl, resource);
 		}
 	}
@@ -161,9 +161,9 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> local_jobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
+		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
 
-		for (final IEclipseJobManagerListener l : local_jobManagerListeners) {
+		for (final IEclipseJobManagerListener l : localJobManagerListeners) {
 			l.jobRemoved(this, job, jobControl, resource);
 		}
 	}
