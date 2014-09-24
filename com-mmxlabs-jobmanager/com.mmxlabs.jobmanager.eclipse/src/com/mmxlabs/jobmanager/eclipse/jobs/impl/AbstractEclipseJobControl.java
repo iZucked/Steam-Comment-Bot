@@ -36,11 +36,12 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private static final Logger log = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
 
 	private class Runner extends Job {
+
+		private boolean paused = false;
+
 		public Runner(final String name) {
 			super(name);
 		}
-
-		private boolean paused = false;
 
 		@Override
 		public IStatus run(final IProgressMonitor monitor) {
