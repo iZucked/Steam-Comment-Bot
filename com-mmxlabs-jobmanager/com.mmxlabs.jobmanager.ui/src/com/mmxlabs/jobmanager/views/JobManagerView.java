@@ -4,10 +4,7 @@
  */
 package com.mmxlabs.jobmanager.views;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.action.Action;
@@ -16,17 +13,13 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -41,7 +34,6 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.jobmanager.manager.IJobManager;
 import com.mmxlabs.jobmanager.ui.Activator;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 
@@ -68,165 +60,9 @@ public class JobManagerView extends ViewPart {
 	private Action stopAction;
 	private Action removeAction;
 
-	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {
-
-		@Override
-		public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-			control.removeListener(jobListener);
-
-			JobManagerView.this.refresh();
-		}
-
-		@Override
-		public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-			control.addListener(jobListener);
-
-			JobManagerView.this.refresh();
-		}
-
-		@Override
-		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-			JobManagerView.this.refresh();
-
-		}
-
-		@Override
-		public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-			JobManagerView.this.refresh();
-
-		}
-	};
+	private final IEclipseJobManagerListener jobManagerListener;
 
 	private final IEclipseJobManager jobManager = Activator.getDefault().getEclipseJobManager();
-
-	public void submitJob(final IJobDescriptor theJob, final IResource resource) {
-		final IJobControl control = jobManager.submitJob(theJob, resource);
-		control.prepare();
-	}
-
-	private class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
-
-		private final Map<Object, Image> imageCache = new HashMap<Object, Image>();
-
-		@Override
-		public String getColumnText(final Object obj, final int index) {
-
-			if (obj instanceof IJobManager) {
-				switch (index) {
-				case 0:
-					return ((IJobManager) obj).getJobManagerDescriptor().getName();
-				}
-			} else if (obj instanceof IJobDescriptor) {
-				final IJobDescriptor job = (IJobDescriptor) obj;
-				final IJobControl control = jobManager.getControlForJob(job);
-				switch (index) {
-				case 1:
-					return job.getJobName();
-				case 2:
-					return Integer.toString(control.getProgress()) + "%";
-				case 3:
-					return control.getJobState().toString();
-				}
-			}
-
-			return null;
-		}
-
-		@Override
-		public Image getColumnImage(final Object obj, final int index) {
-
-			// TODO: Cache images -- they need to be disposed
-			if (index == 1) {
-				if (obj instanceof IJobDescriptor) {
-					final IJobDescriptor job = (IJobDescriptor) obj;
-					final IJobControl control = jobManager.getControlForJob(job);
-
-					return getCachedImage(control.getJobState());
-				}
-			}
-
-			return null;
-		}
-
-		@Override
-		public Image getImage(final Object obj) {
-			return null;
-		}
-
-		Image getCachedImage(final Object key) {
-
-			if (imageCache.containsKey(key)) {
-				return imageCache.get(key);
-			}
-
-			ImageDescriptor desc = null;
-			if (key instanceof EJobState) {
-				final EJobState state = (EJobState) key;
-
-				switch (state) {
-				case CANCELLED:
-					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_ERROR);
-				case CANCELLING:
-					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_ERROR);
-				case COMPLETED:
-					desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
-					break;
-				case INITIALISED:
-					desc = Activator.getImageDescriptor("/icons/elcl16/terminate_co.gif");
-					break;
-				case PAUSED:
-					desc = Activator.getImageDescriptor("/icons/elcl16/suspend_co.gif");
-					break;
-				case PAUSING:
-					desc = Activator.getImageDescriptor("/icons/dlcl16/suspend_co.gif");
-					break;
-				case RESUMING:
-					desc = Activator.getImageDescriptor("/icons/dlcl16/resume_co.gif");
-					break;
-				case RUNNING:
-					desc = Activator.getImageDescriptor("/icons/elcl16/resume_co.gif");
-					break;
-				case UNKNOWN:
-					return getSite().getShell().getDisplay().getSystemImage(SWT.ICON_WARNING);
-				default:
-					break;
-				}
-			} else {
-				desc = Activator.getImageDescriptor(key.toString());
-			}
-
-			// Cache image
-			if (desc != null) {
-				final Image img = desc.createImage();
-				imageCache.put(key, img);
-				return img;
-			}
-
-			return null;
-
-		}
-
-		@Override
-		public void dispose() {
-
-			for (final Image image : imageCache.values()) {
-				image.dispose();
-			}
-
-			imageCache.clear();
-
-			super.dispose();
-		}
-	}
-
-	/**
-	 * The constructor.
-	 */
-	public JobManagerView() {
-
-	}
 
 	private final IJobControlListener jobListener = new IJobControlListener() {
 		@Override
@@ -258,6 +94,18 @@ public class JobManagerView extends ViewPart {
 	};
 
 	/**
+	 * The constructor.
+	 */
+	public JobManagerView() {
+		this.jobManagerListener = new JobManagerViewRefreshListener(this, jobListener);
+	}
+
+	public void submitJob(final IJobDescriptor theJob, final IResource resource) {
+		final IJobControl control = jobManager.submitJob(theJob, resource);
+		control.prepare();
+	}
+
+	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
@@ -280,7 +128,7 @@ public class JobManagerView extends ViewPart {
 		viewer.getTree().setHeaderVisible(true);
 
 		viewer.setContentProvider(new JobManagerContentProvider());
-		viewer.setLabelProvider(new ViewLabelProvider());
+		viewer.setLabelProvider(new ViewLabelProvider(getSite().getShell(), jobManager));
 		// viewer.setSorter(new NameSorter());
 		viewer.setInput(jobManager);
 
@@ -573,47 +421,6 @@ public class JobManagerView extends ViewPart {
 	 * @return
 	 */
 	private Iterator<IJobDescriptor> getTreeSelectionIterator() {
-		final IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
-
-		/**
-		 * Wrapper around the tree iterator which only contains IJobDescriptors.
-		 */
-		final Iterator<IJobDescriptor> itr = new Iterator<IJobDescriptor>() {
-			final Iterator<?> selectionItr = selection.iterator();
-
-			private IJobDescriptor next = null;
-
-			@Override
-			public boolean hasNext() {
-				next = null;
-				while (selectionItr.hasNext() && (next == null)) {
-					final Object obj = selectionItr.next();
-					if (obj instanceof IJobDescriptor) {
-						next = (IJobDescriptor) obj;
-						return true;
-					}
-				}
-				return false;
-			}
-
-			@Override
-			public IJobDescriptor next() {
-				// Assume null means end of list.
-				if (next == null) {
-					throw new NoSuchElementException();
-				}
-
-				final IJobDescriptor job = next;
-				next = null;
-				return job;
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException("Not implemeneted");
-			}
-		};
-		// We assume there is only a single type of object in the table
-		return itr;
+		return new SelectedJobIterator((IStructuredSelection) viewer.getSelection());
 	}
 }
