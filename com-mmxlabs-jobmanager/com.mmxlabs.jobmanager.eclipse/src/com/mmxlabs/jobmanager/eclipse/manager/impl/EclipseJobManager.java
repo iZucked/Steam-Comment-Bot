@@ -183,7 +183,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		return jobResourceMap.get(job);
 	}
 
-
 	protected IJobManager findJobManager(final IJobDescriptor job) {
 
 		// TODO: Make a GUI wrapper to display sorted results and let user pick
@@ -248,11 +247,11 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	protected void saveState(final IJobManager jobManager) {
-
+		// Clients can override this method
 	}
 
 	protected void restoreState(final IJobManager jobManager) {
-
+		// Clients can override this method
 	}
 
 	@Override
