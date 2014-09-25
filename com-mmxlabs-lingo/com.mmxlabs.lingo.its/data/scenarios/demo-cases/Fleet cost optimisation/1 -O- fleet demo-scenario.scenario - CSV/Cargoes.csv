@@ -1,78 +1,78 @@
 name,allowRewiring,allowedVessels,buy.name,buy.date,buy.time,buy.windowSize,buy.duration,buy.min,buy.max,buy.optional,buy.price,buy.cargoCV,buy.arriveCold,buy.DES,buy.contract,buy.port,buy.kind,sell.name,sell.date,sell.time,sell.windowSize,sell.duration,sell.min,sell.max,sell.optional,sell.price,sell.FOB,sell.contract,sell.port,sell.kind,kind
-Cargo 6,,,load-Cargo 6,2010-12-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 6,2011-01-08,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 7,,,load-Cargo 7,2010-12-29,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 7,2011-01-12,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 11,,,load-Cargo 11,2011-01-06,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 11,2011-01-16,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
-Cargo 12,,,load-Cargo 12,2011-01-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 12,2011-01-19,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
-Cargo 13,,,load-Cargo 13,2011-01-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 13,2011-01-21,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
-Cargo 18,,,load-Cargo 18,2011-01-14,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 18,2011-01-27,,,,,,false,,false,Sell 10,Isle of Grain,DischargeSlot,Cargo
-Cargo 20,,,load-Cargo 20,2011-01-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 20,2011-01-30,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 22,,,load-Cargo 22,2011-01-18,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 22,2011-01-31,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
-Cargo 26,,,load-Cargo 26,2011-01-26,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 26,2011-02-23,,,,,,false,,false,Sell 10,Incheon,DischargeSlot,Cargo
-Cargo 27,,,load-Cargo 27,2011-01-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 27,2011-02-25,,,,,,false,,false,Sell 10,Tongyeong,DischargeSlot,Cargo
-Cargo 30,,,load-Cargo 30,2011-01-31,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 30,2011-02-24,,,,,,false,,false,Sell 10,Hazira,DischargeSlot,Cargo
-Cargo 34,,,load-Cargo 34,2011-02-05,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 34,2011-02-14,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 37,,,load-Cargo 37,2011-02-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 37,2011-02-22,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
-Cargo 38,,,load-Cargo 38,2011-02-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 38,2011-02-22,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
-Cargo 43,,,load-Cargo 43,2011-02-16,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 43,2011-03-07,,,,,,false,,false,Sell 10,Altamira,DischargeSlot,Cargo
-Cargo 45,,,load-Cargo 45,2011-02-18,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 45,2011-03-10,,,,,,false,,false,Sell 10,Dahej,DischargeSlot,Cargo
-Cargo 47,,,load-Cargo 47,2011-02-20,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 47,2011-03-01,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
-Cargo 49,,,load-Cargo 49,2011-02-22,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 49,2011-03-21,,,,,,false,,false,Sell 10,Tongyeong,DischargeSlot,Cargo
-Cargo 51,,,load-Cargo 51,2011-02-25,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 51,2011-03-08,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
-Cargo 60,,,load-Cargo 60,2011-03-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 60,2011-03-21,,,,,,false,,false,Sell 10,Sagunto,DischargeSlot,Cargo
-Cargo 62,,,load-Cargo 62,2011-03-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 62,2011-03-27,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
-Cargo 64,,,load-Cargo 64,2011-03-13,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 64,2011-03-22,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
-Cargo 68,,,load-Cargo 68,2011-03-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 68,2011-03-30,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 71,,,load-Cargo 71,2011-03-24,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 71,2011-04-05,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 73,,,load-Cargo 73,2011-03-26,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 73,2011-04-06,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 75,,,load-Cargo 75,2011-03-27,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 75,2011-04-09,,,,,,false,,false,Sell 10,Cartagena,DischargeSlot,Cargo
-Cargo 76,,,load-Cargo 76,2011-03-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 76,2011-04-10,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
-Cargo 82,,,load-Cargo 82,2011-04-03,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 82,2011-04-21,,,,,,false,,false,Sell 10,Altamira,DischargeSlot,Cargo
-Cargo 83,,,load-Cargo 83,2011-04-04,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 83,2011-04-15,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 88,,,load-Cargo 88,2011-04-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 88,2011-04-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 89,,,load-Cargo 89,2011-04-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 89,2011-04-21,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 90,,,load-Cargo 90,2011-04-11,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 90,2011-04-22,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
-Cargo 91,,,load-Cargo 91,2011-04-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 91,2011-04-25,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
-Cargo 94,,,load-Cargo 94,2011-04-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 94,2011-04-27,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 97,,,load-Cargo 97,2011-04-18,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 97,2011-05-17,,,,,,false,,false,Sell 10,Oita,DischargeSlot,Cargo
-Cargo 98,,,load-Cargo 98,2011-04-19,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 98,2011-05-04,,,,,,false,,false,Sell 10,Bilbao,DischargeSlot,Cargo
-Cargo 103,,,load-Cargo 103,2011-04-26,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 103,2011-05-08,,,,,,false,,false,Sell 10,Bilbao,DischargeSlot,Cargo
-Cargo 109,,,load-Cargo 109,2011-05-04,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 109,2011-05-15,,,,,,false,,false,Sell 10,Barcelona,DischargeSlot,Cargo
-Cargo 110,,,load-Cargo 110,2011-05-05,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 110,2011-05-18,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 114,,,load-Cargo 114,2011-05-07,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 114,2011-05-18,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
-Cargo 116,,,load-Cargo 116,2011-05-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 116,2011-05-25,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 117,,,load-Cargo 117,2011-05-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 117,2011-05-28,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 121,,,load-Cargo 121,2011-05-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 121,2011-06-02,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 128,,,load-Cargo 128,2011-05-24,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 128,2011-06-27,,,,,,false,,false,Sell 10,Kawagoe,DischargeSlot,Cargo
-Cargo 131,,,load-Cargo 131,2011-05-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 131,2011-06-10,,,,,,false,,false,Sell 10,Fos Sur Mer,DischargeSlot,Cargo
-Cargo 132,,,load-Cargo 132,2011-05-29,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 132,2011-06-27,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
-Cargo 140,,,load-Cargo 140,2011-06-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 140,2011-06-26,,,,,,false,,false,Sell 10,Hazira,DischargeSlot,Cargo
-Cargo 141,,,load-Cargo 141,2011-06-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 141,2011-06-20,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 143,,,load-Cargo 143,2011-06-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 143,2011-06-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 145,,,load-Cargo 145,2011-06-14,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 145,2011-06-24,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
-Cargo 149,,,load-Cargo 149,2011-06-22,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 149,2011-07-01,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
-Cargo 154,,,load-Cargo 154,2011-06-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 154,2011-07-12,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 161,,,load-Cargo 161,2011-07-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 161,2011-08-04,,,,,,false,,false,Sell 10,Mina Al-Ahmadi,DischargeSlot,Cargo
-Cargo 163,,,load-Cargo 163,2011-07-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 163,2011-08-06,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
-Cargo 164,,,load-Cargo 164,2011-07-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 164,2011-07-23,,,,,,false,,false,Sell 10,Sagunto,DischargeSlot,Cargo
-Cargo 166,,,load-Cargo 166,2011-07-15,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 166,2011-07-28,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 171,,,load-Cargo 171,2011-07-24,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 171,2011-08-19,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
-Cargo 173,,,load-Cargo 173,2011-07-25,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 173,2011-08-21,,,,,,false,,false,Sell 10,Pyeongtaek,DischargeSlot,Cargo
-Cargo 174,,,load-Cargo 174,2011-07-27,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 174,2011-08-08,,,,,,false,,false,Sell 10,Sagunto,DischargeSlot,Cargo
-Cargo 177,,,load-Cargo 177,2011-07-29,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 177,2011-08-10,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 183,,,load-Cargo 183,2011-08-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 183,2011-08-24,,,,,,false,,false,Sell 10,Cove Point,DischargeSlot,Cargo
-Cargo 185,,,load-Cargo 185,2011-08-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 185,2011-09-02,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 188,,,load-Cargo 188,2011-08-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 188,2011-09-15,,,,,,false,,false,Sell 10,Sakai,DischargeSlot,Cargo
-Cargo 191,,,load-Cargo 191,2011-08-19,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 191,2011-09-13,,,,,,false,,false,Sell 10,Hazira,DischargeSlot,Cargo
-Cargo 192,,,load-Cargo 192,2011-08-21,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 192,2011-09-06,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 200,,,load-Cargo 200,2011-09-05,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 200,2011-09-16,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
-Cargo 201,,,load-Cargo 201,2011-09-06,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 201,2011-09-17,,,,,,false,,false,Sell 10,Barcelona,DischargeSlot,Cargo
-Cargo 203,,,load-Cargo 203,2011-09-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 203,2011-09-22,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 205,,,load-Cargo 205,2011-09-11,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 205,2011-10-08,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
-Cargo 207,,,load-Cargo 207,2011-09-13,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 207,2011-09-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 208,,,load-Cargo 208,2011-09-15,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 208,2011-09-25,,,,,,false,,false,Sell 10,Bilbao,DischargeSlot,Cargo
-Cargo 210,,,load-Cargo 210,2011-09-19,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 210,2011-09-30,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 213,,,load-Cargo 213,2011-09-23,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 213,2011-10-06,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 215,,,load-Cargo 215,2011-09-25,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 215,2011-10-18,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
-Cargo 224,,,load-Cargo 224,2011-10-13,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 224,2011-10-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
-Cargo 109a,,,load-Cargo 109a,2011-06-04,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 109a,2011-06-15,,,,,,false,,false,Sell 10,Barcelona,DischargeSlot,Cargo
-Cargo 76a,,,load-Cargo 76a,2011-04-27,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 76a,2011-05-10,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 6,,,Cargo 6,2010-12-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 6,2011-01-08,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 7,,,Cargo 7,2010-12-29,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 7,2011-01-12,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 11,,,Cargo 11,2011-01-06,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 11,2011-01-16,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
+Cargo 12,,,Cargo 12,2011-01-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 12,2011-01-19,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 13,,,Cargo 13,2011-01-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 13,2011-01-21,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
+Cargo 18,,,Cargo 18,2011-01-14,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 18,2011-01-27,,,,,,false,,false,Sell 10,Isle of Grain,DischargeSlot,Cargo
+Cargo 20,,,Cargo 20,2011-01-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 20,2011-01-30,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 22,,,Cargo 22,2011-01-18,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 22,2011-01-31,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
+Cargo 26,,,Cargo 26,2011-01-26,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 26,2011-02-23,,,,,,false,,false,Sell 10,Incheon,DischargeSlot,Cargo
+Cargo 27,,,Cargo 27,2011-01-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 27,2011-02-25,,,,,,false,,false,Sell 10,Tongyeong,DischargeSlot,Cargo
+Cargo 30,,,Cargo 30,2011-01-31,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 30,2011-02-24,,,,,,false,,false,Sell 10,Hazira,DischargeSlot,Cargo
+Cargo 34,,,Cargo 34,2011-02-05,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 34,2011-02-14,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 37,,,Cargo 37,2011-02-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 37,2011-02-22,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 38,,,Cargo 38,2011-02-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 38,2011-02-22,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
+Cargo 43,,,Cargo 43,2011-02-16,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 43,2011-03-07,,,,,,false,,false,Sell 10,Altamira,DischargeSlot,Cargo
+Cargo 45,,,Cargo 45,2011-02-18,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 45,2011-03-10,,,,,,false,,false,Sell 10,Dahej,DischargeSlot,Cargo
+Cargo 47,,,Cargo 47,2011-02-20,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 47,2011-03-01,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
+Cargo 49,,,Cargo 49,2011-02-22,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 49,2011-03-21,,,,,,false,,false,Sell 10,Tongyeong,DischargeSlot,Cargo
+Cargo 51,,,Cargo 51,2011-02-25,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 51,2011-03-08,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 60,,,Cargo 60,2011-03-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 60,2011-03-21,,,,,,false,,false,Sell 10,Sagunto,DischargeSlot,Cargo
+Cargo 62,,,Cargo 62,2011-03-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 62,2011-03-27,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 64,,,Cargo 64,2011-03-13,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 64,2011-03-22,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
+Cargo 68,,,Cargo 68,2011-03-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 68,2011-03-30,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 71,,,Cargo 71,2011-03-24,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 71,2011-04-05,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 73,,,Cargo 73,2011-03-26,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 73,2011-04-06,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 75,,,Cargo 75,2011-03-27,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 75,2011-04-09,,,,,,false,,false,Sell 10,Cartagena,DischargeSlot,Cargo
+Cargo 76,,,Cargo 76,2011-03-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 76,2011-04-10,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 82,,,Cargo 82,2011-04-03,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 82,2011-04-21,,,,,,false,,false,Sell 10,Altamira,DischargeSlot,Cargo
+Cargo 83,,,Cargo 83,2011-04-04,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 83,2011-04-15,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 88,,,Cargo 88,2011-04-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 88,2011-04-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 89,,,Cargo 89,2011-04-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 89,2011-04-21,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 90,,,Cargo 90,2011-04-11,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 90,2011-04-22,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
+Cargo 91,,,Cargo 91,2011-04-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 91,2011-04-25,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 94,,,Cargo 94,2011-04-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 94,2011-04-27,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 97,,,Cargo 97,2011-04-18,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 97,2011-05-17,,,,,,false,,false,Sell 10,Oita,DischargeSlot,Cargo
+Cargo 98,,,Cargo 98,2011-04-19,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 98,2011-05-04,,,,,,false,,false,Sell 10,Bilbao,DischargeSlot,Cargo
+Cargo 103,,,Cargo 103,2011-04-26,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 103,2011-05-08,,,,,,false,,false,Sell 10,Bilbao,DischargeSlot,Cargo
+Cargo 109,,,Cargo 109,2011-05-04,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 109,2011-05-15,,,,,,false,,false,Sell 10,Barcelona,DischargeSlot,Cargo
+Cargo 110,,,Cargo 110,2011-05-05,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 110,2011-05-18,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 114,,,Cargo 114,2011-05-07,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 114,2011-05-18,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
+Cargo 116,,,Cargo 116,2011-05-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 116,2011-05-25,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 117,,,Cargo 117,2011-05-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 117,2011-05-28,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 121,,,Cargo 121,2011-05-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 121,2011-06-02,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 128,,,Cargo 128,2011-05-24,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 128,2011-06-27,,,,,,false,,false,Sell 10,Kawagoe,DischargeSlot,Cargo
+Cargo 131,,,Cargo 131,2011-05-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 131,2011-06-10,,,,,,false,,false,Sell 10,Fos Sur Mer,DischargeSlot,Cargo
+Cargo 132,,,Cargo 132,2011-05-29,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 132,2011-06-27,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
+Cargo 140,,,Cargo 140,2011-06-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 140,2011-06-26,,,,,,false,,false,Sell 10,Hazira,DischargeSlot,Cargo
+Cargo 141,,,Cargo 141,2011-06-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 141,2011-06-20,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 143,,,Cargo 143,2011-06-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 143,2011-06-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 145,,,Cargo 145,2011-06-14,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 145,2011-06-24,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
+Cargo 149,,,Cargo 149,2011-06-22,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 149,2011-07-01,,,,,,false,,false,Sell 10,Sines,DischargeSlot,Cargo
+Cargo 154,,,Cargo 154,2011-06-28,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 154,2011-07-12,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 161,,,Cargo 161,2011-07-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 161,2011-08-04,,,,,,false,,false,Sell 10,Mina Al-Ahmadi,DischargeSlot,Cargo
+Cargo 163,,,Cargo 163,2011-07-10,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 163,2011-08-06,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
+Cargo 164,,,Cargo 164,2011-07-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 164,2011-07-23,,,,,,false,,false,Sell 10,Sagunto,DischargeSlot,Cargo
+Cargo 166,,,Cargo 166,2011-07-15,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 166,2011-07-28,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 171,,,Cargo 171,2011-07-24,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 171,2011-08-19,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
+Cargo 173,,,Cargo 173,2011-07-25,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 173,2011-08-21,,,,,,false,,false,Sell 10,Pyeongtaek,DischargeSlot,Cargo
+Cargo 174,,,Cargo 174,2011-07-27,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 174,2011-08-08,,,,,,false,,false,Sell 10,Sagunto,DischargeSlot,Cargo
+Cargo 177,,,Cargo 177,2011-07-29,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 177,2011-08-10,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 183,,,Cargo 183,2011-08-09,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 183,2011-08-24,,,,,,false,,false,Sell 10,Cove Point,DischargeSlot,Cargo
+Cargo 185,,,Cargo 185,2011-08-12,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 185,2011-09-02,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 188,,,Cargo 188,2011-08-17,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 188,2011-09-15,,,,,,false,,false,Sell 10,Sakai,DischargeSlot,Cargo
+Cargo 191,,,Cargo 191,2011-08-19,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 191,2011-09-13,,,,,,false,,false,Sell 10,Hazira,DischargeSlot,Cargo
+Cargo 192,,,Cargo 192,2011-08-21,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 192,2011-09-06,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 200,,,Cargo 200,2011-09-05,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 200,2011-09-16,,,,,,false,,false,Sell 10,El Ferrol,DischargeSlot,Cargo
+Cargo 201,,,Cargo 201,2011-09-06,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 201,2011-09-17,,,,,,false,,false,Sell 10,Barcelona,DischargeSlot,Cargo
+Cargo 203,,,Cargo 203,2011-09-08,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 203,2011-09-22,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 205,,,Cargo 205,2011-09-11,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 205,2011-10-08,,,,,,false,,false,Sell 10,Yung An,DischargeSlot,Cargo
+Cargo 207,,,Cargo 207,2011-09-13,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 207,2011-09-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 208,,,Cargo 208,2011-09-15,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 208,2011-09-25,,,,,,false,,false,Sell 10,Bilbao,DischargeSlot,Cargo
+Cargo 210,,,Cargo 210,2011-09-19,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 210,2011-09-30,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 213,,,Cargo 213,2011-09-23,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 213,2011-10-06,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 215,,,Cargo 215,2011-09-25,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 215,2011-10-18,,,,,,false,,false,Sell 10,Huelva,DischargeSlot,Cargo
+Cargo 224,,,Cargo 224,2011-10-13,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 224,2011-10-23,,,,,,false,,false,Sell 10,Montoir,DischargeSlot,Cargo
+Cargo 109a,,,Cargo 109a,2011-06-04,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 109a,2011-06-15,,,,,,false,,false,Sell 10,Barcelona,DischargeSlot,Cargo
+Cargo 76a,,,Cargo 76a,2011-04-27,,,,,,false,,,,false,Buy 5,Bonny Is,LoadSlot,discharge-Cargo 76a,2011-05-10,,,,,,false,,false,Sell 10,Dragon LNG,DischargeSlot,Cargo
