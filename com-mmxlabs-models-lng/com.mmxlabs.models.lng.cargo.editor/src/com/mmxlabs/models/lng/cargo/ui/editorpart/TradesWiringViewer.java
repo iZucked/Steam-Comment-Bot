@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1760,6 +1761,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final LoadSlot load = CargoFactory.eINSTANCE.createLoadSlot();
 				final DischargeSlot discharge1 = CargoFactory.eINSTANCE.createDischargeSlot();
 				final DischargeSlot discharge2 = CargoFactory.eINSTANCE.createDischargeSlot();
+				
+				load.setWindowStart(new Date());
+				discharge1.setWindowStart(new Date());
+				discharge2.setWindowStart(new Date());
 
 				cargo.getSlots().addAll(Lists.newArrayList(load, discharge1, discharge2));
 				final int ret = editor.open(cargo);

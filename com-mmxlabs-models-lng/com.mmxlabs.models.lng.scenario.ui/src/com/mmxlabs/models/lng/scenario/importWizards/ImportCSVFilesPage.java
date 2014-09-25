@@ -153,6 +153,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		final Composite top = new Composite(c1, SWT.NONE);
 
 		top.setLayout(new GridLayout(1, false));
+		top.setToolTipText("Top");
 
 		final Composite holder = new Composite(top, SWT.NONE);
 		final GridLayout gl = new GridLayout(3, false);
@@ -223,20 +224,23 @@ public class ImportCSVFilesPage extends WizardPage {
 		// use it to populate the editor
 		csvSelectionGroup.setSelectedIndex(delimiterValue);
 		decimalSelectionGroup.setSelectedIndex(decimalValue);
+
+		GridData layout;
 		
 		final ExpandableComposite fieldComposite = new ExpandableComposite(top, SWT.NONE);
 		fieldComposite.setText("Custom Files");
 		fieldComposite.setLayout(new GridLayout(1, false));
-		fieldComposite.setLayoutData(new GridData(400, 600));
+		layout = new GridData(SWT.FILL, SWT.FILL, true, true);
+		// for some reason, horizontal and vertical fill do not work without width / height hints set
+		layout.heightHint = 300;
+		layout.widthHint = 600;
+		fieldComposite.setLayoutData(layout);
 		
-		final ScrolledComposite fieldScroller = new ScrolledComposite(fieldComposite, SWT.BORDER | SWT.V_SCROLL);
+		final ScrolledComposite fieldScroller = new ScrolledComposite(fieldComposite, SWT.V_SCROLL);
 		fieldScroller.setLayout(new GridLayout(1, false));
-		fieldScroller.setLayoutData(new GridData(400, 600));
 		
-		//final Composite inner = new Composite(fieldComposite, SWT.NONE);
 		final Composite inner = new Composite(fieldScroller, SWT.NONE);		
 		inner.setLayout(new GridLayout(1, false));
-		inner.setLayoutData(new GridData(400, 600));
 
 		/*
 		fieldComposite.addExpansionListener(new IExpansionListener() {
@@ -328,7 +332,6 @@ public class ImportCSVFilesPage extends WizardPage {
 		fieldComposite.setClient(fieldScroller);
 		fieldScroller.setContent(inner);
 		fieldScroller.setExpandHorizontal(true);
-		fieldComposite.setSize(fieldComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		inner.setSize(inner.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
 		
