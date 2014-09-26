@@ -257,7 +257,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	public void dispose() {
 
 		runner.cancel();
-		// TODO: this.runner = null;
 		this.currentState = EJobState.UNKNOWN;
 		this.listeners.clear();
 	}
