@@ -16,12 +16,12 @@ public final class JobManagerContentProvider implements ITreeContentProvider {
 
 	@Override
 	public void dispose() {
-
+		// Nothing to dispose
 	}
 
 	@Override
 	public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-
+		// No data to cache
 	}
 
 	@Override
