@@ -55,14 +55,10 @@ class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 	@Override
 	public Image getColumnImage(final Object obj, final int index) {
 
-		// TODO: Cache images -- they need to be disposed
-		if (index == 1) {
-			if (obj instanceof IJobDescriptor) {
-				final IJobDescriptor job = (IJobDescriptor) obj;
-				final IJobControl control = jobManager.getControlForJob(job);
-
-				return getCachedImage(control.getJobState());
-			}
+		if (index == 1 && obj instanceof IJobDescriptor) {
+			final IJobDescriptor job = (IJobDescriptor) obj;
+			final IJobControl control = jobManager.getControlForJob(job);
+			return getCachedImage(control.getJobState());
 		}
 
 		return null;
