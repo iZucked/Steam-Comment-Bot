@@ -129,7 +129,6 @@ public class JobManagerView extends ViewPart {
 
 		viewer.setContentProvider(new JobManagerContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider(getSite().getShell(), jobManager));
-		// viewer.setSorter(new NameSorter());
 		viewer.setInput(jobManager);
 
 		// Set initial column sizes
