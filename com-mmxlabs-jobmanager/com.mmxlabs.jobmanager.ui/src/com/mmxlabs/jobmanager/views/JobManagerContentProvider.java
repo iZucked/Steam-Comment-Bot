@@ -48,7 +48,7 @@ public final class JobManagerContentProvider implements ITreeContentProvider {
 			return ((Collection<?>) parentElement).toArray();
 		}
 
-		return null;
+		return new Object[0];
 	}
 
 	@Override
@@ -58,6 +58,7 @@ public final class JobManagerContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(final Object element) {
-		return getChildren(element) != null;
+		final Object[] children = getChildren(element);
+		return children != null && children.length != 0;
 	}
 }
