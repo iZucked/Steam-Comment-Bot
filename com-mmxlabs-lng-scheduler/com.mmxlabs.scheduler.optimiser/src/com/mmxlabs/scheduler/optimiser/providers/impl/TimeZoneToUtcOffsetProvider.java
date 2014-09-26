@@ -45,12 +45,12 @@ public class TimeZoneToUtcOffsetProvider implements ITimeZoneToUtcOffsetProvider
 
 	private int convertMillisToInternal(final long time) {
 		final long adjustedToTimeZero = time - timeZeroInMillis;
-		final long convertedToHours = adjustedToTimeZero / 1000l / 60l / 60l;
+		final long convertedToHours = adjustedToTimeZero / 1000L / 60L / 60L;
 		return (int) convertedToHours;
 	}
 
 	private long convertInternalToMillis(final int internal) {
-		final long scaleToMillis = (long) internal * 60l * 60l * 1000l;
+		final long scaleToMillis = (long) internal * 60L * 60L * 1000L;
 		final long removeTimeZeroAdjustment = scaleToMillis + timeZeroInMillis;
 		return removeTimeZeroAdjustment;
 	}

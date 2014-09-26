@@ -68,7 +68,7 @@ public class ShippingCostHelper {
 		final long planDuration = getPlanDurationInHours(plan, false);
 
 		final int hireRatePerDay = plan.getCharterInRatePerDay();
-		long hireCosts = (long) hireRatePerDay * (long) planDuration / 24l;
+		long hireCosts = (long) hireRatePerDay * (long) planDuration / 24L;
 		return hireCosts;
 	}
 
@@ -100,7 +100,7 @@ public class ShippingCostHelper {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
 					final long hourlyCharterOutPrice = voyageDetails.getOptions().getCharterOutDailyRate();
-					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice, voyageDetails.getIdleTime()) / 24l;
+					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice, voyageDetails.getIdleTime()) / 24L;
 				}
 			}
 		}
@@ -134,7 +134,7 @@ public class ShippingCostHelper {
 		}
 
 		final int hireRatePerDay = plan.getCharterInRatePerDay();
-		final long hireCosts = (long) hireRatePerDay * (long) planDuration / 24l;
+		final long hireCosts = (long) hireRatePerDay * (long) planDuration / 24L;
 
 		return hireCosts;
 	}
@@ -142,12 +142,12 @@ public class ShippingCostHelper {
 	public long getShippingCosts(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final boolean includeLNG, final boolean includeCharterCosts) {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-			return 0l;
+			return 0L;
 		}
 
 		final long shippingCosts = getRouteExtraCosts(plan) + getFuelCosts(plan, includeLNG);
 		final long portCosts = getPortCosts(vesselAvailability.getVessel(), plan);
-		final long hireCosts = includeCharterCosts ? getHireCosts(plan) : 0l;
+		final long hireCosts = includeCharterCosts ? getHireCosts(plan) : 0L;
 
 		return shippingCosts + portCosts + hireCosts;
 	}

@@ -20,16 +20,16 @@ public class CachingConsumptionRateCalculatorTest {
 		final CachingConsumptionRateCalculator cachingCalc = new CachingConsumptionRateCalculator(calc);
 
 		final int speed = 5;
-		Mockito.when(calc.getRate(speed)).thenReturn(100l);
+		Mockito.when(calc.getRate(speed)).thenReturn(100L);
 
-		Assert.assertEquals(100l, cachingCalc.getRate(speed));
-		Assert.assertEquals(100l, cachingCalc.getRate(speed));
+		Assert.assertEquals(100L, cachingCalc.getRate(speed));
+		Assert.assertEquals(100L, cachingCalc.getRate(speed));
 
 		final int speed2 = 7;
-		Mockito.when(calc.getRate(speed2)).thenReturn(200l);
-		Assert.assertEquals(200l, cachingCalc.getRate(speed2));
-		Assert.assertEquals(200l, cachingCalc.getRate(speed2));
+		Mockito.when(calc.getRate(speed2)).thenReturn(200L);
+		Assert.assertEquals(200L, cachingCalc.getRate(speed2));
+		Assert.assertEquals(200L, cachingCalc.getRate(speed2));
 
-		Assert.assertEquals(100l, cachingCalc.getRate(speed));
+		Assert.assertEquals(100L, cachingCalc.getRate(speed));
 	}
 }

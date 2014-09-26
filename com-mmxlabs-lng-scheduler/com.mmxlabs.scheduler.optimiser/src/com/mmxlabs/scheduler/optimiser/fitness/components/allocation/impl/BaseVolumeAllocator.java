@@ -142,8 +142,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 					minVolumes.add(heelOptions.getHeelLimit());
 					maxVolumes.add(heelOptions.getHeelLimit());
 				} else {
-					minVolumes.add(0l);
-					maxVolumes.add(0l);
+					minVolumes.add(0L);
+					maxVolumes.add(0L);
 				}
 			}
 		}
