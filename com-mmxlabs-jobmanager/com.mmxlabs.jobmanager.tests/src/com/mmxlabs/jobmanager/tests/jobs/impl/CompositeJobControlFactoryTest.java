@@ -10,12 +10,10 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlFactory;
-import com.mmxlabs.jobmanager.jobs.IJobControlListener;
-import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.jobs.impl.CompositeJobControlFactory;
 
 public class CompositeJobControlFactoryTest {
@@ -23,13 +21,15 @@ public class CompositeJobControlFactoryTest {
 	@Test
 	public void testCompositeJobControlFactory() {
 
-		final MockJobControlFactory mock1 = new MockJobControlFactory(null);
+		final IJobControlFactory mock1 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock2 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock3 = Mockito.mock(IJobControlFactory.class);
 
-		final MockJobControl mockControl1 = new MockJobControl();
-		final MockJobControl mockControl2 = new MockJobControl();
+		final IJobControl mockControl1 = Mockito.mock(IJobControl.class);
+		final IJobControl mockControl2 = Mockito.mock(IJobControl.class);
 
-		final MockJobControlFactory mock2 = new MockJobControlFactory(mockControl1);
-		final MockJobControlFactory mock3 = new MockJobControlFactory(mockControl2);
+		Mockito.when(mock2.createJobControl(null)).thenReturn(mockControl1);
+		Mockito.when(mock3.createJobControl(null)).thenReturn(mockControl2);
 
 		final CompositeJobControlFactory factory = new CompositeJobControlFactory();
 		factory.addJobControlFactory(mock1);
@@ -48,13 +48,15 @@ public class CompositeJobControlFactoryTest {
 	@Test
 	public void testCompositeJobControlFactoryCollectionOfIJobControlFactory() {
 
-		final MockJobControlFactory mock1 = new MockJobControlFactory(null);
+		final IJobControlFactory mock1 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock2 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock3 = Mockito.mock(IJobControlFactory.class);
 
-		final MockJobControl mockControl1 = new MockJobControl();
-		final MockJobControl mockControl2 = new MockJobControl();
+		final IJobControl mockControl1 = Mockito.mock(IJobControl.class);
+		final IJobControl mockControl2 = Mockito.mock(IJobControl.class);
 
-		final MockJobControlFactory mock2 = new MockJobControlFactory(mockControl1);
-		final MockJobControlFactory mock3 = new MockJobControlFactory(mockControl2);
+		Mockito.when(mock2.createJobControl(null)).thenReturn(mockControl1);
+		Mockito.when(mock3.createJobControl(null)).thenReturn(mockControl2);
 
 		final Collection<IJobControlFactory> factories = new ArrayList<IJobControlFactory>(3);
 		factories.add(mock1);
@@ -74,13 +76,15 @@ public class CompositeJobControlFactoryTest {
 	@Test
 	public void testCompositeJobControlFactoryIJobControlFactoryArray() {
 
-		final MockJobControlFactory mock1 = new MockJobControlFactory(null);
+		final IJobControlFactory mock1 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock2 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock3 = Mockito.mock(IJobControlFactory.class);
 
-		final MockJobControl mockControl1 = new MockJobControl();
-		final MockJobControl mockControl2 = new MockJobControl();
+		final IJobControl mockControl1 = Mockito.mock(IJobControl.class);
+		final IJobControl mockControl2 = Mockito.mock(IJobControl.class);
 
-		final MockJobControlFactory mock2 = new MockJobControlFactory(mockControl1);
-		final MockJobControlFactory mock3 = new MockJobControlFactory(mockControl2);
+		Mockito.when(mock2.createJobControl(null)).thenReturn(mockControl1);
+		Mockito.when(mock3.createJobControl(null)).thenReturn(mockControl2);
 
 		final CompositeJobControlFactory factory = new CompositeJobControlFactory(mock1, mock2, mock3);
 
@@ -95,13 +99,16 @@ public class CompositeJobControlFactoryTest {
 
 	@Test
 	public void testRemoveJobControlFactory() {
-		final MockJobControlFactory mock1 = new MockJobControlFactory(null);
 
-		final MockJobControl mockControl1 = new MockJobControl();
-		final MockJobControl mockControl2 = new MockJobControl();
+		final IJobControlFactory mock1 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock2 = Mockito.mock(IJobControlFactory.class);
+		final IJobControlFactory mock3 = Mockito.mock(IJobControlFactory.class);
 
-		final MockJobControlFactory mock2 = new MockJobControlFactory(mockControl1);
-		final MockJobControlFactory mock3 = new MockJobControlFactory(mockControl2);
+		final IJobControl mockControl1 = Mockito.mock(IJobControl.class);
+		final IJobControl mockControl2 = Mockito.mock(IJobControl.class);
+
+		Mockito.when(mock2.createJobControl(null)).thenReturn(mockControl1);
+		Mockito.when(mock3.createJobControl(null)).thenReturn(mockControl2);
 
 		final CompositeJobControlFactory factory = new CompositeJobControlFactory(mock1, mock2, mock3);
 
@@ -121,93 +128,6 @@ public class CompositeJobControlFactoryTest {
 		Assert.assertEquals(expectedFactories2, factory.getJobControlFactories());
 
 		Assert.assertSame(mockControl2, factory.createJobControl(null));
-
-	}
-
-	/**
-	 * TODO: Use JMock
-	 */
-	private static final class MockJobControl implements IJobControl {
-
-		@Override
-		public IJobDescriptor getJobDescriptor() {
-			return null;
-		}
-
-		@Override
-		public void prepare() {
-
-		}
-
-		@Override
-		public void start() {
-
-		}
-
-		@Override
-		public void cancel() {
-
-		}
-
-		@Override
-		public boolean isPauseable() {
-			return false;
-		}
-
-		@Override
-		public void pause() {
-
-		}
-
-		@Override
-		public void resume() {
-
-		}
-
-		@Override
-		public EJobState getJobState() {
-			return null;
-		}
-
-		@Override
-		public int getProgress() {
-			return 0;
-		}
-
-		@Override
-		public Object getJobOutput() {
-			return null;
-		}
-
-		@Override
-		public void addListener(final IJobControlListener listener) {
-
-		}
-
-		@Override
-		public void removeListener(final IJobControlListener listener) {
-
-		}
-
-		@Override
-		public void dispose() {
-
-		}
-
-	}
-
-	private static final class MockJobControlFactory implements IJobControlFactory {
-
-		private final IJobControl control;
-
-		public MockJobControlFactory(final IJobControl control) {
-			this.control = control;
-		}
-
-		@Override
-		public IJobControl createJobControl(final IJobDescriptor job) {
-			return control;
-		}
 
 	}
 }
