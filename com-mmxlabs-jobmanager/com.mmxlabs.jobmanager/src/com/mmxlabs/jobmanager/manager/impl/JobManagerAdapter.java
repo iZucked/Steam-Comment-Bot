@@ -18,11 +18,11 @@ public class JobManagerAdapter implements IJobManagerListener {
 
 	@Override
 	public void jobAdded(final IJobManager jobManager, final IJobDescriptor job, final IJobControl control) {
-
+		// Clients should override
 	}
 
 	@Override
 	public void jobRemoved(final IJobManager jobManager, final IJobDescriptor job, final IJobControl control) {
-
+		// Clients should override
 	}
 }

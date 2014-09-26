@@ -26,7 +26,7 @@ public final class DisposeOnRemoveListener implements IJobManagerListener {
 
 	@Override
 	public void jobAdded(final IJobManager jobManager, final IJobDescriptor job, final IJobControl control) {
-
+		// We do no care about added jobs
 	}
 
 	@Override
