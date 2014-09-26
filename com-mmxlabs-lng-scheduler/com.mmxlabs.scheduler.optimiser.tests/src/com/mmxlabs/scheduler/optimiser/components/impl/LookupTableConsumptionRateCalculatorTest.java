@@ -17,16 +17,16 @@ public class LookupTableConsumptionRateCalculatorTest {
 	public void testLookupTableConsumptionRateCalculator() {
 		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
 
-		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100l);
+		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100L);
 
 		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
-		Assert.assertEquals(100l, lookupCalc.getRate(5));
-		Assert.assertEquals(100l, lookupCalc.getRate(6));
-		Assert.assertEquals(100l, lookupCalc.getRate(7));
-		Assert.assertEquals(100l, lookupCalc.getRate(8));
-		Assert.assertEquals(100l, lookupCalc.getRate(9));
-		Assert.assertEquals(100l, lookupCalc.getRate(10));
+		Assert.assertEquals(100L, lookupCalc.getRate(5));
+		Assert.assertEquals(100L, lookupCalc.getRate(6));
+		Assert.assertEquals(100L, lookupCalc.getRate(7));
+		Assert.assertEquals(100L, lookupCalc.getRate(8));
+		Assert.assertEquals(100L, lookupCalc.getRate(9));
+		Assert.assertEquals(100L, lookupCalc.getRate(10));
 
 	}
 
@@ -34,7 +34,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 	public void testLookupTableConsumptionRateCalculator2() {
 		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
 
-		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100l);
+		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100L);
 
 		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 
@@ -45,7 +45,7 @@ public class LookupTableConsumptionRateCalculatorTest {
 	@Test(expected = ArrayIndexOutOfBoundsException.class)
 	public void testLookupTableConsumptionRateCalculator3() {
 		final IConsumptionRateCalculator calc = Mockito.mock(IConsumptionRateCalculator.class);
-		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100l);
+		Mockito.when(calc.getRate(Matchers.anyInt())).thenReturn(100L);
 
 		final LookupTableConsumptionRateCalculator lookupCalc = new LookupTableConsumptionRateCalculator(5, 10, calc);
 

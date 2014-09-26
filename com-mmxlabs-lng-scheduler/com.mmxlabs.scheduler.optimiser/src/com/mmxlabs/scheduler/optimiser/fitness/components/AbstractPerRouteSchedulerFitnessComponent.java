@@ -36,7 +36,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 			currentResource = resource;
 		} else {
 			currentResource = null;
-			evaluatedFitnesses.put(resource, 0l);
+			evaluatedFitnesses.put(resource, 0L);
 		}
 	}
 

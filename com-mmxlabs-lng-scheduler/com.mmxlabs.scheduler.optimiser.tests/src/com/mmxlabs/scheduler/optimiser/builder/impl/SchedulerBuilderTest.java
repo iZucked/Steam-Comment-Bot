@@ -162,7 +162,7 @@ public class SchedulerBuilderTest {
 
 		final int minSpeed = 1;
 		final int maxSpeed = 2;
-		final long capacity = 3l;
+		final long capacity = 3L;
 		final int safetyHeel = 4;
 
 		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, 7000, 1000, 0, 35353, 10101, 0);

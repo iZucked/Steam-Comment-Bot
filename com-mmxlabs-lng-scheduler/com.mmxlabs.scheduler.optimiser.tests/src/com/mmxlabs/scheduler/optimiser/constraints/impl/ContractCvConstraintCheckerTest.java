@@ -74,12 +74,12 @@ public class ContractCvConstraintCheckerTest {
 		final IResource resource = Mockito.mock(IResource.class);
 
 		Mockito.when(s1.getCargoCVValue()).thenReturn(100);
-		Mockito.when(s2.getMinCvValue()).thenReturn(0l);
-		Mockito.when(s2.getMaxCvValue()).thenReturn(200l);
-		Mockito.when(s3.getMinCvValue()).thenReturn(200l);
-		Mockito.when(s3.getMaxCvValue()).thenReturn(300l);
-		Mockito.when(s4.getMinCvValue()).thenReturn(0l);
-		Mockito.when(s4.getMaxCvValue()).thenReturn(50l);
+		Mockito.when(s2.getMinCvValue()).thenReturn(0L);
+		Mockito.when(s2.getMaxCvValue()).thenReturn(200L);
+		Mockito.when(s3.getMinCvValue()).thenReturn(200L);
+		Mockito.when(s3.getMaxCvValue()).thenReturn(300L);
+		Mockito.when(s4.getMinCvValue()).thenReturn(0L);
+		Mockito.when(s4.getMaxCvValue()).thenReturn(50L);
 
 		
 		Mockito.when(actualsDataProvider.hasActuals(s1)).thenReturn(false);

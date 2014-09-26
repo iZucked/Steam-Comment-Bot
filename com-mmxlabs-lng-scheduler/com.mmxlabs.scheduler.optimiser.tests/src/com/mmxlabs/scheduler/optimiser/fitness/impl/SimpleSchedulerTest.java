@@ -66,15 +66,15 @@ public class SimpleSchedulerTest {
 		final IPort port6 = builder.createPort("port-6", false, null, 5, 10, "UTC");
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(12000, 12000l);
-		keypoints.put(13000, 13000l);
-		keypoints.put(14000, 14000l);
-		keypoints.put(15000, 15000l);
-		keypoints.put(16000, 16000l);
-		keypoints.put(17000, 17000l);
-		keypoints.put(18000, 18000l);
-		keypoints.put(19000, 19000l);
-		keypoints.put(20000, 20000l);
+		keypoints.put(12000, 12000L);
+		keypoints.put(13000, 13000L);
+		keypoints.put(14000, 14000L);
+		keypoints.put(15000, 15000L);
+		keypoints.put(16000, 16000L);
+		keypoints.put(17000, 17000L);
+		keypoints.put(18000, 18000L);
+		keypoints.put(19000, 19000L);
+		keypoints.put(20000, 20000L);
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);

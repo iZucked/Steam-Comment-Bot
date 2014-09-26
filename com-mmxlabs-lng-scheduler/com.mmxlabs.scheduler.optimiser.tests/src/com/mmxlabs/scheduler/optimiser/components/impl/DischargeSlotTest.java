@@ -20,11 +20,11 @@ public class DischargeSlotTest {
 		final String id = "id";
 		final IPort port = Mockito.mock(IPort.class);
 		final ITimeWindow tw = Mockito.mock(ITimeWindow.class);
-		final long minDischargeVolume = 10l;
-		final long maxDischargeVolume = 20l;
+		final long minDischargeVolume = 10L;
+		final long maxDischargeVolume = 20L;
 
-		final long minCvValue = 30l;
-		final long maxCvValue = 40l;
+		final long minCvValue = 30L;
+		final long maxCvValue = 40L;
 		final ISalesPriceCalculator calculator = Mockito.mock(ISalesPriceCalculator.class);
 
 		final DischargeSlot slot = new DischargeSlot(id, port, tw, minDischargeVolume, maxDischargeVolume, calculator, minCvValue, maxCvValue, IPortSlot.NO_PRICING_DATE);
@@ -77,15 +77,15 @@ public class DischargeSlotTest {
 		final ISalesPriceCalculator curve1 = Mockito.mock(ISalesPriceCalculator.class, "curve1");
 		final ISalesPriceCalculator curve2 = Mockito.mock(ISalesPriceCalculator.class, "curve2");
 
-		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1, 30l, 40l, IPortSlot.NO_PRICING_DATE);
-		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1, 30l, 40l, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10L, 20L, curve1, 30L, 40L, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10L, 20L, curve1, 30L, 40L, IPortSlot.NO_PRICING_DATE);
 
-		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, 10l, 20l, curve1, 30l, 40l, IPortSlot.NO_PRICING_DATE);
-		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, 10l, 20l, curve1, 30l, 40l, IPortSlot.NO_PRICING_DATE);
-		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, 10l, 20l, curve1, 30l, 40l, IPortSlot.NO_PRICING_DATE);
-		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, 210l, 20l, curve1, 30l, 40l, IPortSlot.NO_PRICING_DATE);
-		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, 10l, 220l, curve1, 30l, 40l, IPortSlot.NO_PRICING_DATE);
-		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve2, 30l, 40l, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, 10L, 20L, curve1, 30L, 40L, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, 10L, 20L, curve1, 30L, 40L, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, 10L, 20L, curve1, 30L, 40L, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, 210L, 20L, curve1, 30L, 40L, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, 10L, 220L, curve1, 30L, 40L, IPortSlot.NO_PRICING_DATE);
+		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, 10L, 20L, curve2, 30L, 40L, IPortSlot.NO_PRICING_DATE);
 
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));
