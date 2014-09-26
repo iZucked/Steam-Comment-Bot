@@ -71,19 +71,23 @@ public class JobManagerView extends ViewPart {
 			switch (newState) {
 			case PAUSED:
 			case RUNNING:
-				JobManagerView.this.refresh();
-				getSite().getShell().getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-						updateActionEnablement(viewer.getSelection());
-					}
-				});
+				refresh();
 				break;
 			default:
 				break;
 			}
 			return true;
+		}
+
+		private void refresh() {
+			JobManagerView.this.refresh();
+			getSite().getShell().getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					updateActionEnablement(viewer.getSelection());
+				}
+			});
 		}
 
 		@Override
