@@ -21,21 +21,21 @@ public class EclipseJobManagerAdapter implements IEclipseJobManagerListener {
 
 	@Override
 	public void jobAdded(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
+		// Clients should override
 	}
 
 	@Override
 	public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
+		// Clients should override
 	}
 
 	@Override
 	public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-
+		// Clients should override
 	}
 
 	@Override
 	public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-
+		// Clients should override
 	}
 }
