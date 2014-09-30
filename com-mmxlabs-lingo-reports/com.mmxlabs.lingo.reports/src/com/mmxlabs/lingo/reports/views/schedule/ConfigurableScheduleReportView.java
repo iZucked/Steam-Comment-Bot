@@ -230,8 +230,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 	}
 
 	protected void addDialogCheckBoxes(final ColumnConfigurationDialog dialog) {
-		dialog.addCheckBoxInfo("Row Filters", ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
-		dialog.addCheckBoxInfo("Diff Filters", ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
+		dialog.addCheckBoxInfo("Show rows for", ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
+		dialog.addCheckBoxInfo("In diff mode", ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
 	}
 
 	protected void postDialogOpen(final ColumnConfigurationDialog dialog) {

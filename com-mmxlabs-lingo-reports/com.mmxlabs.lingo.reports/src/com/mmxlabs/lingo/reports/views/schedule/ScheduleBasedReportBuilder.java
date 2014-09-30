@@ -105,8 +105,8 @@ public class ScheduleBasedReportBuilder {
 	public static final String[] ROW_FILTER_ALL = new String[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
 			ROW_FILTER_VESSEL_START_ROW };
 
-	public static final String DIFF_FILTER_PINNDED_SCENARIO = "Pinned Scenario";
-	public static final String DIFF_FILTER_VESSEL_CHANGES = "Vessel Changes";
+	public static final String DIFF_FILTER_PINNDED_SCENARIO = "Show Pinned Scenario";
+	public static final String DIFF_FILTER_VESSEL_CHANGES = "Show Vessel Changes";
 
 	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
 	public static final String[] DIFF_FILTER_ALL = new String[] { DIFF_FILTER_PINNDED_SCENARIO, DIFF_FILTER_VESSEL_CHANGES };
