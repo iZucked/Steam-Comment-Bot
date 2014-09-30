@@ -219,7 +219,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					charterOut.setSequenceElement(element);
 
 					// Calculate revenue
-					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), idleTime) / 24l);
+					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), idleTime) / 24L);
 					charterOut.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, idleTime) / 24);
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 

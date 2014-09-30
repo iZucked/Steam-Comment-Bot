@@ -33,7 +33,7 @@ public class CalculatorTest {
 		for (int distance = 1; distance < limit; distance++) {
 			for (int speed = 1; speed < limit; speed++) {
 
-				final int expected = (int) ((1000l * distance) / speed);
+				final int expected = (int) ((1000L * distance) / speed);
 				final int actual = Calculator.getTimeFromSpeedDistance(speed, distance);
 
 				Assert.assertEquals("Distance: " + distance + ", speed: " + speed, expected, actual);

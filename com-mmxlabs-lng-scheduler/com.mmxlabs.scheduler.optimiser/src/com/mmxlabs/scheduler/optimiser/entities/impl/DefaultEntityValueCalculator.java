@@ -296,7 +296,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 
 		// Calculate the value for the fitness function
-		long result = 0l;
+		long result = 0L;
 		// Taxed P&L
 		for (final Map.Entry<IEntityBook, Long> e : entityPreTaxProfit.entrySet()) {
 			result += e.getKey().getTaxedProfit(e.getValue(), utcEquivTaxTime);
@@ -425,7 +425,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	public long evaluate(final VoyagePlan plan, final IVesselAvailability vesselAvailability, final int planStartTime, final int vesselStartTime, @Nullable final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getEntityForVesselAvailability(vesselAvailability);
 		if (shippingEntity == null) {
-			return 0l;
+			return 0L;
 		}
 
 		final long value;
