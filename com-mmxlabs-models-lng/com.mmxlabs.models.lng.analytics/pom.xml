@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.models.lng.analytics</artifactId>
 	<version>3.5.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/analytics/*.java,file:**/com/mmxlabs/models/lng/analytics/impl/*.java,file:**/com/mmxlabs/models/lng/analytics/util/*.java</sonar.exclusions>
+	</properties>
 </project>

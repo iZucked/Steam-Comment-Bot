@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.models.lng.commercial</artifactId>
 	<version>3.5.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/commercial/*.java,file:**/com/mmxlabs/models/lng/commercial/impl/*.java,file:**/com/mmxlabs/models/lng/commercial/util/*.java</sonar.exclusions>
+	</properties>
 </project>

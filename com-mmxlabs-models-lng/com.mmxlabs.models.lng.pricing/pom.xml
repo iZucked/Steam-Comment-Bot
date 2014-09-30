@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.models.lng.pricing</artifactId>
 	<version>3.5.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/pricing/*.java,file:**/com/mmxlabs/models/lng/pricing/impl/*.java,file:**/com/mmxlabs/models/lng/pricing/util/*.java</sonar.exclusions>
+	</properties>
 </project>

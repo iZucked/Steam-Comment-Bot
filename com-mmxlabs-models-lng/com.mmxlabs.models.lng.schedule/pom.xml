@@ -12,4 +12,8 @@
 	<artifactId>com.mmxlabs.models.lng.schedule</artifactId>
 	<version>3.5.0-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
+	
+	<properties>
+		<sonar.exclusions>file:**/com/mmxlabs/models/lng/schedule/*.java,file:**/com/mmxlabs/models/lng/schedule/impl/*.java,file:**/com/mmxlabs/models/lng/schedule/util/*.java</sonar.exclusions>
+	</properties>
 </project>
