@@ -39,7 +39,7 @@ public interface IAllocationAnnotation extends IPortTimesRecord {
 	long getRemainingHeelVolumeInM3();
 
 	/**
-	 * Returns the quantity of LNG in m3 that has been discharged.
+	 * Returns the quantity of LNG in m3 that has been purchased or sold.
 	 * 
 	 * @return
 	 */
