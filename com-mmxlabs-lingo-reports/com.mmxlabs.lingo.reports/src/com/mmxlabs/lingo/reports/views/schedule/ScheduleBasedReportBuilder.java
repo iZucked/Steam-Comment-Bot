@@ -800,7 +800,7 @@ public class ScheduleBasedReportBuilder {
 						final String buysStr = setToString(buysStringsSet);
 						final String sellsStr = setToString(sellsStringsSet);
 
-						return String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr);
+						return getPermutationGroupString(String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
 					} else if (eObj.eIsSet(openSlotAllocationRef)) {
 						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) eObj.eGet(openSlotAllocationRef);
 						if (openSlotAllocation != null) {
@@ -816,7 +816,7 @@ public class ScheduleBasedReportBuilder {
 							final String buysStr = setToString(buysStringsSet);
 							final String sellsStr = setToString(sellsStringsSet);
 
-							return String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr);
+							return getPermutationGroupString(String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
 						}
 					} else {
 						final Object target = eObj.eGet(targetObjectRef);
@@ -1061,4 +1061,8 @@ public class ScheduleBasedReportBuilder {
 		return null;
 	}
 
+	private String getPermutationGroupString(final String permutationGroup) {
+		final String prefix = pinDiffModeHelper.getPermutationGroupPrefix(permutationGroup);
+		return String.format("%s - %s", prefix, permutationGroup);
+	}
 }
