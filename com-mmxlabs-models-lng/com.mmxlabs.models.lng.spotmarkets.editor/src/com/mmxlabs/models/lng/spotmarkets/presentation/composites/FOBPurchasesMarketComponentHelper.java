@@ -87,9 +87,10 @@ public class FOBPurchasesMarketComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the marketPorts feature on FOBPurchasesMarket
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_marketPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET__MARKET_PORTS));
+		// MTM is currently disabled.
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.FOB_PURCHASES_MARKET__MARKET_PORTS));
 	}
 }

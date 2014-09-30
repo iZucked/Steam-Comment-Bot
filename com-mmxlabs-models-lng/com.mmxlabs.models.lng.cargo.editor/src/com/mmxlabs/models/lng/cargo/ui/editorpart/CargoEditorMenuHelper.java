@@ -257,7 +257,7 @@ public class CargoEditorMenuHelper {
 					createAssignmentMenus(manager, dischargeSlot.getCargo());
 				}
 				final Contract contract = dischargeSlot.getContract();
-				if (contract != null && contract.getContractType() == ContractType.BOTH) {
+				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, dischargeSlot);
 				}
 			}
@@ -435,7 +435,7 @@ public class CargoEditorMenuHelper {
 					createAssignmentMenus(manager, loadSlot.getCargo());
 				}
 				final Contract contract = loadSlot.getContract();
-				if (contract != null && contract.getContractType() == ContractType.BOTH) {
+				if (contract == null || contract.getContractType() == ContractType.BOTH) {
 					createFOBDESSwitchMenu(manager, loadSlot);
 				}
 			}
