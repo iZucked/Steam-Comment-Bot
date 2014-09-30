@@ -18,7 +18,7 @@
 	<scm>
 		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-mmxcore.hg</connection>
 		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-mmxcore.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-models-mmxcore</url>
+		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-models-mmxcore</url>
 	</scm>
 
 	<ciManagement>
