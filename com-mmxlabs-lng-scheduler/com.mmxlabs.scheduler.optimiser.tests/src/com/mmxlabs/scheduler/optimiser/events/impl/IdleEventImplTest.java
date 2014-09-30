@@ -32,7 +32,7 @@ public class IdleEventImplTest {
 		final FuelUnit u = FuelUnit.MT;
 		final FuelUnit u2 = FuelUnit.M3;
 
-		final long value = 100l;
+		final long value = 100L;
 		final IdleEventImpl details = new IdleEventImpl();
 		Assert.assertEquals(0, details.getFuelConsumption(c, u));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u2));
@@ -45,7 +45,7 @@ public class IdleEventImplTest {
 	public void testGetSetFuelCost() {
 
 		final FuelComponent c = FuelComponent.Base;
-		final long value = 100l;
+		final long value = 100L;
 		final IdleEventImpl details = new IdleEventImpl();
 		Assert.assertEquals(0, details.getFuelCost(c));
 		details.setFuelCost(c, value);

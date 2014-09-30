@@ -95,7 +95,7 @@ public class LatenessComponentTest {
 		startDetails.getOptions().setPortSlot(startSlot);
 		final PortDetails endDetails = new PortDetails();
 		endDetails.setOptions(new PortOptions());
-		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0l);
+		final EndPortSlot endSlot = new EndPortSlot(null, null, null, false, 0L);
 		endDetails.getOptions().setPortSlot(endSlot);
 
 		final LoadSlot loadSlot = new LoadSlot();

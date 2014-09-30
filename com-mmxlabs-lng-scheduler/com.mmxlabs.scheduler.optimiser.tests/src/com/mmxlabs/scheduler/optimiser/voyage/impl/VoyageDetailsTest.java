@@ -20,7 +20,7 @@ public class VoyageDetailsTest {
 		final FuelUnit u = FuelUnit.MT;
 		final FuelUnit u2 = FuelUnit.M3;
 
-		final long value = 100l;
+		final long value = 100L;
 		final VoyageDetails details = new VoyageDetails();
 		Assert.assertEquals(0, details.getFuelConsumption(c, u));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u2));

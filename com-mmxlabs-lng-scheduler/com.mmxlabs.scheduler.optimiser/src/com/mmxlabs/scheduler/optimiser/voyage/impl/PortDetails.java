@@ -49,7 +49,7 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 		if (fuelConsumption.containsKey(fuel)) {
 			return fuelConsumption.get(fuel);
 		} else {
-			return 0l;
+			return 0L;
 		}
 	}
 

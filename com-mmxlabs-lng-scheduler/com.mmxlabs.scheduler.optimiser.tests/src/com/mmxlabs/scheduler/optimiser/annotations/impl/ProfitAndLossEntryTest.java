@@ -18,8 +18,8 @@ public class ProfitAndLossEntryTest {
 	public void test() {
 
 		final IEntityBook entityBook = mock(IEntityBook.class);
-		final long groupValue = 1234567890l;
-		final long groupValuePreTax = 2234567890l;
+		final long groupValue = 1234567890L;
+		final long groupValuePreTax = 2234567890L;
 		final IDetailTree details = mock(IDetailTree.class);
 
 		final ProfitAndLossEntry entry = new ProfitAndLossEntry(entityBook, groupValue, groupValuePreTax, details);

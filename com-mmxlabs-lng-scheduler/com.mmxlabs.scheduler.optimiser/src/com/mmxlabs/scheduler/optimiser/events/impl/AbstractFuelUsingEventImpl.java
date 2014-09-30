@@ -38,7 +38,7 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 				return map.get(fuelUnit);
 			}
 		}
-		return 0l;
+		return 0L;
 	}
 
 	public void setFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit, final long consumption) {
@@ -58,7 +58,7 @@ public abstract class AbstractFuelUsingEventImpl extends AbstractScheduledEventI
 		if (fuelCost.containsKey(fuel)) {
 			return fuelCost.get(fuel);
 		} else {
-			return 0l;
+			return 0L;
 		}
 	}
 

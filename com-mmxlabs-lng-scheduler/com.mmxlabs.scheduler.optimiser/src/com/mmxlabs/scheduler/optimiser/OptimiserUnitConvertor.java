@@ -120,11 +120,11 @@ public final class OptimiserUnitConvertor {
 	 * @return
 	 */
 	public static long convertToInternalHourlyCost(final int dailyCost) {
-		return (long) dailyCost * (long) Calculator.ScaleFactor / 24l;
+		return (long) dailyCost * (long) Calculator.ScaleFactor / 24L;
 	}
 
 	public static int convertToExernalHourlyCost(final long hourlyCost) {
-		return (int) (hourlyCost * 24l / (long) Calculator.ScaleFactor);
+		return (int) (hourlyCost * 24L / (long) Calculator.ScaleFactor);
 	}
 
 	/**
