@@ -233,6 +233,7 @@ public class ActualsPackageImpl extends EPackageImpl implements ActualsPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getSlotActuals_PortBaseFuelConsumption() {
 		return (EAttribute)slotActualsEClass.getEStructuralFeatures().get(12);
 	}

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.actuals.util;
 
 import java.util.Date;
@@ -48,6 +52,7 @@ public class ActualsAssignableElementComparator extends AssignableElementDateCom
 	// return !(end0.before(start1) || end1.before(start0));
 	// }
 
+	@Override
 	protected Date getStartDate(final AssignableElement element) {
 		if (startDateMap.containsKey(element)) {
 			final SlotActuals slotActuals = startDateMap.get(element);
@@ -56,6 +61,7 @@ public class ActualsAssignableElementComparator extends AssignableElementDateCom
 		return super.getStartDate(element);
 	}
 
+	@Override
 	protected Date getEndDate(final AssignableElement element) {
 		if (endDateMap.containsKey(element)) {
 			final SlotActuals slotActuals = endDateMap.get(element);
