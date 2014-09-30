@@ -777,6 +777,8 @@ public class ScheduleBasedReportBuilder {
 									} else {
 										different = true;
 									}
+								} else {
+									different = true;
 								}
 
 							}
@@ -793,10 +795,10 @@ public class ScheduleBasedReportBuilder {
 						if (buysSet.isEmpty() && sellsSet.isEmpty()) {
 							return "";
 						}
-						final Set<String> buysStringsSet = Sets.newLinkedHashSet(Iterables.transform(buysSet, new SlotToStringFunction()));
-						final Set<String> sellsStringsSet = Sets.newLinkedHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()));
-						final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(buysStringsSet) + " ]";
-						final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(sellsStringsSet) + " ]";
+						final Set<String> buysStringsSet = slotToStringsSet(buysSet);
+						final Set<String> sellsStringsSet = slotToStringsSet(sellsSet);
+						final String buysStr = setToString(buysStringsSet);
+						final String sellsStr = setToString(sellsStringsSet);
 
 						return String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr);
 					} else if (eObj.eIsSet(openSlotAllocationRef)) {
@@ -809,10 +811,10 @@ public class ScheduleBasedReportBuilder {
 								return "";
 							}
 
-							final Set<String> buysStringsSet = Sets.newLinkedHashSet(Iterables.transform(buysSet, new SlotToStringFunction()));
-							final Set<String> sellsStringsSet = Sets.newLinkedHashSet(Iterables.transform(sellsSet, new SlotToStringFunction()));
-							final String buysStr = "[ " + Joiner.on(", ").skipNulls().join(buysStringsSet) + " ]";
-							final String sellsStr = "[ " + Joiner.on(", ").skipNulls().join(sellsStringsSet) + " ]";
+							final Set<String> buysStringsSet = slotToStringsSet(buysSet);
+							final Set<String> sellsStringsSet = slotToStringsSet(sellsSet);
+							final String buysStr = setToString(buysStringsSet);
+							final String sellsStr = setToString(sellsStringsSet);
 
 							return String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr);
 						}
@@ -839,6 +841,14 @@ public class ScheduleBasedReportBuilder {
 					}
 				}
 				return "";
+			}
+
+			protected Set<String> slotToStringsSet(final Set<Slot> buysSet) {
+				return Sets.newTreeSet(Iterables.transform(buysSet, new SlotToStringFunction()));
+			}
+
+			protected String setToString(final Set<String> stringsSet) {
+				return "[ " + Joiner.on(", ").skipNulls().join(stringsSet) + " ]";
 			}
 
 		};
@@ -888,9 +898,8 @@ public class ScheduleBasedReportBuilder {
 							return;
 						}
 
-						
 						// TODO: Need to be able to register a listener for columns to react to this stuff.
-						
+
 						// Clear existing entity columns
 						for (final String s : entityColumnNames) {
 							report.removeColumn(s);
