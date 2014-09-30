@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * All rights reserved.
+ */
 package com.mmxlabs.lingo.reports.utils;
 
 import java.util.HashMap;
@@ -92,10 +96,10 @@ public class RelatedSlotAllocations {
 	}
 
 	public void addRelatedSlot(Slot slotA, Slot slotB) {
-
 		if (slotA == null || slotB == null) {
 			return;
 		}
+		
 
 		final String sA = getSlotNameKey(slotA);
 		final String sB = getSlotNameKey(slotB);
