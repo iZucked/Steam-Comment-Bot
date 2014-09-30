@@ -19,7 +19,7 @@
 	<scm>
 		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-optimiser.hg</connection>
 		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-optimiser.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-optimiser/</url>
+		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-optimiser/</url>
 	</scm>
 
 	<ciManagement>
