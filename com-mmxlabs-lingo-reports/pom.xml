@@ -17,7 +17,7 @@
 	<scm>
 		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lingo.reports.hg</connection>
 		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-lingo.reports.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-lingo.reports</url>
+		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-lingo.reports</url>
 	</scm>
 
 	<ciManagement>
