@@ -80,22 +80,22 @@ public class VoyagePlanAnnotatorTest {
 		// final PortDetails loadDetails1 = new PortDetails();
 		final int loadVisitDuration1 = 10;
 		final double loadFuelPrice1 = 1.0;
-		final long loadFuelConsumption1 = 0l;
+		final long loadFuelConsumption1 = 0L;
 		final PortDetails loadDetails1 = constructPortDetails(loadSlot1, loadVisitDuration1, loadFuelPrice1, loadFuelConsumption1);
 
 		final int dischargeVisitDuration1 = 20;
 		final double dischargeFuelPrice1 = 1.1;
-		final long dischargeFuelConsumption1 = 200l;
+		final long dischargeFuelConsumption1 = 200L;
 		final PortDetails dischargeDetails1 = constructPortDetails(dischargeSlot1, dischargeVisitDuration1, dischargeFuelPrice1, dischargeFuelConsumption1);
 
 		final int loadVisitDuration2 = 30;
 		final double loadFuelPrice2 = 1.2;
-		final long loadFuelConsumption2 = 400l;
+		final long loadFuelConsumption2 = 400L;
 		final PortDetails loadDetails2 = constructPortDetails(loadSlot2, loadVisitDuration2, loadFuelPrice2, loadFuelConsumption2);
 
 		final int dischargeVisitDuration2 = 40;
 		final double dischargeFuelPrice2 = 1.3;
-		final long dischargeFuelConsumption2 = 600l;
+		final long dischargeFuelConsumption2 = 600L;
 		final PortDetails dischargeDetails2 = constructPortDetails(dischargeSlot2, dischargeVisitDuration2, dischargeFuelPrice2, dischargeFuelConsumption2);
 
 		final VoyageDetails voyageDetails1 = new VoyageDetails();
@@ -113,8 +113,8 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails1.setTravelTime(50);
 		voyageDetails1.setIdleTime(40);
 
-		final FuelInfo voyageFuelInfo1 = new FuelInfo(FuelComponent.Base, 1000l, 1.0, FuelComponent.Base_Supplemental, 2000l, 2.0, FuelComponent.NBO, 3000l, 3.0, FuelComponent.FBO, 4000l, 4.0,
-				FuelComponent.IdleBase, 5000l, 5.0, FuelComponent.IdleNBO, 6000l, 6.0);
+		final FuelInfo voyageFuelInfo1 = new FuelInfo(FuelComponent.Base, 1000L, 1.0, FuelComponent.Base_Supplemental, 2000L, 2.0, FuelComponent.NBO, 3000L, 3.0, FuelComponent.FBO, 4000L, 4.0,
+				FuelComponent.IdleBase, 5000L, 5.0, FuelComponent.IdleNBO, 6000L, 6.0);
 
 		voyageFuelInfo1.setVoyageFuelDetails(voyageDetails1);
 
@@ -126,8 +126,8 @@ public class VoyagePlanAnnotatorTest {
 		options2.setAvailableTime(80);
 		options2.setVesselState(VesselState.Ballast);
 
-		final FuelInfo voyageFuelInfo2 = new FuelInfo(FuelComponent.Base, 1100l, 1.10, FuelComponent.Base_Supplemental, 2100l, 2.10, FuelComponent.NBO, 3100l, 3.10, FuelComponent.FBO, 4100l, 4.10,
-				FuelComponent.IdleBase, 5100l, 5.10, FuelComponent.IdleNBO, 6100l, 6.10);
+		final FuelInfo voyageFuelInfo2 = new FuelInfo(FuelComponent.Base, 1100L, 1.10, FuelComponent.Base_Supplemental, 2100L, 2.10, FuelComponent.NBO, 3100L, 3.10, FuelComponent.FBO, 4100L, 4.10,
+				FuelComponent.IdleBase, 5100L, 5.10, FuelComponent.IdleNBO, 6100L, 6.10);
 
 		voyageFuelInfo2.setVoyageFuelDetails(voyageDetails2);
 
@@ -146,8 +146,8 @@ public class VoyagePlanAnnotatorTest {
 		options3.setAvailableTime(70);
 		options3.setVesselState(VesselState.Laden);
 
-		final FuelInfo voyageFuelInfo3 = new FuelInfo(FuelComponent.Base, 1200l, 1.20, FuelComponent.Base_Supplemental, 2200l, 2.20, FuelComponent.NBO, 3200l, 3.20, FuelComponent.FBO, 4200l, 4.20,
-				FuelComponent.IdleBase, 5200l, 5.20, FuelComponent.IdleNBO, 6200l, 6.20);
+		final FuelInfo voyageFuelInfo3 = new FuelInfo(FuelComponent.Base, 1200L, 1.20, FuelComponent.Base_Supplemental, 2200L, 2.20, FuelComponent.NBO, 3200L, 3.20, FuelComponent.FBO, 4200L, 4.20,
+				FuelComponent.IdleBase, 5200L, 5.20, FuelComponent.IdleNBO, 6200L, 6.20);
 		voyageFuelInfo3.setVoyageFuelDetails(voyageDetails3);
 
 		voyageDetails3.setOptions(options3);
@@ -368,8 +368,8 @@ public class VoyagePlanAnnotatorTest {
 
 			for (final FuelComponent fuel : FuelComponent.getIdleFuelComponents()) {
 				if (costs.containsKey(fuel)) {
-					Assert.assertEquals(0l, journey.getFuelConsumption(fuel, fuel.getDefaultFuelUnit()));
-					Assert.assertEquals(0l, journey.getFuelCost(fuel));
+					Assert.assertEquals(0L, journey.getFuelConsumption(fuel, fuel.getDefaultFuelUnit()));
+					Assert.assertEquals(0L, journey.getFuelCost(fuel));
 				}
 			}
 		}
@@ -391,8 +391,8 @@ public class VoyagePlanAnnotatorTest {
 
 			for (final FuelComponent fuel : FuelComponent.getTravelFuelComponents()) {
 				if (costs.containsKey(fuel)) {
-					Assert.assertEquals(0l, journey.getFuelConsumption(fuel, fuel.getDefaultFuelUnit()));
-					Assert.assertEquals(0l, journey.getFuelCost(fuel));
+					Assert.assertEquals(0L, journey.getFuelConsumption(fuel, fuel.getDefaultFuelUnit()));
+					Assert.assertEquals(0L, journey.getFuelCost(fuel));
 				}
 			}
 		}

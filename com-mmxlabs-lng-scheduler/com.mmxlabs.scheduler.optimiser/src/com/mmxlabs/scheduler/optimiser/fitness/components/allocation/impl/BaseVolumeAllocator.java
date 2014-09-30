@@ -171,8 +171,8 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 						minVolumesInMMBtu.add(Calculator.convertMMBTuToM3(heelOptions.getHeelLimit(), cargoCV));
 						maxVolumesInMMBtu.add(Calculator.convertMMBTuToM3(heelOptions.getHeelLimit(), cargoCV));
 					} else {
-						minVolumesInMMBtu.add(0l);
-						maxVolumesInMMBtu.add(0l);
+						minVolumesInMMBtu.add(0L);
+						maxVolumesInMMBtu.add(0L);
 					}
 				} else {
 					minVolumesInM3.add(0l);

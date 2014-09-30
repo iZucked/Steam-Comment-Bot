@@ -16,7 +16,7 @@ public class VoyagePlanTest {
 	@Test
 	public void testGetSetFuelConsumption() {
 		final FuelComponent c = FuelComponent.Base;
-		final long value = 100l;
+		final long value = 100L;
 		final VoyagePlan plan = new VoyagePlan();
 		Assert.assertEquals(0, plan.getFuelConsumption(c));
 		plan.setFuelConsumption(c, value);
@@ -26,7 +26,7 @@ public class VoyagePlanTest {
 	@Test
 	public void testGetSetTotalFuelCost() {
 		final FuelComponent c = FuelComponent.Base;
-		final long value = 100l;
+		final long value = 100L;
 		final VoyagePlan plan = new VoyagePlan();
 		Assert.assertEquals(0, plan.getTotalFuelCost(c));
 		plan.setTotalFuelCost(c, value);

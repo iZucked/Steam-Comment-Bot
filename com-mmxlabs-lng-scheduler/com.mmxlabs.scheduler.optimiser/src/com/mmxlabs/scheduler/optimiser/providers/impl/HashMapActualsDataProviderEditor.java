@@ -149,7 +149,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.baseFuelConsumptionInMT.put(slot, ladenBaseFuelConsumptionInMT);
 		this.portBaseFuelConsumptionInMT.put(slot, portBaseFuelConsumptionInMT);
 		this.startHeelInM3.put(slot, startHeelInM3);
-		this.endHeelInM3.put(slot, 0l);
+		this.endHeelInM3.put(slot, 0L);
 		this.lngPricePerMMBTu.put(slot, purchasePricePerMMBTu);
 		this.baseFuelPricePerMT.put(slot, baseFuelPricePerMT);
 		this.charterRatePerDay.put(slot, charterRatePerDay);
@@ -173,7 +173,7 @@ public class HashMapActualsDataProviderEditor implements IActualsDataProviderEdi
 		this.volumeInMMBTu.put(slot, lngDischargeVolumeInMMBTu);
 		this.baseFuelConsumptionInMT.put(slot, ballastBaseFuelConsumptionInMT);
 		this.portBaseFuelConsumptionInMT.put(slot, dischargePortBaseFuelConsumptionInMT);
-		this.startHeelInM3.put(slot, 0l);
+		this.startHeelInM3.put(slot, 0L);
 		this.endHeelInM3.put(slot, endHeelInM3);
 		this.lngPricePerMMBTu.put(slot, salesPricePerMMBTu);
 		this.distance.put(slot, distance);

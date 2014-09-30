@@ -18,7 +18,7 @@ public class PortDetailsTest {
 	public void testGetSetFuelConsumption() {
 
 		final FuelComponent c = FuelComponent.Base;
-		final long value = 100l;
+		final long value = 100L;
 		final PortDetails details = new PortDetails();
 		Assert.assertEquals(0, details.getFuelConsumption(c));
 		details.setFuelConsumption(c, value);
@@ -28,7 +28,7 @@ public class PortDetailsTest {
 	@Test
 	public void testGetSetCapacityViolationType() {
 		final CapacityViolationType cvt = CapacityViolationType.FORCED_COOLDOWN;
-		final long value = 100l;
+		final long value = 100L;
 		final PortDetails details = new PortDetails();
 		Assert.assertEquals(0, details.getCapacityViolation(cvt));
 		details.setCapacityViolation(cvt, value);
