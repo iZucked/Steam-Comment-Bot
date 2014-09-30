@@ -149,20 +149,20 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				@Override
 				public Comparable<?> getComparable(final Object object) {
 
-					if (object instanceof CargoAllocation) {
-						final CargoAllocation cargoAllocation = (CargoAllocation) object;
-						final Sequence sequence = cargoAllocation.getSequence();
-						if (sequence != null) {
-							return sequence.getName();
-						}
-					} else if (object instanceof Event) {
-						final Event event = (Event) object;
-						final Sequence sequence = event.getSequence();
-						if (sequence != null) {
-							return sequence.getName();
-						}
-					}
-					return "";
+//					if (object instanceof CargoAllocation) {
+//						final CargoAllocation cargoAllocation = (CargoAllocation) object;
+//						final Sequence sequence = cargoAllocation.getSequence();
+//						if (sequence != null) {
+//							return sequence.getName();
+//						}
+//					} else if (object instanceof Event) {
+//						final Event event = (Event) object;
+//						final Sequence sequence = event.getSequence();
+//						if (sequence != null) {
+//							return sequence.getName();
+//						}
+//					}
+					return format(object);
 				}
 
 			}, targetObjectRef));
