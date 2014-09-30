@@ -36,11 +36,12 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private static final Logger log = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
 
 	private class Runner extends Job {
+
+		private boolean paused = false;
+
 		public Runner(final String name) {
 			super(name);
 		}
-
-		private boolean paused = false;
 
 		@Override
 		public IStatus run(final IProgressMonitor monitor) {
@@ -74,7 +75,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 					}
 				}
-			} catch (final Throwable e) {
+			} catch (final Exception e) {
 				log.error(e.getMessage(), e);
 				kill();
 				setJobState(EJobState.CANCELLED);
@@ -101,7 +102,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		}
 	}
 
-	private final LinkedList<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
+	private final List<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
 	private final Runner runner;
 	private EJobState currentState = EJobState.UNKNOWN;
 	private int progress = 0;
@@ -193,6 +194,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 			return;
 		case PAUSED:
 			resume();
+			break;
 		case RUNNING:
 			runner.cancel();
 			setJobState(EJobState.CANCELLING);
@@ -255,7 +257,6 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	public void dispose() {
 
 		runner.cancel();
-		// TODO: this.runner = null;
 		this.currentState = EJobState.UNKNOWN;
 		this.listeners.clear();
 	}

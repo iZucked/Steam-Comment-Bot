@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
@@ -147,9 +148,9 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> local_jobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
+		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
 
-		for (final IEclipseJobManagerListener l : local_jobManagerListeners) {
+		for (final IEclipseJobManagerListener l : localJobManagerListeners) {
 			l.jobAdded(this, job, jobControl, resource);
 		}
 	}
@@ -161,9 +162,9 @@ public final class EclipseJobManager implements IEclipseJobManager {
 
 		// Take a copy of the set before iterating over it as it is possible
 		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> local_jobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
+		final Set<IEclipseJobManagerListener> localJobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
 
-		for (final IEclipseJobManagerListener l : local_jobManagerListeners) {
+		for (final IEclipseJobManagerListener l : localJobManagerListeners) {
 			l.jobRemoved(this, job, jobControl, resource);
 		}
 	}
@@ -183,7 +184,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		return jobResourceMap.get(job);
 	}
 
-
 	protected IJobManager findJobManager(final IJobDescriptor job) {
 
 		// TODO: Make a GUI wrapper to display sorted results and let user pick
@@ -196,7 +196,7 @@ public final class EclipseJobManager implements IEclipseJobManager {
 			return jobManagers.values().iterator().next();
 		}
 
-		final TreeSet<MatchResult> results = new TreeSet<MatchResult>();
+		final SortedSet<MatchResult> results = new TreeSet<MatchResult>();
 		for (final IJobManager mgr : jobManagers.values()) {
 			final int score = jobMatcher.matchJob(job, mgr);
 			results.add(new MatchResult(mgr, score));
@@ -248,11 +248,11 @@ public final class EclipseJobManager implements IEclipseJobManager {
 	}
 
 	protected void saveState(final IJobManager jobManager) {
-
+		// Clients can override this method
 	}
 
 	protected void restoreState(final IJobManager jobManager) {
-
+		// Clients can override this method
 	}
 
 	@Override
