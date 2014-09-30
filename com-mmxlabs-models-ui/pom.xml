@@ -18,7 +18,7 @@
 	<scm>
 		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-ui.hg</connection>
 		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-ui.hg</developerConnection>
-		<url>https://mmxlabs.codebasehq.com/repositories/com-mmxlabs-models-ui</url>
+		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-models-ui</url>
 	</scm>
 
 	<ciManagement>
