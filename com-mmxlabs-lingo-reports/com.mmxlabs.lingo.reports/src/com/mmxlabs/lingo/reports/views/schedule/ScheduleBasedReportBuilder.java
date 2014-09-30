@@ -98,7 +98,7 @@ public class ScheduleBasedReportBuilder {
 	public static final String ROW_FILTER_SHORT_CARGOES = "Shorts";
 	public static final String ROW_FILTER_VESSEL_START_ROW = "Start ballast legs";
 	public static final String ROW_FILTER_VESSEL_EVENT_ROW = "Vessel Events";
-	public static final String ROW_FILTER_CHARTER_OUT_ROW = "Charter Outs (Virt)";
+	public static final String ROW_FILTER_CHARTER_OUT_ROW = "Charter Outs (Virtual)";
 	public static final String ROW_FILTER_CARGO_ROW = "Cargoes";
 
 	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
