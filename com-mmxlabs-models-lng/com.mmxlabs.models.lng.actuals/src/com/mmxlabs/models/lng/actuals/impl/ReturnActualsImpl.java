@@ -186,6 +186,7 @@ public class ReturnActualsImpl extends EObjectImpl implements ReturnActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndHeelM3(double newEndHeelM3) {
 		double oldEndHeelM3 = endHeelM3;
 		endHeelM3 = newEndHeelM3;

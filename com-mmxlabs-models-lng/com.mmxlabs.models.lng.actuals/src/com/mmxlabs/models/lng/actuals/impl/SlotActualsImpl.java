@@ -524,6 +524,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public int getPortBaseFuelConsumption() {
 		return portBaseFuelConsumption;
 	}
@@ -533,6 +534,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setPortBaseFuelConsumption(int newPortBaseFuelConsumption) {
 		int oldPortBaseFuelConsumption = portBaseFuelConsumption;
 		portBaseFuelConsumption = newPortBaseFuelConsumption;
@@ -859,6 +861,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeInM3(double newVolumeInM3) {
 		double oldVolumeInM3 = volumeInM3;
 		volumeInM3 = newVolumeInM3;
@@ -881,6 +884,7 @@ public abstract class SlotActualsImpl extends EObjectImpl implements SlotActuals
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setVolumeInMMBtu(double newVolumeInMMBtu) {
 		double oldVolumeInMMBtu = volumeInMMBtu;
 		volumeInMMBtu = newVolumeInMMBtu;

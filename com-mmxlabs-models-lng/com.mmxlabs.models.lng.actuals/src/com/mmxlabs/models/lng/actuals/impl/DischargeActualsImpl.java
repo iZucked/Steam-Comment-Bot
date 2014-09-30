@@ -142,6 +142,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndHeelM3(double newEndHeelM3) {
 		double oldEndHeelM3 = endHeelM3;
 		endHeelM3 = newEndHeelM3;
@@ -164,6 +165,7 @@ public class DischargeActualsImpl extends SlotActualsImpl implements DischargeAc
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setEndHeelMMBTu(double newEndHeelMMBTu) {
 		double oldEndHeelMMBTu = endHeelMMBTu;
 		endHeelMMBTu = newEndHeelMMBTu;

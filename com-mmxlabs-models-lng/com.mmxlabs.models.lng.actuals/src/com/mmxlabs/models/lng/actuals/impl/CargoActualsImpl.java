@@ -614,6 +614,7 @@ public class CargoActualsImpl extends EObjectImpl implements CargoActuals {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCharterRatePerDay(double newCharterRatePerDay) {
 		double oldCharterRatePerDay = charterRatePerDay;
 		charterRatePerDay = newCharterRatePerDay;
