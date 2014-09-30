@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.utils;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,6 +22,9 @@ import com.mmxlabs.lingo.reports.components.EMFReportView;
 public class PinDiffModeColumnManager {
 	private final Map<String, EObject> pinnedObjects = new LinkedHashMap<>();
 	private final Map<String, Set<EObject>> unpinnedObjects = new LinkedHashMap<>();
+
+	private final Map<String, String> permutationGroupPrefix = new HashMap<>();
+	private int nextPrefix = 1;
 
 	private boolean showPinnedData = true;
 
@@ -61,13 +65,24 @@ public class PinDiffModeColumnManager {
 	public void reset() {
 		pinnedObjects.clear();
 		unpinnedObjects.clear();
+		permutationGroupPrefix.clear();
+		nextPrefix = 1;
+	}
+
+	public String getPermutationGroupPrefix(final String permutationGroup) {
+		if (permutationGroupPrefix.containsKey(permutationGroup)) {
+			return permutationGroupPrefix.get(permutationGroup);
+		}
+		final String prefix = Integer.toString(nextPrefix++);
+		permutationGroupPrefix.put(permutationGroup, prefix);
+		return prefix;
 	}
 
 	public boolean showPinnedData() {
 		return showPinnedData;
 	}
 
-	public void setShowPinnedData(boolean show) {
+	public void setShowPinnedData(final boolean show) {
 		this.showPinnedData = show;
 	}
 }
