@@ -27,6 +27,7 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.lingo.reports,
  com.mmxlabs.lingo.reports.components,
  com.mmxlabs.lingo.reports.extensions,
+ com.mmxlabs.lingo.reports.preferences,
  com.mmxlabs.lingo.reports.properties,
  com.mmxlabs.lingo.reports.utils,
  com.mmxlabs.lingo.reports.views,
