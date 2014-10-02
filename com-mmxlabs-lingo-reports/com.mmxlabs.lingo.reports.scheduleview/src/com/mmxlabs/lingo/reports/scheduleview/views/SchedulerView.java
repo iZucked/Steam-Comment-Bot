@@ -23,6 +23,10 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -77,10 +81,8 @@ import com.mmxlabs.lingo.reports.scheduleview.internal.Activator;
 import com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -91,7 +93,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
-public class SchedulerView extends ViewPart implements ISelectionListener {
+public class SchedulerView extends ViewPart implements ISelectionListener, IPreferenceChangeListener {
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
 
@@ -124,7 +126,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	private IMemento highlightMemento;
 
 	@Inject
-	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemes;
+	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemeExtensions;
+	
+	private List<IScheduleViewColourScheme> colourSchemes= new ArrayList<>();
 
 	private HighlightAction highlightAction;
 
@@ -186,7 +190,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		// Inject the extension points
 		Activator.getDefault().getInjector().injectMembers(this);
-
+		
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
 			@Override
@@ -321,6 +325,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			}
 
 		};
+		
+		// make sure this viewer is listening to preference changes
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		prefs.addPreferenceChangeListener(this);				
+		
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
@@ -422,7 +431,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		viewer.setContentProvider(contentProvider);
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento);
 
-		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemes) {
+		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemeExtensions) {
 			final IScheduleViewColourScheme cs = ext.createInstance();
 			final String ID = ext.getID();
 			cs.setID(ID);
@@ -480,6 +489,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void dispose() {
+		// stop this view from listening to preference changes
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		prefs.removePreferenceChangeListener(this);				
 
 		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 		// getSite().getPage().removeSelectionListener(
@@ -865,5 +877,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			return ((NamedObject) element).getName();
 		}
 		return element.toString();
+	}
+
+	@Override
+	public void preferenceChange(PreferenceChangeEvent event) {
+		viewer.setInput(viewer.getInput());
 	}
 }

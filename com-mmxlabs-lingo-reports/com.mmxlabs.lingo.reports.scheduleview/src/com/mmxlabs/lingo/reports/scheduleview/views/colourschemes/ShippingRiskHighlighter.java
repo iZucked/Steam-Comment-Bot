@@ -5,21 +5,20 @@
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 
 import static com.mmxlabs.lingo.reports.ColourPalette.Warning_Yellow;
-import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.findIdleForJourney;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.findJourneyForIdle;
-import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isRiskyVoyage;
+import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isJourneyTight;
 
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
+import com.mmxlabs.lingo.reports.preferences.PreferenceConstants;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 
 public class ShippingRiskHighlighter extends ColourScheme {
-
-	private static final float threshold = 0.95f;
-	private static final float speed = 19.0f;
 
 	private GanttChartViewer viewer;
 
@@ -45,19 +44,23 @@ public class ShippingRiskHighlighter extends ColourScheme {
 
 	@Override
 	public Color getBackground(final Object element) {
+		IEclipsePreferences prefs = InstanceScope.INSTANCE.getNode("com.mmxlabs.lingo.reports");
+		int tightLeewayInDays = prefs.getInt(PreferenceConstants.P_LEEWAY_DAYS, 1);
+		
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
-
-			if (isRiskyVoyage(journey, findIdleForJourney(journey), speed, threshold)) {
+			
+			if (isJourneyTight(journey, tightLeewayInDays * 24)) {
 				return ColorCache.getColor(Warning_Yellow);
 			}
 		} else if (element instanceof Idle) {
 			final Idle idle = (Idle) element;
 
-			if (isRiskyVoyage(findJourneyForIdle(idle), idle, speed, threshold)) {
+			if (isJourneyTight(findJourneyForIdle(idle), tightLeewayInDays * 24)) {
 				return ColorCache.getColor(Warning_Yellow);
 			}
 		}
 		return null;
 	}
+
 }

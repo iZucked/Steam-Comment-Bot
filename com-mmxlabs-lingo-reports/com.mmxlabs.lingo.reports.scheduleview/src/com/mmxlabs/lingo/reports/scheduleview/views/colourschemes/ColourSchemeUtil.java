@@ -36,9 +36,10 @@ public class ColourSchemeUtil {
 	 * @return
 	 */
 	public static boolean isJourneyTight(final Journey journey, final int leewayInHrs) {
+		if (journey == null) return false;
+		
 		int distance = journey.getDistance();
 		int journeyPlusIdleTime = journey.getDuration(); 
-
 		
 		Sequence sequence = journey.getSequence();		
 		if (sequence == null) return false;
@@ -134,6 +135,7 @@ public class ColourSchemeUtil {
 		return null;
 	}
 
+	/*
 	static boolean isRiskyVoyage(final Journey journey, final Idle idle, float IdleRisk_speed, float IdleRisk_threshold) {
 
 		if (journey == null) {
@@ -150,6 +152,7 @@ public class ColourSchemeUtil {
 
 		return (travelTime / totalTime > IdleRisk_threshold);
 	}
+	*/
 
 	public static boolean isSpot(final SlotVisit visit) {
 		Slot slot = visit.getSlotAllocation().getSlot();

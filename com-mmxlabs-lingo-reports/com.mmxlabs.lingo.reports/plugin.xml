@@ -16,6 +16,21 @@
    <extension-point id="PortRotationBasedReportInitialState" name="PortRotationBasedReportInitialState" schema="schema/PortRotationBasedReportInitialState.exsd"/>
 
    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage"
+            id="com.mmxlabs.lingo.reports.preferences.ReportsPreferencesPage"
+            name="Reports">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="com.mmxlabs.lingo.reports.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+   <extension
          point="org.eclipse.ui.views">
       <category
             name="Reports"
