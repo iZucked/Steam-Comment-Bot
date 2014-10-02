@@ -57,7 +57,16 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 	protected Index<Integer> importIntIndex(@NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
 		return (Index<Integer>) importIndex(true, row, columnsToIgnore, context);
 	}
-
+	
+	/**
+	 * Imports an Index object from a CSV row (represented as a String->String map of fields).
+	 * 
+	 * @param parseAsInt Whether to parse the value fields as integers (false => parse as double).
+	 * @param row
+	 * @param columnsToIgnore Any columns to explicitly ignore.
+	 * @param context The import context.
+	 * @return The imported Index object.
+	 */
 	protected Index<? extends Number> importIndex(final boolean parseAsInt, @NonNull final Map<String, String> row, @NonNull final Set<String> columnsToIgnore, @NonNull final IImportContext context) {
 		// for expression indices, return a derived index
 		if (row.containsKey(EXPRESSION) && row.get(EXPRESSION).isEmpty() == false) {
@@ -88,16 +97,8 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 					continue;
 				}
 				try {
-					final Date date = dateParser.parseDate(s);
-					final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-					c.setTime(date);
-					// Set back to start of month
-					c.set(Calendar.DAY_OF_MONTH, 1);
-					// Clear any other values
-					c.set(Calendar.HOUR_OF_DAY, 0);
-					c.set(Calendar.MINUTE, 0);
-					c.set(Calendar.SECOND, 0);
-					c.set(Calendar.MILLISECOND, 0);
+					final Date date = startOfMonth(dateParser.parseDate(s));
+					
 					final String valueStr = row.get(s);
 					if (valueStr.isEmpty())
 						continue;
@@ -132,6 +133,24 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return result;
 	}
 
+	/**
+	 * Returns the date corresponding to the exact start of a calendar month.
+	 * @param date
+	 * @return
+	 */
+	private Date startOfMonth(final Date date) {
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		c.setTime(date);
+		// Set back to start of month
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		// Clear any other values
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTime();
+	}
+	
 	/**
 	 */
 	@Override
