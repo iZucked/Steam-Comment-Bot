@@ -216,6 +216,24 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 									return 1;
 								}
 							}
+							// Sorting time charters after fleet
+							if (v1 instanceof Vessel && v2 instanceof Vessel){
+								boolean isV1Charter = false;
+								boolean isV2Charter = false;
+								for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+									Vessel v = va.getVessel();
+									if (v == v1){
+										isV1Charter = va.isSetTimeCharterRate();
+									} else if (v == v2){
+										isV2Charter = va.isSetTimeCharterRate();
+									}
+								}
+								if (!isV1Charter && isV2Charter){
+									return -1;
+								} else if (isV1Charter && !isV2Charter){
+									return 1;
+								}
+							}
 							return superValue.compare(o1, o2);
 						}
 
