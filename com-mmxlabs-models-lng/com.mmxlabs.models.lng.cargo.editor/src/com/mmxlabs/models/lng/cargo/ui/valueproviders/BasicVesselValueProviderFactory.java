@@ -64,7 +64,7 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> baseResult = super.getAllowedValues(target, field);
 
-					// All scenario vessels - though we use to ship ourselves
+					// All scenario vessels - those we use to ship ourselves
 					final Set<Vessel> scenarioVessels = new HashSet<>();
 					for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 						scenarioVessels.add(va.getVessel());
