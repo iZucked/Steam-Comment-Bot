@@ -783,7 +783,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		
 		final IScenarioService scenarioService = getScenarioService();
 		if (scenarioService == null) {
-			throw new RuntimeException("Request #unload() on a ScenarioInstance with no ScenarioService");
+			log.error("Request #unload() on a ScenarioInstance with no ScenarioService");
+			// setInstance(null);
+			return;
 		}
 		synchronized (ioLock) {
 			// Already unloaded?
