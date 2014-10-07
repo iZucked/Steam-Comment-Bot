@@ -33,7 +33,7 @@ public class SetUtils {
 	}
 
 	/**
-	 * Return a set containing each vessel in the given vessel sets
+	 * Return a set containing each object in the given object sets
 	 * 
 	 * @param objectSets
 	 * @return
@@ -45,7 +45,7 @@ public class SetUtils {
 	}
 
 	/**
-	 * return a set containing each vessel in the given vessel set.
+	 * return a set containing each object in the given object set.
 	 * 
 	 * @param objectSet
 	 * @return
