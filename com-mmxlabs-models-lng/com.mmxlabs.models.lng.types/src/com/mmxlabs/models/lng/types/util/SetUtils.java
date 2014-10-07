@@ -24,60 +24,60 @@ public class SetUtils {
 	/**
 	 * True iff the given objects sets expand to contain the given object
 	 * 
-	 * @param vesselSets
-	 * @param vessel
+	 * @param objectSets
+	 * @param object
 	 * @return
 	 */
-	public <T extends ObjectSet<T, U>, U> boolean contains(final Iterable<T> vesselSets, final U vessel) {
-		return getObjects(vesselSets).contains(vessel);
+	public <T extends ObjectSet<T, U>, U> boolean contains(final Iterable<T> objectSets, final U object) {
+		return getObjects(objectSets).contains(object);
 	}
 
 	/**
 	 * Return a set containing each vessel in the given vessel sets
 	 * 
-	 * @param portSets
+	 * @param objectSets
 	 * @return
 	 */
-	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final Iterable<T> portSets) {
+	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final Iterable<T> objectSets) {
 		final HashSet<U> result = new HashSet<U>();
-		addObjects(portSets, result);
+		addObjects(objectSets, result);
 		return result;
 	}
 
 	/**
 	 * return a set containing each vessel in the given vessel set.
 	 * 
-	 * @param portSet
+	 * @param objectSet
 	 * @return
 	 */
-	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final T portSet) {
+	public static <T extends ObjectSet<T, U>, U> Set<U> getObjects(final T objectSet) {
 		final HashSet<U> result = new HashSet<U>();
-		addObjects(portSet, result);
+		addObjects(objectSet, result);
 		return result;
 	}
 
 	/**
 	 */
-	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> portSets, Collection<U> output) {
-		addObjects(portSets, output, new UniqueEList<T>());
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> objectSets, Collection<U> output) {
+		addObjects(objectSets, output, new UniqueEList<T>());
 	}
 
 	/**
 	 */
-	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> portSets, Collection<U> output, EList<T> marks) {
-		for (final T set : portSets)
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final Iterable<T> objectSets, Collection<U> output, EList<T> marks) {
+		for (final T set : objectSets)
 			addObjects(set, output, marks);
 	}
 
 	/**
 	 */
-	public static <T extends ObjectSet<T, U>, U> void addObjects(final T portSet, Collection<U> output, EList<T> marks) {
-		output.addAll(portSet.collect(marks));
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final T objectSet, Collection<U> output, EList<T> marks) {
+		output.addAll(objectSet.collect(marks));
 	}
 
 	/**
 	 */
-	public static <T extends ObjectSet<T, U>, U> void addObjects(final T portSet, Collection<U> output) {
-		addObjects(portSet, output, new UniqueEList<T>());
+	public static <T extends ObjectSet<T, U>, U> void addObjects(final T objectSet, Collection<U> output) {
+		addObjects(objectSet, output, new UniqueEList<T>());
 	}
 }
