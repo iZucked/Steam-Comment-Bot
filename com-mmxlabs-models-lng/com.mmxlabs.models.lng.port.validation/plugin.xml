@@ -127,6 +127,22 @@
                      class="Port">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortCVRangeConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortCVRangeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Port CV Range Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

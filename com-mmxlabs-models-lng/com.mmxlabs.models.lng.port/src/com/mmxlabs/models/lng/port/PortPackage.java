@@ -242,13 +242,31 @@ public interface PortPackage extends EPackage {
 	int PORT__UN_LOCODE = TypesPackage.APORT_SET_FEATURE_COUNT + 15;
 
 	/**
+	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__MIN_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 16;
+
+	/**
+	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__MAX_CV_VALUE = TypesPackage.APORT_SET_FEATURE_COUNT + 17;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 16;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 18;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -793,6 +811,28 @@ public interface PortPackage extends EPackage {
 	EAttribute getPort_UNLocode();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getMinCvValue <em>Min Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getMinCvValue()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_MinCvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Port#getMaxCvValue <em>Max Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getMaxCvValue()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EAttribute getPort_MaxCvValue();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Route <em>Route</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1179,6 +1219,22 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__UN_LOCODE = eINSTANCE.getPort_UNLocode();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__MIN_CV_VALUE = eINSTANCE.getPort_MinCvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT__MAX_CV_VALUE = eINSTANCE.getPort_MaxCvValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.

@@ -17,6 +17,7 @@
           ecoreFeature="ecore:EAttribute port.ecore#//Port/loadDuration"/>
       <genFeatures createChild="false" propertyDescription="The time in hours required to discharge a cargo at this port (can be overridden by cargo)"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/dischargeDuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute port.ecore#//Port/berths"/>
       <genFeatures createChild="false" propertyDescription="The CV value of gas from this port"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/cvValue"/>
       <genFeatures createChild="false" propertyDescription="The default time of day for cargo time windows at this port (can be overridden by cargo)"
@@ -34,6 +35,10 @@
           ecoreFeature="ecore:EAttribute port.ecore#//Port/externalCode"/>
       <genFeatures createChild="false" propertyDescription="UN/LOCODE of the Port"
           ecoreFeature="ecore:EAttribute port.ecore#//Port/UNLocode"/>
+      <genFeatures createChild="false" propertyDescription="The minimum CV value of a discharge that can be received at this port"
+          ecoreFeature="ecore:EAttribute port.ecore#//Port/minCvValue"/>
+      <genFeatures createChild="false" propertyDescription="The maximum CV value of a discharge that can be received at this port"
+          ecoreFeature="ecore:EAttribute port.ecore#//Port/maxCvValue"/>
     </genClasses>
     <genClasses ecoreClass="port.ecore#//Route">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference port.ecore#//Route/lines"/>

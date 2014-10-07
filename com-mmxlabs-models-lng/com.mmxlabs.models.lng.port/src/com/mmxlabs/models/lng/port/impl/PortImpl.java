@@ -48,6 +48,8 @@ import com.mmxlabs.models.mmxcore.OtherNamesObject;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getVesonCode <em>Veson Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getExternalCode <em>External Code</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getUNLocode <em>UN Locode</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMinCvValue <em>Min Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
  * </ul>
  * </p>
  *
@@ -332,6 +334,64 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * @ordered
 	 */
 	protected String unLocode = UN_LOCODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MIN_CV_VALUE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMinCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected double minCvValue = MIN_CV_VALUE_EDEFAULT;
+
+	/**
+	 * This is true if the Min Cv Value attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean minCvValueESet;
+
+	/**
+	 * The default value of the '{@link #getMaxCvValue() <em>Max Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MAX_CV_VALUE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMaxCvValue() <em>Max Cv Value</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMaxCvValue()
+	 * @generated
+	 * @ordered
+	 */
+	protected double maxCvValue = MAX_CV_VALUE_EDEFAULT;
+
+	/**
+	 * This is true if the Max Cv Value attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean maxCvValueESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -697,6 +757,98 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getMinCvValue() {
+		return minCvValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinCvValue(double newMinCvValue) {
+		double oldMinCvValue = minCvValue;
+		minCvValue = newMinCvValue;
+		boolean oldMinCvValueESet = minCvValueESet;
+		minCvValueESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__MIN_CV_VALUE, oldMinCvValue, minCvValue, !oldMinCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMinCvValue() {
+		double oldMinCvValue = minCvValue;
+		boolean oldMinCvValueESet = minCvValueESet;
+		minCvValue = MIN_CV_VALUE_EDEFAULT;
+		minCvValueESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PortPackage.PORT__MIN_CV_VALUE, oldMinCvValue, MIN_CV_VALUE_EDEFAULT, oldMinCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMinCvValue() {
+		return minCvValueESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getMaxCvValue() {
+		return maxCvValue;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMaxCvValue(double newMaxCvValue) {
+		double oldMaxCvValue = maxCvValue;
+		maxCvValue = newMaxCvValue;
+		boolean oldMaxCvValueESet = maxCvValueESet;
+		maxCvValueESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PortPackage.PORT__MAX_CV_VALUE, oldMaxCvValue, maxCvValue, !oldMaxCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetMaxCvValue() {
+		double oldMaxCvValue = maxCvValue;
+		boolean oldMaxCvValueESet = maxCvValueESet;
+		maxCvValue = MAX_CV_VALUE_EDEFAULT;
+		maxCvValueESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PortPackage.PORT__MAX_CV_VALUE, oldMaxCvValue, MAX_CV_VALUE_EDEFAULT, oldMaxCvValueESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetMaxCvValue() {
+		return maxCvValueESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -746,6 +898,10 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return getExternalCode();
 			case PortPackage.PORT__UN_LOCODE:
 				return getUNLocode();
+			case PortPackage.PORT__MIN_CV_VALUE:
+				return getMinCvValue();
+			case PortPackage.PORT__MAX_CV_VALUE:
+				return getMaxCvValue();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -809,6 +965,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__UN_LOCODE:
 				setUNLocode((String)newValue);
 				return;
+			case PortPackage.PORT__MIN_CV_VALUE:
+				setMinCvValue((Double)newValue);
+				return;
+			case PortPackage.PORT__MAX_CV_VALUE:
+				setMaxCvValue((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -869,6 +1031,12 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 			case PortPackage.PORT__UN_LOCODE:
 				setUNLocode(UN_LOCODE_EDEFAULT);
 				return;
+			case PortPackage.PORT__MIN_CV_VALUE:
+				unsetMinCvValue();
+				return;
+			case PortPackage.PORT__MAX_CV_VALUE:
+				unsetMaxCvValue();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -913,6 +1081,10 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 				return EXTERNAL_CODE_EDEFAULT == null ? externalCode != null : !EXTERNAL_CODE_EDEFAULT.equals(externalCode);
 			case PortPackage.PORT__UN_LOCODE:
 				return UN_LOCODE_EDEFAULT == null ? unLocode != null : !UN_LOCODE_EDEFAULT.equals(unLocode);
+			case PortPackage.PORT__MIN_CV_VALUE:
+				return isSetMinCvValue();
+			case PortPackage.PORT__MAX_CV_VALUE:
+				return isSetMaxCvValue();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -989,6 +1161,10 @@ public class PortImpl extends APortSetImpl<Port> implements Port {
 		result.append(externalCode);
 		result.append(", UNLocode: ");
 		result.append(unLocode);
+		result.append(", minCvValue: ");
+		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
+		result.append(", maxCvValue: ");
+		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
