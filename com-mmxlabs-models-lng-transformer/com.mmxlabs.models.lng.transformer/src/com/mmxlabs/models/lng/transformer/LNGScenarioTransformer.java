@@ -436,11 +436,13 @@ public class LNGScenarioTransformer {
 
 		for (final Port ePort : portModel.getPorts()) {
 			final IPort port;
+			final long minCv = ePort.isSetMinCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMinCvValue()) : 0;
+			final long maxCv = ePort.isSetMaxCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMaxCvValue()) : Long.MAX_VALUE;
 			if (ePort.getLocation() != null) {
 				final Location loc = ePort.getLocation();
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone());
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone(), minCv, maxCv);
 			} else {
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone());
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone(), minCv, maxCv);
 			}
 
 			portAssociation.add(ePort, port);
@@ -2120,14 +2122,14 @@ public class LNGScenarioTransformer {
 		for (final VesselAvailability eVesselAvailability : sortedAvailabilities) {
 			final Vessel eVessel = eVesselAvailability.getVessel();
 
-			Set<Port> portSet = SetUtils.getObjects(eVesselAvailability.getStartAt());
-			Port startingPort = portSet.isEmpty() ? null : portSet.iterator().next();
+			final Set<Port> portSet = SetUtils.getObjects(eVesselAvailability.getStartAt());
+			final Port startingPort = portSet.isEmpty() ? null : portSet.iterator().next();
 			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfter() : null,
 					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartBy() : null, startingPort, eVesselAvailability.getStartHeel());
 
 			boolean endCold = false;
 			long targetEndHeelInM3 = 0;
-			EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
+			final EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
 			if (endHeel != null) {
 				endCold = endHeel.isEndCold();
 				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
@@ -2211,7 +2213,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private IStartRequirement createStartRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Port port,
-			HeelOptions eHeelOptions) {
+			final HeelOptions eHeelOptions) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
@@ -2226,8 +2228,8 @@ public class LNGScenarioTransformer {
 		if (eHeelOptions != null) {
 			final long heelLimitInM3 = eHeelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(eHeelOptions.getVolumeAvailable()) : 0;
 
-			int cvValue = OptimiserUnitConvertor.convertToInternalConversionFactor(eHeelOptions.getCvValue());
-			int pricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(eHeelOptions.getPricePerMMBTU());
+			final int cvValue = OptimiserUnitConvertor.convertToInternalConversionFactor(eHeelOptions.getCvValue());
+			final int pricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(eHeelOptions.getPricePerMMBTU());
 
 			heelOptions = builder.createHeelOptions(heelLimitInM3, cvValue, pricePerMMBTu);
 		} else {
@@ -2245,7 +2247,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private IEndRequirement createEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Set<Port> ports,
-			boolean endCold, long targetHeelInM3) {
+			final boolean endCold, final long targetHeelInM3) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {

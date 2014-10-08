@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
@@ -139,6 +140,8 @@ public class TransformerExtensionTestModule extends AbstractModule {
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new RestrictedElementsConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ContractCvConstraintCheckerFactory());
+		
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortCvConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ShippingTypeRequirementConstraintCheckerFactory());
 
