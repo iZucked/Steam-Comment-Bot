@@ -36,6 +36,10 @@ public class Port extends IndexedObject implements IPort {
 	 */
 	private ICooldownPriceCalculator cooldownPriceCalculator;
 
+	private long minCvValue;
+
+	private long maxCvValue;
+
 	public Port(final IIndexingContext context) {
 		super(context);
 	}
@@ -102,5 +106,23 @@ public class Port extends IndexedObject implements IPort {
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public long getMinCvValue() {
+		return minCvValue;
+	}
+
+	@Override
+	public long getMaxCvValue() {
+		return maxCvValue;
+	}
+	
+	public void setMinCvValue(long minCvValue) {
+		this.minCvValue = minCvValue;
+	}
+
+	public void setMaxCvValue(long maxCvValue) {
+		this.maxCvValue = maxCvValue;
 	}
 }

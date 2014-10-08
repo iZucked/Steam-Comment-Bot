@@ -340,7 +340,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			public int calculateCooldownUnitPrice(final int time, final IPort port) {
 				return 0;
 			}
-		}, "UTC"/* no timezone */);
+		}, "UTC"/* no timezone */, 0, Long.MAX_VALUE);
 
 		// setup fake vessels for virtual elements.
 		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
@@ -556,11 +556,19 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId) {
+	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId, final long minCvValue, final long maxCvValue) {
 
 		final Port port = new Port(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
+		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId, minCvValue, maxCvValue);
 		return port;
+	}
+
+	/**
+	 * Convenience function only used for testing
+	 */
+	public IPort createPortForTest(final String string, final boolean b, final ICooldownPriceCalculator object, final String string2) {
+
+		return createPort(string, b, object, string2, 0l, Long.MAX_VALUE);
 	}
 
 	/**
@@ -612,14 +620,22 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId, final long minCvValue, final long maxCvValue) {
 
 		final XYPort port = new XYPort(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
+		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId, minCvValue, maxCvValue);
 		port.setX(x);
 		port.setY(y);
 
 		return port;
+	}
+
+	/**
+	 * Convenience function only used for testing
+	 */
+	public IXYPort createPortForTest(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId) {
+
+		return createPort(name, arriveCold, cooldownPriceCalculator, x, y, timezoneId, 0l, Long.MAX_VALUE);
 	}
 
 	/**
@@ -631,12 +647,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param cooldownPriceCalculator
 	 * @param timezoneId
 	 */
-	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId) {
+	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId, final long minCvValue, final long maxCvValue) {
 
 		port.setName(name);
 		port.setShouldVesselsArriveCold(arriveCold);
 		port.setCooldownPriceCalculator(cooldownPriceCalculator);
 		port.setTimeZoneId(timezoneId);
+		port.setMinCvValue(minCvValue);
+		port.setMaxCvValue(maxCvValue);
 		ports.add(port);
 
 		// Pin variable for null analysis...
@@ -1920,4 +1938,5 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		constrainSlotToVesselAvailabilities(portSlot, Collections.singleton(vesselAvailability));
 		this.frozenSlots.add(portSlot);
 	}
+
 }

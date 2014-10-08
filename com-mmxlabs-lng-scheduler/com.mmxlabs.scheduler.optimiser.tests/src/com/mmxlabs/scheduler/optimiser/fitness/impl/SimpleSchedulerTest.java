@@ -61,12 +61,12 @@ public class SimpleSchedulerTest {
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
-		final IPort port1 = builder.createPort("port-1", false, null, 0, 0, "UTC");
-		final IPort port2 = builder.createPort("port-2", false, null, 0, 5, "UTC");
-		final IPort port3 = builder.createPort("port-3", false, null, 5, 0, "UTC");
-		final IPort port4 = builder.createPort("port-4", false, null, 5, 5, "UTC");
-		final IPort port5 = builder.createPort("port-5", false, null, 0, 10, "UTC");
-		final IPort port6 = builder.createPort("port-6", false, null, 5, 10, "UTC");
+		final IPort port1 = builder.createPortForTest("port-1", false, null, 0, 0, "UTC");
+		final IPort port2 = builder.createPortForTest("port-2", false, null, 0, 5, "UTC");
+		final IPort port3 = builder.createPortForTest("port-3", false, null, 5, 0, "UTC");
+		final IPort port4 = builder.createPortForTest("port-4", false, null, 5, 5, "UTC");
+		final IPort port5 = builder.createPortForTest("port-5", false, null, 0, 10, "UTC");
+		final IPort port6 = builder.createPortForTest("port-6", false, null, 5, 10, "UTC");
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 		keypoints.put(12000, 12000L);

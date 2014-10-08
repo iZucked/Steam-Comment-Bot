@@ -43,4 +43,20 @@ public interface IPort extends IIndexedObject {
 	 * @return
 	 */
 	ICooldownPriceCalculator getCooldownPriceCalculator();
+
+	/**
+	 * The min CV of the port
+	 * 
+	 * @return the port's min cv value
+	 */
+	//TODO: replace with datacomponentprovider
+	long getMinCvValue();
+
+	/**
+	 * The max CV of the port
+	 * 
+	 * @return the port's max cv value
+	 */
+	//TODO: replace with datacomponentprovider
+	long getMaxCvValue();
 }
