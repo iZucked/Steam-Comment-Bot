@@ -39,6 +39,8 @@ public class ContractCvValueConstraint extends AbstractModelMultiConstraint {
 
 					final Contract contract = dischargeSlot.getContract();
 					final Port port = dischargeSlot.getPort();
+					
+					
 
 					if (contract instanceof SalesContract) {
 
@@ -48,24 +50,39 @@ public class ContractCvValueConstraint extends AbstractModelMultiConstraint {
 								final LoadSlot loadSlot = (LoadSlot) slot2;
 								final SalesContract salesContract = (SalesContract) contract;
 								final double cv = loadSlot.getSlotOrDelegatedCV();
-								final String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for sales contract '%s'.";
-								if (salesContract.isSetMinCvValue()) {
+								final String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for %s '%s'.";
+								if (dischargeSlot.isSetMinCvValue() || salesContract.isSetMinCvValue()) {
 									final Double minCvValue = dischargeSlot.getSlotOrContractMinCv();
-									
 									if (minCvValue != null && cv < minCvValue) {
-										final String failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, contract.getName());
-										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										String failureMessage;
+										DetailConstraintStatusDecorator dsd;
+										if (dischargeSlot.isSetMinCvValue()) {
+											failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, "discharge slot", dischargeSlot.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MinCvValue());
+										} else { //sales contract
+											failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, "sales contract", contract.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										}
 										dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
 										failures.add(dsd);
 									}
 								}
-								if (salesContract.isSetMaxCvValue()) {
+								if (dischargeSlot.isSetMaxCvValue() || salesContract.isSetMaxCvValue()) {
 									final Double maxCvValue = dischargeSlot.getSlotOrContractMaxCv();
 									if (maxCvValue != null && cv > maxCvValue) {
-										final String failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, contract.getName());
-										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										String failureMessage;
+										DetailConstraintStatusDecorator dsd;
+										if (dischargeSlot.isSetMaxCvValue()) {
+											failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, "discharge slot", dischargeSlot.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MaxCvValue());
+										} else { //sales contract
+											failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, "sales contract", contract.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										}
 										dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
 										failures.add(dsd);
 									}
