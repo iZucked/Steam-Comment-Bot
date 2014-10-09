@@ -635,6 +635,24 @@ public interface ISchedulerBuilder {
 	void setPortCV(@NonNull IPort port, int convertToInternalConversionFactor);
 
 	/**
+	 * Set the Min CV value for a port.
+	 * 
+	 * @param port
+	 * @param cv
+	 *            value
+	 */
+	void setPortMinCV(@NonNull IPort port, long convertToInternalConversionFactor);
+
+	/**
+	 * Set the Max CV value for a port.
+	 * 
+	 * @param port
+	 * @param cv
+	 *            value
+	 */
+	void setPortMaxCV(@NonNull IPort port, long convertToInternalConversionFactor);
+
+	/**
 	 * Create a Mark-To-Market market for DES Purchases valid against the given set of {@link IPort}s
 	 * 
 	 */

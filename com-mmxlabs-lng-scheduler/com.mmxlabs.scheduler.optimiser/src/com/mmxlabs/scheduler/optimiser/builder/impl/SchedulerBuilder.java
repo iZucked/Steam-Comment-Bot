@@ -104,6 +104,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
@@ -254,6 +255,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IPortCVProviderEditor portCVProvider;
+
+	@Inject
+	private IPortCVRangeProviderEditor portCVRangeProvider;
 
 	/**
 	 * Keeps track of calculators
@@ -1820,6 +1824,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setPortCV(@NonNull final IPort port, final int cv) {
 		portCVProvider.setPortCV(port, cv);
+	}
+
+	/**
+	 */
+	@Override
+	public void setPortMinCV(@NonNull final IPort port, final long cv) {
+		portCVRangeProvider.setPortMinCV(port, cv);
+	}
+
+	/**
+	 */
+	@Override
+	public void setPortMaxCV(@NonNull final IPort port, final long cv) {
+		portCVRangeProvider.setPortMaxCV(port, cv);
 	}
 
 	/**

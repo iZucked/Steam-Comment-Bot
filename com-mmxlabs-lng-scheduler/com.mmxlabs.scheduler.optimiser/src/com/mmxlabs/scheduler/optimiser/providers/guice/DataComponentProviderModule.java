@@ -65,6 +65,8 @@ import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
@@ -127,6 +129,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderE
 import com.mmxlabs.scheduler.optimiser.providers.impl.LazyDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.HashMapPortCostEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCVRangeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
@@ -258,6 +261,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IPortCostProviderEditor portCosts = new HashMapPortCostEditor();
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
+
+		final IPortCVRangeProviderEditor portCVRangeProvider = new IndexedPortCVRangeEditor();
+		bind(IPortCVRangeProvider.class).toInstance(portCVRangeProvider);
+		bind(IPortCVRangeProviderEditor.class).toInstance(portCVRangeProvider);
 
 		final ISlotGroupCountProviderEditor slotGroupCountProvider = new HashMapSlotGroupCountProviderEditor();
 		bind(ISlotGroupCountProvider.class).toInstance(slotGroupCountProvider);
