@@ -78,7 +78,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(parametersFactory, SlotGroupCountConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, RestrictedElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ContractCvConstraintCheckerFactory.NAME, true));
-//			constraints.add(createConstraint(parametersFactory, PortCvConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PortCvConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, DifferentSTSVesselsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingHoursRestrictionCheckerFactory.NAME, true));

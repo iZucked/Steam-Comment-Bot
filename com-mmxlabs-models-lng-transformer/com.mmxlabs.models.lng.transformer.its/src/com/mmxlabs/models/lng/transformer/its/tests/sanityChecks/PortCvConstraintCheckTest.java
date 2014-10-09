@@ -6,9 +6,7 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import org.junit.Test;
 
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvConstraintChecker;
 
 public class PortCvConstraintCheckTest {
@@ -16,107 +14,141 @@ public class PortCvConstraintCheckTest {
 	final private float highCv = 24f;
 	final private float midCv = (lowCv + highCv) / 2f;
 
-	public SuboptimalScenarioTester differentCvScenario() {
-		SuboptimalScenarioTester result = new SuboptimalScenarioTester() {
+	public SuboptimalScenarioTester getScenarioWithParams(
+			final double smallLPCv, final double bigLPCv,
+			final double smallDPMinCV, final double smallDPMaxCV,
+			final double bigDPMinCV, final double bigDPMaxCV) {
+		final SuboptimalScenarioTester result = new SuboptimalScenarioTester() {
 			{
-				((LoadSlot) smallToLargeCargo.getSlots().get(0)).setCargoCV(lowCv);
-				((LoadSlot) largeToSmallCargo.getSlots().get(0)).setCargoCV(highCv);
+				// set load cv (from slot as it writes over the load port)
+				((LoadSlot) smallToLargeCargo.getSlots().get(0))
+						.setCargoCV(smallLPCv);
+				((LoadSlot) largeToSmallCargo.getSlots().get(0))
+						.setCargoCV(bigLPCv);
+
+				// set discharge allowed ranges
+				smallDischargePort.setMinCvValue(smallDPMinCV);
+				smallDischargePort.setMaxCvValue(smallDPMaxCV);
+				bigDischargePort.setMinCvValue(bigDPMinCV);
+				bigDischargePort.setMaxCvValue(bigDPMaxCV);
 			}
 		};
 
 		return result;
+
 	}
 
-//	@Test
-//	public void testVariousConstraints() {
-//		final SuboptimalScenarioTester sst = differentCvScenario();
-//		sst.testConstraintCheckerPasses(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
-//
-//		SalesContract stlContract = (SalesContract) sst.smallToLargeCargo.getSlots().get(1).getContract();
-//
-//		// check that the constraints aren't violated when CV values fall within specified ranges
-//		// (the stl cargo has CV of lowCv, and the lts cargo has CV of highCv)
-//		stlContract.setMinCvValue(lowCv - 1);
-//		stlContract.setMaxCvValue(midCv);
-//		sst.testConstraintCheckerPasses(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
-//
-//		// check that the constraints are violated when one CV value is too high
-//		stlContract.setMaxCvValue(lowCv - 1);
-//		sst.testConstraintCheckerFails(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
-//
-//		// check that the constraints are violated when one CV value is too low
-//		stlContract.unsetMaxCvValue();
-//		stlContract.setMinCvValue(midCv);
-//		sst.testConstraintCheckerFails(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
-//
-//		// check that the constraints aren't violated when the contracts don't have specified ranges
-//		stlContract.unsetMinCvValue();
-//		sst.testConstraintCheckerPasses(new ContractCvConstraintChecker("ContractCvConstraintChecker"));
-//
-//	}
+	public SuboptimalScenarioTester maxRangeOnDischargeCvScenario() {
+		return getScenarioWithParams(midCv, midCv, 0, 1000000, 0, 1000000);
+	}
+
+	public SuboptimalScenarioTester loadMidCvDischargeMidMinCvHighMaxCvScenario() {
+		return getScenarioWithParams(midCv, midCv, lowCv, highCv, lowCv, highCv);
+	}
+
+	public SuboptimalScenarioTester loadLowCvDischargeMidMinCvScenario() {
+		return getScenarioWithParams(lowCv, lowCv, midCv, highCv, midCv, highCv);
+	}
+
+	public SuboptimalScenarioTester constraintsShouldCreateSubOptimalOptimisationScenario() {
+		return getScenarioWithParams(lowCv, midCv, midCv, highCv, lowCv, lowCv);
+	}
+
+	public SuboptimalScenarioTester constraintsShouldCreateSubOptimalOptimisationScenario2() {
+		return getScenarioWithParams(lowCv, midCv, lowCv, highCv, 0, lowCv);
+	}
 
 	/*
-	 * Tests the case where no CV constraints are attached to the scenario. The PnL-optimal wiring should be generated.
+	 * Test that the constraints are satisfied when the range is maximal
 	 */
+	@Test
+	public void testConstraintCheckerPassesNoConstraints() {
+		// generate a scenario with the max range on the discharge Cv limit
+		// (therefore no discharge cv constraints)
+		final SuboptimalScenarioTester sst = maxRangeOnDischargeCvScenario();
 
+		// test the PortCvConstraintChecker
+		sst.testConstraintCheckerPasses(new PortCvConstraintChecker(
+				"PortCvConstraintChecker"));
+	}
+
+	/*
+	 * Test that the constraints are satisfied when the load is within range
+	 */
+	@Test
+	public void testConstraintCheckerPassesSatisfiedConstraints() {
+		// generate a scenario with the load Cv within the range of the
+		// discharge Cv limits
+		final SuboptimalScenarioTester sst = loadMidCvDischargeMidMinCvHighMaxCvScenario();
+
+		// test the PortCvConstraintChecker
+		sst.testConstraintCheckerPasses(new PortCvConstraintChecker(
+				"PortCvConstraintChecker"));
+	}
+
+	/*
+	 * Test that the constraints are violated when the load is outside the range
+	 */
+	@Test
+	public void testConstraintCheckerFailsLoadCVTooLarge() {
+		// generate a scenario with the load Cv outside of the discharge Cv
+		// limits
+		final SuboptimalScenarioTester sst = loadLowCvDischargeMidMinCvScenario();
+
+		// test the PortCvConstraintChecker
+		sst.testConstraintCheckerFails(new PortCvConstraintChecker(
+				"PortCvConstraintChecker"));
+	}
+
+	/*
+	 * Test that the constraints are violated when the load is outside the range
+	 */
 	@Test
 	public void testNoConstraintsOptimisation() {
-		// generate a suboptimal scenario in which the small->large cargo has a low CV and the large->small cargo has a high CV
-		final SuboptimalScenarioTester sst = differentCvScenario();
-//		((LoadSlot) sst.largeToSmallCargo.getSlots().get(0)).setCargoCV(highCv);
+		// generate a suboptimal scenario
+		final SuboptimalScenarioTester sst = new SuboptimalScenarioTester();
 
-//		DischargeSlot dischargeSlot1 = (DischargeSlot) sst.largeToSmallCargo.getSlots().get(1);
-//		DischargeSlot dischargeSlot2 = (DischargeSlot) sst.smallToLargeCargo.getSlots().get(1);
-
-//		sst.largeToSmallCargo.getSlots().set(1, dischargeSlot2);
-//		// As we have just swapped the slots, smallToLargeCargo no longer has a discharge slot, so we add rather than set
-//		sst.smallToLargeCargo.getSlots().add(1, dischargeSlot1);
-
-		sst.testConstraintCheckerPasses(new PortCvConstraintChecker("PortCvConstraintChecker"));
-
-		// final SuboptimalScenarioTester sst = new SuboptimalScenarioTester();
 		// run the optimiser and check that the optimal wiring is produced
 		sst.testOptimalWiringProduced();
 	}
 
-//	@Test
-//	public void testNoConstraintsOptimisation() {
-//		// generate a suboptimal scenario in which the small->large cargo has a low CV and the large->small cargo has a high CV
-//		final SuboptimalScenarioTester sst = differentCvScenario();
-//		((LoadSlot) sst.largeToSmallCargo.getSlots().get(0)).setCargoCV(highCv);
-//
-//		DischargeSlot dischargeSlot1 = (DischargeSlot) sst.largeToSmallCargo.getSlots().get(1);
-//		DischargeSlot dischargeSlot2 = (DischargeSlot) sst.smallToLargeCargo.getSlots().get(1);
-//
-//		sst.largeToSmallCargo.getSlots().set(1, dischargeSlot2);
-//		// As we have just swapped the slots, smallToLargeCargo no longer has a discharge slot, so we add rather than set
-//		sst.smallToLargeCargo.getSlots().add(1, dischargeSlot1);
-//
-//		sst.testConstraintCheckerPasses(new ContractCvConstraintChecker("CvConstraintChecker"));
-//
-//		// final SuboptimalScenarioTester sst = new SuboptimalScenarioTester();
-//		// run the optimiser and check that the optimal wiring is produced
-//		sst.testOptimalWiringProduced();
-//	}
+	/*
+	 * Test that the case where no discharge Cv constraints are in place. The
+	 * PnL-optimal wiring should be generated.
+	 */
+	@Test
+	public void testConstraintsOptimalOptimisation() {
+		// generate a suboptimal scenario
+		final SuboptimalScenarioTester sst = maxRangeOnDischargeCvScenario();
+
+		// run the optimiser and check that the optimal wiring is produced
+		sst.testOptimalWiringProduced();
+	}
 
 	/*
-	 * 
-	 * Tests the case where a maximum CV constraint is attached to one of the sales contracts in the scenario. The PnL-suboptimal wiring should be generated.
+	 * Tests the case where discharge Cv constraints are in place, which prevent
+	 * the PnL-optimal wiring. The PnL-suboptimal wiring should be generated.
 	 */
-//	@Test
-	public void testMaxCvConstraintOptimisation() {
-		// generate a suboptimal scenario in which the small->large cargo has a low CV and the large->small cargo has a high CV
-		final SuboptimalScenarioTester sst = differentCvScenario();
+	@Test
+	public void testConstraintsSubOptimalOptimisationScenario1() {
+		// generate a suboptimal scenario
+		final SuboptimalScenarioTester sst = constraintsShouldCreateSubOptimalOptimisationScenario2();
 
-		// prohibit the PnL-optimal rewiring by setting the sales contract on the STL cargo to have a
-		// max CV value which is too low for the LTS cargo
-		Port largePort = (Port) sst.bigDischargePort;
-		largePort.setMaxCvValue(lowCv);
-//		sst.testConstraintCheckerFails(new PortCvConstraintChecker("PortCvConstraintChecker"));
-
-		// test that the optimiser doesn't produce the prohibited wiring
+		// run the optimiser and check that a suboptimal wiring is produced
 		sst.testSuboptimalWiringProduced();
+	}
 
+	/*
+	 * Tests the case where discharge Cv constraints are in place, which prevent
+	 * the PnL-optimal wiring. The PnL-suboptimal wiring should be generated.
+	 */
+	@Test
+	public void testConstraintsSubOptimalOptimisationScenario2() {
+		// generate a suboptimal scenario
+		final SuboptimalScenarioTester sst = constraintsShouldCreateSubOptimalOptimisationScenario2();
+
+		// run the optimiser and check that a suboptimal wiring is produced
+		sst.testSuboptimalWiringProduced();
 	}
 
 }

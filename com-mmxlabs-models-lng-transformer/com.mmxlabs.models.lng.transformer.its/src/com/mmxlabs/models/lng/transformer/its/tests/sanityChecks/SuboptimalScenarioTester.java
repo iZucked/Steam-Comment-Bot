@@ -142,7 +142,7 @@ public class SuboptimalScenarioTester {
 			if (index >= 0) {
 				found[index] = true;
 				Assert.assertTrue(
-						String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'.", loadPort.getName(), dischargePorts[index].getName(), dischargePort.getName()),
+						String.format("Expected solution wires '%s' to '%s' but the allocation wires it to '%s'. (load cv = %f; discharge min cv = %f; discharge max cv = %f", loadPort.getName(), dischargePorts[index].getName(), dischargePort.getName(), loadPort.getCvValue(), dischargePort.getMinCvValue(), dischargePort.getMaxCvValue()),
 						dischargePorts[index].equals(dischargePort));
 			}
 		}
