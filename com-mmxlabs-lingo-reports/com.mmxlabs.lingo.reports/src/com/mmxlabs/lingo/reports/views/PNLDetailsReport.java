@@ -70,8 +70,8 @@ public class PNLDetailsReport extends DetailPropertiesView {
 				viewer.expandToLevel(++expandLevel);
 			}
 		};
-		collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseAll.gif"));
-		expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandAll.gif"));
+		collapseOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/collapseall.gif"));
+		expandOneLevel.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/expandall.gif"));
 
 		getViewSite().getActionBars().getToolBarManager().add(collapseOneLevel);
 		getViewSite().getActionBars().getToolBarManager().add(expandOneLevel);
