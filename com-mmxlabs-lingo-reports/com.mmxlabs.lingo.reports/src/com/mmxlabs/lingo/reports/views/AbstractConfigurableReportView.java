@@ -171,6 +171,12 @@ public abstract class AbstractConfigurableReportView extends EMFReportView {
 							getBlockManager().swapBlockOrder((ColumnBlock) columnObj1, (ColumnBlock) columnObj2);
 							viewer.refresh();
 						}
+						
+						@Override
+						public Object [] resetColumnStates() {
+							setInitialState();
+							return getBlockManager().getBlocksInVisibleOrder().toArray();
+						}
 
 					};
 
