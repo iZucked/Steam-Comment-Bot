@@ -37,6 +37,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLoadFailure <em>Load Failure</em>}</li>
  * </ul>
  * </p>
  *
@@ -270,14 +271,15 @@ public interface ScenarioInstance extends Container {
 	EList<ScenarioFragment> getFragments();
 
 	/**
-	 * Returns the value of the '<em><b>Model References</b></em>' containment reference list. The list contents are of type {@link com.mmxlabs.scenario.service.model.ModelReference}. It is
-	 * bidirectional and its opposite is '{@link com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance <em>Scenario Instance</em>}'. <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Model References</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.scenario.service.model.ModelReference}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance <em>Scenario Instance</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <p>
 	 * Returns the list of active {@link ModelReference}s. A {@link ModelReference} should be obtained from a call to {@link #getReference()} and then released called {@link ModelReference#close()}
 	 * rather than manipulating this list directly. When this list is empty, scenarios may be unloaded.
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * 
 	 * @return the value of the '<em>Model References</em>' containment reference list.
 	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ModelReferences()
 	 * @see com.mmxlabs.scenario.service.model.ModelReference#getScenarioInstance
@@ -434,6 +436,32 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setValidationStatusCode(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Load Failure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Load Failure</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Load Failure</em>' attribute.
+	 * @see #setLoadFailure(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_LoadFailure()
+	 * @model transient="true"
+	 * @generated
+	 */
+	boolean isLoadFailure();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLoadFailure <em>Load Failure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Load Failure</em>' attribute.
+	 * @see #isLoadFailure()
+	 * @generated
+	 */
+	void setLoadFailure(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
