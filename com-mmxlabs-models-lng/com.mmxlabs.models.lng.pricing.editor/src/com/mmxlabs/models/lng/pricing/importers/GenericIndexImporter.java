@@ -33,11 +33,12 @@ import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.IExportContext;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.AbstractClassImporter;
-import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter.ImportResults;
+import com.mmxlabs.models.util.importer.impl.NumberAttributeImporter;
 
 /**
- * Generic import logic for loading index data. Currently implemented by BaseFuelIndexImporter. TODO: change CharterIndexImporter and CommodityIndexImporter to implement this class.
+ * Generic import logic for loading index data. Currently implemented by BaseFuelIndexImporter,
+ * CharterIndexImporter and CommodityIndexImporter.
  * 
  * @author Simon McGregor
  * 
@@ -151,8 +152,6 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return c.getTime();
 	}
 	
-	/**
-	 */
 	@Override
 	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 
@@ -165,6 +164,11 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		};
 	}
 
+	/**
+	 * Return the index contained in a particular target EObject.
+	 * @param target
+	 * @return
+	 */
 	abstract protected Index<? extends Number> getIndexFromObject(TargetClass target);
 
 	protected Map<String, String> getNonDateFields(final TargetClass target, final Index<? extends Number> index) {
@@ -215,4 +219,18 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		}
 		return result;
 	}
+	
+	/*
+	protected Class<?> getIndexDataType(EClass clazz) {
+		EList<EGenericType> gens = clazz.getEGenericSuperTypes();
+		for (EGenericType gen: gens) {
+			EList<EGenericType> args = gen.getETypeArguments();
+			for (EGenericType arg: args) {
+				EClassifier t = arg.getERawType();
+				Class<?> c = t.getInstanceClass();
+				c.getName();
+			}
+		}		
+	}
+	*/
 }
