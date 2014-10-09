@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -41,6 +40,7 @@ import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.components.EMFReportView.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
+import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
 import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
@@ -94,22 +94,22 @@ public class ScheduleBasedReportBuilder {
 
 	private static final Logger log = LoggerFactory.getLogger(ScheduleBasedReportBuilder.class);
 
-	public static final String ROW_FILTER_LONG_CARGOES = "Longs";
-	public static final String ROW_FILTER_SHORT_CARGOES = "Shorts";
-	public static final String ROW_FILTER_VESSEL_START_ROW = "Start ballast legs";
-	public static final String ROW_FILTER_VESSEL_EVENT_ROW = "Vessel Events";
-	public static final String ROW_FILTER_CHARTER_OUT_ROW = "Charter Outs (Virtual)";
-	public static final String ROW_FILTER_CARGO_ROW = "Cargoes";
-
+	public static final OptionInfo ROW_FILTER_LONG_CARGOES = new OptionInfo("ROW_FILTER_LONG_CARGOES", "Longs");
+	public static final OptionInfo ROW_FILTER_SHORT_CARGOES = new OptionInfo("ROW_FILTER_SHORT_CARGOES", "Shorts");
+	public static final OptionInfo ROW_FILTER_VESSEL_START_ROW = new OptionInfo("ROW_FILTER_VESSEL_START_ROW", "Start ballast legs");
+	public static final OptionInfo ROW_FILTER_VESSEL_EVENT_ROW = new OptionInfo("ROW_FILTER_VESSEL_EVENT_ROW", "Vessel Events");
+	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)");
+	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes");
+	
 	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
-	public static final String[] ROW_FILTER_ALL = new String[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
+	public static final OptionInfo[] ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
 			ROW_FILTER_VESSEL_START_ROW };
 
-	public static final String DIFF_FILTER_PINNDED_SCENARIO = "Show Pinned Scenario";
-	public static final String DIFF_FILTER_VESSEL_CHANGES = "Show Vessel Changes";
+	public static final OptionInfo DIFF_FILTER_PINNDED_SCENARIO = new OptionInfo("DIFF_FILTER_PINNDED_SCENARIO", "Show Pinned Scenario");
+	public static final OptionInfo DIFF_FILTER_VESSEL_CHANGES = new OptionInfo("DIFF_FILTER_VESSEL_CHANGES", "Show Vessel Changes");
 
 	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
-	public static final String[] DIFF_FILTER_ALL = new String[] { DIFF_FILTER_PINNDED_SCENARIO, DIFF_FILTER_VESSEL_CHANGES };
+	public static final OptionInfo[] DIFF_FILTER_ALL = new OptionInfo[] { DIFF_FILTER_PINNDED_SCENARIO, DIFF_FILTER_VESSEL_CHANGES };
 
 	private static final String ROW_FILTER_MEMENTO = "ROW_FILTER";
 	private static final String DIFF_FILTER_MEMENTO = "DIFF_FILTER";
@@ -387,24 +387,24 @@ public class ScheduleBasedReportBuilder {
 	private boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
 
 		if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-			return rowFilterInfo.contains(ROW_FILTER_LONG_CARGOES);
+			return rowFilterInfo.contains(ROW_FILTER_LONG_CARGOES.id);
 		} else if (openSlotAllocation.getSlot() instanceof DischargeSlot) {
-			return rowFilterInfo.contains(ROW_FILTER_SHORT_CARGOES);
+			return rowFilterInfo.contains(ROW_FILTER_SHORT_CARGOES.id);
 		}
 		return false;
 	}
 
 	private boolean showEvent(final Event event) {
 		if (event instanceof StartEvent) {
-			return rowFilterInfo.contains(ROW_FILTER_VESSEL_START_ROW);
+			return rowFilterInfo.contains(ROW_FILTER_VESSEL_START_ROW.id);
 		} else if (event instanceof VesselEventVisit) {
-			return rowFilterInfo.contains(ROW_FILTER_VESSEL_EVENT_ROW);
+			return rowFilterInfo.contains(ROW_FILTER_VESSEL_EVENT_ROW.id);
 		} else if (event instanceof GeneratedCharterOut) {
-			return rowFilterInfo.contains(ROW_FILTER_CHARTER_OUT_ROW);
+			return rowFilterInfo.contains(ROW_FILTER_CHARTER_OUT_ROW.id);
 		} else if (event instanceof SlotVisit) {
 			final SlotVisit slotVisit = (SlotVisit) event;
 			if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-				return rowFilterInfo.contains(ROW_FILTER_CARGO_ROW);
+				return rowFilterInfo.contains(ROW_FILTER_CARGO_ROW.id);
 			}
 		}
 		return false;
@@ -568,8 +568,8 @@ public class ScheduleBasedReportBuilder {
 				diffFilterInfo.add(optionInfo.getTextData());
 			}
 		} else {
-			rowFilterInfo.addAll(Arrays.asList(ScheduleBasedReportBuilder.ROW_FILTER_ALL));
-			diffFilterInfo.addAll(Arrays.asList(ScheduleBasedReportBuilder.DIFF_FILTER_ALL));
+			rowFilterInfo.addAll(OptionInfo.getIds(ScheduleBasedReportBuilder.ROW_FILTER_ALL));
+			diffFilterInfo.addAll(OptionInfo.getIds(ScheduleBasedReportBuilder.DIFF_FILTER_ALL));
 		}
 		refreshDiffOptions();
 	}
@@ -579,8 +579,8 @@ public class ScheduleBasedReportBuilder {
 	// ////// Pin / Diff Columns
 
 	public void refreshDiffOptions() {
-		scheduleDiffUtils.setCheckAssignmentDifferences(diffFilterInfo.contains(DIFF_FILTER_VESSEL_CHANGES));
-		pinDiffModeHelper.setShowPinnedData(diffFilterInfo.contains(DIFF_FILTER_PINNDED_SCENARIO));
+		scheduleDiffUtils.setCheckAssignmentDifferences(diffFilterInfo.contains(DIFF_FILTER_VESSEL_CHANGES.id));
+		pinDiffModeHelper.setShowPinnedData(diffFilterInfo.contains(DIFF_FILTER_PINNDED_SCENARIO.id));
 	}
 
 	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {

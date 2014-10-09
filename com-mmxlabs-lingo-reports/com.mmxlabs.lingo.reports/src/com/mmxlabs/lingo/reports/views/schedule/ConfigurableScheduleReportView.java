@@ -62,12 +62,14 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 	@Override
 	public void saveConfigState(final IMemento configMemento) {
 		if (configMemento != null) {
+			getBlockManager().saveToMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 			builder.saveToMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
 		}
 	}
 
 	protected void initConfigMemento(IMemento configMemento) {
 		if (configMemento != null) {
+			getBlockManager().initFromMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 			builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
 		}
 	}
@@ -100,6 +102,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 	/**
 	 * Examine the view extension point to determine the default set of columns, order,row types and diff options.
 	 */
+	@Override
 	protected void setInitialState() {
 
 		if (initialStates != null) {
@@ -137,22 +140,22 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 
 								switch (row.getRowType()) {
 								case "cargo":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CARGO_ROW);
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CARGO_ROW.id);
 									break;
 								case "long":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_LONG_CARGOES);
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_LONG_CARGOES.id);
 									break;
 								case "short":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_SHORT_CARGOES);
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_SHORT_CARGOES.id);
 									break;
 								case "virtualcharters":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CHARTER_OUT_ROW);
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_CHARTER_OUT_ROW.id);
 									break;
 								case "event":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_EVENT_ROW);
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_EVENT_ROW.id);
 									break;
 								case "orphanlegs":
-									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_START_ROW);
+									rowFilter.add(ScheduleBasedReportBuilder.ROW_FILTER_VESSEL_START_ROW.id);
 									break;
 								}
 							}
@@ -169,10 +172,10 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 								switch (diffOption.getOption()) {
 
 								case "vessel":
-									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_VESSEL_CHANGES);
+									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_VESSEL_CHANGES.id);
 									break;
 								case "scenario":
-									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO);
+									diffOptions.add(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id);
 									break;
 								}
 							}

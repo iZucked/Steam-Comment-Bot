@@ -6,9 +6,11 @@ package com.mmxlabs.lingo.reports.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -34,6 +36,8 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.graphics.Image;
@@ -71,6 +75,8 @@ import com.mmxlabs.lingo.reports.internal.Activator;
  * 
  */
 public abstract class ColumnConfigurationDialog extends TrayDialog {
+	
+	private static int RESET_ID = IDialogConstants.CLIENT_ID + 1;
 
 	/** The list contains columns that are currently visible in viewer */
 	private List<Object> visible;
@@ -119,6 +125,25 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	@Override
 	protected void createButtonsForButtonBar(final Composite parent) {
 		// don't create a Cancel button
+		final Button button = createButton(parent, RESET_ID, "Reset to defaults", false);
+		button.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				// hack: reset the visible / non-visible columns to the default states
+				setColumnsObjs(doGetColumnUpdater().resetColumnStates());
+				// and refresh the table viewers
+				visibleViewer.refresh();
+				nonVisibleViewer.refresh();
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
 		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
 	}
 
@@ -194,7 +219,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		createVisibleTable(composite);
 		createUpDownBtt(composite);
 
-		for (CheckboxInfoManager manager : checkboxInfo) {
+		for (final CheckboxInfoManager manager : checkboxInfo) {
 			createCheckBoxes(composite, manager);
 		}
 		// createWidthArea(composite);
@@ -207,7 +232,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	private Control createCheckBoxes(final Composite parent, final CheckboxInfoManager manager) {
 		final Composite composite = new Composite(parent, SWT.NONE);
-		if (manager != null && manager.strings != null && manager.strings.length > 0) {
+		if (manager != null && manager.options != null && manager.options.length > 0) {
 			final GridLayout compositeLayout = new GridLayout();
 			compositeLayout.marginHeight = 0;
 			compositeLayout.marginWidth = 0;
@@ -217,17 +242,17 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 			final Label label = new Label(composite, SWT.NONE);
 			label.setText(manager.title);
 			final Set<String> store = manager.store;
-			for (final String text : manager.strings) {
+			for (final OptionInfo option : manager.options) {
 				final Button button = new Button(composite, SWT.CHECK);
-				button.setText(text);
-				button.setSelection(store.contains(text));
+				button.setText(option.label);
+				button.setSelection(store.contains(option.id));
 				button.addListener(SWT.Selection, new Listener() {
 					@Override
 					public void handleEvent(final Event event) {
-						if (store.contains(text)) {
-							store.remove(text);
+						if (store.contains(option.id)) {
+							store.remove(option.id);
 						} else {
-							store.add(text);
+							store.add(option.id);
 						}
 					}
 				});
@@ -441,11 +466,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 		nonVisibleViewer.setComparator(new ViewerComparator() {
 			@Override
-			public int compare(Viewer viewer, Object e1, Object e2) {
+			public int compare(final Viewer viewer, final Object e1, final Object e2) {
 
 				if (e1 instanceof ColumnBlock && e2 instanceof ColumnBlock) {
-					ColumnBlock b1 = (ColumnBlock) e1;
-					ColumnBlock b2 = (ColumnBlock) e2;
+					final ColumnBlock b1 = (ColumnBlock) e1;
+					final ColumnBlock b2 = (ColumnBlock) e2;
 					return b1.blockName.compareTo(b2.blockName);
 				}
 				return super.compare(viewer, e1, e2);
@@ -462,7 +487,7 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	 */
 	Control createMoveButtons(final Composite parent) {
 		// create the manager and bind to a widget
-		LocalResourceManager resManager = new LocalResourceManager(JFaceResources.getResources(), parent);
+		final LocalResourceManager resManager = new LocalResourceManager(JFaceResources.getResources(), parent);
 
 		final ImageDescriptor leftImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/nav_backward.gif");
 		final Image leftImage = resManager.createImage(leftImageDescriptor);
@@ -742,13 +767,13 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 	public class TableLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
 
 		@Override
-		public Image getColumnImage(Object element, int columnIndex) {
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public String getColumnText(Object element, int columnIndex) {
+		public String getColumnText(final Object element, final int columnIndex) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -943,6 +968,8 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 		 */
 		public void setColumnWidth(Object columnObj, int newWidth);
 
+		Object[] resetColumnStates();
+
 	}
 
 	public static abstract class ColumnUpdaterAdapter implements IColumnUpdater {
@@ -1088,6 +1115,11 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 					// TODO Auto-generated method stub
 
 				}
+
+				@Override
+				public Object[] resetColumnStates() {
+					return new Object[0];
+				}
 			};
 		}
 
@@ -1196,19 +1228,38 @@ public abstract class ColumnConfigurationDialog extends TrayDialog {
 
 	}
 
-	public void addCheckBoxInfo(final String title, final String[] strings, final Set<String> store) {
-		checkboxInfo.add(new CheckboxInfoManager(title, strings, store));
+	public void addCheckBoxInfo(final String title, final OptionInfo[] options, final Set<String> store) {
+		checkboxInfo.add(new CheckboxInfoManager(title, options, store));
 	}
 
-	static class CheckboxInfoManager {
+	public static class OptionInfo {
+		public final String id;
+		public final String label;
+		
+		public OptionInfo(String id, String label) {
+			this.id = id;
+			this.label = label;
+		}
+		
+		public static Collection<? extends String> getIds(OptionInfo [] options) {
+			List<String> result = new LinkedList<>();
+			for (OptionInfo option: options) {
+				result.add(option.id);
+			}
+			return result;
+		}
+	}
 
+	
+	static class CheckboxInfoManager {
+		
 		final String title;
-		final String[] strings;
+		final OptionInfo[] options;
 		final Set<String> store;
 
-		public CheckboxInfoManager(String title, String[] strings, Set<String> store) {
+		public CheckboxInfoManager(final String title, final OptionInfo[] options, final Set<String> store) {
 			this.title = title;
-			this.strings = strings;
+			this.options = options;
 			this.store = store;
 		}
 

@@ -112,5 +112,10 @@ public class ColumnBlock {
 	public boolean getVisible() {
 		return userVisible;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("Column block '%s'", blockName);
+	}
 
 }
