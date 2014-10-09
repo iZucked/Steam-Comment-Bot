@@ -103,7 +103,7 @@ public class PortCvConstraintCheckTest {
 	 * 
 	 * Tests the case where a maximum CV constraint is attached to one of the sales contracts in the scenario. The PnL-suboptimal wiring should be generated.
 	 */
-	@Test
+//	@Test
 	public void testMaxCvConstraintOptimisation() {
 		// generate a suboptimal scenario in which the small->large cargo has a low CV and the large->small cargo has a high CV
 		final SuboptimalScenarioTester sst = differentCvScenario();

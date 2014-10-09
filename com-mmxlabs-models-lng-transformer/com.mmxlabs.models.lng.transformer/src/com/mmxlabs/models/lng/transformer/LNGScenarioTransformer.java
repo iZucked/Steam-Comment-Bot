@@ -451,7 +451,9 @@ public class LNGScenarioTransformer {
 			modelEntityMap.addModelObject(ePort, port);
 
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
-
+			builder.setPortMinCV(port, minCv);
+			builder.setPortMaxCV(port, maxCv);
+			
 			// Set port default values
 			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Load, ePort.getLoadDuration());
 			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Discharge, ePort.getDischargeDuration());
