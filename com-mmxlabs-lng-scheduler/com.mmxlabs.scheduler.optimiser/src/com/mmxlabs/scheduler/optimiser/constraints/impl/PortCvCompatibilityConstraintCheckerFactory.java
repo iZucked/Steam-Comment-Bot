@@ -10,11 +10,11 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 /**
  * {@link IConstraintCheckerFactory} implementation to create {@link RestrictedElementsConstraintChecker} instances.
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  */
-public final class PortCvConstraintCheckerFactory implements IConstraintCheckerFactory {
+public final class PortCvCompatibilityConstraintCheckerFactory implements IConstraintCheckerFactory {
 
-	public static final String NAME = "PortCvConstraintChecker";
+	public static final String NAME = "PortCvCompatibilityConstraintChecker";
 
 	@Override
 	public String getName() {
@@ -23,6 +23,6 @@ public final class PortCvConstraintCheckerFactory implements IConstraintCheckerF
 
 	@Override
 	public IConstraintChecker instantiate() {
-		return new PortCvConstraintChecker(NAME);
+		return new PortCvCompatibilityConstraintChecker(NAME);
 	}
 }

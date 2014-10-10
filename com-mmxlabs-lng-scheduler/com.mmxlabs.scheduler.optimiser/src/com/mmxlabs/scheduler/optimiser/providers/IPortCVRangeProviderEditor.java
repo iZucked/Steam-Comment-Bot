@@ -7,13 +7,13 @@ package com.mmxlabs.scheduler.optimiser.providers;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
- * Editor interface for a {@link IPortCostProvider}
+ * Editor interface for a {@link IPortCVRangeProvider}
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  * 
  */
 public interface IPortCVRangeProviderEditor extends IPortCVRangeProvider {
 
-	void setPortMinCV(IPort port, long cv);
-	void setPortMaxCV(IPort port, long cv);
+	void setPortMinCV(IPort port, int cv);
+	void setPortMaxCV(IPort port, int cv);
 }

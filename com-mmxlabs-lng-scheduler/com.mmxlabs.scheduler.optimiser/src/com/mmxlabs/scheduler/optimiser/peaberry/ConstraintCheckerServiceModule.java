@@ -14,7 +14,7 @@ import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChec
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
@@ -61,8 +61,8 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(ContractCvConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new ContractCvConstraintCheckerFactory()).export());
 
-		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortCvConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new PortCvConstraintCheckerFactory()).export());
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortCvCompatibilityConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new PortCvCompatibilityConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(DifferentSTSVesselsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new DifferentSTSVesselsConstraintCheckerFactory()).export());

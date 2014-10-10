@@ -13,22 +13,22 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class IndexedPortCVRangeEditor implements IPortCVRangeProviderEditor {
-	private final IIndexMap<IPort, Long> portMinCVMap = new ArrayIndexMap<IPort, Long>();
-	private final IIndexMap<IPort, Long> portMaxCVMap = new ArrayIndexMap<IPort, Long>();
+	private final IIndexMap<IPort, Integer> portMinCVMap = new ArrayIndexMap<>();
+	private final IIndexMap<IPort, Integer> portMaxCVMap = new ArrayIndexMap<>();
 	@Override
-	public long getPortMinCV(IPort port) {
+	public int getPortMinCV(IPort port) {
 		return portMinCVMap.get(port);
 	}
 	@Override
-	public long getPortMaxCV(IPort port) {
+	public int getPortMaxCV(IPort port) {
 		return portMaxCVMap.get(port);
 	}
 	@Override
-	public void setPortMinCV(IPort port, long cv) {
+	public void setPortMinCV(IPort port, int cv) {
 		portMinCVMap.set(port,cv);
 	}
 	@Override
-	public void setPortMaxCV(IPort port, long cv) {
+	public void setPortMaxCV(IPort port, int cv) {
 		portMaxCVMap.set(port,cv);		
 	}
 

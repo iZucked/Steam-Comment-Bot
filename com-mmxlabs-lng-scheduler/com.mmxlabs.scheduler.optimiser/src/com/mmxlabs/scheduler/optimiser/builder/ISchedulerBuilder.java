@@ -259,7 +259,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId, final long minCvValue, final long maxCvValue);
+	IPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId, final int minCvValue, final int maxCvValue);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -270,7 +270,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y, final String timezoneId, final long minCvValue, final long maxCvValue);
+	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y, final String timezoneId, final int minCvValue, final int maxCvValue);
 
 	/**
 	 * Create a cargo with the initial port slots. If allowRewiring is false, bind the slot sequence.
@@ -632,7 +632,7 @@ public interface ISchedulerBuilder {
 	 * @param cv
 	 *            value
 	 */
-	void setPortCV(@NonNull IPort port, int convertToInternalConversionFactor);
+	void setPortCV(@NonNull IPort port, int cv);
 
 	/**
 	 * Set the Min CV value for a port.
@@ -641,7 +641,7 @@ public interface ISchedulerBuilder {
 	 * @param cv
 	 *            value
 	 */
-	void setPortMinCV(@NonNull IPort port, long convertToInternalConversionFactor);
+	void setPortMinCV(@NonNull IPort port, int cv);
 
 	/**
 	 * Set the Max CV value for a port.
@@ -650,7 +650,7 @@ public interface ISchedulerBuilder {
 	 * @param cv
 	 *            value
 	 */
-	void setPortMaxCV(@NonNull IPort port, long convertToInternalConversionFactor);
+	void setPortMaxCV(@NonNull IPort port, int cv);
 
 	/**
 	 * Create a Mark-To-Market market for DES Purchases valid against the given set of {@link IPort}s

@@ -10,7 +10,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 /**
  * A {@link IDataComponentProvider} providing default port CV values.
  * 
- * @author Simon Goodall
+ * @author Alex Churchill
  */
 public interface IPortCVRangeProvider extends IDataComponentProvider {
 
@@ -20,6 +20,6 @@ public interface IPortCVRangeProvider extends IDataComponentProvider {
 	 * @param port
 	 * @return
 	 */
-	long getPortMinCV(IPort port);
-	long getPortMaxCV(IPort port);
+	int getPortMinCV(IPort port);
+	int getPortMaxCV(IPort port);
 }
