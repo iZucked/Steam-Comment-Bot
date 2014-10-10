@@ -7,9 +7,9 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvConstraintChecker;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintChecker;
 
-public class PortCvConstraintCheckTest {
+public class PortCvCompatibilityConstraintCheckTest {
 	final private float lowCv = 22f;
 	final private float highCv = 24f;
 	final private float midCv = (lowCv + highCv) / 2f;
@@ -68,8 +68,8 @@ public class PortCvConstraintCheckTest {
 		final SuboptimalScenarioTester sst = maxRangeOnDischargeCvScenario();
 
 		// test the PortCvConstraintChecker
-		sst.testConstraintCheckerPasses(new PortCvConstraintChecker(
-				"PortCvConstraintChecker"));
+		sst.testConstraintCheckerPasses(new PortCvCompatibilityConstraintChecker(
+				"PortCvCompatibilityConstraintChecker"));
 	}
 
 	/*
@@ -82,8 +82,8 @@ public class PortCvConstraintCheckTest {
 		final SuboptimalScenarioTester sst = loadMidCvDischargeMidMinCvHighMaxCvScenario();
 
 		// test the PortCvConstraintChecker
-		sst.testConstraintCheckerPasses(new PortCvConstraintChecker(
-				"PortCvConstraintChecker"));
+		sst.testConstraintCheckerPasses(new PortCvCompatibilityConstraintChecker(
+				"PortCvCompatibilityConstraintChecker"));
 	}
 
 	/*
@@ -96,8 +96,8 @@ public class PortCvConstraintCheckTest {
 		final SuboptimalScenarioTester sst = loadLowCvDischargeMidMinCvScenario();
 
 		// test the PortCvConstraintChecker
-		sst.testConstraintCheckerFails(new PortCvConstraintChecker(
-				"PortCvConstraintChecker"));
+		sst.testConstraintCheckerFails(new PortCvCompatibilityConstraintChecker(
+				"PortCvCompatibilityConstraintChecker"));
 	}
 
 	/*
