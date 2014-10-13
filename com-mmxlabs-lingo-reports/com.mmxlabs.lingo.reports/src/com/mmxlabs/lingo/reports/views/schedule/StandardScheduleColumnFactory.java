@@ -405,7 +405,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, builder.generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. wiring", null, ColumnType.DIFF, builder.generatePreviousWiringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. discharge", null, ColumnType.DIFF, builder.generatePreviousWiringColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, builder.generatePermutationColumnFormatter(cargoAllocationRef));
