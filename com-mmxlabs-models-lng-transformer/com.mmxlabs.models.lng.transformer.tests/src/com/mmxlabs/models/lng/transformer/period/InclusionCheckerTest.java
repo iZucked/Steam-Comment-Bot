@@ -350,6 +350,49 @@ public class InclusionCheckerTest {
 
 		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
 	}
+	@Test
+	public void testVesselAvailabilityInclusion_LowerCutoff_EndBySet() {
+		
+		final InclusionChecker checker = new InclusionChecker();
+		
+		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
+		
+//		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+
+//		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
+//		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		
+		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 4));
+//		
+		Assert.assertEquals(new Pair<>(InclusionType.Out, Position.Before), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+	}
+	@Test
+	public void testVesselAvailabilityInclusion_LowerCutoff_EndAfterSet() {
+		
+		final InclusionChecker checker = new InclusionChecker();
+		
+		final VesselAvailability vesselAvailability = Mockito.mock(VesselAvailability.class);
+		
+		final PeriodRecord periodRecord = new PeriodRecord();
+		periodRecord.lowerCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 5);
+		periodRecord.lowerBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 6);
+		periodRecord.upperBoundary = PeriodTestUtils.createDate(2014, Calendar.JULY, 7);
+		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.JULY, 7, 23);
+		
+		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+		
+		Mockito.when(vesselAvailability.isSetEndAfter()).thenReturn(Boolean.TRUE);
+		Mockito.when(vesselAvailability.getEndAfter()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 8));
+		
+//		Mockito.when(vesselAvailability.isSetEndBy()).thenReturn(Boolean.TRUE);
+//		Mockito.when(vesselAvailability.getEndBy()).thenReturn(PeriodTestUtils.createDate(2014, Calendar.JULY, 9));
+//		
+		Assert.assertEquals(new Pair<>(InclusionType.In, Position.Unknown), checker.getObjectInclusionType(vesselAvailability, periodRecord));
+	}
 
 	@Test
 	public void testVesselAvailabilityInclusion_Bounds() {

@@ -127,7 +127,7 @@ public class InclusionChecker {
 		} else if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
 			if (periodRecord.lowerCutoff != null) {
-				if (vesselAvailability.isSetEndAfter() && vesselAvailability.getEndBy().before(periodRecord.lowerCutoff)) {
+				if (vesselAvailability.isSetEndBy() && vesselAvailability.getEndBy().before(periodRecord.lowerCutoff)) {
 					return new Pair<>(InclusionType.Out, Position.Before);
 				}
 			}
