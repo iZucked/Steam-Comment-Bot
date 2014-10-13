@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -230,14 +231,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, scenarioEditingLocation) {
 
 			@Override
-			protected void cellEditorActivated(Widget widget, CellEditor cellEditor) {
+			protected void cellEditorActivated(final Widget widget, final CellEditor cellEditor) {
 				if (deleteAction != null) {
 					deleteAction.setEnabled(false);
 				}
 			}
 
 			@Override
-			protected void cellEditorDeactivated(Widget widget, CellEditor cellEditor) {
+			protected void cellEditorDeactivated(final Widget widget, final CellEditor cellEditor) {
 				if (deleteAction != null) {
 					deleteAction.setEnabled(true);
 				}
@@ -562,15 +563,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final Point mousePoint = grid.toControl(new Point(e.x, e.y));
 				final GridColumn column = grid.getColumn(mousePoint);
 
-				IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
-				GridItem[] items = grid.getSelection();
+				final IStructuredSelection selection = (IStructuredSelection) getScenarioViewer().getSelection();
+				final GridItem[] items = grid.getSelection();
 
 				if (selection.size() <= 1) {
 					populateSingleSelectionMenu(grid.getItem(mousePoint), column);
 				} else {
-					Set<Cargo> cargoes = new HashSet<Cargo>();
-					for (Object item : selection.toList()) {
-						Cargo cargo = ((RowData) item).cargo;
+					final Set<Cargo> cargoes = new HashSet<Cargo>();
+					for (final Object item : selection.toList()) {
+						final Cargo cargo = ((RowData) item).cargo;
 						if (cargo != null) {
 							cargoes.add(cargo);
 						}
@@ -579,7 +580,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			}
 
-			private void populateMultipleSelectionMenu(Set<Cargo> cargoes) {
+			private void populateMultipleSelectionMenu(final Set<Cargo> cargoes) {
 				if (menu == null) {
 					menu = mgr.createContextMenu(scenarioViewer.getGrid());
 				}
@@ -1753,6 +1754,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final DischargeSlot discharge1 = CargoFactory.eINSTANCE.createDischargeSlot();
 				final DischargeSlot discharge2 = CargoFactory.eINSTANCE.createDischargeSlot();
 
+				final Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.MILLISECOND, 0);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				load.setWindowStart(cal.getTime());
+				discharge1.setWindowStart(cal.getTime());
+				discharge2.setWindowStart(cal.getTime());
 				cargo.getSlots().addAll(Lists.newArrayList(load, discharge1, discharge2));
 				final int ret = editor.open(cargo);
 				final CommandStack commandStack = scenarioEditingLocation.getEditingDomain().getCommandStack();
