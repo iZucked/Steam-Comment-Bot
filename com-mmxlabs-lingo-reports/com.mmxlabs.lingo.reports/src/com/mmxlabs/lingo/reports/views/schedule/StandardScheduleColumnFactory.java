@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule;
 
+import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -42,7 +44,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
