@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
@@ -111,17 +108,6 @@ public class ScenarioUtils {
 		settings.setAnnealingSettings(annealingSettings);
 
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
-		
-		{
-			Calendar cal = Calendar.getInstance();
-			cal.clear();
-			cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-			cal.set(Calendar.YEAR, 2014);
-			cal.set(Calendar.MONTH, Calendar.JULY);
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-//			range.setOptimiseAfter(cal.getTime());
-		}
-		
 		settings.setRange(range);
 		return settings;
 	}
