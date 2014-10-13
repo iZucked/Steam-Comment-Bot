@@ -652,7 +652,7 @@ public class LNGScenarioTransformer {
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
 			final ModelEntityMap modelEntityMap) {
 
-		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
+		final Date latestDate = latestTime;
 
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
@@ -725,7 +725,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
+		final Date latestDate = latestTime;
 
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
@@ -1275,8 +1275,8 @@ public class LNGScenarioTransformer {
 		if (spotMarketsModel == null) {
 			return;
 		}
-		final Date earliestDate = optimiserParameters.getRange().isSetOptimiseAfter() ? optimiserParameters.getRange().getOptimiseAfter() : earliestTime;
-		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
+		final Date earliestDate = earliestTime;
+		final Date latestDate = latestTime;
 
 		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
 		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket());
@@ -2132,7 +2132,7 @@ public class LNGScenarioTransformer {
 				endCold = endHeel.isEndCold();
 				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
 			}
-			
+
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfter() : null,
 					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndBy() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3);
 

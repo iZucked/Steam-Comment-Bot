@@ -124,7 +124,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			optimiserScenario = t.transform(originalScenario, jobDescriptor.getOptimiserSettings(), periodMapping);
 
 			// DEBUGGING - store sub scenario as a "fork"
-			if (false) {
+			if (true) {
 				try {
 					IScenarioService scenarioService = scenarioInstance.getScenarioService();
 					ScenarioInstance dup = scenarioService.insert(scenarioInstance, EcoreUtil.copy(optimiserScenario));
