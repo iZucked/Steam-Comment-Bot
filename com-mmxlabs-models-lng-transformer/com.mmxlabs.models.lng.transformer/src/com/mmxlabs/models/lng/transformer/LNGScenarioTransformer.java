@@ -43,6 +43,7 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -102,6 +103,7 @@ import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -544,6 +546,9 @@ public class LNGScenarioTransformer {
 
 		setNominatedVessels(builder, modelEntityMap);
 
+		// freeze any frozen assignments
+		freezeAssignmentModel(builder, modelEntityMap);
+
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
 		}
@@ -604,6 +609,108 @@ public class LNGScenarioTransformer {
 			}
 		}
 	}
+
+	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap modelEntityMap) {
+
+		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getDischargeSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getVesselEvents());
+
+		for (final AssignableElement assignableElement : assignableElements) {
+			final AVesselSet<? extends Vessel> vesselSet = assignableElement.getAssignment();
+			if (vesselSet == null) {
+				continue;
+			}
+			boolean freeze = assignableElement.isLocked();
+			if (!freeze) {
+				continue;
+			}
+
+			IVesselAvailability vesselAvailability = null;
+			if (vesselSet instanceof Vessel) {
+				// TODO: Get correct mapping.
+				IVessel vessel = modelEntityMap.getOptimiserObject(vesselSet, IVessel.class);
+				vesselAvailability = vesselToAvailabilities.get(vessel).iterator().next();
+//				final VesselAvailability eVesselAvailability = vesselAvailabiltyMap.get(vesselSet);
+//				vessel = modelEntityMap.getOptimiserObject(eVesselAvailability, IVessel.class);
+			}
+
+			if (vesselAvailability == null) {
+				continue;
+			}
+
+			if (assignableElement instanceof Cargo) {
+				final Cargo cargo = (Cargo) assignableElement;
+				IPortSlot prevSlot = null;
+				for (final Slot slot : cargo.getSortedSlots()) {
+					final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
+					// bind slots to vessel
+					builder.freezeSlotToVesselAvailability(portSlot, vesselAvailability);
+					// bind sequencing as well - this forces
+					// previousSlot to come before currentSlot.
+					if (prevSlot != null) {
+						builder.constrainSlotAdjacency(prevSlot, portSlot);
+					}
+					prevSlot = portSlot;
+				}
+			} else if (assignableElement instanceof VesselEvent) {
+				final IVesselEventPortSlot slot = modelEntityMap.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
+				if (slot != null) {
+					builder.freezeSlotToVesselAvailability(slot, vesselAvailability);
+				}
+			}
+		}
+	}
+
+	// /**
+	// * Create and associate discount curves
+	// *
+	// * This ought to be in {@link OptimisationTransformer} but that doesn't have access to set up DCPs.
+	// *
+	// * @param builder
+	// */
+	// private void buildDiscountCurves(final ISchedulerBuilder builder) {
+	// // set up DCP
+	//
+	// final DiscountCurve defaultCurve = scenario.getOptimisation().getCurrentSettings().isSetDefaultDiscountCurve() ? scenario.getOptimisation().getCurrentSettings().getDefaultDiscountCurve()
+	// : null;
+	//
+	// final ICurve realDefaultCurve;
+	// if (defaultCurve == null) {
+	// realDefaultCurve = new ConstantValueCurve(1);
+	// } else {
+	// realDefaultCurve = buildDiscountCurve(defaultCurve);
+	// }
+	//
+	// for (final Objective objective : scenario.getOptimisation().getCurrentSettings().getObjectives()) {
+	// if (objective.isSetDiscountCurve()) {
+	// builder.setFitnessComponentDiscountCurve(objective.getName(), buildDiscountCurve(objective.getDiscountCurve()));
+	// } else {
+	// builder.setFitnessComponentDiscountCurve(objective.getName(), realDefaultCurve);
+	// }
+	// }
+	// }
+
+	// /**
+	// * @param defaultCurve
+	// * @return
+	// */
+	// private ICurve buildDiscountCurve(final DiscountCurve curve) {
+	// final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
+	//
+	// final int baseTime = curve.isSetStartDate() ? convertTime(curve.getStartDate()) : 0;
+	// if (baseTime > 0) {
+	// realCurve.setValueAtPoint(0, 1);
+	// realCurve.setValueAtPoint(baseTime - 1, 1);
+	// }
+	//
+	// for (final Discount d : curve.getDiscounts()) {
+	// realCurve.setValueAtPoint(baseTime + d.getTime(), d.getDiscountFactor());
+	// }
+	// return realCurve;
+	// }
 
 	/**
 	 * Find the earliest and latest times set by events in the model. This takes into account:
