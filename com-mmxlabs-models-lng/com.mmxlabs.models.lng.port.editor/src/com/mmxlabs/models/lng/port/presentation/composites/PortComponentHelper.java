@@ -11,6 +11,8 @@ import java.util.TimeZone;
 import org.apache.shiro.SecurityUtils;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
@@ -39,10 +41,15 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.EnumCheckboxEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.editors.impl.TimezoneInlineEditor;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -106,6 +113,8 @@ public class PortComponentHelper extends BaseComponentHelper {
 		add_vesonCodeEditor(detailComposite, topClass);
 		add_externalCodeEditor(detailComposite, topClass);
 		add_UNLocodeEditor(detailComposite, topClass);
+		add_minCvValueEditor(detailComposite, topClass);
+		add_maxCvValueEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -295,6 +304,26 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_UNLocodeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__UN_LOCODE));
+	}
+
+	/**
+	 * Create the editor for the minCvValue feature on Port
+	 *
+	 * @generated NO minCvValue is disabled if the port does not have discharge capability
+	 */
+	protected void add_minCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MIN_CV_VALUE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.DISCHARGE, editor));
+	}
+
+	/**
+	 * Create the editor for the maxCvValue feature on Port
+	 *
+	 * @generated NO minCvValue is disabled if the port does not have discharge capability
+	 */
+	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__MAX_CV_VALUE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.DISCHARGE, editor));
 	}
 
 	/**

@@ -77,6 +77,8 @@ public class PortItemProvider
 			addVesonCodePropertyDescriptor(object);
 			addExternalCodePropertyDescriptor(object);
 			addUNLocodePropertyDescriptor(object);
+			addMinCvValuePropertyDescriptor(object);
+			addMaxCvValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -412,6 +414,50 @@ public class PortItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Cv Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinCvValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_minCvValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_minCvValue_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__MIN_CV_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Max Cv Value feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMaxCvValuePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Port_maxCvValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Port_maxCvValue_feature", "_UI_Port_type"),
+				 PortPackage.Literals.PORT__MAX_CV_VALUE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -493,6 +539,8 @@ public class PortItemProvider
 			case PortPackage.PORT__VESON_CODE:
 			case PortPackage.PORT__EXTERNAL_CODE:
 			case PortPackage.PORT__UN_LOCODE:
+			case PortPackage.PORT__MIN_CV_VALUE:
+			case PortPackage.PORT__MAX_CV_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case PortPackage.PORT__LOCATION:

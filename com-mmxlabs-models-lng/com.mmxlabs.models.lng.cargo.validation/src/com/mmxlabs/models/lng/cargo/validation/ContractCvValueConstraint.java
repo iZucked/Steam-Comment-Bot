@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -37,6 +38,10 @@ public class ContractCvValueConstraint extends AbstractModelMultiConstraint {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 
 					final Contract contract = dischargeSlot.getContract();
+					final Port port = dischargeSlot.getPort();
+					
+					
+
 					if (contract instanceof SalesContract) {
 
 						for (final Slot slot2 : cargo.getSlots()) {
@@ -45,28 +50,63 @@ public class ContractCvValueConstraint extends AbstractModelMultiConstraint {
 								final LoadSlot loadSlot = (LoadSlot) slot2;
 								final SalesContract salesContract = (SalesContract) contract;
 								final double cv = loadSlot.getSlotOrDelegatedCV();
-								final String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for sales contract '%s'.";
-								if (salesContract.isSetMinCvValue()) {
+								final String format = "[Cargo|%s] Purchase CV %.2f is %s than the %s CV (%.2f) for %s '%s'.";
+								if (dischargeSlot.isSetMinCvValue() || salesContract.isSetMinCvValue()) {
 									final Double minCvValue = dischargeSlot.getSlotOrContractMinCv();
-									
 									if (minCvValue != null && cv < minCvValue) {
-										final String failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, contract.getName());
-										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										String failureMessage;
+										DetailConstraintStatusDecorator dsd;
+										if (dischargeSlot.isSetMinCvValue()) {
+											failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, "discharge slot", dischargeSlot.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MinCvValue());
+										} else { //sales contract
+											failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, "sales contract", contract.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										}
 										dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
 										failures.add(dsd);
 									}
 								}
-								if (salesContract.isSetMaxCvValue()) {
+								if (dischargeSlot.isSetMaxCvValue() || salesContract.isSetMaxCvValue()) {
 									final Double maxCvValue = dischargeSlot.getSlotOrContractMaxCv();
 									if (maxCvValue != null && cv > maxCvValue) {
-										final String failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, contract.getName());
-										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
-										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										String failureMessage;
+										DetailConstraintStatusDecorator dsd;
+										if (dischargeSlot.isSetMaxCvValue()) {
+											failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, "discharge slot", dischargeSlot.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getDischargeSlot_MaxCvValue());
+										} else { //sales contract
+											failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, "sales contract", contract.getName());
+											dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+											dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
+										}
 										dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
 										failures.add(dsd);
 									}
 								}
+								if (port.isSetMinCvValue()) {
+									final Double minCvValue = port.getMinCvValue();
+									if (minCvValue != null && cv < minCvValue) {
+										final String failureMessage = String.format(format, cargo.getName(), cv, "less", "minimum", minCvValue, "port", port.getName());
+										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
+										dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
+										failures.add(dsd);
+									}
+								}
+								if (port.isSetMaxCvValue()) {
+									final Double maxCvValue = port.getMaxCvValue();
+									if (maxCvValue != null && cv > maxCvValue) {
+										final String failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, "port", port.getName());
+										final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
+										dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port());
+										dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
+										failures.add(dsd);
+									}
+								}								
 							}
 						}
 					}

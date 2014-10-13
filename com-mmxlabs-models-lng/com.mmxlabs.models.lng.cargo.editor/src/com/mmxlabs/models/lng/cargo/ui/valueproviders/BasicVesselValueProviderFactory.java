@@ -64,7 +64,7 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 					// get a list of globally permissible values
 					final List<Pair<String, EObject>> baseResult = super.getAllowedValues(target, field);
 
-					// All scenario vessels - though we use to ship ourselves
+					// All scenario vessels - those we use to ship ourselves
 					final Set<Vessel> scenarioVessels = new HashSet<>();
 					for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 						scenarioVessels.add(va.getVessel());
@@ -213,6 +213,24 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 								}
 							} else if (v1 instanceof VesselClass) {
 								if (v2 instanceof Vessel) {
+									return 1;
+								}
+							}
+							// Sorting time charters after fleet
+							if (v1 instanceof Vessel && v2 instanceof Vessel){
+								boolean isV1Charter = false;
+								boolean isV2Charter = false;
+								for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
+									Vessel v = va.getVessel();
+									if (v == v1){
+										isV1Charter = va.isSetTimeCharterRate();
+									} else if (v == v2){
+										isV2Charter = va.isSetTimeCharterRate();
+									}
+								}
+								if (!isV1Charter && isV2Charter){
+									return -1;
+								} else if (isV1Charter && !isV2Charter){
 									return 1;
 								}
 							}
