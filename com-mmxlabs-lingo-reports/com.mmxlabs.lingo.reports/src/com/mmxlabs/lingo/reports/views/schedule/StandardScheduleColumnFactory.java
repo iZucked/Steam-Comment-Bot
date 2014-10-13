@@ -18,6 +18,7 @@ import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -103,9 +104,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						final Sequence sequence = cargoAllocation.getSequence();
 						if (sequence != null) {
 							if (!sequence.isFleetVessel()) {
-								switch (cargoAllocation.getInputCargo().getCargoType()) {
+								Cargo inputCargo = cargoAllocation.getInputCargo();
+								if (inputCargo == null) {
+									return null;
+								}
+								switch (inputCargo.getCargoType()) {
 								case DES:
-									for (final Slot slot : cargoAllocation.getInputCargo().getSortedSlots()) {
+									for (final Slot slot : inputCargo.getSortedSlots()) {
 										if (slot instanceof LoadSlot) {
 											LoadSlot loadSlot = (LoadSlot) slot;
 											if (loadSlot.isDESPurchase()) {
@@ -118,7 +123,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 										}
 									}
 								case FOB:
-									for (final Slot slot : cargoAllocation.getInputCargo().getSortedSlots()) {
+									for (final Slot slot : inputCargo.getSortedSlots()) {
 										if (slot instanceof DischargeSlot) {
 											final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 											if (dischargeSlot.isFOBSale()) {
