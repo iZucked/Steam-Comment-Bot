@@ -128,7 +128,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	protected void add_pricingDateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 
 		final IInlineEditor editor;
-		editor = new DateInlineEditor(CargoPackage.Literals.SLOT__PRICING_DATE, new DateTimeFormatter("MM/yyyy"));
+		editor = new DateInlineEditor(CargoPackage.Literals.SLOT__PRICING_DATE, new DateTimeFormatter("dd/MM/yyyy"));
 		detailComposite.addInlineEditor(editor);
 	}
 
