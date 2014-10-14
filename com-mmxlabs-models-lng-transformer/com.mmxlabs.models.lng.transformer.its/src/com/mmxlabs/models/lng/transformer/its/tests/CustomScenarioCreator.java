@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.management.timer.Timer;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.TaxRate;
@@ -51,8 +53,10 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
@@ -379,7 +383,7 @@ public class CustomScenarioCreator {
 	 * Add a cargo to the scenario. <br>
 	 * Both the load and discharge ports must be added using {@link #addPorts(Port, Port, int[], int[])} to correctly set up distances.
 	 */
-	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
+	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final String loadPrice, final String dischargePrice, final float cvValue, final Date loadWindowStart,
 			final int travelTime) {
 
 		if (!portModel.getPorts().contains(loadPort)) {
@@ -409,8 +413,8 @@ public class CustomScenarioCreator {
 		load.setName("load" + cargoID);
 		dis.setName("discharge" + cargoID);
 
-		dis.setPriceExpression(Float.toString(dischargePrice));
-		load.setPriceExpression(Float.toString(loadPrice));
+		dis.setPriceExpression(dischargePrice);
+		load.setPriceExpression(loadPrice);
 
 		load.setMaxQuantity(loadMaxQuantity);
 		dis.setMaxQuantity(dischargeMaxQuantity);
@@ -445,6 +449,7 @@ public class CustomScenarioCreator {
 		dis.setWindowStart(dischargeCalendar.getTime());
 		dis.setWindowSize(0);
 
+		dis.setPricingEvent(PricingEvent.START_DISCHARGE);
 		cargo.setName(cargoID);
 
 		cargoModel.getLoadSlots().add(load);
@@ -454,6 +459,11 @@ public class CustomScenarioCreator {
 		return cargo;
 	}
 
+	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
+			final int travelTime) {
+		return addCargo(cargoID, loadPort, dischargePort, Float.toString(loadPrice), Float.toString(dischargePrice), cvValue, loadWindowStart,
+				 travelTime);
+	}
 	public DryDockEvent addDryDock(final Port startPort, final Date start, final int durationDays) {
 
 		if (!portModel.getPorts().contains(startPort)) {
@@ -717,6 +727,24 @@ public class CustomScenarioCreator {
 		commercialModel.getPurchaseContracts().add(result);
 
 		return result;
+	}
+	
+	public CommodityIndex addCommodityIndex(final String name){
+		final CommodityIndex ci = PricingFactory.eINSTANCE.createCommodityIndex();
+		ci.setName(name);
+		pricingModel.getCommodityIndices().add(ci);
+		DataIndex<Double> di = PricingFactory.eINSTANCE.createDataIndex();
+		ci.setData(di);
+		return ci;
+	}
+	
+	public void addDataToCommodity(CommodityIndex ci, Date date, double value){
+		DataIndex<Double> di = (DataIndex<Double>) ci.getData();
+		List<IndexPoint<Double>> points = di.getPoints();
+		IndexPoint<Double> ip = PricingFactory.eINSTANCE.createIndexPoint();
+		ip.setDate(date);
+		ip.setValue(value);
+		points.add(ip);
 	}
 
 	/**
