@@ -115,11 +115,11 @@ public class PricingTimesScenario {
 		ScenarioRunner runner = new ScenarioRunner((LNGScenarioModel) this.scenario);
 		try {
 			runner.init();
-			runner.updateScenario();
+//			runner.updateScenario();
 		} catch (IncompleteScenarioException e) {
 			Assert.assertTrue("Scenario runner failed to initialise simple scenario.", false);
 		}
-		final Schedule schedule = runner.getIntialSchedule();
+		final Schedule schedule = runner.updateScenario();
 		// Workaround, would prefer to use ca.getInputCargo().getName() but hookup runner.updateScenario() not working
 		String errorMsg = "Cargo %s has incorrect pricing %2f != %2f";
 		for (int i = 0; i < schedule.getCargoAllocations().size(); i++) {
@@ -133,14 +133,14 @@ public class PricingTimesScenario {
 			switch (i) {
 			case 0:
 				System.out.println("Expected price:" + priceA);
-				Assert.assertTrue(String.format(errorMsg, "A", salePrice, priceA), salePrice == priceA);
+				Assert.assertEquals(String.format(errorMsg, "A", salePrice, priceA), salePrice, priceA, 0.0001);
 				break;
 			case 1:
-				Assert.assertTrue(String.format(errorMsg, "B", salePrice, priceB), salePrice == priceB);
+				Assert.assertEquals(String.format(errorMsg, "B", salePrice, priceB), salePrice, priceB, 0.0001);
 				System.out.println("Expected price:" + priceB);
 				break;
 			case 2:
-				Assert.assertTrue(String.format(errorMsg, "C", salePrice, priceC), salePrice == priceC);
+				Assert.assertEquals(String.format(errorMsg, "C", salePrice, priceC), salePrice, priceC, 0.0001);
 				System.out.println("Expected price:" + priceC);
 				break;
 			default:
