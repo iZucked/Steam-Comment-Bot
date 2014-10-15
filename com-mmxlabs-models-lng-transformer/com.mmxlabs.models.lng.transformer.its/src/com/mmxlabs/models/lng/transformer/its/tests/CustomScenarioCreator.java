@@ -95,9 +95,11 @@ public class CustomScenarioCreator {
 	/** A list of canal costs that will be added to every class of vessel when the scenario is retrieved for use. */
 	// private final ArrayList<VesselClassCost> canalCostsForAllVesselClasses = new ArrayList<VesselClassCost>();
 
-	private static final String timeZone = TimeZone.getDefault().getID();
+	private String timeZone = TimeZone.getDefault().getID();
 
-	public CustomScenarioCreator(final float dischargePrice) {
+	public CustomScenarioCreator(final float dischargePrice, String timeZone) {
+		this.timeZone = timeZone;
+		
 		scenario = ManifestJointModel.createEmptyInstance(null);
 
 		portModel = scenario.getPortModel();
@@ -131,6 +133,9 @@ public class CustomScenarioCreator {
 		// ScenarioUtils.addDefaultSettings(scenario);
 	}
 
+	public CustomScenarioCreator(final float dischargePrice) {
+		this(dischargePrice, TimeZone.getDefault().getID());
+	}
 	/**
 	 * Add a simple vessel to the scenario.
 	 * 
