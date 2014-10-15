@@ -28,8 +28,8 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 	 * 
 	 * @param ctx
 	 * @param extraContext
-	 * @param statuses
-	 * @return
+	 * @param statuses Output: Overriding methods should store any created validation status objects in this list.
+	 * @return The calling Plugin/Bundle ID
 	 */
 	protected abstract String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses);
 
