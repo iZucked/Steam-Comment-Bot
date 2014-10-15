@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.util.Date;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.mmxlabs.models.lng.transformer.its.tests.sanityChecks.PricingTimesScenario.createDate;
@@ -13,25 +14,30 @@ import static com.mmxlabs.models.lng.transformer.its.tests.sanityChecks.PricingT
  * 
  */
 public class PricingTimesScenarioTester {
-	public void testingIndexing(String name, Date testingDate, Date scenarioDate, double priceA, double priceB, double priceC) {
-		PricingTimesScenario tester = new PricingTimesScenario();
+	public void testingIndexingAndPriceDating(String name, Date testingDate, Date scenarioDate, Date priceDate, double priceA, double priceB, double priceC) {
+		PricingTimesScenario tester = new PricingTimesScenario(3);
 		System.out.println(String.format("***%s***", name));
 		System.out.println(String.format("Testing contract date:%s", testingDate));
-		tester.addCargo(scenarioDate);
+		tester.initThreeCargoData(scenarioDate, priceDate);
 		tester.addTestCommodityIndexes();
 		tester.setScenario();
 		tester.testSalesPrice(priceA, priceB, priceC);
 	}
 
-	public void testingIndexingWithPriceDating(String name, Date testingDate, Date scenarioDate, Date priceDate, double priceA, double priceB, double priceC) {
-		PricingTimesScenario tester = new PricingTimesScenario();
+	public void testingIndexing(String name, Date testingDate, Date scenarioDate, double priceA, double priceB, double priceC) {
+		testingIndexingAndPriceDating(name, testingDate, scenarioDate, null, priceA, priceB, priceC);
+	}
+
+	public void testingIndexingWithPriceDatingAndTimeZones(String name, Date testingDate, Date scenarioDate, Date pricingDate, double priceA, String priceCurve, String portsTimeZone) {
+		PricingTimesScenario tester = new PricingTimesScenario(1, portsTimeZone);
+		System.out.println("\n");
 		System.out.println(String.format("***%s***", name));
 		System.out.println(String.format("Testing contract date:%s", testingDate));
-		tester.addCargo(scenarioDate);
+		System.out.println(String.format("Pricing date:%s", pricingDate));
+		tester.initSingleCargoData(scenarioDate, pricingDate, priceCurve);
 		tester.addTestCommodityIndexes();
-		tester.setPriceDate(scenarioDate, priceDate);
 		tester.setScenario();
-		tester.testSalesPrice(priceA, priceB, priceC);
+		tester.testSalesPrice(priceA);
 	}
 
 	/**
@@ -79,7 +85,7 @@ public class PricingTimesScenarioTester {
 	 */
 	@Test
 	public void TestPriceSaleNotAffectedByPricingDate() {
-		testingIndexingWithPriceDating("TestPriceSaleNotAffectedByPricingDate", createDate(2014, 1, 2), createDate(2014, 1, 1), createDate(2014, 1, 2), 7.5, 8.5, 5.0);
+		testingIndexingAndPriceDating("TestPriceSaleNotAffectedByPricingDate", createDate(2014, 1, 2), createDate(2014, 1, 1), createDate(2014, 1, 2), 7.5, 8.5, 5.0);
 	}
 
 	/**
@@ -87,7 +93,7 @@ public class PricingTimesScenarioTester {
 	 */
 	@Test
 	public void TestPriceSaleChangedByEarlierPricingDateA() {
-		testingIndexingWithPriceDating("TestPriceSaleChangedByEarlierPricingDateA", createDate(2014, 0, 31), createDate(2014, 1, 1), createDate(2014, 1, 1), 7.0, 8.0, 5.0);
+		testingIndexingAndPriceDating("TestPriceSaleChangedByEarlierPricingDateA", createDate(2014, 0, 31), createDate(2014, 1, 1), createDate(2014, 1, 1), 7.0, 8.0, 5.0);
 	}
 
 	/**
@@ -95,7 +101,7 @@ public class PricingTimesScenarioTester {
 	 */
 	@Test
 	public void TestPriceSaleChangedByEarlierPricingDateB() {
-		testingIndexingWithPriceDating("TestPriceSaleChangedByEarlierPricingDateB", createDate(2014, 0, 13), createDate(2014, 1, 1), createDate(2014, 0, 13), 4.5, 6.5, 5.0);
+		testingIndexingAndPriceDating("TestPriceSaleChangedByEarlierPricingDateB", createDate(2014, 0, 13), createDate(2014, 1, 1), createDate(2014, 0, 13), 4.5, 6.5, 5.0);
 	}
 
 	/**
@@ -103,6 +109,29 @@ public class PricingTimesScenarioTester {
 	 */
 	@Test
 	public void TestPriceSaleChangedByEarlierPricingDateC() {
-		testingIndexingWithPriceDating("TestPriceSaleChangedByEarlierPricingDateC", createDate(2014, 0, 1), createDate(2014, 1, 1), createDate(2014, 0, 5), 4.0, 6.0, 5.0);
+		testingIndexingAndPriceDating("TestPriceSaleChangedByEarlierPricingDateC", createDate(2014, 0, 1), createDate(2014, 1, 1), createDate(2014, 0, 5), 4.0, 6.0, 5.0);
+	}
+
+	/**
+	 * Testing pricing date set in UTC (at present will shift incorrectly)
+	 */
+	@Ignore("Pricing date is stored as UTC in the UI but the LNGTransformer assumes local time and shifts accordingly")
+	@Test
+	public void TestTimeZonePricingDateUTCPortEtcGMTPlus12() {
+		Date pricingDate = createDate(2014, 1, 1, 0, "UTC");
+		Date cargoStartDate = createDate(2014, 0, 30, "UTC");
+		testingIndexingWithPriceDatingAndTimeZones("PD UTC, Port Etc/GMT+12", createDate(2014, 1, 1, "UTC"), cargoStartDate, pricingDate, 10.0, "UTC", "Etc/GMT+12");
+	}
+
+	/**
+	 * Testing pricing date set in local time (will shift correctly)
+	 */
+	@Ignore("Pricing date is stored as UTC in the UI but the LNGTransformer assumes local time and shifts accordingly")
+	@Test
+	public void TestTimeZonePricingDateEtcGMTPlus12PortEtcGMTPlus12() {
+		// GTM+1 means 1 hour behind
+		Date pricingDate = createDate(2014, 1, 1, 0, "Etc/GMT+12");
+		Date cargoStartDate = createDate(2014, 0, 30, "UTC");
+		testingIndexingWithPriceDatingAndTimeZones("PD Etc/GMT+12, Port Etc/GMT+12", createDate(2014, 1, 1, "UTC"), cargoStartDate, pricingDate, 5.0, "UTC", "Etc/GMT+12");
 	}
 }

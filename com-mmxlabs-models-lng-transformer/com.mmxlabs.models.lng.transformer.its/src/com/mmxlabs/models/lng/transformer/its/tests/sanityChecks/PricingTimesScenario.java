@@ -43,10 +43,6 @@ public class PricingTimesScenario {
 	public Port smallDischargePort;
 	public Port bigDischargePort;
 
-	public Cargo indexedCargoA;
-	public Cargo indexedCargoB;
-	public Cargo notIndexedCargo;
-
 	public String dischargePriceIndexedA = "datedA";
 	public String dischargePriceIndexedB = "datedB";
 	public String dischargePriceNotIndexed = "5";
@@ -54,9 +50,8 @@ public class PricingTimesScenario {
 	public LNGScenarioModel scenario;
 	public CustomScenarioCreator csc;
 
-	public PricingTimesScenario() {
-		csc = new CustomScenarioCreator(cscDischargePrice);
-
+	public PricingTimesScenario(int numVessels, String timeZone) {
+		csc = new CustomScenarioCreator(cscDischargePrice, timeZone);
 		final int fuelPrice = 1;
 
 		smallLoadPort = ScenarioTools.createPort("smallLoadPort");
@@ -71,10 +66,14 @@ public class PricingTimesScenario {
 		SanityCheckTools.setPortDistances(csc, ports);
 
 		// create a few vessels and add them to the list of vessels created.
-		final int numOfClassOne = 3;
+		final int numOfClassOne = numVessels;
 
 		// createVessels creates and adds the vessels to the scenario.
 		csc.addVesselSimple("classOne", numOfClassOne, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
+	}
+
+	public PricingTimesScenario(int numVessels) {
+		this(numVessels, TimeZone.getDefault().getID());
 	}
 
 	void setScenario() {
@@ -82,7 +81,7 @@ public class PricingTimesScenario {
 	}
 
 	void addTestCommodityIndexes() {
-		// add a commodity index to the pricing model and return it
+		// add a commodity index to the pricing model
 		CommodityIndex ci1 = csc.addCommodityIndex(dischargePriceIndexedA);
 		csc.addDataToCommodity(ci1, createDate(2014, 0, 1), 4.0);
 		csc.addDataToCommodity(ci1, createDate(2014, 0, 13), 4.5);
@@ -90,32 +89,61 @@ public class PricingTimesScenario {
 		csc.addDataToCommodity(ci1, createDate(2014, 1, 2), 7.5);
 		csc.addDataToCommodity(ci1, createDate(2014, 4, 1), 8.0);
 
+		// add a second commodity index to the pricing model
 		CommodityIndex ci2 = csc.addCommodityIndex(dischargePriceIndexedB);
 		csc.addDataToCommodity(ci2, createDate(2014, 0, 1), 6.0);
 		csc.addDataToCommodity(ci2, createDate(2014, 0, 13), 6.5);
 		csc.addDataToCommodity(ci2, createDate(2014, 0, 31), 8.0);
 		csc.addDataToCommodity(ci2, createDate(2014, 1, 2), 8.5);
 		csc.addDataToCommodity(ci2, createDate(2014, 4, 1), 10.0);
+
+		// add a commodity index explicitly in UTC
+		CommodityIndex ci3 = csc.addCommodityIndex("UTC");
+		csc.addDataToCommodity(ci3, createDate(2014, 0, 1), 4.0);
+		csc.addDataToCommodity(ci3, createDate(2014, 0, 31), 5.0);
+		csc.addDataToCommodity(ci3, createDate(2014, 1, 1), 10.0);
+		csc.addDataToCommodity(ci3, createDate(2014, 1, 2), 6.5);
 	}
 
-	void addCargo(Date cargoStart) {
+	/*
+	 * Used to test different Price Indexes
+	 */
+	void initThreeCargoData(Date cargoStart, Date priceDate) {
 		// create three identical cargoes with different price exps
-		indexedCargoA = csc.addCargo("indexed-cargo-a", bigLoadPort, bigDischargePort, "1", dischargePriceIndexedA, 22, cargoStart, 50);
-		indexedCargoB = csc.addCargo("indexed-cargo-b", bigLoadPort, bigDischargePort, "1", dischargePriceIndexedB, 22, cargoStart, 50);
-		notIndexedCargo = csc.addCargo("not-indexed-cargo", bigLoadPort, bigDischargePort, "1", dischargePriceNotIndexed, 22, cargoStart, 50);
+		Cargo indexedCargoA = csc.addCargo("indexed-cargo-a", bigLoadPort, bigDischargePort, "1", dischargePriceIndexedA, 22, cargoStart, 50);
+		Cargo indexedCargoB = csc.addCargo("indexed-cargo-b", bigLoadPort, bigDischargePort, "1", dischargePriceIndexedB, 22, cargoStart, 50);
+		Cargo notIndexedCargo = csc.addCargo("not-indexed-cargo", bigLoadPort, bigDischargePort, "1", dischargePriceNotIndexed, 22, cargoStart, 50);
+		if (priceDate != null) {
+			setPriceDates(new Cargo[] { indexedCargoA, indexedCargoB, notIndexedCargo }, priceDate);
+		}
 	}
 
-	void setPriceDate(Date cargoStart, Date priceDate) {
-		indexedCargoA.getSlots().get(1).setPricingDate(priceDate);
-		indexedCargoB.getSlots().get(1).setPricingDate(priceDate);
-		notIndexedCargo.getSlots().get(1).setPricingDate(priceDate);
+	/*
+	 * Used to test different pricing dates on different price indexes
+	 */
+	void setPriceDates(Cargo[] cargoes, Date priceDate) {
+		for (int i = 0; i < cargoes.length; i++) {
+			cargoes[i].getSlots().get(1).setPricingDate(priceDate);
+		}
 	}
 
-	public void testSalesPrice(double priceA, double priceB, double priceC) {
+	/*
+	 * Used to test timezone of pricingDate
+	 */
+	void initSingleCargoData(Date cargoStart, Date priceDate, String priceIndex) {
+		Cargo indexedCargoA = csc.addCargo("indexed-cargo-a", bigLoadPort, bigDischargePort, "1", priceIndex, 22, cargoStart, 50);
+		if (priceDate != null) {
+			setPriceDates(new Cargo[] { indexedCargoA }, priceDate);
+		}
+	}
+
+	/*
+	 * Main testing methods to run the created scenario and compare the actual and expected price
+	 */
+	public void testSalesPrice(double... prices) {
 		ScenarioRunner runner = new ScenarioRunner((LNGScenarioModel) this.scenario);
 		try {
 			runner.init();
-//			runner.updateScenario();
 		} catch (IncompleteScenarioException e) {
 			Assert.assertTrue("Scenario runner failed to initialise simple scenario.", false);
 		}
@@ -129,34 +157,32 @@ public class PricingTimesScenario {
 				System.out.println("Discharge end:" + ca.getSlotAllocations().get(1).getLocalEnd().getTime());
 			}
 			double salePrice = ca.getSlotAllocations().get(1).getPrice();
+			double expectedPrice = prices[i];
 			System.out.println("Sale price: " + salePrice);
-			switch (i) {
-			case 0:
-				System.out.println("Expected price:" + priceA);
-				Assert.assertEquals(String.format(errorMsg, "A", salePrice, priceA), salePrice, priceA, 0.0001);
-				break;
-			case 1:
-				Assert.assertEquals(String.format(errorMsg, "B", salePrice, priceB), salePrice, priceB, 0.0001);
-				System.out.println("Expected price:" + priceB);
-				break;
-			case 2:
-				Assert.assertEquals(String.format(errorMsg, "C", salePrice, priceC), salePrice, priceC, 0.0001);
-				System.out.println("Expected price:" + priceC);
-				break;
-			default:
-				Assert.assertTrue("Too many cargoes", false);
-				break;
-			}
+			System.out.println("Expected price:" + expectedPrice);
+			Assert.assertEquals(String.format(errorMsg, i, salePrice, expectedPrice), salePrice, expectedPrice, 0.0001);
 		}
 	}
 
-	static Date createDate(int year, int month, int day) {
-		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+	/*
+	 * Helper date methods
+	 */
+	static Date createDate(int year, int month, int day, int hour, String timeZone) {
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		cal.clear();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.MONTH, month);
 		cal.set(Calendar.DAY_OF_MONTH, day);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
 		return cal.getTime();
+	}
+
+	static Date createDate(int year, int month, int day) {
+		return createDate(year, month, day, 0, "UTC");
+	}
+
+	static Date createDate(int year, int month, int day, String timeZone) {
+		return createDate(year, month, day, 0, timeZone);
 	}
 
 }
