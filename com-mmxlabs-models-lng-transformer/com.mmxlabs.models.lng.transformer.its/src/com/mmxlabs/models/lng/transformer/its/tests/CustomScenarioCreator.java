@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -48,6 +49,9 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
+import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -110,6 +114,13 @@ public class CustomScenarioCreator {
 		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		shippingEntity.setShippingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
 		shippingEntity.setTradingBook(CommercialFactory.eINSTANCE.createSimpleEntityBook());
+		TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
+		taxRate.setDate(createDate(2000, Calendar.JANUARY, 1));
+		shippingEntity.getShippingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
+		shippingEntity.getTradingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
+		contractEntity.getShippingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
+		contractEntity.getTradingBook().getTaxRates().add(EcoreUtil.copy(taxRate));
+
 		commercialModel.getEntities().add(contractEntity);
 		commercialModel.getEntities().add(shippingEntity);
 
@@ -205,13 +216,14 @@ public class CustomScenarioCreator {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
-		charterCostModel.setSpotCharterCount(spotCharterCount);
-		// Costs
-		charterCostModel.getVesselClasses().add(vc);
+		if (spotCharterCount > 0) {
+			final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+			charterCostModel.setSpotCharterCount(spotCharterCount);
+			// Costs
+			charterCostModel.getVesselClasses().add(vc);
 
-		spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
-
+			spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
+		}
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
 
@@ -229,10 +241,13 @@ public class CustomScenarioCreator {
 		ladenMax.setConsumption(ladenMaxConsumption);
 
 		laden.getFuelConsumption().add(ladenMin);
-		laden.getFuelConsumption().add(ladenMax);
-
+		if (ladenMinSpeed != ladenMaxSpeed) {
+			laden.getFuelConsumption().add(ladenMax);
+		}
 		ballast.getFuelConsumption().add(ballastMin);
-		ballast.getFuelConsumption().add(ballastMax);
+		if (ballastMinSpeed != ballastMaxSpeed) {
+			ballast.getFuelConsumption().add(ballastMax);
+		}
 
 		laden.setIdleBaseRate(ladenIdleConsumptionRate);
 		laden.setIdleNBORate(ladenIdleNBORate);
@@ -697,5 +712,40 @@ public class CustomScenarioCreator {
 		commercialModel.getPurchaseContracts().add(result);
 
 		return result;
+	}
+
+	/**
+	 * Sets up a cooldown pricing model including an index
+	 */
+	public void setupCooldown(final double value) {
+		final PricingModel pricingModel = scenario.getPricingModel();
+		final PortModel portModel = scenario.getPortModel();
+
+		final DerivedIndex<Double> result = PricingFactory.eINSTANCE.createDerivedIndex();
+		result.setExpression(Double.toString(value));
+
+		final CommodityIndex index = PricingFactory.eINSTANCE.createCommodityIndex();
+		index.setName("Cooldown");
+		index.setData(result);
+
+		pricingModel.getCommodityIndices().add(index);
+
+		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
+		price.setIndex(index);
+
+		for (final Port port : portModel.getPorts()) {
+			price.getPorts().add(port);
+		}
+
+		pricingModel.getCooldownPrices().add(price);
+	}
+
+	public Date createDate(int year, int month, int day) {
+		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		cal.clear();
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH, day);
+		return cal.getTime();
 	}
 }
