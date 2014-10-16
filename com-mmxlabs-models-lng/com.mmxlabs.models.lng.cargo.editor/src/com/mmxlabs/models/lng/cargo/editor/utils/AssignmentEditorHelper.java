@@ -191,16 +191,28 @@ public class AssignmentEditorHelper {
 
 	private static VesselAvailability findVesselAvailability(final Vessel vessel, final AssignableElement assignableElement, final List<VesselAvailability> vesselAvailabilities) {
 
+		int mightMatchCount = 0;
 		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
 			if (vesselAvailability.getVessel() == vessel) {
-				return vesselAvailability;
+				mightMatchCount++;
+				if (isElementInVesselAvailability(assignableElement, vesselAvailability)) {
+					return vesselAvailability;
+				}
+			}
+		}
+		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple, give up.
+		if (mightMatchCount == 1) {
+			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
+				if (vesselAvailability.getVessel() == vessel) {
+					return vesselAvailability;
+				}
 			}
 		}
 
 		return null;
 	}
 
-	private boolean isElementInVesselAvailability(final AssignableElement element, final VesselAvailability vesselAvailability) {
+	private static boolean isElementInVesselAvailability(final AssignableElement element, final VesselAvailability vesselAvailability) {
 
 		if (element instanceof Cargo) {
 			final Cargo cargo = (Cargo) element;
