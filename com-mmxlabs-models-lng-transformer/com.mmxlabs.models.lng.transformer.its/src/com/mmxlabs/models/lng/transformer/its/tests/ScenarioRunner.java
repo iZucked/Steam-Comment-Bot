@@ -74,6 +74,10 @@ public class ScenarioRunner {
 
 	public void init() throws IncompleteScenarioException {
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		init(optimiserSettings);
+	}
+
+	public void init(final OptimiserSettings optimiserSettings) throws IncompleteScenarioException {
 
 		transformer = new LNGTransformer(scenario, optimiserSettings, new TransformerExtensionTestModule(), LNGTransformer.HINT_OPTIMISE_LSO);
 
@@ -128,5 +132,4 @@ public class ScenarioRunner {
 
 		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, optimiser.getBestSolution(true), 0);
 	}
-
 }
