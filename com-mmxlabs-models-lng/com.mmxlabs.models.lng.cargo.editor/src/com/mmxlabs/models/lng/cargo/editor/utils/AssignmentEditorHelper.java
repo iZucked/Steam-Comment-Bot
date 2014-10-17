@@ -189,7 +189,7 @@ public class AssignmentEditorHelper {
 		return result;
 	}
 
-	private static VesselAvailability findVesselAvailability(final Vessel vessel, final AssignableElement assignableElement, final List<VesselAvailability> vesselAvailabilities) {
+	public static VesselAvailability findVesselAvailability(final Vessel vessel, final AssignableElement assignableElement, final List<VesselAvailability> vesselAvailabilities) {
 
 		int mightMatchCount = 0;
 		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
