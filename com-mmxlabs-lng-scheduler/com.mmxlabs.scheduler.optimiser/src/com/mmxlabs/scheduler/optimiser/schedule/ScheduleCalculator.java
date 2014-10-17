@@ -55,6 +55,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -111,6 +112,8 @@ public class ScheduleCalculator {
 
 	@Inject(optional = true)
 	private ICustomNonShippedScheduler customNonShippedScheduler;
+	@Inject
+	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	/**
 	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
@@ -189,27 +192,40 @@ public class ScheduleCalculator {
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 
 			// Determine transfer time
-			// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 
-				if (thisPortSlot instanceof ILoadSlot) {
-					startTime = thisPortSlot.getTimeWindow().getStart();
-					startSet = true;
+				// Find latest window start for all slots in FOB/DES combo. Howver if DES divertable, ignore.
+				if (thisPortSlot instanceof ILoadOption) {
+					// Divertable DES has real time window.
+					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+						int windowStart = thisPortSlot.getTimeWindow().getStart();
+						startTime = Math.max(windowStart, startTime);
+					}
 				}
+				if (thisPortSlot instanceof IDischargeOption) {
+					// Divertable FOB has sales time window
+					// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+					int windowStart = thisPortSlot.getTimeWindow().getStart();
+					startTime = Math.max(windowStart, startTime);
+					// }
+				}
+
+				// Actuals Data...
 				if (thisPortSlot instanceof ILoadOption) {
 					// overwrite with actuals if need be
 					if (actualsDataProvider.hasActuals(thisPortSlot)) {
 						currentPlan.setStartingHeelInM3(actualsDataProvider.getStartHeelInM3(thisPortSlot));
 					}
 				}
-				if (thisPortSlot instanceof IDischargeSlot) {
-					startTime = thisPortSlot.getTimeWindow().getStart();
-					startSet = true;
-				}
 				// overwrite with actuals if need be
 				if (actualsDataProvider.hasReturnActuals(thisPortSlot)) {
 					currentPlan.setRemainingHeelInM3(actualsDataProvider.getReturnHeelInM3(thisPortSlot));
 				}
+			}
+
+			if (thisPortSlot instanceof IDischargeSlot) {
+				// Break here to avoid processing further
+				startSet = true;
 			}
 
 			final PortOptions portOptions = new PortOptions();
