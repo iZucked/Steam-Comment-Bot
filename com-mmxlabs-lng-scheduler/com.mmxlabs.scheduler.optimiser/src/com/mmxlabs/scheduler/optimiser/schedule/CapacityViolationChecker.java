@@ -173,7 +173,7 @@ public class CapacityViolationChecker {
 						}
 
 						// Check for forced cooldowns
-						if (lastForcedCooldownVolume > 0) {
+						if (lastForcedCooldownVolume >= 0) {
 							// Record the previously detected forced cooldown problem
 							addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.FORCED_COOLDOWN, lastForcedCooldownVolume);
 						}
@@ -224,7 +224,7 @@ public class CapacityViolationChecker {
 						addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
 					}
 				}
-				if (lastForcedCooldownVolume > 0) {
+				if (lastForcedCooldownVolume >= 0) {
 					// Record the previously detected forced cooldown problem
 					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, lastForcedCooldownVolume);
 				}
