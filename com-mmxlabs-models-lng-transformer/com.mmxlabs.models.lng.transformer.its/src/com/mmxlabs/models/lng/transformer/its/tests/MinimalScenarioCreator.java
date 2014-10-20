@@ -250,7 +250,6 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
 		price.setIndex(cooldownIndex);
-
 		for (final Port port : portModel.getPorts()) {
 			price.getPorts().add(port);
 		}
@@ -258,7 +257,22 @@ public class MinimalScenarioCreator extends DefaultScenarioCreator {
 		pricingModel.getCooldownPrices().add(price);
 	}
 
-	
+	/**
+	 * Sets up a cooldown pricing model including an index
+	 */
+	public void setupCooldownLumpSum(String expression) {
+		final PricingModel pricingModel = scenario.getPricingModel();
+		final PortModel portModel = scenario.getPortModel();
+
+		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
+		price.setExpression(expression);
+		for (final Port port : portModel.getPorts()) {
+			price.getPorts().add(port);
+		}
+
+		pricingModel.getCooldownPrices().add(price);
+	}
+
 	public CharterOutEvent makeCharterOut(MinimalScenarioCreator msc, MMXRootObject scenario, Port startPort, Port endPort) {
 		// change to default: add a charter out event 2-3 hrs after discharge window ends
 		final Date endLoad = msc.cargo.getSlots().get(1).getWindowEndWithSlotOrPortTime();
