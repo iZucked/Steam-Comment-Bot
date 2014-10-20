@@ -93,7 +93,7 @@ public class CapacityViolationChecker {
 			}
 
 			// Forced cooldown volumes are stored on the VoyageDetails, so record the last one for use in the next iteration so we can record the cooldown at the port
-			long lastForcedCooldownVolume = -1;
+			boolean isForcedCooldown = false;
 			long remainingHeelInM3 = 0;
 			PortDetails lastHeelDetails = null;
 			// Loop over all voyage plans in turn. We Use the VoyagePlan directly to obtain allocation annotations
@@ -173,12 +173,12 @@ public class CapacityViolationChecker {
 						}
 
 						// Check for forced cooldowns
-						if (lastForcedCooldownVolume >= 0) {
+						if (isForcedCooldown) {
 							// Record the previously detected forced cooldown problem
-							addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.FORCED_COOLDOWN, lastForcedCooldownVolume);
+							addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
 						}
 						// Reset, do not re-record cooldown problems
-						lastForcedCooldownVolume = -1;
+						isForcedCooldown = false;
 
 					} else if (e instanceof VoyageDetails) {
 						final VoyageDetails voyageDetails = (VoyageDetails) e;
@@ -186,7 +186,7 @@ public class CapacityViolationChecker {
 						final boolean shouldBeCold = voyageDetails.getOptions().shouldBeCold() && !voyageDetails.getOptions().getAllowCooldown();
 						if (shouldBeCold && voyageDetails.isCooldownPerformed()) {
 							// Despite requiring to be cold, we still have some cooldown volume. Mark as > 0
-							lastForcedCooldownVolume = 1;
+							isForcedCooldown = true;
 						}
 
 					} else {
@@ -223,9 +223,9 @@ public class CapacityViolationChecker {
 						addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
 					}
 				}
-				if (lastForcedCooldownVolume >= 0) {
+				if (isForcedCooldown) {
 					// Record the previously detected forced cooldown problem
-					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, lastForcedCooldownVolume);
+					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
 				}
 			}
 
