@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -938,7 +938,7 @@ public class NewLNGVoyageCalculatorTest {
 	}
 
 	@Test
-	public void testCalculateCooldownPrices_NonLoad() {
+	public void testCalculateCooldownCost_NonLoad() {
 		final int expectedBasePrice = 99000;
 
 		final IVessel vessel = Mockito.mock(IVessel.class);
@@ -985,33 +985,30 @@ public class NewLNGVoyageCalculatorTest {
 		final IPort toPort = Mockito.mock(IPort.class);
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
 
-		final ICooldownPriceCalculator cooldownPriceCalculator = Mockito.mock(ICooldownPriceCalculator.class);
+		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
 		voyageDetails.getOptions().setToPortSlot(toPortSlot);
 
-		Mockito.when(toPort.getCooldownPriceCalculator()).thenReturn(cooldownPriceCalculator);
+		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
 
 		Mockito.when(mockPortCVProvider.getPortCV(toPort)).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 
-		final int expectedCooldownPrice = 1000;
+		final long expectedCooldownCost = 1000;
 
 		voyageDetails.getOptions().setShouldBeCold(true);
 		voyageDetails.setCooldownPerformed(true);
-		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, 1000);
 
 		// Expect the non-load slot branch - time 3 == time of next Port
-		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(2, toPort)).thenReturn(expectedCooldownPrice);
+		Mockito.when(cooldownCalculator.calculateCooldownCost(vesselClass, toPort, OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), 2)).thenReturn(expectedCooldownCost);
 
-		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
+		final long cooldownCost = calc.calculateCooldownCost(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
 
-		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(2, toPort);
+		Mockito.verify(cooldownCalculator).calculateCooldownCost(vesselClass, toPort, OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), 2);
 
-		Assert.assertEquals(expectedCooldownPrice, cooldownM3Price);
-		Assert.assertEquals(expectedCooldownPrice, voyageDetails.getFuelUnitPrice(FuelComponent.Cooldown));
-
+		Assert.assertEquals(expectedCooldownCost, cooldownCost);
 	}
 
 	@Test
-	public void testCalculateCooldownPrices_Load() {
+	public void testCalculateCooldownCost_Load() {
 		final int expectedBasePrice = 99000;
 
 		final IVessel vessel = Mockito.mock(IVessel.class);
@@ -1058,28 +1055,96 @@ public class NewLNGVoyageCalculatorTest {
 		final IPort toPort = Mockito.mock(IPort.class);
 		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
 
-		final ICooldownPriceCalculator cooldownPriceCalculator = Mockito.mock(ICooldownPriceCalculator.class);
+		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
 		voyageDetails.getOptions().setToPortSlot(toPortSlot);
 
-		Mockito.when(toPort.getCooldownPriceCalculator()).thenReturn(cooldownPriceCalculator);
+		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
 
 		Mockito.when(toPortSlot.getCargoCVValue()).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
 
-		final int expectedCooldownPrice = 1000;
+		final long expectedCooldownCost = 1000;
 
 		voyageDetails.getOptions().setShouldBeCold(true);
 		voyageDetails.setCooldownPerformed(true);
-		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, 1000);
 
 		// Expect the load slot branch - time 3 == time of next Port
-		Mockito.when(cooldownPriceCalculator.calculateCooldownUnitPrice(toPortSlot, 2)).thenReturn(expectedCooldownPrice);
+		Mockito.when(cooldownCalculator.calculateCooldownCost(vesselClass, toPort, OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), 2)).thenReturn(expectedCooldownCost);
 
-		final int cooldownM3Price = calc.calculateCooldownPrices(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
+		final long cooldownCost = calc.calculateCooldownCost(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
 
-		Mockito.verify(cooldownPriceCalculator).calculateCooldownUnitPrice(toPortSlot, 2);
+		Mockito.verify(cooldownCalculator).calculateCooldownCost(vesselClass, toPort, OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), 2);
 
-		Assert.assertEquals(expectedCooldownPrice, cooldownM3Price);
-		Assert.assertEquals(expectedCooldownPrice, voyageDetails.getFuelUnitPrice(FuelComponent.Cooldown));
+		Assert.assertEquals(expectedCooldownCost, cooldownCost);
+	}
+
+	@Test
+	public void testCalculateCooldownNotCalled_Load() {
+		final int expectedBasePrice = 99000;
+
+		final IVessel vessel = Mockito.mock(IVessel.class);
+		final IVesselClass vesselClass = Mockito.mock(IVesselClass.class);
+		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
+		Mockito.when(vesselClass.getBaseFuelUnitPrice()).thenReturn(expectedBasePrice);
+
+		final PortDetails fromPortDetails = new PortDetails();
+		fromPortDetails.setOptions(new PortOptions());
+
+		final PortDetails toPortDetails = new PortDetails();
+		toPortDetails.setOptions(new PortOptions());
+
+		final PortSlot fromPortSlot = Mockito.mock(PortSlot.class);
+		final ILoadSlot toPortSlot = Mockito.mock(ILoadSlot.class);
+
+		fromPortDetails.getOptions().setPortSlot(fromPortSlot);
+		toPortDetails.getOptions().setPortSlot(toPortSlot);
+
+		final VoyageDetails voyageDetails = new VoyageDetails();
+		final VoyageOptions voyageOptions = new VoyageOptions();
+		voyageOptions.setVesselState(VesselState.Ballast);
+		voyageDetails.setOptions(voyageOptions);
+
+		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+
+		final IRouteCostProvider mockRouteCostProvider = Mockito.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+
+		final IPortCVProvider mockPortCVProvider = Mockito.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
+
+		// Set fuel consumptions with a special pattern - each subsequent details object has a x10 multiplier to the previous value -= this makes it easy to add up for the expectations
+		fromPortDetails.setFuelConsumption(FuelComponent.Cooldown, 9);
+
+		voyageDetails.setFuelConsumption(FuelComponent.Cooldown, FuelComponent.Cooldown.getDefaultFuelUnit(), 90);
+
+		toPortDetails.setFuelConsumption(FuelComponent.Cooldown, 900);
+
+		final IPortTimesRecord portTimesRecord = Mockito.mock(IPortTimesRecord.class);
+		Mockito.when(portTimesRecord.getSlotTime(fromPortSlot)).thenReturn(1);
+		Mockito.when(portTimesRecord.getSlotTime(toPortSlot)).thenReturn(2);
+
+		final IPort toPort = Mockito.mock(IPort.class);
+		Mockito.when(toPortSlot.getPort()).thenReturn(toPort);
+
+		final ICooldownCalculator cooldownCalculator = Mockito.mock(ICooldownCalculator.class);
+		voyageDetails.getOptions().setToPortSlot(toPortSlot);
+
+		Mockito.when(toPort.getCooldownCalculator()).thenReturn(cooldownCalculator);
+
+		Mockito.when(toPortSlot.getCargoCVValue()).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
+
+		final long expectedCooldownCost = 1000;
+
+		voyageDetails.getOptions().setShouldBeCold(true);
+		voyageDetails.setCooldownPerformed(false);
+
+		// Expect the load slot branch - time 3 == time of next Port
+		Mockito.when(cooldownCalculator.calculateCooldownCost(vesselClass, toPort, OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), 2)).thenReturn(expectedCooldownCost);
+
+		final long cooldownCost = calc.calculateCooldownCost(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
+
+		Mockito.verifyZeroInteractions(cooldownCalculator);
+		
+		Assert.assertEquals(0, cooldownCost);
 
 	}
 

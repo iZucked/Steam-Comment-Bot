@@ -46,7 +46,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -259,7 +259,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId, final int minCvValue, final int maxCvValue);
+	IPort createPort(String name, boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId, final int minCvValue, final int maxCvValue);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -270,7 +270,7 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	@NonNull
-	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y, final String timezoneId, final int minCvValue, final int maxCvValue);
+	IXYPort createPort(String name, boolean arriveCold, final ICooldownCalculator cooldownCalculator, float x, float y, final String timezoneId, final int minCvValue, final int maxCvValue);
 
 	/**
 	 * Create a cargo with the initial port slots. If allowRewiring is false, bind the slot sequence.
