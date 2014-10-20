@@ -24,6 +24,11 @@ public final class LongFastEnumMap<K extends Enum<K>> {
 		values = new long[size];
 	}
 
+	public LongFastEnumMap(final int size, final long defaultValue) {
+		values = new long[size];
+		Arrays.fill(values, defaultValue);
+	}
+
 	public final long get(final K key) {
 		return values[key.ordinal()];
 	}
