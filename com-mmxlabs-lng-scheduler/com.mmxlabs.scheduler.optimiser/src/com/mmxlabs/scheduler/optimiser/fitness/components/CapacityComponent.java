@@ -48,7 +48,7 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 			final PortDetails detail = (PortDetails) object;
 			for (final CapacityViolationType cvt : CapacityViolationType.values()) {
 				final long quantity = detail.getCapacityViolation(cvt);
-				if (quantity > 0) {
+				if (quantity >= 0) {
 					accumulator++;
 				}
 			}
