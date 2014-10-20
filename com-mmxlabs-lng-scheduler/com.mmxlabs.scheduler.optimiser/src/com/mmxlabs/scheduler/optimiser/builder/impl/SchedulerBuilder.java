@@ -92,7 +92,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -330,18 +330,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	public void init() {
 		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE", false, new ICooldownPriceCalculator() {
+		ANYWHERE = createPort("ANYWHERE", false, new ICooldownCalculator() {
 			@Override
 			public void prepareEvaluation(final ISequences sequences) {
 			}
 
 			@Override
-			public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
-				return 0;
-			}
-
-			@Override
-			public int calculateCooldownUnitPrice(final int time, final IPort port) {
+			public long calculateCooldownCost(IVesselClass vesselClass, IPort port, int cv, int time) {
 				return 0;
 			}
 		}, "UTC"/* no timezone */, 0, Integer.MAX_VALUE);
@@ -560,17 +555,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId, final int minCvValue, final int maxCvValue) {
+	public IPort createPort(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId, final int minCvValue, final int maxCvValue) {
 
 		final Port port = new Port(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId, minCvValue, maxCvValue);
+		buildPort(port, name, arriveCold, cooldownCalculator, timezoneId, minCvValue, maxCvValue);
 		return port;
 	}
 
 	/**
 	 * Convenience function only used for testing
 	 */
-	public IPort createPortForTest(final String string, final boolean b, final ICooldownPriceCalculator object, final String string2) {
+	public IPort createPortForTest(final String string, final boolean b, final ICooldownCalculator object, final String string2) {
 
 		return createPort(string, b, object, string2, 0, Integer.MAX_VALUE);
 	}
@@ -624,10 +619,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId, final int minCvValue, final int maxCvValue) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final float x, final float y, final String timezoneId, final int minCvValue, final int maxCvValue) {
 
 		final XYPort port = new XYPort(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId, minCvValue, maxCvValue);
+		buildPort(port, name, arriveCold, cooldownCalculator, timezoneId, minCvValue, maxCvValue);
 		port.setX(x);
 		port.setY(y);
 
@@ -637,9 +632,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * Convenience function only used for testing
 	 */
-	public IXYPort createPortForTest(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId) {
+	public IXYPort createPortForTest(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final float x, final float y, final String timezoneId) {
 
-		return createPort(name, arriveCold, cooldownPriceCalculator, x, y, timezoneId, 0, Integer.MAX_VALUE);
+		return createPort(name, arriveCold, cooldownCalculator, x, y, timezoneId, 0, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -648,14 +643,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param port
 	 * @param name
 	 * @param arriveCold
-	 * @param cooldownPriceCalculator
+	 * @param cooldownCalculator
 	 * @param timezoneId
 	 */
-	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId, final long minCvValue, final long maxCvValue) {
+	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId, final long minCvValue, final long maxCvValue) {
 
 		port.setName(name);
 		port.setShouldVesselsArriveCold(arriveCold);
-		port.setCooldownPriceCalculator(cooldownPriceCalculator);
+		port.setCooldownCalculator(cooldownCalculator);
 		port.setTimeZoneId(timezoneId);
 		port.setMinCvValue(minCvValue);
 		port.setMaxCvValue(maxCvValue);
@@ -671,7 +666,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// travel time from A to A should be zero, right?
 		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
 
-		calculatorProvider.addCooldownPriceCalculator(cooldownPriceCalculator);
+		calculatorProvider.addCooldownCalculator(cooldownCalculator);
 	}
 
 	@Override

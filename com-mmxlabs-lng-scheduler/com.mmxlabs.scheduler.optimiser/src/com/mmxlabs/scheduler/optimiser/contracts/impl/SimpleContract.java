@@ -13,7 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -25,7 +25,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
+public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator {
 
 	@Inject(optional = true)
 	private IActualsDataProvider actualsDataProvider;
@@ -81,17 +81,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
-	@Override
-	public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
-		return calculateSimpleUnitPrice(time, slot.getPort());
-	}
-
-	/**
-	 */
-	@Override
-	public int calculateCooldownUnitPrice(final int time, final IPort port) {
-		return calculateSimpleUnitPrice(time, port);
-	}
 
 	/**
 	 */

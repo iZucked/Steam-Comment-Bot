@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -25,21 +25,11 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
+public class FixedPriceContract implements ILoadPriceCalculator, ISalesPriceCalculator {
 	private final int pricePerMMBTU;
 
 	public FixedPriceContract(final int pricePerMMBTU) {
 		this.pricePerMMBTU = pricePerMMBTU;
-	}
-
-	@Override
-	public int calculateCooldownUnitPrice(final ILoadSlot option, final int time) {
-		return pricePerMMBTU;
-	}
-
-	@Override
-	public int calculateCooldownUnitPrice(final int time, final IPort port) {
-		return pricePerMMBTU;
 	}
 
 	@Override

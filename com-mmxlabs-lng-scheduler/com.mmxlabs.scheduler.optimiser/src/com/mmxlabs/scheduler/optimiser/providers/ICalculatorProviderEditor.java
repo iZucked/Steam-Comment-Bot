@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
@@ -19,5 +19,5 @@ public interface ICalculatorProviderEditor extends ICalculatorProvider {
 
 	void addSalesPriceCalculator(ISalesPriceCalculator calculator);
 
-	void addCooldownPriceCalculator(ICooldownPriceCalculator calculator);
+	void addCooldownCalculator(ICooldownCalculator calculator);
 }

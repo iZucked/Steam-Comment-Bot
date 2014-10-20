@@ -20,6 +20,8 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.contracts.ICalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -443,15 +445,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
-	 * Calculates the price per M3 of cooldown and update the voyage details with the MMBTu cooldown quantity
+	 * Calculates the cost of a cooldown
 	 * 
 	 * @param vesselClass
 	 * @param arrivalTimes
 	 * @param sequence
 	 * @return
 	 */
-	final public int calculateCooldownPrices(final IVesselClass vesselClass, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement... sequence) {
-		int cooldownM3Price = 0;
+	final public long calculateCooldownCost(final IVesselClass vesselClass, final IPortTimesRecord portTimesRecord, final IDetailsSequenceElement... sequence) {
+		long cooldownCost = 0;
 
 		for (int i = 0; i < sequence.length; ++i) {
 			if (sequence[i] instanceof VoyageDetails) {
@@ -463,34 +465,28 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					// Look up arrival of next port
 					final int cooldownTime = portTimesRecord.getSlotTime(details.getOptions().getToPortSlot());
 
-					int cooldownPricePerMMBTU = 0;
 					int cooldownCV = 0;
+					IPort cooldownPort;
 					// TODO is this how cooldown gas ought to be priced?
 					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
 						// TODO double check how/if this affects caching
 						// decisions
-						cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice((ILoadSlot) details.getOptions().getToPortSlot(), cooldownTime);
-						cooldownCV = ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue();
-						cooldownM3Price = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, cooldownCV);
+						ILoadSlot loadSlot = (ILoadSlot) details.getOptions().getToPortSlot();
+						cooldownCV = loadSlot.getCargoCVValue();
+						cooldownPort = loadSlot.getPort();
 					} else {
-						cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice(cooldownTime, port);
 						cooldownCV = portCVProvider.getPortCV(port);
-						cooldownM3Price = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, cooldownCV);
+						cooldownPort = port;
 					}
 
-					// Store the MMBTu cooldown value
-					final long cooldownVolumeInM3 = details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
-					details.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.MMBTu, Calculator.convertM3ToMMBTu(cooldownVolumeInM3, cooldownCV));
-
-					assert FuelComponent.Cooldown.getPricingFuelUnit() == FuelUnit.MMBTu;
-					details.setFuelUnitPrice(FuelComponent.Cooldown, cooldownPricePerMMBTU);
+					cooldownCost = port.getCooldownCalculator().calculateCooldownCost(vesselClass, cooldownPort, cooldownCV, cooldownTime);
 				}
 			} else {
 				assert sequence[i] instanceof PortDetails;
 			}
 		}
 
-		return cooldownM3Price;
+		return cooldownCost;
 	}
 
 	/**
@@ -832,8 +828,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(c, baseFuelPricePerMT));
 		}
 
-		final int cooldownM3Price = calculateCooldownPrices(vesselClass, voyageRecord, sequence);
-		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
+		final long cooldownCost = calculateCooldownCost(vesselClass, voyageRecord, sequence);
+		// calculateCoolDown
+		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, cooldownCost);
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
 
