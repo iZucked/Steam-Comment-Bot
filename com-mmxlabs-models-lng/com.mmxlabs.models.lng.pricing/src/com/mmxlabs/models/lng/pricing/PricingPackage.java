@@ -594,13 +594,22 @@ public interface PricingPackage extends EPackage {
 	int COOLDOWN_PRICE__INDEX = PORTS_PRICE_MAP__INDEX;
 
 	/**
+	 * The feature id for the '<em><b>Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN_PRICE__EXPRESSION = PORTS_PRICE_MAP_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Cooldown Price</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COOLDOWN_PRICE_FEATURE_COUNT = PORTS_PRICE_MAP_FEATURE_COUNT + 0;
+	int COOLDOWN_PRICE_FEATURE_COUNT = PORTS_PRICE_MAP_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.CommodityIndexImpl <em>Commodity Index</em>}' class.
@@ -1323,6 +1332,17 @@ public interface PricingPackage extends EPackage {
 	EClass getCooldownPrice();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getExpression <em>Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Expression</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CooldownPrice#getExpression()
+	 * @see #getCooldownPrice()
+	 * @generated
+	 */
+	EAttribute getCooldownPrice_Expression();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.CommodityIndex <em>Commodity Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1806,6 +1826,14 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EClass COOLDOWN_PRICE = eINSTANCE.getCooldownPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute COOLDOWN_PRICE__EXPRESSION = eINSTANCE.getCooldownPrice_Expression();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.CommodityIndexImpl <em>Commodity Index</em>}' class.
