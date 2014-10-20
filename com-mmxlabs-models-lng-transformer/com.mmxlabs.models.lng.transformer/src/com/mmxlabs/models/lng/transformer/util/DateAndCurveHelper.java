@@ -125,7 +125,7 @@ public class DateAndCurveHelper {
 		return curve;
 	}
 
-	public StepwiseIntegerCurve generateCharterExpressionCurve(final String priceExpression, SeriesParser indices) {
+	public StepwiseIntegerCurve generateFixedCostExpressionCurve(final String priceExpression, SeriesParser indices) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			return null;

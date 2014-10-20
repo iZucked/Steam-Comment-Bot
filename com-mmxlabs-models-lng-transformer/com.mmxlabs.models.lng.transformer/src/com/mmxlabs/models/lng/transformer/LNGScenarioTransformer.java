@@ -126,11 +126,13 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
@@ -424,9 +426,15 @@ public class LNGScenarioTransformer {
 		 */
 		final PortModel portModel = rootObject.getPortModel();
 
-		final Map<Port, ICooldownPriceCalculator> cooldownCalculators = new HashMap<Port, ICooldownPriceCalculator>();
+		final Map<Port, ICooldownCalculator> cooldownCalculators = new HashMap<Port, ICooldownCalculator>();
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
-			final ICooldownPriceCalculator cooldownCalculator = new PriceExpressionContract(commodityIndexAssociation.lookup(price.getIndex()));
+			final ICooldownCalculator cooldownCalculator;
+			// Check here if price is indexed or expression
+			if (price.isSetExpression()) {
+				cooldownCalculator = new CooldownLumpSumCalculator(dateHelper.generateFixedCostExpressionCurve(price.getExpression(), commodityIndices));
+			} else {
+				cooldownCalculator = new CooldownPriceIndexedCalculator(commodityIndexAssociation.lookup(price.getIndex()));
+			}
 			injector.injectMembers(cooldownCalculator);
 
 			for (final Port port : SetUtils.getObjects(price.getPorts())) {
@@ -453,7 +461,7 @@ public class LNGScenarioTransformer {
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
 			builder.setPortMinCV(port, minCv);
 			builder.setPortMaxCV(port, maxCv);
-			
+
 			// Set port default values
 			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Load, ePort.getLoadDuration());
 			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Discharge, ePort.getDischargeDuration());
@@ -2136,13 +2144,13 @@ public class LNGScenarioTransformer {
 				endCold = endHeel.isEndCold();
 				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
 			}
-			
+
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfter() : null,
 					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndBy() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3);
 
 			final ICurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
-				dailyCharterInCurve = dateHelper.generateCharterExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
+				dailyCharterInCurve = dateHelper.generateFixedCostExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
 			} else {
 				dailyCharterInCurve = new ConstantValueCurve(0);
 			}
