@@ -221,6 +221,7 @@ public class CapacityViolationChecker {
 				if (toPortSlot instanceof EndPortSlot) {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
+						// NOTE: This can be negative and as such does not feed into capacity component. Note negative values are also now deemed to be "unset"
 						addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
 					}
 				}
