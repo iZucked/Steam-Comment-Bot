@@ -16,7 +16,7 @@ import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
-public class DischargeSlotCVRangeConstraint extends AbstractModelMultiConstraint{
+public class DischargeSlotCVRangeConstraint extends AbstractModelMultiConstraint {
 
 	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
@@ -24,20 +24,20 @@ public class DischargeSlotCVRangeConstraint extends AbstractModelMultiConstraint
 
 		if (target instanceof DischargeSlot) {
 			final DischargeSlot slot = (DischargeSlot) target;
-			DetailConstraintStatusDecorator rangeCheckDSD = checkRange(slot,ctx);
-			if (rangeCheckDSD != null){
+			DetailConstraintStatusDecorator rangeCheckDSD = checkRange(slot, ctx);
+			if (rangeCheckDSD != null) {
 				failures.add(rangeCheckDSD);
 			}
 		}
-		
+
 		return Activator.PLUGIN_ID;
 	}
-	
-	private DetailConstraintStatusDecorator checkRange(DischargeSlot slot, final IValidationContext ctx){
+
+	private DetailConstraintStatusDecorator checkRange(DischargeSlot slot, final IValidationContext ctx) {
 		if (slot.isSetMinCvValue() && slot.isSetMaxCvValue()) {
 			final double minCvValue = slot.getMinCvValue();
 			final double maxCvValue = slot.getMaxCvValue();
-		
+
 			if (minCvValue > maxCvValue) {
 				final String failureMessage = String.format("Discharge slot '%s' has minimum CV (%.2f) greater than maximum CV (%.2f)", slot.getName(), minCvValue, maxCvValue);
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
