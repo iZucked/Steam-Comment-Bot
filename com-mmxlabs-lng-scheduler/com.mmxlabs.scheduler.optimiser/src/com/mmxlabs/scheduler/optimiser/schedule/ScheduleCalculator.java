@@ -171,6 +171,14 @@ public class ScheduleCalculator {
 		return scheduledSequence;
 	}
 
+	/**
+	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
+	 * scheduling and volume allocation - which should really stay in those other classes.
+	 * 
+	 * @param resource
+	 * @param sequence
+	 * @return
+	 */
 	private ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
 		// Virtual vessels are those operated by a third party, for FOB and DES situations.
 		// Should we compute a schedule for them anyway? The arrival times don't mean much,
