@@ -42,11 +42,15 @@ import com.mmxlabs.lingo.reports.views.AbstractVerticalCalendarReportView.Schedu
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -61,6 +65,7 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.schedule.impl.SequenceImpl;
 import com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
@@ -554,6 +559,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			for (Event event: events) {
 				sb.append(join);
 				sb.append(getEventText(date, event));
+				join = "; ";
 			}
 			return sb.toString();
 		}
@@ -989,14 +995,28 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			return result;
 		} else if (event instanceof Idle) {
 			return "";
-		} else if (event instanceof GeneratedCharterOut) {
+		}			
+		else if (event instanceof VesselEventVisit) {
+			VesselEvent vesselEvent = ((VesselEventVisit) event).getVesselEvent();
+			if (vesselEvent instanceof CharterOutEvent) {
+				return "CO";
+			}
+			else if (vesselEvent instanceof DryDockEvent) {
+				return "Dry Dock";
+			}
+			else if (vesselEvent instanceof MaintenanceEvent) {
+				return "Maintenance";
+			}
+			
+		}
+		else if (event instanceof GeneratedCharterOut) {
 			return "GCO";
-		} else if (event instanceof CharterOutEvent) {
-			return "CO";
 		} else if (event instanceof StartEvent) {
 			return "Start";
 		} else if (event instanceof EndEvent) {
 			return "End";
+		} else if (event instanceof Cooldown) {
+			return "Cooldown";
 		}
 
 		final EClass eventClass = event.eClass();
