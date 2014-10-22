@@ -43,7 +43,7 @@ public class CooldownPriceIndexedCalculator extends AbstractCooldownCalculator {
 	}
 
 	public long calculateCooldownCost(IVesselClass vesselClass, IPort port, int cooldownCV, int time) {
-		int priceM3 = Calculator.costPerM3FromMMBTu(calculateCooldownUnitPrice(time, port), cooldownCV);
+		int priceM3 = Calculator.costPerM3FromMMBTu(calculateUnitPriceAtUTCTime(time, port), cooldownCV);
 		long volumeM3 = vesselClass.getCooldownVolume();
 		long cost = Calculator.costFromConsumption(volumeM3, priceM3);
 		return cost;
