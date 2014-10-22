@@ -15,22 +15,24 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.AbstractRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
@@ -111,7 +113,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		gridViewer.getGrid().setLinesVisible(true);
 		
 		// following unfinished code allows the date to display as a row header
-		/*
+		///*
 		gridViewer.getGrid().setRowHeaderVisible(true);
 		gridViewer.getGrid().setRowHeaderRenderer(new AbstractRenderer() {
 
@@ -121,22 +123,31 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 
 			@Override
-			public void paint(GC arg0, Object arg1) {
+			public void paint(GC gc, Object arg1) {
 				Rectangle bounds = getBounds();
-				arg0.setBackground(getColour(Light_Grey));
-				arg0.fillRectangle(bounds);
-				arg0.setForeground(getColour(Black));
+				int left = bounds.x;
+				int top = bounds.y;
+				int right = bounds.x + bounds.width - 1;
+				int bottom = bounds.y + bounds.height - 1;
+				
+				gc.setBackground(getColour(Light_Grey));
+				gc.fillRectangle(bounds);
+				
+				gc.setForeground(getColour(Grey));
+				gc.drawLine(left, bottom, right, bottom);
+				gc.drawLine(right, top, right, bottom);
+				gc.setForeground(getColour(Black));
 				if (arg1 instanceof GridItem) {
 					GridItem item = (GridItem) arg1;
 					Date date = (Date) item.getData();
 					if (date != null) {
-						arg0.drawString(sdf.format(date),  bounds.x,  bounds.y);
+						gc.drawString(sdf.format(date),  left + 3,  top + 1);
 					}
 				}
 			}
 			
 		});
-		*/
+		//*/
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(gridViewer, createElementCollector());
 
