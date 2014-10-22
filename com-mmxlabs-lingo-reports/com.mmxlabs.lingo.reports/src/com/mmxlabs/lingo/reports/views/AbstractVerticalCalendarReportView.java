@@ -15,10 +15,12 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.swt.SWT;
@@ -28,6 +30,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
@@ -41,10 +44,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -95,7 +95,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected Date[] dates = null;
 	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
 	protected final HashMap<Event, Object> vesselsByEvent = new HashMap<>();
-
+	
 	@Override
 	public void createPartControl(final Composite parent) {
 		final Composite container = new Composite(parent, SWT.NONE);
@@ -105,7 +105,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		
 		gridViewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		gridViewer.setContentProvider(createContentProvider());
-
+		
+		
 		gridViewer.getGrid().setHeaderVisible(true);
 		gridViewer.getGrid().setLinesVisible(true);
 		
@@ -196,6 +197,10 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					// setup table columns and rows
 					setCols(data);
 					setRows(data);
+					
+					if (gridViewer.getGrid().getItemCount() >= 2) {
+						gridViewer.getGrid().getItem(2).setRowSpan(2, 2);
+					}
 				}
 			}
 
@@ -536,23 +541,39 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		/**
 		 * Returns the text for a column cell. 
-		 * Defers to {@link #getEventText(Date, Event[])}; override that method if you want to change the behaviour. 
+		 * Defers to {@link #getEventsText(Date, Event[])}; override that method if you want to change the behaviour. 
 		 */
 		@Override
 		protected final String getText(final Date element, final EventProvider provider) {
 			// find the event text for the date given
-			return getEventText(element, provider.getEvents(element));
+			return getEventsText(element, provider.getEvents(element));
 		}
 		
 		/**
-		 * Returns 
-		 * By default, defers to {@link AbstractVerticalCalendarReportView#getEventText(Date, Event[], EventColumnLabelProvider)}
+		 * Returns the text for a particular series of events on a specified date. By default, calls
+		 * {@link #getEventText(Date, Event)} for each event in the specified array. 
 		 * @param element
 		 * @param events
 		 * @return
 		 */
-		protected String getEventText(final Date element, final Event [] events) {
-			return AbstractVerticalCalendarReportView.this.getEventText(element, events, EventColumnLabelProvider.this);			
+		protected String getEventsText(Date date, Event[] events) {
+			StringBuilder sb = new StringBuilder();
+			String join = "";
+			for (Event event: events) {
+				sb.append(join);
+				sb.append(getEventText(date, event));
+			}
+			return sb.toString();
+		}
+		/**
+		 * Returns 
+		 * By default, defers to {@link AbstractVerticalCalendarReportView#getEventText(Date, Event[], EventColumnLabelProvider)}
+		 * @param element
+		 * @param event
+		 * @return
+		 */
+		protected String getEventText(final Date element, final Event event) {
+			return AbstractVerticalCalendarReportView.this.getEventText(element, event, EventColumnLabelProvider.this);			
 		}
 
 		/** Returns the desired background colour of the cell. */
@@ -814,7 +835,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * 
 	 * @param eventColumnLabelProvider
 	 */
-	abstract protected String getEventText(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
+	abstract protected String getEventText(Date element, Event event, EventColumnLabelProvider eventColumnLabelProvider);
 
 	abstract protected Color getEventForegroundColor(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
 	
