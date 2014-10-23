@@ -28,11 +28,11 @@ public interface ICooldownCalculator extends ICalculator {
 	public void prepareEvaluation(ISequences sequences);
 
 	/**
-	 * Calculate the total price in for the cooldown operation.
+	 * Calculate the total cost of a cooldown operation. Note: time is passed in local time and converted to UTC.
 	 * 
 	 * @param time
 	 * @param port
 	 *            {@link IPort} for local to UTC conversion
 	 */
-	public long calculateCooldownCost(IVesselClass vesselClass, IPort port, int cv, int time);
+	public long calculateCooldownCost(IVesselClass vesselClass, IPort port, int cv, int localTime);
 }
