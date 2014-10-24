@@ -19,12 +19,14 @@ import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 /**
  */
 public class ScheduleDiffUtils {
 
 	private boolean checkAssignmentDifferences = true;
+	private boolean checkSpotMarketDifferences = true;
 
 	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 
@@ -83,6 +85,21 @@ public class ScheduleDiffUtils {
 						if (!Equality.isEqual(caName, refName)) {
 							return true;
 						}
+					} else {
+						if (checkSpotMarketDifferences) {
+							final SpotSlot caSpot = (SpotSlot) caSlot;
+							final SpotSlot refSpot = (SpotSlot) refSlot;
+
+							final SpotMarket caMarket = caSpot == null ? null : caSpot.getMarket();
+							final SpotMarket refMarket = refSpot == null ? null : refSpot.getMarket();
+
+							final String caName = caMarket == null ? null : caMarket.getName();
+							final String refName = refMarket == null ? null : refMarket.getName();
+
+							if (!Equality.isEqual(caName, refName)) {
+								return true;
+							}
+						}
 					}
 				}
 
@@ -108,6 +125,7 @@ public class ScheduleDiffUtils {
 					}
 				}
 			}
+
 			return false;
 		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
 			SlotVisit ref = null;
@@ -219,6 +237,7 @@ public class ScheduleDiffUtils {
 			if (Math.abs(refTime - vevTime) > 3 * 24) {
 				return true;
 			}
+
 			return false;
 		}
 
@@ -233,4 +252,11 @@ public class ScheduleDiffUtils {
 		this.checkAssignmentDifferences = checkAssignmentDifferences;
 	}
 
+	public boolean isCheckSpotMarketDifferences() {
+		return checkSpotMarketDifferences;
+	}
+
+	public void setCheckSpotMarketDifferences(final boolean checkSpotMarketDifferences) {
+		this.checkSpotMarketDifferences = checkSpotMarketDifferences;
+	}
 }
