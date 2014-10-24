@@ -2189,7 +2189,6 @@ public class LNGScenarioTransformer {
 				for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == vessel) {
 						sortedAvailabilities.add(vesselAvailability);
-						break;
 					}
 				}
 			}
