@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
@@ -27,6 +28,7 @@ public class ScheduleDiffUtils {
 
 	private boolean checkAssignmentDifferences = true;
 	private boolean checkSpotMarketDifferences = true;
+	private boolean checkNextPortDifferences = true;
 
 	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 
@@ -119,6 +121,25 @@ public class ScheduleDiffUtils {
 					final Contract refContract = refAllocation.getContract();
 					final String caName = caContract == null ? null : caContract.getName();
 					final String refName = refContract == null ? null : refContract.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
+				}
+			}
+
+			if (checkNextPortDifferences) {
+				final Event caLastEvent = ca.getEvents().get(ca.getEvents().size()-1);
+				final Event refLastEvent = ref.getEvents().get(ref.getEvents().size()-1);
+
+				final Event caNextEvent = caLastEvent.getNextEvent();
+				final Event refNextEvent = refLastEvent.getNextEvent();
+
+				if (caNextEvent instanceof PortVisit && refNextEvent instanceof PortVisit) {
+					final Port caPort = caNextEvent.getPort();
+					final Port refPort = refNextEvent.getPort();
+					final String caName = caPort == null ? null : caPort.getName();
+					final String refName = refPort == null ? null : refPort.getName();
 
 					if (!Equality.isEqual(caName, refName)) {
 						return true;
@@ -238,10 +259,35 @@ public class ScheduleDiffUtils {
 				return true;
 			}
 
+			if (checkNextPortDifferences) {
+				final PortVisit vevNextVisit = findNextPortVisit(vev);
+				final PortVisit refNextVisit = findNextPortVisit(ref);
+
+				if (vevNextVisit != null && refNextVisit != null) {
+					final Port caPort = vevNextVisit.getPort();
+					final Port refPort = refNextVisit.getPort();
+					final String caName = caPort == null ? null : caPort.getName();
+					final String refName = refPort == null ? null : refPort.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
+				}
+			}
+
 			return false;
 		}
 
 		return true;
+	}
+
+	private PortVisit findNextPortVisit(final Event evt) {
+
+		Event e = evt.getNextEvent();
+		while (!(e instanceof PortVisit)) {
+			e = e.getNextEvent();
+		}
+		return (PortVisit) e;
 	}
 
 	public boolean isCheckAssignmentDifferences() {
@@ -259,4 +305,13 @@ public class ScheduleDiffUtils {
 	public void setCheckSpotMarketDifferences(final boolean checkSpotMarketDifferences) {
 		this.checkSpotMarketDifferences = checkSpotMarketDifferences;
 	}
+
+	public boolean isCheckNextPortDifferences() {
+		return checkNextPortDifferences;
+	}
+
+	public void setCheckNextPortDifferences(final boolean checkNextPortDifferences) {
+		this.checkNextPortDifferences = checkNextPortDifferences;
+	}
+
 }
