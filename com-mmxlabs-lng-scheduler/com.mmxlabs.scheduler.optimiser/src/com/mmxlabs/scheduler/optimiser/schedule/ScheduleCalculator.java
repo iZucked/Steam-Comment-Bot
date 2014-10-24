@@ -257,6 +257,13 @@ public class ScheduleCalculator {
 
 		if (customNonShippedScheduler != null) {
 			customNonShippedScheduler.modifyArrivalTimes(resource, startTime, currentPlan, portTimesRecord);
+
+			// Back apply any modified times to times array
+			int idx = 0;
+			for (final ISequenceElement element : sequence) {
+				final IPortSlot slot = portSlotProvider.getPortSlot(element);
+				times[idx++] = portTimesRecord.getSlotTime(slot);
+			}
 		}
 
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
