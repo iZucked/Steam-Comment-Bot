@@ -73,6 +73,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		this.toolkit = toolkit;
 		final Control c;
 		if (feature.isUnsettable()) {
+			// FIXME: too early! Needs to  be after/part of display(), once input has been set
 			this.lastSetValue = getInitialUnsetValue();
 //			final Composite sub = new Composite(parent, SWT.NONE);
 			final Composite sub = toolkit.createComposite(parent);
