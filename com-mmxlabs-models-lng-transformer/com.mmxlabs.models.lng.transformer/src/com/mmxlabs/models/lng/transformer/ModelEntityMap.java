@@ -10,10 +10,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
  * Class which maps model entities to classes; the LNGScenarioTransformer should populate one of these, which maps every PortSlot to the URI of a Slot in the EMF, and similarly for vessels, vessel
@@ -84,7 +89,17 @@ public class ModelEntityMap {
 		this.latestDate = latestTime;
 	}
 
-	public Date getDateFromHours(final long hours) {
-		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR);
+	public Date getDateFromHours(final long hours, final String timeZone) {
+		int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
+		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE);
 	}
+	
+	public Date getDateFromHours(final long hours, IPort port) {
+		return getDateFromHours(hours, port.getTimeZoneId());
+	}
+	
+	public Date getDateFromHours(final long hours, Port port) {
+		return getDateFromHours(hours, port.getTimeZone());
+	}
+
 }

@@ -185,8 +185,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
-		portVisit.setStart(modelEntityMap.getDateFromHours(visitEvent.getStartTime()));
-		portVisit.setEnd(modelEntityMap.getDateFromHours(visitEvent.getEndTime()));
+		portVisit.setStart(modelEntityMap.getDateFromHours(visitEvent.getStartTime(), slot.getPort()));
+		portVisit.setEnd(modelEntityMap.getDateFromHours(visitEvent.getEndTime(), slot.getPort()));
 
 		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
 		if (capacityViolationAnnotation != null) {
