@@ -81,7 +81,15 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
 		} else {
 			if (item.getParent().isEnabled()) {
-				Color back = item.getBackground(getColumn());
+				Color back = null;
+				// Check for explicit column background colour disabled: the visualizer
+				// now always provides a default column background, so a non-null column
+				// background does not necessarily indicate an override of the default
+				// behaviour.
+				// TODO: see if the original behaviour can be retrieved by creating
+				// visualizers which explicitly return a null background. 
+
+				// Color back = item.getBackground(getColumn());
 
 				if (back != null) {
 					gc.setBackground(back);
@@ -101,7 +109,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 
 		if (drawBackground)
 			gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
-
+		
 		int x = leftMargin;
 
 		if (isTree()) {
@@ -258,6 +266,15 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 			}
 		}
 
+		/*
+		Color blackColour = new Color(gc.getDevice(), 0, 0, 0);
+		gc.setForeground(blackColour);
+		gc.setBackground(blackColour);
+		gc.fillRectangle(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+		blackColour.dispose();
+		*/
+		
+		
 		alternativeColour.dispose();
 		alternativeLineColour.dispose();
 	}
