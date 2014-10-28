@@ -31,6 +31,7 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItemDataVisualizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -187,7 +188,12 @@ public class EObjectTableViewer extends GridTreeViewer {
 	}
 
 	public EObjectTableViewer(final Composite parent, final int style) {
-		super(parent, style);
+		// The default super class constructor creates a data visualizer with
+		// explicit background & foreground; this interferes with the 
+		// default checking in the AlternatingRowCellRenderer.
+		// Here we make sure that our EObjectTableViewer objects are
+		// initialised with null settings for the cell background colour.
+		super(new Grid(new GridItemDataVisualizer(null, null, null), parent, style));
 		this.validationSupport = createValidationSupport();
 		this.filterSupport = new EObjectTableViewerFilterSupport(this);
 		ColumnViewerToolTipSupport.enableFor(this);

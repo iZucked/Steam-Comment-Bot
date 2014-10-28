@@ -81,7 +81,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 			gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT));
 		} else {
 			if (item.getParent().isEnabled()) {
-				Color back = null;
+				//Color back = null;
 				// Check for explicit column background colour disabled: the visualizer
 				// now always provides a default column background, so a non-null column
 				// background does not necessarily indicate an override of the default
@@ -89,7 +89,7 @@ public class AlternatingRowCellRenderer extends GridCellRenderer {
 				// TODO: see if the original behaviour can be retrieved by creating
 				// visualizers which explicitly return a null background. 
 
-				// Color back = item.getBackground(getColumn());
+				Color back = item.getBackground(getColumn());
 
 				if (back != null) {
 					gc.setBackground(back);
