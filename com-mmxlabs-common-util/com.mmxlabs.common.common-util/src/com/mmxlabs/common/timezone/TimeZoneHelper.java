@@ -1,0 +1,53 @@
+package com.mmxlabs.common.timezone;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+/**
+ * Methods to help move between timezones.
+ * @author achurchill
+ *
+ */
+public class TimeZoneHelper {
+	/**
+	 * Helper method to create a new Date, preserving everything but changing the timezone. In effect this will shift the time.
+	 * @param originalDate
+	 * @param originalTimeZone
+	 * @param newTimeZone
+	 * @return
+	 */
+	public static Date createSameDateAndTimeDifferentTimeZone(Date originalDate, String originalTimeZone, String newTimeZone) {
+		return createCalendarWithSameDateTimeDifferentTimeZone(originalDate, originalTimeZone, newTimeZone).getTime();
+	}
+	
+	/**
+	 * Helper method to create a new Calendar, preserving everything but changing the timezone. In effect this will shift the time.
+	 * @param originalDate
+	 * @param originalTimeZone
+	 * @param newTimeZone
+	 * @return
+	 */
+	public static Calendar createCalendarWithSameDateTimeDifferentTimeZone(Date originalDate, String originalTimeZone, String newTimeZone) {
+		final Calendar oldCalendar = Calendar.getInstance(TimeZone.getTimeZone(originalTimeZone));
+		oldCalendar.setTime(originalDate);
+		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone(newTimeZone));
+		newCalendar.set(Calendar.YEAR, oldCalendar.get(Calendar.YEAR));
+		newCalendar.set(Calendar.MONTH, oldCalendar.get(Calendar.MONTH));
+		newCalendar.set(Calendar.DAY_OF_MONTH, oldCalendar.get(Calendar.DAY_OF_MONTH));
+		newCalendar.set(Calendar.HOUR_OF_DAY, oldCalendar.get(Calendar.HOUR_OF_DAY));
+		newCalendar.set(Calendar.MINUTE, oldCalendar.get(Calendar.MINUTE));
+		return newCalendar;
+	}
+	
+	/**
+	 * Helper method to create a new Calendar, preserving everything but changing the timezone. In effect this will shift the time.
+	 * @param originalDate
+	 * @param originalTimeZone
+	 * @param newTimeZone
+	 * @return
+	 */
+	public static Calendar createCalendarWithSameDateTimeDifferentTimeZone(Calendar originalDate, String originalTimeZone, String newTimeZone) {
+		return createCalendarWithSameDateTimeDifferentTimeZone(originalDate.getTime(), originalTimeZone, newTimeZone);
+	}
+}
