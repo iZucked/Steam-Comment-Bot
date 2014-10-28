@@ -53,25 +53,6 @@ public class DateAndCurveHelper {
 		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
 		return (int) (difference / Timer.ONE_HOUR);
 	}
-
-	/**
-	 * Helper method to create a new date, preserving everything but changing the timezone. In effect this will shift the time.
-	 * @param originalDate
-	 * @param originalTimeZone
-	 * @param newTimeZone
-	 * @return
-	 */
-	public static Date createSameDateAndTimeDifferentTimeZone(Date originalDate, String originalTimeZone, String newTimeZone) {
-		final Calendar oldCalendar = Calendar.getInstance(TimeZone.getTimeZone(originalTimeZone));
-		oldCalendar.setTime(originalDate);
-		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone(newTimeZone));
-		newCalendar.set(Calendar.YEAR, oldCalendar.get(Calendar.YEAR));
-		newCalendar.set(Calendar.MONTH, oldCalendar.get(Calendar.MONTH));
-		newCalendar.set(Calendar.DAY_OF_MONTH, oldCalendar.get(Calendar.DAY_OF_MONTH));
-		newCalendar.set(Calendar.HOUR_OF_DAY, oldCalendar.get(Calendar.HOUR_OF_DAY));
-		newCalendar.set(Calendar.MINUTE, oldCalendar.get(Calendar.MINUTE));
-		return newCalendar.getTime();
-	}
 	
 	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();

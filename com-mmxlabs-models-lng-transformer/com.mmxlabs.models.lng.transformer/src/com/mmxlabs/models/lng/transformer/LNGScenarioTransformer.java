@@ -43,6 +43,7 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -2358,7 +2359,7 @@ public class LNGScenarioTransformer {
 		int pricingDate;
 		if (slot.isSetPricingDate()) {
 			// convert pricing date to local time (as it currently gets converted to UTC in PricingEventHelper)
-			Date pricingDateInLocalTime = DateAndCurveHelper.createSameDateAndTimeDifferentTimeZone(slot.getPricingDate(), "UTC", slot.getPort().getTimeZone());
+			Date pricingDateInLocalTime = TimeZoneHelper.createSameDateAndTimeDifferentTimeZone(slot.getPricingDate(), "UTC", slot.getPort().getTimeZone());
 			pricingDate = convertTime(earliestTime, pricingDateInLocalTime);
 		} else {
 			pricingDate = IPortSlot.NO_PRICING_DATE;
