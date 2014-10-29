@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
  * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
@@ -158,5 +159,27 @@ public class DateAndCurveHelper {
 
 	public void setEarliestTime(Date earliestTime) {
 		this.earliestTime = earliestTime;
+	}
+	
+	public static int getOffsetInMinutesFromTimeZone(String timeZone){
+		return getOffsetMinutes(getOffsetInMsFromTimeZone(timeZone));
+	}
+	
+	public static int getOffsetInMsFromTimeZone(String timeZone){
+		int offset = TimeZone.getTimeZone(timeZone).getRawOffset();
+		return offset;
+	}
+	
+	public static int getOffsetMinutes(int offsetMs) {
+		int correctedOffset = 0;
+		int offsetInMinutes = (Math.abs(offsetMs) / 1000 / 60) % 60;
+		if (offsetInMinutes != 0) {
+			if (offsetMs > 0) {
+				correctedOffset = 60 - (Math.abs(offsetMs) / 1000 / 60) % 60;
+			} else {
+				correctedOffset = offsetInMinutes;
+			}
+		}
+		return correctedOffset;
 	}
 }

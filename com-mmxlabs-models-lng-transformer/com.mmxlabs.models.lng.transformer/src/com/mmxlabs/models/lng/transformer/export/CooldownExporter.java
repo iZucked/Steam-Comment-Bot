@@ -47,8 +47,8 @@ public class CooldownExporter extends BaseAnnotationExporter {
 			cooldown.setPort(ePort);
 			cooldown.setVolume(OptimiserUnitConvertor.convertToExternalVolume(cooldownVolume));
 			cooldown.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getFuelCost(FuelComponent.Cooldown)));
-			cooldown.setStart(modelEntityMap.getDateFromHours(event.getEndTime()));
-			cooldown.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
+			cooldown.setStart(modelEntityMap.getDateFromHours(event.getEndTime(), ePort));
+			cooldown.setEnd(modelEntityMap.getDateFromHours(event.getEndTime(), ePort));
 
 			// Cooldown duration is zero - this will need to be changed if cooldown duration becomes non-zero again. This will likely need API support
 			// cooldown.setCharterCost(OptimiserUnitConvertor.convertToExternalFixedCost(event.getCharterCost()));
