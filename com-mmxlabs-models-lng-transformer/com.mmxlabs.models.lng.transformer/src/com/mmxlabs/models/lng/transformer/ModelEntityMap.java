@@ -15,6 +15,7 @@ import java.util.TimeZone;
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -94,14 +95,14 @@ public class ModelEntityMap {
 		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE);
 	}
 	
-	public Date getDateFromHours(final long hours, IPort port) {
+	public Date getDateFromHours(final long hours, @Nullable IPort port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
 		return getDateFromHours(hours, port.getTimeZoneId());
 	}
 	
-	public Date getDateFromHours(final long hours, Port port) {
+	public Date getDateFromHours(final long hours, @Nullable Port port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
