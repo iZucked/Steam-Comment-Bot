@@ -17,6 +17,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -25,11 +27,12 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
+import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.impl.DefaultTopLevelComposite;
 
 /**
  * 
- * @author Simon Goodall
+ * @author Simon Goodall, achurchill
  * 
  */
 public class ContractTopLevelComposite extends DefaultTopLevelComposite {
@@ -38,62 +41,61 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	 * {@link IDisplayComposite} to contain elements for the bottom of the editor
 	 */
 	protected IDisplayComposite bottomLevel = null;
+	/**
+	 * {@link Composite} to contain the sub editors
+	 */
+	private Composite middle;
 
 	public ContractTopLevelComposite(final Composite parent, final int style, final IDialogEditingContext dialogContext, final FormToolkit toolkit) {
 		super(parent, style, dialogContext, toolkit);
+		setLayoutProvider(new DefaultDisplayCompositeLayoutProvider() {
+			// used for children in "middle" composite
+			@Override
+			public Object createTopLayoutData(MMXRootObject root, EObject value, EObject detail) {
+				return new GridData(GridData.FILL_BOTH);
+			}
+		});
 	}
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject root, final EObject object, final Collection<EObject> range, final EMFDataBindingContext dbc) {
 
 		final EClass eClass = object.eClass();
+		final Group g = new Group(this, SWT.NONE);
 
-		toolkit.adapt(this);
+		toolkit.adapt(g);
 
-		final TabFolder tabFolder = new TabFolder(this, SWT.FLAT | SWT.TOP);
-		toolkit.adapt(tabFolder, true, true);
-		toolkit.paintBordersFor(tabFolder);
+		g.setText("Contract");
+		g.setLayout(new FillLayout());
+		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
-		// tabFolder.setLayout(new FillLayout());
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.verticalIndent = 0;
-		gd.horizontalIndent = 0;
-		tabFolder.setLayoutData(gd);
-		final TabItem mainTabPage = new TabItem(tabFolder, SWT.FLAT);
-		mainTabPage.setText("Contract");// EditorUtils.unmangle(eClass.getName()));
-		// final Composite mainTabComposite = new Composite(tabFolder, SWT.NONE);
-		final Composite mainTabComposite = toolkit.createComposite(tabFolder, SWT.NONE);
-		mainTabPage.setControl(mainTabComposite);
-		// g.setText(EditorUtils.unmangle(eClass.getName()));
-		mainTabComposite.setLayout(new FillLayout());
-		mainTabComposite.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		// Create the directly rather than go through the registry. True indicates this is the top section. The bottom will be created later on
-		topLevel = new ContractDetailComposite(mainTabComposite, SWT.NONE, true, toolkit);
+		topLevel = new ContractDetailComposite(g, SWT.NONE, true, toolkit);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-		final TabItem priceInfoTabPage = new TabItem(tabFolder, SWT.None);
-		priceInfoTabPage.setText("Pricing");
-		final Composite priceInfoTabComposite = toolkit.createComposite(tabFolder);
-		priceInfoTabPage.setControl(priceInfoTabComposite);
-		priceInfoTabComposite.setLayout(new GridLayout(1, true));
-		createChildComposites(root, object, eClass, priceInfoTabComposite);
+		// Initialise middle composite
+		middle = toolkit.createComposite(this);
 
-		final TabItem constraintTabPage = new TabItem(tabFolder, SWT.None);
-		constraintTabPage.setText("Restrictions");
-		// final Group g = new Group(tabFolder, SWT.NONE);
-		final Composite constraintTabComposite = toolkit.createComposite(tabFolder);
-		constraintTabPage.setControl(constraintTabComposite);
+		createChildComposites(root, object, eClass, middle);
+		// We know there are n slots, so n columns
+		middle.setLayout(new GridLayout(childObjects.size(), true));
+		middle.setLayoutData(new GridData(GridData.FILL_BOTH));
+		middle.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+		
+		final Group g2 = new Group(this, SWT.NONE);
 
-		// Additional Group for the bottom section
-		// g2.setText("Additional Constraints");
-		constraintTabComposite.setLayout(new FillLayout());
-		constraintTabComposite.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		// Create the directly rather than go through the registry. True indicates this is the bottom section.
-		bottomLevel = new ContractDetailComposite(constraintTabComposite, SWT.NONE, false, toolkit);
+		toolkit.adapt(g2);
+
+		g2.setText("Restrictions");
+		g2.setLayout(new FillLayout());
+		g2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
+
+		bottomLevel = new ContractDetailComposite(g2, SWT.NONE, false, toolkit);
 		bottomLevel.setCommandHandler(commandHandler);
 		bottomLevel.setEditorWrapper(editorWrapper);
-
 		topLevel.display(dialogContext, root, object, range, dbc);
 		bottomLevel.display(dialogContext, root, object, range, dbc);
 
@@ -103,19 +105,18 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		while (refs.hasNext()) {
 			children.next().display(dialogContext, root, (EObject) object.eGet(refs.next()), range, dbc);
 		}
-
-		// Overrides default layout factory so we get a single column rather than multiple columns and one row
+//
+//		// Overrides default layout factory so we get a single column rather than multiple columns and one row
 		this.setLayout(new GridLayout(1, true));
 	}
 
-	// @Override
-	// protected boolean shouldDisplay(final EReference ref) {
-	// return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
-	// }
+//	 @Override
+//	 protected boolean shouldDisplay(final EReference ref) {
+//	 return super.shouldDisplay(ref) || ref == CargoPackage.eINSTANCE.getCargo_LoadSlot() || ref == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
+//	 }
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
-		bottomLevel.displayValidationStatus(status);
 		super.displayValidationStatus(status);
 	}
 
