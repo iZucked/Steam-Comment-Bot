@@ -118,6 +118,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 	@Override
 	public void displayValidationStatus(final IStatus status) {
 		super.displayValidationStatus(status);
+		bottomLevel.displayValidationStatus(status);
 	}
 
 	@Override
