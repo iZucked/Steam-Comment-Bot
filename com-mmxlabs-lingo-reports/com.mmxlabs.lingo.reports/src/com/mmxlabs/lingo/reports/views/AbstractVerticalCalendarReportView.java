@@ -15,22 +15,24 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.AbstractRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Item;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
@@ -74,11 +76,12 @@ import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 
 /**
- * Class for providing "vertical" schedule reports. Each row is a calendar day in the schedule; each column typically represents a sequence (series of events) in the schedule.
- * <p/>
+ * Class for providing "vertical" schedule reports. Each row is a calendar day in the schedule; each column typically 
+ * represents a sequence (series of events) in the schedule.<p/> 
  * 
  * Override {@link#getCols(ScheduleSequenceData data)} to modify the columns, and override {@link#getEventText(Date date, Event event)} and / or {@link#getEventText(Date date, Event [] events)} to
- * Override {@link#getEventText(Date date, Event event)} and / or {@link#getEventText(Date date, Event [] events)} to modify the sequence cell contents.
+ * Override {@link#getEventText(Date date, Event event)} and / or {@link#getEventText(Date date, Event [] events)} 
+ * to modify the sequence cell contents.   
  * 
  * @author Simon McGregor
  * 
@@ -106,26 +109,50 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		final FillLayout layout = new FillLayout();
 		layout.marginHeight = layout.marginWidth = 0;
 		container.setLayout(layout);
-
+		
 		gridViewer = new GridTableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		gridViewer.setContentProvider(createContentProvider());
 		
 		
 		gridViewer.getGrid().setHeaderVisible(true);
 		gridViewer.getGrid().setLinesVisible(true);
-
+		
 		// following unfinished code allows the date to display as a row header
-		/*
-		 * gridViewer.getGrid().setRowHeaderVisible(true); gridViewer.getGrid().setRowHeaderRenderer(new AbstractRenderer() {
-		 * 
-		 * @Override public Point computeSize(GC arg0, int arg1, int arg2, Object arg3) { return new Point(50, 10); }
-		 * 
-		 * @Override public void paint(GC arg0, Object arg1) { Rectangle bounds = getBounds(); arg0.setBackground(getColour(Light_Grey)); arg0.fillRectangle(bounds);
-		 * arg0.setForeground(getColour(Black)); if (arg1 instanceof GridItem) { GridItem item = (GridItem) arg1; Date date = (Date) item.getData(); if (date != null) {
-		 * arg0.drawString(sdf.format(date), bounds.x, bounds.y); } } }
-		 * 
-		 * });
-		 */
+		///*
+		gridViewer.getGrid().setRowHeaderVisible(true);
+		gridViewer.getGrid().setRowHeaderRenderer(new AbstractRenderer() {
+
+			@Override
+			public Point computeSize(GC arg0, int arg1, int arg2, Object arg3) {
+				return new Point(50, 10);
+			}
+
+			@Override
+			public void paint(GC gc, Object arg1) {
+				Rectangle bounds = getBounds();
+				int left = bounds.x;
+				int top = bounds.y;
+				int right = bounds.x + bounds.width - 1;
+				int bottom = bounds.y + bounds.height - 1;
+				
+				gc.setBackground(getColour(Light_Grey));
+				gc.fillRectangle(bounds);
+				
+				gc.setForeground(getColour(Grey));
+				gc.drawLine(left, bottom, right, bottom);
+				gc.drawLine(right, top, right, bottom);
+				gc.setForeground(getColour(Black));
+				if (arg1 instanceof GridItem) {
+					GridItem item = (GridItem) arg1;
+					Date date = (Date) item.getData();
+					if (date != null) {
+						gc.drawString(sdf.format(date),  left + 3,  top + 1);
+					}
+				}
+			}
+			
+		});
+		//*/
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(gridViewer, createElementCollector());
 
@@ -162,7 +189,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 		};
 	}
-
+	
 	protected IStructuredContentProvider createContentProvider() {
 		return new IStructuredContentProvider() {
 
@@ -202,24 +229,16 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				if (root != null) {
 					createCols(data);
 				}
-
+				
 				// regenerate the map linking events to vessels (or vessel classes if the event is handled by a chartered-in vessel)
 				vesselsByEvent.clear();
 				if (data != null && data.vessels != null) {
-					for (final Sequence sequence : data.vessels) {
+					for (Sequence sequence: data.vessels) {
 						// check to see if we are dealing with a specific vessel from the fleet or a nameless chartered-in vessel												
-						Object vesselOrClass = null;
-						if (sequence.isSpotVessel()) {
-							vesselOrClass = sequence.getVesselClass();
-						} else {
-							final VesselAvailability vesselAvailability = sequence.getVesselAvailability();
-							if (vesselAvailability != null) {
-								vesselOrClass = vesselAvailability.getVessel();
-							}
-						}
-					
+						Object vesselOrClass = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVesselAvailability().getVessel();
+						
 						if (vesselOrClass != null) {
-							for (final Event event : sequence.getEvents()) {
+							for (Event event: sequence.getEvents()) {
 								vesselsByEvent.put(event, vesselOrClass);
 							}
 						}
@@ -244,18 +263,17 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		};
 	}
-
-	protected void setData(final ScheduleSequenceData data) {
+	
+	protected void setData(ScheduleSequenceData data) {
 	}
 
 	/**
 	 * Returns a list of all 00h00 GMT Date objects which fall within the specified range
-	 * 
 	 * @param start
 	 * @param end
 	 * @return
 	 */
-	public static List<Date> getGMTDaysBetween(final Date start, final Date end) {
+	public static List<Date> getGMTDaysBetween(Date start, Date end) {
 		final ArrayList<Date> result = new ArrayList<Date>();
 		if (start != null && end != null) {
 			final Calendar c = Calendar.getInstance();
@@ -269,11 +287,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 
 		}
-
-		return result;
+		
+		return result;		
 	}
-
-	public static Date getGMTDayFor(final Date date) {
+	
+	public static Date getGMTDayFor(Date date) {
 		final Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		c.set(Calendar.HOUR_OF_DAY, 0);
@@ -300,11 +318,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				// when we get to an event after the search window, break the loop
 				// NO: events are not guaranteed to be sorted by date :(
 				if (event.getStart().after(end)) {
-					// break;
+					//break;
 				}
 				// otherwise, as long as the event is in the search window, add it to the results
 				// if the event ends at midnight, we do *not* count it towards this day
-				else if (start.before(event.getEnd())) {
+				else if (start.before(event.getEnd())) {					
 					result.add(event);
 				}
 			}
@@ -324,20 +342,21 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	}
 
 	/**
-	 * Is the specified day outside of the actual slot visit itself? (A SlotVisit event can be associated with a particular day if its slot window includes that day.)
+	 * Is the specified day outside of the actual slot visit itself? (A SlotVisit event can be
+	 * associated with a particular day if its slot window includes that day.) 
 	 * 
 	 * @param day
 	 * @param visit
 	 * @return
 	 */
 	protected static boolean isDayOutsideActualVisit(final Date day, final SlotVisit visit) {
-		final Date nextDay = new Date(day.getTime() + 1000 * 24 * 3600);
-
-		final Slot slot = ((SlotVisit) visit).getSlotAllocation().getSlot();
+		Date nextDay = new Date(day.getTime() + 1000 * 24 * 3600);
+		
+		Slot slot = ((SlotVisit) visit).getSlotAllocation().getSlot(); 
 		if (slot.getName().equals("P16")) {
 			slot.getName();
 		}
-
+	
 		return (nextDay.before(visit.getStart()) || (visit.getEnd().after(day) == false));
 	}
 
@@ -410,18 +429,18 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	public interface EventFilter {
 		boolean isEventFiltered(Date date, Event event);
 	}
-
+	
 	public abstract static class BaseEventFilter implements EventFilter {
 		protected final EventFilter filter; // allow filters to be chained if necessary
-
-		public BaseEventFilter(final EventFilter filter) {
+		
+		public BaseEventFilter(EventFilter filter) {
 			this.filter = filter;
 		}
 
 		protected abstract boolean isEventDirectlyFiltered(Date date, Event event);
-
+		
 		@Override
-		public boolean isEventFiltered(final Date date, final Event event) {
+		public boolean isEventFiltered(Date date, Event event) {
 			if (filter != null) {
 				// if the previous filter filtered stuff out
 				if (filter.isEventFiltered(date, event) == true) {
@@ -430,9 +449,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 
 			return isEventDirectlyFiltered(date, event);
-		}
+		}		
 	}
-
+	
 	static abstract protected class FieldEventFilter<T> extends BaseEventFilter {
 		final private List<T> permittedValues;
 
@@ -444,44 +463,44 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		public FieldEventFilter(final List<T> values) {
 			this(null, values);
 		}
-
+		
 		@Override
 		public boolean isEventDirectlyFiltered(final Date date, final Event event) {
 			return (permittedValues.contains(getEventField(event)) == false);
 		}
 
-		abstract T getEventField(Event event);
-
+		abstract T getEventField(Event event);		
+		
 	}
-
+	
 	static protected class PortEventFilter extends FieldEventFilter<Port> {
 
-		public PortEventFilter(final EventFilter filter, final List<Port> values) {
+		public PortEventFilter(final EventFilter filter, List<Port> values) {
 			super(filter, values);
 		}
 
-		public PortEventFilter(final List<Port> values) {
+		public PortEventFilter(List<Port> values) {
 			this(null, values);
 		}
 
 		@Override
-		Port getEventField(final Event event) {
+		Port getEventField(Event event) {
 			return event.getPort();
 		}
-
+		
 	}
 
-	static protected class ContractEventFilter extends FieldEventFilter<Contract> {
-		public ContractEventFilter(final EventFilter filter, final List<Contract> values) {
+	static protected class ContractEventFilter extends FieldEventFilter<Contract> {		
+		public ContractEventFilter(final EventFilter filter, List<Contract> values) {
 			super(filter, values);
 		}
 
-		public ContractEventFilter(final List<Contract> values) {
+		public ContractEventFilter(List<Contract> values) {
 			this(null, values);
 		}
 
 		@Override
-		Contract getEventField(final Event event) {
+		Contract getEventField(Event event) {
 			if (event instanceof SlotVisit) {
 				return ((SlotVisit) event).getSlotAllocation().getContract();
 			}
@@ -489,6 +508,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 	}
 
+	
 	/**
 	 * Class which provides cell labels (and formatting if desired) for columns in a calendar-style vertical report, based on a list of events per cell.
 	 * <p/>
@@ -512,22 +532,21 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		public EventColumnLabelProvider(final EventProvider provider) {
 			super(provider);
 		}
-
-		//
-		// public void update(ViewerCell cell) {
-		// super.update(cell);
-		// DataVisualizer dv = gridViewer.getGrid().getDataVisualizer();
-		//
-		// int col = cell.getColumnIndex();
-		//
-		// Object element = cell.getElement();
-		// int row = Arrays.asList(dates).indexOf(element);
-		// int rowSpan = getRowSpan((Date) element, data);
-		// dv.setRowSpan(row, col, rowSpan);
-		// int colSpan = getColSpan((Date) element, data);
-		//
-		// }
-		//
+//
+//		public void update(ViewerCell cell) {
+//			super.update(cell);
+//			DataVisualizer dv = gridViewer.getGrid().getDataVisualizer();
+//			
+//			int col = cell.getColumnIndex();
+//
+//			Object element = cell.getElement();
+//			int row = Arrays.asList(dates).indexOf(element);
+//			int rowSpan = getRowSpan((Date) element, data);
+//			dv.setRowSpan(row, col, rowSpan);
+//			int colSpan = getColSpan((Date) element, data);
+//
+//		}		
+//		
 		protected int getRowSpan(final Date date, final EventProvider provider) {
 			return 0;
 		}
@@ -537,7 +556,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 
 		/**
-		 * Returns the text for a column cell.
+		 * Returns the text for a column cell. 
 		 * Defers to {@link #getEventsText(Date, Event[])}; override that method if you want to change the behaviour. 
 		 */
 		@Override
@@ -545,7 +564,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			// find the event text for the date given
 			return getEventsText(element, provider.getEvents(element));
 		}
-
+		
 		/**
 		 * Returns the text for a particular series of events on a specified date. By default, calls
 		 * {@link #getEventText(Date, Event)} for each event in the specified array. 
@@ -564,12 +583,14 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			return sb.toString();
 		}
 		/**
+		 * Returns 
+		 * By default, defers to {@link AbstractVerticalCalendarReportView#getEventText(Date, Event[], EventColumnLabelProvider)}
 		 * @param element
 		 * @param event
 		 * @return
 		 */
-		protected String getEventText(final Date element, final Event[] events) {
-			return AbstractVerticalCalendarReportView.this.getEventText(element, events, EventColumnLabelProvider.this);
+		protected String getEventText(final Date element, final Event event) {
+			return AbstractVerticalCalendarReportView.this.getEventText(element, event, EventColumnLabelProvider.this);			
 		}
 
 		/** Returns the desired background colour of the cell. */
@@ -623,11 +644,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 */
 	public abstract static class EventProvider {
 		final protected EventFilter filter;
-
-		public EventProvider(final EventFilter filter) {
+		
+		public EventProvider(EventFilter filter) {
 			this.filter = filter;
 		}
-
+		
 		public Event[] getEvents(final Date date) {
 			final ArrayList<Event> result = new ArrayList<>();
 
@@ -651,40 +672,40 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			return false;
 		}
 	}
-
+	
 	static protected class HashMapEventProvider extends EventProvider {
 		Map<Date, List<Event>> events = new HashMap<>();
-		final Event[] noEvents = new Event[0];
+		final Event [] noEvents = new Event [0];
 
-		public HashMapEventProvider(final Date start, final Date end, final EventProvider wrapped) {
+		public HashMapEventProvider(Date start, Date end, EventProvider wrapped) {
 			this(null);
-			for (final Date day : getGMTDaysBetween(start, end)) {
-				for (final Event event : wrapped.getEvents(day)) {
+			for (Date day: getGMTDaysBetween(start, end)) {
+				for (Event event: wrapped.getEvents(day)) {
 					addEvent(day, event);
 				}
 			}
 		}
-
-		public HashMapEventProvider(final EventFilter filter) {
+		
+		public HashMapEventProvider(EventFilter filter) {
 			super(filter);
 		}
 
 		public void addEvent(final Date date, final Event event) {
 			final List<Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<Event>();
 			list.add(event);
-
-			// we actually want the events to be keyed on 00:00 GMT of the same day
+			
+			// we actually want the events to be keyed on 00:00 GMT of the same day			
 			this.events.put(getGMTDayFor(date), list);
 		}
-
+		
 		@Override
-		protected Event[] getUnfilteredEvents(final Date date) {
+		protected Event[] getUnfilteredEvents(Date date) {
 			if (events.containsKey(date)) {
 				return events.get(date).toArray(noEvents);
 			}
 			return noEvents;
 		}
-
+		
 	}
 
 	/**
@@ -729,9 +750,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 	}
 
-	protected enum PrecedenceType {
-		COLOUR, TEXT
-	}
+	protected enum PrecedenceType { COLOUR, TEXT }
 
 	/**
 	 * Record class for holding information on the sequences in a Schedule. Provides the following fields:
@@ -757,16 +776,16 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		public ScheduleSequenceData(final LNGScenarioModel model) {
 			final ScheduleModel scheduleModel = (model == null ? null : model.getPortfolioModel().getScheduleModel());
 			final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
-
+			
 			if (schedule == null) {
 				vessels = null;
 				fobSales = desPurchases = null;
 				start = end = null;
 				longLoads = null;
 				shortDischarges = null;
-				return;
+				return;				
 			}
-
+			
 			Date startDate = null;
 			Date endDate = null;
 
@@ -786,7 +805,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			// set the final record fields
 			start = startDate;
 			end = endDate;
-
+			
+			
 			// find the sequences per vessel, and the FOB & DES sequences
 			Sequence tempDes = null;
 			Sequence tempFob = null;
@@ -801,25 +821,26 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				} else {
 					vesselList.add(seq);
 				}
-			}
+			}			
 			// set the final record fields
 			desPurchases = tempDes;
-			fobSales = tempFob;
+			fobSales = tempFob;			
 			vessels = vesselList.toArray(new Sequence[0]);
-
+			
 			// find the open slots in the schedule
 			final List<VirtualSlotVisit> longLoadList = new ArrayList<>();
 			final List<VirtualSlotVisit> shortDischargeList = new ArrayList<>();
 
-			for (final OpenSlotAllocation allocation : schedule.getOpenSlotAllocations()) {
-				final Slot slot = allocation.getSlot();
+			for (OpenSlotAllocation allocation: schedule.getOpenSlotAllocations()) {
+				Slot slot = allocation.getSlot();
 				if (slot instanceof LoadSlot) {
 					longLoadList.add(new VirtualSlotVisit(slot));
-				} else if (slot instanceof DischargeSlot) {
+				}
+				else if (slot instanceof DischargeSlot) {
 					shortDischargeList.add(new VirtualSlotVisit(slot));
 				}
 			}
-
+			
 			this.longLoads = new VirtualSequence(longLoadList);
 			this.shortDischarges = new VirtualSequence(shortDischargeList);
 		}
@@ -834,34 +855,35 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	abstract protected String getEventText(Date element, Event event, EventColumnLabelProvider eventColumnLabelProvider);
 
 	abstract protected Color getEventForegroundColor(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider);
-
-	protected Font getEventFont(final Date element, final Event[] events, final EventColumnLabelProvider eventColumnLabelProvider) {
+	
+	protected Font getEventFont(Date element, Event[] events, EventColumnLabelProvider eventColumnLabelProvider) {
 		return null;
 	}
 
-	protected GridViewerColumn createEventColumn(final EventProvider eventProvider, final String title) {
+	protected GridViewerColumn createEventColumn(EventProvider eventProvider, String title) {
 		return createColumn(new EventColumnLabelProvider(eventProvider), title);
 	}
 
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String title) {
+	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String title) {
 		return createColumn(labeller, title, (GridColumn) null);
 	}
 
-	protected GridViewerColumn createEventColumn(final EventProvider eventProvider, final String name, final GridColumnGroup columnGroup) {
+	protected GridViewerColumn createEventColumn(EventProvider eventProvider, String name, GridColumnGroup columnGroup) {
 		return createColumn(new EventColumnLabelProvider(eventProvider), name, columnGroup);
 	}
 
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, final GridColumnGroup columnGroup) {
+	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String name, GridColumnGroup columnGroup) {
 		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
 		return createColumn(labeller, name, column);
-
+		
 	}
 
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, final GridColumn column) {
+	protected GridViewerColumn createColumn(ColumnLabelProvider labeller, String name, GridColumn column) {
 		final GridViewerColumn result;
 		if (column == null) {
-			result = new GridViewerColumn(gridViewer, SWT.NONE);
-		} else {
+			result = new GridViewerColumn(gridViewer, SWT.NONE); 
+		}
+		else {
 			result = new GridViewerColumn(gridViewer, column);
 		}
 		result.setLabelProvider(labeller);
@@ -869,10 +891,10 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		result.getColumn().pack();
 
 		return result;
-
+		
 	}
 
-	protected int getEventPrecedence(final Date date, final Event event, final PrecedenceType type) {
+	protected int getEventPrecedence(final Date date, final Event event, final PrecedenceType type) {		
 		if (type == PrecedenceType.COLOUR) {
 			if (event instanceof SlotVisit) {
 				return 5;
@@ -880,14 +902,15 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			if (event instanceof Journey) {
 				return -5;
 			}
-		} else if (type == PrecedenceType.TEXT) {
+		}
+		else if (type == PrecedenceType.TEXT) {
 			if (event instanceof SlotVisit) {
 				return isDayOutsideActualVisit(date, (SlotVisit) event) ? -10 : 5;
 			}
 			if (event instanceof Journey) {
 				return -5;
 			}
-
+			
 		}
 		return 0;
 	}
@@ -895,7 +918,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected Event getRelevantEvent(final Date date, final Event[] events, final PrecedenceType type) {
 		Integer best = null;
 		Event result = null;
-
+	
 		for (final Event event : events) {
 			final int precedence = getEventPrecedence(date, event, type);
 			if (result == null || best == null || precedence > best) {
@@ -903,7 +926,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				best = precedence;
 			}
 		}
-
+	
 		return result;
 	}
 
@@ -917,40 +940,41 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 	}
 
-	protected Color getEventBackgroundColor(final Date date, final Event[] events, final EventColumnLabelProvider provider) {
-
-		final Event event = getRelevantEvent(date, events, PrecedenceType.COLOUR);
-
-		if (event instanceof SlotVisit) {
-			return getColorFor(date, (SlotVisit) event);
-		}
-		if (event instanceof Journey) {
-			if (((Journey) event).isLaden()) {
-				return getColour(ColourPalette.Vessel_Laden_Journey);
-			} else
-				return getColour(ColourPalette.Vessel_Ballast_Journey);
-		}
-		if (event instanceof CharterOutEvent) {
-			return getColour(ColourPalette.Vessel_Charter_Out);
-		}
-		if (event instanceof GeneratedCharterOut) {
-			return getColour(ColourPalette.Vessel_Generated_Charter_Out);
-		}
-
-		if (event instanceof Idle) {
-			if (((Idle) event).isLaden()) {
-				return getColour(ColourPalette.Vessel_Laden_Idle);
-			} else
-				return getColour(ColourPalette.Vessel_Ballast_Idle);
-		}
-
-		return null;
-	}
+	protected Color getEventBackgroundColor(final Date date, final Event[] events,
+			final EventColumnLabelProvider provider) {
+			
+				final Event event = getRelevantEvent(date, events, PrecedenceType.COLOUR);
+			
+				if (event instanceof SlotVisit) {
+					return getColorFor(date, (SlotVisit) event);
+				}
+				if (event instanceof Journey) {
+					if (((Journey) event).isLaden()) {
+						return getColour(ColourPalette.Vessel_Laden_Journey);
+					} else
+						return getColour(ColourPalette.Vessel_Ballast_Journey);
+				}
+				if (event instanceof CharterOutEvent) {
+					return getColour(ColourPalette.Vessel_Charter_Out);
+				}
+				if (event instanceof GeneratedCharterOut) {
+					return getColour(ColourPalette.Vessel_Generated_Charter_Out);
+				}
+			
+				if (event instanceof Idle) {
+					if (((Idle) event).isLaden()) {
+						return getColour(ColourPalette.Vessel_Laden_Idle);
+					} else
+						return getColour(ColourPalette.Vessel_Ballast_Idle);
+				}
+			
+				return null;
+			}
 
 	protected Color getColorFor(final Date date, final SlotVisit visit) {
 		final SlotAllocation allocation = visit.getSlotAllocation();
 		final boolean isWindow = isDayOutsideActualVisit(date, visit);
-
+		
 		if (allocation != null) {
 			final Slot slot = allocation.getSlot();
 			if (slot != null) {
@@ -963,27 +987,27 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		return isWindow ? getColour(Light_Orange) : getSlotColour(visit);
 	}
 
-	protected Color getSlotColour(final SlotVisit visit) {
+	protected Color getSlotColour(SlotVisit visit) {
 		return getColour(Orange);
 	}
 
 	protected String getEventText(final Date element, final Event event) {
 		// how many days since the start of the event?
 		Long days = (element.getTime() - event.getStart().getTime()) / (24 * 1000 * 3600);
-
+	
 		// Journey events just show the day number
 		if (event instanceof Journey) {
 			days += 1;
-			return days.toString() + (days == 1 ? String.format(" (%.02f)", ((Journey) event).getSpeed()) : "");
+			return days.toString() + (days==1 ? String.format(" (%.02f)", ((Journey) event).getSpeed()): "");
 		}
-
+	
 		else if (event instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) event;
 			if (isDayOutsideActualVisit(element, visit)) {
 				return "";
 			}
 			String result = getShortPortName(visit.getPort());
-
+	
 			final SlotAllocation allocation = visit.getSlotAllocation();
 			if (allocation != null) {
 				final Slot slot = allocation.getSlot();
@@ -991,7 +1015,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 					result += " " + slot.getName();
 				}
 			}
-
+	
 			return result;
 		} else if (event instanceof Idle) {
 			return "";
@@ -1018,7 +1042,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		} else if (event instanceof Cooldown) {
 			return "Cooldown";
 		}
-
+	
 		final EClass eventClass = event.eClass();
 		return eventClass.getName() + " '" + event.name() + "' " + days.toString();
 	}
@@ -1029,33 +1053,34 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * @param port
 	 * @return
 	 */
-	public String getShortPortName(final Port port) {
-		return port.getName();
+	public String getShortPortName(Port port) {
+		return port.getName();		
 	}
 
 	public class HashLabelProvider<T> extends ColumnLabelProvider {
-
+		
 	}
-
+	
+	
 	/**
-	 * Virtual "Event" class for additional data which isn't organised in a Sequence.
-	 * 
+	 * Virtual "Event" class for additional data which isn't organised in a Sequence. 
+	 *
 	 */
 	public static class VirtualSlotVisit extends SlotVisitImpl {
-		public VirtualSlotVisit(final Slot slot) {
+		public VirtualSlotVisit(Slot slot) {
 			super();
 			this.setStart(slot.getWindowStartWithSlotOrPortTime());
 			this.setEnd(slot.getWindowEndWithSlotOrPortTime());
 			this.setPort(slot.getPort());
-			final SlotAllocation sa = ScheduleFactory.eINSTANCE.createSlotAllocation();
+			SlotAllocation sa = ScheduleFactory.eINSTANCE.createSlotAllocation();
 			sa.setSlot(slot);
-			sa.setSlotVisit(this);
+			sa.setSlotVisit(this);						
 			this.setSlotAllocation(sa);
 		}
 	}
-
+	
 	public static class VirtualSequence extends SequenceImpl {
-		public VirtualSequence(final List<? extends Event> events) {
+		public VirtualSequence(List<? extends Event> events) {
 			super();
 			this.getEvents().addAll(events);
 		}
