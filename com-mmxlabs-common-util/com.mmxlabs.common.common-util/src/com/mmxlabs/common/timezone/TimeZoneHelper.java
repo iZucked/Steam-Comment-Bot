@@ -17,8 +17,8 @@ public class TimeZoneHelper {
 	 * @param newTimeZone
 	 * @return
 	 */
-	public static Date createSameDateAndTimeDifferentTimeZone(Date originalDate, String originalTimeZone, String newTimeZone) {
-		return createCalendarWithSameDateTimeDifferentTimeZone(originalDate, originalTimeZone, newTimeZone).getTime();
+	public static Date createTimeZoneShiftedDate(Date originalDate, String originalTimeZone, String newTimeZone) {
+		return createTimeZoneShiftedCalendar(originalDate, originalTimeZone, newTimeZone).getTime();
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class TimeZoneHelper {
 	 * @param newTimeZone
 	 * @return
 	 */
-	public static Calendar createCalendarWithSameDateTimeDifferentTimeZone(Date originalDate, String originalTimeZone, String newTimeZone) {
+	public static Calendar createTimeZoneShiftedCalendar(Date originalDate, String originalTimeZone, String newTimeZone) {
 		final Calendar oldCalendar = Calendar.getInstance(TimeZone.getTimeZone(originalTimeZone));
 		oldCalendar.setTime(originalDate);
 		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone(newTimeZone));
@@ -47,7 +47,7 @@ public class TimeZoneHelper {
 	 * @param newTimeZone
 	 * @return
 	 */
-	public static Calendar createCalendarWithSameDateTimeDifferentTimeZone(Calendar originalDate, String originalTimeZone, String newTimeZone) {
-		return createCalendarWithSameDateTimeDifferentTimeZone(originalDate.getTime(), originalTimeZone, newTimeZone);
+	public static Calendar createTimeZoneShiftedCalendar(Calendar originalDate, String originalTimeZone, String newTimeZone) {
+		return createTimeZoneShiftedCalendar(originalDate.getTime(), originalTimeZone, newTimeZone);
 	}
 }
