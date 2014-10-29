@@ -113,25 +113,23 @@ public class PricingTimesScenarioTester {
 	}
 
 	/**
-	 * Testing pricing date set in UTC (at present will shift incorrectly)
+	 * Testing pricing date set in UTC
 	 */
-	@Ignore("Pricing date is stored as UTC in the UI but the LNGTransformer assumes local time and shifts accordingly")
 	@Test
-	public void TestTimeZonePricingDateUTCPortEtcGMTPlus12() {
+	public void TestTimeZonePricingDateUTCPortEtcGMTMinus12() {
 		Date pricingDate = createDate(2014, 1, 1, 0, "UTC");
 		Date cargoStartDate = createDate(2014, 0, 30, "UTC");
-		testingIndexingWithPriceDatingAndTimeZones("PD UTC, Port Etc/GMT+12", createDate(2014, 1, 1, "UTC"), cargoStartDate, pricingDate, 10.0, "UTC", "Etc/GMT+12");
+		testingIndexingWithPriceDatingAndTimeZones("PD UTC, Port Etc/GMT-12", createDate(2014, 1, 1, "UTC"), cargoStartDate, pricingDate, 10.0, "UTC", "Etc/GMT-12");
 	}
 
 	/**
 	 * Testing pricing date set in local time (will shift correctly)
 	 */
-	@Ignore("Pricing date is stored as UTC in the UI but the LNGTransformer assumes local time and shifts accordingly")
 	@Test
-	public void TestTimeZonePricingDateEtcGMTPlus12PortEtcGMTPlus12() {
+	public void TestTimeZonePricingDateEtcGMTPlus12PortEtcGMTMinus12() {
 		// GTM+1 means 1 hour behind
-		Date pricingDate = createDate(2014, 1, 1, 0, "Etc/GMT+12");
+		Date pricingDate = createDate(2014, 1, 1, 0, "Etc/GMT-12");
 		Date cargoStartDate = createDate(2014, 0, 30, "UTC");
-		testingIndexingWithPriceDatingAndTimeZones("PD Etc/GMT+12, Port Etc/GMT+12", createDate(2014, 1, 1, "UTC"), cargoStartDate, pricingDate, 5.0, "UTC", "Etc/GMT+12");
+		testingIndexingWithPriceDatingAndTimeZones("PD Etc/GMT-12, Port Etc/GMT-12", createDate(2014, 1, 1, "UTC"), cargoStartDate, pricingDate, 5.0, "UTC", "Etc/GMT-12");
 	}
 }

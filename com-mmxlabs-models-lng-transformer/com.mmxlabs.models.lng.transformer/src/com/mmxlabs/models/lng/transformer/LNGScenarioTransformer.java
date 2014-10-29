@@ -43,6 +43,7 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
@@ -1148,10 +1149,7 @@ public class LNGScenarioTransformer {
 			final long minCv;
 			long maxCv;
 
-			if (dischargeSlot.isSetPricingDate()) {
-				dischargeSlot.getPricingDate();
-			}
-			final int pricingDate = dischargeSlot.isSetPricingDate() ? convertTime(earliestTime, dischargeSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
+			final int pricingDate = getSlotPricingDate(dischargeSlot);
 
 			minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMinCv());
 			maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMaxCv());
@@ -1296,7 +1294,7 @@ public class LNGScenarioTransformer {
 			throw new IllegalStateException("Load Slot has no contract or other pricing data");
 		}
 
-		final int slotPricingDate = loadSlot.isSetPricingDate() ? convertTime(earliestTime, loadSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
+		final int slotPricingDate = getSlotPricingDate(loadSlot);
 
 		final long minVolume;
 		final long maxVolume;
@@ -1741,10 +1739,7 @@ public class LNGScenarioTransformer {
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								desSlot.setWindowSize((int) duration);
 
-								if (desSlot.isSetPricingDate()) {
-									desSlot.getPricingDate();
-								}
-								final int pricingDate = desSlot.isSetPricingDate() ? convertTime(earliestTime, desSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
+								final int pricingDate = getSlotPricingDate(desSlot);
 
 								final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 								final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
@@ -2464,5 +2459,17 @@ public class LNGScenarioTransformer {
 
 		}
 		throw new IllegalArgumentException("Unsupported pricing event");
+	}
+	
+	private int getSlotPricingDate(Slot slot) {
+		int pricingDate;
+		if (slot.isSetPricingDate()) {
+			// convert pricing date to local time (as it currently gets converted to UTC in PricingEventHelper)
+			Date pricingDateInLocalTime = TimeZoneHelper.createTimeZoneShiftedDate(slot.getPricingDate(), "UTC", slot.getPort().getTimeZone());
+			pricingDate = convertTime(earliestTime, pricingDateInLocalTime);
+		} else {
+			pricingDate = IPortSlot.NO_PRICING_DATE;
+		}
+		return pricingDate;
 	}
 }
