@@ -22,46 +22,46 @@ import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
  */
 public class ContractDetailComposite extends DefaultDetailComposite {
 
-	private final boolean mainTab;
+	private final boolean topOfPane;
 
 	public ContractDetailComposite(final Composite parent, final int style, final boolean top, final FormToolkit toolkit) {
 		super(parent, style, toolkit);
 
-		this.mainTab = top;
+		this.topOfPane = top;
 	}
 
 	@Override
 	public IInlineEditor addInlineEditor(final IInlineEditor editor) {
 
 		// By default all elements are in the main tab
-		boolean mainTabElement = true;
+		boolean topOfPaneElement = true;
 
 		// Here the exceptions are listed for the elements which should go into the bottom
 		// Here the exceptions are listed for the elements which should go into the bottom
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedListsArePermissive()) {
-			mainTabElement = false;
+			topOfPaneElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedContracts()) {
-			mainTabElement = false;
+			topOfPaneElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedPorts()) {
-			mainTabElement = false;
+			topOfPaneElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MaxCvValue()) {
-			mainTabElement = false;
+			topOfPaneElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MinCvValue()) {
-			mainTabElement = false;
+			topOfPaneElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getPurchaseContract_SalesDeliveryType()) {
-			mainTabElement = false;
+			topOfPaneElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_PurchaseDeliveryType()) {
-			mainTabElement = false;
+			topOfPaneElement = false;
 		}
 
 		// Do not add elements if they are for the wrong section.
-		if (mainTab != mainTabElement) {
+		if (topOfPane != topOfPaneElement) {
 			// Rejected...
 			return null;
 		}
