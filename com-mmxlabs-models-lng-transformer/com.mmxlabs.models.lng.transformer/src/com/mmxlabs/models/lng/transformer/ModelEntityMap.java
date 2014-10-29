@@ -95,10 +95,16 @@ public class ModelEntityMap {
 	}
 	
 	public Date getDateFromHours(final long hours, IPort port) {
+		if (port == null) {
+			return getDateFromHours(hours, "UTC");
+		}
 		return getDateFromHours(hours, port.getTimeZoneId());
 	}
 	
 	public Date getDateFromHours(final long hours, Port port) {
+		if (port == null) {
+			return getDateFromHours(hours, "UTC");
+		}
 		return getDateFromHours(hours, port.getTimeZone());
 	}
 
