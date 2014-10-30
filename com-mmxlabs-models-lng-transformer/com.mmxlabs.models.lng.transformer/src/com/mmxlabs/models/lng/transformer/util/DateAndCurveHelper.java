@@ -45,7 +45,7 @@ public class DateAndCurveHelper {
 	public int convertTime(final Date earliest, final Date windowStart) {
 		// I am using two calendars, because the java date objects are all
 		// deprecated; however, timezones should not be a problem because
-		// every Date in the EMF representation is in UTC.
+		// every Date in the EMF representation is in UTC. (No - everything should be in correct localtime, but date doesn't care so we just need it to be consistent.
 		final Calendar a = Calendar.getInstance(timezone);
 		a.setTime(earliest);
 		final Calendar b = Calendar.getInstance(timezone);
