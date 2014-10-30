@@ -59,6 +59,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -630,11 +631,9 @@ public class LNGScenarioTransformer {
 
 			IVesselAvailability vesselAvailability = null;
 			if (vesselSet instanceof Vessel) {
-				// TODO: Get correct mapping.
-				IVessel vessel = modelEntityMap.getOptimiserObject(vesselSet, IVessel.class);
-				vesselAvailability = vesselToAvailabilities.get(vessel).iterator().next();
-//				final VesselAvailability eVesselAvailability = vesselAvailabiltyMap.get(vesselSet);
-//				vessel = modelEntityMap.getOptimiserObject(eVesselAvailability, IVessel.class);
+				// Find a relevant vessel availability.
+				final VesselAvailability va = AssignmentEditorHelper.findVesselAvailability((Vessel)vesselSet, assignableElement, rootObject.getPortfolioModel().getCargoModel().getVesselAvailabilities());
+				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
 			}
 
 			if (vesselAvailability == null) {
