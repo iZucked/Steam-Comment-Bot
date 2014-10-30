@@ -54,7 +54,7 @@ public class DateAndCurveHelper {
 		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
 		return (int) (difference / Timer.ONE_HOUR);
 	}
-
+	
 	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
