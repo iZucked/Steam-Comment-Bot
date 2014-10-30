@@ -90,7 +90,8 @@ public class ModelEntityMap {
 		this.latestDate = latestTime;
 	}
 
-	public Date getDateFromHours(final long hours, final String timeZone) {
+	public Date getDateFromHours(final long hours, final String tz) {
+		String timeZone =  (tz == null) ? "UTC" : tz;
 		int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
 		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE);
 	}
