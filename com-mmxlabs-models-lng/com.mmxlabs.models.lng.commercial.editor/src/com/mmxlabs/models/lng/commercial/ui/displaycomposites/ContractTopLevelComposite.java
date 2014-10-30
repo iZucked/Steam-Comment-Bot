@@ -67,7 +67,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 
 		g.setText("Contract");
 		g.setLayout(new FillLayout());
-		g.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		g.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING|GridData.FILL_HORIZONTAL));
 		g.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		// Create the directly rather than go through the registry. True indicates this is the top section. The bottom will be created later on
@@ -90,7 +90,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 
 		g2.setText("Restrictions");
 		g2.setLayout(new FillLayout());
-		g2.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		g2.setLayoutData(new GridData(GridData.VERTICAL_ALIGN_BEGINNING|GridData.FILL_HORIZONTAL));
 		g2.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 
 		bottomLevel = new ContractDetailComposite(g2, SWT.NONE, false, toolkit);
@@ -107,7 +107,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		}
 //
 //		// Overrides default layout factory so we get a single column rather than multiple columns and one row
-		this.setLayout(new GridLayout(1, true));
+		this.setLayout(new GridLayout(3, true));
 	}
 
 //	 @Override
