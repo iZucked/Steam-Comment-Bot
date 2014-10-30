@@ -66,8 +66,23 @@ public class PeriodTestUtils {
 		return cal.getTime();
 	}
 
+	public static Date createDate(final String timezoneCode, final int year, final int month, final int day, final int hour) {
+		final Calendar cal = Calendar.getInstance();
+		cal.setTimeZone(TimeZone.getTimeZone(timezoneCode));
+		cal.clear();
+
+		cal.set(Calendar.YEAR, year);
+		cal.set(Calendar.MONTH, month);
+		cal.set(Calendar.DAY_OF_MONTH, day);
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		return cal.getTime();
+	}
+
 	static Date createDate(final int year, final int month, final int day) {
 		return PeriodTestUtils.createDate(year, month, day, 0);
+	}
+	static Date createDate(final String timezoneCode, final int year, final int month, final int day) {
+		return PeriodTestUtils.createDate(timezoneCode, year, month, day, 0);
 	}
 
 	public static LNGScenarioModel createBasicScenario() {

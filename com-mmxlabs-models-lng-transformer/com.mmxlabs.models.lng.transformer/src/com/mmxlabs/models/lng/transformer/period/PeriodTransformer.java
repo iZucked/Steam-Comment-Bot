@@ -370,7 +370,7 @@ public class PeriodTransformer {
 	}
 
 	public void lockDownCargoDates(final Map<Slot, SlotAllocation> slotAllocationMap, final Cargo cargo) {
-		
+
 		for (final Slot slot : cargo.getSlots()) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
@@ -390,13 +390,14 @@ public class PeriodTransformer {
 			// continue;
 			// }
 			final SlotAllocation cargoSlotAllocation = slotAllocationMap.get(slot);
-			assert cargoSlotAllocation != null;
-			slot.setWindowSize(0);
-			final Calendar localStart = (Calendar) cargoSlotAllocation.getLocalStart().clone();
-			final int localTime = localStart.get(Calendar.HOUR_OF_DAY);
-			localStart.set(Calendar.HOUR_OF_DAY, 0);
-			slot.setWindowStart(localStart.getTime());
-			slot.setWindowStartTime(localTime);
+			if (cargoSlotAllocation != null) {
+				slot.setWindowSize(0);
+				final Calendar localStart = (Calendar) cargoSlotAllocation.getLocalStart().clone();
+				final int localTime = localStart.get(Calendar.HOUR_OF_DAY);
+				localStart.set(Calendar.HOUR_OF_DAY, 0);
+				slot.setWindowStart(localStart.getTime());
+				slot.setWindowStartTime(localTime);
+			}
 		}
 		cargo.setAllowRewiring(false);
 		if (cargo.getCargoType() == CargoType.FLEET) {
