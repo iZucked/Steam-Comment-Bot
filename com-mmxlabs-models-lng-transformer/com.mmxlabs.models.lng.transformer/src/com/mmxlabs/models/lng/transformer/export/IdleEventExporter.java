@@ -60,8 +60,8 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 		final Idle idle = factory.createIdle();
 
 		idle.setPort(ePort);
-		idle.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
-		idle.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
+		idle.setStart(modelEntityMap.getDateFromHours(event.getStartTime(), event.getPort()));
+		idle.setEnd(modelEntityMap.getDateFromHours(event.getEndTime(), event.getPort()));
 
 		idle.setLaden(VesselState.Laden.equals(event.getVesselState()));
 
