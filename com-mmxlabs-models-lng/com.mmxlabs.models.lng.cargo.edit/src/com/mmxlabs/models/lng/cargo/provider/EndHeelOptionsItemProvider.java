@@ -61,32 +61,9 @@ public class EndHeelOptionsItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addEndColdPropertyDescriptor(object);
 			addTargetEndHeelPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the End Cold feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addEndColdPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_EndHeelOptions_endCold_feature"),
-				 getString("_UI_EndHeelOptions_endCold_description"),
-				 CargoPackage.Literals.END_HEEL_OPTIONS__END_COLD,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -131,7 +108,7 @@ public class EndHeelOptionsItemProvider
 	@Override
 	public String getText(Object object) {
 		EndHeelOptions endHeelOptions = (EndHeelOptions)object;
-		return getString("_UI_EndHeelOptions_type") + " " + endHeelOptions.isEndCold();
+		return getString("_UI_EndHeelOptions_type") + " " + endHeelOptions.getTargetEndHeel();
 	}
 
 	/**
@@ -146,7 +123,6 @@ public class EndHeelOptionsItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(EndHeelOptions.class)) {
-			case CargoPackage.END_HEEL_OPTIONS__END_COLD:
 			case CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

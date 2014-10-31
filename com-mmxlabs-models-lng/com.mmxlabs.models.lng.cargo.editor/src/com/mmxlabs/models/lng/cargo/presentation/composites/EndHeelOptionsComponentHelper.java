@@ -4,18 +4,17 @@ package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
 
 /**
  * A component helper for EndHeelOptions instances
@@ -61,16 +60,7 @@ public class EndHeelOptionsComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_endColdEditor(detailComposite, topClass);
 		add_targetEndHeelEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the endCold feature on EndHeelOptions
-	 *
-	 * @generated
-	 */
-	protected void add_endColdEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.END_HEEL_OPTIONS__END_COLD));
 	}
 	/**
 	 * Create the editor for the targetEndHeel feature on EndHeelOptions

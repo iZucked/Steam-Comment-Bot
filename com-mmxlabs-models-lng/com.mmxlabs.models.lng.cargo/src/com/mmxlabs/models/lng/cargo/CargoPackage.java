@@ -4086,22 +4086,13 @@ public interface CargoPackage extends EPackage {
 	int END_HEEL_OPTIONS = 16;
 
 	/**
-	 * The feature id for the '<em><b>End Cold</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int END_HEEL_OPTIONS__END_COLD = 0;
-
-	/**
 	 * The feature id for the '<em><b>Target End Heel</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int END_HEEL_OPTIONS__TARGET_END_HEEL = 1;
+	int END_HEEL_OPTIONS__TARGET_END_HEEL = 0;
 
 	/**
 	 * The number of structural features of the '<em>End Heel Options</em>' class.
@@ -4110,7 +4101,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int END_HEEL_OPTIONS_FEATURE_COUNT = 2;
+	int END_HEEL_OPTIONS_FEATURE_COUNT = 1;
 
 	/**
 	 * The number of operations of the '<em>End Heel Options</em>' class.
@@ -5285,17 +5276,6 @@ public interface CargoPackage extends EPackage {
 	EClass getEndHeelOptions();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#isEndCold <em>End Cold</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>End Cold</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.EndHeelOptions#isEndCold()
-	 * @see #getEndHeelOptions()
-	 * @generated
-	 */
-	EAttribute getEndHeelOptions_EndCold();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.EndHeelOptions#getTargetEndHeel <em>Target End Heel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6229,14 +6209,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EClass END_HEEL_OPTIONS = eINSTANCE.getEndHeelOptions();
-
-		/**
-		 * The meta object literal for the '<em><b>End Cold</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute END_HEEL_OPTIONS__END_COLD = eINSTANCE.getEndHeelOptions_EndCold();
 
 		/**
 		 * The meta object literal for the '<em><b>Target End Heel</b></em>' attribute feature.

@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#isEndCold <em>End Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.EndHeelOptionsImpl#getTargetEndHeel <em>Target End Heel</em>}</li>
  * </ul>
  * </p>
@@ -27,26 +26,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * @generated
  */
 public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
-	/**
-	 * The default value of the '{@link #isEndCold() <em>End Cold</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isEndCold()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean END_COLD_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isEndCold() <em>End Cold</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isEndCold()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean endCold = END_COLD_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getTargetEndHeel() <em>Target End Heel</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -66,6 +45,15 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * @ordered
 	 */
 	protected int targetEndHeel = TARGET_END_HEEL_EDEFAULT;
+
+	/**
+	 * This is true if the Target End Heel attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean targetEndHeelESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -91,27 +79,6 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isEndCold() {
-		return endCold;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setEndCold(boolean newEndCold) {
-		boolean oldEndCold = endCold;
-		endCold = newEndCold;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__END_COLD, oldEndCold, endCold));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getTargetEndHeel() {
 		return targetEndHeel;
 	}
@@ -124,8 +91,33 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	public void setTargetEndHeel(int newTargetEndHeel) {
 		int oldTargetEndHeel = targetEndHeel;
 		targetEndHeel = newTargetEndHeel;
+		boolean oldTargetEndHeelESet = targetEndHeelESet;
+		targetEndHeelESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL, oldTargetEndHeel, targetEndHeel));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL, oldTargetEndHeel, targetEndHeel, !oldTargetEndHeelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetTargetEndHeel() {
+		int oldTargetEndHeel = targetEndHeel;
+		boolean oldTargetEndHeelESet = targetEndHeelESet;
+		targetEndHeel = TARGET_END_HEEL_EDEFAULT;
+		targetEndHeelESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL, oldTargetEndHeel, TARGET_END_HEEL_EDEFAULT, oldTargetEndHeelESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetTargetEndHeel() {
+		return targetEndHeelESet;
 	}
 
 	/**
@@ -136,8 +128,6 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.END_HEEL_OPTIONS__END_COLD:
-				return isEndCold();
 			case CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL:
 				return getTargetEndHeel();
 		}
@@ -152,9 +142,6 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.END_HEEL_OPTIONS__END_COLD:
-				setEndCold((Boolean)newValue);
-				return;
 			case CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL:
 				setTargetEndHeel((Integer)newValue);
 				return;
@@ -170,11 +157,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.END_HEEL_OPTIONS__END_COLD:
-				setEndCold(END_COLD_EDEFAULT);
-				return;
 			case CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL:
-				setTargetEndHeel(TARGET_END_HEEL_EDEFAULT);
+				unsetTargetEndHeel();
 				return;
 		}
 		super.eUnset(featureID);
@@ -188,10 +172,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.END_HEEL_OPTIONS__END_COLD:
-				return endCold != END_COLD_EDEFAULT;
 			case CargoPackage.END_HEEL_OPTIONS__TARGET_END_HEEL:
-				return targetEndHeel != TARGET_END_HEEL_EDEFAULT;
+				return isSetTargetEndHeel();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -206,10 +188,8 @@ public class EndHeelOptionsImpl extends EObjectImpl implements EndHeelOptions {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (endCold: ");
-		result.append(endCold);
-		result.append(", targetEndHeel: ");
-		result.append(targetEndHeel);
+		result.append(" (targetEndHeel: ");
+		if (targetEndHeelESet) result.append(targetEndHeel); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
