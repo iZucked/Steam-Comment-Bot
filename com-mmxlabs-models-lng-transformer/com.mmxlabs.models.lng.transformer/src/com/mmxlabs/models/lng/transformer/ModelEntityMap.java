@@ -35,7 +35,6 @@ public class ModelEntityMap {
 
 	private Date earliestDate;
 	private Date latestDate;
-	private int earliestDateOffset = 0;
 
 	public <U> U getModelObject(final Object internalObject, final Class<? extends U> clz) {
 		return clz.cast(optimiserToModel.get(internalObject));
@@ -83,11 +82,10 @@ public class ModelEntityMap {
 
 	/**
 	 * @param earliestDate
-	 *            the earliestDate to set
+	 *            the earliestDate to set. The date is rounded down to the nearest hour (relative to UTC).
 	 */
 	public void setEarliestDate(Date earliestDate) {
-		this.earliestDate = earliestDate;
-		this.earliestDateOffset = DateAndCurveHelper.getHourRoundingRemainder(earliestDate);
+		this.earliestDate = DateAndCurveHelper.roundTimeDown(earliestDate);
 	}
 
 	public void setLatestDate(Date latestTime) {
@@ -97,7 +95,7 @@ public class ModelEntityMap {
 	public Date getDateFromHours(final long hours, final String tz) {
 		String timeZone = (tz == null) ? "UTC" : tz;
 		int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE + earliestDateOffset);
+		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE);
 	}
 
 	/**

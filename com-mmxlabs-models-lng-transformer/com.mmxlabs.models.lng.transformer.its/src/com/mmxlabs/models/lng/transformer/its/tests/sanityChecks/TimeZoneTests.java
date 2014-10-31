@@ -162,9 +162,13 @@ public class TimeZoneTests {
 	@Test
 	public void testChathamIslands() {
 		testTimeZone(2015, 0, 1, "Pacific/Chatham", true);
+		testTimeZone(2015, 0, 1, "Pacific/Chatham", true, true);
 		testTimeZone(2015, 0, 1, "Pacific/Chatham", false);
+		testTimeZone(2015, 0, 1, "Pacific/Chatham", false, true);
 		testTimeZone(2015, 6, 1, "Pacific/Chatham", true);
+		testTimeZone(2015, 6, 1, "Pacific/Chatham", true, true);
 		testTimeZone(2015, 6, 1, "Pacific/Chatham", false);
+		testTimeZone(2015, 6, 1, "Pacific/Chatham", false, true);
 	}
 
 	@Test

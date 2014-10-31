@@ -754,6 +754,8 @@ public class LNGScenarioTransformer {
 		}
 
 		earliestTime = allDates.isEmpty() ? new Date(0) : Collections.min(allDates);
+		// round down earliest time
+		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
 		latestTime = allDates.isEmpty() ? new Date(0) : Collections.max(allDates);
 	}
 

@@ -48,10 +48,9 @@ public class DateAndCurveHelper {
 		// deprecated; however, timezones should not be a problem because
 		// every Date in the EMF representation is in UTC. (No - everything should be in correct localtime, but date doesn't care so we just need it to be consistent.
 		final Calendar a = Calendar.getInstance(timezone);
-		a.setTime(roundTimeDown(earliest));
 		a.setTime(earliest);
 		final Calendar b = Calendar.getInstance(timezone);
-		b.setTime(roundTimeDown(windowStart));
+		b.setTime(windowStart);
 		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
 		return (int) (difference / Timer.ONE_HOUR);
 	}
@@ -159,7 +158,7 @@ public class DateAndCurveHelper {
 	}
 
 	public void setEarliestTime(Date earliestTime) {
-		this.earliestTime = earliestTime;
+		this.earliestTime = roundTimeDown(earliestTime);
 	}
 
 	/**
