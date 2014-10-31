@@ -304,6 +304,8 @@ public class LNGScenarioTransformer {
 		 */
 		findEarliestAndLatestTimes();
 
+//		 TODO: Ensure minutes are zero
+		
 		dateHelper.setEarliestTime(earliestTime);
 		dateHelper.setEarliestTime(earliestTime);
 		// set earliest and latest times into modelEntityMap
@@ -614,6 +616,8 @@ public class LNGScenarioTransformer {
 
 	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap modelEntityMap) {
 
+		// TODO: Freeze as part of the buildXXX methods when object is created rather than here.
+		
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
@@ -2229,7 +2233,7 @@ public class LNGScenarioTransformer {
 			long targetEndHeelInM3 = 0;
 			final EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
 			if (endHeel != null) {
-				endCold = endHeel.isEndCold();
+				endCold = endHeel.isSetTargetEndHeel();
 				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
 			}
 

@@ -601,8 +601,9 @@ public class PeriodTransformer {
 				if (vesselAvailability.getEndHeel() == null) {
 					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 				}
-				vesselAvailability.getEndHeel().setEndCold(true);
 				vesselAvailability.getEndHeel().setTargetEndHeel(heel);
+			} else {
+				vesselAvailability.getEndHeel().unsetTargetEndHeel();
 			}
 		}
 	}
@@ -671,8 +672,9 @@ public class PeriodTransformer {
 				if (vesselAvailability.getEndHeel() == null) {
 					vesselAvailability.setEndHeel(CargoFactory.eINSTANCE.createEndHeelOptions());
 				}
-				vesselAvailability.getEndHeel().setEndCold(true);
 				vesselAvailability.getEndHeel().setTargetEndHeel(heel);
+			} else {
+				vesselAvailability.getEndHeel().unsetTargetEndHeel();
 			}
 		}
 	}
