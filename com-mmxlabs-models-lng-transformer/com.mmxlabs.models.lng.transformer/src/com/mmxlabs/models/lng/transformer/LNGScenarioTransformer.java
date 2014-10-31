@@ -633,7 +633,8 @@ public class LNGScenarioTransformer {
 			IVesselAvailability vesselAvailability = null;
 			if (vesselSet instanceof Vessel) {
 				// Find a relevant vessel availability.
-				final VesselAvailability va = AssignmentEditorHelper.findVesselAvailability((Vessel)vesselSet, assignableElement, rootObject.getPortfolioModel().getCargoModel().getVesselAvailabilities());
+				final VesselAvailability va = AssignmentEditorHelper.findVesselAvailability((Vessel) vesselSet, assignableElement, rootObject.getPortfolioModel().getCargoModel()
+						.getVesselAvailabilities());
 				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
 			}
 
@@ -2459,7 +2460,7 @@ public class LNGScenarioTransformer {
 		}
 		throw new IllegalArgumentException("Unsupported pricing event");
 	}
-	
+
 	private int getSlotPricingDate(Slot slot) {
 		int pricingDate;
 		if (slot.isSetPricingDate()) {

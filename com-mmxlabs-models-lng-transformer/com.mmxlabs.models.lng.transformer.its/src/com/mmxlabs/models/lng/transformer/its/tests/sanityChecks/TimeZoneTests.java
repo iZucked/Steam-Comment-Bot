@@ -22,13 +22,19 @@ public class TimeZoneTests {
 	ModelEntityMap modelEntityMap = new ModelEntityMap();
 	DateAndCurveHelper dateHelper = new DateAndCurveHelper();
 
-	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime) {
+	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime, boolean dahejEarliestTime) {
 		String earliestTimeString = isJanEarliestTime ? "Jan 2014" : "Jul 2013";
 		System.out.println(String.format("Testing: %s/%s/%s (%s) with earliest time %s", year,month+1,day,timeZone,earliestTimeString));
 		if (isJanEarliestTime) {
-			setJanuaryEarliestTime();
+			if (dahejEarliestTime)
+				setJanuaryEarliestTimeDahej();
+			else
+				setJanuaryEarliestTime();
 		} else {
-			setJulyEarliestTime();
+			if (dahejEarliestTime)
+				setJulyEarliestTimeDahej();
+			else
+				setJulyEarliestTime();
 		}
 		for (int i = 0; i < 24; i++) {
 			Date dateToTest = createDate(year, month, day, i, timeZone);
@@ -36,6 +42,10 @@ public class TimeZoneTests {
 		}
 	}
 
+	public void testTimeZone(int year, int month, int day, String timeZone, boolean isJanEarliestTime) {
+		testTimeZone(year, month, day, timeZone, isJanEarliestTime, false);
+	}
+	
 	public static Date createDate(int year, int month, int day, int hour, String timeZone) {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 		cal.clear();
@@ -53,16 +63,33 @@ public class TimeZoneTests {
 		Assert.assertEquals(dateToTest, intToDate);
 	}
 
-	private void setJanuaryEarliestTime() {
-		Date jan = createDate(2014, 0, 10, 0, "UTC");
+	private void setJanuaryEarliestTime(String timeZone) {
+		Date jan = createDate(2014, 0, 10, 0, timeZone);
 		setEarliestTime(jan);
 	}
 
-	private void setJulyEarliestTime() {
-		Date jul = createDate(2013, 6, 10, 0, "UTC");
-		setEarliestTime(jul);
+	private void setJanuaryEarliestTime() {
+		setJanuaryEarliestTime("UTC");
 	}
 
+	private void setJulyEarliestTime(String timeZone) {
+		Date jul = createDate(2013, 6, 10, 0, timeZone);
+		setEarliestTime(jul);
+	}
+	
+	private void setJulyEarliestTime() {
+		setJulyEarliestTime("UTC");
+	}
+
+	private void setJanuaryEarliestTimeDahej() {
+		setJanuaryEarliestTime("Asia/Calcutta");
+	}
+	
+	private void setJulyEarliestTimeDahej() {
+		setJulyEarliestTime("Asia/Calcutta");
+	}
+
+	
 	private void setEarliestTime(Date earliestTime) {
 		modelEntityMap.setEarliestDate(earliestTime);
 		dateHelper.setEarliestTime(earliestTime);
@@ -71,9 +98,13 @@ public class TimeZoneTests {
 	@Test
 	public void testUTC() {
 		testTimeZone(2015, 0, 1, "UTC", true);
+		testTimeZone(2015, 0, 1, "UTC", true, true);
 		testTimeZone(2015, 0, 1, "UTC", false);
+		testTimeZone(2015, 0, 1, "UTC", false, true);
 		testTimeZone(2014, 6, 1, "UTC", true);
+		testTimeZone(2014, 6, 1, "UTC", true, true);
 		testTimeZone(2014, 6, 1, "UTC", false);
+		testTimeZone(2014, 6, 1, "UTC", false, true);
 	}
 
 	@Test
@@ -116,12 +147,16 @@ public class TimeZoneTests {
 		testTimeZone(2015, 6, 1, "America/Port_of_Spain", false);
 	}
 
-	@Ignore @Test
+	@Test
 	public void testCalcutta() {
 		testTimeZone(2015, 0, 1, "Asia/Calcutta", true);
+		testTimeZone(2015, 0, 1, "Asia/Calcutta", true, true);
 		testTimeZone(2015, 0, 1, "Asia/Calcutta", false);
+		testTimeZone(2015, 0, 1, "Asia/Calcutta", false, true);
 		testTimeZone(2015, 6, 1, "Asia/Calcutta", true);
+		testTimeZone(2015, 6, 1, "Asia/Calcutta", true, true);
 		testTimeZone(2015, 6, 1, "Asia/Calcutta", false);
+		testTimeZone(2015, 6, 1, "Asia/Calcutta", false, true);
 	}
 	
 	@Test
@@ -159,26 +194,14 @@ public class TimeZoneTests {
 	@Test
 	public void testNewfoundland() {
 		testTimeZone(2015, 0, 1, "Canada/Newfoundland", true);
+		testTimeZone(2015, 0, 1, "Canada/Newfoundland", true, true);
 		testTimeZone(2015, 0, 1, "Canada/Newfoundland", false);
+		testTimeZone(2015, 0, 1, "Canada/Newfoundland", false, true);
 		testTimeZone(2015, 6, 1, "Canada/Newfoundland", true);
+		testTimeZone(2015, 6, 1, "Canada/Newfoundland", true, true);
 		testTimeZone(2015, 6, 1, "Canada/Newfoundland", false);
+		testTimeZone(2015, 6, 1, "Canada/Newfoundland", false, true);
 	}
 
-	@Test
-	public void subTestCalcutta1() {
-		testTimeZone(2015, 0, 1, "Asia/Calcutta", true);
-	}
-	@Test
-	public void subTestCalcutta2() {
-		testTimeZone(2015, 0, 1, "Asia/Calcutta", false);
-	}
-	@Test
-	public void subTestCalcutta3() {
-		testTimeZone(2015, 6, 1, "Asia/Calcutta", true);
-	}
-	@Test
-	public void subTestCalcutta4() {
-		testTimeZone(2015, 6, 1, "Asia/Calcutta", false);
-	}
 
 }
