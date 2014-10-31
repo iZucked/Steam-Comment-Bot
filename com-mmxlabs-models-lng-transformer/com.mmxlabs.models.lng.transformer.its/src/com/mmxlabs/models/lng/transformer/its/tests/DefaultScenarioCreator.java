@@ -238,8 +238,7 @@ public class DefaultScenarioCreator {
 		}
 		public EndHeelOptions createDefaultEndHeelOptions() {
 			final EndHeelOptions result = CargoFactory.eINSTANCE.createEndHeelOptions();
-			result.setEndCold(false);
-			result.setTargetEndHeel(0);
+			result.unsetTargetEndHeel();
 			return result;
 		}
 
