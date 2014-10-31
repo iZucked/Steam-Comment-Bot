@@ -83,9 +83,6 @@ public class MigrateToV20 extends AbstractMigrationUnit {
 		final EReference reference_CargoModel_vesselAvailabilities = MetamodelUtils.getReference(class_CargoModel, "vesselAvailabilities");
 		final EReference reference_VesselAvailability_endHeel = MetamodelUtils.getReference(class_VesselAvailability, "endHeel");
 
-		final EAttribute attribute_EndHeelOptions_endCold = MetamodelUtils.getAttribute(class_EndHeelOptions, "endCold");
-		final EAttribute attribute_EndHeelOptions_targetEndHeel = MetamodelUtils.getAttribute(class_EndHeelOptions, "targetEndHeel");
-
 		final EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
 		if (portfolioModel == null) {
 			return;
@@ -101,9 +98,6 @@ public class MigrateToV20 extends AbstractMigrationUnit {
 			for (final EObject vesselAvailability : vesselAvailabilities) {
 				if (!vesselAvailability.eIsSet(reference_VesselAvailability_endHeel)) {
 					EObject endHeelOptions = package_CargoModel.getEFactoryInstance().create(class_EndHeelOptions);
-					endHeelOptions.eSet(attribute_EndHeelOptions_endCold, Boolean.FALSE);
-					endHeelOptions.eSet(attribute_EndHeelOptions_targetEndHeel, 0);
-
 					vesselAvailability.eSet(reference_VesselAvailability_endHeel, endHeelOptions);
 				}
 			}
