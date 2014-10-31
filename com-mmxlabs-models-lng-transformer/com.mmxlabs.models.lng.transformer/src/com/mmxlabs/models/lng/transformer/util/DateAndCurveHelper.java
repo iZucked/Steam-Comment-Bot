@@ -48,13 +48,14 @@ public class DateAndCurveHelper {
 		// deprecated; however, timezones should not be a problem because
 		// every Date in the EMF representation is in UTC. (No - everything should be in correct localtime, but date doesn't care so we just need it to be consistent.
 		final Calendar a = Calendar.getInstance(timezone);
+		a.setTime(roundTimeDown(earliest));
 		a.setTime(earliest);
 		final Calendar b = Calendar.getInstance(timezone);
-		b.setTime(windowStart);
+		b.setTime(roundTimeDown(windowStart));
 		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
 		return (int) (difference / Timer.ONE_HOUR);
 	}
-	
+
 	public StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
@@ -160,26 +161,51 @@ public class DateAndCurveHelper {
 	public void setEarliestTime(Date earliestTime) {
 		this.earliestTime = earliestTime;
 	}
-	
-	public static int getOffsetInMinutesFromTimeZone(String timeZone){
+
+	/**
+	 * Returns the minutes that need to be added to a date that has been rounded down elsewhere in the application (e.g. in convertTime())
+	 * 
+	 * @param timeZone
+	 * @return
+	 */
+	public static int getOffsetInMinutesFromTimeZone(String timeZone) {
 		return getOffsetMinutes(getOffsetInMsFromTimeZone(timeZone));
 	}
-	
-	public static int getOffsetInMsFromTimeZone(String timeZone){
+
+	public static int getOffsetInMsFromTimeZone(String timeZone) {
 		int offset = TimeZone.getTimeZone(timeZone).getRawOffset();
 		return offset;
 	}
-	
+
 	public static int getOffsetMinutes(int offsetMs) {
 		int correctedOffset = 0;
 		int offsetInMinutes = (Math.abs(offsetMs) / 1000 / 60) % 60;
 		if (offsetInMinutes != 0) {
 			if (offsetMs > 0) {
-				correctedOffset = 60 - (Math.abs(offsetMs) / 1000 / 60) % 60;
+				correctedOffset = 60 - offsetInMinutes;
 			} else {
 				correctedOffset = offsetInMinutes;
 			}
 		}
 		return correctedOffset;
+	}
+
+	/**
+	 * Rounds time down by losing the hour information
+	 * 
+	 * @return
+	 */
+	public static Date roundTimeDown(Date date) {
+		return new Date(date.getTime() - getHourRoundingRemainder(date));
+	}
+
+	/**
+	 * Returns the number of milliseconds lost by rounding down to the nearest hour
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static int getHourRoundingRemainder(Date date) {
+		return (int) (date.getTime() % Timer.ONE_HOUR);
 	}
 }

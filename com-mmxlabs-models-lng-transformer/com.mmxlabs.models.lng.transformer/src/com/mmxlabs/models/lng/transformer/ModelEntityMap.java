@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ public class ModelEntityMap {
 
 	private Date earliestDate;
 	private Date latestDate;
+	private int earliestDateOffset = 0;
 
 	public <U> U getModelObject(final Object internalObject, final Class<? extends U> clz) {
 		return clz.cast(optimiserToModel.get(internalObject));
@@ -74,6 +76,7 @@ public class ModelEntityMap {
 	public Date getEarliestDate() {
 		return earliestDate;
 	}
+
 	public Date getLatestDate() {
 		return latestDate;
 	}
@@ -84,6 +87,7 @@ public class ModelEntityMap {
 	 */
 	public void setEarliestDate(Date earliestDate) {
 		this.earliestDate = earliestDate;
+		this.earliestDateOffset = DateAndCurveHelper.getHourRoundingRemainder(earliestDate);
 	}
 
 	public void setLatestDate(Date latestTime) {
@@ -91,18 +95,32 @@ public class ModelEntityMap {
 	}
 
 	public Date getDateFromHours(final long hours, final String tz) {
-		String timeZone =  (tz == null) ? "UTC" : tz;
+		String timeZone = (tz == null) ? "UTC" : tz;
 		int offsetMinutes = DateAndCurveHelper.getOffsetInMinutesFromTimeZone(timeZone);
-		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE);
+		return new Date(earliestDate.getTime() + hours * Timer.ONE_HOUR + offsetMinutes * Timer.ONE_MINUTE + earliestDateOffset);
 	}
-	
+
+	/**
+	 * Convert from hours, relative to earliest time, to a Date object
+	 * 
+	 * @param hours
+	 * @param port
+	 * @return
+	 */
 	public Date getDateFromHours(final long hours, @Nullable IPort port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
 		}
 		return getDateFromHours(hours, port.getTimeZoneId());
 	}
-	
+
+	/**
+	 * Convert from hours, relative to earliest time, to a Date object
+	 * 
+	 * @param hours
+	 * @param port
+	 * @return
+	 */
 	public Date getDateFromHours(final long hours, @Nullable Port port) {
 		if (port == null) {
 			return getDateFromHours(hours, "UTC");
