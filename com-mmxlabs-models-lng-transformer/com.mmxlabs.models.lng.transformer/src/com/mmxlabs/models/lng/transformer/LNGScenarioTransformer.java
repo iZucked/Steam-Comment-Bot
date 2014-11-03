@@ -302,8 +302,6 @@ public class LNGScenarioTransformer {
 		 */
 		findEarliestAndLatestTimes();
 
-//		 TODO: Ensure minutes are zero
-		
 		dateHelper.setEarliestTime(earliestTime);
 		dateHelper.setEarliestTime(earliestTime);
 		// set earliest and latest times into modelEntityMap
@@ -615,7 +613,7 @@ public class LNGScenarioTransformer {
 	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap modelEntityMap) {
 
 		// TODO: Freeze as part of the buildXXX methods when object is created rather than here.
-		
+
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
@@ -2461,7 +2459,7 @@ public class LNGScenarioTransformer {
 		int pricingDate;
 		if (slot.isSetPricingDate()) {
 			// convert pricing date to local time (as it currently gets converted to UTC in PricingEventHelper)
-			Date pricingDateInLocalTime = TimeZoneHelper.createTimeZoneShiftedDate(slot.getPricingDate(), "UTC", slot.getPort().getTimeZone());
+			final Date pricingDateInLocalTime = TimeZoneHelper.createTimeZoneShiftedDate(slot.getPricingDate(), "UTC", slot.getPort().getTimeZone());
 			pricingDate = convertTime(earliestTime, pricingDateInLocalTime);
 		} else {
 			pricingDate = IPortSlot.NO_PRICING_DATE;
