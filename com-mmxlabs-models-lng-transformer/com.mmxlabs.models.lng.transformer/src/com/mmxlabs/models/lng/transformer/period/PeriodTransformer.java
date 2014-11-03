@@ -181,7 +181,7 @@ public class PeriodTransformer {
 		// Update vessel availabilities
 		updateVesselAvailabilities(periodRecord, cargoModel, fleetModel, startConditionMap, endConditionMap);
 
-		// List of new vessel availabilties for caroges outside normal range
+		// List of new vessel availabilities for cargoes outside normal range
 		final List<VesselAvailability> newVesselAvailabilities = new LinkedList<>();
 		final Set<Slot> seenSlots = new HashSet<>();
 		final Set<Slot> slotsToRemove = new HashSet<>();
