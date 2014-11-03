@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -100,7 +99,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -222,7 +220,7 @@ public class LNGScenarioTransformer {
 	 */
 	private final Map<String, Slot> marketSlotsByID = new HashMap<String, Slot>();
 
-	private final EnumMap<SpotType, TreeMap<String, Collection<Slot>>> existingSpotCount = new EnumMap<SpotType, TreeMap<String, Collection<Slot>>>(SpotType.class);
+	private final Map<SpotMarket, TreeMap<String, Collection<Slot>>> existingSpotCount = new HashMap<>();
 
 	private OptimiserSettings optimiserParameters;
 
@@ -1437,7 +1435,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.DES_PURCHASE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1569,7 +1567,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_SALE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1706,7 +1704,7 @@ public class LNGScenarioTransformer {
 						cal.add(Calendar.MONTH, 1);
 						final Date endTime = cal.getTime();
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.DES_SALE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1817,7 +1815,7 @@ public class LNGScenarioTransformer {
 						final Date endTime = cal.getTime();
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_PURCHASE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -2382,26 +2380,17 @@ public class LNGScenarioTransformer {
 	 */
 	private void addSpotSlotToCount(final SpotSlot spotSlot) {
 		final SpotMarket market = spotSlot.getMarket();
-		final SpotType spotType;
-		if (market instanceof DESPurchaseMarket) {
-			spotType = SpotType.DES_PURCHASE;
-		} else if (market instanceof DESSalesMarket) {
-			spotType = SpotType.DES_SALE;
-		} else if (market instanceof FOBPurchasesMarket) {
-			spotType = SpotType.FOB_PURCHASE;
-		} else if (market instanceof FOBSalesMarket) {
-			spotType = SpotType.FOB_SALE;
-		} else {
+		if (market == null) {
 			log.warn("Spot slot with an invalid market found");
 			return;
 		}
 
 		final TreeMap<String, Collection<Slot>> curve;
-		if (existingSpotCount.containsKey(spotType)) {
-			curve = existingSpotCount.get(spotType);
+		if (existingSpotCount.containsKey(market)) {
+			curve = existingSpotCount.get(market);
 		} else {
 			curve = new TreeMap<String, Collection<Slot>>();
-			existingSpotCount.put(spotType, curve);
+			existingSpotCount.put(market, curve);
 		}
 		if (spotSlot instanceof Slot) {
 			final Slot slot = (Slot) spotSlot;
@@ -2417,9 +2406,10 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private Collection<Slot> getSpotSlots(final SpotType spotType, final String key) {
-		if (existingSpotCount.containsKey(spotType)) {
-			final TreeMap<String, Collection<Slot>> curve = existingSpotCount.get(spotType);
+	private Collection<Slot> getSpotSlots(final SpotMarket spotMarket, final String key) {
+
+		if (existingSpotCount.containsKey(spotMarket)) {
+			final TreeMap<String, Collection<Slot>> curve = existingSpotCount.get(spotMarket);
 			if (curve.containsKey(key)) {
 				final Collection<Slot> slots = curve.get(key);
 				if (slots != null) {
@@ -2467,7 +2457,7 @@ public class LNGScenarioTransformer {
 		throw new IllegalArgumentException("Unsupported pricing event");
 	}
 
-	private int getSlotPricingDate(Slot slot) {
+	private int getSlotPricingDate(final Slot slot) {
 		int pricingDate;
 		if (slot.isSetPricingDate()) {
 			// convert pricing date to local time (as it currently gets converted to UTC in PricingEventHelper)
