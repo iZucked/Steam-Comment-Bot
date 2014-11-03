@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -62,14 +63,7 @@ public class VesselAvailabilityConstraint extends AbstractModelMultiConstraint {
 			if (assignment.getAssignment() instanceof Vessel) {
 				final Vessel vessel = (Vessel) assignment.getAssignment();
 
-				VesselAvailability vesselAvailability = null;
-				for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
-					if (va.getVessel() == extraContext.getOriginal(vessel) || va.getVessel() == extraContext.getReplacement(vessel)) {
-						vesselAvailability = va;
-						break;
-
-					}
-				}
+				final VesselAvailability vesselAvailability = AssignmentEditorHelper.findVesselAvailability(vessel, assignment, cargoModel.getVesselAvailabilities());
 
 				if (vesselAvailability != null) {
 
