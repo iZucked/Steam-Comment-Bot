@@ -20,7 +20,7 @@ public final class ObjectCopier {
 	public static <T extends Slot> T copySlot(final T slot, final IScenarioEntityMapping mapping) {
 		final T newSlot = createNewInstance(slot);
 		assert newSlot != null;
-		copyFeatures(slot, newSlot, mapping, Lists.newArrayList(CargoPackage.Literals.SLOT__CARGO, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE, CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO));
+		copyFeatures(slot, newSlot, mapping, Lists.<EStructuralFeature>newArrayList(CargoPackage.Literals.SLOT__CARGO, CargoPackage.Literals.LOAD_SLOT__TRANSFER_FROM, CargoPackage.Literals.DISCHARGE_SLOT__TRANSFER_TO));
 		return newSlot;
 	}
 
