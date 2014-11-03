@@ -1,7 +1,6 @@
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +16,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -90,9 +90,14 @@ public class PeriodExporter {
 					}
 					if (newSlot instanceof SpotSlot) {
 						// Clone spot details
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START, new Date(newSlot.getWindowStart().getTime())));
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE, newSlot.getWindowSize()));
+						if (newSlot instanceof LoadSlot && ((LoadSlot) newSlot).isDESPurchase()) {
+							cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
+						} else if (newSlot instanceof DischargeSlot && ((DischargeSlot) newSlot).isFOBSale()) {
+							cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
+						}
+						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START,
+								TimeZoneHelper.createTimeZoneShiftedDate(oldSlot.getWindowStart(), oldSlot.getPort().getTimeZone(), newSlot.getPort().getTimeZone())));
+						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 0));
 					}
 					newCargoSlots.add(oldSlot);
 				}
@@ -150,7 +155,7 @@ public class PeriodExporter {
 					}
 				}
 			}
-			// NOTE: Keep cargoe deletion after slot unset SLOT_CARGO feature otherwise is caused lots of issues with commands.
+			// NOTE: Keep cargo deletion after slot unset SLOT_CARGO feature otherwise is caused lots of issues with commands.
 			// Loop through new loads & discharges looking for unused slots which were part of a cargo originally and break up the original cargo.
 			for (final Cargo cargo : originalCargoes) {
 				if (!seenCargoes.contains(cargo)) {
