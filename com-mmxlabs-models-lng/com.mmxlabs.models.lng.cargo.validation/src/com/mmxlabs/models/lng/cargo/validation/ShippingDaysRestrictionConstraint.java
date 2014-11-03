@@ -61,7 +61,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 					}
 				}
 				final double travelTime = distance / maxSpeedKnots;
-				final int totalTime = (int) (Math.round(travelTime) + extraTime);
+				final int totalTime = (int) (Math.floor(travelTime) + extraTime);
 				if (totalTime < minDuration) {
 					minDuration = totalTime;
 				}
@@ -261,7 +261,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 					} else {
 
-						// FOB?
+						// FOB?	
 
 					}
 				}
