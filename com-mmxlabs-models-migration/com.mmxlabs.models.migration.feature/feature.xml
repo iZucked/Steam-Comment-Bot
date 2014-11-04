@@ -27,14 +27,14 @@
          id="com.mmxlabs.models.migration"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.migration.scenario"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
 </feature>
