@@ -692,7 +692,11 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final IPortSlot toPortSlot = lastVoyageDetailsElement.getOptions().getToPortSlot();
 					if (toPortSlot instanceof EndPortSlot) {
 						final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
-						remainingHeelInM3 = endPortSlot.getTargetEndHeelInM3();
+						if (endPortSlot.isEndCold()) {
+							remainingHeelInM3 = endPortSlot.getTargetEndHeelInM3();
+						} else {
+							remainingHeelInM3 = 0;
+						}
 					} else {
 						remainingHeelInM3 = vesselClass.getSafetyHeel();
 					}
@@ -740,7 +744,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
 					// TODO: Tricky here to get exact fuel volume, should there be some tolerance?
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
-						// ++violationsCount;
+						if (remainingHeelInM3 == 0) {
+							++violationsCount;
+						}
 					}
 				}
 			}
