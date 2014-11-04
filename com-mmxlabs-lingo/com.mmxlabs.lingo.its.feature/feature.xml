@@ -26,13 +26,13 @@
 
    <includes
          id="com.mmxlabs.lingo.feature"
-         version="0.0.0"/>
+         version="3.5.0.RELEASE"/>
 
    <plugin
          id="com.mmxlabs.lingo.its"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="3.5.0.RELEASE"
          unpack="false"/>
 
 </feature>
