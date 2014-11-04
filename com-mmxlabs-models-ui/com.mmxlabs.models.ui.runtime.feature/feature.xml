@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.ui.runtime.feature"
       label="Models: UI Runtime Feature"
-      version="3.5.0.RELEASE"
+      version="3.5.1.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -28,56 +28,56 @@ All rights reserved.
          id="com.mmxlabs.models.ui"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.ui.tabular"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.ui.validation"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.util"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.mmxcore.validation"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.ui.validation.views"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.ui.properties"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.ui.properties.edit"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
 </feature>
