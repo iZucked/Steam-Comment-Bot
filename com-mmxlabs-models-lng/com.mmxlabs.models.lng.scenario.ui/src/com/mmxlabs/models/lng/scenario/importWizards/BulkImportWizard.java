@@ -171,11 +171,12 @@ public class BulkImportWizard extends Wizard implements IImportWizard {
 		}
 		if (!allProblems.isEmpty()) {
 			// pop up a dialog showing the problems
-			final StringBuilder sb = new StringBuilder("There were problems with the import (perhaps the wrong delimeter character was used). Check the error log.: \n");
+			final StringBuilder sb = new StringBuilder("There were problems with the import (perhaps a wrong delimiter character was used): \n");
 			for (final String problem : allProblems) {
-				sb.append("\n");
+				sb.append("\n- ");
 				sb.append(problem);
 			}
+			sb.append("\n Please check the error log for more details.");
 			MessageDialog.openWarning(getShell(), "Import Problems", sb.toString());
 		}
 	}
