@@ -93,7 +93,7 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/3.5.0-SNAPSHOT/com.mmxlabs.models.ui.p2-3.5.0-SNAPSHOT.zip-unzip/" id="com-mmxlabs-model-ui.hg"/>
+<repository location="https://server1.mmxlabs.com/nexus/service/local/repositories/snapshots-v2-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/3.5.0-SNAPSHOT/com.mmxlabs.models.ui.p2-3.5.0-SNAPSHOT.zip-unzip/" id="com-mmxlabs-models-ui.hg"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.feature.feature.group" version="0.0.0"/>
