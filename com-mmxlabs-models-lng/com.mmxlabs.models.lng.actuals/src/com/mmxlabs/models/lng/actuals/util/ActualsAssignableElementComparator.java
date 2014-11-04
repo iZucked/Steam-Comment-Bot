@@ -30,6 +30,9 @@ public class ActualsAssignableElementComparator extends AssignableElementDateCom
 		if (actualsModel != null) {
 			for (final CargoActuals cargoActuals : actualsModel.getCargoActuals()) {
 				final Cargo cargo = cargoActuals.getCargo();
+				if (cargo == null) {
+					continue;
+				}
 				final List<Slot> slots = cargo.getSortedSlots();
 				if (slots.isEmpty()) {
 					continue;
