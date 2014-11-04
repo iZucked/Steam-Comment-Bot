@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.lingo.reports.feature"
       label="Lingo Reports Feature"
-      version="3.5.0.RELEASE"
+      version="3.5.1.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description url="http://www.minimaxlabs.com/">
@@ -28,14 +28,14 @@ All rights reserved.
          id="com.mmxlabs.lingo.reports"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.lingo.reports.scheduleview"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
