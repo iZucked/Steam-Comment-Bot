@@ -6,7 +6,7 @@
 
 -->
 <site>
-   <feature id="com.mmxlabs.jobmanager.feature" version="0.0.0">
+   <feature id="com.mmxlabs.jobmanager.feature" version="3.5.0.RELEASE">
       <category name="all"/>
    </feature>
    <feature id="com.mmxlabs.jobmanager.feature.source" version="0.0.0">
