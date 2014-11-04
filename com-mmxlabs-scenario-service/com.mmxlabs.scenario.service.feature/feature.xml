@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.scenario.service.feature"
       label="Scenario Service Feature"
-      version="3.5.0.RELEASE"
+      version="3.5.1.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -28,56 +28,56 @@ All rights reserved.
          id="com.mmxlabs.scenario.service.file"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.scenario.service.model"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.scenario.service.model.edit"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.scenario.service.ui"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.scenario.service.manifest"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.scenario.service.manifest.edit"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.scenario.service.util"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.scenario.service.dirscan"
          download-size="0"
          install-size="0"
-         version="3.5.0.RELEASE"
+         version="3.5.1.qualifier"
          unpack="false"/>
 
 </feature>
