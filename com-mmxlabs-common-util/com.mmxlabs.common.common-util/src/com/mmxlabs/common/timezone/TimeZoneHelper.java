@@ -41,6 +41,9 @@ public class TimeZoneHelper {
 		newCalendar.set(Calendar.DAY_OF_MONTH, oldCalendar.get(Calendar.DAY_OF_MONTH));
 		newCalendar.set(Calendar.HOUR_OF_DAY, oldCalendar.get(Calendar.HOUR_OF_DAY));
 		newCalendar.set(Calendar.MINUTE, oldCalendar.get(Calendar.MINUTE));
+		newCalendar.set(Calendar.SECOND, 0);
+		newCalendar.set(Calendar.MILLISECOND, 0);
+
 		return newCalendar;
 	}
 	
