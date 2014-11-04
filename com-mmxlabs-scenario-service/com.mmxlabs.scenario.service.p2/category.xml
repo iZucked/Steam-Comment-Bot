@@ -7,7 +7,7 @@
 -->
 <site>
    <category-def name="all" label="Scenario Service p2 Repository"/>
-   <feature id="com.mmxlabs.scenario.service.feature" version="3.5.0.RELEASE">
+   <feature id="com.mmxlabs.scenario.service.feature" version="3.5.1.RELEASE">
       <category name="all"/>
    </feature>
    <feature id="com.mmxlabs.scenario.service.feature.source" version="0.0.0">
