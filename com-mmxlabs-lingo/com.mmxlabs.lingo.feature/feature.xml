@@ -26,23 +26,23 @@
 
    <includes
          id="com.mmxlabs.jobmanager.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.lingo.platform.feature"
-         version="3.5.1.qualifier"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.models.lng.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.models.lng.transformer.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.models.migration.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.models.mmxcore.runtime.feature"
@@ -50,23 +50,23 @@
 
    <includes
          id="com.mmxlabs.models.ui.runtime.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.rcp.common.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.scenario.service.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.lingo.reports.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.scheduler.optimiser.feature"
-         version="3.5.0.RELEASE"/>
+         version="3.5.1.RELEASE"/>
 
    <includes
          id="com.mmxlabs.optimiser.feature"
@@ -84,42 +84,42 @@
          id="com.mmxlabs.lingo.app"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.lingo.extensions"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.lingo.product"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.lingo.ui"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.lingo.app.headless"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.lingo.doc"
          download-size="0"
          install-size="0"
-         version="3.5.1.qualifier"
+         version="3.5.1.RELEASE"
          unpack="false"/>
 
 </feature>
