@@ -6,13 +6,13 @@
 
 -->
 <site>
-   <feature id="com.mmxlabs.models.lng.transformer.feature" version="0.0.0">
+   <feature id="com.mmxlabs.models.lng.transformer.feature" version="3.5.0.RELEASE">
       <category name="all"/>
    </feature>
    <feature id="com.mmxlabs.models.lng.transformer.feature.source" version="0.0.0">
       <category name="all"/>
    </feature>
-      <feature id="com.mmxlabs.models.lng.transformer.its.feature" version="0.0.0">
+      <feature id="com.mmxlabs.models.lng.transformer.its.feature" version="3.5.0.RELEASE">
       <category name="all"/>
    </feature>
    <feature id="com.mmxlabs.models.lng.transformer.its.feature.source" version="0.0.0">
