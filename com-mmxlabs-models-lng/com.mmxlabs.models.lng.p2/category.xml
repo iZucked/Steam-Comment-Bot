@@ -6,7 +6,7 @@
 
 -->
 <site>
-   <feature id="com.mmxlabs.models.lng.feature" version="3.5.0.RELEASE">
+   <feature id="com.mmxlabs.models.lng.feature" version="3.5.1.RELEASE">
       <category name="all"/>
    </feature>
    <feature id="com.mmxlabs.models.lng.feature.source" version="0.0.0">
