@@ -139,8 +139,8 @@ public class MarkToMarketExporter extends BaseAnnotationExporter {
 				}
 
 			}
-			sv.setStart(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot)));
-			sv.setEnd(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot)));
+			sv.setStart(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot), slot.getPort()));
+			sv.setEnd(modelEntityMap.getDateFromHours(allocation.getSlotTime(slot), slot.getPort()));
 
 			sv.setSlotAllocation(slotAllocation);
 

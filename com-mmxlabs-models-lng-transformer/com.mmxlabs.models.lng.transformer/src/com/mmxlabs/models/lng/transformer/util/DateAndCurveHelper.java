@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 
 /**
  * Small helper class which is intended to be injected into external {@link ITransformerExtension}s and {@link IBuilderExtension}s to help with date and time conversion. This also has some routines
@@ -45,7 +46,7 @@ public class DateAndCurveHelper {
 	public int convertTime(final Date earliest, final Date windowStart) {
 		// I am using two calendars, because the java date objects are all
 		// deprecated; however, timezones should not be a problem because
-		// every Date in the EMF representation is in UTC.
+		// every Date in the EMF representation is in UTC. (No - everything should be in correct localtime, but date doesn't care so we just need it to be consistent.
 		final Calendar a = Calendar.getInstance(timezone);
 		a.setTime(earliest);
 		final Calendar b = Calendar.getInstance(timezone);
@@ -157,6 +158,53 @@ public class DateAndCurveHelper {
 	}
 
 	public void setEarliestTime(Date earliestTime) {
-		this.earliestTime = earliestTime;
+		this.earliestTime = roundTimeDown(earliestTime);
+	}
+
+	/**
+	 * Returns the minutes that need to be added to a date that has been rounded down elsewhere in the application (e.g. in convertTime())
+	 * 
+	 * @param timeZone
+	 * @return
+	 */
+	public static int getOffsetInMinutesFromTimeZone(String timeZone) {
+		return getOffsetMinutes(getOffsetInMsFromTimeZone(timeZone));
+	}
+
+	public static int getOffsetInMsFromTimeZone(String timeZone) {
+		int offset = TimeZone.getTimeZone(timeZone).getRawOffset();
+		return offset;
+	}
+
+	public static int getOffsetMinutes(int offsetMs) {
+		int correctedOffset = 0;
+		int offsetInMinutes = (Math.abs(offsetMs) / 1000 / 60) % 60;
+		if (offsetInMinutes != 0) {
+			if (offsetMs > 0) {
+				correctedOffset = 60 - offsetInMinutes;
+			} else {
+				correctedOffset = offsetInMinutes;
+			}
+		}
+		return correctedOffset;
+	}
+
+	/**
+	 * Rounds time down by losing the hour information
+	 * 
+	 * @return
+	 */
+	public static Date roundTimeDown(Date date) {
+		return new Date(date.getTime() - getHourRoundingRemainder(date));
+	}
+
+	/**
+	 * Returns the number of milliseconds lost by rounding down to the nearest hour
+	 * 
+	 * @param date
+	 * @return
+	 */
+	public static int getHourRoundingRemainder(Date date) {
+		return (int) (date.getTime() % Timer.ONE_HOUR);
 	}
 }
