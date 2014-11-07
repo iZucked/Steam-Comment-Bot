@@ -75,7 +75,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 
 					}
 				}
-			} catch (final Exception e) {
+			} catch (final Exception | AssertionError e) {
 				log.error(e.getMessage(), e);
 				kill();
 				setJobState(EJobState.CANCELLED);
@@ -126,7 +126,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		currentState = EJobState.CREATED;
 	}
 
-	public void setRule(ISchedulingRule rule) {
+	public void setRule(final ISchedulingRule rule) {
 		runner.setRule(rule);
 	}
 
