@@ -220,9 +220,15 @@ public class CapacityViolationChecker {
 				if (toPortSlot instanceof EndPortSlot) {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
-						addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+						// NOTE: This can be negative and as such does not feed into capacity component. Note negative values are also now deemed to be "unset"
+						// addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+
+						// Alternative for period opt, just flag up if we expected heel but arrived with none. We could put a tolerance on the mismatch? E.g. only flag up if diff is greater than e.g.
+						// 500? It can be very hard for optimiser to get exactly the right m3 value, and often a small difference makes no real impact on overall P&L.
+						if (endPortSlot.isEndCold() && remainingHeelInM3 == 0) {
+							addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+						}
 					}
-				}
 				if (isForcedCooldown) {
 					// Record the previously detected forced cooldown problem
 					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
