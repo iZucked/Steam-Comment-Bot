@@ -533,6 +533,15 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 15;
 
 	/**
+	 * The feature id for the '<em><b>Load Failure</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__LOAD_FAILURE = CONTAINER_FEATURE_COUNT + 16;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @Note: Compatibility filter created
@@ -540,7 +549,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 16;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 17;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -1150,6 +1159,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getScenarioInstance_ValidationStatusCode();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isLoadFailure <em>Load Failure</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Load Failure</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#isLoadFailure()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_LoadFailure();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Metadata <em>Metadata</em>}'.

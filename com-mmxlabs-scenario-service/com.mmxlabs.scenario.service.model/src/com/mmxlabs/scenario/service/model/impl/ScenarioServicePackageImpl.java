@@ -482,6 +482,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getScenarioInstance_LoadFailure() {
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMetadata() {
 		return metadataEClass;
 	}
@@ -741,6 +750,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__READONLY);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__DIRTY);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VALIDATION_STATUS_CODE);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__LOAD_FAILURE);
 
 		metadataEClass = createEClass(METADATA);
 		createEAttribute(metadataEClass, METADATA__CREATOR);
@@ -883,6 +893,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_ValidationStatusCode(), ecorePackage.getEInt(), "validationStatusCode", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_LoadFailure(), ecorePackage.getEBoolean(), "loadFailure", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
 

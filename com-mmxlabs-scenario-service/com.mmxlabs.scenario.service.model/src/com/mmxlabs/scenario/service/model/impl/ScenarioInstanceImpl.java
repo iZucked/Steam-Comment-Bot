@@ -54,6 +54,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isReadonly <em>Readonly</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isLoadFailure <em>Load Failure</em>}</li>
  * </ul>
  * </p>
  *
@@ -65,13 +66,13 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @generated NOT
 	 */
 	private static final Logger log = LoggerFactory.getLogger(ScenarioInstanceImpl.class);
-	
+
 	/**
 	 * Object used as a lock when performing IO operations {@link #load()}, {@link #save()} and {@link #unload()};
 	 * @generated NOT
 	 */
 	private Object ioLock = new Object();
-	
+
 	/**
 	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -334,6 +335,26 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected int validationStatusCode = VALIDATION_STATUS_CODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isLoadFailure() <em>Load Failure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLoadFailure()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean LOAD_FAILURE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isLoadFailure() <em>Load Failure</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isLoadFailure()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean loadFailure = LOAD_FAILURE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -712,6 +733,27 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isLoadFailure() {
+		return loadFailure;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLoadFailure(boolean newLoadFailure) {
+		boolean oldLoadFailure = loadFailure;
+		loadFailure = newLoadFailure;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE, oldLoadFailure, loadFailure));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getContainedInstanceCount() {
 		return super.getContainedInstanceCount() + 1;
 	}
@@ -763,12 +805,26 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		if (scenarioService == null) {
 			throw new RuntimeException("Request #load() on a ScenarioInstance with no ScenarioService");
 		}
+		// Do not attempt to reload if a previous attempt failed
+		if (isLoadFailure()) {
+			return null;
+		}
 		synchronized (ioLock) {
 			// Already unloaded?
 			if (getInstance() != null) {
 				return getInstance();
 			}
-			return scenarioService.load(this);
+			try {
+				return scenarioService.load(this);
+			} catch (final Exception e) {
+				// Error on loading, record failure and do not attempt to reload.
+				setLoadFailure(true);
+				
+				log.error("Failed to load scenario " + getName() + ". Reload will not be attempted again until the application is relaunched.");
+				
+				// Re-throw exception
+				throw e;
+			}
 		}
 	}
 
@@ -780,10 +836,12 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @generated NOT
 	 */
 	public void unload() {
-		
+
 		final IScenarioService scenarioService = getScenarioService();
 		if (scenarioService == null) {
-			throw new RuntimeException("Request #unload() on a ScenarioInstance with no ScenarioService");
+			log.error("Request #unload() on a ScenarioInstance with no ScenarioService");
+			// setInstance(null);
+			return;
 		}
 		synchronized (ioLock) {
 			// Already unloaded?
@@ -816,7 +874,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			if (getInstance() == null) {
 				return;
 			}
-	
+
 			scenarioService.save(this);
 		}
 	}
@@ -902,6 +960,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return isDirty();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			return getValidationStatusCode();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
+			return isLoadFailure();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -966,6 +1026,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			setValidationStatusCode((Integer) newValue);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
+			setLoadFailure((Boolean) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1026,6 +1089,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			setValidationStatusCode(VALIDATION_STATUS_CODE_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
+			setLoadFailure(LOAD_FAILURE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1070,6 +1136,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return dirty != DIRTY_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			return validationStatusCode != VALIDATION_STATUS_CODE_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOAD_FAILURE:
+			return loadFailure != LOAD_FAILURE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1107,6 +1175,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		result.append(dirty);
 		result.append(", validationStatusCode: ");
 		result.append(validationStatusCode);
+		result.append(", loadFailure: ");
+		result.append(loadFailure);
 		result.append(')');
 		return result.toString();
 	}
