@@ -152,6 +152,24 @@ abstract public class GenericIndexImporter<TargetClass> extends AbstractClassImp
 		return c.getTime();
 	}
 	
+	/**
+	 * Returns the date corresponding to the exact start of a calendar month.
+	 * @param date
+	 * @return
+	 */
+	private Date startOfMonth(final Date date) {
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		c.setTime(date);
+		// Set back to start of month
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		// Clear any other values
+		c.set(Calendar.HOUR_OF_DAY, 0);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTime();
+	}
+	
 	@Override
 	abstract public ImportResults importObject(final EObject parent, final EClass targetClass, final Map<String, String> row, final IImportContext context);
 

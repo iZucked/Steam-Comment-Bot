@@ -78,7 +78,7 @@ public class ElementAssignmentConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			if (event != null) {
+			if (event != null && vessel != null) {
 
 				if (!scenarioVessels.contains(vessel)) {
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel event " + event.getName()

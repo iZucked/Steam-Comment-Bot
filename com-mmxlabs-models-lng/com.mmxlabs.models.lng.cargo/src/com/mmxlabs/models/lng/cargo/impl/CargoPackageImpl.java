@@ -1204,17 +1204,8 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getEndHeelOptions_EndCold() {
-		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getEndHeelOptions_TargetEndHeel() {
-		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)endHeelOptionsEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1385,7 +1376,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEAttribute(vesselTypeGroupEClass, VESSEL_TYPE_GROUP__VESSEL_TYPE);
 
 		endHeelOptionsEClass = createEClass(END_HEEL_OPTIONS);
-		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__END_COLD);
 		createEAttribute(endHeelOptionsEClass, END_HEEL_OPTIONS__TARGET_END_HEEL);
 
 		// Create enums
@@ -1618,8 +1608,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEAttribute(getVesselTypeGroup_VesselType(), this.getVesselType(), "vesselType", null, 1, 1, VesselTypeGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(endHeelOptionsEClass, EndHeelOptions.class, "EndHeelOptions", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEndHeelOptions_EndCold(), ecorePackage.getEBoolean(), "endCold", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEndHeelOptions_TargetEndHeel(), ecorePackage.getEInt(), "targetEndHeel", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getEndHeelOptions_TargetEndHeel(), ecorePackage.getEInt(), "targetEndHeel", null, 0, 1, EndHeelOptions.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");

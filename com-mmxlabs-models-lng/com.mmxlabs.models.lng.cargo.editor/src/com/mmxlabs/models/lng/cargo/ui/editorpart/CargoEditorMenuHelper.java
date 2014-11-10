@@ -38,6 +38,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -946,12 +947,10 @@ public class CargoEditorMenuHelper {
 						dischargeSlot.setWindowStart(source.getWindowStart());
 					} else {
 						dischargeSlot = cec.createNewSpotDischarge(setCommands, cargoModel, isDesPurchaseOrFobSale, market);
-
 						// Get start of month and create full sized window
 						final Calendar cal = Calendar.getInstance();
 						cal.setTimeZone(TimeZone.getTimeZone(source.getPort().getTimeZone()));
 						cal.setTime(source.getWindowStartWithSlotOrPortTime());
-
 						// Take into account travel time
 						if (loadSlot.isDESPurchase() && loadSlot.isDivertible()) {
 							final int travelTime = getTravelTime(loadSlot.getPort(), dischargeSlot.getPort(), loadSlot.getAssignment());
@@ -967,19 +966,19 @@ public class CargoEditorMenuHelper {
 							cal.add(Calendar.HOUR_OF_DAY, travelTime);
 							cal.add(Calendar.HOUR_OF_DAY, loadSlot.getSlotOrPortDuration());
 						}
-
-						cal.set(Calendar.DAY_OF_MONTH, 1);
 						cal.set(Calendar.DAY_OF_MONTH, 1);
 						cal.set(Calendar.HOUR_OF_DAY, 0);
 						cal.set(Calendar.MINUTE, 0);
 						cal.set(Calendar.SECOND, 0);
 						cal.set(Calendar.MILLISECOND, 0);
-						final Date startDate = cal.getTime();
-						final String yearMonthString = getKeyForDate(cal.getTimeZone(), cal.getTime());
+						// create new calendar in Disharge Port's timezone
+						Calendar dishargeCal = TimeZoneHelper.createTimeZoneShiftedCalendar(cal, cal.getTimeZone().getID(), dischargeSlot.getPort().getTimeZone());
+						final Date startDate = dishargeCal.getTime();
+						final String yearMonthString = getKeyForDate(dishargeCal.getTimeZone(), dishargeCal.getTime());
 						dischargeSlot.setWindowStart(startDate);
 						dischargeSlot.setWindowStartTime(0);
-						cal.add(Calendar.MONTH, 1);
-						final Date endDate = cal.getTime();
+						dishargeCal.add(Calendar.MONTH, 1);
+						final Date endDate = dishargeCal.getTime();
 						dischargeSlot.setWindowSize((int) ((endDate.getTime() - startDate.getTime()) / 1000L / 60L / 60L));
 
 						// Get existing names

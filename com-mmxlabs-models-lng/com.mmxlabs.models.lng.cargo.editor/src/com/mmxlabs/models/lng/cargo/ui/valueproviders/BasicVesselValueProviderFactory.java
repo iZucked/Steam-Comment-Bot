@@ -109,8 +109,12 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 						useScenarioVessel = !((DischargeSlot) target).isFOBSale();
 					}
 
+					boolean noVesselsAllowed = false;
 					final List<AVesselSet<Vessel>> allowedVessels = new ArrayList<>();
-					final boolean noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, target);
+					// we only want to filter vessels if we are assigning them (i.e. don't do this if we are selecting vessels to add to the restricted list)
+					if (field == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
+						noVesselsAllowed = AssignmentEditorHelper.compileAllowedVessels(allowedVessels, target);
+					}
 
 					final Set<AVesselSet<Vessel>> expandedVessels = new HashSet<AVesselSet<Vessel>>();
 					// filter the global list by the object's allowed values
