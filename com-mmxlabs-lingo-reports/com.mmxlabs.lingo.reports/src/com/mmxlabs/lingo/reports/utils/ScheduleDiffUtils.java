@@ -16,15 +16,19 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.util.ScheduleModelUtils;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 
 /**
  */
 public class ScheduleDiffUtils {
 
 	private boolean checkAssignmentDifferences = true;
+	private boolean checkSpotMarketDifferences = true;
+	private boolean checkNextPortDifferences = true;
 
 	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 
@@ -83,6 +87,21 @@ public class ScheduleDiffUtils {
 						if (!Equality.isEqual(caName, refName)) {
 							return true;
 						}
+					} else {
+						if (checkSpotMarketDifferences) {
+							final SpotSlot caSpot = (SpotSlot) caSlot;
+							final SpotSlot refSpot = (SpotSlot) refSlot;
+
+							final SpotMarket caMarket = caSpot == null ? null : caSpot.getMarket();
+							final SpotMarket refMarket = refSpot == null ? null : refSpot.getMarket();
+
+							final String caName = caMarket == null ? null : caMarket.getName();
+							final String refName = refMarket == null ? null : refMarket.getName();
+
+							if (!Equality.isEqual(caName, refName)) {
+								return true;
+							}
+						}
 					}
 				}
 
@@ -108,6 +127,26 @@ public class ScheduleDiffUtils {
 					}
 				}
 			}
+
+			if (checkNextPortDifferences) {
+				final Event caLastEvent = ca.getEvents().get(ca.getEvents().size()-1);
+				final Event refLastEvent = ref.getEvents().get(ref.getEvents().size()-1);
+
+				final Event caNextEvent = caLastEvent.getNextEvent();
+				final Event refNextEvent = refLastEvent.getNextEvent();
+
+				if (caNextEvent instanceof PortVisit && refNextEvent instanceof PortVisit) {
+					final Port caPort = caNextEvent.getPort();
+					final Port refPort = refNextEvent.getPort();
+					final String caName = caPort == null ? null : caPort.getName();
+					final String refName = refPort == null ? null : refPort.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
+				}
+			}
+
 			return false;
 		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
 			SlotVisit ref = null;
@@ -219,10 +258,36 @@ public class ScheduleDiffUtils {
 			if (Math.abs(refTime - vevTime) > 3 * 24) {
 				return true;
 			}
+
+			if (checkNextPortDifferences) {
+				final PortVisit vevNextVisit = findNextPortVisit(vev);
+				final PortVisit refNextVisit = findNextPortVisit(ref);
+
+				if (vevNextVisit != null && refNextVisit != null) {
+					final Port caPort = vevNextVisit.getPort();
+					final Port refPort = refNextVisit.getPort();
+					final String caName = caPort == null ? null : caPort.getName();
+					final String refName = refPort == null ? null : refPort.getName();
+
+					if (!Equality.isEqual(caName, refName)) {
+						return true;
+					}
+				}
+			}
+
 			return false;
 		}
 
 		return true;
+	}
+
+	private PortVisit findNextPortVisit(final Event evt) {
+
+		Event e = evt.getNextEvent();
+		while (!(e instanceof PortVisit)) {
+			e = e.getNextEvent();
+		}
+		return (PortVisit) e;
 	}
 
 	public boolean isCheckAssignmentDifferences() {
@@ -231,6 +296,22 @@ public class ScheduleDiffUtils {
 
 	public void setCheckAssignmentDifferences(final boolean checkAssignmentDifferences) {
 		this.checkAssignmentDifferences = checkAssignmentDifferences;
+	}
+
+	public boolean isCheckSpotMarketDifferences() {
+		return checkSpotMarketDifferences;
+	}
+
+	public void setCheckSpotMarketDifferences(final boolean checkSpotMarketDifferences) {
+		this.checkSpotMarketDifferences = checkSpotMarketDifferences;
+	}
+
+	public boolean isCheckNextPortDifferences() {
+		return checkNextPortDifferences;
+	}
+
+	public void setCheckNextPortDifferences(final boolean checkNextPortDifferences) {
+		this.checkNextPortDifferences = checkNextPortDifferences;
 	}
 
 }

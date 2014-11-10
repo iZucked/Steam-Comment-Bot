@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.lingo.reports.views.schedule;
 
+import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -16,6 +18,7 @@ import com.mmxlabs.lingo.reports.views.formatters.Formatters;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -42,7 +45,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
@@ -102,9 +104,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						final Sequence sequence = cargoAllocation.getSequence();
 						if (sequence != null) {
 							if (!sequence.isFleetVessel()) {
-								switch (cargoAllocation.getInputCargo().getCargoType()) {
+								Cargo inputCargo = cargoAllocation.getInputCargo();
+								if (inputCargo == null) {
+									return null;
+								}
+								switch (inputCargo.getCargoType()) {
 								case DES:
-									for (final Slot slot : cargoAllocation.getInputCargo().getSortedSlots()) {
+									for (final Slot slot : inputCargo.getSortedSlots()) {
 										if (slot instanceof LoadSlot) {
 											LoadSlot loadSlot = (LoadSlot) slot;
 											if (loadSlot.isDESPurchase()) {
@@ -117,7 +123,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 										}
 									}
 								case FOB:
-									for (final Slot slot : cargoAllocation.getInputCargo().getSortedSlots()) {
+									for (final Slot slot : inputCargo.getSortedSlots()) {
 										if (slot instanceof DischargeSlot) {
 											final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 											if (dischargeSlot.isFOBSale()) {
@@ -405,7 +411,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, builder.generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. wiring", null, ColumnType.DIFF, builder.generatePreviousWiringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. discharge", null, ColumnType.DIFF, builder.generatePreviousWiringColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, builder.generatePermutationColumnFormatter(cargoAllocationRef));

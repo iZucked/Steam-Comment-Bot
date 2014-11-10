@@ -36,7 +36,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.schedule.ConfigurableScheduleReportView";
+	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
 
 	private final ScheduleBasedReportBuilder builder;
 
