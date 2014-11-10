@@ -6,7 +6,7 @@
 
 -->
 <site>
-   <feature id="com.mmxlabs.lingo.feature" version="3.5.1.RELEASE">
+   <feature id="com.mmxlabs.lingo.feature" version="0.0.0">
       <category name="all"/>
    </feature>
    <category-def name="all" label="LiNGO"/>
