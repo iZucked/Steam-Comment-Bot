@@ -4,6 +4,7 @@
 		<groupId>com.mmxlabs.jobmanager</groupId>
 		<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
 		<version>3.5.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.jobmanager.target-definition</artifactId>
 	<packaging>eclipse-target-definition</packaging>
