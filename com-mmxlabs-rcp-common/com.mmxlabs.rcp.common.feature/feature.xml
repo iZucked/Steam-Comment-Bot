@@ -27,21 +27,21 @@
          id="com.mmxlabs.ganttviewer"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.rcp.common"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.models.common"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -50,7 +50,7 @@
          ws="win32"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -58,14 +58,14 @@
          id="com.mmxlabs.license.ssl"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.rcp.logger"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          fragment="true"
          unpack="false"/>
 
@@ -73,7 +73,7 @@
          id="com.mmxlabs.license.features"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
