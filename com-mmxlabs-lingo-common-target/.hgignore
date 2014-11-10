@@ -1,0 +1,20 @@
+syntax: regexp
+^.*.orig$
+
+.*~
+syntax: regexp
+^.*/bin$
+
+syntax: regexp
+^target$
+
+syntax: regexp
+^.*/target$
+
+syntax: regexp
+^\.project$
+
+syntax: regexp
+^plugin_customization\.ini$
+syntax: regexp
+^com\.mmxlabs\.lingo\.doc/index$
