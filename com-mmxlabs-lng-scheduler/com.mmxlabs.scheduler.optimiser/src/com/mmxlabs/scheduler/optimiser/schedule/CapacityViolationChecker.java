@@ -229,6 +229,7 @@ public class CapacityViolationChecker {
 							addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
 						}
 					}
+				}
 				if (isForcedCooldown) {
 					// Record the previously detected forced cooldown problem
 					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
