@@ -117,6 +117,11 @@
 
 					<target>
 						<artifact>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+						<artifact>
 							<groupId>com.mmxlabs.models.lng</groupId>
 							<artifactId>com.mmxlabs.models.lng.target-definition</artifactId>
 							<version>${project.version}</version>
