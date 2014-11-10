@@ -27,21 +27,21 @@
          id="com.mmxlabs.jobmanager"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.jobmanager.eclipse"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="com.mmxlabs.jobmanager.ui"
          download-size="0"
          install-size="0"
-         version="3.5.1.RELEASE"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
