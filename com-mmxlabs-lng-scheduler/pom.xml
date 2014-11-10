@@ -27,7 +27,6 @@
 	</ciManagement>
 
 	<modules>
-		<module>com.mmxlabs.scheduler.target-definition</module>
 		<module>com.mmxlabs.scheduler.optimiser</module>
 		<module>com.mmxlabs.scheduler.optimiser.tests</module>
 		<module>com.mmxlabs.scheduler.optimiser.feature</module>
@@ -60,11 +59,6 @@
 							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>						
-						<artifact>
-							<groupId>com.mmxlabs.scheduler</groupId>
-							<artifactId>com.mmxlabs.scheduler.target-definition</artifactId>
-							<version>${project.version}</version>
-						</artifact>
 					</target>
 
 					<environments>
@@ -111,4 +105,17 @@
 
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>com-mmxlabs-common-util.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.6.1.RELEASE/com.mmxlabs.common.util.p2-2.6.1.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-optimiser.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/2.0.0.RELEASE/com.mmxlabs.optimiser.p2-2.0.0.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
 </project>
