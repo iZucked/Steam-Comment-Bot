@@ -27,7 +27,6 @@
 	</ciManagement>
 
 	<modules>
-		<module>com.mmxlabs.models.migration.target-definition</module>
 		<module>com.mmxlabs.models.migration</module>
 
 		<module>com.mmxlabs.models.migration.scenario</module>
@@ -62,11 +61,6 @@
 							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>						
-						<artifact>
-							<groupId>com.mmxlabs.models.migration</groupId>
-							<artifactId>com.mmxlabs.models.migration.target-definition</artifactId>
-							<version>${project.version}</version>
-						</artifact>
 					</target>
 
 					<environments>
@@ -120,6 +114,32 @@
 
 		</plugins>
 	</build>
-
+	<repositories>
+		<repository>
+			<id>com-mmxlabs-common-util.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.6.1.RELEASE/com.mmxlabs.common.util.p2-2.6.1.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-jobmanager.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-models-mmxcore.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/5.0.0.RELEASE/com.mmxlabs.models.mmxcore.p2-5.0.0.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-rcp-common.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-scenario-service.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/${project.version}/com.mmxlabs.scenario.service.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
 </project>
 
