@@ -36,9 +36,7 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView";
-	// private ColumnHandler dateColumn;
-	// private ColumnHandler vesselColumn;
-	// private ColumnHandler durationColumn;
+
 	private final PortRotationBasedReportBuilder builder;
 
 	@Inject(optional = true)
@@ -59,14 +57,6 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 
 	}
 
-	// @Override
-	// public void createPartControl(final Composite parent) {
-	// super.createPartControl(parent);
-	// Defines initial sort order?
-	// durationColumn.column.getColumn().notifyListeners(SWT.Selection, null);
-	// dateColumn.column.getColumn().notifyListeners(SWT.Selection, null);
-	// vesselColumn.column.getColumn().notifyListeners(SWT.Selection, null);
-	// }
 	/**
 	 * Check the view extension point to see if we can enable the customise dialog
 	 * 
