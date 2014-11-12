@@ -126,11 +126,6 @@
 			<layout>p2</layout>
 		</repository>
 		<repository>
-			<id>com-mmxlabs-jobmanager.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
-		<repository>
 			<id>com-mmxlabs-models-mmxcore.hg</id>
 			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/5.0.0.RELEASE/com.mmxlabs.models.mmxcore.p2-5.0.0.RELEASE.zip-unzip/</url>
 			<layout>p2</layout>
