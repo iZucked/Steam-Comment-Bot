@@ -11,8 +11,10 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
+
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.actuals.ActualsModel;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
@@ -243,13 +245,13 @@ public class ActualsModelRowTransformer {
 		 */
 		private final boolean primaryRecordOnly;
 
-		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Iterable<?> path) {
+		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Iterable<ETypedElement> path) {
 			super(true, path);
 			this.type = type;
 			this.primaryRecordOnly = primaryRecordOnly;
 		}
 
-		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Object... path) {
+		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final ETypedElement... path) {
 			super(true, path);
 			this.type = type;
 			this.primaryRecordOnly = primaryRecordOnly;
