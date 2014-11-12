@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -251,7 +252,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	}
 
-	public ColumnHandler createColumn(final ColumnBlock block, final String title, final IFormatter formatter, final Object... path) {
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final IFormatter formatter, final ETypedElement... path) {
 		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title);
 
 		handlers.add(handler);
@@ -742,9 +743,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		final String tooltip;
 		final ColumnType columnType;
 		final IFormatter formatter;
-		final Object[] path;
+		final ETypedElement[] path;
 
-		public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+		public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String tooltip, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
 			this.blockID = blockID;
 			this.columnName = title;
 			this.blockDisplayName = title;
@@ -755,7 +756,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		}
 
 		public SimpleEmfBlockColumnFactory(final String blockID, final String title, final String blockName, final String tooltip, final ColumnType columnType, final IFormatter formatter,
-				final Object... path) {
+				final ETypedElement... path) {
 			this.blockID = blockID;
 			this.columnName = title;
 			this.blockDisplayName = blockName;

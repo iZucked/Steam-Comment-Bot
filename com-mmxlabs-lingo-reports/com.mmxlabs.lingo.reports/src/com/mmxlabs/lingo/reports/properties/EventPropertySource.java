@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -99,7 +100,7 @@ public class EventPropertySource implements IPropertySource {
 			list.add(descriptor);
 
 			addPropertyDescriptor(list, "Slot ID", MMXCorePackage.eINSTANCE.getNamedObject_Name(),
-					Lists.<Object> newArrayList(SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation(), SchedulePackage.eINSTANCE.getSlotAllocation_Slot()));
+					Lists.<ETypedElement> newArrayList(SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation(), SchedulePackage.eINSTANCE.getSlotAllocation_Slot()));
 			// if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			// descriptor = new PropertyDescriptor(
 			// new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
@@ -230,7 +231,7 @@ public class EventPropertySource implements IPropertySource {
 		}
 
 		// Find the path to a ProfitAndLossContainer
-		final List<Object> featureList = new ArrayList<Object>();
+		final List<ETypedElement> featureList = new ArrayList<>();
 		ProfitAndLossContainer container = null;
 		if (event instanceof ProfitAndLossContainer) {
 			container = (ProfitAndLossContainer) event;
@@ -307,7 +308,7 @@ public class EventPropertySource implements IPropertySource {
 		return sb.toString();
 	}
 
-	private void addPropertyDescriptor(List<IPropertyDescriptor> list, String displayName, final EStructuralFeature feature, final List<Object> featureList) {
+	private void addPropertyDescriptor(List<IPropertyDescriptor> list, String displayName, final EStructuralFeature feature, final List<ETypedElement> featureList) {
 		// Create the property!
 		final EMFPathPropertyDescriptor desc = EMFPathPropertyDescriptor.create(event, adapterFactory, feature, featureList);
 		if (desc != null) {
