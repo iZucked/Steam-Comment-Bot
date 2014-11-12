@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
@@ -800,7 +801,7 @@ public class CargoModelRowTransformer {
 
 		/**
 		 */
-		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Iterable<?> path) {
+		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Iterable<ETypedElement> path) {
 			super(true, path);
 			this.type = type;
 			this.primaryRecordOnly = primaryRecordOnly;
@@ -808,7 +809,7 @@ public class CargoModelRowTransformer {
 
 		/**
 		 */
-		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final Object... path) {
+		public RowDataEMFPath(final boolean primaryRecordOnly, final Type type, final ETypedElement... path) {
 			super(true, path);
 			this.type = type;
 			this.primaryRecordOnly = primaryRecordOnly;
