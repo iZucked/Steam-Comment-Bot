@@ -7,11 +7,13 @@ package com.mmxlabs.models.util.emfpath;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 /**
  * A device for finding things relative to an EObject; it can follow a sequence of EReferences and EOperations from a root object.
@@ -20,44 +22,44 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * 
  */
 public class EMFPath {
-	final Object[] path;
+	final ETypedElement[] path;
 	final boolean failSilently;
 
-	public EMFPath(boolean failSilently, final Iterable<?> path) {
-		final ArrayList<Object> scratch = new ArrayList<Object>();
+	public EMFPath(final boolean failSilently, final Iterable<ETypedElement> path) {
+		final List<ETypedElement> scratch = new ArrayList<>();
 
-		for (final Object o : path) {
+		for (final ETypedElement o : path) {
 			scratch.add(o);
 		}
 
-		this.path = scratch.toArray();
+		this.path = scratch.toArray(new ETypedElement[scratch.size()]);
 		checkPathIsValid();
 		this.failSilently = failSilently;
 	}
 
-	public EMFPath(boolean failSilently, final Object... path) {
+	public EMFPath(final boolean failSilently, final ETypedElement... path) {
 		this.path = path.clone();
 		checkPathIsValid();
 		this.failSilently = failSilently;
 	}
 
 	private void checkPathIsValid() {
-		for (final Object object : path) {
+		for (final ETypedElement object : path) {
 			assert object instanceof EStructuralFeature || object instanceof EOperation;
 		}
 	}
 
-	public Object get(EObject root, final int depth) {
+	public Object get(final EObject root, final int depth) {
 		if (failSilently) {
 			try {
 				return actuallyGet(root, depth);
-			} catch (Throwable ex) {
+			} catch (final Throwable ex) {
 				return null;
 			}
 		} else {
 			try {
 				return actuallyGet(root, depth);
-			} catch (InvocationTargetException e) {
+			} catch (final InvocationTargetException e) {
 				throw new RuntimeException(e);
 			}
 		}
@@ -74,11 +76,11 @@ public class EMFPath {
 		}
 	}
 
-	private Object actuallyGet(EObject root, int depth) throws InvocationTargetException {
+	private Object actuallyGet(EObject root, final int depth) throws InvocationTargetException {
 		if (depth == path.length)
 			return root;
 		for (int i = 0; i < path.length - (1 + depth); i++) {
-			final Object el = path[i];
+			final ETypedElement el = path[i];
 			root = (EObject) chase(root, el);
 		}
 		if (path.length > 0) {
@@ -88,7 +90,7 @@ public class EMFPath {
 		}
 	}
 
-	private Object chase(final EObject root, final Object el) throws InvocationTargetException {
+	private Object chase(final EObject root, final ETypedElement el) throws InvocationTargetException {
 
 		if (root == null) {
 			if (failSilently) {
@@ -98,8 +100,14 @@ public class EMFPath {
 			}
 		}
 		if (el instanceof EOperation) {
+			if (failSilently && !root.eClass().getEAllOperations().contains(el)) {
+				return null;
+			}
 			return root.eInvoke((EOperation) el, null);
 		} else {
+			if (failSilently && !root.eClass().getEAllStructuralFeatures().contains(el)) {
+				return null;
+			}
 			return root.eGet((EStructuralFeature) el);
 		}
 	}
@@ -117,7 +125,7 @@ public class EMFPath {
 	 * @param i
 	 * @return
 	 */
-	public Object getPathComponent(int i) {
+	public Object getPathComponent(final int i) {
 		return path[path.length - (i + 1)];
 	}
 
@@ -146,14 +154,14 @@ public class EMFPath {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		EMFPath other = (EMFPath) obj;
+		final EMFPath other = (EMFPath) obj;
 		if (failSilently != other.failSilently)
 			return false;
 		if (!Arrays.equals(path, other.path))

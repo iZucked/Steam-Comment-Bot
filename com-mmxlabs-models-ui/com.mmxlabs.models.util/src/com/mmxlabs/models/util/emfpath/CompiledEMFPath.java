@@ -7,6 +7,7 @@ package com.mmxlabs.models.util.emfpath;
 import java.util.Arrays;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.compilation.ITransformer;
 
@@ -23,24 +24,23 @@ public class CompiledEMFPath extends EMFPath {
 	 * @param failSilently
 	 * @param path
 	 */
-	public CompiledEMFPath(final ClassLoader loader, boolean failSilently, Object... path) {
+	public CompiledEMFPath(final ClassLoader loader, boolean failSilently, ETypedElement... path) {
 		super(failSilently, path);
 		if (failSilently) {
-			delegate = PathDelegateCache.getInstance().getPathDelegate(loader, 
-					Arrays.asList(path));
+			delegate = PathDelegateCache.getInstance().getPathDelegate(loader, Arrays.asList(path));
 		} else {
 			delegate = null;
 		}
 	}
 
 	/**
-	 * Create a new path by appending to an existing path. 
+	 * Create a new path by appending to an existing path.
+	 * 
 	 * @param failSilently
 	 * @param path
 	 * @param append
 	 */
-	public CompiledEMFPath(final ClassLoader loader, final EMFPath path,
-			final Object append) {
+	public CompiledEMFPath(final ClassLoader loader, final EMFPath path, final ETypedElement append) {
 		this(loader, path.failSilently, appendPath(path, append));
 	}
 
@@ -49,9 +49,9 @@ public class CompiledEMFPath extends EMFPath {
 	 * @param append
 	 * @return
 	 */
-	private static Object[] appendPath(final EMFPath path, final Object append) {
-		final Object[] result = Arrays.copyOf(path.path, path.path.length+1);
-		result[result.length-1] = append;
+	private static ETypedElement[] appendPath(final EMFPath path, final ETypedElement append) {
+		final ETypedElement[] result = Arrays.copyOf(path.path, path.path.length + 1);
+		result[result.length - 1] = append;
 		return result;
 	}
 

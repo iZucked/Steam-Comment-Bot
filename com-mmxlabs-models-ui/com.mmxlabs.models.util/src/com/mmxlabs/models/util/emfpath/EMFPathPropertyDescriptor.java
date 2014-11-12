@@ -48,12 +48,12 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 	 */
 	private boolean editable = false;
 
-	public static EMFPathPropertyDescriptor create(final EObject object, final AdapterFactory adapterFactory, final EStructuralFeature feature, final List<Object> featurePath) {
+	public static EMFPathPropertyDescriptor create(final EObject object, final AdapterFactory adapterFactory, final EStructuralFeature feature, final List<ETypedElement> featurePath) {
 		final EMFPath path = new EMFPath(true, featurePath);
 		return create(object, adapterFactory, feature, path);
 	}
 
-	public static EMFPathPropertyDescriptor create(final EObject object, final AdapterFactory adapterFactory, final EStructuralFeature feature, final Object... featurePath) {
+	public static EMFPathPropertyDescriptor create(final EObject object, final AdapterFactory adapterFactory, final EStructuralFeature feature, final ETypedElement... featurePath) {
 		final EMFPath path = new EMFPath(true, featurePath);
 		return create(object, adapterFactory, feature, path);
 	}
@@ -72,8 +72,8 @@ public class EMFPathPropertyDescriptor implements IPropertyDescriptor {
 		final Object object2 = path.get(object);
 
 		// Combine the existing path and the extra feature into a new path object
-		final List<Object> combinedPath = new ArrayList<Object>();
-		for (final Object o : path.path) {
+		final List<ETypedElement> combinedPath = new ArrayList<>();
+		for (final ETypedElement o : path.path) {
 			combinedPath.add(o);
 		}
 		combinedPath.add(feature);
