@@ -145,10 +145,5 @@
 			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
 			<layout>p2</layout>
 		</repository>
-		<repository>
-			<id>com-mmxlabs-scenario-service.hg</id>
-			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/${project.version}/com.mmxlabs.scenario.service.p2-${project.version}.zip-unzip/</url>
-			<layout>p2</layout>
-		</repository>
 	</repositories>	
 </project>
