@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.compilation.ITransformer;
@@ -23,20 +24,21 @@ import com.mmxlabs.common.compilation.MethodChainGenerator;
  */
 public class PathDelegateCache {
 	private static final PathDelegateCache INSTANCE = new PathDelegateCache();
-	
+
 	private final MethodChainGenerator generator = new MethodChainGenerator();
+
 	public static PathDelegateCache getInstance() {
 		return INSTANCE;
 	}
 
-	private final HashMap<Pair<ClassLoader, List<Object>>, ITransformer> cache = new HashMap<Pair<ClassLoader, List<Object>>, ITransformer>();
-	
+	private final HashMap<Pair<ClassLoader, List<ETypedElement>>, ITransformer> cache = new HashMap<>();
+
 	protected PathDelegateCache() {
 
 	}
 
-	public synchronized ITransformer getPathDelegate(final ClassLoader loader, final List<Object> path) {
-		final Pair<ClassLoader, List<Object>> key = new Pair<ClassLoader, List<Object>>(loader, path);
+	public synchronized ITransformer getPathDelegate(final ClassLoader loader, final List<ETypedElement> path) {
+		final Pair<ClassLoader, List<ETypedElement>> key = new Pair<>(loader, path);
 		if (cache.containsKey(key)) {
 			return cache.get(key);
 		} else {
@@ -48,24 +50,23 @@ public class PathDelegateCache {
 
 	/**
 	 * Create a new delegate
-	 * @param injectableClassLoader 
+	 * 
+	 * @param injectableClassLoader
 	 * @param path
 	 * @return
 	 */
-	private synchronized ITransformer compileDelegate(
-			InjectableClassLoader injectableClassLoader, final List<Object> path) {
+	private synchronized ITransformer compileDelegate(final InjectableClassLoader injectableClassLoader, final List<ETypedElement> path) {
 		final List<Method> methods = new LinkedList<Method>();
-		
+
 		// find Methods for ESF/EOps.
-		
-		for (final Object o : path) {
+
+		for (final ETypedElement o : path) {
 			final Class<?> containerClass;
 			final String methodName;
 			if (o instanceof EStructuralFeature) {
 				containerClass = ((EStructuralFeature) o).getContainerClass();
 				final String refName = ((EStructuralFeature) o).getName();
-				methodName = "get" + Character.toUpperCase(refName.charAt(0)) + 
-					refName.substring(1);
+				methodName = "get" + Character.toUpperCase(refName.charAt(0)) + refName.substring(1);
 			} else if (o instanceof EOperation) {
 				containerClass = ((EOperation) o).getEContainingClass().getInstanceClass();
 				methodName = ((EOperation) o).getName();
@@ -81,13 +82,12 @@ public class PathDelegateCache {
 				return null;
 			}
 		}
-		
-		final Class<ITransformer> tc = (Class<ITransformer>) generator
-				.createTransformer(methods, injectableClassLoader);
+
+		final Class<ITransformer> tc = (Class<ITransformer>) generator.createTransformer(methods, injectableClassLoader);
 		try {
 			return tc.newInstance();
 		} catch (final Exception ex) {
-			return null; //fallthrough to no transformer
+			return null; // fallthrough to no transformer
 		}
 	}
 }

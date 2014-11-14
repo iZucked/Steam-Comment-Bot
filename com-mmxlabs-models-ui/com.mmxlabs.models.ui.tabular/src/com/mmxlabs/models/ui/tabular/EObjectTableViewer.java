@@ -18,6 +18,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -211,7 +212,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 		};
 	}
 
-	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
+	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final ETypedElement... pathObjects) {
 		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
@@ -373,7 +374,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 		return new AlternatingRowCellRenderer();
 	}
 
-	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
+	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final ETypedElement... path) {
 		this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
 	}
 
