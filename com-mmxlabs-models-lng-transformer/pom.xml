@@ -27,9 +27,6 @@
 	</ciManagement>
 
 	<modules>
-
-		<module>com.mmxlabs.models.lng.transformer.target-definition</module>
-
 		<module>com.mmxlabs.models.lng.transformer</module>
 
 		<module>com.mmxlabs.models.lng.transformer.extensions</module>
