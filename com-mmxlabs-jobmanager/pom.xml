@@ -27,8 +27,6 @@
 	</ciManagement>
 
 	<modules>
-		<module>com.mmxlabs.jobmanager.target-definition</module>
-
 		<module>com.mmxlabs.jobmanager</module>
 		<module>com.mmxlabs.jobmanager.ui</module>
 		<module>com.mmxlabs.jobmanager.eclipse</module>
@@ -58,8 +56,8 @@
 
 					<target>
 						<artifact>
-							<groupId>com.mmxlabs.jobmanager</groupId>
-							<artifactId>com.mmxlabs.jobmanager.target-definition</artifactId>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
 							<version>${project.version}</version>
 						</artifact>
 					</target>
@@ -110,4 +108,17 @@
 		</plugins>
 
 	</build>
+
+	<repositories>
+		<repository>
+			<id>com-mmxlabs-common-util.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.6.1.RELEASE/com.mmxlabs.common.util.p2-2.6.1.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-rcp-common.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
 </project>
