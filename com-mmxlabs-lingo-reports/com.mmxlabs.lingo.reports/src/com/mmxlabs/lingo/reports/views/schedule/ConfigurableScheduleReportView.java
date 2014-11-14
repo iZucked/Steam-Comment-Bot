@@ -62,14 +62,12 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 	@Override
 	public void saveConfigState(final IMemento configMemento) {
 		if (configMemento != null) {
-			getBlockManager().saveToMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 			builder.saveToMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
 		}
 	}
 
 	protected void initConfigMemento(IMemento configMemento) {
 		if (configMemento != null) {
-			getBlockManager().initFromMemento(CONFIGURABLE_COLUMNS_ORDER, configMemento);
 			builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
 		}
 	}

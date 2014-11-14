@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.ETypedElement;
+
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EMFReportView;
 import com.mmxlabs.lingo.reports.components.EMFReportView.EmfBlockColumnFactory;
@@ -57,7 +59,7 @@ public class EMFReportColumnManager {
 		}
 	}
 
-	public void registerColumn(final String reportType, final String columnID, final String title, String tooltip, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+	public void registerColumn(final String reportType, final String columnID, final String title, String tooltip, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
 		registerColumn(reportType, new SimpleEmfBlockColumnFactory(columnID, title, tooltip, columnType, formatter, path));
 	}
 	

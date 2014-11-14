@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 
@@ -31,7 +32,7 @@ public class ColumnHandler {
 	public int viewIndex;
 	public final ColumnBlock block;
 
-	public ColumnHandler(final ColumnBlock block, final IFormatter formatter, final Object[] features, final String title) {
+	public ColumnHandler(final ColumnBlock block, final IFormatter formatter, final ETypedElement[] features, final String title) {
 		super();
 		this.formatter = formatter;
 		this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);

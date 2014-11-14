@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -292,7 +293,7 @@ public class LatenessReportView extends EMFReportView {
 		return true;
 	}
 
-	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
 		final ColumnBlock block = createBlock(blockID, title, columnType);
 		return createColumn(block, title, formatter, path);
 	}

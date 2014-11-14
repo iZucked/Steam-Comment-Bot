@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -230,7 +231,7 @@ public class CapacityViolationReportView extends EMFReportView {
 		return row;
 	}
 	
-	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final Object... path) {
+	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
 		final ColumnBlock block = createBlock(blockID, title, columnType);
 		return createColumn(block, title, formatter, path);
 	}
