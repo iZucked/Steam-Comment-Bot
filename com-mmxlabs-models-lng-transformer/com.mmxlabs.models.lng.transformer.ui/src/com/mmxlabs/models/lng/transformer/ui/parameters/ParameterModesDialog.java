@@ -146,7 +146,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 				@Override
 				public void expansionStateChanged(final ExpansionEvent e) {
-					resizeAndCenter();
+					resizeAndCenter(false);
 				}
 
 			});
@@ -239,6 +239,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 	private Composite createDateEditor(final Composite parent, final Option option) {
 		final Composite area = toolkit.createComposite(parent, SWT.NONE);
 		area.setLayout(new GridLayout(2, false));
+		area.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 		toolkit.createLabel(area, option.label);
 
 		final DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -250,7 +251,7 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 					if (value.equals("") == false) {
 						try {
 							format.parse((String) value);
-						} catch (ParseException e) {
+						} catch (final ParseException e) {
 							return ValidationStatus.error(String.format("'%s' is not a valid date.", value));
 						}
 					}
@@ -260,18 +261,19 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 		};
 
 		final Text text = toolkit.createText(area, null, SWT.NONE);
+		text.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL));
 
 		final IEMFEditValueProperty prop = EMFEditProperties.value(option.editingDomain, FeaturePath.fromList(option.features));
 
 		final EMFUpdateValueStrategy stringToDateStrategy = new EMFUpdateValueStrategy() {
 			@Override
-			protected IConverter createConverter(Object fromType, Object toType) {
+			protected IConverter createConverter(final Object fromType, final Object toType) {
 				return new Converter(fromType, toType) {
-					public Object convert(Object fromObject) {
-						String value = fromObject == null ? null : fromObject.toString();
+					public Object convert(final Object fromObject) {
+						final String value = fromObject == null ? null : fromObject.toString();
 						try {
 							return format.parse(value);
-						} catch (Exception e) {
+						} catch (final Exception e) {
 							return null;
 						}
 					}
@@ -281,9 +283,9 @@ public class ParameterModesDialog extends AbstractDataBindingFormDialog {
 
 		final EMFUpdateValueStrategy dateToStringStrategy = new EMFUpdateValueStrategy() {
 			@Override
-			protected IConverter createConverter(Object fromType, Object toType) {
+			protected IConverter createConverter(final Object fromType, final Object toType) {
 				return new Converter(fromType, toType) {
-					public Object convert(Object fromObject) {
+					public Object convert(final Object fromObject) {
 						if (fromObject instanceof Date) {
 							return format.format(fromObject);
 						}
