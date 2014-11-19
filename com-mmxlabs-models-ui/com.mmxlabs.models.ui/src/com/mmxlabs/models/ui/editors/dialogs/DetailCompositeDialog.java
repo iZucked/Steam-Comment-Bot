@@ -352,10 +352,10 @@ public class DetailCompositeDialog extends AbstractDataBindingFormDialog {
 		// commence editing
 		enableButtons();
 		updateEditor();
-		resizeAndCenter();
+		resizeAndCenter(false);
 		getShell().getDisplay().asyncExec(new Runnable() {
 			public void run() {
-				resizeAndCenter();
+				resizeAndCenter(false);
 			}
 		});
 	}
