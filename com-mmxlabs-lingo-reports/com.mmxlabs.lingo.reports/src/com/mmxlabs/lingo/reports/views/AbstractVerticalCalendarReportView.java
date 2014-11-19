@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -276,7 +277,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	public static List<Date> getGMTDaysBetween(Date start, Date end) {
 		final ArrayList<Date> result = new ArrayList<Date>();
 		if (start != null && end != null) {
-			final Calendar c = Calendar.getInstance();
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT"));
 			c.setTime(start);
 			c.set(Calendar.HOUR_OF_DAY, 0);
 			c.set(Calendar.MINUTE, 0);
@@ -292,7 +293,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	}
 	
 	public static Date getGMTDayFor(Date date) {
-		final Calendar c = Calendar.getInstance();
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT"));
 		c.setTime(date);
 		c.set(Calendar.HOUR_OF_DAY, 0);
 		c.set(Calendar.MINUTE, 0);
