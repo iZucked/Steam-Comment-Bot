@@ -481,10 +481,8 @@ public class PeriodTransformer {
 						// skip to next segment - start of next sequence. Otherwise this could e.g. cargo discharge slot.
 						// TODO: Note, what about FOB/DES here?
 						Event segmentEnd = ScheduleModelUtils.getSegmentEnd(event).getNextEvent();
-						int nextCounter = 0;
 						while (segmentEnd != null && !(segmentEnd instanceof PortVisit)) {
 							segmentEnd = segmentEnd.getNextEvent();
-							++nextCounter;
 						}
 
 						startConditionMap.put(cargo, (PortVisit) segmentEnd);
@@ -496,13 +494,9 @@ public class PeriodTransformer {
 						endConditionMap.put(vesselEvent, vesselEventVisit);
 
 						Event segmentEnd = ScheduleModelUtils.getSegmentEnd(event);
-						int nextCounter = 0;
 						while (segmentEnd != null && !(segmentEnd instanceof PortVisit)) {
 							segmentEnd = segmentEnd.getNextEvent();
-							++nextCounter;
 						}
-						// Only expect getNextEvent to be called once
-						assert nextCounter < 2;
 						startConditionMap.put(vesselEvent, (PortVisit) segmentEnd);
 
 					}
