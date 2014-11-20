@@ -21,17 +21,12 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.jface.gridviewer.GridColumnLabelProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.AbstractRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
-import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -117,43 +112,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		gridViewer.getGrid().setHeaderVisible(true);
 		gridViewer.getGrid().setLinesVisible(true);
 
-		// following unfinished code allows the date to display as a row header
-		// /*
 		gridViewer.getGrid().setRowHeaderVisible(true);
-		gridViewer.getGrid().setRowHeaderRenderer(new AbstractRenderer() {
-
-			@Override
-			public Point computeSize(final GC arg0, final int arg1, final int arg2, final Object arg3) {
-				return new Point(50, 10);
-			}
-
-			@Override
-			public void paint(final GC gc, final Object arg1) {
-				final Rectangle bounds = getBounds();
-				final int left = bounds.x;
-				final int top = bounds.y;
-				final int right = bounds.x + bounds.width - 1;
-				final int bottom = bounds.y + bounds.height - 1;
-
-				gc.setBackground(getColour(Light_Grey));
-				gc.fillRectangle(bounds);
-
-				gc.setForeground(getColour(Grey));
-				gc.drawLine(left, bottom, right, bottom);
-				gc.drawLine(right, top, right, bottom);
-				gc.setForeground(getColour(Black));
-				if (arg1 instanceof GridItem) {
-					final GridItem item = (GridItem) arg1;
-					final Date date = (Date) item.getData();
-					if (date != null) {
-						gc.drawString(sdf.format(date), left + 3, top + 1);
-					}
-				}
-			}
-
-		});
-		// */
-
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(gridViewer, createElementCollector());
 
 		makeActions();
