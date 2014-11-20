@@ -191,7 +191,7 @@ public class MultiDetailDialog extends AbstractDataBindingFormDialog {
 		displayComposite.setCommandHandler(immediate);
 		displayComposite.display(dialogContext, rootObject, proxies.get(proxies.size() - 1), proxies, dbc);
 		disableControls();
-		resizeAndCenter();
+		resizeAndCenter(false);
 	}
 
 	/**

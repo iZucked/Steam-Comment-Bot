@@ -78,11 +78,11 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 	}
 
 	protected Control createButtonBar(Composite parent) {
-		
+
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		Label sep = new Label(parent, SWT.HORIZONTAL|SWT.SEPARATOR);
+		Label sep = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
 		sep.setLayoutData(gd);
-				
+
 		Composite composite = new Composite(parent, SWT.NONE);
 		// create a layout with spacing and margins appropriate for the font
 		// size.
@@ -90,20 +90,19 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 0; // this is incremented by createButton
 		layout.makeColumnsEqualWidth = true;
-//		layout.marginWidth = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
-//		layout.marginHeight = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_MARGIN);
-//		layout.horizontalSpacing = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
-//		layout.verticalSpacing = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_SPACING);
+		// layout.marginWidth = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_MARGIN);
+		// layout.marginHeight = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_MARGIN);
+		// layout.horizontalSpacing = convertHorizontalDLUsToPixels(IDialogConstants.HORIZONTAL_SPACING);
+		// layout.verticalSpacing = convertVerticalDLUsToPixels(IDialogConstants.VERTICAL_SPACING);
 		composite.setLayout(layout);
-		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_END
-				| GridData.VERTICAL_ALIGN_CENTER);
+		GridData data = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.VERTICAL_ALIGN_CENTER);
 		composite.setLayoutData(data);
 		composite.setFont(parent.getFont());
-		
-//		 Add the buttons to the button bar.
+
+		// Add the buttons to the button bar.
 		createButtonsForButtonBar(composite);
 		return composite;
-//		return super.createButtonBar(parent);
+		// return super.createButtonBar(parent);
 	}
 
 	@Override
@@ -143,7 +142,7 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 			public void handleValueChange(final ValueChangeEvent event) {
 				handleStateChange((IStatus) event.diff.getNewValue(), dbc);
 				if (!event.diff.getNewValue().equals(event.diff.getOldValue())) {
-					resizeAndCenter();
+					resizeAndCenter(true);
 				}
 			}
 		});
@@ -241,10 +240,14 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 		return IMessageProvider.NONE;
 	}
 
-	protected void resizeAndCenter() {
+	protected void resizeAndCenter(final boolean growOnly) {
 		final Shell shell = getShell();
 		if (shell != null) {
 			shell.layout(true);
+			if (growOnly) {
+				shell.setMinimumSize(shell.getSize());
+			}
+
 			shell.setSize(shell.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			final Rectangle shellBounds = getParentShell().getBounds();
 			final Point dialogSize = shell.getSize();
