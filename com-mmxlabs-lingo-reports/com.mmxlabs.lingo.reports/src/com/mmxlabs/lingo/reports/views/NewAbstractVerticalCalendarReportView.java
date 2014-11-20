@@ -908,11 +908,13 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 		private final EventProvider provider;
 		private final EventLabelProvider labeller;
 		private final String title;
+		private final GridColumnGroup columnGroup;
 
-		public CalendarColumn(final EventProvider provider, final EventLabelProvider labeller, final String title) {
+		public CalendarColumn(final EventProvider provider, final EventLabelProvider labeller, final String title, final GridColumnGroup columnGroup) {
 			this.provider = provider;
 			this.labeller = labeller;
 			this.title = title;
+			this.columnGroup = columnGroup;
 		}
 
 		public ColumnLabelProvider createColumnLabelProvider(final ReportNebulaGridManager manager) {
@@ -923,8 +925,13 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 			return title;
 		}
 
+		@Override
 		public String toString() {
 			return (title == null) ? "(null)" : title;
+		}
+
+		public GridColumnGroup getColumnGroup() {
+			return columnGroup;
 		}
 	}
 
@@ -1030,7 +1037,11 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 			nebulaColumns = new ArrayList<>();
 			if (calendarColumns != null) {
 				for (final CalendarColumn column : calendarColumns) {
-					nebulaColumns.add(createColumn(column.createColumnLabelProvider(this), column.getTitle()));
+					if (column.getColumnGroup() != null) {
+						nebulaColumns.add(createColumn(column.createColumnLabelProvider(this), column.getTitle(), column.getColumnGroup()));
+					} else {
+						nebulaColumns.add(createColumn(column.createColumnLabelProvider(this), column.getTitle()));
+					}
 				}
 			}
 		}
