@@ -352,9 +352,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		final Date nextDay = new Date(day.getTime() + 1000 * 24 * 3600);
 
 		final Slot slot = ((SlotVisit) visit).getSlotAllocation().getSlot();
-		if (slot.getName().equals("P16")) {
-			slot.getName();
-		}
 
 		return (nextDay.before(visit.getStart()) || (visit.getEnd().after(day) == false));
 	}
@@ -430,10 +427,22 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	}
 
+	/**
+	 * Class to allow EventProvider objects to filter out particular events from their results.
+	 * 
+	 * @author mmxlabs
+	 * 
+	 */
 	public interface EventFilter {
 		boolean isEventFiltered(Date date, Event event);
 	}
 
+	/**
+	 * Concrete implementation of the EventFilter interface.
+	 * 
+	 * @author mmxlabs
+	 * 
+	 */
 	public abstract static class BaseEventFilter implements EventFilter {
 		protected final EventFilter filter; // allow filters to be chained if necessary
 
@@ -456,6 +465,15 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 	}
 
+	/**
+	 * Abstract event filter superclass which filters out Event objects unless they have a particular field set to one of a particular set of values.
+	 * 
+	 * Implement getEventField() to produce a filter which filters on a specific field.
+	 * 
+	 * @author mmxlabs
+	 * 
+	 * @param <T>
+	 */
 	static abstract protected class FieldEventFilter<T> extends BaseEventFilter {
 		final private List<T> permittedValues;
 
@@ -477,6 +495,12 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	}
 
+	/**
+	 * Filter to filter out events which do not occur at one of a specified list of ports.
+	 * 
+	 * @author mmxlabs
+	 * 
+	 */
 	static protected class PortEventFilter extends FieldEventFilter<Port> {
 
 		public PortEventFilter(final EventFilter filter, final List<Port> values) {
@@ -494,6 +518,12 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	}
 
+	/**
+	 * Filter to filter out events which are not associated with one of a specified list of contracts.
+	 * 
+	 * @author mmxlabs
+	 * 
+	 */
 	static protected class ContractEventFilter extends FieldEventFilter<Contract> {
 		public ContractEventFilter(final EventFilter filter, final List<Contract> values) {
 			super(filter, values);
@@ -677,6 +707,12 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 	}
 
+	/**
+	 * Event provider
+	 * 
+	 * @author mmxlabs
+	 * 
+	 */
 	static protected class HashMapEventProvider extends EventProvider {
 		Map<Date, List<Event>> events = new HashMap<>();
 		final Event[] noEvents = new Event[0];
@@ -970,6 +1006,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 
 		return null;
+
 	}
 
 	protected Color getColorFor(final Date date, final SlotVisit visit) {
@@ -992,9 +1029,13 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		return getColour(Orange);
 	}
 
-	protected String getEventText(final Date element, final Event event) {
+	protected String getEventText(final Date date, final Event event) {
+		if (date == null || event == null) {
+			return "";
+		}
+
 		// how many days since the start of the event?
-		Long days = (element.getTime() - event.getStart().getTime()) / (24 * 1000 * 3600);
+		Long days = (date.getTime() - event.getStart().getTime()) / (24 * 1000 * 3600);
 
 		// Journey events just show the day number
 		if (event instanceof Journey) {
@@ -1004,7 +1045,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		else if (event instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) event;
-			if (isDayOutsideActualVisit(element, visit)) {
+			if (date != null && isDayOutsideActualVisit(date, visit)) {
 				return "";
 			}
 			String result = getShortPortName(visit.getPort());
