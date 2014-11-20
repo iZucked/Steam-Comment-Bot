@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.jface.gridviewer.GridColumnLabelProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
@@ -376,7 +377,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	 * This class allows for convenient column label provider creation in a calendar grid: the provider is initialised with a particular data object (e.g. a sequence from a schedule) and will delegate
 	 * cell formatting & contents to methods based on the data object and the date.
 	 */
-	static abstract protected class CalendarColumnLabelProvider<T> extends ColumnLabelProvider {
+	static abstract protected class CalendarColumnLabelProvider<T> extends GridColumnLabelProvider {
 		protected T data;
 
 		public CalendarColumnLabelProvider(final T object) {
@@ -385,6 +386,11 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		public T getData() {
 			return data;
+		}
+
+		@Override
+		public String getRowHeaderText(final Object element) {
+			return getText((Date) element, data);
 		}
 
 		@Override

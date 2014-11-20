@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.nebula.jface.gridviewer.GridColumnLabelProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
@@ -27,11 +28,9 @@ import org.eclipse.nebula.widgets.grid.DataVisualizer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.GridItemDataVisualizer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.RGB;
@@ -39,7 +38,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
@@ -880,7 +878,7 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected class NewCalendarColumnLabelProvider extends ColumnLabelProvider {
+	protected class NewCalendarColumnLabelProvider extends GridColumnLabelProvider {
 		protected EventProvider provider;
 		protected EventLabelProvider labeller;
 		protected ReportNebulaGridManager manager;
@@ -899,6 +897,13 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 				return null;
 			}
 			return result[index];
+		}
+
+		@Override
+		public String getRowHeaderText(final Object element) {
+			final Pair<Date, Integer> pair = (Pair<Date, Integer>) element;
+			final Date date = pair.getFirst();
+			return labeller.getText(date, getData(pair));
 		}
 
 		@Override
