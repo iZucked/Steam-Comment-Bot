@@ -26,8 +26,8 @@ public final class CopyToClipboardActionFactory {
 
 	}
 
-	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTableViewer viewer) {
-		return new CopyGridToHtmlClipboardAction(viewer.getGrid());
+	public static CopyGridToHtmlClipboardAction createCopyToHtmlClipboardAction(final GridTableViewer viewer, boolean includeRowHeaders) {
+		return new CopyGridToHtmlClipboardAction(viewer.getGrid(), includeRowHeaders);
 	}
 
 	public static CopyGridToClipboardAction createCopyToClipboardAction(final Grid grid) {
@@ -57,16 +57,16 @@ public final class CopyToClipboardActionFactory {
 	public static CopyGridToClipboardAction createCopyToClipboardAction(final GridTableViewer viewer) {
 		return new CopyGridToClipboardAction(viewer.getGrid());
 	}
-	
+
 	public static String generateCSV(Object obj) {
-		if (obj instanceof Grid || obj instanceof GridTreeViewer || obj instanceof GridTableViewer) 
-			return createCopyToClipboardAction((Grid)obj).parseGridIntoStringWriter().toString();
-		else if (obj instanceof TreeViewer) 
-			return createCopyToClipboardAction((TreeViewer)obj).parseTreeIntoStringWriter().toString();
-		else if (obj instanceof Tree || obj instanceof TreeViewer) 
-			return createCopyToClipboardAction((Tree)obj).parseTreeIntoStringWriter().toString();
-		else if (obj instanceof Table || obj instanceof TableViewer) 
-			return createCopyToClipboardAction((Table)obj).parseTableIntoStringWriter().toString();
+		if (obj instanceof Grid || obj instanceof GridTreeViewer || obj instanceof GridTableViewer)
+			return createCopyToClipboardAction((Grid) obj).parseGridIntoStringWriter().toString();
+		else if (obj instanceof TreeViewer)
+			return createCopyToClipboardAction((TreeViewer) obj).parseTreeIntoStringWriter().toString();
+		else if (obj instanceof Tree || obj instanceof TreeViewer)
+			return createCopyToClipboardAction((Tree) obj).parseTreeIntoStringWriter().toString();
+		else if (obj instanceof Table || obj instanceof TableViewer)
+			return createCopyToClipboardAction((Table) obj).parseTableIntoStringWriter().toString();
 
 		return "";
 	}
