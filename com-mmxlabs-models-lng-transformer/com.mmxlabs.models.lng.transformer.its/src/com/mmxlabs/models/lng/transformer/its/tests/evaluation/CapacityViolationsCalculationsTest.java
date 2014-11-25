@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.util.Date;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,8 +24,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.SequenceTester;
 import com.mmxlabs.models.lng.types.PortCapability;
 
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
