@@ -840,7 +840,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		  (getBaseFuel_EquivalenceFactor(), 
 		   source, 
 		   new String[] {
-			 "unit", "m\u00b3/MT",
+			 "unit", "mmBtu/mt",
 			 "formatString", "##.###"
 		   });		
 		addAnnotation
