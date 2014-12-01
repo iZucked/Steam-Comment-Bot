@@ -58,7 +58,7 @@ public class JourneyEventImplTest {
 		final FuelUnit u = FuelUnit.MT;
 		final FuelUnit u2 = FuelUnit.M3;
 
-		final long value = 100l;
+		final long value = 100L;
 		final JourneyEventImpl details = new JourneyEventImpl();
 		Assert.assertEquals(0, details.getFuelConsumption(c, u));
 		Assert.assertEquals(0, details.getFuelConsumption(c, u2));
@@ -71,7 +71,7 @@ public class JourneyEventImplTest {
 	public void testGetSetFuelCost() {
 
 		final FuelComponent c = FuelComponent.Base;
-		final long value = 100l;
+		final long value = 100L;
 		final JourneyEventImpl details = new JourneyEventImpl();
 		Assert.assertEquals(0, details.getFuelCost(c));
 		details.setFuelCost(c, value);
@@ -93,7 +93,7 @@ public class JourneyEventImplTest {
 
 		final JourneyEventImpl event = new JourneyEventImpl();
 		Assert.assertEquals(0, event.getRouteCost());
-		final long cost = 1234567890l;
+		final long cost = 1234567890L;
 		event.setRouteCost(cost);
 		Assert.assertEquals(cost, event.getRouteCost());
 	}

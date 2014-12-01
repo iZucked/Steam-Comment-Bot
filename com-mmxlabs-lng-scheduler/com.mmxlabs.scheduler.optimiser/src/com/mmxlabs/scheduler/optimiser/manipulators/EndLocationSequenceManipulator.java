@@ -148,6 +148,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			break;
 		case REMOVE:
 			sequence.remove(sequence.size() - 1);
+			break;
 		default:
 			break;
 		}

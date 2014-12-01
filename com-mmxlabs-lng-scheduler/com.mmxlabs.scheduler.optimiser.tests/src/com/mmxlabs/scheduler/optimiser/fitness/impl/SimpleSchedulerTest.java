@@ -61,23 +61,23 @@ public class SimpleSchedulerTest {
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
-		final IPort port1 = builder.createPort("port-1", false, null, 0, 0, "UTC");
-		final IPort port2 = builder.createPort("port-2", false, null, 0, 5, "UTC");
-		final IPort port3 = builder.createPort("port-3", false, null, 5, 0, "UTC");
-		final IPort port4 = builder.createPort("port-4", false, null, 5, 5, "UTC");
-		final IPort port5 = builder.createPort("port-5", false, null, 0, 10, "UTC");
-		final IPort port6 = builder.createPort("port-6", false, null, 5, 10, "UTC");
+		final IPort port1 = builder.createPortForTest("port-1", false, null, 0, 0, "UTC");
+		final IPort port2 = builder.createPortForTest("port-2", false, null, 0, 5, "UTC");
+		final IPort port3 = builder.createPortForTest("port-3", false, null, 5, 0, "UTC");
+		final IPort port4 = builder.createPortForTest("port-4", false, null, 5, 5, "UTC");
+		final IPort port5 = builder.createPortForTest("port-5", false, null, 0, 10, "UTC");
+		final IPort port6 = builder.createPortForTest("port-6", false, null, 5, 10, "UTC");
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(12000, 12000l);
-		keypoints.put(13000, 13000l);
-		keypoints.put(14000, 14000l);
-		keypoints.put(15000, 15000l);
-		keypoints.put(16000, 16000l);
-		keypoints.put(17000, 17000l);
-		keypoints.put(18000, 18000l);
-		keypoints.put(19000, 19000l);
-		keypoints.put(20000, 20000l);
+		keypoints.put(12000, 12000L);
+		keypoints.put(13000, 13000L);
+		keypoints.put(14000, 14000L);
+		keypoints.put(15000, 15000L);
+		keypoints.put(16000, 16000L);
+		keypoints.put(17000, 17000L);
+		keypoints.put(18000, 18000L);
+		keypoints.put(19000, 19000L);
+		keypoints.put(20000, 20000L);
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 100000, 0, Integer.MAX_VALUE, 0, 0);

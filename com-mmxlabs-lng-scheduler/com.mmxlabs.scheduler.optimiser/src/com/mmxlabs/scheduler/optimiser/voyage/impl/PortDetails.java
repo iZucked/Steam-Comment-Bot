@@ -24,7 +24,7 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 	private final EnumMap<FuelComponent, Integer> fuelPrice = new EnumMap<FuelComponent, Integer>(FuelComponent.class);
 
-	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length);
+	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length,-1L);
 
 	private long totalGroupProfitAndLoss;
 
@@ -49,7 +49,7 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 		if (fuelConsumption.containsKey(fuel)) {
 			return fuelConsumption.get(fuel);
 		} else {
-			return 0l;
+			return 0L;
 		}
 	}
 

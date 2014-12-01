@@ -55,6 +55,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IShippingHoursRestrictionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -111,6 +112,8 @@ public class ScheduleCalculator {
 
 	@Inject(optional = true)
 	private ICustomNonShippedScheduler customNonShippedScheduler;
+	@Inject
+	private IShippingHoursRestrictionProvider shippingHoursRestrictionProvider;
 
 	/**
 	 * Schedule an {@link ISequence} using the given array of arrivalTimes, indexed according to sequence elements. These times will be used as the base arrival time. However is some cases the time
@@ -168,6 +171,14 @@ public class ScheduleCalculator {
 		return scheduledSequence;
 	}
 
+	/**
+	 * This method replaces the normal shipped cargo calculation path with one specific to DES purchase or FOB sale cargoes. However this currently merges in behaviour from other classes - such as
+	 * scheduling and volume allocation - which should really stay in those other classes.
+	 * 
+	 * @param resource
+	 * @param sequence
+	 * @return
+	 */
 	private ScheduledSequence desOrFobSchedule(final IResource resource, final ISequence sequence) {
 		// Virtual vessels are those operated by a third party, for FOB and DES situations.
 		// Should we compute a schedule for them anyway? The arrival times don't mean much,
@@ -189,27 +200,40 @@ public class ScheduleCalculator {
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 
 			// Determine transfer time
-			// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 
-				if (thisPortSlot instanceof ILoadSlot) {
-					startTime = thisPortSlot.getTimeWindow().getStart();
-					startSet = true;
+				// Find latest window start for all slots in FOB/DES combo. Howver if DES divertable, ignore.
+				if (thisPortSlot instanceof ILoadOption) {
+					// Divertable DES has real time window.
+					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+						int windowStart = thisPortSlot.getTimeWindow().getStart();
+						startTime = Math.max(windowStart, startTime);
+					}
 				}
+				if (thisPortSlot instanceof IDischargeOption) {
+					// Divertable FOB has sales time window
+					// if (!shippingHoursRestrictionProvider.isDivertable(element)) {
+					int windowStart = thisPortSlot.getTimeWindow().getStart();
+					startTime = Math.max(windowStart, startTime);
+					// }
+				}
+
+				// Actuals Data...
 				if (thisPortSlot instanceof ILoadOption) {
 					// overwrite with actuals if need be
 					if (actualsDataProvider.hasActuals(thisPortSlot)) {
 						currentPlan.setStartingHeelInM3(actualsDataProvider.getStartHeelInM3(thisPortSlot));
 					}
 				}
-				if (thisPortSlot instanceof IDischargeSlot) {
-					startTime = thisPortSlot.getTimeWindow().getStart();
-					startSet = true;
-				}
 				// overwrite with actuals if need be
 				if (actualsDataProvider.hasReturnActuals(thisPortSlot)) {
 					currentPlan.setRemainingHeelInM3(actualsDataProvider.getReturnHeelInM3(thisPortSlot));
 				}
+			}
+
+			if (thisPortSlot instanceof IDischargeSlot) {
+				// Break here to avoid processing further
+				startSet = true;
 			}
 
 			final PortOptions portOptions = new PortOptions();
@@ -233,6 +257,13 @@ public class ScheduleCalculator {
 
 		if (customNonShippedScheduler != null) {
 			customNonShippedScheduler.modifyArrivalTimes(resource, startTime, currentPlan, portTimesRecord);
+
+			// Back apply any modified times to times array
+			int idx = 0;
+			for (final ISequenceElement element : sequence) {
+				final IPortSlot slot = portSlotProvider.getPortSlot(element);
+				times[idx++] = portTimesRecord.getSlotTime(slot);
+			}
 		}
 
 		final ScheduledSequence scheduledSequence = new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);

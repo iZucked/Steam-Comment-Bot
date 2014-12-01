@@ -93,7 +93,7 @@ public class CapacityViolationChecker {
 			}
 
 			// Forced cooldown volumes are stored on the VoyageDetails, so record the last one for use in the next iteration so we can record the cooldown at the port
-			long lastForcedCooldownVolume = -1;
+			boolean isForcedCooldown = false;
 			long remainingHeelInM3 = 0;
 			PortDetails lastHeelDetails = null;
 			// Loop over all voyage plans in turn. We Use the VoyagePlan directly to obtain allocation annotations
@@ -173,21 +173,20 @@ public class CapacityViolationChecker {
 						}
 
 						// Check for forced cooldowns
-						if (lastForcedCooldownVolume > 0) {
+						if (isForcedCooldown) {
 							// Record the previously detected forced cooldown problem
-							addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.FORCED_COOLDOWN, lastForcedCooldownVolume);
+							addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
 						}
 						// Reset, do not re-record cooldown problems
-						lastForcedCooldownVolume = -1;
+						isForcedCooldown = false;
 
 					} else if (e instanceof VoyageDetails) {
 						final VoyageDetails voyageDetails = (VoyageDetails) e;
 
 						final boolean shouldBeCold = voyageDetails.getOptions().shouldBeCold() && !voyageDetails.getOptions().getAllowCooldown();
 						if (shouldBeCold && voyageDetails.isCooldownPerformed()) {
-							final long fuelConsumption = voyageDetails.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
-							// Despite requring to be cold, we still have some cooldown volume. Record this volume so the next port visit can allocate it properly
-							lastForcedCooldownVolume = fuelConsumption;
+							// Despite requiring to be cold, we still have some cooldown volume. Mark as > 0
+							isForcedCooldown = true;
 						}
 
 					} else {
@@ -221,12 +220,19 @@ public class CapacityViolationChecker {
 				if (toPortSlot instanceof EndPortSlot) {
 					final EndPortSlot endPortSlot = (EndPortSlot) toPortSlot;
 					if (endPortSlot.isEndCold() && remainingHeelInM3 != endPortSlot.getTargetEndHeelInM3()) {
-						addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+						// NOTE: This can be negative and as such does not feed into capacity component. Note negative values are also now deemed to be "unset"
+						// addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+
+						// Alternative for period opt, just flag up if we expected heel but arrived with none. We could put a tolerance on the mismatch? E.g. only flag up if diff is greater than e.g.
+						// 500? It can be very hard for optimiser to get exactly the right m3 value, and often a small difference makes no real impact on overall P&L.
+						if (endPortSlot.isEndCold() && remainingHeelInM3 == 0) {
+							addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+						}
 					}
 				}
-				if (lastForcedCooldownVolume > 0) {
+				if (isForcedCooldown) {
 					// Record the previously detected forced cooldown problem
-					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, lastForcedCooldownVolume);
+					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
 				}
 			}
 

@@ -58,7 +58,6 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	@Inject
 	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
 
-
 	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
 
@@ -219,7 +218,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					charterOut.setSequenceElement(element);
 
 					// Calculate revenue
-					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), idleTime) / 24l);
+					charterOut.setCharterOutRevenue(Calculator.quantityFromRateTime(details.getOptions().getCharterOutDailyRate(), idleTime) / 24L);
 					charterOut.setHireCost(Calculator.quantityFromRateTime(charterRatePerDay, idleTime) / 24);
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
@@ -252,8 +251,12 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					}
 					idle.setVesselState(details.getOptions().getVesselState());
 
+					// set cooldown and cooldown cost (which has been previously calculated in LNGVoyageCalculator)
 					idle.setCooldownPerformed(details.isCooldownPerformed());
-					
+					if (details.isCooldownPerformed()) {
+						idle.setFuelCost(FuelComponent.Cooldown, currentPlan.getTotalFuelCost(FuelComponent.Cooldown));
+					}
+
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
 				}
 			} else {

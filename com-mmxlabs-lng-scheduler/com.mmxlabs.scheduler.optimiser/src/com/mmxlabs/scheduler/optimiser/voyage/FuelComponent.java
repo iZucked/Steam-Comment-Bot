@@ -79,7 +79,7 @@ public enum FuelComponent {
 		return travelFuelComponents;
 	}
 
-	private static final FuelComponent[] idleFuelComponents = new FuelComponent[] { FuelComponent.IdleBase, FuelComponent.IdleNBO, FuelComponent.Cooldown, FuelComponent.IdlePilotLight };
+	private static final FuelComponent[] idleFuelComponents = new FuelComponent[] { FuelComponent.IdleBase, FuelComponent.IdleNBO, FuelComponent.IdlePilotLight };
 
 	public static FuelComponent[] getIdleFuelComponents() {
 		return idleFuelComponents;

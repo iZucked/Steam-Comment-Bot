@@ -10,6 +10,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.inject.Inject;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
@@ -77,20 +78,24 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 		final IDetailsSequenceElement[] sequence = plan.getSequence();
 		final int numElements = sequence.length / 2 + 1;
 		final List<IPortSlot> slots = new ArrayList<>(numElements);
-		final List<Long> minVolumes = new ArrayList<>(numElements);
-		final List<Long> maxVolumes = new ArrayList<>(numElements);
+		final List<Long> minVolumesInM3 = new ArrayList<>(numElements);
+		final List<Long> maxVolumesInM3 = new ArrayList<>(numElements);
+		final List<Long> minVolumesInMMBtu = new ArrayList<>(numElements);
+		final List<Long> maxVolumesInMMBtu = new ArrayList<>(numElements);
+		final List<Integer> slotCV = new ArrayList<>(numElements);
 
 		boolean foundALoad = false;
 
 		// These handle current special cases around FOB/DES
-		Long transferVolume = null;
+		// Long transferVolume = null;
 		IVessel nominatedVessel = null;
 		final int adjust = plan.isIgnoreEnd() ? 1 : 0;
 		// Assume true, unless a slot has said otherwise
-		boolean hasActuals = true;
+		boolean hasActuals = false;
 
 		// how to get this port slot?
 		IPortSlot returnSlot = null;
+		int cargoCV = 0;
 		for (int i = 0; i < sequence.length - adjust; ++i) {
 			final IDetailsSequenceElement element = sequence[i];
 
@@ -109,42 +114,73 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 				if (slot instanceof ILoadOption) {
 					slots.add(slot);
 					final ILoadOption loadOption = (ILoadOption) slot;
-					minVolumes.add(loadOption.getMinLoadVolume());
-					maxVolumes.add(loadOption.getMaxLoadVolume());
+
+					if (actualsDataProvider.hasActuals(slot)) {
+						// Do not mark has actuals as true here, wait for discharge
+						// hasActuals = true;
+						cargoCV = actualsDataProvider.getCVValue(slot);
+						slotCV.add(cargoCV);
+
+						minVolumesInM3.add(actualsDataProvider.getVolumeInM3(slot));
+						maxVolumesInM3.add(actualsDataProvider.getVolumeInM3(slot));
+						minVolumesInMMBtu.add(actualsDataProvider.getVolumeInMMBtu(slot));
+						maxVolumesInMMBtu.add(actualsDataProvider.getVolumeInMMBtu(slot));
+					} else {
+						cargoCV = loadOption.getCargoCVValue();
+
+						minVolumesInM3.add(loadOption.getMinLoadVolume());
+						maxVolumesInM3.add(loadOption.getMaxLoadVolume());
+						minVolumesInMMBtu.add(Calculator.convertMMBTuToM3(loadOption.getMinLoadVolume(), cargoCV));
+						maxVolumesInMMBtu.add(Calculator.convertMMBTuToM3(loadOption.getMaxLoadVolume(), cargoCV));
+					}
+
 					foundALoad = true;
 					if (!(loadOption instanceof ILoadSlot)) {
-						if (transferVolume == null) {
-							transferVolume = loadOption.getMaxLoadVolume();
-						} else {
-							transferVolume = Math.min(transferVolume, loadOption.getMaxLoadVolume());
-						}
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(loadOption));
 					}
-					hasActuals &= actualsDataProvider.hasActuals(slot);
 				} else if (slot instanceof IDischargeOption) {
 					slots.add(slot);
 					final IDischargeOption dischargeOption = (IDischargeOption) slot;
-					minVolumes.add(dischargeOption.getMinDischargeVolume());
-					maxVolumes.add(dischargeOption.getMaxDischargeVolume());
+					if (actualsDataProvider.hasActuals(slot)) {
+						hasActuals = true;
+						cargoCV = actualsDataProvider.getCVValue(slot);
+
+						minVolumesInM3.add(actualsDataProvider.getVolumeInM3(slot));
+						maxVolumesInM3.add(actualsDataProvider.getVolumeInM3(slot));
+						minVolumesInMMBtu.add(actualsDataProvider.getVolumeInMMBtu(slot));
+						maxVolumesInMMBtu.add(actualsDataProvider.getVolumeInMMBtu(slot));
+
+					} else {
+						minVolumesInM3.add(dischargeOption.getMinDischargeVolume());
+						maxVolumesInM3.add(dischargeOption.getMaxDischargeVolume());
+						minVolumesInMMBtu.add(Calculator.convertMMBTuToM3(dischargeOption.getMinDischargeVolume(), cargoCV));
+						maxVolumesInMMBtu.add(Calculator.convertMMBTuToM3(dischargeOption.getMaxDischargeVolume(), cargoCV));
+					}
 					if (!(dischargeOption instanceof IDischargeSlot)) {
-						if (transferVolume == null) {
-							transferVolume = dischargeOption.getMaxDischargeVolume();
-						} else {
-							transferVolume = Math.min(transferVolume, dischargeOption.getMaxDischargeVolume());
-						}
 						nominatedVessel = nominatedVesselProvider.getNominatedVessel(portSlotProvider.getElement(dischargeOption));
 					}
-					hasActuals &= actualsDataProvider.hasActuals(slot);
 				} else if (slot instanceof IHeelOptionsPortSlot) {
 					slots.add(slot);
 					final IHeelOptionsPortSlot heelOptionsPortSlot = (IHeelOptionsPortSlot) slot;
 					final IHeelOptions heelOptions = heelOptionsPortSlot.getHeelOptions();
-					minVolumes.add(heelOptions.getHeelLimit());
-					maxVolumes.add(heelOptions.getHeelLimit());
+					cargoCV = heelOptions.getHeelCVValue();
+
+					minVolumesInM3.add(heelOptions.getHeelLimit());
+					maxVolumesInM3.add(heelOptions.getHeelLimit());
+					if (cargoCV != 0) {
+						minVolumesInMMBtu.add(Calculator.convertMMBTuToM3(heelOptions.getHeelLimit(), cargoCV));
+						maxVolumesInMMBtu.add(Calculator.convertMMBTuToM3(heelOptions.getHeelLimit(), cargoCV));
+					} else {
+						minVolumesInMMBtu.add(0L);
+						maxVolumesInMMBtu.add(0L);
+					}
 				} else {
-					minVolumes.add(0l);
-					maxVolumes.add(0l);
+					minVolumesInM3.add(0l);
+					maxVolumesInM3.add(0l);
+					minVolumesInMMBtu.add(0l);
+					maxVolumesInMMBtu.add(0l);
 				}
+				slotCV.add(cargoCV);
 			}
 		}
 
@@ -153,8 +189,9 @@ public abstract class BaseVolumeAllocator implements IVolumeAllocator {
 			return null;
 		}
 
-		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots,
-				portTimesRecord, returnSlot, minVolumes, maxVolumes);
+		// TODO: Assert start/end heel match actuals records.
+		final AllocationRecord allocationRecord = new AllocationRecord(vesselAvailability, plan, vesselStartTime, plan.getStartingHeelInM3(), plan.getLNGFuelVolume(), minEndVolumeInM3, slots, portTimesRecord,
+				returnSlot, minVolumesInM3, maxVolumesInM3, minVolumesInMMBtu, maxVolumesInMMBtu, slotCV);
 
 		if (hasActuals) {
 			allocationRecord.allocationMode = AllocationMode.Actuals;

@@ -8,7 +8,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 
 /**
  * Default implementation of {@link IPort}
@@ -34,7 +34,11 @@ public class Port extends IndexedObject implements IPort {
 	/**
 	 * A calculator used to determine the price of cooldown LNG here.
 	 */
-	private ICooldownPriceCalculator cooldownPriceCalculator;
+	private ICooldownCalculator cooldownCalculator;
+
+	private long minCvValue;
+
+	private long maxCvValue;
 
 	public Port(final IIndexingContext context) {
 		super(context);
@@ -72,7 +76,7 @@ public class Port extends IndexedObject implements IPort {
 				return false;
 			}
 
-			if (!Equality.isEqual(cooldownPriceCalculator, p.getCooldownPriceCalculator())) {
+			if (!Equality.isEqual(cooldownCalculator, p.getCooldownCalculator())) {
 				return false;
 			}
 			return true;
@@ -91,16 +95,34 @@ public class Port extends IndexedObject implements IPort {
 	}
 
 	@Override
-	public ICooldownPriceCalculator getCooldownPriceCalculator() {
-		return cooldownPriceCalculator;
+	public ICooldownCalculator getCooldownCalculator() {
+		return cooldownCalculator;
 	}
 
-	public void setCooldownPriceCalculator(final ICooldownPriceCalculator cooldownPriceCalculator) {
-		this.cooldownPriceCalculator = cooldownPriceCalculator;
+	public void setCooldownCalculator(final ICooldownCalculator cooldownCalculator) {
+		this.cooldownCalculator = cooldownCalculator;
 	}
 	
 	@Override
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public long getMinCvValue() {
+		return minCvValue;
+	}
+
+	@Override
+	public long getMaxCvValue() {
+		return maxCvValue;
+	}
+	
+	public void setMinCvValue(long minCvValue) {
+		this.minCvValue = minCvValue;
+	}
+
+	public void setMaxCvValue(long maxCvValue) {
+		this.maxCvValue = maxCvValue;
 	}
 }

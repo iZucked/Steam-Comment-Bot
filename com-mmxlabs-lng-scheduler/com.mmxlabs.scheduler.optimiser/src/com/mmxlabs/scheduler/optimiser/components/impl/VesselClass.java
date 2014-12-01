@@ -110,19 +110,19 @@ public final class VesselClass implements IVesselClass {
 
 	@Override
 	public long getIdleConsumptionRate(final VesselState vesselState) {
-		return CollectionsUtil.getValue(idleConsumptionRate, vesselState, 0l);
+		return CollectionsUtil.getValue(idleConsumptionRate, vesselState, 0L);
 	}
 
 	/**
 	 */
 	@Override
 	public long getInPortConsumptionRateInMTPerDay(final PortType portType) {
-		return CollectionsUtil.getValue(inPortConsumptionRateInMTPerDay, portType, 0l);
+		return CollectionsUtil.getValue(inPortConsumptionRateInMTPerDay, portType, 0L);
 	}
 
 	@Override
 	public long getIdleNBORate(final VesselState vesselState) {
-		return CollectionsUtil.getValue(idleNBORate, vesselState, 0l);
+		return CollectionsUtil.getValue(idleNBORate, vesselState, 0L);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public final class VesselClass implements IVesselClass {
 
 	@Override
 	public long getNBORate(final VesselState state) {
-		return CollectionsUtil.getValue(nboRate, state, 0l);
+		return CollectionsUtil.getValue(nboRate, state, 0L);
 	}
 
 	public void setIdleNBORate(final VesselState state, final long nboRate) {

@@ -116,7 +116,6 @@ public final class VoyagePlan implements Cloneable {
 			// Ensure all fields are present here
 			// @formatter:off
 			return Objects.equal(lngFuelVolume, plan.lngFuelVolume)
-					&& Arrays.deepEquals(sequence, plan.sequence)
 					&& Objects.equal(charterInRatePerDay, plan.charterInRatePerDay)
 					&& Objects.equal(violationsCount, plan.violationsCount)
 					&& Objects.equal(fuelConsumptions, plan.fuelConsumptions)
@@ -124,11 +123,19 @@ public final class VoyagePlan implements Cloneable {
 					&& Objects.equal(fuelCosts, plan.fuelCosts)
 					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
+					&& Arrays.deepEquals(sequence, plan.sequence)
+
 					;
 			// @formatter:on
 		}
 
 		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		// Simple hashCode implementation to fix findbugs warnings.
+		return super.hashCode();
 	}
 
 	@Override

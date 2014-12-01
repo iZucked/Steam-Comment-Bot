@@ -92,7 +92,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
@@ -104,6 +104,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IMarkToMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVRangeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
@@ -255,6 +256,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private IPortCVProviderEditor portCVProvider;
 
+	@Inject
+	private IPortCVRangeProviderEditor portCVRangeProvider;
+
 	/**
 	 * Keeps track of calculators
 	 */
@@ -326,21 +330,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	public void init() {
 		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE", false, new ICooldownPriceCalculator() {
+		ANYWHERE = createPort("ANYWHERE", false, new ICooldownCalculator() {
 			@Override
 			public void prepareEvaluation(final ISequences sequences) {
 			}
 
 			@Override
-			public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
+			public long calculateCooldownCost(IVesselClass vesselClass, IPort port, int cv, int time) {
 				return 0;
 			}
-
-			@Override
-			public int calculateCooldownUnitPrice(final int time, final IPort port) {
-				return 0;
-			}
-		}, "UTC"/* no timezone */);
+		}, "UTC"/* no timezone */, 0, Integer.MAX_VALUE);
 
 		// setup fake vessels for virtual elements.
 		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
@@ -556,11 +555,19 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId) {
+	public IPort createPort(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId, final int minCvValue, final int maxCvValue) {
 
 		final Port port = new Port(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
+		buildPort(port, name, arriveCold, cooldownCalculator, timezoneId, minCvValue, maxCvValue);
 		return port;
+	}
+
+	/**
+	 * Convenience function only used for testing
+	 */
+	public IPort createPortForTest(final String string, final boolean b, final ICooldownCalculator object, final String string2) {
+
+		return createPort(string, b, object, string2, 0, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -612,14 +619,22 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	@NonNull
-	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y, final String timezoneId) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final float x, final float y, final String timezoneId, final int minCvValue, final int maxCvValue) {
 
 		final XYPort port = new XYPort(indexingContext);
-		buildPort(port, name, arriveCold, cooldownPriceCalculator, timezoneId);
+		buildPort(port, name, arriveCold, cooldownCalculator, timezoneId, minCvValue, maxCvValue);
 		port.setX(x);
 		port.setY(y);
 
 		return port;
+	}
+
+	/**
+	 * Convenience function only used for testing
+	 */
+	public IXYPort createPortForTest(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final float x, final float y, final String timezoneId) {
+
+		return createPort(name, arriveCold, cooldownCalculator, x, y, timezoneId, 0, Integer.MAX_VALUE);
 	}
 
 	/**
@@ -628,15 +643,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param port
 	 * @param name
 	 * @param arriveCold
-	 * @param cooldownPriceCalculator
+	 * @param cooldownCalculator
 	 * @param timezoneId
 	 */
-	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final String timezoneId) {
+	private void buildPort(@NonNull final Port port, final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final String timezoneId, final long minCvValue, final long maxCvValue) {
 
 		port.setName(name);
 		port.setShouldVesselsArriveCold(arriveCold);
-		port.setCooldownPriceCalculator(cooldownPriceCalculator);
+		port.setCooldownCalculator(cooldownCalculator);
 		port.setTimeZoneId(timezoneId);
+		port.setMinCvValue(minCvValue);
+		port.setMaxCvValue(maxCvValue);
 		ports.add(port);
 
 		// Pin variable for null analysis...
@@ -649,7 +666,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// travel time from A to A should be zero, right?
 		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
 
-		calculatorProvider.addCooldownPriceCalculator(cooldownPriceCalculator);
+		calculatorProvider.addCooldownCalculator(cooldownCalculator);
 	}
 
 	@Override
@@ -1522,7 +1539,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		unrestrictedSlots.addAll(dischargeSlots);
 		// Note this might not be the correct behaviour for event slots - although typically we expect them to be part of the restrictedSlots array.
 		unrestrictedSlots.addAll(vesselEvents);
-		unrestrictedSlots.removeAll(unshippedElements);
+//		unrestrictedSlots.removeAll(unshippedElements);
+		for (final ISequenceElement unshippedElement : unshippedElements) {
+			unrestrictedSlots.add(portSlotsProvider.getPortSlot(unshippedElement));
+		}
 		unrestrictedSlots.removeAll(restrictedSlots);
 		for (final IPortSlot slot : unrestrictedSlots) {
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
@@ -1779,6 +1799,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 */
 	@Override
+	public void setPortMinCV(@NonNull final IPort port, final int cv) {
+		portCVRangeProvider.setPortMinCV(port, cv);
+	}
+
+	/**
+	 */
+	@Override
+	public void setPortMaxCV(@NonNull final IPort port, final int cv) {
+		portCVRangeProvider.setPortMaxCV(port, cv);
+	}
+
+	/**
+	 */
+	@Override
 	@NonNull
 	public IMarkToMarket createDESPurchaseMTM(@NonNull final Set<IPort> marketPorts, final int cargoCVValue, @NonNull final ILoadPriceCalculator priceCalculator, final IEntity entity) {
 		final MarkToMarket mtm = new MarkToMarket(priceCalculator, cargoCVValue, entity);
@@ -1892,4 +1926,5 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		constrainSlotToVesselAvailabilities(portSlot, Collections.singleton(vesselAvailability));
 		this.frozenSlots.add(portSlot);
 	}
+
 }

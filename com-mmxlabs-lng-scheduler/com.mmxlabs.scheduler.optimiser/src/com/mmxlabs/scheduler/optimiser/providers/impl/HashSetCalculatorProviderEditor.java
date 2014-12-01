@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
@@ -22,7 +22,7 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 
 	private final Set<ILoadPriceCalculator> loadPriceCalculators = new LinkedHashSet<>();
 	private final Set<ISalesPriceCalculator> salesPriceCalculators = new LinkedHashSet<>();
-	private final Set<ICooldownPriceCalculator> cooldownPriceCalculators = new LinkedHashSet<>();
+	private final Set<ICooldownCalculator> cooldownCalculators = new LinkedHashSet<>();
 
 	@Override
 	public Collection<ILoadPriceCalculator> getLoadPriceCalculators() {
@@ -35,8 +35,8 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	}
 
 	@Override
-	public Collection<ICooldownPriceCalculator> getCooldownPriceCalculators() {
-		return Collections.unmodifiableSet(cooldownPriceCalculators);
+	public Collection<ICooldownCalculator> getCooldownCalculators() {
+		return Collections.unmodifiableSet(cooldownCalculators);
 	}
 
 	@Override
@@ -54,9 +54,9 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	}
 
 	@Override
-	public void addCooldownPriceCalculator(final ICooldownPriceCalculator calculator) {
+	public void addCooldownCalculator(final ICooldownCalculator calculator) {
 		if (calculator != null) {
-			cooldownPriceCalculators.add(calculator);
+			cooldownCalculators.add(calculator);
 		}
 	}
 

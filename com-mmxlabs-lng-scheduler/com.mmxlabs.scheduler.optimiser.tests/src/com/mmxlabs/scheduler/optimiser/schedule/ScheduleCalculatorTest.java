@@ -59,7 +59,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.impl.TimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -109,6 +111,7 @@ public class ScheduleCalculatorTest {
 
 				bind(new TypeLiteral<IMultiMatrixProvider<IPort, Integer>>() {
 				}).toInstance(distanceProvider);
+				bind(ITimeZoneToUtcOffsetProvider.class).to(TimeZoneToUtcOffsetProvider.class);
 			}
 		}
 		final Injector injector = Guice.createInjector(new TestModule());

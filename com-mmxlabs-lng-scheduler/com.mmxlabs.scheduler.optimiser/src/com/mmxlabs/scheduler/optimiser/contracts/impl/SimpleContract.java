@@ -13,11 +13,12 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -25,13 +26,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
+public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator {
 
 	@Inject(optional = true)
 	private IActualsDataProvider actualsDataProvider;
 
 	@Inject
 	private PricingEventHelper pricingEventHelper;
+
+	@Inject
+	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
 	@Override
 	public void prepareEvaluation(final ISequences sequences) {
@@ -53,19 +57,19 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		}
 
 		final int pricingDate = pricingEventHelper.getLoadPricingDate(loadSlot, dischargeSlot, allocationAnnotation);
-		final IPort port = loadSlot == null ? null : loadSlot.getPort();
+		final IPort port = loadSlot.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
 	@Override
-	public int estimateSalesUnitPrice(final IDischargeOption dischargeOption, IPortTimesRecord voyageRecord, final IDetailTree annotations) {
+	public int estimateSalesUnitPrice(final IDischargeOption dischargeOption, final IPortTimesRecord voyageRecord, final IDetailTree annotations) {
 
 		if (actualsDataProvider != null && actualsDataProvider.hasActuals(dischargeOption)) {
 			return actualsDataProvider.getLNGPricePerMMBTu(dischargeOption);
 		}
 
 		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, voyageRecord);
-		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
+		final IPort port = dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
@@ -77,27 +81,16 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 		}
 
 		final int pricingDate = pricingEventHelper.getDischargePricingDate(dischargeOption, allocationAnnotation);
-		final IPort port = dischargeOption == null ? null : dischargeOption.getPort();
+		final IPort port = dischargeOption.getPort();
 		return calculateSimpleUnitPrice(pricingDate, port);
 	}
 
-	@Override
-	public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
-		return calculateSimpleUnitPrice(time, slot.getPort());
-	}
 
 	/**
 	 */
 	@Override
-	public int calculateCooldownUnitPrice(final int time, final IPort port) {
-		return calculateSimpleUnitPrice(time, port);
-	}
-
-	/**
-	 */
-	@Override
-	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu, final IVesselAvailability vesselAvailability,
-			final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
+	public long calculateAdditionalProfitAndLoss(final ILoadOption loadOption, final IAllocationAnnotation allocationAnnotation, final int[] dischargePricesPerMMBTu,
+			final IVesselAvailability vesselAvailability, final int vesselStartTime, final VoyagePlan plan, final IDetailTree annotations) {
 		return 0;
 	}
 

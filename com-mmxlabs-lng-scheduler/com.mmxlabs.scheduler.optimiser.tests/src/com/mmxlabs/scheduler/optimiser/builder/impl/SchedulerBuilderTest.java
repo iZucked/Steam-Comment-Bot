@@ -59,7 +59,7 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = createScheduleBuilder();
 
-		final IPort port = builder.createPort("port", false, null, "UTC");
+		final IPort port = builder.createPortForTest("port", false, null, "UTC");
 		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
 
 		final ILoadPriceCalculator contract = Mockito.mock(ILoadPriceCalculator.class);
@@ -91,7 +91,7 @@ public class SchedulerBuilderTest {
 
 		final SchedulerBuilder builder = createScheduleBuilder();
 
-		final IPort port = builder.createPort("port", false, null, "UTC");
+		final IPort port = builder.createPortForTest("port", false, null, "UTC");
 		final ITimeWindow window = Mockito.mock(ITimeWindow.class);
 
 		final ISalesPriceCalculator curve = Mockito.mock(ISalesPriceCalculator.class);
@@ -162,7 +162,7 @@ public class SchedulerBuilderTest {
 
 		final int minSpeed = 1;
 		final int maxSpeed = 2;
-		final long capacity = 3l;
+		final long capacity = 3L;
 		final int safetyHeel = 4;
 
 		final IVesselClass vesselClass = builder.createVesselClass("name", minSpeed, maxSpeed, capacity, safetyHeel, 7000, 1000, 0, 35353, 10101, 0);

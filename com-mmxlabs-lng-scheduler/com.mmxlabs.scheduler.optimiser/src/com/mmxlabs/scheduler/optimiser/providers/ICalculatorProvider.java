@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 import java.util.Collection;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
@@ -29,7 +29,7 @@ public interface ICalculatorProvider extends IDataComponentProvider {
 	Collection<ISalesPriceCalculator> getSalesPriceCalculators();
 
 	/**
-	 * @return A collection of all {@link ICooldownPriceCalculator} used in this scenario.
+	 * @return A collection of all {@link ICooldownCalculator} used in this scenario.
 	 */
-	Collection<ICooldownPriceCalculator> getCooldownPriceCalculators();
+	Collection<ICooldownCalculator> getCooldownCalculators();
 }

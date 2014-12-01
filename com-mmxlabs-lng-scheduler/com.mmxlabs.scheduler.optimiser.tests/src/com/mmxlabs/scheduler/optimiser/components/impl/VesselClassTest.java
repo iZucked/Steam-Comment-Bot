@@ -25,7 +25,7 @@ public class VesselClassTest {
 
 	@Test
 	public void testGetSetCargoCapacity() {
-		final long value = 100l;
+		final long value = 100L;
 		final VesselClass vesselClass = new VesselClass();
 		Assert.assertEquals(0, vesselClass.getCargoCapacity());
 		vesselClass.setCargoCapacity(value);
@@ -55,7 +55,7 @@ public class VesselClassTest {
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
 
-		final long value = 100l;
+		final long value = 100L;
 		final VesselClass vesselClass = new VesselClass();
 		Assert.assertEquals(0, vesselClass.getIdleConsumptionRate(state1));
 		Assert.assertEquals(0, vesselClass.getIdleConsumptionRate(state2));
@@ -66,7 +66,7 @@ public class VesselClassTest {
 
 	@Test
 	public void testGetSetSafetyHeel() {
-		final long value = 100l;
+		final long value = 100L;
 		final VesselClass vesselClass = new VesselClass();
 		Assert.assertEquals(0, vesselClass.getSafetyHeel());
 		vesselClass.setSafetyHeel(value);
@@ -78,7 +78,7 @@ public class VesselClassTest {
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
 
-		final long value = 100l;
+		final long value = 100L;
 		final VesselClass vesselClass = new VesselClass();
 		Assert.assertEquals(0, vesselClass.getNBORate(state1));
 		Assert.assertEquals(0, vesselClass.getNBORate(state2));
@@ -92,7 +92,7 @@ public class VesselClassTest {
 		final VesselState state1 = VesselState.Laden;
 		final VesselState state2 = VesselState.Ballast;
 
-		final long value = 100l;
+		final long value = 100L;
 		final VesselClass vesselClass = new VesselClass();
 		Assert.assertEquals(0, vesselClass.getIdleNBORate(state1));
 		Assert.assertEquals(0, vesselClass.getIdleNBORate(state2));

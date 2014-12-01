@@ -15,28 +15,28 @@ public class InterpolatingConsumptionRateCalculatorTest {
 	public void testInterpolatingConsumptionRateCalculator() {
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(5, 500l);
-		keypoints.put(10, 1000l);
+		keypoints.put(5, 500L);
+		keypoints.put(10, 1000L);
 
 		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		// Test exact values
-		Assert.assertEquals(500l, calc.getRate(5));
-		Assert.assertEquals(1000l, calc.getRate(10));
+		Assert.assertEquals(500L, calc.getRate(5));
+		Assert.assertEquals(1000L, calc.getRate(10));
 
 		// Test interpolation
-		Assert.assertEquals(600l, calc.getRate(6));
-		Assert.assertEquals(700l, calc.getRate(7));
-		Assert.assertEquals(800l, calc.getRate(8));
-		Assert.assertEquals(900l, calc.getRate(9));
+		Assert.assertEquals(600L, calc.getRate(6));
+		Assert.assertEquals(700L, calc.getRate(7));
+		Assert.assertEquals(800L, calc.getRate(8));
+		Assert.assertEquals(900L, calc.getRate(9));
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void testInterpolatingConsumptionRateCalculator2() {
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(5, 500l);
-		keypoints.put(10, 1000l);
+		keypoints.put(5, 500L);
+		keypoints.put(10, 1000L);
 
 		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
@@ -48,8 +48,8 @@ public class InterpolatingConsumptionRateCalculatorTest {
 	public void testInterpolatingConsumptionRateCalculator3() {
 
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(5, 500l);
-		keypoints.put(10, 1000l);
+		keypoints.put(5, 500L);
+		keypoints.put(10, 1000L);
 
 		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
 
