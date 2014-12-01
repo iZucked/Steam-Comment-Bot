@@ -6,7 +6,6 @@ package com.mmxlabs.models.lng.transformer.its.tests.evaluation;
 
 import java.util.Date;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,8 +24,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.its.tests.MinimalScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.Expectations;
-import com.mmxlabs.models.lng.transformer.its.tests.evaluation.AbstractShippingCalculationsTestClass.SequenceTester;
 import com.mmxlabs.models.lng.types.PortCapability;
 
 public class CapacityViolationsCalculationsTest extends AbstractShippingCalculationsTestClass {
@@ -72,7 +69,6 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		msc.vc.setMinHeel(0);
-		msc.vesselAvailability.getEndHeel().setEndCold(true);
 		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
 
 		Slot loadSlot = msc.cargo.getSlots().get(0);
@@ -581,7 +577,6 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		SequenceTester checker = getDefaultTester(classes);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setEndCold(true);
 		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
 
 		// expected durations of journeys
@@ -659,7 +654,6 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		SequenceTester checker = getDefaultTester(classes);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setEndCold(true);
 		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
 
 		// expected durations of journeys
@@ -710,7 +704,8 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, VesselEventVisit.class, new Integer[] { -24 });
 
 		// End heel in m3 - Unable to meet end heel level
-		checker.setExpectedValue(1000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
+		// Current check means if anything is left, then no violation.
+//		checker.setExpectedValue(1000, Expectations.LOST_HEEL_VIOLATIONS, EndEvent.class, 0);
 
 		final Schedule schedule = ScenarioTools.evaluate(scenario);
 		ScenarioTools.printSequences(schedule);
@@ -728,7 +723,6 @@ public class CapacityViolationsCalculationsTest extends AbstractShippingCalculat
 		msc.setupCooldown(30);
 
 		// Set a target end heel
-		msc.vesselAvailability.getEndHeel().setEndCold(true);
 		msc.vesselAvailability.getEndHeel().setTargetEndHeel(2000);
 
 		// change to default: add a dry dock event 2-3 hrs after discharge window ends

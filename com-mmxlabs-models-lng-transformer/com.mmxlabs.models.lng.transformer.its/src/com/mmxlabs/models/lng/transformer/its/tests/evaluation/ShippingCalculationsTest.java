@@ -610,6 +610,43 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 	}
 
 	@Test
+	public void testCooldownAddedLumpSum() {
+		System.err.println("\n\nCooldown event should be scheduled at load port.");
+		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
+		final LNGScenarioModel scenario = msc.buildScenario();
+
+		// change from default scenario: cooldown times and volumes specified
+		msc.vc.setWarmingTime(0);
+		// msc.vc.setCoolingTime(0);
+		msc.vc.setCoolingVolume(100);
+
+		msc.setupCooldownLumpSum("2100");
+		msc.loadPort.setAllowCooldown(true);
+
+		// change from default scenario: should insert a cooldown event
+		final Class<?>[] expectedClasses = { StartEvent.class, Journey.class, Idle.class, Cooldown.class, SlotVisit.class, Journey.class, Idle.class, SlotVisit.class, Journey.class, Idle.class,
+				EndEvent.class };
+
+		final SequenceTester checker = getDefaultTester(expectedClasses);
+		// change from default: cooldown time
+		final Integer[] expectedCooldownTimes = { 0 };
+		checker.setExpectedValues(Expectations.DURATIONS, Cooldown.class, expectedCooldownTimes);
+
+		// cooldown cost
+		checker.setExpectedValues(Expectations.OVERHEAD_COSTS, Cooldown.class, new Integer[] { 2100 });
+
+		final Schedule schedule = ScenarioTools.evaluate(scenario);
+		ScenarioTools.printSequences(schedule);
+
+		final Sequence sequence = schedule.getSequences().get(0);
+		checker.check(sequence);
+
+		final Cooldown cooldown = extractObjectsOfClass(sequence.getEvents(), Cooldown.class).get(0);
+		Assert.assertEquals("Cooldown cost", 2100, cooldown.getCost());
+
+	}
+
+	@Test
 	public void testCharterCost_TimeCharter() {
 		System.err.println("\n\nTime Charter vessel charter cost ignored.");
 		final MinimalScenarioCreator msc = new MinimalScenarioCreator();
@@ -860,7 +897,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final Sequence sequence = schedule.getSequences().get(0);
 
-//		Fails with a missin g Journel event - understandable as there is no journey, but why does it now not appear?
+		// Fails with a missin g Journel event - understandable as there is no journey, but why does it now not appear?
 		checker.check(sequence);
 
 	}

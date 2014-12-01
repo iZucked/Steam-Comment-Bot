@@ -30,6 +30,7 @@ import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.parameters.OptimisationRange;
+import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
@@ -107,8 +108,9 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	protected void reallyPrepare() {
 		startTimeMillis = System.currentTimeMillis();
 
+		OptimiserSettings optimiserSettings = jobDescriptor.getOptimiserSettings();
 		{
-			final OptimisationRange range = jobDescriptor.getOptimiserSettings().getRange();
+			final OptimisationRange range = optimiserSettings.getRange();
 			if (range != null) {
 				if (range.getOptimiseAfter() != null || range.getOptimiseBefore() != null) {
 					periodMapping = new ScenarioEntityMapping();
@@ -121,7 +123,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			final PeriodTransformer t = new PeriodTransformer();
 			t.setInclusionChecker(new InclusionChecker());
 
-			optimiserScenario = t.transform(originalScenario, jobDescriptor.getOptimiserSettings(), periodMapping);
+			optimiserScenario = t.transform(originalScenario, optimiserSettings, periodMapping);
 
 			// DEBUGGING - store sub scenario as a "fork"
 			if (false) {
@@ -159,7 +161,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			optimiserEditingDomain = originalEditingDomain;
 		}
 
-		transformer = new LNGTransformer(optimiserScenario, jobDescriptor.getOptimiserSettings(), LNGTransformer.HINT_OPTIMISE_LSO);
+		transformer = new LNGTransformer(optimiserScenario, optimiserSettings, LNGTransformer.HINT_OPTIMISE_LSO);
 
 		injector = transformer.getInjector();
 
@@ -185,6 +187,18 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				originalEditingDomain.getCommandStack().execute(cmd);
 			} else {
 				throw new RuntimeException("Unable to execute period optimisation merge command");
+			}
+			
+			
+			{
+				final OptimiserSettings evalSettings = EcoreUtil.copy(optimiserSettings);
+				evalSettings.getRange().unsetOptimiseAfter();
+				evalSettings.getRange().unsetOptimiseBefore();
+				final LNGTransformer transformer = new LNGTransformer(originalScenario,  evalSettings);
+
+				final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
+				final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
+				LNGSchedulerJobUtils.exportSolution(transformer.getInjector(), originalScenario, transformer.getOptimiserSettings(), originalEditingDomain, modelEntityMap, finalSolution, 0);
 			}
 		}
 	}
@@ -222,6 +236,17 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 
 				} else {
 					throw new RuntimeException("Unable to execute period optimisation merge command");
+				}
+				
+				{
+					OptimiserSettings evalSettings = EcoreUtil.copy(transformer.getOptimiserSettings());
+					evalSettings.getRange().unsetOptimiseAfter();
+					evalSettings.getRange().unsetOptimiseBefore();
+					final LNGTransformer subTransformer = new LNGTransformer(originalScenario,  evalSettings);
+
+					final ModelEntityMap modelEntityMap = subTransformer.getModelEntityMap();
+					final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(subTransformer);
+					LNGSchedulerJobUtils.exportSolution(subTransformer.getInjector(), originalScenario, subTransformer.getOptimiserSettings(), originalEditingDomain, modelEntityMap, finalSolution, 0);
 				}
 			}
 

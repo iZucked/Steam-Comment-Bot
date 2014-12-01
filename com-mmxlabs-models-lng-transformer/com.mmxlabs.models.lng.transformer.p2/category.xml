@@ -18,5 +18,5 @@
    <feature id="com.mmxlabs.models.lng.transformer.its.feature.source" version="0.0.0">
       <category name="all"/>
    </feature>
-   <category-def name="all" label="Models: LNG Types - Transformer"/>
+   <category-def name="all" label="Models: LNG Transformer"/>
 </site>

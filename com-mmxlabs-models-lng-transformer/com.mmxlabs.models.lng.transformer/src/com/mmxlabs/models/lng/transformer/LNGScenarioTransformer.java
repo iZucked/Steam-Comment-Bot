@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -43,6 +42,8 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.common.timezone.TimeZoneHelper;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -58,6 +59,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.cargo.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -97,11 +99,11 @@ import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -126,11 +128,13 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.PricingEventType;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownLumpSumCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.CooldownPriceIndexedCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProviderEditor;
@@ -218,7 +222,7 @@ public class LNGScenarioTransformer {
 	 */
 	private final Map<String, Slot> marketSlotsByID = new HashMap<String, Slot>();
 
-	private final EnumMap<SpotType, TreeMap<String, Collection<Slot>>> existingSpotCount = new EnumMap<SpotType, TreeMap<String, Collection<Slot>>>(SpotType.class);
+	private final Map<SpotMarket, TreeMap<String, Collection<Slot>>> existingSpotCount = new HashMap<>();
 
 	private OptimiserSettings optimiserParameters;
 
@@ -424,9 +428,15 @@ public class LNGScenarioTransformer {
 		 */
 		final PortModel portModel = rootObject.getPortModel();
 
-		final Map<Port, ICooldownPriceCalculator> cooldownCalculators = new HashMap<Port, ICooldownPriceCalculator>();
+		final Map<Port, ICooldownCalculator> cooldownCalculators = new HashMap<Port, ICooldownCalculator>();
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
-			final ICooldownPriceCalculator cooldownCalculator = new PriceExpressionContract(commodityIndexAssociation.lookup(price.getIndex()));
+			final ICooldownCalculator cooldownCalculator;
+			// Check here if price is indexed or expression
+			if (price.isSetExpression()) {
+				cooldownCalculator = new CooldownLumpSumCalculator(dateHelper.generateFixedCostExpressionCurve(price.getExpression(), commodityIndices));
+			} else {
+				cooldownCalculator = new CooldownPriceIndexedCalculator(commodityIndexAssociation.lookup(price.getIndex()));
+			}
 			injector.injectMembers(cooldownCalculator);
 
 			for (final Port port : SetUtils.getObjects(price.getPorts())) {
@@ -436,11 +446,13 @@ public class LNGScenarioTransformer {
 
 		for (final Port ePort : portModel.getPorts()) {
 			final IPort port;
+			final int minCv = ePort.isSetMinCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMinCvValue()) : 0;
+			final int maxCv = ePort.isSetMaxCvValue() ? OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getMaxCvValue()) : Integer.MAX_VALUE;
 			if (ePort.getLocation() != null) {
 				final Location loc = ePort.getLocation();
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone());
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float) loc.getLat(), (float) loc.getLon(), ePort.getTimeZone(), minCv, maxCv);
 			} else {
-				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone());
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), ePort.getTimeZone(), minCv, maxCv);
 			}
 
 			portAssociation.add(ePort, port);
@@ -449,6 +461,8 @@ public class LNGScenarioTransformer {
 			modelEntityMap.addModelObject(ePort, port);
 
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
+			builder.setPortMinCV(port, minCv);
+			builder.setPortMaxCV(port, maxCv);
 
 			// Set port default values
 			portVisitDurationProviderEditor.setVisitDuration(port, PortType.Load, ePort.getLoadDuration());
@@ -544,6 +558,9 @@ public class LNGScenarioTransformer {
 
 		setNominatedVessels(builder, modelEntityMap);
 
+		// freeze any frozen assignments
+		freezeAssignmentModel(builder, modelEntityMap);
+
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
 		}
@@ -605,6 +622,109 @@ public class LNGScenarioTransformer {
 		}
 	}
 
+	private void freezeAssignmentModel(final ISchedulerBuilder builder, final ModelEntityMap modelEntityMap) {
+
+		// TODO: Freeze as part of the buildXXX methods when object is created rather than here.
+
+		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getDischargeSlots());
+		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getVesselEvents());
+
+		for (final AssignableElement assignableElement : assignableElements) {
+			final AVesselSet<? extends Vessel> vesselSet = assignableElement.getAssignment();
+			if (vesselSet == null) {
+				continue;
+			}
+			final boolean freeze = assignableElement.isLocked();
+			if (!freeze) {
+				continue;
+			}
+
+			IVesselAvailability vesselAvailability = null;
+			if (vesselSet instanceof Vessel) {
+				// Find a relevant vessel availability.
+				final VesselAvailability va = AssignmentEditorHelper.findVesselAvailability((Vessel) vesselSet, assignableElement, rootObject.getPortfolioModel().getCargoModel()
+						.getVesselAvailabilities());
+				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
+			}
+
+			if (vesselAvailability == null) {
+				continue;
+			}
+
+			if (assignableElement instanceof Cargo) {
+				final Cargo cargo = (Cargo) assignableElement;
+				IPortSlot prevSlot = null;
+				for (final Slot slot : cargo.getSortedSlots()) {
+					final IPortSlot portSlot = modelEntityMap.getOptimiserObject(slot, IPortSlot.class);
+					// bind slots to vessel
+					builder.freezeSlotToVesselAvailability(portSlot, vesselAvailability);
+					// bind sequencing as well - this forces
+					// previousSlot to come before currentSlot.
+					if (prevSlot != null) {
+						builder.constrainSlotAdjacency(prevSlot, portSlot);
+					}
+					prevSlot = portSlot;
+				}
+			} else if (assignableElement instanceof VesselEvent) {
+				final IVesselEventPortSlot slot = modelEntityMap.getOptimiserObject(assignableElement, IVesselEventPortSlot.class);
+				if (slot != null) {
+					builder.freezeSlotToVesselAvailability(slot, vesselAvailability);
+				}
+			}
+		}
+	}
+
+	// /**
+	// * Create and associate discount curves
+	// *
+	// * This ought to be in {@link OptimisationTransformer} but that doesn't have access to set up DCPs.
+	// *
+	// * @param builder
+	// */
+	// private void buildDiscountCurves(final ISchedulerBuilder builder) {
+	// // set up DCP
+	//
+	// final DiscountCurve defaultCurve = scenario.getOptimisation().getCurrentSettings().isSetDefaultDiscountCurve() ? scenario.getOptimisation().getCurrentSettings().getDefaultDiscountCurve()
+	// : null;
+	//
+	// final ICurve realDefaultCurve;
+	// if (defaultCurve == null) {
+	// realDefaultCurve = new ConstantValueCurve(1);
+	// } else {
+	// realDefaultCurve = buildDiscountCurve(defaultCurve);
+	// }
+	//
+	// for (final Objective objective : scenario.getOptimisation().getCurrentSettings().getObjectives()) {
+	// if (objective.isSetDiscountCurve()) {
+	// builder.setFitnessComponentDiscountCurve(objective.getName(), buildDiscountCurve(objective.getDiscountCurve()));
+	// } else {
+	// builder.setFitnessComponentDiscountCurve(objective.getName(), realDefaultCurve);
+	// }
+	// }
+	// }
+
+	// /**
+	// * @param defaultCurve
+	// * @return
+	// */
+	// private ICurve buildDiscountCurve(final DiscountCurve curve) {
+	// final InterpolatingDiscountCurve realCurve = new InterpolatingDiscountCurve();
+	//
+	// final int baseTime = curve.isSetStartDate() ? convertTime(curve.getStartDate()) : 0;
+	// if (baseTime > 0) {
+	// realCurve.setValueAtPoint(0, 1);
+	// realCurve.setValueAtPoint(baseTime - 1, 1);
+	// }
+	//
+	// for (final Discount d : curve.getDiscounts()) {
+	// realCurve.setValueAtPoint(baseTime + d.getTime(), d.getDiscountFactor());
+	// }
+	// return realCurve;
+	// }
+
 	/**
 	 * Find the earliest and latest times set by events in the model. This takes into account:
 	 * 
@@ -646,13 +766,15 @@ public class LNGScenarioTransformer {
 		}
 
 		earliestTime = allDates.isEmpty() ? new Date(0) : Collections.min(allDates);
+		// round down earliest time
+		earliestTime = DateAndCurveHelper.roundTimeDown(earliestTime);
 		latestTime = allDates.isEmpty() ? new Date(0) : Collections.max(allDates);
 	}
 
 	private void buildVesselEvents(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<VesselClass, IVesselClass> classes,
 			final ModelEntityMap modelEntityMap) {
 
-		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
+		final Date latestDate = latestTime;
 
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 
@@ -725,7 +847,7 @@ public class LNGScenarioTransformer {
 			}
 		}
 
-		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
+		final Date latestDate = latestTime;
 
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
@@ -1041,10 +1163,7 @@ public class LNGScenarioTransformer {
 			final long minCv;
 			long maxCv;
 
-			if (dischargeSlot.isSetPricingDate()) {
-				dischargeSlot.getPricingDate();
-			}
-			final int pricingDate = dischargeSlot.isSetPricingDate() ? convertTime(earliestTime, dischargeSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
+			final int pricingDate = getSlotPricingDate(dischargeSlot);
 
 			minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMinCv());
 			maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(dischargeSlot.getSlotOrContractMaxCv());
@@ -1189,7 +1308,7 @@ public class LNGScenarioTransformer {
 			throw new IllegalStateException("Load Slot has no contract or other pricing data");
 		}
 
-		final int slotPricingDate = loadSlot.isSetPricingDate() ? convertTime(earliestTime, loadSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
+		final int slotPricingDate = getSlotPricingDate(loadSlot);
 
 		final long minVolume;
 		final long maxVolume;
@@ -1275,8 +1394,8 @@ public class LNGScenarioTransformer {
 		if (spotMarketsModel == null) {
 			return;
 		}
-		final Date earliestDate = optimiserParameters.getRange().isSetOptimiseAfter() ? optimiserParameters.getRange().getOptimiseAfter() : earliestTime;
-		final Date latestDate = optimiserParameters.getRange().isSetOptimiseBefore() ? optimiserParameters.getRange().getOptimiseBefore() : latestTime;
+		final Date earliestDate = earliestTime;
+		final Date latestDate = latestTime;
 
 		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
 		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, modelEntityMap, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket());
@@ -1326,7 +1445,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.DES_PURCHASE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1458,7 +1577,7 @@ public class LNGScenarioTransformer {
 							}
 						}
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_SALE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1595,7 +1714,7 @@ public class LNGScenarioTransformer {
 						cal.add(Calendar.MONTH, 1);
 						final Date endTime = cal.getTime();
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.DES_SALE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -1634,10 +1753,7 @@ public class LNGScenarioTransformer {
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								desSlot.setWindowSize((int) duration);
 
-								if (desSlot.isSetPricingDate()) {
-									desSlot.getPricingDate();
-								}
-								final int pricingDate = desSlot.isSetPricingDate() ? convertTime(earliestTime, desSlot.getPricingDate()) : IPortSlot.NO_PRICING_DATE;
+								final int pricingDate = getSlotPricingDate(desSlot);
 
 								final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity());
 								final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity());
@@ -1709,7 +1825,7 @@ public class LNGScenarioTransformer {
 						final Date endTime = cal.getTime();
 						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
-						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_PURCHASE, getKeyForDate(cal.getTimeZone(), startTime));
+						final Collection<Slot> existing = getSpotSlots(market, getKeyForDate(cal.getTimeZone(), startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
 						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
@@ -2082,7 +2198,6 @@ public class LNGScenarioTransformer {
 				for (final VesselAvailability vesselAvailability : cargoModel.getVesselAvailabilities()) {
 					if (vesselAvailability.getVessel() == vessel) {
 						sortedAvailabilities.add(vesselAvailability);
-						break;
 					}
 				}
 			}
@@ -2120,25 +2235,25 @@ public class LNGScenarioTransformer {
 		for (final VesselAvailability eVesselAvailability : sortedAvailabilities) {
 			final Vessel eVessel = eVesselAvailability.getVessel();
 
-			Set<Port> portSet = SetUtils.getObjects(eVesselAvailability.getStartAt());
-			Port startingPort = portSet.isEmpty() ? null : portSet.iterator().next();
+			final Set<Port> portSet = SetUtils.getObjects(eVesselAvailability.getStartAt());
+			final Port startingPort = portSet.isEmpty() ? null : portSet.iterator().next();
 			final IStartRequirement startRequirement = createStartRequirement(builder, portAssociation, eVesselAvailability.isSetStartAfter() ? eVesselAvailability.getStartAfter() : null,
 					eVesselAvailability.isSetStartBy() ? eVesselAvailability.getStartBy() : null, startingPort, eVesselAvailability.getStartHeel());
 
 			boolean endCold = false;
 			long targetEndHeelInM3 = 0;
-			EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
+			final EndHeelOptions endHeel = eVesselAvailability.getEndHeel();
 			if (endHeel != null) {
-				endCold = endHeel.isEndCold();
+				endCold = endHeel.isSetTargetEndHeel();
 				targetEndHeelInM3 = endCold ? OptimiserUnitConvertor.convertToInternalVolume(endHeel.getTargetEndHeel()) : 0;
 			}
-			
+
 			final IEndRequirement endRequirement = createEndRequirement(builder, portAssociation, eVesselAvailability.isSetEndAfter() ? eVesselAvailability.getEndAfter() : null,
 					eVesselAvailability.isSetEndBy() ? eVesselAvailability.getEndBy() : null, SetUtils.getObjects(eVesselAvailability.getEndAt()), endCold, targetEndHeelInM3);
 
 			final ICurve dailyCharterInCurve;
 			if (eVesselAvailability.isSetTimeCharterRate()) {
-				dailyCharterInCurve = dateHelper.generateCharterExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
+				dailyCharterInCurve = dateHelper.generateFixedCostExpressionCurve(eVesselAvailability.getTimeCharterRate(), charterIndices);
 			} else {
 				dailyCharterInCurve = new ConstantValueCurve(0);
 			}
@@ -2211,7 +2326,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private IStartRequirement createStartRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Port port,
-			HeelOptions eHeelOptions) {
+			final HeelOptions eHeelOptions) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
@@ -2226,8 +2341,8 @@ public class LNGScenarioTransformer {
 		if (eHeelOptions != null) {
 			final long heelLimitInM3 = eHeelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(eHeelOptions.getVolumeAvailable()) : 0;
 
-			int cvValue = OptimiserUnitConvertor.convertToInternalConversionFactor(eHeelOptions.getCvValue());
-			int pricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(eHeelOptions.getPricePerMMBTU());
+			final int cvValue = OptimiserUnitConvertor.convertToInternalConversionFactor(eHeelOptions.getCvValue());
+			final int pricePerMMBTu = OptimiserUnitConvertor.convertToInternalPrice(eHeelOptions.getPricePerMMBTU());
 
 			heelOptions = builder.createHeelOptions(heelLimitInM3, cvValue, pricePerMMBTu);
 		} else {
@@ -2245,7 +2360,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 */
 	private IEndRequirement createEndRequirement(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Date from, final Date to, final Set<Port> ports,
-			boolean endCold, long targetHeelInM3) {
+			final boolean endCold, final long targetHeelInM3) {
 		ITimeWindow window = null;
 
 		if (from == null && to != null) {
@@ -2275,26 +2390,17 @@ public class LNGScenarioTransformer {
 	 */
 	private void addSpotSlotToCount(final SpotSlot spotSlot) {
 		final SpotMarket market = spotSlot.getMarket();
-		final SpotType spotType;
-		if (market instanceof DESPurchaseMarket) {
-			spotType = SpotType.DES_PURCHASE;
-		} else if (market instanceof DESSalesMarket) {
-			spotType = SpotType.DES_SALE;
-		} else if (market instanceof FOBPurchasesMarket) {
-			spotType = SpotType.FOB_PURCHASE;
-		} else if (market instanceof FOBSalesMarket) {
-			spotType = SpotType.FOB_SALE;
-		} else {
+		if (market == null) {
 			log.warn("Spot slot with an invalid market found");
 			return;
 		}
 
 		final TreeMap<String, Collection<Slot>> curve;
-		if (existingSpotCount.containsKey(spotType)) {
-			curve = existingSpotCount.get(spotType);
+		if (existingSpotCount.containsKey(market)) {
+			curve = existingSpotCount.get(market);
 		} else {
 			curve = new TreeMap<String, Collection<Slot>>();
-			existingSpotCount.put(spotType, curve);
+			existingSpotCount.put(market, curve);
 		}
 		if (spotSlot instanceof Slot) {
 			final Slot slot = (Slot) spotSlot;
@@ -2310,9 +2416,10 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private Collection<Slot> getSpotSlots(final SpotType spotType, final String key) {
-		if (existingSpotCount.containsKey(spotType)) {
-			final TreeMap<String, Collection<Slot>> curve = existingSpotCount.get(spotType);
+	private Collection<Slot> getSpotSlots(final SpotMarket spotMarket, final String key) {
+
+		if (existingSpotCount.containsKey(spotMarket)) {
+			final TreeMap<String, Collection<Slot>> curve = existingSpotCount.get(spotMarket);
 			if (curve.containsKey(key)) {
 				final Collection<Slot> slots = curve.get(key);
 				if (slots != null) {
@@ -2358,5 +2465,17 @@ public class LNGScenarioTransformer {
 
 		}
 		throw new IllegalArgumentException("Unsupported pricing event");
+	}
+
+	private int getSlotPricingDate(final Slot slot) {
+		int pricingDate;
+		if (slot.isSetPricingDate()) {
+			// convert pricing date to local time (as it currently gets converted to UTC in PricingEventHelper)
+			final Date pricingDateInLocalTime = TimeZoneHelper.createTimeZoneShiftedDate(slot.getPricingDate(), "UTC", slot.getPort().getTimeZone());
+			pricingDate = convertTime(earliestTime, pricingDateInLocalTime);
+		} else {
+			pricingDate = IPortSlot.NO_PRICING_DATE;
+		}
+		return pricingDate;
 	}
 }

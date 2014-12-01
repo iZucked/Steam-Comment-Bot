@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.Calendar;
@@ -127,7 +131,7 @@ public class InclusionChecker {
 		} else if (object instanceof VesselAvailability) {
 			final VesselAvailability vesselAvailability = (VesselAvailability) object;
 			if (periodRecord.lowerCutoff != null) {
-				if (vesselAvailability.isSetEndAfter() && vesselAvailability.getEndBy().before(periodRecord.lowerCutoff)) {
+				if (vesselAvailability.isSetEndBy() && vesselAvailability.getEndBy().before(periodRecord.lowerCutoff)) {
 					return new Pair<>(InclusionType.Out, Position.Before);
 				}
 			}

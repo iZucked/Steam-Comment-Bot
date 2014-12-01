@@ -1,13 +1,20 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -19,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.CollectedAssignment;
@@ -866,15 +874,7 @@ public class PeriodTransformerTest {
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
 
 		// // Create a sample scenario
-		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
-
-		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
-		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.FEBRUARY, 1));
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
-		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
@@ -883,33 +883,26 @@ public class PeriodTransformerTest {
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
-		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
+		Assert.assertTrue(removedCargoes.contains(copyCargo));
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
-
-		// Removed from copy
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
-
-		// Registered objects as removed.
-		Mockito.verify(mapping).registerRemovedOriginal(cargo);
-		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
-		Mockito.verify(mapping).registerRemovedOriginal(dischargeSlot);
-
+		// No change to copy scenario
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
 	}
 
 	@Test
@@ -925,15 +918,7 @@ public class PeriodTransformerTest {
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
 
 		// // Create a sample scenario
-		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
-
-		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
-		final DischargeSlot dischargeSlot = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge");
-		dischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
-		final Cargo cargo = PeriodTestUtils.createCargo(scenarioModel, "cargo", loadSlot, dischargeSlot);
-		cargo.setAllowRewiring(true);
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MARCH, 1));
@@ -942,38 +927,40 @@ public class PeriodTransformerTest {
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
-		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
-
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
-
-		// Still in copy
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
-
-		// Check copy flags changed
+		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assert.assertFalse(removedSlots.contains(copyDischargeSlot));
+		Assert.assertFalse(removedCargoes.contains(copyCargo));
+		//
+		//
+		// // Verify relevant slots and cargoes marked as remove
+		// Mockito.verify(seenSlots, Mockito.atLeastOnce()).add(copyLoadSlot);
+		// Mockito.verify(seenSlots, Mockito.atLeastOnce()).add(copyDischargeSlot);
+		// Mockito.verify(seenSlots).addAll(Matchers.anyList());
+		// Mockito.verifyNoMoreInteractions(seenSlots);
+		// Mockito.verifyNoMoreInteractions(removedSlots);
+		// Mockito.verifyNoMoreInteractions(removedCargoes);
+		// Mockito.verifyNoMoreInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // Check copy flags changed
 		Assert.assertTrue(copyCargo.isLocked());
 		Assert.assertFalse(copyCargo.isAllowRewiring());
-
-		// but not original
-		Assert.assertFalse(cargo.isLocked());
-		Assert.assertTrue(cargo.isAllowRewiring());
-
-		// Registered objects as removed.
-		Mockito.verifyNoMoreInteractions(mapping);
 	}
 
 	@Test
@@ -1016,27 +1003,45 @@ public class PeriodTransformerTest {
 		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
 		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		// Still in copy
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
 
+		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assert.assertFalse(removedSlots.contains(copyDischargeSlot));
+		Assert.assertFalse(removedCargoes.contains(copyCargo));
+
+		//
+		// // Verify relevant slots and cargoes marked as remove
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
 		// Check copy flags unchanged
 		Assert.assertFalse(copyCargo.isLocked());
 		Assert.assertTrue(copyCargo.isAllowRewiring());
-
-		Assert.assertFalse(cargo.isLocked());
-		Assert.assertTrue(cargo.isAllowRewiring());
-
+		//
+		// Assert.assertFalse(cargo.isLocked());
+		// Assert.assertTrue(cargo.isAllowRewiring());
+		//
 		// Registered objects as removed.
-		Mockito.verifyNoMoreInteractions(mapping);
+		// Mockito.verifyNoMoreInteractions(mapping);
 	}
 
 	@Test
@@ -1069,38 +1074,56 @@ public class PeriodTransformerTest {
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		//
+		// Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		// Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		// Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		//
+		// Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		// Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		// Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
-		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
-
-		// Still in copy
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
-
-		// Check copy flags changed
+		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assert.assertFalse(removedSlots.contains(copyDischargeSlot));
+		Assert.assertFalse(removedCargoes.contains(copyCargo));
+		//
+		//
+		// // Verify relevant slots and cargoes marked as remove
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // Check copy flags changed
 		Assert.assertTrue(copyCargo.isLocked());
 		Assert.assertFalse(copyCargo.isAllowRewiring());
-
-		// but not original
-		Assert.assertFalse(cargo.isLocked());
-		Assert.assertTrue(cargo.isAllowRewiring());
-
-		// Registered objects as removed.
-		Mockito.verifyNoMoreInteractions(mapping);
+		//
+		// // but not original
+		// Assert.assertFalse(cargo.isLocked());
+		// Assert.assertTrue(cargo.isAllowRewiring());
+		//
+		// // Registered objects as removed.
+		// Mockito.verifyNoMoreInteractions(mapping);
 	}
 
 	@Test
@@ -1133,32 +1156,50 @@ public class PeriodTransformerTest {
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		//
+		// Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		// Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		// Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		//
+		// Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		// Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		// Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
-		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
+		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
+		Assert.assertTrue(removedCargoes.contains(copyCargo));
 
-		// Removed from copy
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
+		//
+		// // Verify relevant slots and cargoes marked as remove
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
 
-		// Registered objects as removed.
-		Mockito.verify(mapping).registerRemovedOriginal(cargo);
-		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
-		Mockito.verify(mapping).registerRemovedOriginal(dischargeSlot);
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // Registered objects as removed.
+		// Mockito.verify(mapping).registerRemovedOriginal(cargo);
+		// Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+		// Mockito.verify(mapping).registerRemovedOriginal(dischargeSlot);
 
 	}
 
@@ -1191,36 +1232,54 @@ public class PeriodTransformerTest {
 		copyDischargeSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
 		final Cargo copyCargo = PeriodTestUtils.createCargo(copyScenarioModel, "cargo", copyLoadSlot, copyDischargeSlot);
 		copyCargo.setAllowRewiring(true);
+		//
+		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		//
+		// Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		// Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
+		// Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		//
+		// Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		// Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
+		// Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot)).thenReturn(copyDischargeSlot);
-		Mockito.when(mapping.getCopyFromOriginal(cargo)).thenReturn(copyCargo);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot)).thenReturn(dischargeSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyCargo)).thenReturn(cargo);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
+		Assert.assertFalse(removedSlots.contains(copyDischargeSlot));
+		Assert.assertFalse(removedCargoes.contains(copyCargo));
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(cargo));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(dischargeSlot));
-
-		// Still in copy
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
-
-		// Check copy flags changed
+		//
+		// // Verify relevant slots and cargoes marked as remove
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // Check copy flags changed
 		Assert.assertTrue(copyCargo.isLocked());
 		Assert.assertFalse(copyCargo.isAllowRewiring());
-
-		// but not original
-		Assert.assertFalse(cargo.isLocked());
-		Assert.assertTrue(cargo.isAllowRewiring());
+		//
+		// // but not original
+		// Assert.assertFalse(cargo.isLocked());
+		// Assert.assertTrue(cargo.isAllowRewiring());
 	}
 
 	@Test
@@ -1236,28 +1295,32 @@ public class PeriodTransformerTest {
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
 
 		// // Create a sample scenario
-		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
-
-		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1));
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
-		// Registered objects as removed.
-		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+		//
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().isEmpty());
 	}
 
 	@Test
@@ -1282,19 +1345,42 @@ public class PeriodTransformerTest {
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		// final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		//
+		// Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
+		// Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
 
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
-		// Registered objects as removed.
-		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+		//
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // No change to original
+		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		//
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// // Registered objects as removed.
+		// Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
 	}
 
 	@Test
@@ -1310,27 +1396,47 @@ public class PeriodTransformerTest {
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
 
 		// // Create a sample scenario
-		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
-
-		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.MAY, 1));
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertFalse(removedSlots.contains(copyLoadSlot));
 
-		// No changes
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		// Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		//
+		// Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		// Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
+		// Assert.assertTrue(removedCargoes.contains(copyCargo));
 
-		Mockito.verifyNoMoreInteractions(mapping);
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // No changes
+		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		//
+		// Mockito.verifyNoMoreInteractions(mapping);
 	}
 
 	@Test
@@ -1346,28 +1452,49 @@ public class PeriodTransformerTest {
 		periodRecord.upperCutoff = PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 15);
 
 		// // Create a sample scenario
-		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
-
-		final LoadSlot loadSlot = PeriodTestUtils.createLoadSlot(scenarioModel, "load");
-		loadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
 
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1));
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		//
+		//
+		// Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		// Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
+		//
+		// Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		// Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
+		// Assert.assertTrue(removedCargoes.contains(copyCargo));
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
-
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
-		// Registered objects as removed.
-		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // No change to original
+		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		//
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// // Registered objects as removed.
+		// Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
 	}
 
 	@Test
@@ -1392,19 +1519,40 @@ public class PeriodTransformerTest {
 		final LoadSlot copyLoadSlot = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load");
 		copyLoadSlot.setWindowStart(PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
 
-		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+		final Set<Slot> seenSlots = new HashSet<>();
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
-		Mockito.when(mapping.getCopyFromOriginal(loadSlot)).thenReturn(copyLoadSlot);
-		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot)).thenReturn(loadSlot);
+		transformer.findSlotsAndCargoesToRemove(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), seenSlots, removedSlots,
+				removedCargoes, slotAllocationMap);
 
-		transformer.filterSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), periodRecord, copyScenarioModel.getPortfolioModel().getCargoModel(), mapping);
+		// Verify relevant slots and cargoes marked as remove
+		Assert.assertTrue(seenSlots.contains(copyLoadSlot));
+		// Assert.assertTrue(seenSlots.contains(copyDischargeSlot));
 
-		// No change to original
-		Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		Assert.assertTrue(removedSlots.contains(copyLoadSlot));
+		// Assert.assertTrue(removedSlots.contains(copyDischargeSlot));
+		// Assert.assertTrue(removedCargoes.contains(copyCargo));
 
-		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
-		// Registered objects as removed.
-		Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
+		// Mockito.verify(seenSlots).add(copyLoadSlot);
+		// Mockito.verify(seenSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedSlots).add(copyLoadSlot);
+		// Mockito.verify(removedSlots).add(copyDischargeSlot);
+		// Mockito.verify(removedCargoes).add(copyCargo);
+		// Mockito.verifyZeroInteractions(slotAllocationMap);
+		//
+		// // No change to copy scenario
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot));
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot));
+		//
+		// // No change to original
+		// Assert.assertTrue(scenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(loadSlot));
+		//
+		// Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().isEmpty());
+		// // Registered objects as removed.
+		// Mockito.verify(mapping).registerRemovedOriginal(loadSlot);
 	}
 
 	@Test
@@ -1821,10 +1969,10 @@ public class PeriodTransformerTest {
 		final SlotVisit loadVisit = PeriodTestUtils.createSlotVisit(scenarioModel, loadAllocation);
 		final SlotVisit dischargeVisit = PeriodTestUtils.createSlotVisit(scenarioModel, dischargeAllocation);
 
-		Journey ladenJourney = PeriodTestUtils.createJourney();
-		Idle ladenIdle = PeriodTestUtils.createIdle();
-		Journey ballastJourney = PeriodTestUtils.createJourney();
-		Idle ballastIdle = PeriodTestUtils.createIdle();
+		final Journey ladenJourney = PeriodTestUtils.createJourney();
+		final Idle ladenIdle = PeriodTestUtils.createIdle();
+		final Journey ballastJourney = PeriodTestUtils.createJourney();
+		final Idle ballastIdle = PeriodTestUtils.createIdle();
 
 		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
 
@@ -1865,11 +2013,11 @@ public class PeriodTransformerTest {
 		final SlotVisit loadVisit = PeriodTestUtils.createSlotVisit(scenarioModel, loadAllocation);
 		final SlotVisit dischargeVisit = PeriodTestUtils.createSlotVisit(scenarioModel, dischargeAllocation);
 
-		Journey ladenJourney = PeriodTestUtils.createJourney();
-		Idle ladenIdle = PeriodTestUtils.createIdle();
-		Journey ballastJourney = PeriodTestUtils.createJourney();
-		Idle ballastIdle = PeriodTestUtils.createIdle();
-		Cooldown cooldown = PeriodTestUtils.createCooldown();
+		final Journey ladenJourney = PeriodTestUtils.createJourney();
+		final Idle ladenIdle = PeriodTestUtils.createIdle();
+		final Journey ballastJourney = PeriodTestUtils.createJourney();
+		final Idle ballastIdle = PeriodTestUtils.createIdle();
+		final Cooldown cooldown = PeriodTestUtils.createCooldown();
 
 		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
 
@@ -1902,10 +2050,46 @@ public class PeriodTransformerTest {
 		final Schedule schedule = PeriodTestUtils.createSchedule(scenarioModel);
 
 		final VesselEvent vesselEvent = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
-		VesselEventVisit vesselEventVisit = PeriodTestUtils.createVesselEventVisit(scenarioModel, vesselEvent);
+		final VesselEventVisit vesselEventVisit = PeriodTestUtils.createVesselEventVisit(scenarioModel, vesselEvent);
 
-		Journey eventJourney = PeriodTestUtils.createJourney();
-		Idle eventIdle = PeriodTestUtils.createIdle();
+		final Journey eventJourney = PeriodTestUtils.createJourney();
+		final Idle eventIdle = PeriodTestUtils.createIdle();
+
+		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
+
+		final Sequence sequence = PeriodTestUtils.createSequence(scenarioModel, PeriodTestUtils.createStartEvent(), PeriodTestUtils.createJourney(), PeriodTestUtils.createIdle(), vesselEventVisit,
+				eventJourney, eventIdle, endVisit);
+
+		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
+		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+
+		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+
+		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
+		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
+
+	}
+
+	@Ignore()
+	@Test
+	public void generateStartAndEndConditionsMapTest_CharterOutDifferentEndPort() {
+
+		Assert.fail("Not yet implemented");
+
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+
+		final Schedule schedule = PeriodTestUtils.createSchedule(scenarioModel);
+
+		final VesselEvent vesselEvent = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
+		final VesselEventVisit vesselEventVisit = PeriodTestUtils.createVesselEventVisit(scenarioModel, vesselEvent);
+
+		final Journey eventJourney = PeriodTestUtils.createJourney();
+		final Idle eventIdle = PeriodTestUtils.createIdle();
 
 		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
 
@@ -1923,38 +2107,141 @@ public class PeriodTransformerTest {
 	}
 
 	@Test
-	public void generateStartAndEndConditionsMapTest_CharterOutDifferentEndPort() {
-
-		Assert.fail("Not yet implemented");
-
+	public void removeExcludedSlotsAndCargoesTest() {
 		final InclusionChecker inclusionChecker = new InclusionChecker();
 
 		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
 
 		// // Create a sample scenario
 		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
+		final LNGScenarioModel copyScenarioModel = PeriodTestUtils.createBasicScenario();
 
+		final LoadSlot loadSlot1 = PeriodTestUtils.createLoadSlot(scenarioModel, "load1");
+		final DischargeSlot dischargeSlot1 = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge1");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(scenarioModel, "cargo1", loadSlot1, dischargeSlot1);
+
+		final LoadSlot loadSlot2 = PeriodTestUtils.createLoadSlot(scenarioModel, "load2");
+		final DischargeSlot dischargeSlot2 = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge2");
+		final Cargo cargo2 = PeriodTestUtils.createCargo(scenarioModel, "cargo2", loadSlot2, dischargeSlot2);
+
+		final LoadSlot copyLoadSlot1 = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load1");
+		final DischargeSlot copyDischargeSlot1 = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge1");
+		final Cargo copyCargo1 = PeriodTestUtils.createCargo(copyScenarioModel, "cargo1", copyLoadSlot1, copyDischargeSlot1);
+
+		final LoadSlot copyLoadSlot2 = PeriodTestUtils.createLoadSlot(copyScenarioModel, "load2");
+		final DischargeSlot copyDischargeSlot2 = PeriodTestUtils.createDischargeSlot(copyScenarioModel, "discharge2");
+		final Cargo copyCargo2 = PeriodTestUtils.createCargo(copyScenarioModel, "cargo2", copyLoadSlot2, copyDischargeSlot2);
+
+		final IScenarioEntityMapping mapping = Mockito.mock(IScenarioEntityMapping.class);
+
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot1)).thenReturn(copyLoadSlot1);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot1)).thenReturn(copyDischargeSlot1);
+		Mockito.when(mapping.getCopyFromOriginal(cargo1)).thenReturn(copyCargo1);
+		Mockito.when(mapping.getCopyFromOriginal(loadSlot2)).thenReturn(copyLoadSlot2);
+		Mockito.when(mapping.getCopyFromOriginal(dischargeSlot2)).thenReturn(copyDischargeSlot2);
+		Mockito.when(mapping.getCopyFromOriginal(cargo2)).thenReturn(copyCargo2);
+
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot1)).thenReturn(loadSlot1);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot1)).thenReturn(dischargeSlot1);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo1)).thenReturn(cargo1);
+		Mockito.when(mapping.getOriginalFromCopy(copyLoadSlot2)).thenReturn(loadSlot2);
+		Mockito.when(mapping.getOriginalFromCopy(copyDischargeSlot2)).thenReturn(dischargeSlot2);
+		Mockito.when(mapping.getOriginalFromCopy(copyCargo2)).thenReturn(cargo2);
+
+		final Set<Slot> removedSlots = new HashSet<>();
+		final Set<Cargo> removedCargoes = new HashSet<>();
+
+		removedSlots.add(copyLoadSlot2);
+		removedSlots.add(copyDischargeSlot2);
+		removedCargoes.add(copyCargo2);
+
+		transformer.removeExcludedSlotsAndCargoes(PeriodTestUtils.createEditingDomain(copyScenarioModel), mapping, removedSlots, removedCargoes);
+
+		// Removed from copy
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo1));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot1));
+		Assert.assertTrue(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot1));
+
+		Assert.assertFalse(copyScenarioModel.getPortfolioModel().getCargoModel().getCargoes().contains(copyCargo2));
+		Assert.assertFalse(copyScenarioModel.getPortfolioModel().getCargoModel().getLoadSlots().contains(copyLoadSlot2));
+		Assert.assertFalse(copyScenarioModel.getPortfolioModel().getCargoModel().getDischargeSlots().contains(copyDischargeSlot2));
+
+		// Registered objects as removed.
+		Mockito.verify(mapping).registerRemovedOriginal(cargo2);
+		Mockito.verify(mapping).registerRemovedOriginal(loadSlot2);
+		Mockito.verify(mapping).registerRemovedOriginal(dischargeSlot2);
+
+	}
+
+	@Test
+	public void lockDownCargoDatesTest() {
+		final InclusionChecker inclusionChecker = new InclusionChecker();
+		final PeriodTransformer transformer = createPeriodTransformer(inclusionChecker);
+
+		// // Create a sample scenario
+		final LNGScenarioModel scenarioModel = PeriodTestUtils.createBasicScenario();
 		final Schedule schedule = PeriodTestUtils.createSchedule(scenarioModel);
 
-		final VesselEvent vesselEvent = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event");
-		VesselEventVisit vesselEventVisit = PeriodTestUtils.createVesselEventVisit(scenarioModel, vesselEvent);
+		final LoadSlot loadSlot1 = PeriodTestUtils.createLoadSlot(scenarioModel, "load1");
+		final DischargeSlot dischargeSlot1 = PeriodTestUtils.createDischargeSlot(scenarioModel, "discharge1");
+		final Cargo cargo1 = PeriodTestUtils.createCargo(scenarioModel, "cargo1", loadSlot1, dischargeSlot1);
 
-		Journey eventJourney = PeriodTestUtils.createJourney();
-		Idle eventIdle = PeriodTestUtils.createIdle();
+		final Port port = PeriodTestUtils.createPort(scenarioModel, "port");
+		port.setTimeZone("Etc/GMT-1");
 
-		final PortVisit endVisit = PeriodTestUtils.createEndEvent();
+		loadSlot1.setPort(port);
+		dischargeSlot1.setPort(port);
 
-		final Sequence sequence = PeriodTestUtils.createSequence(scenarioModel, PeriodTestUtils.createStartEvent(), PeriodTestUtils.createJourney(), PeriodTestUtils.createIdle(), vesselEventVisit,
-				eventJourney, eventIdle, endVisit);
+		// set window start dsate, time and duration.
+		loadSlot1.setWindowStart(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 10, 1));
+		dischargeSlot1.setWindowStart(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 11, 1));
 
-		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
-		final Map<AssignableElement, PortVisit> endConditionMap = new HashMap<>();
+		loadSlot1.setWindowStartTime(5);
+		dischargeSlot1.setWindowStartTime(10);
 
-		transformer.generateStartAndEndConditionsMap(scenarioModel, startConditionMap, endConditionMap);
+		loadSlot1.setWindowSize(48);
+		dischargeSlot1.setWindowSize(72);
 
-		Assert.assertSame(endVisit, startConditionMap.get(vesselEvent));
-		Assert.assertSame(vesselEventVisit, endConditionMap.get(vesselEvent));
+		// TODO: Should be part of the input?
+		// loadSlot1.setDuration(5);
+		// dischargeSlot1.setDuration(10);
 
+		// set flags
+		cargo1.setAllowRewiring(true);
+		cargo1.setLocked(false);
+
+		final SlotAllocation loadAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, loadSlot1);
+		final SlotAllocation dischargeAllocation = PeriodTestUtils.createSlotAllocation(scenarioModel, dischargeSlot1);
+		final CargoAllocation cargoAllocation = PeriodTestUtils.createCargoAllocation(scenarioModel, cargo1, loadAllocation, dischargeAllocation);
+
+		final SlotVisit loadVisit = PeriodTestUtils.createSlotVisit(scenarioModel, loadAllocation);
+		final SlotVisit dischargeVisit = PeriodTestUtils.createSlotVisit(scenarioModel, dischargeAllocation);
+
+		loadVisit.setPort(port);
+		dischargeVisit.setPort(port);
+
+		loadVisit.setStart(PeriodTestUtils.createDate("UTC", 2014, 10, 5, 1));
+		dischargeVisit.setStart(PeriodTestUtils.createDate("UTC", 2014, 11, 10, 2));
+
+		final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
+
+		slotAllocationMap.put(loadSlot1, loadAllocation);
+		slotAllocationMap.put(dischargeSlot1, dischargeAllocation);
+
+		transformer.lockDownCargoDates(slotAllocationMap, cargo1);
+
+		Assert.assertFalse(cargo1.isAllowRewiring());
+		Assert.assertTrue(cargo1.isLocked());
+
+		Assert.assertEquals(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 10, 5), loadSlot1.getWindowStart());
+		Assert.assertEquals(PeriodTestUtils.createDate("Etc/GMT-1", 2014, 11, 10), dischargeSlot1.getWindowStart());
+
+		Assert.assertEquals(0, loadSlot1.getWindowSize());
+		Assert.assertEquals(0, dischargeSlot1.getWindowSize());
+
+		// +1 for difference between UTC and Etc/GMT-1
+		Assert.assertEquals(1 + 1, loadSlot1.getWindowStartTime());
+		Assert.assertEquals(2 + 1, dischargeSlot1.getWindowStartTime());
 	}
 
 	private PeriodTransformer createPeriodTransformer(final InclusionChecker inclusionChecker) {

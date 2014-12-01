@@ -45,8 +45,8 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 
 		final Journey journey = factory.createJourney();
 
-		journey.setStart(modelEntityMap.getDateFromHours(event.getStartTime()));
-		journey.setEnd(modelEntityMap.getDateFromHours(event.getEndTime()));
+		journey.setStart(modelEntityMap.getDateFromHours(event.getStartTime(), eFromPort));
+		journey.setEnd(modelEntityMap.getDateFromHours(event.getEndTime(), eToPort));
 
 		journey.setPort(eFromPort);
 		journey.setDestination(eToPort);

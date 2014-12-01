@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.models.lng.transformer.ui.parametermodes.impl;
 
-import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.jdt.annotation.NonNull;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
@@ -14,14 +14,14 @@ import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustom
 public interface ParameterModeExtension {
 
 	@MapName("id")
-	@Nullable
+	@NonNull
 	String getID();
 
 	@MapName("name")
-	@Nullable
+	@NonNull
 	String getName();
 
 	@MapName("class")
-	@Nullable
+	@NonNull
 	IParameterModeCustomiser createCustomiser();
 }

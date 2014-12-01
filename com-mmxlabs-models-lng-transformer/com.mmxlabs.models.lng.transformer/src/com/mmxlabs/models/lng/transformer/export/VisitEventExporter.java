@@ -111,29 +111,16 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				for (final IPortSlot allocationSlot : allocation.getSlots()) {
 					allocations.put(allocationSlot, eAllocation);
 				}
-				// eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
-				// eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
-				// eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
-				// eAllocation.setSequence();
 
 				output.getCargoAllocations().add(eAllocation);
 			}
 			eAllocation.getSlotAllocations().add(slotAllocation);
 
-			// for now, only handle single load/discharge case
-			// assert(allocation.getSlots().size() == 2);
-			// final ILoadOption loadSlot = (ILoadOption) allocation.getSlots().get(0);
-			// final IDischargeOption dischargeSlot = (IDischargeOption) allocation.getSlots().get(1);
-			if (slot instanceof ILoadOption) {
-				// final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadPricePerM3(), allocation.getLoadOption().getCargoCVValue());
-				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
-				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
-			} else {
-				final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
-				slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
-				slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
-			}
+			final int pricePerMMBTu = allocation.getSlotPricePerMMBTu(slot);
+			slotAllocation.setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
+			slotAllocation.setVolumeTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInM3(slot)));
+			slotAllocation.setEnergyTransferred(OptimiserUnitConvertor.convertToExternalVolume(allocation.getSlotVolumeInMMBTu(slot)));
+			slotAllocation.setCv(OptimiserUnitConvertor.convertToExternalConversionFactor(allocation.getSlotCargoCV(slot)));
 
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
@@ -198,8 +185,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		assert visitEvent != null : "Every sequence element should have a visit event associated with it";
 
-		portVisit.setStart(modelEntityMap.getDateFromHours(visitEvent.getStartTime()));
-		portVisit.setEnd(modelEntityMap.getDateFromHours(visitEvent.getEndTime()));
+		portVisit.setStart(modelEntityMap.getDateFromHours(visitEvent.getStartTime(), slot.getPort()));
+		portVisit.setEnd(modelEntityMap.getDateFromHours(visitEvent.getEndTime(), slot.getPort()));
 
 		final ICapacityAnnotation capacityViolationAnnotation = (ICapacityAnnotation) annotations.get(SchedulerConstants.AI_capacityViolationInfo);
 		if (capacityViolationAnnotation != null) {

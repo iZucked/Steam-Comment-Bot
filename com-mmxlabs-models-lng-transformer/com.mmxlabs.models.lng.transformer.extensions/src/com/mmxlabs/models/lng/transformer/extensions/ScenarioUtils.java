@@ -4,9 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.extensions;
 
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.parameters.AnnealingSettings;
@@ -22,6 +19,7 @@ import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChec
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.DifferentSTSVesselsConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.PortCvCompatibilityConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ShippingHoursRestrictionCheckerFactory;
@@ -77,6 +75,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(parametersFactory, SlotGroupCountConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, RestrictedElementsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ContractCvConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(parametersFactory, PortCvCompatibilityConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, DifferentSTSVesselsConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingTypeRequirementConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(parametersFactory, ShippingHoursRestrictionCheckerFactory.NAME, true));
@@ -111,17 +110,6 @@ public class ScenarioUtils {
 		settings.setAnnealingSettings(annealingSettings);
 
 		final OptimisationRange range = parametersFactory.createOptimisationRange();
-		
-		{
-			Calendar cal = Calendar.getInstance();
-			cal.clear();
-			cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-			cal.set(Calendar.YEAR, 2014);
-			cal.set(Calendar.MONTH, Calendar.JULY);
-			cal.set(Calendar.DAY_OF_MONTH, 1);
-//			range.setOptimiseAfter(cal.getTime());
-		}
-		
 		settings.setRange(range);
 		return settings;
 	}

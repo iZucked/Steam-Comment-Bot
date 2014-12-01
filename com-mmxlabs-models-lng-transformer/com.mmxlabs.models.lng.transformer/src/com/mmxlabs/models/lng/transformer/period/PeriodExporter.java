@@ -1,11 +1,16 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.transformer.period;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -17,6 +22,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.common.timezone.TimeZoneHelper;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -62,8 +68,21 @@ public class PeriodExporter {
 
 		// Second the harder part, reconcile cargo model changes
 		{
+
 			final CargoModel oldCargoModel = originalScenario.getPortfolioModel().getCargoModel();
 			final CargoModel newCargoModel = periodScenario.getPortfolioModel().getCargoModel();
+
+			// Grab existing slot ids
+			final Set<String> usedIDStrings = new HashSet<String>();
+
+			{
+				for (final LoadSlot loadSlot : oldCargoModel.getLoadSlots()) {
+					usedIDStrings.add(loadSlot.getName());
+				}
+				for (final DischargeSlot dischargeSlot : oldCargoModel.getDischargeSlots()) {
+					usedIDStrings.add(dischargeSlot.getName());
+				}
+			}
 
 			// First pass, update wiring. create list of paired slots and work out which slots are no longer paired
 			final Set<Cargo> seenCargoes = new HashSet<>();
@@ -87,12 +106,43 @@ public class PeriodExporter {
 							assert oldSlot instanceof DischargeSlot;
 							cmd.append(AddCommand.create(editingDomain, oldCargoModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, oldSlot));
 						}
+
+						if (oldSlot instanceof SpotSlot) {
+							if (usedIDStrings.contains(oldSlot.getName())) {
+
+								// Expect string in form MARKET_NAME-YYYY-MM-n. Strip off the "n" part.
+								Pattern pattern = Pattern.compile("(.*-[0-9][0-9][0-9][0-9]-[0-1][0-9]-)[0-9]*");
+								Matcher matcher = pattern.matcher(oldSlot.getName());
+
+								final String idPrefix;
+								if (matcher.find()) {
+									idPrefix = matcher.group(1);
+								} else {
+									// Fallback and use whole name as a prefix
+									idPrefix = oldSlot.getName();
+								}
+
+								// Avoid ID clash
+								int offset = 0;
+								String id = idPrefix + (offset);
+								while (usedIDStrings.contains(id)) {
+									id = idPrefix + (++offset);
+								}
+								oldSlot.setName(id);
+							}
+							usedIDStrings.add(oldSlot.getName());
+						}
 					}
 					if (newSlot instanceof SpotSlot) {
 						// Clone spot details
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START, new Date(newSlot.getWindowStart().getTime())));
-						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_SIZE, newSlot.getWindowSize()));
+						if (newSlot instanceof LoadSlot && ((LoadSlot) newSlot).isDESPurchase()) {
+							cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
+						} else if (newSlot instanceof DischargeSlot && ((DischargeSlot) newSlot).isFOBSale()) {
+							cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__PORT, mapping.getOriginalFromCopy(newSlot.getPort())));
+						}
+						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START,
+								TimeZoneHelper.createTimeZoneShiftedDate(oldSlot.getWindowStart(), oldSlot.getPort().getTimeZone(), newSlot.getPort().getTimeZone())));
+						cmd.append(SetCommand.create(editingDomain, oldSlot, CargoPackage.Literals.SLOT__WINDOW_START_TIME, 0));
 					}
 					newCargoSlots.add(oldSlot);
 				}
@@ -150,7 +200,7 @@ public class PeriodExporter {
 					}
 				}
 			}
-			// NOTE: Keep cargoe deletion after slot unset SLOT_CARGO feature otherwise is caused lots of issues with commands.
+			// NOTE: Keep cargo deletion after slot unset SLOT_CARGO feature otherwise is caused lots of issues with commands.
 			// Loop through new loads & discharges looking for unused slots which were part of a cargo originally and break up the original cargo.
 			for (final Cargo cargo : originalCargoes) {
 				if (!seenCargoes.contains(cargo)) {

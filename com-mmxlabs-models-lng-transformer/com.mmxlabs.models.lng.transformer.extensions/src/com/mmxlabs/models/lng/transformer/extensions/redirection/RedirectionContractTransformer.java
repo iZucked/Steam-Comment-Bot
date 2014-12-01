@@ -163,7 +163,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 								fobPurchaseSlot.setCargoCV(loadSlot.getCargoCV());
 							}
 							fobPurchaseSlot.setPort(loadSlot.getPort());
-							fobPurchaseSlot.setWindowStart(modelEntityMap.getDateFromHours(baseTimeWindow.getStart()));
+							fobPurchaseSlot.setWindowStart(modelEntityMap.getDateFromHours(baseTimeWindow.getStart(), loadSlot.getPort()));
 							fobPurchaseSlot.setContract(loadSlot.getContract());
 							fobPurchaseSlot.setOptional(loadSlot.isOptional());
 							fobPurchaseSlot.setWindowSize((int) 24);
@@ -201,7 +201,7 @@ public abstract class RedirectionContractTransformer implements IContractTransfo
 							// Always set CV
 							desSlot.setCargoCV(loadSlot.getSlotOrDelegatedCV());
 							desSlot.setPort(loadSlot.getPort());
-							desSlot.setWindowStart(modelEntityMap.getDateFromHours(window.getStart()));
+							desSlot.setWindowStart(modelEntityMap.getDateFromHours(window.getStart(), loadSlot.getPort()));
 							desSlot.setContract(loadSlot.getContract());
 							desSlot.setOptional(loadSlot.isOptional());
 							desSlot.setWindowSize((int) 24);

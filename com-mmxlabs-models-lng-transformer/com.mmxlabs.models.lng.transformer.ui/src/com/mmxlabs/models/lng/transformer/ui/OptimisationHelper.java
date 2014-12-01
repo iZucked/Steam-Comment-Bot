@@ -265,15 +265,15 @@ public final class OptimisationHelper {
 
 			final OptimiserSettings copy = EcoreUtil.copy(previousSettings);
 
-			dialog.addOption(DataSection.Main, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
+			dialog.addOption(DataSection.Advanced, editingDomian, "Shipping Only Optimisation", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_ShippingOnly());
 			dialog.addOption(DataSection.Main, editingDomian, "Generate Charter Outs", copy, defaultSettings, DataType.Boolean, ParametersPackage.eINSTANCE.getOptimiserSettings_GenerateCharterOuts());
 
 			if (!forEvaluation) {
 				dialog.addOption(DataSection.Advanced, editingDomian, "Number of Iterations", copy, defaultSettings, DataType.PositiveInt,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings(), ParametersPackage.eINSTANCE.getAnnealingSettings_Iterations());
-				dialog.addOption(DataSection.Advanced, editingDomian, "Start Date", copy, defaultSettings, DataType.Date,
+				dialog.addOption(DataSection.Main, editingDomian, "Start Date", copy, defaultSettings, DataType.Date,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseAfter());
-				dialog.addOption(DataSection.Advanced, editingDomian, "End Date", copy, defaultSettings, DataType.Date,
+				dialog.addOption(DataSection.Main, editingDomian, "End Date", copy, defaultSettings, DataType.Date,
 						ParametersPackage.eINSTANCE.getOptimiserSettings_Range(), ParametersPackage.eINSTANCE.getOptimisationRange_OptimiseBefore());
 			}
 
