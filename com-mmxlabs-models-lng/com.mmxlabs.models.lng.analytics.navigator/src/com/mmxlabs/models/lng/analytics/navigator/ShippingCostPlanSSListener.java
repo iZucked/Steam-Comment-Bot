@@ -79,6 +79,7 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 		public void dispose() {
 
 			manager.dispose();
+			if (analyticsModel != null ) {
 			analyticsModel.eAdapters().remove(ModelAdapter.this);
 
 			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
@@ -92,7 +93,7 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 			for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
 				removeFragment(plan);
 			}
-		}
+		}}
 
 		@Override
 		protected void missedNotifications(final List<Notification> missed) {
