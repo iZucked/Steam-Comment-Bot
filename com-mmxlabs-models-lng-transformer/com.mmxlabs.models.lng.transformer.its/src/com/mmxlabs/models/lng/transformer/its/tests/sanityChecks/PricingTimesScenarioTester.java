@@ -1,10 +1,11 @@
 package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
+import static com.mmxlabs.models.lng.transformer.its.tests.sanityChecks.PricingTimesScenario.createDate;
+
 import java.util.Date;
 
+import org.junit.Ignore;
 import org.junit.Test;
-
-import static com.mmxlabs.models.lng.transformer.its.tests.sanityChecks.PricingTimesScenario.createDate;
 
 /**
  * Tests {@link PricingTimesScenario} instances to make sure discharges use the correct sales price, according to a price index and a pricing date
