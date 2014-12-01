@@ -751,10 +751,10 @@ public class CargoEditorMenuHelper {
 			final LoadSlot loadSlot = (LoadSlot) source;
 			if (loadSlot.isDESPurchase()) {
 				// Only create new Discharge
-				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
+				menuManager.add(new CreateSlotAction("DES Sale", source, null, false, null));
 			} else {
 				//
-				menuManager.add(new CreateSlotAction("Discharge", source, null, false, null));
+				menuManager.add(new CreateSlotAction("DES Sale", source, null, false, null));
 				menuManager.add(new CreateSlotAction("FOB Sale", source, null, true, null));
 
 				if (enableSTSMenus) {
@@ -772,7 +772,7 @@ public class CargoEditorMenuHelper {
 			}
 		} else {
 			final DischargeSlot dischargeSlot = (DischargeSlot) source;
-			menuManager.add(new CreateSlotAction("Load", source, null, false, null));
+			menuManager.add(new CreateSlotAction("FOB Purchase", source, null, false, null));
 			if (!dischargeSlot.isFOBSale()) {
 				menuManager.add(new CreateSlotAction("DES Purchase", source, null, true, null));
 			}
