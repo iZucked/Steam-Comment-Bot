@@ -2,7 +2,6 @@ package com.mmxlabs.models.lng.transformer.its.tests.sanityChecks;
 
 import java.util.Date;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.mmxlabs.models.lng.transformer.its.tests.sanityChecks.PricingTimesScenario.createDate;

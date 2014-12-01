@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -66,8 +68,21 @@ public class PeriodExporter {
 
 		// Second the harder part, reconcile cargo model changes
 		{
+
 			final CargoModel oldCargoModel = originalScenario.getPortfolioModel().getCargoModel();
 			final CargoModel newCargoModel = periodScenario.getPortfolioModel().getCargoModel();
+
+			// Grab existing slot ids
+			final Set<String> usedIDStrings = new HashSet<String>();
+
+			{
+				for (final LoadSlot loadSlot : oldCargoModel.getLoadSlots()) {
+					usedIDStrings.add(loadSlot.getName());
+				}
+				for (final DischargeSlot dischargeSlot : oldCargoModel.getDischargeSlots()) {
+					usedIDStrings.add(dischargeSlot.getName());
+				}
+			}
 
 			// First pass, update wiring. create list of paired slots and work out which slots are no longer paired
 			final Set<Cargo> seenCargoes = new HashSet<>();
@@ -90,6 +105,32 @@ public class PeriodExporter {
 						} else {
 							assert oldSlot instanceof DischargeSlot;
 							cmd.append(AddCommand.create(editingDomain, oldCargoModel, CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS, oldSlot));
+						}
+
+						if (oldSlot instanceof SpotSlot) {
+							if (usedIDStrings.contains(oldSlot.getName())) {
+
+								// Expect string in form MARKET_NAME-YYYY-MM-n. Strip off the "n" part.
+								Pattern pattern = Pattern.compile("(.*-[0-9][0-9][0-9][0-9]-[0-1][0-9]-)[0-9]*");
+								Matcher matcher = pattern.matcher(oldSlot.getName());
+
+								final String idPrefix;
+								if (matcher.find()) {
+									idPrefix = matcher.group(1);
+								} else {
+									// Fallback and use whole name as a prefix
+									idPrefix = oldSlot.getName();
+								}
+
+								// Avoid ID clash
+								int offset = 0;
+								String id = idPrefix + (offset);
+								while (usedIDStrings.contains(id)) {
+									id = idPrefix + (++offset);
+								}
+								oldSlot.setName(id);
+							}
+							usedIDStrings.add(oldSlot.getName());
 						}
 					}
 					if (newSlot instanceof SpotSlot) {
