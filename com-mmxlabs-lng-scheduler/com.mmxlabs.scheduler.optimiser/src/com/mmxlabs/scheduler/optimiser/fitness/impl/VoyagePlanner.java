@@ -169,6 +169,7 @@ public class VoyagePlanner {
 			options.setWarm(false);
 		}
 
+		
 		// Determined by voyage plan optimiser
 		options.setUseNBOForTravel(useNBO);
 		options.setUseFBOForSupplement(false);
@@ -305,10 +306,10 @@ public class VoyagePlanner {
 
 			// TODO: Extract out further for custom base fuel pricing logic?
 			// Use forecast BF, but check for actuals later
-			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
+			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
 			if (thisPortSlot instanceof ILoadOption) {
 				if (actualsDataProvider.hasActuals(thisPortSlot)) {
-					voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
+					voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
 				}
 			}
 
@@ -850,10 +851,10 @@ public class VoyagePlanner {
 
 			// TODO: Extract out further for custom base fuel pricing logic?
 			// Use forecast BF, but check for actuals later
-			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
+			voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, vesselAvailability.getVessel().getVesselClass().getBaseFuelUnitPrice());
 			if (thisPortSlot instanceof ILoadOption) {
 				if (actualsDataProvider.hasActuals(thisPortSlot)) {
-					voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
+					voyagePlanOptimiser.setVessel(vesselAvailability.getVessel(), resource, actualsDataProvider.getBaseFuelPricePerMT(thisPortSlot));
 				}
 			}
 			// If this is the first port, then this will be null and there will

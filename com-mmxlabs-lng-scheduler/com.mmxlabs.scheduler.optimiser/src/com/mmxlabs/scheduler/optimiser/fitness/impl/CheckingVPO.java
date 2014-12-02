@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -82,9 +83,9 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 	 * @param vesselStartTime
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final int baseFuelPricePerMT) {
-		delegate.setVessel(vessel, baseFuelPricePerMT);
-		reference.setVessel(vessel, baseFuelPricePerMT);
+	public void setVessel(final IVessel vessel, final IResource resource, final int baseFuelPricePerMT) {
+		delegate.setVessel(vessel, resource, baseFuelPricePerMT);
+		reference.setVessel(vessel, resource, baseFuelPricePerMT);
 	}
 
 	@Override

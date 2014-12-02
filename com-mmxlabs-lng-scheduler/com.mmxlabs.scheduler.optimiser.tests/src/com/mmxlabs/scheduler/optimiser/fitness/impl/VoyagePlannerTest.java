@@ -321,7 +321,7 @@ public final class VoyagePlannerTest {
 		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> plans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 		//
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
 
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
@@ -563,7 +563,7 @@ public final class VoyagePlannerTest {
 		final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlans = planner.makeVoyagePlans(resource, sequence, arrivalTimes);
 
 		// Rely upon objects equals() methods to aid JMock equal(..) case
-		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, 0);
+		Mockito.verify(voyagePlanOptimiser).setVessel(vessel, resource, 0);
 
 		// Set expected list of VPO choices
 		Mockito.verify(voyagePlanOptimiser).addChoice(Matchers.eq(new FBOVoyagePlanChoice(expectedVoyageOptions1)));
