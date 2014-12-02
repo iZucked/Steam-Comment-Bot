@@ -36,8 +36,7 @@ class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 	public String getColumnText(final Object obj, final int index) {
 
 		if (obj instanceof IJobManager) {
-			switch (index) {
-			case 0:
+			if (index == 0) {
 				return ((IJobManager) obj).getJobManagerDescriptor().getName();
 			}
 		} else if (obj instanceof IJobDescriptor) {
