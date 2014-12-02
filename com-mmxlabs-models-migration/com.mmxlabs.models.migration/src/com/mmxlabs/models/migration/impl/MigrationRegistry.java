@@ -38,7 +38,7 @@ import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
  */
 public class MigrationRegistry implements IMigrationRegistry {
 
-	private static final Logger log = LoggerFactory.getLogger(MigrationRegistry.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MigrationRegistry.class);
 
 	private final Map<String, Integer> contexts = new HashMap<>();
 	private final Map<String, Map<Integer, IMigrationUnit>> fromVersionMap = new HashMap<>();
@@ -71,7 +71,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 					registerContext(contextName, Integer.parseInt(ext.getLatestVersion()));
 				}
 			} catch (final NumberFormatException e) {
-				log.error("Unable to register context: " + contextName, e);
+				LOG.error("Unable to register context: " + contextName, e);
 			}
 		}
 		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
@@ -82,7 +82,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 				}
 			} catch (final Exception e) {
-				log.error("Unable to register migration unit for context: " + (ext == null ? "unknown" : ext.getContext()), e);
+				LOG.error("Unable to register migration unit for context: " + (ext == null ? "unknown" : ext.getContext()), e);
 			}
 		}
 		for (final MigrationUnitExtensionExtensionPoint ext : migrationUnitExtensions) {
@@ -92,7 +92,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 					registerMigrationUnitExtension(ext.getMigrationUnitID(), proxy);
 				}
 			} catch (final Exception e) {
-				log.error("Unable to register migration unit extension for unit: " + (ext == null ? "unknown" : ext.getMigrationUnitID()), e);
+				LOG.error("Unable to register migration unit extension for unit: " + (ext == null ? "unknown" : ext.getMigrationUnitID()), e);
 			}
 		}
 
@@ -100,7 +100,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			if (defaultContext == null) {
 				defaultContext = ext.getContext();
 			} else {
-				log.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
+				LOG.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
 			}
 		}
 
@@ -111,7 +111,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 					registerClientContext(contextName, Integer.parseInt(ext.getLatestClientVersion()));
 				}
 			} catch (final NumberFormatException e) {
-				log.error("Unable to register client context: " + contextName, e);
+				LOG.error("Unable to register client context: " + contextName, e);
 			}
 		}
 		for (final ClientMigrationUnitExtensionPoint ext : clientMigrationUnits) {
@@ -122,7 +122,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 
 				}
 			} catch (final Exception e) {
-				log.error("Unable to register client migration unit for context: " + (ext == null ? "unknown" : ext.getClientContext()), e);
+				LOG.error("Unable to register client migration unit for context: " + (ext == null ? "unknown" : ext.getClientContext()), e);
 			}
 		}
 
@@ -130,7 +130,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 			if (defaultClientContext == null) {
 				defaultClientContext = ext.getClientContext();
 			} else {
-				log.error("There is already a default client migration context set. " + ext.getClientContext() + " will not be set as the default.");
+				LOG.error("There is already a default client migration context set. " + ext.getClientContext() + " will not be set as the default.");
 			}
 		}
 	}
