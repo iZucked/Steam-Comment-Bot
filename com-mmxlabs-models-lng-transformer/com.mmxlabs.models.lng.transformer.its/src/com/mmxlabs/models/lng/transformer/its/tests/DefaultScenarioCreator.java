@@ -218,7 +218,8 @@ public class DefaultScenarioCreator {
 		final int defaultMinHeelVolume = 0;
 
 		final int defaultWarmupTime = Integer.MAX_VALUE;
-		final double defaultEquivalenceFactor = 1.0;
+		// Same as portcreator default CV
+		final double defaultEquivalenceFactor = 21;
 		final int cooldownVolume = 0;
 		final double defaultFillCapacity = 1.0;
 		final int startHeelVolume = 0;
