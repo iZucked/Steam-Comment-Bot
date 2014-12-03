@@ -87,6 +87,7 @@ public abstract class AbstractVoyageCostCalculator implements IVoyageCostCalcula
 		voyageOptions.setVessel(vessel);
 		voyageOptions.setVesselState(vesselState);
 		voyageOptions.setWarm(false);
+		voyageOptions.setCargoCVValue(cargoCV);
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
 		// Convert rate to MT equivalent per day
