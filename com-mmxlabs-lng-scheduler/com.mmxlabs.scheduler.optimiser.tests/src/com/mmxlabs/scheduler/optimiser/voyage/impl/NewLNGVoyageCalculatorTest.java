@@ -807,6 +807,8 @@ public class NewLNGVoyageCalculatorTest {
 		options.setVessel(vessel);
 		options.setVesselState(VesselState.Laden);
 
+		options.setCargoCVValue(OptimiserUnitConvertor.convertToInternalConversionFactor(22.8));
+
 		return options;
 	}
 
@@ -1143,7 +1145,7 @@ public class NewLNGVoyageCalculatorTest {
 		final long cooldownCost = calc.calculateCooldownCost(vessel.getVesselClass(), portTimesRecord, fromPortDetails, voyageDetails, toPortDetails);
 
 		Mockito.verifyZeroInteractions(cooldownCalculator);
-		
+
 		Assert.assertEquals(0, cooldownCost);
 
 	}
@@ -1175,7 +1177,7 @@ public class NewLNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
+		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
 
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(150 * HEEL_DURATION));

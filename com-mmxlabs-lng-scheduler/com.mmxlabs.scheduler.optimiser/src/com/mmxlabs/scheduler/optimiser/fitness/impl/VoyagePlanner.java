@@ -184,9 +184,10 @@ public class VoyagePlanner {
 
 		// Convert rate to MT equivalent per day
 		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(vesselState), cargoCV, vesselClass.getBaseFuelConversionFactor());
+		if (nboRateInMTPerDay > 0) {
 		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
 		options.setNBOSpeed(nboSpeed);
-		
+		}
 		// Determined by voyage plan optimiser
 		options.setUseNBOForTravel(useNBO);
 		options.setUseFBOForSupplement(false);

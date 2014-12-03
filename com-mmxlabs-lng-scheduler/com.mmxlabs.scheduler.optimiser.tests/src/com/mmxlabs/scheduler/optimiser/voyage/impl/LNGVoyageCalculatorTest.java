@@ -386,6 +386,8 @@ public class LNGVoyageCalculatorTest {
 		options.setVessel(vessel);
 		options.setVesselState(VesselState.Laden);
 
+		options.setCargoCVValue(OptimiserUnitConvertor.convertToInternalConversionFactor(22.8));
+		
 		return options;
 	}
 
@@ -1048,7 +1050,7 @@ public class LNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
+		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
 
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
