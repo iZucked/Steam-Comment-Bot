@@ -61,12 +61,12 @@ public final class Calculator {
 		return (mmbtu * HighScaleFactor) / (long) factor;
 	}
 
-	public static long convertM3ToMT(final long m3, final int factor) {
-		return (m3 * factor) / HighScaleFactor;
+	public static long convertM3ToMT(final long m3, final int cargoCV, final int factor) {
+		return factor == 0 ? 0L : (m3 * (long) cargoCV) / (long) factor;
 	}
 
-	public static long convertMTToM3(final long mt, final int factor) {
-		return (mt * HighScaleFactor) / (long) factor;
+	public static long convertMTToM3(final long mt, final int cargoCV, final int factor) {
+		return cargoCV == 0 ? 0 : (mt * (long) factor) / (long) cargoCV;
 	}
 
 	/**

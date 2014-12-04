@@ -123,7 +123,8 @@ public final class VoyagePlan implements Cloneable {
 					&& Objects.equal(fuelCosts, plan.fuelCosts)
 					&& Objects.equal(startingHeelInM3, plan.startingHeelInM3)
 					&& Objects.equal(remainingHeelInM3, plan.remainingHeelInM3)
-					&& Arrays.equals(sequence, plan.sequence)
+					&& Arrays.deepEquals(sequence, plan.sequence)
+
 					;
 			// @formatter:on
 		}

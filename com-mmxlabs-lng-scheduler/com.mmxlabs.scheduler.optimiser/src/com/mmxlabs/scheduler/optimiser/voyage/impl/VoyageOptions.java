@@ -29,7 +29,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 	private boolean charterOutIdleTime;
 
-	private long availableLNG;
+	private int cargoCV;
 
 	/**
 	 * If shouldBeCold is true: If true, a cooldown will be considered If false, enough heel will be retained to avoid warming up If shouldBeCold is false, this should be false and will be ignored
@@ -72,6 +72,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 		setShouldBeCold(options.shouldBeCold());
 		setCharterOutDailyRate(options.getCharterOutDailyRate());
 		setCharterOutIdleTime(options.isCharterOutIdleTime());
+		setCargoCVValue(options.getCargoCVValue());
 	}
 
 	public final int getAvailableTime() {
@@ -210,7 +211,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 				&& Objects.equal(vessel, vo.vessel)
 				&& Objects.equal(fromPortSlot, vo.fromPortSlot)
 				&& Objects.equal(toPortSlot, vo.toPortSlot)
-				&& Objects.equal(availableLNG, vo.availableLNG)
+				&& Objects.equal(cargoCV, vo.cargoCV)
 				&& Objects.equal(cooldown, vo.cooldown)
 				&& Objects.equal(shouldBeCold, vo.shouldBeCold)
 				&& Objects.equal(startWarm, vo.startWarm)
@@ -239,7 +240,7 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 				.add("useNBOForIdle", useNBOForIdle)
 				.add("useNBOForTravel", useNBOForTravel)
 				.add("useFBOForSupplement", useFBOForSupplement)
-				.add("availableLNG", availableLNG)
+				.add("cargoCV", cargoCV)
 				.add("cooldown", cooldown)
 				.add("shouldBeCold", shouldBeCold)
 				.add("startWarm", startWarm)
@@ -269,6 +270,15 @@ public final class VoyageOptions implements Cloneable, IOptionsSequenceElement {
 
 	public void setCharterOutDailyRate(final int charterOutDailyRate) {
 		this.charterOutDailyRate = charterOutDailyRate;
+	}
+
+	public int getCargoCVValue() {
+		return cargoCV;
+	}
+
+	public void setCargoCVValue(final int cargoCV) {
+		this.cargoCV = cargoCV;
+
 	}
 
 }

@@ -386,6 +386,8 @@ public class LNGVoyageCalculatorTest {
 		options.setVessel(vessel);
 		options.setVesselState(VesselState.Laden);
 
+		options.setCargoCVValue(OptimiserUnitConvertor.convertToInternalConversionFactor(22.8));
+		
 		return options;
 	}
 
@@ -559,6 +561,7 @@ public class LNGVoyageCalculatorTest {
 		final VoyageDetails details = new VoyageDetails();
 		final VoyageOptions options = new VoyageOptions();
 		options.setVesselState(VesselState.Laden);
+		options.setCargoCVValue(loadSlot.getCargoCVValue());
 		details.setOptions(options);
 
 		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
@@ -597,7 +600,9 @@ public class LNGVoyageCalculatorTest {
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		Mockito.when(vessel.getVesselClass()).thenReturn(vesselClass);
 		Mockito.when(vessel.getCargoCapacity()).thenReturn(Long.MAX_VALUE);
-
+		
+//		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(1.0));
+		
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
@@ -618,6 +623,7 @@ public class LNGVoyageCalculatorTest {
 
 		final VoyageDetails details = new VoyageDetails();
 		final VoyageOptions options = new VoyageOptions();
+		options.setCargoCVValue(loadSlot.getCargoCVValue());
 		options.setVesselState(VesselState.Laden);
 		details.setOptions(options);
 
@@ -757,6 +763,7 @@ public class LNGVoyageCalculatorTest {
 
 		final VoyageDetails details1 = new VoyageDetails();
 		final VoyageOptions options1 = new VoyageOptions();
+		options1.setCargoCVValue(loadSlot.getCargoCVValue());
 		options1.setVesselState(VesselState.Laden);
 		details1.setOptions(options1);
 
@@ -771,6 +778,7 @@ public class LNGVoyageCalculatorTest {
 
 		final VoyageDetails details2 = new VoyageDetails();
 		final VoyageOptions options2 = new VoyageOptions();
+		options2.setCargoCVValue(loadSlot.getCargoCVValue());
 		options2.setVesselState(VesselState.Ballast);
 		details2.setOptions(options2);
 
@@ -1042,7 +1050,7 @@ public class LNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
+		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(45.6));
 
 		// 2 days of boil off
 		vesselClass.setSafetyHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
