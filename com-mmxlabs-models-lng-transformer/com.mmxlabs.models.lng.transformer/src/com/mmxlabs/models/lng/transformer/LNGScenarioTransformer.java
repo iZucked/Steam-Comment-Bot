@@ -432,10 +432,10 @@ public class LNGScenarioTransformer {
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
 			final ICooldownCalculator cooldownCalculator;
 			// Check here if price is indexed or expression
-			if (price.isSetExpression()) {
+			if (price.isLumpsum()) {
 				cooldownCalculator = new CooldownLumpSumCalculator(dateHelper.generateFixedCostExpressionCurve(price.getExpression(), commodityIndices));
 			} else {
-				cooldownCalculator = new CooldownPriceIndexedCalculator(commodityIndexAssociation.lookup(price.getIndex()));
+				cooldownCalculator = new CooldownPriceIndexedCalculator(dateHelper.generateExpressionCurve(price.getExpression(), commodityIndices));
 			}
 			injector.injectMembers(cooldownCalculator);
 
