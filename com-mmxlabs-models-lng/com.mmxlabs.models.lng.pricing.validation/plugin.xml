@@ -90,6 +90,9 @@
                <target
                      class="PricingModel">
                </target>
+               <target
+                     class="CooldownPrice">
+               </target>
             </constraint>
              <constraint
                   class="com.mmxlabs.models.lng.pricing.validation.SensibleIndexDateConstraint"

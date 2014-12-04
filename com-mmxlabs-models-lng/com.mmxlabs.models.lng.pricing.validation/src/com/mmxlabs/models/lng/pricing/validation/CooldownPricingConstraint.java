@@ -42,6 +42,20 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 	protected String validate(IValidationContext ctx, final IExtraValidationContext extraContext, List<IStatus> failures) {
 		final EObject target = ctx.getTarget();
 
+		
+		if (target instanceof CooldownPrice) {
+			CooldownPrice c = (CooldownPrice) target;
+			if (c.getExpression() == null) {
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing a price expression."));
+				dcsd.addEObjectAndFeature(c,  PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION);
+				failures.add(dcsd);
+			} else {
+				PriceExpressionUtils.validatePriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression(), failures);			
+			}
+			
+//			
+		}
+		
 		if (target instanceof PricingModel) {
 			final PricingModel pm = (PricingModel) target;
 			final MMXRootObject rootObject = extraContext.getRootObject();
@@ -55,18 +69,10 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 					}
 
 					for (final CooldownPrice c : pm.getCooldownPrices()) {
-						
-						if (c.getExpression() == null) {
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing a price expression."));
-							dcsd.addEObjectAndFeature(c,  PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION);
-							failures.add(dcsd);
-						} else {
-							PriceExpressionUtils.validatePriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression(), failures);			
-						}
-						
 						for (final Port port : SetUtils.getObjects(c.getPorts())) {
 							pricingPerPort.get(port).add(c);
 						}
+						
 					}
 
 
