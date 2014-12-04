@@ -137,6 +137,12 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.pricing.PortsPriceMap">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortsExpressionMapComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortsExpressionMapComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.PortsExpressionMap">
+  </componentHelper>
 		
 	</extension>
  <extension

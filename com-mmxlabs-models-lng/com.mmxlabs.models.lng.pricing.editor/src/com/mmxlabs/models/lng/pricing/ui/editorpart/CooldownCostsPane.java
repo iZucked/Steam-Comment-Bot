@@ -17,8 +17,8 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.tabular.manipulators.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
-import com.mmxlabs.models.ui.tabular.manipulators.SingleReferenceManipulator;
 
 /**
  * @author hinton
@@ -39,8 +39,8 @@ public class CooldownCostsPane extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
 		super.init(path, adapterFactory, commandStack);
-		addTypicalColumn("Ports", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getPortsPriceMap_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		addTypicalColumn("Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getPortsPriceMap_Index(), getReferenceValueProviderCache(), getEditingDomain()));
+		addTypicalColumn("Ports", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getPortsExpressionMap_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+		addTypicalColumn("Expression", new BasicAttributeManipulator(PricingPackage.eINSTANCE.getPortsExpressionMap_Expression(), getEditingDomain()));
 		defaultSetTitle("Cooldown Costs");
 	}
 }
