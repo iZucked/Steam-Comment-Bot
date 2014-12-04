@@ -177,6 +177,15 @@ public interface PricingFactory extends EFactory {
 	PortsSplitPriceMap createPortsSplitPriceMap();
 
 	/**
+	 * Returns a new object of class '<em>Ports Split Expression Map</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Ports Split Expression Map</em>'.
+	 * @generated
+	 */
+	PortsSplitExpressionMap createPortsSplitExpressionMap();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

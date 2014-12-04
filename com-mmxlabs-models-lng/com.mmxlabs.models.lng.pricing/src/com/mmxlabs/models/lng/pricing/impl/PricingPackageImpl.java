@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PortsExpressionMap;
 import com.mmxlabs.models.lng.pricing.PortsPriceMap;
+import com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap;
 import com.mmxlabs.models.lng.pricing.PortsSplitPriceMap;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -170,6 +171,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass portsSplitPriceMapEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portsSplitExpressionMapEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -699,6 +707,42 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getPortsSplitExpressionMap() {
+		return portsSplitExpressionMapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPortsSplitExpressionMap_Ports() {
+		return (EReference)portsSplitExpressionMapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPortsSplitExpressionMap_Expression1() {
+		return (EAttribute)portsSplitExpressionMapEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPortsSplitExpressionMap_Expression2() {
+		return (EAttribute)portsSplitExpressionMapEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PricingFactory getPricingFactory() {
 		return (PricingFactory)getEFactoryInstance();
 	}
@@ -790,6 +834,11 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(portsSplitPriceMapEClass, PORTS_SPLIT_PRICE_MAP__PORTS);
 		createEReference(portsSplitPriceMapEClass, PORTS_SPLIT_PRICE_MAP__INDEX_H1);
 		createEReference(portsSplitPriceMapEClass, PORTS_SPLIT_PRICE_MAP__INDEX_H2);
+
+		portsSplitExpressionMapEClass = createEClass(PORTS_SPLIT_EXPRESSION_MAP);
+		createEReference(portsSplitExpressionMapEClass, PORTS_SPLIT_EXPRESSION_MAP__PORTS);
+		createEAttribute(portsSplitExpressionMapEClass, PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION1);
+		createEAttribute(portsSplitExpressionMapEClass, PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION2);
 	}
 
 	/**
@@ -862,6 +911,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		portsPriceMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portsExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portsSplitPriceMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		portsSplitExpressionMapEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -972,6 +1022,14 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPortsSplitPriceMap_Ports(), g1, null, "ports", null, 0, -1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortsSplitPriceMap_IndexH1(), this.getCommodityIndex(), null, "indexH1", null, 1, 1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortsSplitPriceMap_IndexH2(), this.getCommodityIndex(), null, "indexH2", null, 1, 1, PortsSplitPriceMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portsSplitExpressionMapEClass, PortsSplitExpressionMap.class, "PortsSplitExpressionMap", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		g1 = createEGenericType(theTypesPackage.getAPortSet());
+		g2 = createEGenericType(thePortPackage.getPort());
+		g1.getETypeArguments().add(g2);
+		initEReference(getPortsSplitExpressionMap_Ports(), g1, null, "ports", null, 0, -1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortsSplitExpressionMap_Expression1(), ecorePackage.getEString(), "expression1", null, 0, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getPortsSplitExpressionMap_Expression2(), ecorePackage.getEString(), "expression2", null, 0, 1, PortsSplitExpressionMap.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

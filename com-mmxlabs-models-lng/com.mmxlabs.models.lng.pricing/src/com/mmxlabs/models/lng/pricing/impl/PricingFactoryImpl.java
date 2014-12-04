@@ -89,6 +89,7 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.PORTS_PRICE_MAP: return createPortsPriceMap();
 			case PricingPackage.PORTS_EXPRESSION_MAP: return createPortsExpressionMap();
 			case PricingPackage.PORTS_SPLIT_PRICE_MAP: return createPortsSplitPriceMap();
+			case PricingPackage.PORTS_SPLIT_EXPRESSION_MAP: return createPortsSplitExpressionMap();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -262,6 +263,16 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public PortsSplitPriceMap createPortsSplitPriceMap() {
 		PortsSplitPriceMapImpl portsSplitPriceMap = new PortsSplitPriceMapImpl();
 		return portsSplitPriceMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortsSplitExpressionMap createPortsSplitExpressionMap() {
+		PortsSplitExpressionMapImpl portsSplitExpressionMap = new PortsSplitExpressionMapImpl();
+		return portsSplitExpressionMap;
 	}
 
 	/**
