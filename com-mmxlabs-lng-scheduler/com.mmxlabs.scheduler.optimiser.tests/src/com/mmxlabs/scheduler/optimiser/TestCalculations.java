@@ -103,8 +103,10 @@ public class TestCalculations {
 		final int minSpeed = 12000;
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
+		// 2 / 4 == 0.5 equivalence
+		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
+		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4);
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
-		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
 		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
@@ -133,7 +135,6 @@ public class TestCalculations {
 		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
-		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
 				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false);
 
@@ -167,7 +168,8 @@ public class TestCalculations {
 		final ISequence sequence = new ListSequence(sequenceList);
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(2200L);
@@ -402,7 +404,7 @@ public class TestCalculations {
 			Assert.assertEquals(12000, journeyEvent.getSpeed());
 
 			Assert.assertEquals(24 * ballast_nboRateInM3PerHour / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-			Assert.assertEquals((24L * ballast_nboRateInM3PerHour * baseFuelEquivalence) / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+			Assert.assertEquals((24L * ballast_nboRateInM3PerHour * cargoCVValue / baseFuelEquivalence) / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
 			Assert.assertEquals(24L * ballast_nboRateInM3PerHour * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 			// Assert.assertEquals(25 * 1000 * 2,
 			// journeyEvent.getFuelConsumption(FuelComponent.NBO,
@@ -506,7 +508,11 @@ public class TestCalculations {
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(400);
-		final int baseFuelUnitEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
+
+		// 2 / 4 == 0.5 equivalence
+		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
+		final int baseFuelUnitEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4.0);
+
 		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelUnitEquivalence, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
@@ -540,7 +546,6 @@ public class TestCalculations {
 		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
-		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
 				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false);
 
@@ -576,11 +581,13 @@ public class TestCalculations {
 		final ISequences sequences = new Sequences(Collections.singletonList(resource), CollectionsUtil.<IResource, ISequence> makeHashMap(resource, sequence));
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(3300L);
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(dischargeSlot)).thenReturn(0L);
+		Mockito.when(allocationAnnotation.getSlotCargoCV(Matchers.<IPortSlot> any())).thenReturn(cargoCVValue);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -712,14 +719,14 @@ public class TestCalculations {
 			Assert.assertEquals(16000, journeyEvent.getSpeed());
 
 			Assert.assertEquals(18 * laden_nboRateInM3PerHour / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.M3));
-			Assert.assertEquals((18L * laden_nboRateInM3PerHour * baseFuelUnitEquivalence) / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
+			Assert.assertEquals((18L * laden_nboRateInM3PerHour * cargoCVValue / baseFuelUnitEquivalence) / 24L, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MT));
 			Assert.assertEquals(18L * laden_nboRateInM3PerHour * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.NBO, FuelUnit.MMBTu));
 			// Assert.assertEquals(25 * 1200 * 2,
 			// journeyEvent.getFuelConsumption(FuelComponent.NBO,
 			// FuelUnit.MMBTu));
 
 			Assert.assertEquals(18 * 800 / 24L, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.M3));
-			Assert.assertEquals((18L * 800 * baseFuelUnitEquivalence) / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
+			Assert.assertEquals((18L * 800 * cargoCVValue / baseFuelUnitEquivalence) / 24L, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MT));
 			Assert.assertEquals(18L * 800 * cargoCVValue / 24L / Calculator.HighScaleFactor, journeyEvent.getFuelConsumption(FuelComponent.FBO, FuelUnit.MMBTu));
 
 			Assert.assertEquals(0, journeyEvent.getFuelConsumption(FuelComponent.IdleNBO, FuelUnit.M3));
@@ -913,9 +920,13 @@ public class TestCalculations {
 		final int minSpeed = 16000;
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
+		
+		// 2 / 4 == 0.5 equivalence
+		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
+		final int baseFuelEquivalence = OptimiserUnitConvertor.convertToInternalConversionFactor(4);
+
 		final int baseFuelUnitPrice = OptimiserUnitConvertor.convertToInternalPrice(1);
-		final int baseFuelEquivalance = OptimiserUnitConvertor.convertToInternalConversionFactor(0.5);
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalance, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.6));
@@ -947,7 +958,6 @@ public class TestCalculations {
 		final IVesselAvailability vesselAvailability1 = builder.createVesselAvailability(vessel1, new ConstantValueCurve(0), VesselInstanceType.FLEET, startRequirement, endRequirement);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
-		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
 				false, IPortSlot.NO_PRICING_DATE, PricingEventType.START_OF_LOAD, false);
 
@@ -981,7 +991,8 @@ public class TestCalculations {
 		final ISequence sequence = new ListSequence(sequenceList);
 
 		final IAllocationAnnotation allocationAnnotation = Mockito.mock(IAllocationAnnotation.class);
-		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any())).thenReturn(allocationAnnotation);
+		Mockito.when(volumeAllocator.allocate(Matchers.<IVesselAvailability> any(), Matchers.anyInt(), Matchers.<VoyagePlan> any(), Matchers.<IPortTimesRecord> any()))
+				.thenReturn(allocationAnnotation);
 		Mockito.when(allocationAnnotation.getRemainingHeelVolumeInM3()).thenReturn(0L);
 		// Load enough to cover boil-off
 		Mockito.when(allocationAnnotation.getSlotVolumeInM3(loadSlot)).thenReturn(1150L);

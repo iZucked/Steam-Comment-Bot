@@ -148,7 +148,7 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 		final ILoadOption loadSlot = (ILoadOption) slots.get(0);
 		// Assuming a single cargo CV!
-		final int cargoCVValue = loadSlot.getCargoCVValue();
+		final int defaultCargoCVValue = loadSlot.getCargoCVValue();
 
 		if (allocationRecord.allocationMode == AllocationMode.Transfer) {
 			// Transfer, just find the common max and replicate
@@ -159,8 +159,13 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 
 			}
 			for (int i = 0; i < slots.size(); ++i) {
-				annotation.setSlotVolumeInM3(slots.get(i), transferVolume);
-				annotation.setSlotCargoCV(slots.get(i), cargoCVValue);
+				final IPortSlot slot = slots.get(i);
+				annotation.setSlotVolumeInM3(slot, transferVolume);
+				if (actualsDataProvider.hasActuals(slot)) {
+					annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));
+				} else {
+					annotation.setSlotCargoCV(slot, defaultCargoCVValue);
+				}
 			}
 		} else {
 			assert allocationRecord.allocationMode == AllocationMode.Shipped;
@@ -281,7 +286,14 @@ public class UnconstrainedVolumeAllocator extends BaseVolumeAllocator {
 			annotation.getSlots().add(slot);
 			annotation.setSlotTime(slot, allocationRecord.portTimesRecord.getSlotTime(slot));
 			annotation.setSlotDuration(slot, allocationRecord.portTimesRecord.getSlotDuration(slot));
-			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), cargoCVValue));
+
+			if (actualsDataProvider.hasActuals(slot)) {
+				annotation.setSlotCargoCV(slot, actualsDataProvider.getCVValue(slot));
+			} else {
+				annotation.setSlotCargoCV(slot, defaultCargoCVValue);
+			}
+
+			annotation.setSlotVolumeInMMBTu(slot, Calculator.convertM3ToMMBTu(annotation.getSlotVolumeInM3(slot), annotation.getSlotCargoCV(slot)));
 		}
 		// Copy over the return slot time if present
 		{

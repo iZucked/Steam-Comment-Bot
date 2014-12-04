@@ -30,7 +30,8 @@ public class PortDetailsTest {
 		final CapacityViolationType cvt = CapacityViolationType.FORCED_COOLDOWN;
 		final long value = 100L;
 		final PortDetails details = new PortDetails();
-		Assert.assertEquals(0, details.getCapacityViolation(cvt));
+		// -1 is unset
+		Assert.assertEquals(-1, details.getCapacityViolation(cvt));
 		details.setCapacityViolation(cvt, value);
 		Assert.assertEquals(value, details.getCapacityViolation(cvt));
 	}

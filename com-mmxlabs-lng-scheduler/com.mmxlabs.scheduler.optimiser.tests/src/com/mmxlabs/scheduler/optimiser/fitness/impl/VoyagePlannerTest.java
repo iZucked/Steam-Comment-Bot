@@ -13,6 +13,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
@@ -40,6 +41,7 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.impl.HashMapMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.annotations.IHeelLevelAnnotation;
+import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -172,11 +174,16 @@ public final class VoyagePlannerTest {
 		final Vessel vessel = new Vessel();
 		vessel.setName("Schedule1Vessel");
 		final VesselClass vesselClass = new VesselClass();
-		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
-		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
 		vesselClass.setCargoCapacity(1000000);
 
 		vessel.setVesselClass(vesselClass);
+		
+		
+		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
+		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyInt())).thenReturn(15000);
+		
+		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
+		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
 
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
 		vesselAvailability.setVessel(vessel);
@@ -442,10 +449,16 @@ public final class VoyagePlannerTest {
 		final Vessel vessel = new Vessel();
 		vessel.setName("Schedule2Vessel");
 		final VesselClass vesselClass = new VesselClass();
-		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
-		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
 		vesselClass.setCargoCapacity(100000);
 		vessel.setVesselClass(vesselClass);
+		
+		
+		final IConsumptionRateCalculator consumptionRateCalculator = Mockito.mock(IConsumptionRateCalculator.class);
+		Mockito.when(consumptionRateCalculator.getSpeed(Matchers.anyInt())).thenReturn(15000);
+		
+		vesselClass.setConsumptionRate(VesselState.Laden, consumptionRateCalculator);
+		vesselClass.setConsumptionRate(VesselState.Ballast, consumptionRateCalculator);
+
 
 		final DefaultVesselAvailability vesselAvailability = new DefaultVesselAvailability();
 		vesselAvailability.setVessel(vessel);

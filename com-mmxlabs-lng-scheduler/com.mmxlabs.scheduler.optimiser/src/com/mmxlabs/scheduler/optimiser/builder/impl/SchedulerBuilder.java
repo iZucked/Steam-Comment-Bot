@@ -1194,7 +1194,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public void setVesselClassStateParameters(@NonNull final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
-			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int nboSpeed, final int serviceSpeed) {
+			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerDay, final int serviceSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -1211,32 +1211,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setIdleNBORate(state, idleNBORateInM3PerDay);
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerDay);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerDay);
-		vc.setMinNBOSpeed(state, nboSpeed);
 		vc.setServiceSpeed(state, serviceSpeed);
-
-	}
-
-	/**
-	 * Like the other setVesselClassStateParameters, but the NBO speed is calculated automatically.
-	 * 
-	 * @param vc
-	 * @param state
-	 * @param nboRateInM3PerDay
-	 * @param idleNBORateInM3PerDay
-	 * @param idleConsumptionRateInMTPerDay
-	 * @param consumptionCalculatorInMTPerDay
-	 */
-
-	@Override
-	public void setVesselClassStateParameters(@NonNull final IVesselClass vc, final VesselState state, final int nboRateInM3PerDay, final int idleNBORateInM3PerDay,
-			final int idleConsumptionRateInMTPerDay, final IConsumptionRateCalculator consumptionCalculatorInMTPerDay, final int serviceSpeed) {
-
-		// Convert rate to MT equivalent per day
-		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(nboRateInM3PerDay, vc.getBaseFuelConversionFactor());
-
-		final int nboSpeed = consumptionCalculatorInMTPerDay.getSpeed(nboRateInMTPerDay);
-
-		this.setVesselClassStateParameters(vc, state, nboRateInM3PerDay, idleNBORateInM3PerDay, idleConsumptionRateInMTPerDay, consumptionCalculatorInMTPerDay, nboSpeed, serviceSpeed);
 	}
 
 	/**
