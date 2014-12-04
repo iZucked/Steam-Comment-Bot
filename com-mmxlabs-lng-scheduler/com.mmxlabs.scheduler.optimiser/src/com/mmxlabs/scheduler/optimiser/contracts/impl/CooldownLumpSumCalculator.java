@@ -25,7 +25,7 @@ public class CooldownLumpSumCalculator extends AbstractCooldownCalculator {
 	 * @param time
 	 * @return lump sum cost
 	 */
-	private long getLumpSumCost(final int localTime, IPort port) {
+	private long getLumpSumCost(final int localTime, final IPort port) {
 		return calculateUnitPriceAtUTCTime(localTime, port);
 	}
 
