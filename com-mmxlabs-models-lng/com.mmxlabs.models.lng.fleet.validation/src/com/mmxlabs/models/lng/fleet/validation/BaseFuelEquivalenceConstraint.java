@@ -21,8 +21,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * 
  */
 public class BaseFuelEquivalenceConstraint extends AbstractModelConstraint {
-	private double min = 0.1;
-	private double max = 2;
+	private final double min = 10.;
+	private final double max = 70.;
 	
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
