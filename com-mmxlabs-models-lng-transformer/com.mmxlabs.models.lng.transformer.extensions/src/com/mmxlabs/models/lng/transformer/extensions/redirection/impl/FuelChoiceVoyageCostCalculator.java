@@ -123,9 +123,10 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 		// Calculate new voyage requirements
 		{
-			final VoyageOptions ladenOptions = createVoyageOptions(VesselState.Laden, vessel, route, ladenDistance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot);
+			final VoyageOptions ladenOptions = createVoyageOptions(VesselState.Laden, vessel, route, ladenDistance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
+					cargoCVValue);
 			final VoyageOptions ballastOptions = createVoyageOptions(VesselState.Ballast, vessel, route, ballastDistance, notionalReturnTime - dischargeDuration - dischargeTime,
-					notionalDischargeSlot, notionalReturnSlot);
+					notionalDischargeSlot, notionalReturnSlot, cargoCVValue);
 
 			switch (fuelChoice) {
 			case Base:

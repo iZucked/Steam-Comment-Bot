@@ -69,7 +69,6 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		final PortSlot notionalReturnSlot = new EndPortSlot("notional-end", loadPort, new TimeWindow(notionalReturnTime, notionalReturnTime), true, vessel.getVesselClass().getSafetyHeel());
 
-		
 		final PortTimesRecord portTimesRecord = new PortTimesRecord();
 		portTimesRecord.setSlotTime(notionalLoadSlot, loadTime);
 		portTimesRecord.setSlotTime(notionalDischargeSlot, dischargeTime);
@@ -80,10 +79,11 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot);
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
+					cargoCVValue);
 
 			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, notionalReturnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
-					notionalReturnSlot);
+					notionalReturnSlot, cargoCVValue);
 
 			final PortDetails loadDetails = new PortDetails();
 			loadDetails.setOptions(new PortOptions());
@@ -147,10 +147,11 @@ public class FBOOnlyVoyageCostCalculator extends AbstractVoyageCostCalculator {
 
 		// Calculate new voyage requirements
 		{
-			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot);
+			final VoyageDetails ladenDetails = calculateVoyageDetails(VesselState.Laden, vessel, route, distance, dischargeTime - loadDuration - loadTime, notionalLoadSlot, notionalDischargeSlot,
+					cargoCVValue);
 
 			final VoyageDetails ballastDetails = calculateVoyageDetails(VesselState.Ballast, vessel, route, distance, returnTime - dischargeDuration - dischargeTime, notionalDischargeSlot,
-					notionalReturnSlot);
+					notionalReturnSlot, cargoCVValue);
 
 			final PortDetails loadDetails = new PortDetails();
 			loadDetails.setOptions(new PortOptions());
