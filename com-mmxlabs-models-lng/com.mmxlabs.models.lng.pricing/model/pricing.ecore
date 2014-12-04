@@ -121,9 +121,9 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CooldownPrice" eSuperTypes="#//PortsPriceMap">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
-        unsettable="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CooldownPrice" eSuperTypes="#//PortsExpressionMap">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1" eType="#//CommodityIndex"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lumpsum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommodityIndex">
     <eGenericSuperTypes eClassifier="#//NamedIndexContainer">

@@ -3,7 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
+import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -16,41 +18,41 @@ import org.eclipse.emf.common.notify.Notification;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#getExpression <em>Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#isLumpsum <em>Lumpsum</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPrice {
+public class CooldownPriceImpl extends PortsExpressionMapImpl implements CooldownPrice {
 	/**
-	 * The default value of the '{@link #getExpression() <em>Expression</em>}' attribute.
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getExpression()
+	 * @see #getIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String EXPRESSION_EDEFAULT = null;
+	protected CommodityIndex index;
 	/**
-	 * The cached value of the '{@link #getExpression() <em>Expression</em>}' attribute.
+	 * The default value of the '{@link #isLumpsum() <em>Lumpsum</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getExpression()
+	 * @see #isLumpsum()
 	 * @generated
 	 * @ordered
 	 */
-	protected String expression = EXPRESSION_EDEFAULT;
-
+	protected static final boolean LUMPSUM_EDEFAULT = false;
 	/**
-	 * This is true if the Expression attribute has been set.
+	 * The cached value of the '{@link #isLumpsum() <em>Lumpsum</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @see #isLumpsum()
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean expressionESet;
-
+	protected boolean lumpsum = LUMPSUM_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -75,8 +77,16 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String getExpression() {
-		return expression;
+	public CommodityIndex getIndex() {
+		if (index != null && index.eIsProxy()) {
+			InternalEObject oldIndex = (InternalEObject)index;
+			index = (CommodityIndex)eResolveProxy(oldIndex);
+			if (index != oldIndex) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
+			}
+		}
+		return index;
 	}
 
 	/**
@@ -84,13 +94,20 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setExpression(String newExpression) {
-		String oldExpression = expression;
-		expression = newExpression;
-		boolean oldExpressionESet = expressionESet;
-		expressionESet = true;
+	public CommodityIndex basicGetIndex() {
+		return index;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIndex(CommodityIndex newIndex) {
+		CommodityIndex oldIndex = index;
+		index = newIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COOLDOWN_PRICE__EXPRESSION, oldExpression, expression, !oldExpressionESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
 	}
 
 	/**
@@ -98,22 +115,20 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetExpression() {
-		String oldExpression = expression;
-		boolean oldExpressionESet = expressionESet;
-		expression = EXPRESSION_EDEFAULT;
-		expressionESet = false;
+	public boolean isLumpsum() {
+		return lumpsum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLumpsum(boolean newLumpsum) {
+		boolean oldLumpsum = lumpsum;
+		lumpsum = newLumpsum;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, PricingPackage.COOLDOWN_PRICE__EXPRESSION, oldExpression, EXPRESSION_EDEFAULT, oldExpressionESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetExpression() {
-		return expressionESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COOLDOWN_PRICE__LUMPSUM, oldLumpsum, lumpsum));
 	}
 
 	/**
@@ -124,8 +139,11 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__EXPRESSION:
-				return getExpression();
+			case PricingPackage.COOLDOWN_PRICE__INDEX:
+				if (resolve) return getIndex();
+				return basicGetIndex();
+			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
+				return isLumpsum();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -138,8 +156,11 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__EXPRESSION:
-				setExpression((String)newValue);
+			case PricingPackage.COOLDOWN_PRICE__INDEX:
+				setIndex((CommodityIndex)newValue);
+				return;
+			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
+				setLumpsum((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -153,8 +174,11 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__EXPRESSION:
-				unsetExpression();
+			case PricingPackage.COOLDOWN_PRICE__INDEX:
+				setIndex((CommodityIndex)null);
+				return;
+			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
+				setLumpsum(LUMPSUM_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -168,8 +192,10 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__EXPRESSION:
-				return isSetExpression();
+			case PricingPackage.COOLDOWN_PRICE__INDEX:
+				return index != null;
+			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
+				return lumpsum != LUMPSUM_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -184,8 +210,8 @@ public class CooldownPriceImpl extends PortsPriceMapImpl implements CooldownPric
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (expression: ");
-		if (expressionESet) result.append(expression); else result.append("<unset>");
+		result.append(" (lumpsum: ");
+		result.append(lumpsum);
 		result.append(')');
 		return result.toString();
 	}

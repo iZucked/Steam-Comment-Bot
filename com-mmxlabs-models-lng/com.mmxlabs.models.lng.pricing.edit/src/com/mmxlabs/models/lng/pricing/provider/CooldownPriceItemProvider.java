@@ -29,7 +29,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class CooldownPriceItemProvider
-	extends PortsPriceMapItemProvider
+	extends PortsExpressionMapItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -57,29 +57,52 @@ public class CooldownPriceItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addExpressionPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
+			addLumpsumPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Expression feature.
+	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addExpressionPropertyDescriptor(Object object) {
+	protected void addIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CooldownPrice_expression_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CooldownPrice_expression_feature", "_UI_CooldownPrice_type"),
-				 PricingPackage.Literals.COOLDOWN_PRICE__EXPRESSION,
+				 getString("_UI_CooldownPrice_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CooldownPrice_index_feature", "_UI_CooldownPrice_type"),
+				 PricingPackage.Literals.COOLDOWN_PRICE__INDEX,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Lumpsum feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLumpsumPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CooldownPrice_lumpsum_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CooldownPrice_lumpsum_feature", "_UI_CooldownPrice_type"),
+				 PricingPackage.Literals.COOLDOWN_PRICE__LUMPSUM,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -121,7 +144,7 @@ public class CooldownPriceItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(CooldownPrice.class)) {
-			case PricingPackage.COOLDOWN_PRICE__EXPRESSION:
+			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

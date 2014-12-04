@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
+import com.mmxlabs.models.lng.pricing.validation.utils.PriceExpressionUtils;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -55,12 +56,13 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 
 					for (final CooldownPrice c : pm.getCooldownPrices()) {
 						
-						if (c.getIndex() == null) {
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing a price index."));
-							dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getPortsPriceMap_Index());
+						if (c.getExpression() == null) {
+							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cooldown definition is missing a price expression."));
+							dcsd.addEObjectAndFeature(c,  PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION);
 							failures.add(dcsd);
+						} else {
+							PriceExpressionUtils.validatePriceExpression(ctx, c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__EXPRESSION, c.getExpression(), failures);			
 						}
-						
 						
 						for (final Port port : SetUtils.getObjects(c.getPorts())) {
 							pricingPerPort.get(port).add(c);
@@ -78,7 +80,7 @@ public class CooldownPricingConstraint extends AbstractModelMultiConstraint {
 							dcsd.addEObjectAndFeature(port, null);
 							if (count > 0) {
 								for (final CooldownPrice c : entry.getValue()) {
-									dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getPortsPriceMap_Ports());
+									dcsd.addEObjectAndFeature(c, PricingPackage.Literals.PORTS_EXPRESSION_MAP__PORTS);
 								}
 							}
 							failures.add(dcsd);

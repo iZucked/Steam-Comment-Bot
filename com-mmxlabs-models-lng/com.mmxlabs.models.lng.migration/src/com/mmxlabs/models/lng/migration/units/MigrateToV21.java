@@ -62,6 +62,45 @@ public class MigrateToV21 extends AbstractMigrationUnit {
 
 		final MetamodelLoader modelLoader = getDestinationMetamodelLoader(null);
 		modifyEquivalenceFactor(modelLoader, model);
+		migrateCooldownCosts(modelLoader, model);
+	}
+
+	private void migrateCooldownCosts(final MetamodelLoader modelLoader, final EObject model) {
+		final EPackage package_MMXcore = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		final EPackage package_ScenarioModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EPackage package_PricingModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
+
+		final EClass class_NamedObject = MetamodelUtils.getEClass(package_MMXcore, "NamedObject");
+		final EAttribute attribute_NamedObject_name = MetamodelUtils.getAttribute(class_NamedObject, "name");
+
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EClass class_PricingModel = MetamodelUtils.getEClass(package_PricingModel, "PricingModel");
+
+		final EReference reference_LNGScenarioModel_pricingModel = MetamodelUtils.getReference(class_LNGScenarioModel, "pricingModel");
+
+		final EClass class_CooldownPrice = MetamodelUtils.getEClass(package_PricingModel, "CooldownPrice");
+		final EClass class_PortsExpressionMap = MetamodelUtils.getEClass(package_PricingModel, "PortsExpressionMap");
+		// final EClass class_CooldownPrice = MetamodelUtils.getEClass(package_PricingModel, "CooldownPrice");
+
+		final EReference reference_PricingModel_cooldownPrices = MetamodelUtils.getReference(class_PricingModel, "cooldownPrices");
+
+		final EReference reference_CooldownPrice_index = MetamodelUtils.getReference(class_CooldownPrice, "index");
+		final EAttribute attribute_CooldownPrice_expression = MetamodelUtils.getAttribute(class_PortsExpressionMap, "expression");
+
+		final EObject pricingModel = (EObject) model.eGet(reference_LNGScenarioModel_pricingModel);
+		if (pricingModel == null) {
+			return;
+		}
+
+		final EList<EObject> cooldownPrices = MetamodelUtils.getValueAsTypedList(pricingModel, reference_PricingModel_cooldownPrices);
+
+		if (cooldownPrices != null) {
+			for (final EObject cooldownPrice : cooldownPrices) {
+				final EObject index = (EObject) cooldownPrice.eGet(reference_CooldownPrice_index);
+				cooldownPrice.eSet(attribute_CooldownPrice_expression, index.eGet(attribute_NamedObject_name));
+				cooldownPrice.eUnset(reference_CooldownPrice_index);
+			}
+		}
 
 	}
 
@@ -73,11 +112,11 @@ public class MigrateToV21 extends AbstractMigrationUnit {
 		final EClass class_FleetModel = MetamodelUtils.getEClass(package_FleetModel, "FleetModel");
 
 		final EReference reference_LNGScenarioModel_fleetModel = MetamodelUtils.getReference(class_LNGScenarioModel, "fleetModel");
-		
+
 		final EClass class_BaseFuel = MetamodelUtils.getEClass(package_FleetModel, "BaseFuel");
 
 		final EReference reference_FleetModel_baseFuels = MetamodelUtils.getReference(class_FleetModel, "baseFuels");
-		
+
 		final EAttribute attribute_BaseFuel_equivalenceFactor = MetamodelUtils.getAttribute(class_BaseFuel, "equivalenceFactor");
 
 		final EObject fleetModel = (EObject) model.eGet(reference_LNGScenarioModel_fleetModel);
@@ -89,15 +128,15 @@ public class MigrateToV21 extends AbstractMigrationUnit {
 
 		if (baseFuels != null) {
 			for (final EObject baseFuel : baseFuels) {
-				double currentEquiv = (Double) baseFuel.eGet(attribute_BaseFuel_equivalenceFactor);
+				final double currentEquiv = (Double) baseFuel.eGet(attribute_BaseFuel_equivalenceFactor);
 				baseFuel.eSet(attribute_BaseFuel_equivalenceFactor, getDefaultEquivalence(currentEquiv));
 			}
 		}
 
 	}
 
-	private double getDefaultEquivalence(double equiv) {
-		return 22.8/equiv; 
+	private double getDefaultEquivalence(final double equiv) {
+		return 22.8 / equiv;
 	}
-	
+
 }

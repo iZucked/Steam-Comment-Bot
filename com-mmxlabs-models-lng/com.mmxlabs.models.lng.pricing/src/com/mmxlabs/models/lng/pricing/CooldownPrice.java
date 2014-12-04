@@ -12,7 +12,8 @@ package com.mmxlabs.models.lng.pricing;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getExpression <em>Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getIndex <em>Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.CooldownPrice#isLumpsum <em>Lumpsum</em>}</li>
  * </ul>
  * </p>
  *
@@ -20,60 +21,59 @@ package com.mmxlabs.models.lng.pricing;
  * @model
  * @generated
  */
-public interface CooldownPrice extends PortsPriceMap {
+public interface CooldownPrice extends PortsExpressionMap {
 
 	/**
-	 * Returns the value of the '<em><b>Expression</b></em>' attribute.
+	 * Returns the value of the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Expression</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Index</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Expression</em>' attribute.
-	 * @see #isSetExpression()
-	 * @see #unsetExpression()
-	 * @see #setExpression(String)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCooldownPrice_Expression()
-	 * @model unsettable="true"
+	 * @return the value of the '<em>Index</em>' reference.
+	 * @see #setIndex(CommodityIndex)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCooldownPrice_Index()
+	 * @model required="true"
 	 * @generated
 	 */
-	String getExpression();
+	CommodityIndex getIndex();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getExpression <em>Expression</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getIndex <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Expression</em>' attribute.
-	 * @see #isSetExpression()
-	 * @see #unsetExpression()
-	 * @see #getExpression()
+	 * @param value the new value of the '<em>Index</em>' reference.
+	 * @see #getIndex()
 	 * @generated
 	 */
-	void setExpression(String value);
+	void setIndex(CommodityIndex value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getExpression <em>Expression</em>}' attribute.
+	 * Returns the value of the '<em><b>Lumpsum</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Lumpsum</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
 	 * <!-- end-user-doc -->
-	 * @see #isSetExpression()
-	 * @see #getExpression()
-	 * @see #setExpression(String)
+	 * @return the value of the '<em>Lumpsum</em>' attribute.
+	 * @see #setLumpsum(boolean)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCooldownPrice_Lumpsum()
+	 * @model
 	 * @generated
 	 */
-	void unsetExpression();
+	boolean isLumpsum();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getExpression <em>Expression</em>}' attribute is set.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#isLumpsum <em>Lumpsum</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Expression</em>' attribute is set.
-	 * @see #unsetExpression()
-	 * @see #getExpression()
-	 * @see #setExpression(String)
+	 * @param value the new value of the '<em>Lumpsum</em>' attribute.
+	 * @see #isLumpsum()
 	 * @generated
 	 */
-	boolean isSetExpression();
+	void setLumpsum(boolean value);
 
 } // end of  CooldownPrice
 

@@ -157,7 +157,7 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.COOLDOWN_PRICE: {
 				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
 				T result = caseCooldownPrice(cooldownPrice);
-				if (result == null) result = casePortsPriceMap(cooldownPrice);
+				if (result == null) result = casePortsExpressionMap(cooldownPrice);
 				if (result == null) result = caseMMXObject(cooldownPrice);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
