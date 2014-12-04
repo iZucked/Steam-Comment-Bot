@@ -179,7 +179,7 @@ public class SeriesParser extends ExpressionParser<ISeries> {
 
 			@Override
 			public Number evaluate(int point) {
-				return values[SeriesUtil.floor(points, point)];
+				return values.length == 0 ? 0 :  values[SeriesUtil.floor(points, point)];
 			}
 		});
 	}
