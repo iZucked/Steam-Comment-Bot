@@ -207,4 +207,16 @@ public class DateAndCurveHelper {
 	public static int getHourRoundingRemainder(Date date) {
 		return (int) (date.getTime() % Timer.ONE_HOUR);
 	}
+	
+	public static Date createDate(int year, int month, int dayOfMonth, int hourOfDay, String newTimeZone) {
+		final Calendar newCalendar = Calendar.getInstance(TimeZone.getTimeZone(newTimeZone));
+		newCalendar.set(Calendar.YEAR, year);
+		newCalendar.set(Calendar.MONTH, month);
+		newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		newCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		newCalendar.set(Calendar.MINUTE, 0);
+		newCalendar.set(Calendar.SECOND, 0);
+		newCalendar.set(Calendar.MILLISECOND, 0);
+		return newCalendar.getTime();
+	}
 }
