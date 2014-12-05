@@ -4,17 +4,14 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Map;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -26,45 +23,17 @@ import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.DryDockEvent;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.Cooldown;
-import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
-import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleModel;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SequenceType;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -252,6 +221,8 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 		private List<CalendarColumn> calendarColumns;
 		private List<GridViewerColumn> nebulaColumns;
 
+		private Map<Date, Integer> rowCache = new HashMap<>();
+
 		public Event[] getLogicalCellContents(final Date date, final CalendarColumn column) {
 			return column.getProvider().getEvents(date);
 		}
@@ -265,6 +236,11 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 		}
 
 		public int getNumRowsRequired(final Date date) {
+
+			if (rowCache.containsKey(date)) {
+				return rowCache.get(date);
+			}
+
 			int result = 1;
 			for (final CalendarColumn column : calendarColumns) {
 				final int num = getNumRowsRequired(date, column);
@@ -272,6 +248,7 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 					result = num;
 				}
 			}
+			rowCache.put(date, result);
 			return result;
 		}
 
@@ -282,25 +259,30 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 
 		@Override
 		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+			final ScheduleSequenceData data;
+			root = null;
+			rowCache.clear();
 			if (newInput != null) {
 				// svso.getCollectedElements in this case returns a singleton list containing the root object
 				final IScenarioViewerSynchronizerOutput svso = (IScenarioViewerSynchronizerOutput) newInput;
 				for (final Object element : svso.getCollectedElements()) {
 					root = (LNGScenarioModel) element;
 				}
-				// extract the relevant data from the root object
-				final ScheduleSequenceData data = new ScheduleSequenceData(root);
-				setData(data);
-				// setup table columns and rows
-				setCols(data);
-				setRows(data);
 
+				// extract the relevant data from the root object
+				data = new ScheduleSequenceData(root);
+			} else {
+				data = new ScheduleSequenceData(null);
 			}
+
+			setData(data);
+			// setup table columns and rows
+			setCols(data);
+			setRows(data);
 		}
 
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			// TODO Auto-generated method stub
 			return nebulaElements;
 		}
 
@@ -309,15 +291,14 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 			for (final GridColumn column : gridViewer.getGrid().getColumns()) {
 				column.dispose();
 			}
-
 			if (root != null) {
 				calendarColumns = createCalendarCols(data);
+			} else {
+				if (calendarColumns != null) {
+					calendarColumns.clear();
+				}
 			}
-
 			createNebulaColumns();
-
-			gridViewer.refresh();
-
 		}
 
 		@SuppressWarnings("unchecked")

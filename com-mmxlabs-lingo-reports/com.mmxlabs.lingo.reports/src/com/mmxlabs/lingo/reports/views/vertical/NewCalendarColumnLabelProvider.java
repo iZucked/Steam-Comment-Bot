@@ -2,6 +2,7 @@ package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridColumnLabelProvider;
@@ -18,6 +19,8 @@ public class NewCalendarColumnLabelProvider extends GridColumnLabelProvider {
 	protected ReportNebulaGridManager manager;
 	protected DateFormat df;
 
+	protected HashMap<Date, Event[]> cache = new HashMap<>();
+
 	public NewCalendarColumnLabelProvider(final DateFormat df, final EventProvider provider, final EventLabelProvider labeller, final ReportNebulaGridManager manager) {
 		this.df = df;
 		this.provider = provider;
@@ -28,7 +31,13 @@ public class NewCalendarColumnLabelProvider extends GridColumnLabelProvider {
 	public Event getData(final Pair<Date, Integer> key) {
 		final Date date = key.getFirst();
 		final Integer index = key.getSecond();
-		final Event[] result = provider.getEvents(date);
+		final Event[] result;
+		if (cache.containsKey(date)) {
+			result = (Event[]) cache.get(date);
+		} else {
+			result = provider.getEvents(date);
+			cache.put(date, result);
+		}
 		if (result == null || result.length <= index) {
 			return null;
 		}
