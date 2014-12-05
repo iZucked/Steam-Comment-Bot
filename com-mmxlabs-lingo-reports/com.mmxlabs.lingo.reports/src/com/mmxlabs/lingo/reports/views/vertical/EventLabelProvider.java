@@ -34,6 +34,6 @@ public class EventLabelProvider {
 	}
 
 	protected Color getForeground(final Date date, final Event event) {
-		return null;
+		return verticalReportVisualiser.getEventForegroundColor(date, new Event[] { event });
 	}
 }
