@@ -81,8 +81,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	protected GridTableViewer gridViewer;
 	private ScenarioViewerSynchronizer jobManagerListener;
-	// protected SimpleDateFormat sdf = new SimpleDateFormat("dd/MMM/yy");
-	/** format for the "date" column */
 	protected LNGScenarioModel root = null;
 	protected Date[] dates = null;
 
@@ -107,7 +105,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		gridViewer.getGrid().setHeaderVisible(true);
 		gridViewer.getGrid().setLinesVisible(true);
-		// gridViewer.getGrid().setAutoHeight(true);
 
 		gridViewer.getGrid().setRowHeaderVisible(true);
 
