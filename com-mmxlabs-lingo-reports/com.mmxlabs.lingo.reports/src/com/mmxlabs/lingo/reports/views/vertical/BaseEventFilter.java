@@ -1,6 +1,6 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.util.Date;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 
@@ -17,10 +17,10 @@ public abstract class BaseEventFilter implements EventFilter {
 		this.filter = filter;
 	}
 
-	protected abstract boolean isEventDirectlyFiltered(Date date, Event event);
+	protected abstract boolean isEventDirectlyFiltered(LocalDate date, Event event);
 
 	@Override
-	public boolean isEventFiltered(final Date date, final Event event) {
+	public boolean isEventFiltered(final LocalDate date, final Event event) {
 		if (filter != null) {
 			// if the previous filter filtered stuff out
 			if (filter.isEventFiltered(date, event) == true) {

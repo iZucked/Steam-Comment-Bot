@@ -1,7 +1,8 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.util.Date;
 import java.util.List;
+
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 
@@ -27,7 +28,7 @@ public abstract  class FieldEventFilter<T> extends BaseEventFilter {
 	}
 
 	@Override
-	public boolean isEventDirectlyFiltered(final Date date, final Event event) {
+	public boolean isEventDirectlyFiltered(final LocalDate date, final Event event) {
 		return (permittedValues.contains(getEventField(event)) == false);
 	}
 

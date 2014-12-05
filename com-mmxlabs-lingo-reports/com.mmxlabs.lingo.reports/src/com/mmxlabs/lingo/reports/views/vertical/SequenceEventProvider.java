@@ -1,7 +1,7 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.ArrayList;
-import java.util.Date;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -21,23 +21,25 @@ import com.mmxlabs.models.lng.schedule.Sequence;
  */
 public class SequenceEventProvider extends EventProvider {
 	final protected Sequence[] data;
+	private boolean asUTCEquivalent;
 
-	public SequenceEventProvider(final Sequence[] data, final EventFilter filter) {
+	public SequenceEventProvider(final Sequence[] data, final EventFilter filter, boolean asUTCEquivalent) {
 		super(filter);
 		this.data = data;
+		this.asUTCEquivalent = asUTCEquivalent;
 	}
 
-	public SequenceEventProvider(final Sequence seq, final EventFilter filter) {
-		this(new Sequence[] { seq }, filter);
+	public SequenceEventProvider(final Sequence seq, final EventFilter filter, boolean asUTCEquivalent) {
+		this(new Sequence[] { seq }, filter, asUTCEquivalent);
 	}
 
 	@Override
-	public Event[] getUnfilteredEvents(final Date date) {
+	public Event[] getUnfilteredEvents(final LocalDate date) {
 		final ArrayList<Event> result = new ArrayList<>();
 
 		for (final Sequence seq : data) {
 			if (seq != null) {
-				final Event[] events = VerticalReportUtils.getEvents(seq, date);
+				final Event[] events = VerticalReportUtils.getEvents(seq, date, asUTCEquivalent);
 				for (final Event event : events) {
 					result.add(event);
 				}

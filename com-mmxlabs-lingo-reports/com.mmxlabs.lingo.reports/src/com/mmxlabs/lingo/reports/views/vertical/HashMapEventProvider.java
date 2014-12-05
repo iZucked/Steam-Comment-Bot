@@ -1,10 +1,11 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 
@@ -15,12 +16,12 @@ import com.mmxlabs.models.lng.schedule.Event;
  * 
  */
 public class HashMapEventProvider extends EventProvider {
-	protected Map<Date, List<Event>> events = new HashMap<>();
+	protected Map<LocalDate, List<Event>> events = new HashMap<>();
 	protected final Event[] noEvents = new Event[0];
 
-	public HashMapEventProvider(final Date start, final Date end, final EventProvider wrapped) {
+	public HashMapEventProvider(final LocalDate start, final LocalDate end, final EventProvider wrapped) {
 		this(null);
-		for (final Date day : VerticalReportUtils.getUTCDaysBetween(start, end)) {
+		for (final LocalDate day : VerticalReportUtils.getUTCDaysBetween(start, end)) {
 			for (final Event event : wrapped.getEvents(day)) {
 				addEvent(day, event);
 			}
@@ -31,16 +32,14 @@ public class HashMapEventProvider extends EventProvider {
 		super(filter);
 	}
 
-	public void addEvent(final Date date, final Event event) {
+	public void addEvent(final LocalDate date, final Event event) {
 		final List<Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<Event>();
 		list.add(event);
-
-		// we actually want the events to be keyed on 00:00 GMT of the same day
-		this.events.put(VerticalReportUtils.getUTCDayFor(date), list);
+		this.events.put(date, list);
 	}
 
 	@Override
-	protected Event[] getUnfilteredEvents(final Date date) {
+	protected Event[] getUnfilteredEvents(final LocalDate date) {
 		if (events.containsKey(date)) {
 			return events.get(date).toArray(noEvents);
 		}

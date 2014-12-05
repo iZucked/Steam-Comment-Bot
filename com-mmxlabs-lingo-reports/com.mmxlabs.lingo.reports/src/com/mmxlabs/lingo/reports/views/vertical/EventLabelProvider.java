@@ -1,9 +1,8 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.util.Date;
-
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 
@@ -21,19 +20,19 @@ public class EventLabelProvider {
 		this.verticalReportVisualiser = verticalReportVisualiser;
 	}
 
-	protected String getText(final Date date, final Event event) {
+	protected String getText(final LocalDate date, final Event event) {
 		return verticalReportVisualiser.getEventText(date, event);
 	}
 
-	protected Font getFont(final Date date, final Event event) {
+	protected Font getFont(final LocalDate date, final Event event) {
 		return verticalReportVisualiser.getEventFont(date, event);
 	}
 
-	protected Color getBackground(final Date date, final Event event) {
+	protected Color getBackground(final LocalDate date, final Event event) {
 		return verticalReportVisualiser.getEventBackgroundColor(date, event);
 	}
 
-	protected Color getForeground(final Date date, final Event event) {
+	protected Color getForeground(final LocalDate date, final Event event) {
 		return verticalReportVisualiser.getEventForegroundColor(date, event);
 	}
 }

@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.joda.time.LocalDate;
+
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -22,24 +25,25 @@ public final class VerticalReportUtils {
 	 * @param visit
 	 * @return
 	 */
-	public static boolean isDayOutsideActualVisit(final Date day, final SlotVisit visit) {
-		final Date nextDay = new Date(day.getTime() + 1000 * 24 * 3600);
+	public static boolean isDayOutsideActualVisit(final LocalDate day, final SlotVisit visit, boolean asUTCEquivalent) {
+		final LocalDate nextDay = day.plusDays(1);
 
-		final Slot slot = ((SlotVisit) visit).getSlotAllocation().getSlot();
+		LocalDate eventStart = VerticalReportUtils.getLocalDateFor(visit.getStart(), TimeZone.getTimeZone(visit.getTimeZone(SchedulePackage.Literals.EVENT__START)), asUTCEquivalent);
+		LocalDate eventEnd = VerticalReportUtils.getLocalDateFor(visit.getEnd(), TimeZone.getTimeZone(visit.getTimeZone(SchedulePackage.Literals.EVENT__END)), asUTCEquivalent);
 
-		return (nextDay.before(visit.getStart()) || (visit.getEnd().after(day) == false));
+		return (nextDay.isBefore(eventStart) || (eventEnd.isAfter(day) == false));
 	}
 
 	public static boolean isEventLate(final Event event) {
 		if (event instanceof SlotVisit) {
-			SlotVisit slotVisit = (SlotVisit) event;
-			Slot slot = slotVisit.getSlotAllocation().getSlot();
+			final SlotVisit slotVisit = (SlotVisit) event;
+			final Slot slot = slotVisit.getSlotAllocation().getSlot();
 			if (slotVisit.getStart().after(slot.getWindowEndWithSlotOrPortTime())) {
 				return true;
 			}
 		} else if (event instanceof VesselEventVisit) {
-			VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-			VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+			final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+			final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 			if (vesselEventVisit.getStart().after(vesselEvent.getStartBy())) {
 				return true;
 			}
@@ -54,25 +58,29 @@ public final class VerticalReportUtils {
 	 * @param date
 	 * @return
 	 */
-	public static Event[] getEvents(final Sequence seq, final Date date) {
-		return getEvents(seq, date, new Date(date.getTime() + 1000 * 24 * 3600));
+	public static Event[] getEvents(final Sequence seq, final LocalDate date, boolean asUTCEquivalent) {
+		return getEvents(seq, date, date.plusDays(1), asUTCEquivalent);
 	}
 
 	/**
 	 * Returns the events, if any, occurring between the two dates specified.
 	 */
-	public static Event[] getEvents(final Sequence seq, final Date start, final Date end) {
+	public static Event[] getEvents(final Sequence seq, final LocalDate start, final LocalDate end, boolean asUTCEquivalent) {
 		final ArrayList<Event> result = new ArrayList<>();
 		if (seq != null && start != null && end != null) {
 			for (final Event event : seq.getEvents()) {
+
+				LocalDate eventStart = VerticalReportUtils.getLocalDateFor(event.getStart(), TimeZone.getTimeZone(event.getTimeZone(SchedulePackage.Literals.EVENT__START)), asUTCEquivalent);
+				LocalDate eventEnd = VerticalReportUtils.getLocalDateFor(event.getEnd(), TimeZone.getTimeZone(event.getTimeZone(SchedulePackage.Literals.EVENT__END)), asUTCEquivalent);
+
 				// when we get to an event after the search window, break the loop
 				// NO: events are not guaranteed to be sorted by date :(
-				if (event.getStart().after(end)) {
+				if (eventStart.isAfter(end)) {
 					// break;
 				}
 				// otherwise, as long as the event is in the search window, add it to the results
 				// if the event ends at midnight, we do *not* count it towards this day
-				else if (start.before(event.getEnd())) {
+				else if (start.isBefore(eventEnd)) {
 					result.add(event);
 				}
 			}
@@ -87,17 +95,21 @@ public final class VerticalReportUtils {
 	 * @param end
 	 * @return
 	 */
-	public static List<Date> getUTCDaysBetween(final Date start, final Date end) {
-		final ArrayList<Date> result = new ArrayList<Date>();
+	public static List<LocalDate> getUTCDaysBetween(final LocalDate start, final LocalDate end) {
+		final ArrayList<LocalDate> result = new ArrayList<>();
 		if (start != null && end != null) {
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
-			c.setTime(start);
-			c.set(Calendar.HOUR_OF_DAY, 0);
-			c.set(Calendar.MINUTE, 0);
-			c.set(Calendar.SECOND, 0);
-			while (!c.getTime().after(end)) {
-				result.add(c.getTime());
-				c.add(Calendar.DAY_OF_MONTH, 1);
+			LocalDate current = start;
+			// final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
+			// c.setTime(start);
+			// c.set(Calendar.HOUR_OF_DAY, 0);
+			// c.set(Calendar.MINUTE, 0);
+			// c.set(Calendar.SECOND, 0);
+			// c.set(Calendar.MILLISECOND, 0);
+			while (!current.isAfter(end)) {
+				result.add(current);
+				// result.add(c.getTime());
+				// c.add(Calendar.DAY_OF_MONTH, 1);
+				current = current.plusDays(1);
 			}
 
 		}
@@ -105,13 +117,32 @@ public final class VerticalReportUtils {
 		return result;
 	}
 
-	public static Date getUTCDayFor(final Date date) {
-		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
-		c.setTime(date);
-		c.set(Calendar.HOUR_OF_DAY, 0);
-		c.set(Calendar.MINUTE, 0);
-		c.set(Calendar.SECOND, 0);
-		return c.getTime();
+	// public static LocalDate getUTCDayFor(final Date date) {
+	// final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
+	// c.setTime(date);
+	// c.set(Calendar.HOUR_OF_DAY, 0);
+	// c.set(Calendar.MINUTE, 0);
+	// c.set(Calendar.SECOND, 0);
+	// c.set(Calendar.MILLISECOND, 0);
+	// // return c.getTime();
+	// return new LocalDate(c.get(Calendar.YEAR), 1 + c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+	// }
+
+	public static LocalDate getLocalDateFor(final Date date, final TimeZone timeZone, final boolean asUTCEquivalent) {
+		final Calendar cal = Calendar.getInstance(timeZone);
+		cal.setTime(date);
+		return getLocalDateFor(cal, asUTCEquivalent);
+	}
+
+	public static LocalDate getLocalDateFor(final Calendar cal, final boolean asUTCEquivalent) {
+		if (asUTCEquivalent) {
+			return new LocalDate(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+		} else {
+			final Calendar cal2 = (Calendar) cal.clone();
+			cal2.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
+			return new LocalDate(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+
+		}
 	}
 
 }

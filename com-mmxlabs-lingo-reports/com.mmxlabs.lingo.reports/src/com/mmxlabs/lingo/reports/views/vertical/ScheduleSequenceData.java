@@ -1,8 +1,10 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -12,6 +14,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 
@@ -32,8 +35,8 @@ public class ScheduleSequenceData {
 	final public Sequence desPurchases;
 	final public VirtualSequence longLoads;
 	final public VirtualSequence shortDischarges;
-	final public Date start;
-	final public Date end;
+	final public LocalDate start;
+	final public LocalDate end;
 
 	/** Extracts the relevant information from the model */
 	public ScheduleSequenceData(final LNGScenarioModel model) {
@@ -49,18 +52,22 @@ public class ScheduleSequenceData {
 			return;
 		}
 
-		Date startDate = null;
-		Date endDate = null;
+		LocalDate startDate = null;
+		LocalDate endDate = null;
 
 		// find start and end dates of entire calendar
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
-				final Date sDate = event.getStart();
-				final Date eDate = event.getEnd();
-				if (startDate == null || startDate.after(sDate)) {
+
+				final LocalDate sDate = VerticalReportUtils.getLocalDateFor(event.getStart(), TimeZone.getTimeZone(event.getTimeZone(SchedulePackage.Literals.EVENT__START)), false);
+				final LocalDate eDate = VerticalReportUtils.getLocalDateFor(event.getStart(), TimeZone.getTimeZone(event.getTimeZone(SchedulePackage.Literals.EVENT__END)), false);
+
+				// final Date sDate = event.getStart();
+				// final Date eDate = event.getEnd();
+				if (startDate == null || startDate.isAfter(sDate)) {
 					startDate = sDate;
 				}
-				if (endDate == null || endDate.before(eDate)) {
+				if (endDate == null || endDate.isBefore(eDate)) {
 					endDate = eDate;
 				}
 			}

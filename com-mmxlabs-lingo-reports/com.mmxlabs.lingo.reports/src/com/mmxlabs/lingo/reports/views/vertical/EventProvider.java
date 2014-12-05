@@ -1,7 +1,7 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.ArrayList;
-import java.util.Date;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
 
@@ -25,7 +25,7 @@ public abstract class EventProvider {
 		this.filter = filter;
 	}
 
-	public Event[] getEvents(final Date date) {
+	public Event[] getEvents(final LocalDate date) {
 		final ArrayList<Event> result = new ArrayList<>();
 
 		for (final Event event : getUnfilteredEvents(date)) {
@@ -38,10 +38,10 @@ public abstract class EventProvider {
 	}
 
 	/** Must be overridden to provide a list of events for any particular date */
-	protected abstract Event[] getUnfilteredEvents(Date date);
+	protected abstract Event[] getUnfilteredEvents(LocalDate date);
 
 	/** Returns {@code true} if an event should not be returned by this event provider for a particular date. */
-	protected boolean filterEventOut(final Date date, final Event event) {
+	protected boolean filterEventOut(final LocalDate date, final Event event) {
 		if (filter != null) {
 			return filter.isEventFiltered(date, event);
 		}

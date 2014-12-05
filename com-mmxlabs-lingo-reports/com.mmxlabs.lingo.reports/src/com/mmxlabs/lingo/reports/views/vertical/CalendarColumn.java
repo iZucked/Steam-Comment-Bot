@@ -1,9 +1,8 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.text.DateFormat;
-
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView.ReportNebulaGridManager;
 
@@ -12,9 +11,9 @@ public class CalendarColumn {
 	private final EventLabelProvider labeller;
 	private final String title;
 	private final GridColumnGroup columnGroup;
-	private final DateFormat df;
+	private final DateTimeFormatter df;
 
-	public CalendarColumn(final DateFormat df, final EventProvider provider, final EventLabelProvider labeller, final String title, final GridColumnGroup columnGroup) {
+	public CalendarColumn(final DateTimeFormatter df, final EventProvider provider, final EventLabelProvider labeller, final String title, final GridColumnGroup columnGroup) {
 		this.df = df;
 		this.provider = provider;
 		this.labeller = labeller;

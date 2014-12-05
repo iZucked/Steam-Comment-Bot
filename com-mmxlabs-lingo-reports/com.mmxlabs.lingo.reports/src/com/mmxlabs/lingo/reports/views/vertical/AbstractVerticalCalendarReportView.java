@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -27,6 +26,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
+import org.joda.time.LocalDate;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
@@ -82,7 +82,6 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 	protected GridTableViewer gridViewer;
 	private ScenarioViewerSynchronizer jobManagerListener;
 	protected LNGScenarioModel root = null;
-	protected Date[] dates = null;
 
 	protected ReportNebulaGridManager manager;
 
@@ -196,7 +195,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 		result.setLabelProvider(labeller);
 		result.getColumn().setText(name);
-		result.getColumn().pack();
+		// result.getColumn().pack();
 
 		return result;
 
@@ -218,13 +217,13 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		private List<CalendarColumn> calendarColumns;
 		private List<GridViewerColumn> nebulaColumns;
 
-		private Map<Date, Integer> rowCache = new HashMap<>();
+		private final Map<LocalDate, Integer> rowCache = new HashMap<>();
 
-		public Event[] getLogicalCellContents(final Date date, final CalendarColumn column) {
+		public Event[] getLogicalCellContents(final LocalDate date, final CalendarColumn column) {
 			return column.getProvider().getEvents(date);
 		}
 
-		public int getNumRowsRequired(final Date date, final CalendarColumn column) {
+		public int getNumRowsRequired(final LocalDate date, final CalendarColumn column) {
 			final Event[] contents = getLogicalCellContents(date, column);
 			if (contents != null && contents.length > 1) {
 				return contents.length;
@@ -232,7 +231,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			return 1;
 		}
 
-		public int getNumRowsRequired(final Date date) {
+		public int getNumRowsRequired(final LocalDate date) {
 
 			if (rowCache.containsKey(date)) {
 				return rowCache.get(date);
@@ -300,11 +299,15 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 		@SuppressWarnings("unchecked")
 		private void setRows(final ScheduleSequenceData data) {
-			final List<Pair<Date, Integer>> result = new LinkedList<>();
+			final List<Pair<LocalDate, Integer>> result = new LinkedList<>();
 
-			final Date[] allDates = VerticalReportUtils.getUTCDaysBetween(data.start, data.end).toArray(new Date[0]);
-			for (final Date date : allDates) {
-				for (int i = 0; i < getNumRowsRequired(date); i++) {
+			final LocalDate[] allDates = VerticalReportUtils.getUTCDaysBetween(data.start, data.end).toArray(new LocalDate[0]);
+			for (final LocalDate date : allDates) {
+				if (date.getMonthOfYear() == 5) {
+					int ii = 0;
+				}
+				int numRowsRequired = getNumRowsRequired(date);
+				for (int i = 0; i < numRowsRequired; i++) {
 					result.add(new Pair<>(date, i));
 				}
 			}
@@ -332,8 +335,8 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			final DataVisualizer dv = gridViewer.getGrid().getDataVisualizer();
 
 			@SuppressWarnings("unchecked")
-			final Pair<Date, Integer> pair = (Pair<Date, Integer>) item.getData();
-			final Date date = pair.getFirst();
+			final Pair<LocalDate, Integer> pair = (Pair<LocalDate, Integer>) item.getData();
+			final LocalDate date = pair.getFirst();
 			final int index = pair.getSecond();
 
 			final int totalRows = getNumRowsRequired(date);
