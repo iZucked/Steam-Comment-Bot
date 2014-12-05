@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 public final class VerticalReportUtils {
 
@@ -28,6 +30,23 @@ public final class VerticalReportUtils {
 		return (nextDay.before(visit.getStart()) || (visit.getEnd().after(day) == false));
 	}
 
+	
+	public static boolean isEventLate(final Event event) {
+		if (event instanceof SlotVisit) {
+			SlotVisit slotVisit = (SlotVisit) event;
+			Slot slot = slotVisit.getSlotAllocation().getSlot();
+			if (slotVisit.getStart().after(slot.getWindowEndWithSlotOrPortTime())) {
+				return true;
+			}
+		} else if (event instanceof VesselEventVisit) {
+			VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+			VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+			if (vesselEventVisit.getStart().after(vesselEvent.getStartBy())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	/**
 	 * Returns all events in the specified sequence which overlap with the 24 hr period starting with the specified date
 	 * 
