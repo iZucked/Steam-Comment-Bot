@@ -2,71 +2,88 @@ package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 
-/**
- * This class allows for convenient column label provider creation in a calendar grid: the provider is initialised with a particular data object (e.g. a sequence from a schedule) and will delegate
- * cell formatting & contents to methods based on the data object and the date.
- */
-public abstract class CalendarColumnLabelProvider<T> extends GridColumnLabelProvider {
-	protected T data;
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView.ReportNebulaGridManager;
+import com.mmxlabs.models.lng.schedule.Event;
+
+public class CalendarColumnLabelProvider extends GridColumnLabelProvider {
+	protected EventProvider provider;
+	protected EventLabelProvider labeller;
+	protected ReportNebulaGridManager manager;
 	protected DateFormat df;
 
-	public CalendarColumnLabelProvider(final DateFormat df, final T object) {
+	protected HashMap<Date, Event[]> cache = new HashMap<>();
+
+	public CalendarColumnLabelProvider(final DateFormat df, final EventProvider provider, final EventLabelProvider labeller, final ReportNebulaGridManager manager) {
 		this.df = df;
-		data = object;
+		this.provider = provider;
+		this.labeller = labeller;
+		this.manager = manager;
 	}
 
-	public T getData() {
-		return data;
+	public Event getData(final Pair<Date, Integer> key) {
+		final Date date = key.getFirst();
+		final Integer index = key.getSecond();
+		final Event[] result;
+		if (cache.containsKey(date)) {
+			result = (Event[]) cache.get(date);
+		} else {
+			result = provider.getEvents(date);
+			cache.put(date, result);
+		}
+		if (result == null || result.length <= index) {
+			return null;
+		}
+		return result[index];
 	}
 
 	@Override
 	public String getRowHeaderText(final Object element) {
-
-		final Date date = (Date) element;
+		final Pair<Date, Integer> pair = (Pair<Date, Integer>) element;
+		final Date date = pair.getFirst();
 		return df.format(date);
 	}
 
 	@Override
 	public String getText(final Object element) {
-		return getText((Date) element, data);
+		final Pair<Date, Integer> pair = (Pair<Date, Integer>) element;
+		final Date date = pair.getFirst();
+		return labeller.getText(date, getData(pair));
 	}
 
 	@Override
 	public Font getFont(final Object element) {
-		return getFont((Date) element, data);
+		final Pair<Date, Integer> pair = (Pair<Date, Integer>) element;
+		final Date date = pair.getFirst();
+		return labeller.getFont(date, getData(pair));
 	}
 
 	@Override
 	public Color getBackground(final Object element) {
-		return getBackground((Date) element, data);
+		@SuppressWarnings("unchecked")
+		final Pair<Date, Integer> pair = (Pair<Date, Integer>) element;
+		final Date date = pair.getFirst();
+		return labeller.getBackground(date, getData(pair));
 	}
 
 	@Override
 	public Color getForeground(final Object element) {
-		return getForeground((Date) element, data);
+		final Pair<Date, Integer> pair = (Pair<Date, Integer>) element;
+		final Date date = pair.getFirst();
+		return labeller.getForeground(date, getData(pair));
 	}
 
-	/** Returns the text content of the cell. */
-	abstract protected String getText(Date element, T object);
-
-	/** Returns the desired font of the cell. */
-	protected Font getFont(final Date element, final T object) {
-		return null;
-	}
-
-	/** Returns the desired font of the cell. */
-	protected Color getBackground(final Date element, final T object) {
-		return null;
-	}
-
-	/** Returns the desired font of the cell. */
-	protected Color getForeground(final Date element, final T object) {
-		return null;
+	@Override
+	public void update(final ViewerCell cell) {
+		super.update(cell);
+		manager.updateCell(cell);
 	}
 
 }

@@ -26,14 +26,14 @@ public class EventLabelProvider {
 	}
 
 	protected Font getFont(final Date date, final Event event) {
-		return verticalReportVisualiser.getEventFont(date, new Event[] { event });
+		return verticalReportVisualiser.getEventFont(date, event);
 	}
 
 	protected Color getBackground(final Date date, final Event event) {
-		return verticalReportVisualiser.getEventBackgroundColor(date, new Event[] { event });
+		return verticalReportVisualiser.getEventBackgroundColor(date, event);
 	}
 
 	protected Color getForeground(final Date date, final Event event) {
-		return verticalReportVisualiser.getEventForegroundColor(date, new Event[] { event });
+		return verticalReportVisualiser.getEventForegroundColor(date, event);
 	}
 }

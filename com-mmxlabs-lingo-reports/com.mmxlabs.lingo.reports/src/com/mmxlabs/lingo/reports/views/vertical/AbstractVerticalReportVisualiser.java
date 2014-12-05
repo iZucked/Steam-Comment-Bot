@@ -70,9 +70,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		}
 	}
 
-	public Color getEventBackgroundColor(final Date date, final Event[] events) {
-
-		final Event event = getRelevantEvent(date, events, PrecedenceType.COLOUR);
+	public Color getEventBackgroundColor(final Date date, final Event event) {
 
 		if (event instanceof SlotVisit) {
 			return getColorFor(date, (SlotVisit) event);
@@ -101,31 +99,31 @@ public abstract class AbstractVerticalReportVisualiser {
 
 	}
 
-	public Font getEventFont(final Date element, final Event[] events) {
+	public Font getEventFont(final Date element, final Event event) {
 		return null;
 	}
 
-	abstract public Color getEventForegroundColor(Date element, Event[] events);
+	abstract public Color getEventForegroundColor(Date element, Event event);
 
-	public int getEventPrecedence(final Date date, final Event event, final PrecedenceType type) {
-		if (type == PrecedenceType.COLOUR) {
-			if (event instanceof SlotVisit) {
-				return 5;
-			}
-			if (event instanceof Journey) {
-				return -5;
-			}
-		} else if (type == PrecedenceType.TEXT) {
-			if (event instanceof SlotVisit) {
-				return VerticalReportUtils.isDayOutsideActualVisit(date, (SlotVisit) event) ? -10 : 5;
-			}
-			if (event instanceof Journey) {
-				return -5;
-			}
-
-		}
-		return 0;
-	}
+//	public int getEventPrecedence(final Date date, final Event event, final PrecedenceType type) {
+//		if (type == PrecedenceType.COLOUR) {
+//			if (event instanceof SlotVisit) {
+//				return 5;
+//			}
+//			if (event instanceof Journey) {
+//				return -5;
+//			}
+//		} else if (type == PrecedenceType.TEXT) {
+//			if (event instanceof SlotVisit) {
+//				return VerticalReportUtils.isDayOutsideActualVisit(date, (SlotVisit) event) ? -10 : 5;
+//			}
+//			if (event instanceof Journey) {
+//				return -5;
+//			}
+//
+//		}
+//		return 0;
+//	}
 
 	public String getEventText(final Date date, final Event event) {
 		if (date == null || event == null) {
@@ -185,21 +183,6 @@ public abstract class AbstractVerticalReportVisualiser {
 
 	public Color getSlotColour(final SlotVisit visit) {
 		return getColour(Orange);
-	}
-
-	public Event getRelevantEvent(final Date date, final Event[] events, final PrecedenceType type) {
-		Integer best = null;
-		Event result = null;
-
-		for (final Event event : events) {
-			final int precedence = getEventPrecedence(date, event, type);
-			if (result == null || best == null || precedence > best) {
-				result = event;
-				best = precedence;
-			}
-		}
-
-		return result;
 	}
 
 	/**

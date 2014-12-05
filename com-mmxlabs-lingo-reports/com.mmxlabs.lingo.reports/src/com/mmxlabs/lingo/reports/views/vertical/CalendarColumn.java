@@ -5,7 +5,7 @@ import java.text.DateFormat;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 
-import com.mmxlabs.lingo.reports.views.vertical.NewAbstractVerticalCalendarReportView.ReportNebulaGridManager;
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView.ReportNebulaGridManager;
 
 public class CalendarColumn {
 	private final EventProvider provider;
@@ -23,7 +23,7 @@ public class CalendarColumn {
 	}
 
 	public ColumnLabelProvider createColumnLabelProvider(final ReportNebulaGridManager manager) {
-		return new NewCalendarColumnLabelProvider(df, provider, labeller, manager);
+		return new CalendarColumnLabelProvider(df, provider, labeller, manager);
 	}
 
 	public String getTitle() {
