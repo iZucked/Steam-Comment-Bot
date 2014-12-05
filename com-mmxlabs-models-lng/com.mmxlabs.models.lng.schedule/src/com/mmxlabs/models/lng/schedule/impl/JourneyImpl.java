@@ -9,6 +9,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -614,6 +615,21 @@ public class JourneyImpl extends EventImpl implements Journey {
 		}
 
 		return super.name();
+	}
+
+	/**
+	 * @generated NOT
+	 */
+	public String getTimeZone(EAttribute attribute) {
+		if (attribute == SchedulePackage.Literals.EVENT__END){
+			if (getDestination() == null)
+				return "UTC";
+			if (getDestination().getTimeZone() == null)
+				return "UTC";
+			return getDestination().getTimeZone();
+		} else {
+			return super.getTimeZone(attribute);
+		}
 	}
 	
 } // end of JourneyImpl
