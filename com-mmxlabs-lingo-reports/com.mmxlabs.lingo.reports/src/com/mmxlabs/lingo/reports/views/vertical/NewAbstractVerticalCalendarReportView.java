@@ -305,7 +305,7 @@ public abstract class NewAbstractVerticalCalendarReportView extends ViewPart {
 		private void setRows(final ScheduleSequenceData data) {
 			final List<Pair<Date, Integer>> result = new LinkedList<>();
 
-			final Date[] allDates = VerticalReportUtils.getGMTDaysBetween(data.start, data.end).toArray(new Date[0]);
+			final Date[] allDates = VerticalReportUtils.getUTCDaysBetween(data.start, data.end).toArray(new Date[0]);
 			for (final Date date : allDates) {
 				for (int i = 0; i < getNumRowsRequired(date); i++) {
 					result.add(new Pair<>(date, i));

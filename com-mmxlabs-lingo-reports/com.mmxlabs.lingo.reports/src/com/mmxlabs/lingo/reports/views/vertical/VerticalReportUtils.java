@@ -30,7 +30,6 @@ public final class VerticalReportUtils {
 		return (nextDay.before(visit.getStart()) || (visit.getEnd().after(day) == false));
 	}
 
-	
 	public static boolean isEventLate(final Event event) {
 		if (event instanceof SlotVisit) {
 			SlotVisit slotVisit = (SlotVisit) event;
@@ -47,6 +46,7 @@ public final class VerticalReportUtils {
 		}
 		return false;
 	}
+
 	/**
 	 * Returns all events in the specified sequence which overlap with the 24 hr period starting with the specified date
 	 * 
@@ -81,16 +81,16 @@ public final class VerticalReportUtils {
 	}
 
 	/**
-	 * Returns a list of all 00h00 GMT Date objects which fall within the specified range
+	 * Returns a list of all 00h00 UTC Date objects which fall within the specified range
 	 * 
 	 * @param start
 	 * @param end
 	 * @return
 	 */
-	public static List<Date> getGMTDaysBetween(final Date start, final Date end) {
+	public static List<Date> getUTCDaysBetween(final Date start, final Date end) {
 		final ArrayList<Date> result = new ArrayList<Date>();
 		if (start != null && end != null) {
-			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT"));
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
 			c.setTime(start);
 			c.set(Calendar.HOUR_OF_DAY, 0);
 			c.set(Calendar.MINUTE, 0);
@@ -105,12 +105,13 @@ public final class VerticalReportUtils {
 		return result;
 	}
 
-	public static Date getGMTDayFor(final Date date) {
-		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT"));
+	public static Date getUTCDayFor(final Date date) {
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("Etc/UTC"));
 		c.setTime(date);
 		c.set(Calendar.HOUR_OF_DAY, 0);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
 		return c.getTime();
 	}
+
 }

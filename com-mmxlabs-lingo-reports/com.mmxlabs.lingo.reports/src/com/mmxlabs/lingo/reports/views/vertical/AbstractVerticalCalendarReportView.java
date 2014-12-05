@@ -171,7 +171,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 
 			private void setRows(final ScheduleSequenceData data) {
-				dates = VerticalReportUtils.getGMTDaysBetween(data.start, data.end).toArray(new Date[0]);
+				dates = VerticalReportUtils.getUTCDaysBetween(data.start, data.end).toArray(new Date[0]);
 			}
 
 			@Override

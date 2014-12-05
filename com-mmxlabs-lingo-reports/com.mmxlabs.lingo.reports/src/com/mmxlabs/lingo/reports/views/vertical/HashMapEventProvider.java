@@ -20,7 +20,7 @@ public class HashMapEventProvider extends EventProvider {
 
 	public HashMapEventProvider(final Date start, final Date end, final EventProvider wrapped) {
 		this(null);
-		for (final Date day : VerticalReportUtils.getGMTDaysBetween(start, end)) {
+		for (final Date day : VerticalReportUtils.getUTCDaysBetween(start, end)) {
 			for (final Event event : wrapped.getEvents(day)) {
 				addEvent(day, event);
 			}
@@ -36,7 +36,7 @@ public class HashMapEventProvider extends EventProvider {
 		list.add(event);
 
 		// we actually want the events to be keyed on 00:00 GMT of the same day
-		this.events.put(VerticalReportUtils.getGMTDayFor(date), list);
+		this.events.put(VerticalReportUtils.getUTCDayFor(date), list);
 	}
 
 	@Override
