@@ -21,16 +21,16 @@ import com.mmxlabs.models.lng.schedule.Sequence;
  */
 public class SequenceEventProvider extends EventProvider {
 	final protected Sequence[] data;
-	private boolean asUTCEquivalent;
+	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
 
-	public SequenceEventProvider(final Sequence[] data, final EventFilter filter, boolean asUTCEquivalent) {
+	public SequenceEventProvider(final Sequence[] data, final EventFilter filter, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		super(filter);
 		this.data = data;
-		this.asUTCEquivalent = asUTCEquivalent;
+		this.verticalReportVisualiser = verticalReportVisualiser;
 	}
 
-	public SequenceEventProvider(final Sequence seq, final EventFilter filter, boolean asUTCEquivalent) {
-		this(new Sequence[] { seq }, filter, asUTCEquivalent);
+	public SequenceEventProvider(final Sequence seq, final EventFilter filter, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+		this(new Sequence[] { seq }, filter, verticalReportVisualiser);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class SequenceEventProvider extends EventProvider {
 
 		for (final Sequence seq : data) {
 			if (seq != null) {
-				final Event[] events = VerticalReportUtils.getEvents(seq, date, asUTCEquivalent);
+				final Event[] events = verticalReportVisualiser.getEvents(seq, date);
 				for (final Event event : events) {
 					result.add(event);
 				}

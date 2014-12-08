@@ -37,9 +37,11 @@ public class ScheduleSequenceData {
 	final public VirtualSequence shortDischarges;
 	final public LocalDate start;
 	final public LocalDate end;
+	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
 
 	/** Extracts the relevant information from the model */
-	public ScheduleSequenceData(final LNGScenarioModel model) {
+	public ScheduleSequenceData(final LNGScenarioModel model, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+		this.verticalReportVisualiser = verticalReportVisualiser;
 		final ScheduleModel scheduleModel = (model == null ? null : model.getPortfolioModel().getScheduleModel());
 		final Schedule schedule = (scheduleModel == null ? null : scheduleModel.getSchedule());
 
@@ -59,8 +61,8 @@ public class ScheduleSequenceData {
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event event : seq.getEvents()) {
 
-				final LocalDate sDate = VerticalReportUtils.getLocalDateFor(event.getStart(), TimeZone.getTimeZone(event.getTimeZone(SchedulePackage.Literals.EVENT__START)), false);
-				final LocalDate eDate = VerticalReportUtils.getLocalDateFor(event.getStart(), TimeZone.getTimeZone(event.getTimeZone(SchedulePackage.Literals.EVENT__END)), false);
+				final LocalDate sDate = verticalReportVisualiser.getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
+				final LocalDate eDate = verticalReportVisualiser.getLocalDateFor(event, SchedulePackage.Literals.EVENT__END);
 
 				// final Date sDate = event.getStart();
 				// final Date eDate = event.getEnd();

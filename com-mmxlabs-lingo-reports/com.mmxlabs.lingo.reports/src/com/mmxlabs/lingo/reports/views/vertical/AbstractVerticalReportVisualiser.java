@@ -1,9 +1,14 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.TimeZone;
+import java.util.List;
+import java.util.Map;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.RGB;
@@ -13,6 +18,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.ColourPalette;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
@@ -27,10 +34,12 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 public abstract class AbstractVerticalReportVisualiser {
 
@@ -41,6 +50,9 @@ public abstract class AbstractVerticalReportVisualiser {
 	public static RGB Light_Orange = new RGB(255, 197, 168);
 	public static RGB Orange = new RGB(255, 168, 64);
 	protected final HashMap<RGB, Color> colourMap = new HashMap<>();
+
+	protected final Map<Pair<EObject, EAttribute>, LocalDate> dateCacheA = new HashMap<>();
+	protected final Map<Triple<EObject, Date, EAttribute>, LocalDate> dateCacheB = new HashMap<>();
 
 	public DateTimeFormatter createDateFormat() {
 		return DateTimeFormat.forPattern("dd/MMM/yy");
@@ -112,11 +124,10 @@ public abstract class AbstractVerticalReportVisualiser {
 			return "";
 		}
 
-
 		// Journey events just show the day number
 		if (event instanceof Journey) {
-			LocalDate eventStart = VerticalReportUtils.getLocalDateFor(event.getStart(), TimeZone.getTimeZone(event.getTimeZone(SchedulePackage.Literals.EVENT__START)), false);
-			
+			final LocalDate eventStart = getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
+
 			// how many days since the start of the event?
 			int days = Days.daysBetween(eventStart, date).getDays();
 			days += 1;
@@ -126,7 +137,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		else if (event instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) event;
 			// True or false or both?
-			if (date != null && VerticalReportUtils.isDayOutsideActualVisit(date, visit, false)) {
+			if (date != null && isDayOutsideActualVisit(date, visit)) {
 				return "";
 			}
 			String result = getShortPortName(visit.getPort());
@@ -163,7 +174,7 @@ public abstract class AbstractVerticalReportVisualiser {
 		}
 
 		final EClass eventClass = event.eClass();
-		return eventClass.getName() + " '" + event.name();/// + "' " + Integer.toString(days);
+		return eventClass.getName() + " '" + event.name();
 	}
 
 	public Color getSlotColour(final SlotVisit visit) {
@@ -187,4 +198,93 @@ public abstract class AbstractVerticalReportVisualiser {
 		colourMap.clear();
 	}
 
+	/**
+	 * Is the specified day outside of the actual slot visit itself? (A SlotVisit event can be associated with a particular day if its slot window includes that day.)
+	 * 
+	 * @param day
+	 * @param visit
+	 * @return
+	 */
+	public boolean isDayOutsideActualVisit(final LocalDate day, final SlotVisit visit) {
+		final LocalDate nextDay = day.plusDays(1);
+
+		final LocalDate eventStart = getLocalDateFor(visit, SchedulePackage.Literals.EVENT__START);
+		final LocalDate eventEnd = getLocalDateFor(visit, SchedulePackage.Literals.EVENT__END);
+
+		return (nextDay.isBefore(eventStart) || (eventEnd.isAfter(day) == false));
+	}
+
+	/**
+	 * Returns all events in the specified sequence which overlap with the 24 hr period starting with the specified date
+	 * 
+	 * @param seq
+	 * @param date
+	 * @return
+	 */
+	public Event[] getEvents(final Sequence seq, final LocalDate date) {
+		return getEvents(seq, date, date.plusDays(1));
+	}
+
+	/**
+	 * Returns the events, if any, occurring between the two dates specified.
+	 */
+	public Event[] getEvents(final Sequence seq, final LocalDate start, final LocalDate end) {
+		final List<Event> result = new ArrayList<>();
+		if (seq != null && start != null && end != null) {
+			for (final Event event : seq.getEvents()) {
+
+				final LocalDate eventStart = getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
+				final LocalDate eventEnd = getLocalDateFor(event, SchedulePackage.Literals.EVENT__END);
+
+				// when we get to an event after the search window, break the loop
+				// NO: events are not guaranteed to be sorted by date :(
+				if (eventStart.isAfter(end)) {
+					// break;
+				}
+				// otherwise, as long as the event is in the search window, add it to the results
+				// if the event ends at midnight, we do *not* count it towards this day
+				else if (start.isBefore(eventEnd)) {
+					result.add(event);
+				}
+			}
+		}
+		return result.toArray(new Event[0]);
+	}
+
+	/**
+	 * Return true if dates should be rendered in local time - i.e. "UTC equivalent" (10 AM local time is also 10 AM UTC) or as actual UTC time (thus 10 AM localtime is not necessarily 10 AM UTC).
+	 * 
+	 * @return
+	 */
+	public boolean datesAreUTCEquivalent() {
+		return false;
+	}
+
+	public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final EAttribute feature) {
+
+		final Pair<EObject, EAttribute> key = new Pair<>((EObject) object, feature);
+		if (dateCacheA.containsKey(key)) {
+			return dateCacheA.get(key);
+		} else {
+			final LocalDate localDate = VerticalReportUtils.getLocalDateFor(object, feature, datesAreUTCEquivalent());
+			dateCacheA.put(key, localDate);
+			return localDate;
+		}
+	}
+
+	public <T extends ITimezoneProvider & EObject> LocalDate getLocalDateFor(final T object, final Date date, final EAttribute feature) {
+		final Triple<EObject, Date, EAttribute> key = new Triple<>((EObject) object, date, feature);
+		if (dateCacheB.containsKey(key)) {
+			return dateCacheB.get(key);
+		} else {
+			final LocalDate localDate = VerticalReportUtils.getLocalDateFor(object, date, feature, datesAreUTCEquivalent());
+			dateCacheB.put(key, localDate);
+			return localDate;
+		}
+	}
+
+	public void inputChanged() {
+		dateCacheA.clear();
+		dateCacheB.clear();
+	}
 }

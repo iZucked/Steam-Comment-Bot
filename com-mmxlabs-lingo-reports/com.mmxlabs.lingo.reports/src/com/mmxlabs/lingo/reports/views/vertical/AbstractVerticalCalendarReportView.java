@@ -195,7 +195,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		}
 		result.setLabelProvider(labeller);
 		result.getColumn().setText(name);
-		// result.getColumn().pack();
+		result.getColumn().pack();
 
 		return result;
 
@@ -258,6 +258,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			final ScheduleSequenceData data;
 			root = null;
 			rowCache.clear();
+			verticalReportVisualiser.inputChanged();
 			if (newInput != null) {
 				// svso.getCollectedElements in this case returns a singleton list containing the root object
 				final IScenarioViewerSynchronizerOutput svso = (IScenarioViewerSynchronizerOutput) newInput;
@@ -266,9 +267,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 				}
 
 				// extract the relevant data from the root object
-				data = new ScheduleSequenceData(root);
+				data = new ScheduleSequenceData(root, verticalReportVisualiser);
 			} else {
-				data = new ScheduleSequenceData(null);
+				data = new ScheduleSequenceData(null, verticalReportVisualiser);
 			}
 
 			setData(data);
@@ -303,10 +304,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 			final LocalDate[] allDates = VerticalReportUtils.getUTCDaysBetween(data.start, data.end).toArray(new LocalDate[0]);
 			for (final LocalDate date : allDates) {
-				if (date.getMonthOfYear() == 5) {
-					int ii = 0;
-				}
-				int numRowsRequired = getNumRowsRequired(date);
+				final int numRowsRequired = getNumRowsRequired(date);
 				for (int i = 0; i < numRowsRequired; i++) {
 					result.add(new Pair<>(date, i));
 				}

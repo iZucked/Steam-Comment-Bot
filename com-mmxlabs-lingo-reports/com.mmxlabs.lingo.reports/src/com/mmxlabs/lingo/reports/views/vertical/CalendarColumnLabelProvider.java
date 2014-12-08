@@ -89,5 +89,4 @@ public class CalendarColumnLabelProvider extends GridColumnLabelProvider {
 	protected Pair<LocalDate, Integer> castPair(final Object element) {
 		return (Pair<LocalDate, Integer>) element;
 	}
-
 }

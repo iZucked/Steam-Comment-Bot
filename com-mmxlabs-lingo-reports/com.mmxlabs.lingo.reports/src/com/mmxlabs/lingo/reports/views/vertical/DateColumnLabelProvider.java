@@ -1,8 +1,9 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.text.DateFormat;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
 
-import org.eclipse.jface.viewers.ColumnLabelProvider;
+import com.mmxlabs.models.lng.schedule.Event;
 
 /**
  * Label provider for the "date" column: provide the date in a specified format.
@@ -10,16 +11,16 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
  * @author Simon McGregor
  * 
  */
-public class DateColumnLabelProvider extends ColumnLabelProvider {
-	private final DateFormat df;
+public class DateColumnLabelProvider extends EventLabelProvider {
+	private final DateTimeFormatter df;
 
-	public DateColumnLabelProvider(final DateFormat df) {
-		this.df = df;
+	public DateColumnLabelProvider(final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+		super(verticalReportVisualiser);
+		this.df = verticalReportVisualiser.createDateFormat();
 	}
 
 	@Override
-	public String getText(final Object element) {
-		return df.format(element);
+	protected String getText(final LocalDate date, final Event event) {
+		return df.print(date);
 	}
-
 }
