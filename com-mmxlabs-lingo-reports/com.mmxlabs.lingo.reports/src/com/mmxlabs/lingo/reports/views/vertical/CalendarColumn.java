@@ -4,7 +4,9 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView.ReportNebulaGridManager;
+import com.mmxlabs.lingo.reports.views.vertical.labellers.CalendarColumnLabelProvider;
+import com.mmxlabs.lingo.reports.views.vertical.labellers.EventLabelProvider;
+import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 
 public class CalendarColumn {
 	private final EventProvider provider;

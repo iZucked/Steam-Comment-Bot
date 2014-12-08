@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.views.vertical;
+package com.mmxlabs.lingo.reports.views.vertical.filters;
 
 import java.util.List;
 

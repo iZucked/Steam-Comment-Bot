@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.views.vertical;
+package com.mmxlabs.lingo.reports.views.vertical.providers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.joda.time.LocalDate;
 
+import com.mmxlabs.lingo.reports.views.vertical.VerticalReportUtils;
+import com.mmxlabs.lingo.reports.views.vertical.filters.EventFilter;
 import com.mmxlabs.models.lng.schedule.Event;
 
 /**

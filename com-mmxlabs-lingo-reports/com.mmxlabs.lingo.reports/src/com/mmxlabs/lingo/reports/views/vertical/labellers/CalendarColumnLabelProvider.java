@@ -1,4 +1,4 @@
-package com.mmxlabs.lingo.reports.views.vertical;
+package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
 import java.util.HashMap;
 
@@ -10,7 +10,8 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalCalendarReportView.ReportNebulaGridManager;
+import com.mmxlabs.lingo.reports.views.vertical.ReportNebulaGridManager;
+import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 import com.mmxlabs.models.lng.schedule.Event;
 
 public class CalendarColumnLabelProvider extends GridColumnLabelProvider {

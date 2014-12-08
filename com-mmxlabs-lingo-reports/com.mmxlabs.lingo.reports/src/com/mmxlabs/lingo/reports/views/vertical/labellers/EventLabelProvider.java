@@ -1,9 +1,10 @@
-package com.mmxlabs.lingo.reports.views.vertical;
+package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.joda.time.LocalDate;
 
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
 import com.mmxlabs.models.lng.schedule.Event;
 
 /**

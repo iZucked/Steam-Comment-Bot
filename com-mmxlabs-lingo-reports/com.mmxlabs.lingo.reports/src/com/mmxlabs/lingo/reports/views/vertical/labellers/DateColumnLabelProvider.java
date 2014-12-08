@@ -1,8 +1,9 @@
-package com.mmxlabs.lingo.reports.views.vertical;
+package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
 import com.mmxlabs.models.lng.schedule.Event;
 
 /**

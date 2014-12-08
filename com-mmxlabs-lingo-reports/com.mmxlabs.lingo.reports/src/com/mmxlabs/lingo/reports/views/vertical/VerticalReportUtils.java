@@ -14,12 +14,26 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 
 public final class VerticalReportUtils {
 
+	
+
+	public static List<Event> eventsFromSequences(final Sequence... sequences) {
+		final List<Event> result = new ArrayList<Event>();
+		if (sequences != null) {
+			for (final Sequence seq : sequences) {
+				if (seq != null) {
+					result.addAll(seq.getEvents());
+				}
+			}
+		}
+		return result;
+	}
 
 	public static boolean isEventLate(final Event event) {
 

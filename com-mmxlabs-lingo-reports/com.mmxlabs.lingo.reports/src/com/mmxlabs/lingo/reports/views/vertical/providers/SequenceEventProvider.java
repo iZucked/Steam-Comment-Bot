@@ -1,8 +1,11 @@
-package com.mmxlabs.lingo.reports.views.vertical;
+package com.mmxlabs.lingo.reports.views.vertical.providers;
 
 import java.util.ArrayList;
+
 import org.joda.time.LocalDate;
 
+import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
+import com.mmxlabs.lingo.reports.views.vertical.filters.EventFilter;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
@@ -20,8 +23,8 @@ import com.mmxlabs.models.lng.schedule.Sequence;
  * 
  */
 public class SequenceEventProvider extends EventProvider {
-	final protected Sequence[] data;
-	private final AbstractVerticalReportVisualiser verticalReportVisualiser;
+	protected final Sequence[] data;
+	protected final AbstractVerticalReportVisualiser verticalReportVisualiser;
 
 	public SequenceEventProvider(final Sequence[] data, final EventFilter filter, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		super(filter);

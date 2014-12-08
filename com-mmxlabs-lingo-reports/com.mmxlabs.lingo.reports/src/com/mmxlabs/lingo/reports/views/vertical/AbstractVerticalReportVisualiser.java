@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -256,9 +257,9 @@ public abstract class AbstractVerticalReportVisualiser {
 
 				if (event instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) event;
-					final Slot slot = slotVisit.getSlotAllocation().getSlot();
-					eventStart = getLocalDateFor(slot, slot.getWindowStartWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
-					eventEnd = getLocalDateFor(slot, slot.getWindowEndWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+					final Pair<LocalDate, LocalDate> p = getWindowDatesForSlotVisit(slotVisit);
+					eventStart = p.getFirst();
+					eventEnd = p.getSecond();
 				} else if (event instanceof VesselEventVisit) {
 					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
 					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
@@ -281,6 +282,13 @@ public abstract class AbstractVerticalReportVisualiser {
 			}
 		}
 		return result.toArray(new Event[0]);
+	}
+
+	public Pair<LocalDate, LocalDate> getWindowDatesForSlotVisit(final SlotVisit slotVisit) {
+		final Slot slot = slotVisit.getSlotAllocation().getSlot();
+		final LocalDate eventStart = getLocalDateFor(slot, slot.getWindowStartWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+		final LocalDate eventEnd = getLocalDateFor(slot, slot.getWindowEndWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+		return new Pair<>(eventStart, eventEnd);
 	}
 
 	/**
