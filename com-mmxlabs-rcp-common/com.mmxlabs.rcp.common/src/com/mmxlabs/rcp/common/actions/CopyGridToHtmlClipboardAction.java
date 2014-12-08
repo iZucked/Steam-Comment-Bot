@@ -37,6 +37,8 @@ public class CopyGridToHtmlClipboardAction extends Action {
 	private final Grid table;
 
 	private boolean rowHeadersIncluded = false;
+	// Set border around everything?
+	private final boolean includeBorder = false;
 
 	public CopyGridToHtmlClipboardAction(final Grid table, final boolean includeRowHeaders) {
 
@@ -59,8 +61,12 @@ public class CopyGridToHtmlClipboardAction extends Action {
 		// Note this may be zero if no columns have been defined. However an
 		// implicit column will be created in such cases
 		final int numColumns = table.getColumnCount();
+		if (includeBorder) {
+			sw.write("<table border='0'>\n");
+		} else {
+			sw.write("<table >\n");
 
-		sw.write("<table border='1'>\n");
+		}
 		try {
 			addHeader(sw);
 			// Ensure at least 1 column to grab data
@@ -112,14 +118,16 @@ public class CopyGridToHtmlClipboardAction extends Action {
 			final GridColumnGroup columnGroup = column.getColumnGroup();
 			if (columnGroup == null) {
 				// No group? Then cell bottom row cell should fill both header rows
-				addCell(topRow, "th", column.getText(), new String[] { "bgcolor='grey'", String.format("rowSpan='%d'", table.getColumnCount() > 0 ? 2 : 1) });
+				addCell(topRow, "th", column.getText(),
+						combineAttributes(new String[] { "bgcolor='grey'", String.format("rowSpan='%d'", table.getColumnCount() > 0 ? 2 : 1) }, getAdditionalHeaderAttributes(column)));
 			} else {
 				// Part of column group. Only add group if we have not previously seen it.
 				if (seenGroups.add(columnGroup)) {
-					addCell(topRow, "th", columnGroup.getText(), new String[] { "bgcolor='grey'", String.format("colSpan=%d", columnGroup.getColumns().length) });
+					addCell(topRow, "th", columnGroup.getText(),
+							combineAttributes(new String[] { "bgcolor='grey'", String.format("colSpan=%d", columnGroup.getColumns().length) }, getAdditionalHeaderAttributes(column)));
 				}
 				// Add in the bottom row info.
-				addCell(bottomRow, "th", column.getText(), new String[] { "bgcolor='grey'" });
+				addCell(bottomRow, "th", column.getText(), combineAttributes(new String[] { "bgcolor='grey'" }, getAdditionalHeaderAttributes(column)));
 			}
 
 		}
@@ -152,7 +160,10 @@ public class CopyGridToHtmlClipboardAction extends Action {
 				} else {
 					colourString = String.format("bgcolor='#%02X%02X%02X'", c.getRed(), c.getGreen(), c.getBlue());
 				}
-				addCell(sw, item.getText(i), new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(i)), String.format("colSpan='%d'", 1 + item.getColumnSpan(i)) });
+				addCell(sw,
+						item.getText(i),
+						combineAttributes(new String[] { colourString, String.format("rowSpan='%d'", 1 + item.getRowSpan(i)), String.format("colSpan='%d'", 1 + item.getColumnSpan(i)) },
+								getAdditionalAttributes(item, i)));
 				// Increment col idx.
 				i += item.getColumnSpan(i);
 				rowOffsets[i] = item.getRowSpan(i);
@@ -164,6 +175,30 @@ public class CopyGridToHtmlClipboardAction extends Action {
 				sw.write("</tr>\n");
 			}
 		}
+	}
+
+	private String[] combineAttributes(final String[] strings, final String[] additionalAttributes) {
+		if (strings == null && additionalAttributes == null) {
+			return new String[0];
+		} else if (strings == null) {
+			return additionalAttributes;
+		} else if (additionalAttributes == null) {
+			return strings;
+		}
+
+		final String[] combined = new String[strings.length + additionalAttributes.length];
+		System.arraycopy(strings, 0, combined, 0, strings.length);
+		System.arraycopy(additionalAttributes, 0, combined, strings.length, additionalAttributes.length);
+
+		return combined;
+	}
+
+	protected String[] getAdditionalHeaderAttributes(final GridColumn column) {
+		return null;
+	}
+
+	protected String[] getAdditionalAttributes(final GridItem item, final int i) {
+		return null;
 	}
 
 	public void addCell(final StringWriter sw, final String text, final String[] attributes) {
