@@ -18,6 +18,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.google.common.collect.Range;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.ColourPalette;
@@ -216,6 +217,22 @@ public abstract class AbstractVerticalReportVisualiser {
 	}
 
 	/**
+	 * Is the specified day within the slot visit window?
+	 * 
+	 * @param day
+	 * @param visit
+	 * @return
+	 */
+	public boolean isDayInsideWindow(final LocalDate day, final SlotVisit visit) {
+		final Slot slot = visit.getSlotAllocation().getSlot();
+		final LocalDate eventStart = getLocalDateFor(slot, slot.getWindowStartWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+		final LocalDate eventEnd = getLocalDateFor(slot, slot.getWindowEndWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+
+		final Range<LocalDate> range = Range.closedOpen(eventStart, eventEnd);
+		return range.contains(day);
+	}
+
+	/**
 	 * Returns all events in the specified sequence which overlap with the 24 hr period starting with the specified date
 	 * 
 	 * @param seq
@@ -243,8 +260,8 @@ public abstract class AbstractVerticalReportVisualiser {
 					eventStart = getLocalDateFor(slot, slot.getWindowStartWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
 					eventEnd = getLocalDateFor(slot, slot.getWindowEndWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
 				} else if (event instanceof VesselEventVisit) {
-					VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
-					VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+					final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+					final VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
 					eventStart = getLocalDateFor(vesselEvent, CargoPackage.Literals.VESSEL_EVENT__START_AFTER);
 					eventEnd = getLocalDateFor(vesselEvent, CargoPackage.Literals.VESSEL_EVENT__START_BY);
 				} else {
