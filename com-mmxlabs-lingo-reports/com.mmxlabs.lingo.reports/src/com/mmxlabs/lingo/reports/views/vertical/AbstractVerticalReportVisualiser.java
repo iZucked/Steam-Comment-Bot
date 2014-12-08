@@ -21,6 +21,7 @@ import org.joda.time.format.DateTimeFormatter;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.Triple;
 import com.mmxlabs.lingo.reports.ColourPalette;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
@@ -221,14 +222,65 @@ public abstract class AbstractVerticalReportVisualiser {
 	 * @param date
 	 * @return
 	 */
-	public Event[] getEvents(final Sequence seq, final LocalDate date) {
-		return getEvents(seq, date, date.plusDays(1));
+	public Event[] getEventsByWindowStart(final Sequence seq, final LocalDate date) {
+		return getEventsByWindowStart(seq, date, date.plusDays(1));
 	}
 
 	/**
 	 * Returns the events, if any, occurring between the two dates specified.
 	 */
-	public Event[] getEvents(final Sequence seq, final LocalDate start, final LocalDate end) {
+	public Event[] getEventsByWindowStart(final Sequence seq, final LocalDate start, final LocalDate end) {
+		final List<Event> result = new ArrayList<>();
+		if (seq != null && start != null && end != null) {
+			for (final Event event : seq.getEvents()) {
+
+				final LocalDate eventStart;
+				final LocalDate eventEnd;
+
+				if (event instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) event;
+					final Slot slot = slotVisit.getSlotAllocation().getSlot();
+					eventStart = getLocalDateFor(slot, slot.getWindowStartWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+					eventEnd = getLocalDateFor(slot, slot.getWindowEndWithSlotOrPortTime(), CargoPackage.Literals.SLOT__WINDOW_START);
+				} else if (event instanceof VesselEventVisit) {
+					VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+					VesselEvent vesselEvent = vesselEventVisit.getVesselEvent();
+					eventStart = getLocalDateFor(vesselEvent, CargoPackage.Literals.VESSEL_EVENT__START_AFTER);
+					eventEnd = getLocalDateFor(vesselEvent, CargoPackage.Literals.VESSEL_EVENT__START_BY);
+				} else {
+					eventStart = getLocalDateFor(event, SchedulePackage.Literals.EVENT__START);
+					eventEnd = getLocalDateFor(event, SchedulePackage.Literals.EVENT__END);
+				}
+				// when we get to an event after the search window, break the loop
+				// NO: events are not guaranteed to be sorted by date :(
+				if (eventStart.isAfter(end)) {
+					// break;
+				}
+				// otherwise, as long as the event is in the search window, add it to the results
+				// if the event ends at midnight, we do *not* count it towards this day
+				else if (start.isBefore(eventEnd)) {
+					result.add(event);
+				}
+			}
+		}
+		return result.toArray(new Event[0]);
+	}
+
+	/**
+	 * Returns all events in the specified sequence which overlap with the 24 hr period starting with the specified date
+	 * 
+	 * @param seq
+	 * @param date
+	 * @return
+	 */
+	public Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate date) {
+		return getEventsByScheduledDate(seq, date, date.plusDays(1));
+	}
+
+	/**
+	 * Returns the events, if any, occurring between the two dates specified.
+	 */
+	public Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate start, final LocalDate end) {
 		final List<Event> result = new ArrayList<>();
 		if (seq != null && start != null && end != null) {
 			for (final Event event : seq.getEvents()) {

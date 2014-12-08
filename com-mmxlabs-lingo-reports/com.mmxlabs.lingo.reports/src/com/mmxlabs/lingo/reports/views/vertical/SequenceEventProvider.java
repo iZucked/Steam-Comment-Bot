@@ -39,7 +39,7 @@ public class SequenceEventProvider extends EventProvider {
 
 		for (final Sequence seq : data) {
 			if (seq != null) {
-				final Event[] events = verticalReportVisualiser.getEvents(seq, date);
+				final Event[] events = getEvents(date, seq);
 				for (final Event event : events) {
 					result.add(event);
 				}
@@ -47,5 +47,10 @@ public class SequenceEventProvider extends EventProvider {
 		}
 
 		return result.toArray(new Event[0]);
+	}
+
+	protected Event[] getEvents(final LocalDate date, final Sequence seq) {
+		final Event[] events = verticalReportVisualiser.getEventsByScheduledDate(seq, date);
+		return events;
 	}
 }
