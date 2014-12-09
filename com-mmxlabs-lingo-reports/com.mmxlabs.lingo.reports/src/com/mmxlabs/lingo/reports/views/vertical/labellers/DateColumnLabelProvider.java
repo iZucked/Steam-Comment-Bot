@@ -1,5 +1,6 @@
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -15,13 +16,13 @@ import com.mmxlabs.models.lng.schedule.Event;
 public class DateColumnLabelProvider extends EventLabelProvider {
 	private final DateTimeFormatter df;
 
-	public DateColumnLabelProvider(final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+	public DateColumnLabelProvider(@NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		super(verticalReportVisualiser);
 		this.df = verticalReportVisualiser.createDateFormat();
 	}
 
 	@Override
-	protected String getText(final LocalDate date, final Event event) {
+	protected String getText(@NonNull final LocalDate date, @NonNull final Event event) {
 		return df.print(date);
 	}
 }

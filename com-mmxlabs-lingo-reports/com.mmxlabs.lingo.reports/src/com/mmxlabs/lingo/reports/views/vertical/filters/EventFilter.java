@@ -1,5 +1,6 @@
 package com.mmxlabs.lingo.reports.views.vertical.filters;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.joda.time.LocalDate;
 
 import com.mmxlabs.models.lng.schedule.Event;
@@ -11,5 +12,5 @@ import com.mmxlabs.models.lng.schedule.Event;
  * 
  */
 public interface EventFilter {
-	boolean isEventFiltered(LocalDate date, Event event);
+	boolean isEventFiltered(@NonNull LocalDate date, @NonNull Event event);
 }

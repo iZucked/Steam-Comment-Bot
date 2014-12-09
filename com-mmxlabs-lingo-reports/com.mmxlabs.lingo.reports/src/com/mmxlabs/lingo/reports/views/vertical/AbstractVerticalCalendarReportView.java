@@ -4,11 +4,10 @@
  */
 package com.mmxlabs.lingo.reports.views.vertical;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -21,10 +20,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
@@ -43,18 +42,8 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
  *   These objects each require an EventProvider (which maps from Date objects to Event [] arrays)
  *   and an EventLabelProvider (which describes how to display an Event object on a particular Date).
  * 
- * Known issues:
- * - Column groups are now missing from the column headers. 
- * 	 Modify CalendarColumn constructor and ReportNebulaGridManager#createNebulaColumns to 
- * 	 create column groups (see previous version of vertical reports for guidance)
  * 
- * - Row headers (grey boxes with dates) are split across different rows. 
- *   Modify new AbstractRenderer()#paint in createPartControl.
- *   
- * - Code is even messier than before.
- *   
- * - Export to Excel format may be broken due to cell merging. Not tested.
- * 
+ * @See https://docs.google.com/a/minimaxlabs.com/document/d/1X9x3sHstBUS9F6zUTV_iAWBGFEs-9qolrkqTiQRjRJ8/edit#
  */
 
 /**
@@ -122,9 +111,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 			@Override
 			public Collection<? extends Object> collectElements(final LNGScenarioModel rootObject, final boolean isPinned) {
-				final List<LNGScenarioModel> result = new ArrayList<LNGScenarioModel>();
-				result.add(rootObject);
-				return result;
+				return Lists.newArrayList(rootObject);
 			}
 
 			@Override
@@ -150,6 +137,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	@Override
 	public void setFocus() {
+		gridViewer.getControl().setFocus();
 	}
 
 	@Override
@@ -170,13 +158,13 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		return createColumn(labeller, title, (GridColumn) null);
 	}
 
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, final GridColumnGroup columnGroup) {
+	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, @Nullable final GridColumnGroup columnGroup) {
 		final GridColumn column = new GridColumn(columnGroup, SWT.NONE);
 		return createColumn(labeller, name, column);
 
 	}
 
-	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, final GridColumn column) {
+	protected GridViewerColumn createColumn(final ColumnLabelProvider labeller, final String name, @Nullable final GridColumn column) {
 		final GridViewerColumn result;
 		if (column == null) {
 			result = new GridViewerColumn(gridViewer, SWT.NONE);
@@ -191,9 +179,9 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 
 	}
 
-	
 	/**
-	 * Override this method to control the columns in the vertical report.
+	 * This method is used by subclasses to create the columns required by the report. This is called every time the input data changes. Existing columns will have been disposed prior to calling this
+	 * method.
 	 * 
 	 * @param data
 	 */

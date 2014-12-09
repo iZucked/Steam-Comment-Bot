@@ -2,6 +2,8 @@ package com.mmxlabs.lingo.reports.views.vertical.providers;
 
 import java.util.ArrayList;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.vertical.AbstractVerticalReportVisualiser;
@@ -17,7 +19,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
  * 
  * column.setLabelProvider(new EventColumnLabelProvider(new SequenceEventProvider(sequence));
  * 
- * Override the {@link#filterEventOut(Date date, Event event)} method to filter the events more specifically.
+ * Override the {@link#filterEventOut(LocalDate date, Event event)} method to filter the events more specifically.
  * 
  * @author Simon McGregor
  * 
@@ -26,18 +28,18 @@ public class SequenceEventProvider extends EventProvider {
 	protected final Sequence[] data;
 	protected final AbstractVerticalReportVisualiser verticalReportVisualiser;
 
-	public SequenceEventProvider(final Sequence[] data, final EventFilter filter, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+	public SequenceEventProvider(@NonNull final Sequence[] data, @Nullable final EventFilter filter, @NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		super(filter);
 		this.data = data;
 		this.verticalReportVisualiser = verticalReportVisualiser;
 	}
 
-	public SequenceEventProvider(final Sequence seq, final EventFilter filter, final AbstractVerticalReportVisualiser verticalReportVisualiser) {
+	public SequenceEventProvider(@NonNull final Sequence seq, @Nullable final EventFilter filter, @NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		this(new Sequence[] { seq }, filter, verticalReportVisualiser);
 	}
 
 	@Override
-	public Event[] getUnfilteredEvents(final LocalDate date) {
+	public Event[] getUnfilteredEvents(@NonNull final LocalDate date) {
 		final ArrayList<Event> result = new ArrayList<>();
 
 		for (final Sequence seq : data) {
@@ -52,7 +54,7 @@ public class SequenceEventProvider extends EventProvider {
 		return result.toArray(new Event[0]);
 	}
 
-	protected Event[] getEvents(final LocalDate date, final Sequence seq) {
+	protected Event[] getEvents(@NonNull final LocalDate date, @NonNull final Sequence seq) {
 		final Event[] events = verticalReportVisualiser.getEventsByScheduledDate(seq, date);
 		return events;
 	}

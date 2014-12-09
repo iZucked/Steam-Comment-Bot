@@ -2,6 +2,9 @@ package com.mmxlabs.lingo.reports.views.vertical.filters;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 
@@ -13,16 +16,16 @@ import com.mmxlabs.models.lng.schedule.Event;
  */
 public class PortEventFilter extends FieldEventFilter<Port> {
 
-	public PortEventFilter(final EventFilter filter, final List<Port> values) {
+	public PortEventFilter(@Nullable final EventFilter filter, @NonNull final List<Port> values) {
 		super(filter, values);
 	}
 
-	public PortEventFilter(final List<Port> values) {
+	public PortEventFilter(@NonNull final List<Port> values) {
 		this(null, values);
 	}
 
 	@Override
-	Port getEventField(final Event event) {
+	protected Port getEventField(@NonNull final Event event) {
 		return event.getPort();
 	}
 

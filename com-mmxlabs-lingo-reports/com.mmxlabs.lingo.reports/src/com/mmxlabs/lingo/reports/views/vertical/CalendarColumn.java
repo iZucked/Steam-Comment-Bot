@@ -1,6 +1,7 @@
 package com.mmxlabs.lingo.reports.views.vertical;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumnGroup;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -8,7 +9,14 @@ import com.mmxlabs.lingo.reports.views.vertical.labellers.CalendarColumnLabelPro
 import com.mmxlabs.lingo.reports.views.vertical.labellers.EventLabelProvider;
 import com.mmxlabs.lingo.reports.views.vertical.providers.EventProvider;
 
-public class CalendarColumn {
+/**
+ * The calendar column is a class to describe a particular column in the {@link AbstractVerticalCalendarReportView} and is used to generate Nebula {@link Grid} objects from previously created
+ * {@link EventProvider} and {@link EventLabelProvider} implementations.
+ * 
+ * @author Simon McGregor
+ *
+ */
+public final class CalendarColumn {
 	private final EventProvider provider;
 	private final EventLabelProvider labeller;
 	private final String title;

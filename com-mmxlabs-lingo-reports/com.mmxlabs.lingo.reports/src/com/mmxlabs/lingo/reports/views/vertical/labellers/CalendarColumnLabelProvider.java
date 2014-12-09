@@ -2,6 +2,7 @@ package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
 import java.util.HashMap;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
@@ -22,14 +23,15 @@ public class CalendarColumnLabelProvider extends GridColumnLabelProvider {
 
 	protected HashMap<LocalDate, Event[]> cache = new HashMap<>();
 
-	public CalendarColumnLabelProvider(final DateTimeFormatter df, final EventProvider provider, final EventLabelProvider labeller, final ReportNebulaGridManager manager) {
+	public CalendarColumnLabelProvider(@NonNull final DateTimeFormatter df, @NonNull final EventProvider provider, @NonNull final EventLabelProvider labeller,
+			@NonNull final ReportNebulaGridManager manager) {
 		this.df = df;
 		this.provider = provider;
 		this.labeller = labeller;
 		this.manager = manager;
 	}
 
-	public Event getData(final Pair<LocalDate, Integer> key) {
+	public Event getData(@NonNull final Pair<LocalDate, Integer> key) {
 		final LocalDate date = key.getFirst();
 		final Integer index = key.getSecond();
 		final Event[] result;

@@ -2,6 +2,8 @@ package com.mmxlabs.lingo.reports.views.vertical.providers;
 
 import java.util.ArrayList;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.vertical.filters.EventFilter;
@@ -10,24 +12,22 @@ import com.mmxlabs.models.lng.schedule.Event;
 /**
  * Class to provide events to an EventDisplay column.
  * 
- * Descendant classes should override {@link#getUnfilteredEvents(Date date)} and / or {@link#filterEventOut(Date date, Event event)} to maintain filtered behaviour.
+ * Descendant classes should override {@link#getUnfilteredEvents(LocalDate date)} and / or {@link#filterEventOut(LocalDate date, Event event)} to maintain filtered behaviour.
  * 
- * If {@link#getEvents(Date date)} is overridden without preserving the filter logic, {@link#filterEventOut} should be made {@code final} in the overriding class.
+ * If {@link#getEvents(LocalDate date)} is overridden without preserving the filter logic, {@link#filterEventOut} should be made {@code final} in the overriding class.
  * 
  * 
  * @author Simon McGregor
  * 
- * @param <T>
- *            The data type to initialise the event provider with.
  */
 public abstract class EventProvider {
-	final protected EventFilter filter;
+	protected final EventFilter filter;
 
-	public EventProvider(final EventFilter filter) {
+	public EventProvider(@Nullable final EventFilter filter) {
 		this.filter = filter;
 	}
 
-	public Event[] getEvents(final LocalDate date) {
+	public Event[] getEvents(@NonNull final LocalDate date) {
 		final ArrayList<Event> result = new ArrayList<>();
 
 		for (final Event event : getUnfilteredEvents(date)) {
@@ -40,10 +40,10 @@ public abstract class EventProvider {
 	}
 
 	/** Must be overridden to provide a list of events for any particular date */
-	protected abstract Event[] getUnfilteredEvents(LocalDate date);
+	protected abstract Event[] getUnfilteredEvents(@NonNull LocalDate date);
 
 	/** Returns {@code true} if an event should not be returned by this event provider for a particular date. */
-	protected boolean filterEventOut(final LocalDate date, final Event event) {
+	protected boolean filterEventOut(@NonNull final LocalDate date, @NonNull final Event event) {
 		if (filter != null) {
 			return filter.isEventFiltered(date, event);
 		}

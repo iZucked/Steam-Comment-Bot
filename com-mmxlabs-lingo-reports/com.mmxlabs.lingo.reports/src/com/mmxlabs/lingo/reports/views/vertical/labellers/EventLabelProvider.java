@@ -1,5 +1,6 @@
 package com.mmxlabs.lingo.reports.views.vertical.labellers;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.joda.time.LocalDate;
@@ -17,23 +18,23 @@ public class EventLabelProvider {
 
 	protected final AbstractVerticalReportVisualiser verticalReportVisualiser;
 
-	public EventLabelProvider(AbstractVerticalReportVisualiser verticalReportVisualiser) {
+	public EventLabelProvider(@NonNull final AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		this.verticalReportVisualiser = verticalReportVisualiser;
 	}
 
-	protected String getText(final LocalDate date, final Event event) {
+	protected String getText(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventText(date, event);
 	}
 
-	protected Font getFont(final LocalDate date, final Event event) {
+	protected Font getFont(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventFont(date, event);
 	}
 
-	protected Color getBackground(final LocalDate date, final Event event) {
+	protected Color getBackground(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventBackgroundColor(date, event);
 	}
 
-	protected Color getForeground(final LocalDate date, final Event event) {
+	protected Color getForeground(@NonNull final LocalDate date, @NonNull final Event event) {
 		return verticalReportVisualiser.getEventForegroundColor(date, event);
 	}
 }

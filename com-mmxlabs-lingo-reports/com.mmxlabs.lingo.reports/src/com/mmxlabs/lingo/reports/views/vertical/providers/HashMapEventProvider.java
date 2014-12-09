@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.joda.time.LocalDate;
 
 import com.mmxlabs.lingo.reports.views.vertical.VerticalReportUtils;
@@ -12,16 +14,17 @@ import com.mmxlabs.lingo.reports.views.vertical.filters.EventFilter;
 import com.mmxlabs.models.lng.schedule.Event;
 
 /**
- * Event provider
+ * An {@link EventProvider} which uses a {@link HashMap} to cache events by date. It can be used as a cache around a pre-existing {@link EventProvider} and/or be directly populated via external code
+ * through {@link #addEvent(LocalDate, Event)}.
  * 
- * @author mmxlabs
+ * @author Simon McGregor
  * 
  */
 public class HashMapEventProvider extends EventProvider {
 	protected Map<LocalDate, List<Event>> events = new HashMap<>();
 	protected final Event[] noEvents = new Event[0];
 
-	public HashMapEventProvider(final LocalDate start, final LocalDate end, final EventProvider wrapped) {
+	public HashMapEventProvider(@NonNull final LocalDate start, @NonNull final LocalDate end, @NonNull final EventProvider wrapped) {
 		this(null);
 		for (final LocalDate day : VerticalReportUtils.getUTCDaysBetween(start, end)) {
 			for (final Event event : wrapped.getEvents(day)) {
@@ -30,18 +33,18 @@ public class HashMapEventProvider extends EventProvider {
 		}
 	}
 
-	public HashMapEventProvider(final EventFilter filter) {
+	public HashMapEventProvider(@Nullable final EventFilter filter) {
 		super(filter);
 	}
 
-	public void addEvent(final LocalDate date, final Event event) {
+	public void addEvent(@NonNull final LocalDate date, @NonNull final Event event) {
 		final List<Event> list = events.containsKey(date) ? events.get(date) : new ArrayList<Event>();
 		list.add(event);
 		this.events.put(date, list);
 	}
 
 	@Override
-	protected Event[] getUnfilteredEvents(final LocalDate date) {
+	protected Event[] getUnfilteredEvents(@NonNull final LocalDate date) {
 		if (events.containsKey(date)) {
 			return events.get(date).toArray(noEvents);
 		}
