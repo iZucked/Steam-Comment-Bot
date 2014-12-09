@@ -1775,9 +1775,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setGeneratedCharterOutStartTime(@NonNull final int charterOutStartTime) {
+	public void setGeneratedCharterOutStartTime(final int charterOutStartTime) {
 		charterMarketProviderEditor.setCharterOutStartTime(charterOutStartTime);
-		;
 	}
 
 	/**

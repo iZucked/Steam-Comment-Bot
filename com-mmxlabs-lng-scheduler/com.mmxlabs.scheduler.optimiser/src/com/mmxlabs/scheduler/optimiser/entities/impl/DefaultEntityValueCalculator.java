@@ -48,7 +48,6 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.AllocationRecord;
-import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICancellationFeeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IHedgesProvider;
@@ -88,11 +87,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	private ICancellationFeeProvider cancellationFeeProvider;
 
 	@Inject
-	private IActualsDataProvider actualsDataProvider;
-
-	@Inject
 	private ITimeZoneToUtcOffsetProvider utcOffsetProvider;
-	
+
 	/**
 	 * Internal data structure to store handy data needed for Cargo P&L calculations. Note similarity to {@link IAllocationAnnotation} - and even {@link AllocationRecord} (which is not visible here).
 	 * 
@@ -132,7 +128,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	@Override
-	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVesselAvailability vesselAvailability, final int vesselStartTime,
+	public long evaluate(@NonNull final VoyagePlan plan, @NonNull final IAllocationAnnotation currentAllocation, @NonNull final IVesselAvailability vesselAvailability, final int vesselStartTime,
 			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		final List<IPortSlot> slots = currentAllocation.getSlots();
@@ -191,7 +187,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			// Translate into UTC curve
 			utcEquivTaxTime = utcOffsetProvider.UTC(currentAllocation.getSlotTime(slot), slot.getPort());
-			
+
 			idx++;
 		}
 
@@ -250,20 +246,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				((AllocationAnnotation) currentAllocation).setSlotPricePerMMBTu(slot, pricePerMMBTu);
 
 			}
-
-			// Sanity checks for actuals DCP
-			if (actualsDataProvider.hasActuals(slot)) {
-				// Disable as not correct for DES cases
-//				assert cargoPNLData.arrivalTimes[idx] == actualsDataProvider.getArrivalTime(slot);
-//				assert cargoPNLData.visitDurations[idx] == actualsDataProvider.getVisitDuration(slot);
-//				assert cargoPNLData.slotCargoCV[idx] == actualsDataProvider.getCVValue(slot);
-//				assert cargoPNLData.slotVolumeInM3[idx] == actualsDataProvider.getVolumeInM3(slot);
-//				assert cargoPNLData.slotVolumeInMMBTu[idx] == actualsDataProvider.getVolumeInMMBtu(slot);
-//				assert cargoPNLData.slotPricePerMMBTu[idx] == actualsDataProvider.getLNGPricePerMMBTu(slot);
-			}
-
 			idx++;
 		}
+
+		assert baseEntity != null;
 
 		// Calculate additional P&L
 		idx = 0;
@@ -381,8 +367,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param baseEntity
 	 * @param entityProfit
 	 */
-	protected void evaluateCargoPNL(final CargoPNLData cargoPNLData, final IEntity baseEntity, final Map<IEntityBook, Long> entityPreTaxProfit, @Nullable final IAnnotatedSolution annotatedSolution,
-			@Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
+	protected void evaluateCargoPNL(@NonNull final CargoPNLData cargoPNLData, @NonNull final IEntity baseEntity, @NonNull final Map<IEntityBook, Long> entityPreTaxProfit,
+			@Nullable final IAnnotatedSolution annotatedSolution, @Nullable final Map<IEntityBook, IDetailTree> entityBookDetailTreeMap) {
 
 		int idx = 0;
 		for (final IPortSlot slot : cargoPNLData.slots) {
@@ -545,8 +531,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param includeLNG
 	 */
 
-	protected void calculateShippingEntityCosts(final Map<IEntityBook, Long> entityPreTaxProfit, final IVesselAvailability vesselAvailability, final VoyagePlan plan, final CargoPNLData cargoPNLData,
-			final IEntity tradingEntity, final IEntity shippingEntity, final boolean includeLNG, final Map<IEntityBook, IDetailTree> entityDetailsMap) {
+	protected void calculateShippingEntityCosts(@NonNull final Map<IEntityBook, Long> entityPreTaxProfit, @NonNull final IVesselAvailability vesselAvailability, @NonNull final VoyagePlan plan,
+			@NonNull final CargoPNLData cargoPNLData, @NonNull final IEntity tradingEntity, @NonNull final IEntity shippingEntity, final boolean includeLNG,
+			@Nullable final Map<IEntityBook, IDetailTree> entityDetailsMap) {
 
 		if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vesselAvailability.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return;

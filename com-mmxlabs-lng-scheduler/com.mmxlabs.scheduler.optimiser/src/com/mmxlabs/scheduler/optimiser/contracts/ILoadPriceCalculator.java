@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
@@ -30,7 +31,7 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @param sequences
 	 */
-	public void prepareEvaluation(ISequences sequences);
+	public void prepareEvaluation(@NonNull ISequences sequences);
 
 	/**
 	 * Find the price (in $/M3) for loading at the given slot. Although every argument here except loadSlot and loadVolume can be found in the previous call to
@@ -47,8 +48,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @return
 	 */
-	public int calculateFOBPricePerMMBTu(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation,
-			IVesselAvailability vesselAvailability, int vesselStartTime, VoyagePlan plan, @Nullable IDetailTree annotations);
+	public int calculateFOBPricePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu, @NonNull IAllocationAnnotation allocationAnnotation,
+			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when the cargo is a DES Purchase
@@ -63,8 +64,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
 	 * @return
 	 */
-	public int calculateDESPurchasePricePerMMBTu(ILoadOption loadOption, final IDischargeSlot dischargeSlot, final int dischargePricePerMMBTu, IAllocationAnnotation allocationAnnotation,
-			@Nullable IDetailTree annotations);
+	public int calculateDESPurchasePricePerMMBTu(@NonNull ILoadOption loadOption, @NonNull IDischargeSlot dischargeSlot, int dischargePricePerMMBTu,
+			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a the cargo is a FOB Sale
@@ -78,8 +79,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
 	 * @return
 	 */
-	public int calculatePriceForFOBSalePerMMBTu(ILoadSlot loadSlot, final IDischargeOption dischargeOption, final int dischargePricePerMMBTu, final IAllocationAnnotation allocationAnnotation,
-			@Nullable IDetailTree annotations);
+	public int calculatePriceForFOBSalePerMMBTu(@NonNull ILoadSlot loadSlot, @NonNull IDischargeOption dischargeOption, int dischargePricePerMMBTu,
+			@NonNull IAllocationAnnotation allocationAnnotation, @Nullable IDetailTree annotations);
 
 	/**
 	 * Questions -> Volume allocator interaction? -> EntityValueCalcuator interaction -> Statefull/less?
@@ -88,12 +89,12 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * 
 	 * @return Positive value for profit, negative value for loss (Normal scale factor) // TODO: Copy API for calulcateLoadPrice
 	 */
-	public long calculateAdditionalProfitAndLoss(ILoadOption loadOption, IAllocationAnnotation allocationAnnotation, int[] slotPricesPerMMBTu, IVesselAvailability vesselAvailability,
-			int vesselStartTime, VoyagePlan plan, @Nullable IDetailTree annotations);
+	public long calculateAdditionalProfitAndLoss(@NonNull ILoadOption loadOption, @NonNull IAllocationAnnotation allocationAnnotation, @NonNull int[] slotPricesPerMMBTu,
+			@NonNull IVesselAvailability vesselAvailability, int vesselStartTime, @NonNull VoyagePlan plan, @Nullable IDetailTree annotations);
 
 	/**
-	 * Invoked before final P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to
-	 * clean any cached data prior to the real calculations.
+	 * Invoked before P&L calculations are about to begin, but after {@link #prepareEvaluation(ISequences)}. The calculate methods may have been invoked to obtain P&L estimates, now we want to clean
+	 * any cached data prior to the real calculations.
 	 */
 	public void prepareRealPNL();
 }
