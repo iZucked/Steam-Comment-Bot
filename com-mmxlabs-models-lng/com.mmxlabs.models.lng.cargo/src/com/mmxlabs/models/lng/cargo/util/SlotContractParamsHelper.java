@@ -35,7 +35,7 @@ public final class SlotContractParamsHelper {
 			return null;
 		}
 		// Are we of the correct contract? If not we may have stale, invalid params, so exit now to avoid returning them
-		if (!contractCls.isInstance(contract)) {
+		if (!contractCls.isInstance(contract.getPriceInfo())) {
 			return null;
 		}
 		// Search through extensions to find the correct params object.
