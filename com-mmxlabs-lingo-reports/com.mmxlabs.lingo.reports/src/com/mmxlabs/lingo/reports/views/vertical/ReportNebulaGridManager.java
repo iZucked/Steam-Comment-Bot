@@ -182,4 +182,7 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 		return root;
 	}
 
+	public CalendarColumn getCalendarColumn(final int columnIdx) {
+		return calendarColumns.get(columnIdx);
+	}
 }
