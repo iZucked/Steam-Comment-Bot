@@ -10,8 +10,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -31,6 +34,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
+
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
 
 	private static final int RELAXATION_STEP = 6;
 
@@ -60,6 +66,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private boolean bestPlanFitsInAvailableTime = false;
 
 	private final ILNGVoyageCalculator voyageCalculator;
+
+	private IResource resource;
 
 	@Inject
 	public VoyagePlanOptimiser(final ILNGVoyageCalculator voyageCalculator) {
@@ -113,16 +121,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 */
 	@Override
 	public VoyagePlan optimise() {
-
-		// nonRecursiveRunLoop();
-		// System.err.println("==============Optimising voyage plan=============");
-
 		runLoop(0);
-
-		// if (!bestPlanFitsInAvailableTime) {
-		// System.err.println("Impossible situation!");
-		// }
-
 		return bestPlan;
 	}
 
@@ -132,7 +131,13 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		if (slot != null) {
 			if (slot.getPortType() == PortType.End) {
-				final ITimeWindow window = slot.getTimeWindow();
+				ITimeWindow window = slot.getTimeWindow();
+				if (resource != null) {
+					final IEndRequirement requirement = startEndRequirementProvider.getEndRequirement(resource);
+					if (requirement != null) {
+						window = requirement.getTimeWindow();
+					}
+				}
 
 				final int lastArrivalTime = portTimesRecord.getSlotTime(slot);
 				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getEnd() ? 0 : window.getEnd() - lastArrivalTime);
@@ -223,7 +228,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 					// This is not calculator.multiply, because hireRate is not scaled.
 					{
-						int hireRatePerDay = currentPlan.getCharterInRatePerDay();
+						final int hireRatePerDay = currentPlan.getCharterInRatePerDay();
 						final long hireCost = (long) hireRatePerDay * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime()) / 24;
 						currentCost += hireCost;
 					}
@@ -341,36 +346,14 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	public long evaluatePlan(final VoyagePlan plan) {
 		if (plan == null) {
 			return Long.MAX_VALUE;
-			// System.err.println("Evaluating a plan");
-			// for (final Object o : plan.getSequence()) {
-			// if (o instanceof VoyageDetails) {
-			// final VoyageDetails vd = (VoyageDetails) o;
-			// System.err.println("\tvoyage from " + vd.getOptions().getFromPortSlot().getPort().getName() + " to " + vd.getOptions().getToPortSlot().getPort().getName());
-			// System.err.println(vd.getOptions());
-			// System.err.println("idle:" + vd.getIdleTime() + ", journey" + vd.getTravelTime());
-			// for (final FuelComponent fc : FuelComponent.values()) {
-			// final long consumption = vd.getFuelConsumption(fc, fc.getDefaultFuelUnit());
-			// final long up = vd.getFuelUnitPrice(fc);
-			// System.err.println("\t\t" + fc + " = " + consumption + ", " + Calculator.multiply(consumption, up));
-			// }
-			// }
-			// }
 		}
 
-		// long revenue = currentPlan.getSalesRevenue() -
-		// currentPlan.getSalesRevenue();
 		long cost = 0;
 		for (final FuelComponent fuel : FuelComponent.values()) {
 			cost += plan.getTotalFuelCost(fuel);
 		}
-		// System.err.println("Fuel Cost = " + cost);
-		cost += plan.getTotalRouteCost();
-		// System.err.println("Total Cost = " + cost);
-		// if (cost < bestCost)
-		// System.err.println("Maybe new best ^^");
-		// // include cost of hire
 
-		// cost += plan.getTotalHireCost();
+		cost += plan.getTotalRouteCost();
 		return cost;
 	}
 
@@ -432,8 +415,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * @param vessel
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, int baseFuelPricePerMT) {
+	public void setVessel(final IVessel vessel, final IResource resource, final int baseFuelPricePerMT) {
 		this.vessel = vessel;
+		this.resource = resource;
 		this.baseFuelPricePerMT = baseFuelPricePerMT;
 	}
 
@@ -478,7 +462,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	@Override
-	public void setStartHeel(long heelVolumeInM3) {
+	public void setStartHeel(final long heelVolumeInM3) {
 		startHeel = heelVolumeInM3;
 	}
 

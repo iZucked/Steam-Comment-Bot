@@ -6,6 +6,10 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -76,7 +80,8 @@ public interface IVoyagePlanOptimiser {
 	 * 
 	 * @param vessel
 	 */
-	void setVessel(final IVessel vessel, int baseFuelPricePerMT);
+	void setVessel(@NonNull IVessel vessel, @Nullable IResource resource, int baseFuelPricePerMT);
+
 
 	/**
 	 * Once optimised, returns the best {@link VoyagePlan} cost.

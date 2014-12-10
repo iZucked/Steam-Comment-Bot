@@ -13,6 +13,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.caches.AbstractCache;
 import com.mmxlabs.common.caches.AbstractCache.IKeyEvaluator;
 import com.mmxlabs.common.caches.LHMCache;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -54,11 +55,13 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		protected IPortTimesRecord portTimesRecord;
 		protected final long startHeel;
+		protected IResource resource;
 
-		public CacheKey(final IVessel vessel, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence, final IPortTimesRecord portTimesRecord,
-				final List<IVoyagePlanChoice> choices, final long startHeel) {
+		public CacheKey(final IVessel vessel, final IResource resource, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence,
+				final IPortTimesRecord portTimesRecord, final List<IVoyagePlanChoice> choices, final long startHeel) {
 			super();
 			this.vessel = vessel;
+			this.resource = resource;
 			this.vesselCharterInRatePerDay = vesselCharterInRatePerDay;
 			this.baseFuelPricePerMT = baseFuelPricePerMT;
 			final int sz = sequence.size();
@@ -157,6 +160,8 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private long startHeel;
 
+	private IResource resource;
+
 	public CachingVoyagePlanOptimiser(final IVoyagePlanOptimiser delegate, final int cacheSize) {
 		super();
 		this.delegate = delegate;
@@ -170,7 +175,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				for (final IVoyagePlanChoice c : arg.choices) {
 					delegate.addChoice(c);
 				}
-				delegate.setVessel(arg.vessel, arg.baseFuelPricePerMT);
+				delegate.setVessel(arg.vessel, arg.resource, arg.baseFuelPricePerMT);
 				delegate.setVesselCharterInRatePerDay(arg.vesselCharterInRatePerDay);
 				delegate.setBasicSequence(arg.sequence);
 				delegate.setPortTimesRecord(arg.portTimesRecord);
@@ -191,7 +196,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	@Override
 	public VoyagePlan optimise() {
 
-		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, portTimesRecord, choices, startHeel));
+		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, resource, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, portTimesRecord, choices, startHeel));
 
 		// bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestPlan = best.getFirst();
@@ -233,8 +238,9 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	/**
 	 */
 	@Override
-	public void setVessel(final IVessel vessel, final int baseFuelPricePerMT) {
+	public void setVessel(final IVessel vessel, final IResource resource, final int baseFuelPricePerMT) {
 		this.vessel = vessel;
+		this.resource = resource;
 		this.baseFuelPricePerMT = baseFuelPricePerMT;
 	}
 

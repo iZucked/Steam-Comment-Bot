@@ -28,8 +28,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.NBOTravelVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.RouteVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.providers.IActualsDataProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
-import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
+import com.mmxlabs.scheduler.optimiser.providers.ITimeZoneToUtcOffsetProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.IPortTimesRecord;
@@ -67,6 +68,9 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 	@Inject
 	private ITimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
 
+	@Inject
+	private IVesselProvider vesselProvider;
+	
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
 
@@ -188,7 +192,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		vpo.reset();
 
-		vpo.setVessel(vesselAvailability.getVessel(), baseFuelUnitPricePerMT);
+		vpo.setVessel(vesselAvailability.getVessel(), vesselProvider.getResource(vesselAvailability), baseFuelUnitPricePerMT);
 		vpo.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 		vpo.setStartHeel(startingHeelInM3);
 		// Install our new alternative sequence
