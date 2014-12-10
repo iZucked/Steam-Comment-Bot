@@ -77,27 +77,9 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final IAnnotatedSolution solution, final int[] arrivalTimes) {
 		final VoyagePlanIterator vpi = voyagePlanIteratorProvider.get();
-		final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 		vpi.setVoyagePlans(resource, plans, arrivalTimes);
 
 		vpi.reset();
-
-		// final ICurve charterCostCurve;
-		// switch (vessel.getVesselInstanceType()) {
-		// case SPOT_CHARTER:
-		// charterCostCurve = vessel.getHourlyCharterInPrice();
-		// break;
-		// case TIME_CHARTER:
-		// charterCostCurve = vessel.getHourlyCharterInPrice();
-		// break;
-		// case CARGO_SHORTS:
-		// charterCostCurve = vessel.getHourlyCharterInPrice();
-		// break;
-		// default:
-		// charterCostCurve = null;
-		// break;
-		// }
-		// final int charterRate = charterCostCurve == null ? 0 : charterCostCurve.getValueAtPoint(arrivalTimes[0]);
 
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();

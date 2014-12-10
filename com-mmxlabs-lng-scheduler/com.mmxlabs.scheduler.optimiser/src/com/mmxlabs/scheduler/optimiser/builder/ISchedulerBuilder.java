@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -277,7 +278,8 @@ public interface ISchedulerBuilder {
 	void setSlotVesselAvailabilityRestriction(IPortSlot slot, Set<IVesselAvailability> vessels);
 
 	/**
-	 * Create a time window with the specified start and end time.
+	 * Create a time window with the specified start and end time. If the end time is {@link Integer#MIN_VALUE}, then assume the end time is unbounded and it will be replaced with the latest time in
+	 * the scenario.
 	 * 
 	 * @param start
 	 *            Time window start

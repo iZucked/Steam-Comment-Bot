@@ -167,12 +167,11 @@ public class VoyagePlanner {
 			}
 			cargoCV = heelOptionsSlot.getHeelOptions().getHeelCVValue();
 		} else if (prevPortSlot instanceof ILoadOption) {
-			ILoadOption loadOption = (ILoadOption) prevPortSlot;
+			final ILoadOption loadOption = (ILoadOption) prevPortSlot;
 			cargoCV = loadOption.getCargoCVValue();
 		} else {
 			cargoCV = previousOptions.getCargoCVValue();
 		}
-
 
 		if ((prevPortType == PortType.DryDock) || (prevPortType == PortType.Maintenance)) {
 			options.setWarm(true);
@@ -185,8 +184,8 @@ public class VoyagePlanner {
 		// Convert rate to MT equivalent per day
 		final int nboRateInMTPerDay = (int) Calculator.convertM3ToMT(vesselClass.getNBORate(vesselState), cargoCV, vesselClass.getBaseFuelConversionFactor());
 		if (nboRateInMTPerDay > 0) {
-		final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
-		options.setNBOSpeed(nboSpeed);
+			final int nboSpeed = vesselClass.getConsumptionRate(vesselState).getSpeed(nboRateInMTPerDay);
+			options.setNBOSpeed(nboSpeed);
 		}
 		// Determined by voyage plan optimiser
 		options.setUseNBOForTravel(useNBO);
@@ -217,8 +216,8 @@ public class VoyagePlanner {
 				}
 			}
 		} else if (thisPortSlot.getPortType() == PortType.End) {
-			IResource resource = vesselProvider.getResource(vesselAvailability);
-			IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+			final IResource resource = vesselProvider.getResource(vesselAvailability);
+			final IEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
 			options.setShouldBeCold(endRequirement.isEndCold());
 			options.setAllowCooldown(false);
 		} else {
@@ -463,9 +462,26 @@ public class VoyagePlanner {
 				if (plan == null) {
 					return null;
 				}
+
+				// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the new
+				// arrival time.
+				if (!isShortsSequence) {
+					final IDetailsSequenceElement[] vpSequence = plan.getSequence();
+					final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
+					assert lastVoyage.getOptions().getToPortSlot().getPortType() == PortType.End;
+					// Idx of last element
+					final int idx = arrivalTimes.length - 1;
+					// New arrival time = Previoud element arrival time + visit duration + travel time + idle time.
+					arrivalTimes[idx] = arrivalTimes[idx - 1] + durationsProvider.getElementDuration(portSlotProvider.getElement(lastVoyage.getOptions().getFromPortSlot()), resource)
+							+ lastVoyage.getTravelTime() + lastVoyage.getIdleTime();
+					portTimesRecord.setSlotTime(lastVoyage.getOptions().getToPortSlot(), arrivalTimes[idx]);
+
+				}
+
 				plan.setIgnoreEnd(false);
 				heelVolumeInM3 = evaluateVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, portTimesRecord, heelVolumeInM3, plan);
 				assert heelVolumeInM3 >= 0;
+
 			}
 		}
 
