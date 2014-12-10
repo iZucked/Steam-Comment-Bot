@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.common.delayedactions;
 
-import javax.sound.midi.Sequence;
-
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
