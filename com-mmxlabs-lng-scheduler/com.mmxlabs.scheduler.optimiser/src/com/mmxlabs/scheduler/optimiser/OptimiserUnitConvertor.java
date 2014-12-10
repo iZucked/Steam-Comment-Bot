@@ -63,6 +63,10 @@ public final class OptimiserUnitConvertor {
 		return (double) factor / (double) Calculator.HighScaleFactor;
 	}
 
+	public static double convertToExternalConversionFactor(final long factor) {
+		return (double) factor / (double) Calculator.HighScaleFactor;
+	}
+
 	/**
 	 * Convert to internal speed units.
 	 * 
