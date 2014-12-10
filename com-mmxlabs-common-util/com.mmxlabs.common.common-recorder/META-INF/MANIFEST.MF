@@ -7,7 +7,7 @@ Bundle-Description: Project containing commonly used classes and utility
 Bundle-DocURL: http://www.minimaxlabs.com/
 Bundle-ManifestVersion: 2
 Bundle-Name: common-recorder
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-SymbolicName: com.mmxlabs.common.common-recorder
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-Version: 2.6.2.qualifier
