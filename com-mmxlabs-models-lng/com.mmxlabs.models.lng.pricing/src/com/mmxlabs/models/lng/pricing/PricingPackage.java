@@ -978,6 +978,61 @@ public interface PricingPackage extends EPackage {
 	int PORTS_SPLIT_PRICE_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl <em>Ports Split Expression Map</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitExpressionMap()
+	 * @generated
+	 */
+	int PORTS_SPLIT_EXPRESSION_MAP = 18;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_EXPRESSION_MAP__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_EXPRESSION_MAP__PORTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Expression1</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION1 = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Expression2</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION2 = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Ports Split Expression Map</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORTS_SPLIT_EXPRESSION_MAP_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PricingModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1532,6 +1587,49 @@ public interface PricingPackage extends EPackage {
 	EReference getPortsSplitPriceMap_IndexH2();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap <em>Ports Split Expression Map</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Ports Split Expression Map</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap
+	 * @generated
+	 */
+	EClass getPortsSplitExpressionMap();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap#getPorts <em>Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Ports</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap#getPorts()
+	 * @see #getPortsSplitExpressionMap()
+	 * @generated
+	 */
+	EReference getPortsSplitExpressionMap_Ports();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap#getExpression1 <em>Expression1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Expression1</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap#getExpression1()
+	 * @see #getPortsSplitExpressionMap()
+	 * @generated
+	 */
+	EAttribute getPortsSplitExpressionMap_Expression1();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap#getExpression2 <em>Expression2</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Expression2</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PortsSplitExpressionMap#getExpression2()
+	 * @see #getPortsSplitExpressionMap()
+	 * @generated
+	 */
+	EAttribute getPortsSplitExpressionMap_Expression2();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2004,6 +2102,40 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORTS_SPLIT_PRICE_MAP__INDEX_H2 = eINSTANCE.getPortsSplitPriceMap_IndexH2();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl <em>Ports Split Expression Map</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.PortsSplitExpressionMapImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortsSplitExpressionMap()
+		 * @generated
+		 */
+		EClass PORTS_SPLIT_EXPRESSION_MAP = eINSTANCE.getPortsSplitExpressionMap();
+
+		/**
+		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORTS_SPLIT_EXPRESSION_MAP__PORTS = eINSTANCE.getPortsSplitExpressionMap_Ports();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression1</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION1 = eINSTANCE.getPortsSplitExpressionMap_Expression1();
+
+		/**
+		 * The meta object literal for the '<em><b>Expression2</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORTS_SPLIT_EXPRESSION_MAP__EXPRESSION2 = eINSTANCE.getPortsSplitExpressionMap_Expression2();
 
 	}
 
