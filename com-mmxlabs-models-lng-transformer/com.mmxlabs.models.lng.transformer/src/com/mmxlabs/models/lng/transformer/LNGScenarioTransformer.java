@@ -2366,7 +2366,7 @@ public class LNGScenarioTransformer {
 		if (from == null && to != null) {
 			window = builder.createTimeWindow(convertTime(earliestTime), convertTime(to));
 		} else if (from != null && to == null) {
-			window = builder.createTimeWindow(convertTime(from), convertTime(latestTime));
+			window = builder.createTimeWindow(convertTime(from), Integer.MIN_VALUE);
 		} else if (from != null && to != null) {
 			window = builder.createTimeWindow(convertTime(from), convertTime(to));
 		}
