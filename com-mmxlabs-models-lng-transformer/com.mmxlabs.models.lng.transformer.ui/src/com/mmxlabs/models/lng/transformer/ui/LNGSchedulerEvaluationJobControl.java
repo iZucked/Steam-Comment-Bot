@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Injector;
 import com.mmxlabs.jobmanager.jobs.EJobState;
@@ -30,18 +31,18 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public class LNGSchedulerEvaluationJobControl implements IJobControl {
 
-	private final LinkedList<IJobControlListener> listeners = new LinkedList<IJobControlListener>();
+	private final LinkedList<IJobControlListener> listeners = new LinkedList<>();
 
 	private LNGSchedulerJobDescriptor jobDescriptor;
 
 	private EJobState currentState = EJobState.UNKNOWN;
 
-	public LNGSchedulerEvaluationJobControl(final LNGSchedulerJobDescriptor descriptor) {
+	public LNGSchedulerEvaluationJobControl(@NonNull final LNGSchedulerJobDescriptor descriptor) {
 		this.jobDescriptor = descriptor;
 	}
 
 	@Override
-	public IJobDescriptor getJobDescriptor() {
+	public @NonNull IJobDescriptor getJobDescriptor() {
 		return jobDescriptor;
 	}
 
@@ -108,29 +109,24 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 	@Override
 	public Object getJobOutput() {
 		// Method not actually used and it would require hanging on to the model reference longer...
-		//return jobDescriptor.getJobContext().getInstance();
+		// return jobDescriptor.getJobContext().getInstance();
 		return null;
 	}
 
 	@Override
-	public void addListener(final IJobControlListener listener) {
+	public void addListener(@NonNull final IJobControlListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 
 	@Override
-	public void removeListener(final IJobControlListener listener) {
+	public void removeListener(@NonNull final IJobControlListener listener) {
 		listeners.remove(listener);
 	}
 
 	@Override
 	public void dispose() {
-
-//		if (scenarioLock != null) {
-//			scenarioLock.release();
-//			scenarioLock = null;
-//		}
 
 		jobDescriptor = null;
 		this.currentState = EJobState.UNKNOWN;
@@ -144,7 +140,7 @@ public class LNGSchedulerEvaluationJobControl implements IJobControl {
 			currentState = newState;
 
 			// Take copy to avoid concurrent modification exceptions.
-			final List<IJobControlListener> copy = new ArrayList<IJobControlListener>(listeners);
+			final List<IJobControlListener> copy = new ArrayList<>(listeners);
 
 			for (final IJobControlListener mjl : copy) {
 				if (!mjl.jobStateChanged(this, oldState, newState)) {
