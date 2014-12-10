@@ -171,7 +171,7 @@ public class FuelChoiceVoyageCostCalculator extends AbstractVoyageCostCalculator
 
 			vpo.setBasicSequence(basicSequence);
 			vpo.setPortTimesRecord(portTimesRecord);
-			vpo.setVessel(vessel, baseFuelPricePerMT);
+			vpo.setVessel(vessel, null, baseFuelPricePerMT);
 			vpo.setVesselCharterInRatePerDay(vesselCharterInRatePerDay);
 			vpo.setStartHeel(startHeelInM3);
 
