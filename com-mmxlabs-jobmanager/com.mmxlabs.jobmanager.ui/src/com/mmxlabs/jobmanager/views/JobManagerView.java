@@ -101,6 +101,7 @@ public class JobManagerView extends ViewPart {
 	 * The constructor.
 	 */
 	public JobManagerView() {
+		assert jobListener != null;
 		this.jobManagerListener = new JobManagerViewRefreshListener(this, jobListener);
 	}
 
@@ -164,6 +165,7 @@ public class JobManagerView extends ViewPart {
 		// Register listener on existing jobs
 		for (final IJobDescriptor job : jobManager.getJobs()) {
 			final IJobControl control = jobManager.getControlForJob(job);
+			assert jobListener != null;
 			control.addListener(jobListener);
 		}
 
@@ -406,12 +408,12 @@ public class JobManagerView extends ViewPart {
 
 	@Override
 	public void dispose() {
-
 		jobManager.removeEclipseJobManagerListener(jobManagerListener);
 
 		// Register listener on existing jobs
 		for (final IJobDescriptor job : jobManager.getJobs()) {
 			final IJobControl control = jobManager.getControlForJob(job);
+			assert jobListener != null;
 			control.removeListener(jobListener);
 		}
 

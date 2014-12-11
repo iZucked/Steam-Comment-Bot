@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.jobmanager.views;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
@@ -16,7 +18,7 @@ class JobManagerViewRefreshListener implements IEclipseJobManagerListener {
 	private final JobManagerView view;
 	private final IJobControlListener jobListener;
 
-	public JobManagerViewRefreshListener(final JobManagerView view, final IJobControlListener jobListener) {
+	public JobManagerViewRefreshListener(@NonNull final JobManagerView view, @NonNull final IJobControlListener jobListener) {
 		this.view = view;
 		this.jobListener = jobListener;
 	}
@@ -24,14 +26,14 @@ class JobManagerViewRefreshListener implements IEclipseJobManagerListener {
 	@Override
 	public void jobRemoved(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
-		control.removeListener(jobListener);
+		control.removeListener(getJobListener());
 		view.refresh();
 	}
 
 	@Override
 	public void jobAdded(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 
-		control.addListener(jobListener);
+		control.addListener(getJobListener());
 		view.refresh();
 	}
 
@@ -45,5 +47,11 @@ class JobManagerViewRefreshListener implements IEclipseJobManagerListener {
 	public void jobManagerRemoved(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
 		view.refresh();
 
+	}
+
+	@NonNull
+	public final IJobControlListener getJobListener() {
+		assert jobListener != null;
+		return jobListener;
 	}
 }

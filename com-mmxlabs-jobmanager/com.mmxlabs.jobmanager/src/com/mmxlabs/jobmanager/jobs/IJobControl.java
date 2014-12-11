@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.jobmanager.jobs;
 
+import org.eclipse.jdt.annotation.NonNull;
+
+
 /**
  * Interface to control the lifecycle of a job. The expected lifecycle is defined as;
  * <ol>
@@ -22,7 +25,7 @@ public interface IJobControl {
 	 * Returns the {@link IJobDescriptor} linked to this {@link IJobControl
 	 * @return
 	 */
-	IJobDescriptor getJobDescriptor();
+	@NonNull IJobDescriptor getJobDescriptor();
 
 	/**
 	 * Perform the required initialisation to be able to begin an optimisation. For example this may require loading data and preparing data structures so that an initial solution state can be
@@ -76,20 +79,21 @@ public interface IJobControl {
 	 * @return
 	 */
 	Object getJobOutput();
+	
 
 	/**
 	 * Add a listener for {@link IJobControl} instances to track changes in state and progress.
 	 * 
 	 * @param listener
 	 */
-	void addListener(IJobControlListener listener);
+	void addListener(@NonNull IJobControlListener listener);
 
 	/**
 	 * Remove a previous registered listener
 	 * 
 	 * @param listener
 	 */
-	void removeListener(IJobControlListener listener);
+	void removeListener(@NonNull IJobControlListener listener);
 
 	/**
 	 * {@link #cancel()} any running optimisation and clean up references.
