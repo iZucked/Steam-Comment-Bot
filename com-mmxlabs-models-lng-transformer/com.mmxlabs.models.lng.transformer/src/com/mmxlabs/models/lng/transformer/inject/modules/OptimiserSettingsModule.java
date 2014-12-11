@@ -22,8 +22,10 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.thresholders.GeometricThresholder;
+import com.mmxlabs.optimiser.lso.impl.thresholders.InstrumentingThresholder;
 import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
+import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
 /**
  * The {@link OptimiserSettingsModule} provides user-definable parameters derived from the {@link OptimiserSettings} object such as the random seed and number of iterations
@@ -67,11 +69,13 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IThresholder provideThresholder(final OptimiserSettings settings, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
+	private IThresholder provideThresholder(final OptimiserSettings settings, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed, final InstrumentingMoveGenerator img) {
 		// For now we are just going to generate a self-calibrating thresholder
 
-		return new GeometricThresholder(new Random(seed), settings.getAnnealingSettings().getEpochLength(), settings.getAnnealingSettings().getInitialTemperature(), settings.getAnnealingSettings()
-				.getCooling());
+		final IThresholder thresholder = new GeometricThresholder(new Random(seed), settings.getAnnealingSettings().getEpochLength(), settings.getAnnealingSettings().getInitialTemperature(), settings
+				.getAnnealingSettings().getCooling());
+		return LocalSearchOptimiserModule.instrumenting ? new InstrumentingThresholder(thresholder, img) : thresholder;
+
 		// return new MovingAverageThresholder(getRandom(), ts.getInitialAcceptanceRate(), ts.getAlpha(), ts.getEpochLength(), 3000);
 		// return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
 	}

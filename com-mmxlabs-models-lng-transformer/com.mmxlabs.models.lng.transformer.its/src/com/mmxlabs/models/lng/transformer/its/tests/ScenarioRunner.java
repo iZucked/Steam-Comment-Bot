@@ -106,7 +106,7 @@ public class ScenarioRunner {
 
 	public void run(int percentage) {
 		optimiser.step(percentage);
-		finalSchedule = exportSchedule(optimiser.getBestSolution(true));
+		finalSchedule = exportSchedule(optimiser.getBestSolution());
 	}
 
 	private Schedule exportSchedule(final IAnnotatedSolution solution) {
@@ -130,6 +130,6 @@ public class ScenarioRunner {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		return LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, optimiser.getBestSolution(true), 0);
+		return LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, optimiser.getBestSolution(), 0);
 	}
 }

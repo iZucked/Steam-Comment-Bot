@@ -29,6 +29,8 @@ import javax.inject.Named;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -829,8 +831,8 @@ public class LNGScenarioTransformer {
 	 * @param modelEntityMap
 	 * @param defaultRewiring
 	 */
-	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
-			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap modelEntityMap, final boolean shippingOnly) {
+	private void buildCargoes(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Association<Vessel, IVessel> vesselAssociation,
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, final boolean shippingOnly) {
 
 		// All Discharge ports - for use with
 		final Set<IPort> allDischargePorts = new HashSet<IPort>();
@@ -897,12 +899,14 @@ public class LNGScenarioTransformer {
 					final LoadSlot loadSlot = (LoadSlot) slot;
 					// Bind FOB/DES slots to resource
 					final ILoadOption load = (ILoadOption) slotMap.get(loadSlot);
+					assert loadSlot != null;
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(loadSlot, load, portAssociation.lookup(loadSlot.getPort()));
 					configureLoadSlotRestrictions(builder, portAssociation, allDischargePorts, loadSlot, load, twForBinding);
 					isTransfer = (((LoadSlot) slot).getTransferFrom() != null);
 				} else if (slot instanceof DischargeSlot) {
 					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 					final IDischargeOption discharge = (IDischargeOption) slotMap.get(dischargeSlot);
+					assert discharge != null;
 					final ITimeWindow twForBinding = getTimeWindowForSlotBinding(dischargeSlot, discharge, portAssociation.lookup(dischargeSlot.getPort()));
 					configureDischargeSlotRestrictions(builder, allLoadPorts, dischargeSlot, discharge, twForBinding);
 					isTransfer = (((DischargeSlot) slot).getTransferTo() != null);
@@ -1000,8 +1004,8 @@ public class LNGScenarioTransformer {
 
 	}
 
-	public void configureDischargeSlotRestrictions(final ISchedulerBuilder builder, final Set<IPort> allLoadPorts, final DischargeSlot dischargeSlot, final IDischargeOption discharge,
-			final ITimeWindow twForSlotBinding) {
+	public void configureDischargeSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Set<IPort> allLoadPorts, @NonNull final DischargeSlot dischargeSlot,
+			@NonNull final IDischargeOption discharge, @NonNull final ITimeWindow twForSlotBinding) {
 		if (dischargeSlot.isFOBSale()) {
 
 			if (dischargeSlot instanceof SpotDischargeSlot) {
@@ -1033,8 +1037,8 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	public void configureLoadSlotRestrictions(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Set<IPort> allDischargePorts, final LoadSlot loadSlot,
-			final ILoadOption load, final ITimeWindow twForSlotBinding) {
+	public void configureLoadSlotRestrictions(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final Set<IPort> allDischargePorts,
+			@NonNull final LoadSlot loadSlot, @NonNull final ILoadOption load, @NonNull final ITimeWindow twForSlotBinding) {
 
 		if (loadSlot.isDESPurchase()) {
 			if (loadSlot instanceof SpotLoadSlot) {
@@ -1086,8 +1090,10 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private IDischargeOption createDischargeOption(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
-			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap modelEntityMap, final DischargeSlot dischargeSlot) {
+	@NonNull
+	private IDischargeOption createDischargeOption(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
+			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
+			@NonNull final DischargeSlot dischargeSlot) {
 		final IDischargeOption discharge;
 		usedIDStrings.add(dischargeSlot.getName());
 
@@ -1246,8 +1252,10 @@ public class LNGScenarioTransformer {
 		return discharge;
 	}
 
-	private ILoadOption createLoadOption(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Vessel, IVessel> vesselAssociation,
-			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap modelEntityMap, final LoadSlot loadSlot) {
+	@NonNull
+	private ILoadOption createLoadOption(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
+			@NonNull final Association<Vessel, IVessel> vesselAssociation, @NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap,
+			@NonNull final LoadSlot loadSlot) {
 		final ILoadOption load;
 		usedIDStrings.add(loadSlot.getName());
 
@@ -1680,8 +1688,9 @@ public class LNGScenarioTransformer {
 		return builder.createTimeWindow(startTime - 12, endTime + 14);
 	}
 
-	private void buildDESSalesSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap modelEntityMap, final Date earliestDate, final Date latestDate, final SpotMarketGroup desSalesSpotMarket) {
+	private void buildDESSalesSpotMarket(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation,
+			@NonNull final Collection<IContractTransformer> contractTransformers, @NonNull final ModelEntityMap modelEntityMap, @NonNull final Date earliestDate, @NonNull final Date latestDate,
+			@Nullable final SpotMarketGroup desSalesSpotMarket) {
 		if (desSalesSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = desSalesSpotMarket.getAvailability();
@@ -1694,6 +1703,7 @@ public class LNGScenarioTransformer {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 					final Port notionalAPort = desSalesMarket.getNotionalPort();
 					final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
+					assert notionalIPort != null;
 
 					// Loop over the date range in the optimisation generating market slots
 					final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(notionalAPort.getTimeZone()));
@@ -2080,8 +2090,9 @@ public class LNGScenarioTransformer {
 	 * @param vesselAssociation
 	 * @throws IncompleteScenarioException
 	 */
-	private void buildDistances(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final List<IPort> allPorts, final Map<IPort, Integer> portIndices,
-			final Association<VesselClass, IVesselClass> vesselAssociation, final ModelEntityMap modelEntityMap) throws IncompleteScenarioException {
+	private void buildDistances(@NonNull final ISchedulerBuilder builder, @NonNull final Association<Port, IPort> portAssociation, @NonNull final List<IPort> allPorts,
+			@NonNull final Map<IPort, Integer> portIndices, @NonNull final Association<VesselClass, IVesselClass> vesselAssociation, @NonNull final ModelEntityMap modelEntityMap)
+			throws IncompleteScenarioException {
 
 		/*
 		 * Now fill out the distances from the distance model. Firstly we need to create the default distance matrix.
@@ -2093,7 +2104,9 @@ public class LNGScenarioTransformer {
 			for (final RouteLine dl : r.getLines()) {
 				IPort from, to;
 				from = portAssociation.lookup(dl.getFrom());
+				assert from != null;
 				to = portAssociation.lookup(dl.getTo());
+				assert to != null;
 
 				final int distance = dl.getFullDistance();
 

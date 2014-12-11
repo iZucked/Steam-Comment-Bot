@@ -22,8 +22,7 @@ import com.mmxlabs.scheduler.optimiser.entities.IEntity;
  */
 public final class SlotContractHelper {
 
-	public static @Nullable
-	<T> T findSlotContractExtension(@NonNull final Slot slot, @NonNull final Class<T> cls) {
+	public static @Nullable <T> T findSlotContractExtension(@NonNull final Slot slot, @NonNull final Class<T> cls) {
 		for (final EObject object : slot.getExtensions()) {
 			if (cls.isInstance(object)) {
 				return cls.cast(object);
@@ -32,7 +31,8 @@ public final class SlotContractHelper {
 		return null;
 	}
 
-	public static <T> T findDetailsAnnotation(@NonNull final IProfitAndLossSlotDetailsAnnotation annotation, String annotationKey, @NonNull final Class<T> cls) {
+	@Nullable
+	public static <T> T findDetailsAnnotation(@Nullable final IProfitAndLossSlotDetailsAnnotation annotation, @NonNull String annotationKey, @NonNull final Class<T> cls) {
 		if (annotation == null) {
 			return null;
 		}
@@ -49,14 +49,17 @@ public final class SlotContractHelper {
 		return null;
 	}
 
-	public static <T> T findDetailsAnnotation(@NonNull final IProfitAndLossAnnotation annotation, String annotationKey, @NonNull final Class<T> cls) {
-		for (final IProfitAndLossEntry e : annotation.getEntries()) {
-			final IDetailTree detailTree = e.getDetails();
-			if (detailTree != null) {
-				for (final IDetailTree child : detailTree.getChildren()) {
-					if (child.getKey().equals(annotationKey)) {
-						if (cls.isInstance(child.getValue())) {
-							return cls.cast(child.getValue());
+	@Nullable
+	public static <T> T findDetailsAnnotation(@Nullable final IProfitAndLossAnnotation annotation, @NonNull String annotationKey, @NonNull final Class<T> cls) {
+		if (annotation != null) {
+			for (final IProfitAndLossEntry e : annotation.getEntries()) {
+				final IDetailTree detailTree = e.getDetails();
+				if (detailTree != null) {
+					for (final IDetailTree child : detailTree.getChildren()) {
+						if (child.getKey().equals(annotationKey)) {
+							if (cls.isInstance(child.getValue())) {
+								return cls.cast(child.getValue());
+							}
 						}
 					}
 				}

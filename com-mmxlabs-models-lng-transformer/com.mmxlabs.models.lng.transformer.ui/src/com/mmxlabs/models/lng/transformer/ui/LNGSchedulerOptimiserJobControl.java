@@ -188,13 +188,12 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			} else {
 				throw new RuntimeException("Unable to execute period optimisation merge command");
 			}
-			
-			
+
 			{
 				final OptimiserSettings evalSettings = EcoreUtil.copy(optimiserSettings);
 				evalSettings.getRange().unsetOptimiseAfter();
 				evalSettings.getRange().unsetOptimiseBefore();
-				final LNGTransformer transformer = new LNGTransformer(originalScenario,  evalSettings);
+				final LNGTransformer transformer = new LNGTransformer(originalScenario, evalSettings);
 
 				final ModelEntityMap modelEntityMap = transformer.getModelEntityMap();
 				final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(transformer);
@@ -224,7 +223,7 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 			// export final state
 
 			LNGSchedulerJobUtils.undoPreviousOptimsationStep(optimiserEditingDomain, 100);
-			LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, optimiser.getBestSolution(true), 100);
+			LNGSchedulerJobUtils.exportSolution(injector, optimiserScenario, transformer.getOptimiserSettings(), optimiserEditingDomain, modelEntityMap, optimiser.getBestSolution(), 100);
 			if (periodMapping != null) {
 				LNGSchedulerJobUtils.undoPreviousOptimsationStep(originalEditingDomain, 100);
 
@@ -237,12 +236,12 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 				} else {
 					throw new RuntimeException("Unable to execute period optimisation merge command");
 				}
-				
+
 				{
 					OptimiserSettings evalSettings = EcoreUtil.copy(transformer.getOptimiserSettings());
 					evalSettings.getRange().unsetOptimiseAfter();
 					evalSettings.getRange().unsetOptimiseBefore();
-					final LNGTransformer subTransformer = new LNGTransformer(originalScenario,  evalSettings);
+					final LNGTransformer subTransformer = new LNGTransformer(originalScenario, evalSettings);
 
 					final ModelEntityMap modelEntityMap = subTransformer.getModelEntityMap();
 					final IAnnotatedSolution finalSolution = LNGSchedulerJobUtils.evaluateCurrentState(subTransformer);
@@ -268,7 +267,6 @@ public class LNGSchedulerOptimiserJobControl extends AbstractEclipseJobControl {
 	@Override
 	protected void kill() {
 		if (optimiser != null) {
-			optimiser.dispose();
 			optimiser = null;
 		}
 	}
