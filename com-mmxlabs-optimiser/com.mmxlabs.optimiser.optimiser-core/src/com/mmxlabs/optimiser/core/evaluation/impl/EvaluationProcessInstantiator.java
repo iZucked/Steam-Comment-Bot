@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessInstantiator;
@@ -25,7 +27,8 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class EvaluationProcessInstantiator implements IEvaluationProcessInstantiator {
 
 	@Override
-	public List<IEvaluationProcess> instantiateEvaluationProcesses(final IEvaluationProcessRegistry registry, final IOptimisationData optimisationData) {
+	@NonNull
+	public List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull final IEvaluationProcessRegistry registry, @NonNull final IOptimisationData optimisationData) {
 
 		final Collection<IEvaluationProcessFactory> factories = registry.getEvaluationProcessFactories();
 		final List<IEvaluationProcess> checkers = new ArrayList<IEvaluationProcess>(factories.size());
@@ -38,7 +41,9 @@ public final class EvaluationProcessInstantiator implements IEvaluationProcessIn
 	}
 
 	@Override
-	public List<IEvaluationProcess> instantiateEvaluationProcesses(final IEvaluationProcessRegistry registry, final List<String> evaluationProcessNames, final IOptimisationData optimisationData) {
+	@NonNull
+	public List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull final IEvaluationProcessRegistry registry, @NonNull final List<String> evaluationProcessNames,
+			@NonNull final IOptimisationData optimisationData) {
 
 		final List<IEvaluationProcess> evaluationProcesses = new ArrayList<IEvaluationProcess>(evaluationProcessNames.size());
 

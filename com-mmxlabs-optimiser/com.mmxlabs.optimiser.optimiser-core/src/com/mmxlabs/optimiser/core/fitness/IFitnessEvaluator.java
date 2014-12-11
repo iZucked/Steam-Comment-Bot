@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.core.fitness;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -29,6 +32,7 @@ public interface IFitnessEvaluator {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<IFitnessComponent> getFitnessComponents();
 
 	/**
@@ -36,20 +40,7 @@ public interface IFitnessEvaluator {
 	 * 
 	 * @param fitnessComponents
 	 */
-	void setFitnessComponents(List<IFitnessComponent> fitnessComponents);
-
-	/**
-	 * Returns the {@link IFitnessHelper} used to evaluate {@link ISequences} using the {@link IFitnessComponent}s passed into the {@link #setFitnessComponents(List)} method.
-	 * 
-	 * @return
-	 */
-	IFitnessHelper getFitnessHelper();
-
-	/**
-	 * Set the {@link IFitnessHelper} used to evaluate {@link ISequences} using the {@link IFitnessComponent}s passed into the {@link #setFitnessComponents(List)} method.
-	 * 
-	 */
-	void setFitnessHelper(IFitnessHelper fitnessHelper);
+	void setFitnessComponents(@NonNull List<IFitnessComponent> fitnessComponents);
 
 	/**
 	 * Initialise {@link IFitnessEvaluator} and ensure all the relevant setters have been called.
@@ -61,14 +52,14 @@ public interface IFitnessEvaluator {
 	 * 
 	 * @param data
 	 */
-	void setOptimisationData(IOptimisationData data);
+	void setOptimisationData(@NonNull IOptimisationData data);
 
 	/**
 	 * Set the initial sequences. These should have had any manipulation from {@link ISequencesManipulator} already applied.
 	 * 
 	 * @param sequences
 	 */
-	void setInitialSequences(ISequences sequences);
+	void setInitialSequences(@NonNull ISequences sequences);
 
 	/**
 	 * Evaluate the given {@link ISequences} to determine whether or not they are accepted as a better state than the previously accepted state. If accepted, then the {@link ISequences} "state" will
@@ -77,13 +68,14 @@ public interface IFitnessEvaluator {
 	 * @param sequences
 	 * @return
 	 */
-	boolean evaluateSequences(ISequences sequences, Collection<IResource> affectedResources);
+	boolean evaluateSequences(@NonNull ISequences sequences, @NonNull Collection<IResource> affectedResources);
 
 	/**
 	 * Returns the best {@link ISequences} instance seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
 	 * 
 	 * @return
 	 */
+	@Nullable
 	ISequences getBestSequences();
 
 	/**
@@ -98,6 +90,7 @@ public interface IFitnessEvaluator {
 	 * 
 	 * @return
 	 */
+	@Nullable
 	ISequences getCurrentSequences();
 
 	/**
@@ -107,15 +100,14 @@ public interface IFitnessEvaluator {
 	 */
 	long getCurrentFitness();
 
-	void dispose();
-
 	/**
 	 * Returns an annotated solution for the best sequences so far
 	 * 
 	 * @param context
 	 * @return
 	 */
-	IAnnotatedSolution getBestAnnotatedSolution(final IOptimisationContext context, final boolean forExport);
+	@Nullable
+	IAnnotatedSolution getBestAnnotatedSolution(@NonNull final IOptimisationContext context);
 
 	/**
 	 * Returns an annotated solution for the current sequences.
@@ -123,5 +115,6 @@ public interface IFitnessEvaluator {
 	 * @param context
 	 * @return
 	 */
-	IAnnotatedSolution getCurrentAnnotatedSolution(final IOptimisationContext context, final boolean forExport);
+	@Nullable
+	IAnnotatedSolution getCurrentAnnotatedSolution(@NonNull final IOptimisationContext context);
 }

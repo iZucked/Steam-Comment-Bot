@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * 
  * @author Simon Goodall
@@ -24,6 +26,7 @@ public interface ISegment extends Iterable<ISequenceElement> {
 	 * @param index
 	 * @return
 	 */
+	@Nullable
 	ISequenceElement get(int index);
 
 	/**
@@ -45,6 +48,7 @@ public interface ISegment extends Iterable<ISequenceElement> {
 	 * 
 	 * @return
 	 */
+	@Nullable
 	ISequence getSequence();
 
 }

@@ -4,9 +4,12 @@
  */
 package com.mmxlabs.optimiser.core.evaluation;
 
-public interface IEvaluationProcessFactory {
+import org.eclipse.jdt.annotation.NonNull;
 
+public interface IEvaluationProcessFactory {
+	@NonNull
 	String getName();
 
+	@NonNull
 	IEvaluationProcess instantiate();
 }

@@ -50,46 +50,15 @@ public class UnmodifiableSequenceWrapperTest {
 
 		final ISequenceElement element = Mockito.mock(ISequenceElement.class);
 		final Iterator<ISequenceElement> target = Mockito.mock(Iterator.class);
-
-		final ISequence sequence = new ISequence() {
-
-			@Override
-			public ISequenceElement get(final int index) {
-				return null;
-			}
-
-			@Override
-			public ISegment getSegment(final int start, final int end) {
-				return null;
-			}
-
-			@Override
-			public int size() {
-				return 0;
-			}
-
-			@Override
-			public Iterator<ISequenceElement> iterator() {
-				return target;
-			}
-
-			@Override
-			public final ISequenceElement last() {
-				return get(size() - 1);
-			}
-
-			@Override
-			public ISequenceElement first() {
-				return get(0);
-			}
-		};
+		final ISequence sequence = Mockito.mock(ISequence.class);
+		Mockito.when(sequence.iterator()).thenReturn(target);
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
 		final Iterator<ISequenceElement> wrappedItr = wrapped.iterator();
 
 		Mockito.when(target.next()).thenReturn(element);
-		ISequenceElement next = wrappedItr.next();
+		final ISequenceElement next = wrappedItr.next();
 		Assert.assertEquals(element, next);
 
 	}
@@ -99,39 +68,8 @@ public class UnmodifiableSequenceWrapperTest {
 	public void testIterator3() {
 
 		final Iterator<ISequenceElement> target = Mockito.mock(Iterator.class);
-
-		final ISequence sequence = new ISequence() {
-
-			@Override
-			public ISequenceElement get(final int index) {
-				return null;
-			}
-
-			@Override
-			public ISegment getSegment(final int start, final int end) {
-				return null;
-			}
-
-			@Override
-			public int size() {
-				return 0;
-			}
-
-			@Override
-			public Iterator<ISequenceElement> iterator() {
-				return target;
-			}
-
-			@Override
-			public final ISequenceElement last() {
-				return get(size() - 1);
-			}
-
-			@Override
-			public ISequenceElement first() {
-				return get(0);
-			}
-		};
+		final ISequence sequence = Mockito.mock(ISequence.class);
+		Mockito.when(sequence.iterator()).thenReturn(target);
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 
@@ -148,38 +86,8 @@ public class UnmodifiableSequenceWrapperTest {
 
 		final Iterator<ISequenceElement> target = Mockito.mock(Iterator.class);
 
-		final ISequence sequence = new ISequence() {
-
-			@Override
-			public ISequenceElement get(final int index) {
-				return null;
-			}
-
-			@Override
-			public ISegment getSegment(final int start, final int end) {
-				return null;
-			}
-
-			@Override
-			public int size() {
-				return 0;
-			}
-
-			@Override
-			public Iterator<ISequenceElement> iterator() {
-				return target;
-			}
-
-			@Override
-			public final ISequenceElement last() {
-				return get(size() - 1);
-			}
-
-			@Override
-			public ISequenceElement first() {
-				return get(0);
-			}
-		};
+		final ISequence sequence = Mockito.mock(ISequence.class);
+		Mockito.when(sequence.iterator()).thenReturn(target);
 
 		final UnmodifiableSequenceWrapper wrapped = new UnmodifiableSequenceWrapper(sequence);
 

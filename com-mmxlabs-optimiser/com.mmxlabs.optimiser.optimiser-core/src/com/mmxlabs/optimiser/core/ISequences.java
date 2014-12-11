@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.core;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * {@link ISequences} objects define a collection of {@link ISequence} objects and their {@link IResource} allocations.
  * 
@@ -21,7 +23,8 @@ public interface ISequences {
 	 * @param resource
 	 * @return
 	 */
-	ISequence getSequence(IResource resource);
+	@NonNull
+	ISequence getSequence(@NonNull IResource resource);
 
 	/**
 	 * Returns the {@link ISequence} for the given resource index.
@@ -29,6 +32,7 @@ public interface ISequences {
 	 * @param index
 	 * @return
 	 */
+	@NonNull
 	ISequence getSequence(int index);
 
 	/**
@@ -36,6 +40,7 @@ public interface ISequences {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Map<IResource, ISequence> getSequences();
 
 	/**
@@ -43,6 +48,7 @@ public interface ISequences {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<ISequenceElement> getUnusedElements();
 
 	/**
@@ -50,6 +56,7 @@ public interface ISequences {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<IResource> getResources();
 
 	/**

@@ -11,6 +11,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
@@ -42,7 +45,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
-	public void init(final IOptimisationData data) {
+	public void init(@NonNull final IOptimisationData data) {
 		interestingElements.addAll(optionalElementsProvider.getSoftRequiredElements());
 	}
 
@@ -57,28 +60,28 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences) {
+	public boolean evaluate(@NonNull final ISequences sequences) {
 		evaluation(sequences);
 		return true;
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 		evaluation(sequences);
 		return true;
 	}
 
 	@Override
-	public void accepted(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 
 	}
 
 	@Override
-	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution) {
 
 	}
 
-	private void evaluation(final ISequences sequences) {
+	private void evaluation(@NonNull final ISequences sequences) {
 		int fitness = 0;
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (interestingElements.contains(element)) {

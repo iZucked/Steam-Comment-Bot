@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 public interface IAnnotatedSolution {
 
 	/**
@@ -11,6 +14,7 @@ public interface IAnnotatedSolution {
 	 * 
 	 * @return
 	 */
+	@NonNull 
 	ISequences getSequences();
 
 	/**
@@ -18,6 +22,7 @@ public interface IAnnotatedSolution {
 	 * 
 	 * @return
 	 */
+	@NonNull 
 	IElementAnnotationsMap getElementAnnotations();
 
 	// annotations for other components?
@@ -29,6 +34,7 @@ public interface IAnnotatedSolution {
 	 * 
 	 * @return
 	 */
+	@NonNull 
 	IOptimisationContext getContext();
 
 	/**
@@ -36,7 +42,8 @@ public interface IAnnotatedSolution {
 	 */
 	void dispose();
 
-	<U> U getGeneralAnnotation(String key, Class<U> clz);
+	@Nullable
+	<U> U getGeneralAnnotation(@NonNull String key,@NonNull  Class<U> clz);
 
 	/**
 	 * Set a general annotation.
@@ -44,5 +51,5 @@ public interface IAnnotatedSolution {
 	 * @param key
 	 * @param value
 	 */
-	void setGeneralAnnotation(String key, Object value);
+	void setGeneralAnnotation(@NonNull String key,@NonNull  Object value);
 }

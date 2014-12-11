@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.fitness.impl;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.UnitCurve;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -38,6 +40,7 @@ public abstract class AbstractDiscountedFitnessComponent implements IFitnessComp
 	 * 
 	 * @return
 	 */
+	@NonNull
 	public ICurve getDiscountCurve() {
 		return discountCurve;
 	}
@@ -47,7 +50,7 @@ public abstract class AbstractDiscountedFitnessComponent implements IFitnessComp
 	 * 
 	 * @param discountCurve
 	 */
-	public void setDiscountCurve(final ICurve discountCurve) {
+	public void setDiscountCurve(@NonNull final ICurve discountCurve) {
 		this.discountCurve = discountCurve;
 	}
 

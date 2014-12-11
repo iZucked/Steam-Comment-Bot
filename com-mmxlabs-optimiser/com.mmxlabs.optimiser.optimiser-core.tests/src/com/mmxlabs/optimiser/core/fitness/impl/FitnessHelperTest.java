@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -26,7 +27,7 @@ public class FitnessHelperTest {
 
 		private final IFitnessCore core;
 
-		public CoreWrapper(final IFitnessCore core) {
+		public CoreWrapper(@NonNull final IFitnessCore core) {
 			this.core = core;
 		}
 
@@ -44,7 +45,7 @@ public class FitnessHelperTest {
 		@Override
 		public String getName() {
 			fail("Unexpected method invocation");
-			return null;
+			return "";
 		}
 
 	}

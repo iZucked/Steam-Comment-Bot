@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.fitness;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * The {@link IFitnessFunctionRegistry} is a store for {@link IFitnessCoreFactory} instances. The Registry is to be used to create new instances of {@link IFitnessCore} for use in optimisations.
  * 
@@ -20,21 +22,21 @@ public interface IFitnessFunctionRegistry {
 	 * 
 	 * @param factory
 	 */
-	void registerFitnessCoreFactory(IFitnessCoreFactory factory);
+	void registerFitnessCoreFactory(@NonNull IFitnessCoreFactory factory);
 
 	/**
 	 * De-registers a {@link IFitnessCoreFactory} instance.
 	 * 
 	 * @param factory
 	 */
-	void deregisterFitnessCoreFactory(IFitnessCoreFactory factory);
+	void deregisterFitnessCoreFactory(@NonNull IFitnessCoreFactory factory);
 
 	/**
 	 * Return a {@link Collection} of the registered {@link IFitnessCoreFactory} instances.
 	 * 
 	 * @return
 	 */
-
+	@NonNull
 	Collection<IFitnessCoreFactory> getFitnessCoreFactories();
 
 	/**
@@ -42,6 +44,7 @@ public interface IFitnessFunctionRegistry {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Collection<String> getFitnessCoreFactoryNames();
 
 	/**
@@ -49,6 +52,7 @@ public interface IFitnessFunctionRegistry {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Collection<String> getFitnessComponentNames();
 
 	/**
@@ -57,6 +61,7 @@ public interface IFitnessFunctionRegistry {
 	 * @param names
 	 * @return
 	 */
-	Collection<IFitnessCoreFactory> getFitnessCoreFactories(Collection<String> names);
+	@NonNull
+	Collection<IFitnessCoreFactory> getFitnessCoreFactories(@NonNull Collection<String> names);
 
 }

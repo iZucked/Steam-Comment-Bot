@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * A callback interface to monitor progress of an optimisation. An {@link IOptimiser} instance will report the initial and ending states and report back updates during the optimisation process.
  * 
@@ -19,7 +22,7 @@ public interface IOptimiserProgressMonitor {
 	 * @param initialFitness
 	 * @param initialState
 	 */
-	void begin(IOptimiser optimiser, long initialFitness, IAnnotatedSolution annotatedSolution);
+	void begin(@NonNull IOptimiser optimiser, long initialFitness, @Nullable IAnnotatedSolution annotatedSolution);
 
 	/**
 	 * Report back the current and best state found at the given iteration number. This method will be called from the main optimisation loop so implementations should return as quickly as possible.
@@ -31,7 +34,7 @@ public interface IOptimiserProgressMonitor {
 	 * @param currentState
 	 * @param bestState
 	 */
-	void report(IOptimiser optimiser, int iteration, long currentFitness, long bestFitness, IAnnotatedSolution currentSolution, IAnnotatedSolution bestSolution);
+	void report(@NonNull IOptimiser optimiser, int iteration, long currentFitness, long bestFitness, @Nullable IAnnotatedSolution currentSolution, @Nullable IAnnotatedSolution bestSolution);
 
 	/**
 	 * Notify the optimisation has finished with the given solution as the best found.
@@ -40,5 +43,5 @@ public interface IOptimiserProgressMonitor {
 	 * @param bestFitness
 	 * @param bestState
 	 */
-	void done(IOptimiser optimiser, long bestFitness, IAnnotatedSolution annotatedSolution);
+	void done(@NonNull IOptimiser optimiser, long bestFitness, @Nullable IAnnotatedSolution annotatedSolution);
 }

@@ -11,6 +11,10 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -67,26 +71,29 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void accepted(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 
 		// Copy across proposed values into accepted values
 		oldFitness = newFitness;
 
 		// Only need to copy affected resource values
-		for (final IResource resource : affectedResources) {
+		final Collection<IResource> loopResources = affectedResources != null ? affectedResources : sequences.getResources();
+
+		for (final IResource resource : loopResources) {
 			final Long value = newFitnessByResource.get(resource);
 			oldFitnessByResource.put(resource, value);
 		}
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences) {
+	public boolean evaluate(@NonNull final ISequences sequences) {
 
 		// Perform a full evaluation
 		oldFitness = 0;
 
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence sequence = sequences.getSequence(resource);
+			assert sequence != null;
 			final long value = evaluateSequence(sequence);
 			oldFitnessByResource.put(resource, value);
 			oldFitness += value;
@@ -98,12 +105,13 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 
 		// Reset this value
 		newFitness = oldFitness;
 
-		for (final IResource resource : affectedResources) {
+		final Collection<IResource> loopResources = affectedResources != null ? affectedResources : sequences.getResources();
+		for (final IResource resource : loopResources) {
 			// Subtract old resource fitness from total
 			final long oldValue = oldFitnessByResource.get(resource);
 			newFitness -= oldValue;
@@ -123,17 +131,16 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
-		return Collections.singleton(component);
+		return CollectionsUtil.<IFitnessComponent>makeArrayList(component);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public void init(final IOptimisationData data) {
+	public void init(@NonNull final IOptimisationData data) {
 		oldFitnessByResource = new HashMap<IResource, Long>();
 		newFitnessByResource = new HashMap<IResource, Long>();
 	}
 
-	private long evaluateSequence(final ISequence sequence) {
+	private long evaluateSequence(@NonNull final ISequence sequence) {
 
 		// loop over sequence accumulating value
 		double totalValue = 0.0;
@@ -166,7 +173,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	public IMatrixProvider<ISequenceElement, Number> getMatrix() {
 		return matrix;
 	}
-	
+
 	public long getNewFitness() {
 		return newFitness;
 	}
@@ -180,7 +187,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution) {
 		evaluate(sequences);
 		// Would annotate here
 	}

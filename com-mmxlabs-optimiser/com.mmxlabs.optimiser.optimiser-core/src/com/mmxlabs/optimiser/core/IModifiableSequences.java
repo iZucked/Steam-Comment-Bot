@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.core;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Extended version of the {@link ISequences} interface allowing access to {@link IModifiableSequence} instances rather than the read-only {@link ISequence} instances.
  * 
@@ -20,7 +22,8 @@ public interface IModifiableSequences extends ISequences {
 	 * @param resource
 	 * @return
 	 */
-	IModifiableSequence getModifiableSequence(IResource resource);
+	@NonNull
+	IModifiableSequence getModifiableSequence(@NonNull IResource resource);
 
 	/**
 	 * Returns the {@link IModifiableSequence} for the given resource index.
@@ -28,15 +31,18 @@ public interface IModifiableSequences extends ISequences {
 	 * @param index
 	 * @return
 	 */
+	@NonNull
 	IModifiableSequence getModifiableSequence(int index);
 
 	/**
 	 * @return
 	 */
+	@NonNull
 	Map<IResource, IModifiableSequence> getModifiableSequences();
 
 	/**
 	 * @return a modifiable list of unused elements.
 	 */
+	@NonNull
 	List<ISequenceElement> getModifiableUnusedElements();
 }

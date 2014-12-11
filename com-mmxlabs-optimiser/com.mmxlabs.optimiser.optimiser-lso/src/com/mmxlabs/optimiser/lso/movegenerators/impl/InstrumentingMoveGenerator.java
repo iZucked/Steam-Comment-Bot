@@ -8,6 +8,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,7 +42,8 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 	private final class AllMoves implements IMove {
 		@Override
 		public Collection<IResource> getAffectedResources() {
-			return null;
+			// TODO: SG - 2014-12-11 Changed from null to empty list for null analysis stuff. Is this correct? I am not sure how this move interacts with the rest of the application.
+			return Collections.emptySet();
 		}
 
 		@Override
@@ -130,7 +132,7 @@ public class InstrumentingMoveGenerator implements IMoveGenerator {
 				log.debug("logging moves to " + s);
 				output2 = new BufferedWriter(new FileWriter(s));
 			} catch (final IOException e) {
-				output2 = null;
+				// output2 = null;
 			}
 			output = output2;
 		} else {

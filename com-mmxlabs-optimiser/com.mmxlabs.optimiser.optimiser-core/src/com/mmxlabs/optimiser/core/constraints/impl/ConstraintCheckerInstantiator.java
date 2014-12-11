@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerInstantiator;
@@ -25,7 +27,8 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class ConstraintCheckerInstantiator implements IConstraintCheckerInstantiator {
 
 	@Override
-	public List<IConstraintChecker> instantiateConstraintCheckers(final IConstraintCheckerRegistry registry, final IOptimisationData optimisationData) {
+	@NonNull
+	public List<IConstraintChecker> instantiateConstraintCheckers(@NonNull final IConstraintCheckerRegistry registry, @NonNull final IOptimisationData optimisationData) {
 
 		final Collection<IConstraintCheckerFactory> factories = registry.getConstraintCheckerFactories();
 		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(factories.size());
@@ -39,7 +42,9 @@ public final class ConstraintCheckerInstantiator implements IConstraintCheckerIn
 	}
 
 	@Override
-	public List<IConstraintChecker> instantiateConstraintCheckers(final IConstraintCheckerRegistry registry, final List<String> constraintNames, final IOptimisationData optimisationData) {
+	@NonNull
+	public List<IConstraintChecker> instantiateConstraintCheckers(@NonNull final IConstraintCheckerRegistry registry, @NonNull final List<String> constraintNames,
+			@NonNull final IOptimisationData optimisationData) {
 
 		final List<IConstraintChecker> checkers = new ArrayList<IConstraintChecker>(constraintNames.size());
 

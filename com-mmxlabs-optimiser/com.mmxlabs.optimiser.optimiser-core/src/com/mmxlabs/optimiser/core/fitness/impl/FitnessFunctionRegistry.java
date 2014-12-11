@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 
@@ -30,7 +32,7 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	}
 
 	@Override
-	public void registerFitnessCoreFactory(final IFitnessCoreFactory factory) {
+	public void registerFitnessCoreFactory(@NonNull final IFitnessCoreFactory factory) {
 
 		if (coreFactoriesByCoreName.containsKey(factory.getFitnessCoreName())) {
 			throw new RuntimeException("Fitness core name already registered: " + factory.getFitnessCoreName());
@@ -47,7 +49,7 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	}
 
 	@Override
-	public void deregisterFitnessCoreFactory(final IFitnessCoreFactory factory) {
+	public void deregisterFitnessCoreFactory(@NonNull final IFitnessCoreFactory factory) {
 
 		coreFactoriesByCoreName.remove(factory.getFitnessCoreName());
 
@@ -57,22 +59,26 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getFitnessCoreFactoryNames() {
 		return coreFactoriesByCoreName.keySet();
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getFitnessComponentNames() {
 		return coreFactoriesByComponentName.keySet();
 	}
 
 	@Override
+	@NonNull
 	public Collection<IFitnessCoreFactory> getFitnessCoreFactories() {
 		return coreFactoriesByCoreName.values();
 	}
 
 	@Override
-	public Set<IFitnessCoreFactory> getFitnessCoreFactories(final Collection<String> names) {
+	@NonNull
+	public Set<IFitnessCoreFactory> getFitnessCoreFactories(@NonNull final Collection<String> names) {
 
 		final Set<IFitnessCoreFactory> factories = new HashSet<IFitnessCoreFactory>(names.size());
 
@@ -92,10 +98,12 @@ public final class FitnessFunctionRegistry implements IFitnessFunctionRegistry {
 	 * 
 	 * @param factories
 	 */
-	public void setFitnessCoreFactories(final Collection<IFitnessCoreFactory> factories) {
+	public void setFitnessCoreFactories(@NonNull final Collection<IFitnessCoreFactory> factories) {
 
 		for (final IFitnessCoreFactory factory : factories) {
-			registerFitnessCoreFactory(factory);
+			if (factory != null) {
+				registerFitnessCoreFactory(factory);
+			}
 		}
 	}
 }

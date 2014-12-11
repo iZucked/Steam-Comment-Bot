@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
@@ -21,5 +23,6 @@ public interface ISequenceElement extends IIndexedObject {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getName();
 }

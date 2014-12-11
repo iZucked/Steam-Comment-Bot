@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.evaluation;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * The {@link IEvaluationProcessRegistry} is a store for {@link IEvaluationProcessFactory} instances. The Registry is to be used to create new instances of {@link IEvaluationProcess} for use in
  * optimisations.
@@ -20,21 +22,21 @@ public interface IEvaluationProcessRegistry {
 	 * 
 	 * @param factory
 	 */
-	void registerEvaluationProcessFactory(IEvaluationProcessFactory factory);
+	void registerEvaluationProcessFactory(@NonNull IEvaluationProcessFactory factory);
 
 	/**
 	 * De-registers a {@link IEvaluationProcessFactory} instance.
 	 * 
 	 * @param factory
 	 */
-	void deregisterEvaluationProcessFactory(IEvaluationProcessFactory factory);
+	void deregisterEvaluationProcessFactory(@NonNull IEvaluationProcessFactory factory);
 
 	/**
 	 * Return a {@link Collection} of the registered {@link IEvaluationProcessFactory} instances.
 	 * 
 	 * @return
 	 */
-
+	@NonNull
 	Collection<IEvaluationProcessFactory> getEvaluationProcessFactories();
 
 	/**
@@ -42,6 +44,7 @@ public interface IEvaluationProcessRegistry {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Collection<String> getEvaluationProcessNames();
 
 	/**
@@ -50,5 +53,6 @@ public interface IEvaluationProcessRegistry {
 	 * @param names
 	 * @return
 	 */
-	Collection<IEvaluationProcessFactory> getEvaluationProcessFactories(Collection<String> names);
+	@NonNull
+	Collection<IEvaluationProcessFactory> getEvaluationProcessFactories(@NonNull Collection<String> names);
 }

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 /**
@@ -18,14 +20,13 @@ public interface IOptimiser {
 	 * 
 	 * @param optimisationContext
 	 */
-	void optimise(IOptimisationContext optimisationContext);
+	void optimise(@NonNull IOptimisationContext optimisationContext);
 
 	/**
 	 * Returns the {@link IFitnessEvaluator} instance used within the optimisation process.
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IFitnessEvaluator getFitnessEvaluator();
-
-	void dispose();
 }

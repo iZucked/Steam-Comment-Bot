@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.constraints;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * The {@link IConstraintCheckerRegistry} is a store for {@link IConstraintCheckerFactory} instances. The Registry is to be used to create new instances of {@link IConstraintChecker} for use in
  * optimisations.
@@ -21,21 +23,21 @@ public interface IConstraintCheckerRegistry {
 	 * 
 	 * @param factory
 	 */
-	void registerConstraintCheckerFactory(IConstraintCheckerFactory factory);
+	void registerConstraintCheckerFactory(@NonNull IConstraintCheckerFactory factory);
 
 	/**
 	 * De-registers a {@link IConstraintCheckerFactory} instance.
 	 * 
 	 * @param factory
 	 */
-	void deregisterConstraintCheckerFactory(IConstraintCheckerFactory factory);
+	void deregisterConstraintCheckerFactory(@NonNull IConstraintCheckerFactory factory);
 
 	/**
 	 * Return a {@link Collection} of the registered {@link IConstraintCheckerFactory} instances.
 	 * 
 	 * @return
 	 */
-
+	@NonNull 
 	Collection<IConstraintCheckerFactory> getConstraintCheckerFactories();
 
 	/**
@@ -43,6 +45,7 @@ public interface IConstraintCheckerRegistry {
 	 * 
 	 * @return
 	 */
+	@NonNull 
 	Collection<String> getConstraintCheckerNames();
 
 	/**
@@ -51,5 +54,6 @@ public interface IConstraintCheckerRegistry {
 	 * @param names
 	 * @return
 	 */
-	Collection<IConstraintCheckerFactory> getConstraintCheckerFactories(Collection<String> names);
+	@NonNull 
+	Collection<IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull Collection<String> names);
 }

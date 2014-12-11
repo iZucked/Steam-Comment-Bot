@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponentInstantiator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
@@ -32,7 +34,8 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 	 * @see com.mmxlabs.optimiser.fitness.impl.IFitnessComponentInstantiator#instantiateFitnesses(com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry)
 	 */
 	@Override
-	public List<IFitnessComponent> instantiateFitnesses(final IFitnessFunctionRegistry registry) {
+	@NonNull
+	public List<IFitnessComponent> instantiateFitnesses(@NonNull final IFitnessFunctionRegistry registry) {
 
 		final List<IFitnessComponent> components = new ArrayList<IFitnessComponent>();
 
@@ -51,7 +54,8 @@ public final class FitnessComponentInstantiator implements IFitnessComponentInst
 	 * @see com.mmxlabs.optimiser.fitness.impl.IFitnessComponentInstantiator#instantiateFitnesses(com.mmxlabs.optimiser.fitness.IFitnessFunctionRegistry, java.util.List)
 	 */
 	@Override
-	public List<IFitnessComponent> instantiateFitnesses(final IFitnessFunctionRegistry registry, final List<String> componentNames) {
+	@NonNull
+	public List<IFitnessComponent> instantiateFitnesses(@NonNull final IFitnessFunctionRegistry registry, @NonNull final List<String> componentNames) {
 
 		final List<IFitnessComponent> components = new ArrayList<IFitnessComponent>(componentNames.size());
 

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Injector;
 
 /**
@@ -19,6 +21,7 @@ public interface IConstraintCheckerFactory {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getName();
 
 	/**
@@ -27,5 +30,6 @@ public interface IConstraintCheckerFactory {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IConstraintChecker instantiate();
 }

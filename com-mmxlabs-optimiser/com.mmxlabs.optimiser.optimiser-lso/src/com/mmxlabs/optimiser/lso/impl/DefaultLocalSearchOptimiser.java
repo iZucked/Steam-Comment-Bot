@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.lso.impl;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -43,7 +45,7 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	private ModifiableSequences potentialRawSequences;
 
 	@Override
-	public IAnnotatedSolution start(final IOptimisationContext optimiserContext) {
+	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext) {
 		setCurrentContext(optimiserContext);
 		data = optimiserContext.getOptimisationData();
 		fitnessEvaluator = getFitnessEvaluator();
@@ -53,8 +55,8 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		numberOfMovesAccepted = 0;
 
 		final ISequences initialSequences = optimiserContext.getInitialSequences();
-		currentRawSequences = new ModifiableSequences(initialSequences);
-		potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
+		final ModifiableSequences currentRawSequences = new ModifiableSequences(initialSequences);
+		final ModifiableSequences potentialRawSequences = new ModifiableSequences(currentRawSequences.getResources());
 		updateSequences(currentRawSequences, potentialRawSequences, currentRawSequences.getResources());
 
 		// Evaluate initial sequences
@@ -75,7 +77,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
-		final IAnnotatedSolution annotatedBestSolution = fitnessEvaluator.getBestAnnotatedSolution(optimiserContext, false);
+		final IAnnotatedSolution annotatedBestSolution = fitnessEvaluator.getBestAnnotatedSolution(optimiserContext);
+		if (annotatedBestSolution == null) {
+			return null;
+		}
 
 		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, 0);
 		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, 0l);
@@ -84,11 +89,19 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 		setNumberOfIterationsCompleted(0);
 
+		this.currentRawSequences = currentRawSequences;
+		this.potentialRawSequences = potentialRawSequences;
+
 		return annotatedBestSolution;
 	}
 
 	@Override
 	public int step(final int percentage) {
+		return step(percentage, potentialRawSequences, currentRawSequences);
+	}
+
+	protected int step(final int percentage, @NonNull final ModifiableSequences pinnedPotentialRawSequences, @NonNull final ModifiableSequences pinnedCurrentRawSequences) {
+
 		final int iterationsThisStep = Math.min(Math.max(1, (getNumberOfIterations() * percentage) / 100), getNumberOfIterations() - getNumberOfIterationsCompleted());
 		MAIN_LOOP: for (int i = 0; i < iterationsThisStep; i++) {
 			++numberOfMovesTried;
@@ -102,22 +115,22 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			}
 
 			// Test move is valid against data.
-			if (!move.validate(potentialRawSequences)) {
+			if (!move.validate(pinnedPotentialRawSequences)) {
 				continue;
 			}
 
 			// Update potential sequences
-			move.apply(potentialRawSequences);
+			move.apply(pinnedPotentialRawSequences);
 
 			// Apply sequence manipulators
-			final IModifiableSequences potentialFullSequences = new ModifiableSequences(potentialRawSequences);
+			final IModifiableSequences potentialFullSequences = new ModifiableSequences(pinnedPotentialRawSequences);
 			manipulator.manipulate(potentialFullSequences);
 
 			// Apply hard constraint checkers
 			for (final IConstraintChecker checker : constraintCheckers) {
 				if (checker.checkConstraints(potentialFullSequences) == false) {
 					// Reject Move
-					updateSequences(currentRawSequences, potentialRawSequences, move.getAffectedResources());
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 					// Break out
 					continue MAIN_LOOP;
 				}
@@ -132,15 +145,15 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				}
 
 				// Success update state for new sequences
-				updateSequences(potentialRawSequences, currentRawSequences, move.getAffectedResources());
+				updateSequences(pinnedPotentialRawSequences, pinnedCurrentRawSequences, move.getAffectedResources());
 
 				// Update move sequences.
-				getMoveGenerator().setSequences(potentialRawSequences);
+				getMoveGenerator().setSequences(pinnedPotentialRawSequences);
 
 				++numberOfMovesAccepted;
 			} else {
 				// Failed, reset state for old sequences
-				updateSequences(currentRawSequences, potentialRawSequences, move.getAffectedResources());
+				updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
 			}
 		}
 

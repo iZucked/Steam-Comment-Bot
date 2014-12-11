@@ -35,15 +35,6 @@ public class GeneticAlgorithmOptimiser extends AbstractSequencesOptimiser implem
 	}
 
 	@Override
-	public void dispose() {
-		// TODO: Implement
-
-		super.dispose();
-
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
-
-	@Override
 	public IAnnotatedSolution start(final IOptimisationContext optimiserContext) {
 
 		throw new UnsupportedOperationException("Not yet implemented");

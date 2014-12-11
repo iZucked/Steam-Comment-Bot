@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -18,16 +20,15 @@ public interface ISequencesManipulator {
 
 	/**
 	 * @param data
-	 * @since 2.0
 	 */
-	void init(IOptimisationData data);
-	
+	void init(@NonNull IOptimisationData data);
+
 	/**
 	 * Manipulate the given {@link ISequences}
 	 * 
 	 * @param sequences
 	 */
-	void manipulate(IModifiableSequences sequences);
+	void manipulate(@NonNull IModifiableSequences sequences);
 
 	void dispose();
 }

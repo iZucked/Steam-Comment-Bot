@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * The {@link IModifiableSequence} interface extends the {@link ISequence} interface to allow sequence contents to be modified. It is expected that the main users of this interface will be
  * {@link ISequencesManipulator} instances and optimiser operators.
@@ -19,13 +22,14 @@ public interface IModifiableSequence extends ISequence {
 	 * @param index
 	 * @param element
 	 */
-	void set(int index, ISequenceElement element);
+	void set(int index,@NonNull  ISequenceElement element);
 
 	/**
 	 * Remove the element at the specified index
 	 * 
 	 * @param index
 	 */
+	@Nullable
 	ISequenceElement remove(int index);
 
 	/**
@@ -33,7 +37,7 @@ public interface IModifiableSequence extends ISequence {
 	 * 
 	 * @param element
 	 */
-	boolean remove(ISequenceElement element);
+	boolean remove(@NonNull ISequenceElement element);
 
 	/**
 	 * Insert the given element at the specified index.
@@ -41,21 +45,21 @@ public interface IModifiableSequence extends ISequence {
 	 * @param index
 	 * @param element
 	 */
-	void insert(int index, ISequenceElement element);
+	void insert(int index,@NonNull  ISequenceElement element);
 
 	/**
 	 * Add the given element to the end of the sequence.
 	 * 
 	 * @param element
 	 */
-	void add(ISequenceElement element);
+	void add(@NonNull ISequenceElement element);
 
 	/**
 	 * Remove a range of elements specified in the given {@link ISegment}
 	 * 
 	 * @param segment
 	 */
-	void remove(ISegment segment);
+	void remove(@NonNull ISegment segment);
 
 	/**
 	 * Remove a range of elements from the start index to the end index.
@@ -74,12 +78,12 @@ public interface IModifiableSequence extends ISequence {
 	 * @param index
 	 * @param segment
 	 */
-	void insert(int index, ISegment segment);
+	void insert(int index,@NonNull  ISegment segment);
 
 	/**
 	 * Replaces all entries in the current sequence with those in the specified sequence.
 	 * 
 	 * @param sequence
 	 */
-	void replaceAll(ISequence sequence);
+	void replaceAll(@NonNull ISequence sequence);
 }

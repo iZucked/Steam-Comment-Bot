@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.evaluation;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public interface IEvaluationProcessInstantiator {
@@ -16,8 +18,8 @@ public interface IEvaluationProcessInstantiator {
 	 * @param registry
 	 * @return
 	 */
-
-	List<IEvaluationProcess> instantiateEvaluationProcesses(IEvaluationProcessRegistry registry, IOptimisationData optimisationData);
+	@NonNull
+	List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull IEvaluationProcessRegistry registry, @NonNull IOptimisationData optimisationData);
 
 	/**
 	 * Return new instances of all {@link IEvaluationProcess}s the {@link IEvaluationProcessRegistry} knows about. The returned list will contain {@link IEvaluationProcess}s in the same order as the
@@ -27,6 +29,7 @@ public interface IEvaluationProcessInstantiator {
 	 * @param constraintCheckerNames
 	 * @return
 	 */
-	List<IEvaluationProcess> instantiateEvaluationProcesses(IEvaluationProcessRegistry registry, List<String> evaluationProcessNames, IOptimisationData optimisationData);
+	@NonNull
+	List<IEvaluationProcess> instantiateEvaluationProcesses(@NonNull IEvaluationProcessRegistry registry, @NonNull List<String> evaluationProcessNames, @NonNull IOptimisationData optimisationData);
 
 }

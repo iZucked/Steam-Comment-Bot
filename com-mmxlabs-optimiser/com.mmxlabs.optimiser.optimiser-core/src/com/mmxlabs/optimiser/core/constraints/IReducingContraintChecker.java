@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.ISequences;
 
 /**
@@ -23,6 +25,6 @@ public interface IReducingContraintChecker extends IConstraintChecker {
 	 * 
 	 * @param sequences
 	 */
-	void sequencesAccepted(ISequences sequences);
+	void sequencesAccepted(@NonNull ISequences sequences);
 
 }

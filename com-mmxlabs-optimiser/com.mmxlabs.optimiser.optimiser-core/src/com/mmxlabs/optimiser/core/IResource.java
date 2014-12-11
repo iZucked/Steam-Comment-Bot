@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
 
 /**
@@ -19,6 +21,7 @@ public interface IResource extends IIndexedObject {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getName();
 
 }

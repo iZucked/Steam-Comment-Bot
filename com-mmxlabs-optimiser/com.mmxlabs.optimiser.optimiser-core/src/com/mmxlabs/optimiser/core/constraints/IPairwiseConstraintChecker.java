@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.core.constraints;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
@@ -25,7 +28,7 @@ public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	 * @param resource
 	 * @return
 	 */
-	public boolean checkPairwiseConstraint(ISequenceElement first, ISequenceElement second, IResource resource);
+	public boolean checkPairwiseConstraint(@NonNull ISequenceElement first,@NonNull  ISequenceElement second,@NonNull  IResource resource);
 
 	/**
 	 * Return a string explaining why these two items cannot follow one another
@@ -35,5 +38,6 @@ public interface IPairwiseConstraintChecker extends IConstraintChecker {
 	 * @param resource
 	 * @return
 	 */
-	public String explain(ISequenceElement first, ISequenceElement second, IResource resource);
+	@Nullable
+	public String explain(@NonNull ISequenceElement first,@NonNull  ISequenceElement second,@NonNull  IResource resource);
 }

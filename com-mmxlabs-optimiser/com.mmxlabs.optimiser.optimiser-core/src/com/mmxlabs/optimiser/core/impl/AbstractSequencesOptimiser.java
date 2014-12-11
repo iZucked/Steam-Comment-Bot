@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -64,7 +66,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	 * A default optimisation loop, which calls start() and then step() until done, and notifies the progress monitor. Subclasses will need to implement these.
 	 */
 	@Override
-	public final void optimise(final IOptimisationContext optimiserContext) {
+	public final void optimise(@NonNull final IOptimisationContext optimiserContext) {
 		final IAnnotatedSolution startSolution = start(optimiserContext);
 		getProgressMonitor().begin(this, fitnessEvaluator.getBestFitness(), startSolution);
 		final int percentage = (100 * getReportInterval()) / getNumberOfIterations();
@@ -73,16 +75,19 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 		while (getNumberOfIterationsCompleted() < getNumberOfIterations()) {
 			step(percentage);
-			getProgressMonitor().report(this, getNumberOfIterationsCompleted(), fitnessEvaluator.getCurrentFitness(), fitnessEvaluator.getBestFitness(), getCurrentSolution(false),
-					getBestSolution(false));
+			getProgressMonitor().report(this, getNumberOfIterationsCompleted(), fitnessEvaluator.getCurrentFitness(), fitnessEvaluator.getBestFitness(), getCurrentSolution(), getBestSolution());
 		}
 
-		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(), getBestSolution(true));
+		getProgressMonitor().done(this, fitnessEvaluator.getBestFitness(), getBestSolution());
 	}
 
 	@Override
-	public final IAnnotatedSolution getBestSolution(final boolean forExport) {
-		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext, forExport);
+	public final IAnnotatedSolution getBestSolution() {
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getBestAnnotatedSolution(currentContext);
+		if (annotatedSolution == null) {
+			return null;
+		}
+
 		final long clock = System.currentTimeMillis() - getStartTime();
 
 		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
@@ -92,8 +97,13 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	@Override
-	public final IAnnotatedSolution getCurrentSolution(final boolean forExport) {
-		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getCurrentAnnotatedSolution(currentContext, forExport);
+	public final IAnnotatedSolution getCurrentSolution() {
+		final IAnnotatedSolution annotatedSolution = fitnessEvaluator.getCurrentAnnotatedSolution(currentContext);
+
+		if (annotatedSolution == null) {
+			return null;
+		}
+
 		final long clock = System.currentTimeMillis() - getStartTime();
 
 		annotatedSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, getNumberOfIterationsCompleted());
@@ -114,7 +124,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	 * @param destination
 	 * @param affectedResources
 	 */
-	protected final void updateSequences(final ISequences source, final IModifiableSequences destination, final Collection<IResource> affectedResources) {
+	protected final void updateSequences(@NonNull final ISequences source, @NonNull final IModifiableSequences destination, @NonNull final Collection<IResource> affectedResources) {
 
 		for (final IResource resource : affectedResources) {
 			// Get source sequence
@@ -208,7 +218,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return currentContext;
 	}
 
-	protected final void setCurrentContext(final IOptimisationContext currentContext) {
+	protected final void setCurrentContext(@NonNull final IOptimisationContext currentContext) {
 		this.currentContext = currentContext;
 	}
 
@@ -218,13 +228,5 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	protected final void setStartTime(final long startTime) {
 		this.startTime = startTime;
-	}
-
-	@Override
-	public void dispose() {
-		this.constraintCheckers = null;
-		this.fitnessEvaluator = null;
-		this.progressMonitor = null;
-		this.sequenceManipulator = null;
 	}
 }

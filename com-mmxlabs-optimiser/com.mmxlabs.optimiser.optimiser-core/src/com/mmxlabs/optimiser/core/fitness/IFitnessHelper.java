@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.core.fitness;
 import java.util.Collection;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -26,14 +29,14 @@ public interface IFitnessHelper {
 	 * 
 	 * @param fitnessCores
 	 */
-	void initFitnessCores(Collection<IFitnessCore> fitnessCores, IOptimisationData data);
+	void initFitnessCores(@NonNull Collection<IFitnessCore> fitnessCores, @NonNull IOptimisationData data);
 
 	/**
 	 * Initialise {@link IFitnessCore}s based upon the a {@link Collection} of {@link IFitnessComponent}s
 	 * 
 	 * @param fitnessCores
 	 */
-	void initFitnessComponents(Collection<IFitnessComponent> fitnessComponents, IOptimisationData data);
+	void initFitnessComponents(@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull IOptimisationData data);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
@@ -43,7 +46,7 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromCores(ISequences sequences, Collection<IFitnessCore> fitnessCores);
+	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull Collection<IFitnessCore> fitnessCores);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
@@ -54,7 +57,7 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromCores(ISequences sequences, Collection<IFitnessCore> fitnessCores, Collection<IResource> affectedResources);
+	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull Collection<IFitnessCore> fitnessCores, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
@@ -64,7 +67,7 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromComponents(ISequences sequences, Collection<IFitnessComponent> fitnessComponents);
+	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull Collection<IFitnessComponent> fitnessComponents);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
@@ -74,7 +77,7 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromComponents(ISequences sequences, Collection<IFitnessComponent> fitnessComponents, Collection<IResource> affectedResources);
+	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull Collection<IFitnessComponent> fitnessComponents, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * The {@link #accept(ISequences, Collection)} method is to be invoked when a {@link ISequences} object is accepted as the new state. The {@link ISequences} object must have been passed to the
@@ -85,7 +88,7 @@ public interface IFitnessHelper {
 	 * @param sequences
 	 * @param affectedResources
 	 */
-	void acceptFromCores(Collection<IFitnessCore> fitnessCores, ISequences sequences, Collection<IResource> affectedResources);
+	void acceptFromCores(@NonNull Collection<IFitnessCore> fitnessCores, @NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
 
 /**
 	 * The {@link #accept(ISequences, Collection)} method is to be invoked when
@@ -102,7 +105,7 @@ public interface IFitnessHelper {
 	 * @param sequences
 	 * @param affectedResources
 	 */
-	void acceptFromComponents(Collection<IFitnessComponent> fitnessComponents, ISequences sequences, Collection<IResource> affectedResources);
+	void acceptFromComponents(@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Returns the set of {@link IFitnessCore}s that are used by the given {@link IFitnessComponent}s
@@ -110,7 +113,8 @@ public interface IFitnessHelper {
 	 * @param fitnessComponents
 	 * @return
 	 */
-	Set<IFitnessCore> getFitnessCores(Collection<IFitnessComponent> fitnessComponents);
+	@NonNull
+	Set<IFitnessCore> getFitnessCores(@NonNull Collection<IFitnessComponent> fitnessComponents);
 
 	/**
 	 * Construct an annotated solution for the given state. Performs an evaluation with the given components as well, so watch out for that.
@@ -120,5 +124,6 @@ public interface IFitnessHelper {
 	 * @param fitnessComponents
 	 * @return
 	 */
-	public IAnnotatedSolution buildAnnotatedSolution(IOptimisationContext context, ISequences state, Collection<IFitnessComponent> fitnessComponents, final boolean forExport);
+	@NonNull
+	IAnnotatedSolution buildAnnotatedSolution(@NonNull IOptimisationContext context, @NonNull ISequences state, @NonNull Collection<IFitnessComponent> fitnessComponents);
 }

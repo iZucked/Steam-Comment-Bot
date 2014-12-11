@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.core.fitness;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -24,13 +27,14 @@ public interface IFitnessCore {
 	/**
 	 * Initialise or re-initialise the fitness core. This will reset the state associated with the {@link #evaluate(ISequences, List)} method.
 	 */
-	void init(IOptimisationData data);
+	void init(@NonNull IOptimisationData data);
 
 	/**
 	 * Return a {@link Collection} of {@link IFitnessComponent} instances that are represented by this {@link IFitnessCore}.
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Collection<IFitnessComponent> getFitnessComponents();
 
 	/**
@@ -38,7 +42,7 @@ public interface IFitnessCore {
 	 * 
 	 * @param sequences
 	 */
-	boolean evaluate(ISequences sequences);
+	boolean evaluate(@NonNull ISequences sequences);
 
 	/**
 	 * Evaluates the fitness of the given sequence. This method takes a list of affected resources used to indicate that only the given resources have changed since the previous evaluation. If this is
@@ -47,7 +51,7 @@ public interface IFitnessCore {
 	 * 
 	 * @param sequences
 	 */
-	boolean evaluate(ISequences sequences, Collection<IResource> affectedResources);
+	boolean evaluate(@NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Notify the fitness core that the given sequences have been accepted. These parameters should have been given to the last invocation of {@link #evaluate(ISequences, Collection)}.
@@ -55,7 +59,7 @@ public interface IFitnessCore {
 	 * @param sequences
 	 * @param affectedResources
 	 */
-	void accepted(ISequences sequences, Collection<IResource> affectedResources);
+	void accepted(@NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Clean up resources once the {@link IFitnessCore} is no longer required.
@@ -70,5 +74,5 @@ public interface IFitnessCore {
 	 * @param solution
 	 *            annotated solution for these sequences
 	 */
-	void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport);
+	void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution);
 }

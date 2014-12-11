@@ -5,8 +5,8 @@
 package com.mmxlabs.optimiser.core.fitness.impl;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -44,7 +44,7 @@ public final class MockFitnessCore implements IFitnessCore {
 
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
-		return Collections.singleton(component);
+		return CollectionsUtil.makeArrayList(component);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public final class MockFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
+	public void annotate(final ISequences sequences, final IAnnotatedSolution solution) {
 
 	}
 }

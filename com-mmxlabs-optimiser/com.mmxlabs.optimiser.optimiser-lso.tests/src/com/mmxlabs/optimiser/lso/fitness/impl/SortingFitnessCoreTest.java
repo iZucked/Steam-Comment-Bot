@@ -10,6 +10,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -19,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.OptimiserTestUtil;
 
 public class SortingFitnessCoreTest {
@@ -31,7 +33,10 @@ public class SortingFitnessCoreTest {
 
 		final SortingFitnessFactory factory = new SortingFitnessFactory();
 		core = factory.instantiate();
-		core.init(null);
+		IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		assert data != null;
+		core.init(data);
+
 		final Collection<IFitnessComponent> fitnessComponents = core.getFitnessComponents();
 
 		Assert.assertEquals(1, fitnessComponents.size());

@@ -8,6 +8,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -26,14 +29,14 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class FitnessHelper implements IFitnessHelper {
 
 	@Override
-	public boolean evaluateSequencesFromComponents(final ISequences sequences, final Collection<IFitnessComponent> fitnessComponents) {
+	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessComponent> fitnessComponents) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
 		return evaluateSequencesFromCores(sequences, fitnessCores);
 	}
 
 	@Override
-	public boolean evaluateSequencesFromCores(final ISequences sequences, final Collection<IFitnessCore> fitnessCores) {
+	public boolean evaluateSequencesFromCores(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessCore> fitnessCores) {
 
 		for (final IFitnessCore core : fitnessCores) {
 			if (!core.evaluate(sequences)) {
@@ -44,7 +47,8 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public boolean evaluateSequencesFromComponents(final ISequences sequences, final Collection<IFitnessComponent> fitnessComponents, final Collection<IResource> affectedResources) {
+	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessComponent> fitnessComponents,
+			@Nullable final Collection<IResource> affectedResources) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
 		return evaluateSequencesFromCores(sequences, fitnessCores, affectedResources);
@@ -52,7 +56,7 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public boolean evaluateSequencesFromCores(final ISequences sequences, final Collection<IFitnessCore> fitnessCores, final Collection<IResource> affectedResources) {
+	public boolean evaluateSequencesFromCores(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessCore> fitnessCores, @Nullable final Collection<IResource> affectedResources) {
 		for (final IFitnessCore core : fitnessCores) {
 			if (!core.evaluate(sequences, affectedResources)) {
 				return false;
@@ -62,14 +66,15 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public void initFitnessComponents(final Collection<IFitnessComponent> fitnessComponents, final IOptimisationData data) {
+	public void initFitnessComponents(@NonNull final Collection<IFitnessComponent> fitnessComponents, @NonNull final IOptimisationData data) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 		initFitnessCores(fitnessCores, data);
 
 	}
 
+	@NonNull
 	@Override
-	public Set<IFitnessCore> getFitnessCores(final Collection<IFitnessComponent> fitnessComponents) {
+	public Set<IFitnessCore> getFitnessCores(@NonNull final Collection<IFitnessComponent> fitnessComponents) {
 		final Set<IFitnessCore> fitnessCores = new HashSet<IFitnessCore>();
 		for (final IFitnessComponent component : fitnessComponents) {
 			fitnessCores.add(component.getFitnessCore());
@@ -78,27 +83,28 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public void initFitnessCores(final Collection<IFitnessCore> fitnessCores, final IOptimisationData data) {
+	public void initFitnessCores(@NonNull final Collection<IFitnessCore> fitnessCores, @NonNull final IOptimisationData data) {
 		for (final IFitnessCore core : fitnessCores) {
 			core.init(data);
 		}
 	}
 
 	@Override
-	public void acceptFromComponents(final Collection<IFitnessComponent> fitnessComponents, final ISequences sequences, final Collection<IResource> affectedResources) {
+	public void acceptFromComponents(@NonNull final Collection<IFitnessComponent> fitnessComponents, @NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 		acceptFromCores(fitnessCores, sequences, affectedResources);
 	}
 
 	@Override
-	public void acceptFromCores(final Collection<IFitnessCore> fitnessCores, final ISequences sequences, final Collection<IResource> affectedResources) {
+	public void acceptFromCores(@NonNull final Collection<IFitnessCore> fitnessCores, @NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 		for (final IFitnessCore core : fitnessCores) {
 			core.accepted(sequences, affectedResources);
 		}
 	}
 
+	@NonNull
 	@Override
-	public IAnnotatedSolution buildAnnotatedSolution(final IOptimisationContext context, final ISequences state, final Collection<IFitnessComponent> fitnessComponents, final boolean forExport) {
+	public IAnnotatedSolution buildAnnotatedSolution(@NonNull final IOptimisationContext context, @NonNull final ISequences state, @NonNull final Collection<IFitnessComponent> fitnessComponents) {
 
 		final Set<IFitnessCore> cores = getFitnessCores(fitnessComponents);
 
@@ -107,7 +113,7 @@ public final class FitnessHelper implements IFitnessHelper {
 		result.setContext(context);
 
 		for (final IFitnessCore core : cores) {
-			core.annotate(state, result, forExport);
+			core.annotate(state, result);
 		}
 
 		return result;

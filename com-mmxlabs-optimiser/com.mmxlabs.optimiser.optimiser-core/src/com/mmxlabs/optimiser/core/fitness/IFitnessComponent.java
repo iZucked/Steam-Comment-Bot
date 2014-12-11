@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.fitness;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * The {@link IFitnessComponent} represents a single fitness value from a {@link IFitnessCore} object. The {@link IFitnessComponent} does not perform any processing of it's own, that is the
  * responsibility of the {@link IFitnessCore}.
@@ -18,6 +20,7 @@ public interface IFitnessComponent {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getName();
 
 	/**
@@ -33,5 +36,6 @@ public interface IFitnessComponent {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IFitnessCore getFitnessCore();
 }

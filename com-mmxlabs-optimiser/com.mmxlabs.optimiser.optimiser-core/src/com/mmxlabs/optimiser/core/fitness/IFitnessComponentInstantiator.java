@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.fitness;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public interface IFitnessComponentInstantiator {
 
 	/**
@@ -14,7 +16,8 @@ public interface IFitnessComponentInstantiator {
 	 * @param registry
 	 * @return
 	 */
-	public List<IFitnessComponent> instantiateFitnesses(final IFitnessFunctionRegistry registry);
+	@NonNull
+	List<IFitnessComponent> instantiateFitnesses(@NonNull IFitnessFunctionRegistry registry);
 
 	/**
 	 * Return new instances of all {@link IFitnessComponent}s the {@link IFitnessFunctionRegistry} knows about. The returned list will contain components in the same order as the input list. Missing
@@ -24,6 +27,7 @@ public interface IFitnessComponentInstantiator {
 	 * @param componentNames
 	 * @return
 	 */
-	public List<IFitnessComponent> instantiateFitnesses(final IFitnessFunctionRegistry registry, final List<String> componentNames);
+	@NonNull
+	List<IFitnessComponent> instantiateFitnesses(@NonNull IFitnessFunctionRegistry registry, @NonNull List<String> componentNames);
 
 }

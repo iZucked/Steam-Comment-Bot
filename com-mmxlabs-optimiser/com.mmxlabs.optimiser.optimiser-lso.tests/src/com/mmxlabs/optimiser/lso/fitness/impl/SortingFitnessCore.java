@@ -7,6 +7,9 @@ package com.mmxlabs.optimiser.lso.fitness.impl;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -29,7 +32,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void accepted(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public void accepted(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 
 		// Nothing to do here, no state is recorded
 	}
@@ -42,13 +45,15 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
 
 		fitness = evaluateSequences(sequences);
 		return true;
 	}
 
+	@SuppressWarnings("null")
 	@Override
+	@NonNull
 	public Collection<IFitnessComponent> getFitnessComponents() {
 
 		return Collections.singleton((IFitnessComponent) component);
@@ -64,7 +69,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 		return fitness;
 	}
 
-	private long evaluateSequences(final ISequences sequences) {
+	private long evaluateSequences(@NonNull final ISequences sequences) {
 		long fitness = 0;
 
 		final int numSequences = sequences.size();
@@ -96,7 +101,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution) {
 
 	}
 }

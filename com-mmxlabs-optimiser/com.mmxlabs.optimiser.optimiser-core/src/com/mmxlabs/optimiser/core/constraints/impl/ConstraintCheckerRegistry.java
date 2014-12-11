@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 
@@ -28,7 +30,7 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 	}
 
 	@Override
-	public void registerConstraintCheckerFactory(final IConstraintCheckerFactory factory) {
+	public void registerConstraintCheckerFactory(@NonNull final IConstraintCheckerFactory factory) {
 
 		if (constraintFactoriesByName.containsKey(factory.getName())) {
 			throw new RuntimeException("Constraint checker name already registered: " + factory.getName());
@@ -38,23 +40,26 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 	}
 
 	@Override
-	public void deregisterConstraintCheckerFactory(final IConstraintCheckerFactory factory) {
+	public void deregisterConstraintCheckerFactory(@NonNull final IConstraintCheckerFactory factory) {
 
 		constraintFactoriesByName.remove(factory.getName());
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getConstraintCheckerNames() {
 		return constraintFactoriesByName.keySet();
 	}
 
 	@Override
+	@NonNull
 	public Collection<IConstraintCheckerFactory> getConstraintCheckerFactories() {
 		return constraintFactoriesByName.values();
 	}
 
 	@Override
-	public Set<IConstraintCheckerFactory> getConstraintCheckerFactories(final Collection<String> names) {
+	@NonNull
+	public Set<IConstraintCheckerFactory> getConstraintCheckerFactories(@NonNull final Collection<String> names) {
 
 		final Set<IConstraintCheckerFactory> factories = new HashSet<IConstraintCheckerFactory>(names.size());
 
@@ -74,10 +79,12 @@ public final class ConstraintCheckerRegistry implements IConstraintCheckerRegist
 	 * 
 	 * @param factories
 	 */
-	public void setConstraintCheckerFactories(final Collection<IConstraintCheckerFactory> factories) {
+	public void setConstraintCheckerFactories(@NonNull final Collection<IConstraintCheckerFactory> factories) {
 
 		for (final IConstraintCheckerFactory factory : factories) {
-			registerConstraintCheckerFactory(factory);
+			if (factory != null) {
+				registerConstraintCheckerFactory(factory);
+			}
 		}
 	}
 }

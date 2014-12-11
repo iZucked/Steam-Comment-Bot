@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.common.base.Objects;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -41,7 +43,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 * 
 	 * @param resources
 	 */
-	public ModifiableSequences(final List<IResource> resources) {
+	public ModifiableSequences(@NonNull final List<IResource> resources) {
 		// Copy the list as we do not track changes
 		this.resources = new ArrayList<IResource>(resources);
 		sequenceMap = new LinkedHashMap<IResource, IModifiableSequence>();
@@ -56,7 +58,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 * @param resources
 	 * @param sequenceMap
 	 */
-	public ModifiableSequences(final List<IResource> resources, final Map<IResource, IModifiableSequence> sequenceMap) {
+	public ModifiableSequences(@NonNull final List<IResource> resources, @NonNull final Map<IResource, IModifiableSequence> sequenceMap) {
 		this.resources = resources;
 		this.sequenceMap = sequenceMap;
 	}
@@ -67,7 +69,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	 * @param sequences
 	 *            Source {@link ISequences} object
 	 */
-	public ModifiableSequences(final ISequences sequences) {
+	public ModifiableSequences(@NonNull final ISequences sequences) {
 
 		this.resources = new ArrayList<IResource>(sequences.getResources());
 
@@ -89,32 +91,38 @@ public final class ModifiableSequences implements IModifiableSequences {
 	}
 
 	@Override
+	@NonNull
 	public IModifiableSequence getModifiableSequence(final IResource resource) {
 
 		return sequenceMap.get(resource);
 	}
 
 	@Override
+	@NonNull
 	public IModifiableSequence getModifiableSequence(final int index) {
 		return sequenceMap.get(resources.get(index));
 	}
 
 	@Override
+	@NonNull
 	public List<IResource> getResources() {
 		return Collections.unmodifiableList(resources);
 	}
 
 	@Override
+	@NonNull
 	public ISequence getSequence(final IResource resource) {
 		return sequenceMap.get(resource);
 	}
 
 	@Override
+	@NonNull
 	public ISequence getSequence(final int index) {
 		return sequenceMap.get(resources.get(index));
 	}
 
 	@Override
+	@NonNull
 	public Map<IResource, ISequence> getSequences() {
 
 		// Create a copy so external modification does not affect internal
@@ -127,6 +135,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 	}
 
 	@Override
+	@NonNull
 	public Map<IResource, IModifiableSequence> getModifiableSequences() {
 
 		// Create a copy so external modification does not affect internal
@@ -178,11 +187,13 @@ public final class ModifiableSequences implements IModifiableSequences {
 	}
 
 	@Override
+	@NonNull
 	public List<ISequenceElement> getUnusedElements() {
 		return Collections.unmodifiableList(unusedElements);
 	}
 
 	@Override
+	@NonNull
 	public List<ISequenceElement> getModifiableUnusedElements() {
 		return unusedElements;
 	}

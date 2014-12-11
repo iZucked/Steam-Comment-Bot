@@ -6,6 +6,9 @@ package com.mmxlabs.optimiser.core;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
 
@@ -29,6 +32,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<IConstraintChecker> getConstraintCheckers();
 
 	/**
@@ -36,6 +40,7 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<IReducingContraintChecker> getReducingConstraintCheckers();
 
 	/**
@@ -43,13 +48,17 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	ISequencesManipulator getSequenceManipulator();
 
-	IAnnotatedSolution start(IOptimisationContext context);
+	@Nullable
+	IAnnotatedSolution start(@NonNull IOptimisationContext context);
 
-	IAnnotatedSolution getBestSolution(final boolean b);
+	@Nullable
+	IAnnotatedSolution getBestSolution();
 
-	IAnnotatedSolution getCurrentSolution(final boolean b);
+	@Nullable
+	IAnnotatedSolution getCurrentSolution();
 
 	int step(int percentage);
 

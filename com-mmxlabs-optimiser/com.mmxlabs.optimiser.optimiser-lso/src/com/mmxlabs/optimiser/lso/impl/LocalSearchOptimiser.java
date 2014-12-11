@@ -42,10 +42,4 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 	public final IMoveGenerator getMoveGenerator() {
 		return moveGenerator;
 	}
-
-	@Override
-	public void dispose() {
-		this.moveGenerator = null;
-		super.dispose();
-	}
 }

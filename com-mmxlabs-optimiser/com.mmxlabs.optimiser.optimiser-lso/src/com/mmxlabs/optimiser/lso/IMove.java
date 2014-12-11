@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.lso;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -23,6 +25,7 @@ public interface IMove {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Collection<IResource> getAffectedResources();
 
 	/**
@@ -30,12 +33,12 @@ public interface IMove {
 	 * 
 	 * @param sequences
 	 */
-	void apply(IModifiableSequences sequences);
+	void apply(@NonNull IModifiableSequences sequences);
 
 	/**
 	 * Validate the move parameters are valid for the given {@link ISequences} object.
 	 * 
 	 * @return True on valid parameters.
 	 */
-	boolean validate(ISequences sequences);
+	boolean validate(@NonNull ISequences sequences);
 }

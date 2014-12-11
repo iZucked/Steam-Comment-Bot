@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
@@ -27,6 +29,7 @@ public interface IOptimisationContext {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IOptimisationData getOptimisationData();
 
 	/**
@@ -34,6 +37,7 @@ public interface IOptimisationContext {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	ISequences getInitialSequences();
 
 	/**
@@ -41,6 +45,7 @@ public interface IOptimisationContext {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IFitnessFunctionRegistry getFitnessFunctionRegistry();
 
 	/**
@@ -48,6 +53,7 @@ public interface IOptimisationContext {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<String> getFitnessComponents();
 
 	/**
@@ -55,6 +61,7 @@ public interface IOptimisationContext {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IConstraintCheckerRegistry getConstraintCheckerRegistry();
 
 	/**
@@ -62,14 +69,15 @@ public interface IOptimisationContext {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<String> getConstraintCheckers();
 
-	
 	/**
 	 * Returns the {@link IEvaluationProcessRegistry} instance to be used to obtain {@link IEvaluationProcess} instances. @see {@link #getEvaluationProcesses()}.
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IEvaluationProcessRegistry getEvaluationProcessRegistry();
 
 	/**
@@ -77,5 +85,6 @@ public interface IOptimisationContext {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	List<String> getEvaluationProcesses();
 }

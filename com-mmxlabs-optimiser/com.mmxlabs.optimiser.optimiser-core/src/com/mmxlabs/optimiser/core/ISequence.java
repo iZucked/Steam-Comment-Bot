@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.optimiser.core;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 /**
  * This interface defines an immutable sequence of elements. It is assumed that each element appears only once in a given sequence.
  * 
@@ -25,6 +28,7 @@ public interface ISequence extends Iterable<ISequenceElement> {
 	 * @param index
 	 * @return
 	 */
+	@NonNull
 	ISequenceElement get(int index);
 
 	/**
@@ -37,6 +41,7 @@ public interface ISequence extends Iterable<ISequenceElement> {
 	 *            Range end (exclusive)
 	 * @return
 	 */
+	@NonNull
 	ISegment getSegment(int start, int end);
 
 	/**
@@ -44,6 +49,7 @@ public interface ISequence extends Iterable<ISequenceElement> {
 	 * 
 	 * @return last element
 	 */
+	@Nullable
 	ISequenceElement last();
 
 	/**
@@ -51,5 +57,6 @@ public interface ISequence extends Iterable<ISequenceElement> {
 	 * 
 	 * @return first element
 	 */
+	@Nullable
 	ISequenceElement first();
 }

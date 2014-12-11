@@ -6,6 +6,8 @@ package com.mmxlabs.optimiser.core.fitness;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 /**
  * Interface defining a factory to generate new {@link IFitnessCore} instances.
  * 
@@ -19,6 +21,7 @@ public interface IFitnessCoreFactory {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getFitnessCoreName();
 
 	/**
@@ -26,6 +29,7 @@ public interface IFitnessCoreFactory {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	Collection<String> getFitnessComponentNames();
 
 	/**
@@ -33,5 +37,6 @@ public interface IFitnessCoreFactory {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	IFitnessCore instantiate();
 }

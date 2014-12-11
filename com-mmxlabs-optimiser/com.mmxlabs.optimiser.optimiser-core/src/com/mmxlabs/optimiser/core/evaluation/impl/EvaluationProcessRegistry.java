@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 
@@ -28,7 +30,7 @@ public final class EvaluationProcessRegistry implements IEvaluationProcessRegist
 	}
 
 	@Override
-	public void registerEvaluationProcessFactory(final IEvaluationProcessFactory factory) {
+	public void registerEvaluationProcessFactory(@NonNull final IEvaluationProcessFactory factory) {
 
 		if (factoriesByName.containsKey(factory.getName())) {
 			throw new RuntimeException("Evaluation process name already registered: " + factory.getName());
@@ -38,23 +40,26 @@ public final class EvaluationProcessRegistry implements IEvaluationProcessRegist
 	}
 
 	@Override
-	public void deregisterEvaluationProcessFactory(final IEvaluationProcessFactory factory) {
+	public void deregisterEvaluationProcessFactory(@NonNull final IEvaluationProcessFactory factory) {
 
 		factoriesByName.remove(factory.getName());
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getEvaluationProcessNames() {
 		return factoriesByName.keySet();
 	}
 
 	@Override
+	@NonNull
 	public Collection<IEvaluationProcessFactory> getEvaluationProcessFactories() {
 		return factoriesByName.values();
 	}
 
 	@Override
-	public Set<IEvaluationProcessFactory> getEvaluationProcessFactories(final Collection<String> names) {
+	@NonNull
+	public Set<IEvaluationProcessFactory> getEvaluationProcessFactories(@NonNull final Collection<String> names) {
 
 		final Set<IEvaluationProcessFactory> factories = new HashSet<IEvaluationProcessFactory>(names.size());
 
@@ -74,10 +79,12 @@ public final class EvaluationProcessRegistry implements IEvaluationProcessRegist
 	 * 
 	 * @param factories
 	 */
-	public void setConstraintCheckerFactories(final Collection<IEvaluationProcessFactory> factories) {
+	public void setConstraintCheckerFactories(@NonNull final Collection<IEvaluationProcessFactory> factories) {
 
 		for (final IEvaluationProcessFactory factory : factories) {
-			registerEvaluationProcessFactory(factory);
+			if (factory != null) {
+				registerEvaluationProcessFactory(factory);
+			}
 		}
 	}
 }
