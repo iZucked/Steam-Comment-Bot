@@ -110,7 +110,7 @@ public class ScenarioRunner {
 
 	public void run() {
 		optimiser.optimise(context);
-		finalSchedule = exportSchedule(optimiser.getBestSolution(true));
+		finalSchedule = exportSchedule(optimiser.getBestSolution());
 	}
 
 	private Schedule exportSchedule(final IAnnotatedSolution solution) {
@@ -126,7 +126,7 @@ public class ScenarioRunner {
 	/**
 	 * Update the Scenario with the best solution. Note: This {@link ScenarioRunner} should not be used again.
 	 */
-	public void updateScenario() {
+	public Schedule updateScenario() {
 
 		// Construct internal command stack to generate correct output schedule
 		final BasicCommandStack commandStack = new BasicCommandStack();
@@ -134,7 +134,7 @@ public class ScenarioRunner {
 		adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
 		final EditingDomain ed = new AdapterFactoryEditingDomain(adapterFactory, commandStack);
 
-		LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, optimiser.getBestSolution(true), 0);
+		return LNGSchedulerJobUtils.exportSolution(injector, scenario, transformer.getOptimiserSettings(), ed, modelEntityMap, optimiser.getBestSolution(), 0);
 	}
 
 }
