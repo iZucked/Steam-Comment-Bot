@@ -49,6 +49,8 @@ class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 				return Integer.toString(control.getProgress()) + "%";
 			case 3:
 				return control.getJobState().toString();
+			default:
+				break;
 			}
 		}
 

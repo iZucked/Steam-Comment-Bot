@@ -33,7 +33,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
  */
 public abstract class AbstractEclipseJobControl implements IJobControl {
 
-	private static final Logger log = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
 
 	private class Runner extends Job {
 
@@ -67,7 +67,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 						if (p1 > p0) {
 							monitor.worked(p1 - p0);
 						}
-						if (more == false) {
+						if (!more) {
 							setProgress(100);
 							setJobState(EJobState.COMPLETED);
 							return Status.OK_STATUS;
@@ -76,7 +76,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 					}
 				}
 			} catch (final Exception | AssertionError e) {
-				log.error(e.getMessage(), e);
+				LOG.error(e.getMessage(), e);
 				kill();
 				setJobState(EJobState.CANCELLED);
 
@@ -168,7 +168,8 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 				public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 					if (newState == EJobState.INITIALISED) {
 						runner.schedule();
-						return false; // return false to avoid getting any more events
+						// return false to avoid getting any more events
+						return false;
 					}
 					return true;
 				}
