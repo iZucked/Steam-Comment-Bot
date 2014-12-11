@@ -5,7 +5,6 @@
 package com.mmxlabs.models.ui.tabular;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;

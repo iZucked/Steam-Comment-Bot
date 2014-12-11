@@ -15,17 +15,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.ops4j.peaberry.Peaberry;
-import org.ops4j.peaberry.eclipse.EclipseRegistry;
-import org.ops4j.peaberry.util.TypeLiterals;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.mmxlabs.models.ui.properties.DetailProperty;
-import com.mmxlabs.models.ui.properties.extensions.DetailPropertyFactoryExtensionPoint;
 import com.mmxlabs.models.ui.properties.factory.DetailPropertyFactoryRegistry;
 import com.mmxlabs.models.ui.properties.factory.IDetailPropertyFactory;
 
