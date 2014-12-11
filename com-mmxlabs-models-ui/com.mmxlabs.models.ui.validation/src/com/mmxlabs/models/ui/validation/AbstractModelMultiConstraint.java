@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
@@ -28,7 +27,8 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 	 * 
 	 * @param ctx
 	 * @param extraContext
-	 * @param statuses Output: Overriding methods should store any created validation status objects in this list.
+	 * @param statuses
+	 *            Output: Overriding methods should store any created validation status objects in this list.
 	 * @return The calling Plugin/Bundle ID
 	 */
 	protected abstract String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses);
@@ -45,7 +45,7 @@ public abstract class AbstractModelMultiConstraint extends AbstractModelConstrai
 		} else if (statuses.size() == 1) {
 			return statuses.get(0);
 		} else {
-			int code = Status.OK;
+			int code = IStatus.OK;
 			for (final IStatus status : statuses) {
 				if (status.getSeverity() > code) {
 					code = status.getSeverity();
