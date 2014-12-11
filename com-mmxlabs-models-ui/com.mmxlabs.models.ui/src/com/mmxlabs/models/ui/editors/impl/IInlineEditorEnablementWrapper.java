@@ -227,6 +227,7 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 		}
 	}	
 
+	@Override
 	public boolean hasLabel() {
 		return wrapped.hasLabel();
 	}

@@ -226,6 +226,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DetailProperty getParent() {
 		if (eContainerFeatureID() != PropertiesPackage.DETAIL_PROPERTY__PARENT) return null;
 		return (DetailProperty)eContainer();
@@ -246,6 +247,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParent(DetailProperty newParent) {
 		if (newParent != eInternalContainer() || (eContainerFeatureID() != PropertiesPackage.DETAIL_PROPERTY__PARENT && newParent != null)) {
 			if (EcoreUtil.isAncestor(this, newParent))
@@ -267,6 +269,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<DetailProperty> getChildren() {
 		if (children == null) {
 			children = new EObjectContainmentWithInverseEList<DetailProperty>(DetailProperty.class, this, PropertiesPackage.DETAIL_PROPERTY__CHILDREN, PropertiesPackage.DETAIL_PROPERTY__PARENT);
@@ -279,6 +282,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -288,6 +292,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId) {
 		String oldId = id;
 		id = newId;
@@ -300,6 +305,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -309,6 +315,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName) {
 		String oldName = name;
 		name = newName;
@@ -321,6 +328,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription() {
 		return description;
 	}
@@ -330,6 +338,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription) {
 		String oldDescription = description;
 		description = newDescription;
@@ -342,6 +351,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUnitsPrefix() {
 		return unitsPrefix;
 	}
@@ -351,6 +361,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnitsPrefix(String newUnitsPrefix) {
 		String oldUnitsPrefix = unitsPrefix;
 		unitsPrefix = newUnitsPrefix;
@@ -363,6 +374,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getUnitsSuffix() {
 		return unitsSuffix;
 	}
@@ -372,6 +384,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setUnitsSuffix(String newUnitsSuffix) {
 		String oldUnitsSuffix = unitsSuffix;
 		unitsSuffix = newUnitsSuffix;
@@ -384,6 +397,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public Object getObject() {
 		return object;
 	}
@@ -393,6 +407,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setObject(Object newObject) {
 		Object oldObject = object;
 		object = newObject;
@@ -405,6 +420,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ILabelProvider getLabelProvider() {
 		return labelProvider;
 	}
@@ -414,6 +430,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setLabelProvider(ILabelProvider newLabelProvider) {
 		ILabelProvider oldLabelProvider = labelProvider;
 		labelProvider = newLabelProvider;
@@ -426,6 +443,7 @@ public class DetailPropertyImpl extends MinimalEObjectImpl.Container implements 
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
+	@Override
 	public String format() {
 		
 		final Object obj = getObject();

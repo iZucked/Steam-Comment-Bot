@@ -657,6 +657,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 	 * 
 	 */
 	private class ControlListener implements Listener {
+		@Override
 		public void handleEvent(final Event event) {
 			switch (event.type) {
 			case SWT.Activate:

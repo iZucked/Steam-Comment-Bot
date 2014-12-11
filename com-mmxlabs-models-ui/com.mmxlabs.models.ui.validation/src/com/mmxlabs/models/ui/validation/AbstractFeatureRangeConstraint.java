@@ -86,6 +86,7 @@ public abstract class AbstractFeatureRangeConstraint extends AbstractModelMultiC
 	 */
 	abstract protected void createConstraints();
 
+	@Override
 	protected String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 

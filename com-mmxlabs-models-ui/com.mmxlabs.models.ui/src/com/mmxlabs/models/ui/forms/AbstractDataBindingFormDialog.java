@@ -77,6 +77,7 @@ public abstract class AbstractDataBindingFormDialog extends FormDialog {
 		});
 	}
 
+	@Override
 	protected Control createButtonBar(Composite parent) {
 
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);

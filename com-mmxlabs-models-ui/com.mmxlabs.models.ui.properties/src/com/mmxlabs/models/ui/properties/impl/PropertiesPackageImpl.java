@@ -108,6 +108,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDetailProperty() {
 		return detailPropertyEClass;
 	}
@@ -117,6 +118,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDetailProperty_Parent() {
 		return (EReference)detailPropertyEClass.getEStructuralFeatures().get(0);
 	}
@@ -126,6 +128,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getDetailProperty_Children() {
 		return (EReference)detailPropertyEClass.getEStructuralFeatures().get(1);
 	}
@@ -135,6 +138,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDetailProperty_Id() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(2);
 	}
@@ -144,6 +148,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDetailProperty_Name() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(3);
 	}
@@ -153,6 +158,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDetailProperty_Description() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(4);
 	}
@@ -162,6 +168,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDetailProperty_UnitsPrefix() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(5);
 	}
@@ -171,6 +178,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDetailProperty_UnitsSuffix() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(6);
 	}
@@ -180,6 +188,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDetailProperty_Object() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(7);
 	}
@@ -189,6 +198,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDetailProperty_LabelProvider() {
 		return (EAttribute)detailPropertyEClass.getEStructuralFeatures().get(8);
 	}
@@ -198,6 +208,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getDetailProperty__Format() {
 		return detailPropertyEClass.getEOperations().get(0);
 	}
@@ -207,6 +218,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EDataType getILabelProvider() {
 		return iLabelProviderEDataType;
 	}
@@ -216,6 +228,7 @@ public class PropertiesPackageImpl extends EPackageImpl implements PropertiesPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PropertiesFactory getPropertiesFactory() {
 		return (PropertiesFactory)getEFactoryInstance();
 	}

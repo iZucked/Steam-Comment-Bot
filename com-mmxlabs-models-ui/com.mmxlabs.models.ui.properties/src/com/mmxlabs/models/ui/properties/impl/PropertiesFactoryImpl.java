@@ -104,6 +104,7 @@ public class PropertiesFactoryImpl extends EFactoryImpl implements PropertiesFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DetailProperty createDetailProperty() {
 		DetailPropertyImpl detailProperty = new DetailPropertyImpl();
 		return detailProperty;
@@ -132,6 +133,7 @@ public class PropertiesFactoryImpl extends EFactoryImpl implements PropertiesFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public PropertiesPackage getPropertiesPackage() {
 		return (PropertiesPackage)getEPackage();
 	}
