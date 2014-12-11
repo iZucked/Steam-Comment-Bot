@@ -187,7 +187,9 @@ public class DirScanScenarioService extends AbstractScenarioService {
 		final URI fileURI = URI.createFileURI(scenario.toString());
 
 		final URI manifestURI = URI.createURI("archive:" + fileURI.toString() + "!/MANIFEST.xmi");
+		assert manifestURI != null;
 		final ResourceSet resourceSet = ResourceHelper.createResourceSet(getScenarioCipherProvider());
+		assert resourceSet != null;
 
 		try {
 			final Resource resource = ResourceHelper.loadResource(resourceSet, manifestURI);
@@ -525,6 +527,7 @@ public class DirScanScenarioService extends AbstractScenarioService {
 			final URI scenarioURI = URI.createFileURI(target.getAbsolutePath());
 
 			final URI destURI = URI.createURI("archive:" + scenarioURI.toString() + "!/rootObject.xmi");
+			assert destURI != null;
 			if (original.getInstance() == null) {
 				// Not loaded, copy raw data
 				final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();

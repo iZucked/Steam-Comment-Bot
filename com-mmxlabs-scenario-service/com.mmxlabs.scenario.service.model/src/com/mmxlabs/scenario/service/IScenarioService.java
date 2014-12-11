@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -20,6 +21,7 @@ public interface IScenarioService {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	String getName();
 
 	/**
@@ -35,7 +37,7 @@ public interface IScenarioService {
 	 * @param uuid
 	 * @return
 	 */
-	boolean exists(String uuid);
+	boolean exists(@NonNull String uuid);
 
 	/**
 	 * Retrieve the scenario instance with the given unique ID
@@ -43,7 +45,7 @@ public interface IScenarioService {
 	 * @param uuid
 	 * @return
 	 */
-	ScenarioInstance getScenarioInstance(String uuid);
+	ScenarioInstance getScenarioInstance(@NonNull String uuid);
 
 	/**
 	 * Insert some new models into the service to create a new scenario instance
@@ -68,7 +70,7 @@ public interface IScenarioService {
 	 * @return the new, duplicated instance.
 	 * @throws IOException
 	 */
-	ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException;
+	ScenarioInstance duplicate(@NonNull final ScenarioInstance original, @NonNull final Container destination) throws IOException;
 
 	/**
 	 * Delete the given scenario instance from this scenario service. Throws an {@link IllegalArgumentException} if the container is owned by another {@link IScenarioService}. This method can also be
@@ -76,7 +78,7 @@ public interface IScenarioService {
 	 * 
 	 * @param container
 	 */
-	void delete(Container container);
+	void delete(@NonNull Container container);
 
 	/**
 	 * Ensures that the given scenario instance's actual implementation (getInstance() method) is loaded and resolved.
@@ -84,7 +86,7 @@ public interface IScenarioService {
 	 * @param instance
 	 * @throws IOException
 	 */
-	EObject load(final ScenarioInstance instance) throws IOException;
+	EObject load(@NonNull final ScenarioInstance instance) throws IOException;
 
 	/**
 	 * Cause the saving of the given instance.
@@ -92,32 +94,34 @@ public interface IScenarioService {
 	 * @param instance
 	 * @throws IOException
 	 */
-	void save(ScenarioInstance instance) throws IOException;
+	void save(@NonNull ScenarioInstance instance) throws IOException;
 
 	/**
 	 * Resolves the relative uri stored in a {@link ScenarioInstance} owned by this {@link IScenarioService} into a fully qualified {@link URI}
+	 * 
 	 * @param uriString
 	 * @return
 	 */
-	public URI resolveURI(final String uriString);
+	@NonNull
+	public URI resolveURI(@NonNull final String uriString);
 
 	/**
 	 * Register a {@link IScenarioServiceListener} with this scenario service. Adding a service multiple times has no effect.
 	 * 
 	 * @param listener
 	 */
-	void addScenarioServiceListener(IScenarioServiceListener listener);
+	void addScenarioServiceListener(@NonNull IScenarioServiceListener listener);
 
 	/**
 	 * Remove a previously added {@link IScenarioServiceListener} to this scenario service.
 	 * 
 	 * @param listener
 	 */
-	void removeScenarioServiceListener(IScenarioServiceListener listener);
+	void removeScenarioServiceListener(@NonNull IScenarioServiceListener listener);
 
 	/**
 	 */
-	void unload(ScenarioInstance model);
+	void unload(@NonNull ScenarioInstance model);
 
 	/**
 	 * Move the collection of elements under the destination.
@@ -125,9 +129,9 @@ public interface IScenarioService {
 	 * @param containers
 	 * @param container
 	 */
-	void moveInto(List<Container> elements, Container destination);
+	void moveInto(@NonNull List<Container> elements, @NonNull Container destination);
 
 	/**
 	 */
-	void makeFolder(Container parent, String name);
+	void makeFolder(@NonNull Container parent, @NonNull String name);
 }
