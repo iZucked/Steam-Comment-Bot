@@ -163,7 +163,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
+	public void annotate(final ISequences sequences, final IAnnotatedSolution solution) {
 		// re-evaluate everything and populate the IAnnotatedSolution
 		if (scheduler.schedule(sequences, solution) == null) {
 			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");

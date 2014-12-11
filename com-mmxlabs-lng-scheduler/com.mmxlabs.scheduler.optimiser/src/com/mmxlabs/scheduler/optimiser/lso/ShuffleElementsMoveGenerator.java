@@ -57,7 +57,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		super();
 		this.owner = owner;
 	}
-	
+
 	@Inject
 	public void init() {
 		targetElements = new ArrayList<ISequenceElement>(owner.context.getOptimisationData().getSequenceElements().size());
@@ -95,9 +95,13 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		final ISequenceElement rawElement = RandomHelper.chooseElementFrom(owner.getRandom(), targetElements);
 		final Pair<Integer, Integer> elementPosition = owner.reverseLookup.get(rawElement);
 		final IResource elementResource = elementPosition.getFirst() == null ? null : owner.getSequences().getResources().get(elementPosition.getFirst());
+		if (elementResource == null) {
+			return null;
+		}
 		final ISequence elementSequence = owner.getSequences().getSequence(elementResource);
+
 		touchedElements.add(rawElement);
-		
+
 		if (elementPosition.getSecond() == -1) {
 			return null;
 		}
@@ -131,7 +135,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 				// Check we can move our element to this resource
 				final IResource followerResource = owner.getSequences().getResources().get(followerPosition.getFirst());
-				if (followerResource == elementResource) {
+				if (followerResource == null || followerResource == elementResource) {
 					continue;
 				}
 				if (!checkResource(element, followerResource)) {
@@ -203,7 +207,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 				// Check we can move our element to this resource
 				final IResource precederResource = owner.getSequences().getResources().get(precederPosition.getFirst());
-				if (precederResource == elementResource) {
+				if (precederResource == null || precederResource == elementResource) {
 					continue;
 				}
 				if (!checkResource(element, precederResource)) {
@@ -351,6 +355,9 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 					continue;
 				}
 				final IResource resource = owner.getSequences().getResources().get(position.getFirst());
+				if (resource == null) {
+					continue;
+				}
 				final ISequence sequence = owner.getSequences().getSequence(resource);
 
 				final Set<ISequenceElement> candidates = findPossibleUnusedElement(resource, owner.validFollowers.get(target), owner.validPreceeders.get(sequence.get(position.getSecond() + 1)));
@@ -398,6 +405,9 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 					continue;
 				}
 				final IResource resource = owner.getSequences().getResources().get(position.getFirst());
+				if (resource == null) {
+					continue;
+				}
 				final ISequence sequence = owner.getSequences().getSequence(resource);
 
 				final Set<ISequenceElement> candidates = findPossibleUnusedElement(resource, owner.validFollowers.get(sequence.get(position.getSecond() - 1)), owner.validPreceeders.get(target));
