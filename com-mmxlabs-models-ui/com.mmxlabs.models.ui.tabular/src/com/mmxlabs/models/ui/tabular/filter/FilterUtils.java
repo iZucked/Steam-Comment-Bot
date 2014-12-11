@@ -46,6 +46,7 @@ public class FilterUtils {
 			conjunction.addFilter(filter);
 		}
 
+		@SuppressWarnings("unused")
 		public void pushOr(final IFilter filter) {
 			pushOr();
 			pushAnd(filter);

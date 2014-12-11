@@ -42,8 +42,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
@@ -57,7 +55,6 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * 
  */
 public class EObjectTableViewer extends GridTreeViewer {
-	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
 
 	protected static final String COLUMN_PATH = "COLUMN_PATH";
 	protected static final String COLUMN_RENDERER = "COLUMN_RENDERER";

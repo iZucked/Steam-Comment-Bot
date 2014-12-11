@@ -92,7 +92,7 @@ public class CSVReader implements Closeable {
 		boolean firstTry = true;
 
 		// Loop round when a newline occurs within a quoted string (ESCAPED)
-		while (firstTry || state == State.ESCAPED && line != null) {
+		while (firstTry || state == State.ESCAPED) {
 			if (firstTry == false) {
 				line = reader.readLine();
 				temp.append("\n");

@@ -16,8 +16,6 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -33,7 +31,6 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * 
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
-	private static final Logger log = LoggerFactory.getLogger(SingleReferenceManipulator.class);
 
 	final ArrayList<EObject> valueList = new ArrayList<EObject>();
 	final ArrayList<String> names = new ArrayList<String>();
@@ -67,7 +64,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	@Override
 	public String render(final Object object) {
 		final Object superValue = super.getValue(object);
-		if (super.getValue(object) == SetCommand.UNSET_VALUE) {
+		if (superValue == SetCommand.UNSET_VALUE) {
 			if (object instanceof MMXObject) {
 				final Object defaultValue = ((MMXObject) object).getUnsetValue(field);
 				if (defaultValue instanceof EObject || defaultValue == null) {
@@ -75,9 +72,8 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 				}
 			}
 		} else {
-			final Object value = super.getValue(object);
-			if ((value instanceof EObject) || (value == null)) {
-				return valueProvider.getName((EObject) object, (EReference) field, (EObject) value);
+			if ((superValue instanceof EObject) || (superValue == null)) {
+				return valueProvider.getName((EObject) object, (EReference) field, (EObject) superValue);
 			} else {
 				return "";
 			}
@@ -108,7 +104,7 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 		final int x = valueList.indexOf(value);
 		if (x == -1) {
 			// Ignore warning - this can happen where there is no existing selection
-//			log.warn(String.format("Index of %s (value: %s) to be selected is -1, so it is not a legal option in the control", object, value));
+			// log.warn(String.format("Index of %s (value: %s) to be selected is -1, so it is not a legal option in the control", object, value));
 		}
 		return x;
 	}

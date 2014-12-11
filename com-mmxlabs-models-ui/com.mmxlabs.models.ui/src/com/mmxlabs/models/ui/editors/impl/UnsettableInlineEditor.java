@@ -26,7 +26,6 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	private Button setButton;
 	private Object lastSetValue;
 	private Control inner;
-	private boolean controlEnabled;
 	/**
 	 */
 	protected FormToolkit toolkit;
@@ -73,9 +72,9 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		this.toolkit = toolkit;
 		final Control c;
 		if (feature.isUnsettable()) {
-			// FIXME: too early! Needs to  be after/part of display(), once input has been set
+			// FIXME: too early! Needs to be after/part of display(), once input has been set
 			this.lastSetValue = getInitialUnsetValue();
-//			final Composite sub = new Composite(parent, SWT.NONE);
+			// final Composite sub = new Composite(parent, SWT.NONE);
 			final Composite sub = toolkit.createComposite(parent);
 			GridLayout gl = new GridLayout(2, false);
 			gl.marginLeft = 0;
@@ -83,9 +82,9 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			gl.marginHeight = 0;
 			gl.marginTop = 0;
 			gl.marginRight = 0;
-			gl.marginWidth= 0;
+			gl.marginWidth = 0;
 			sub.setLayout(gl);
-//			this.setButton = new Button(sub, SWT.CHECK);
+			// this.setButton = new Button(sub, SWT.CHECK);
 			this.setButton = toolkit.createButton(sub, "", SWT.CHECK);
 			this.inner = createValueControl(sub);
 			setButton.addSelectionListener(new SelectionAdapter() {
@@ -191,7 +190,6 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	@Override
 	public void setEditorEnabled(boolean enabled) {
-		this.controlEnabled = !isFeatureReadonly() && enabled;
 		super.setEditorEnabled(enabled);
 	}
 
@@ -205,11 +203,10 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			if (inner != null) {
 				inner.setEnabled(setButton.getSelection());
 			}
-		}
-		else if (inner != null) {
+		} else if (inner != null) {
 			inner.setEnabled(controlsEnabled);
 		}
-		
+
 	}
 
 	@Override
@@ -220,7 +217,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			setButton.setVisible(visible);
 		}
 	}
-	
+
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		if (input instanceof MMXObject) {
@@ -229,7 +226,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			if (di != null && di.delegatesTo(changedFeature)) {
 				return true;
 			}
-			
+
 		}
 
 		return super.updateOnChangeToFeature(changedFeature);
