@@ -6,10 +6,13 @@ package com.mmxlabs.optimiser.core.fitness.impl;
 
 import java.util.Collection;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -33,12 +36,12 @@ public final class MockFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences) {
+	public boolean evaluate(final ISequences sequences, @NonNull IEvaluationState evaluationState) {
 		return true;
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public boolean evaluate(final ISequences sequences, @NonNull IEvaluationState evaluationState, final Collection<IResource> affectedResources) {
 		return true;
 	}
 
@@ -53,7 +56,7 @@ public final class MockFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(final ISequences sequences, final IAnnotatedSolution solution) {
+	public void annotate(final ISequences sequences, @NonNull IEvaluationState evaluationState, final IAnnotatedSolution solution) {
 
 	}
 }

@@ -7,6 +7,8 @@ package com.mmxlabs.optimiser.core;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+
 public interface IAnnotatedSolution {
 
 	/**
@@ -17,6 +19,8 @@ public interface IAnnotatedSolution {
 	@NonNull 
 	ISequences getSequences();
 
+	IEvaluationState getEvaluationState();
+	
 	/**
 	 * Returns the {@link IElementAnnotationsMap} associated with the sequence elements in this solution
 	 * 

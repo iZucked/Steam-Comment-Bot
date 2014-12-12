@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -275,6 +276,7 @@ public class AbstractSequencesOptimiserTest {
 		final TestAbstractSequencesOptimiser lso = new TestAbstractSequencesOptimiser();
 		Assert.assertNull(lso.getSequenceManipulator());
 		final ISequencesManipulator sequencesManipulator = Mockito.mock(ISequencesManipulator.class);
+		assert sequencesManipulator != null;
 		lso.setSequenceManipulator(sequencesManipulator);
 		Assert.assertSame(sequencesManipulator, lso.getSequenceManipulator());
 
@@ -285,12 +287,12 @@ public class AbstractSequencesOptimiserTest {
 		/**
 		 * Make public rather than protected for the tests
 		 */
-		public void callUpdateSequences(final ISequences source, final IModifiableSequences destination, final Collection<IResource> affectedResources) {
+		public void callUpdateSequences(@NonNull final ISequences source, @NonNull final IModifiableSequences destination, @NonNull final Collection<IResource> affectedResources) {
 			super.updateSequences(source, destination, affectedResources);
 		}
 
 		@Override
-		public IAnnotatedSolution start(final IOptimisationContext context) {
+		public IAnnotatedSolution start(@NonNull final IOptimisationContext context) {
 			fail("This is not part of the test.");
 			return null;
 		}

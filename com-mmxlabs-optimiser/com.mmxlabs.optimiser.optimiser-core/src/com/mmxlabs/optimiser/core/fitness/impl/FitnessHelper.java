@@ -15,6 +15,8 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
@@ -29,17 +31,17 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 public final class FitnessHelper implements IFitnessHelper {
 
 	@Override
-	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessComponent> fitnessComponents) {
+	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final Collection<IFitnessComponent> fitnessComponents) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
-		return evaluateSequencesFromCores(sequences, fitnessCores);
+		return evaluateSequencesFromCores(sequences, evaluationState, fitnessCores);
 	}
 
 	@Override
-	public boolean evaluateSequencesFromCores(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessCore> fitnessCores) {
+	public boolean evaluateSequencesFromCores(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final Collection<IFitnessCore> fitnessCores) {
 
 		for (final IFitnessCore core : fitnessCores) {
-			if (!core.evaluate(sequences)) {
+			if (!core.evaluate(sequences, evaluationState)) {
 				return false;
 			}
 		}
@@ -47,18 +49,19 @@ public final class FitnessHelper implements IFitnessHelper {
 	}
 
 	@Override
-	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessComponent> fitnessComponents,
-			@Nullable final Collection<IResource> affectedResources) {
+	public boolean evaluateSequencesFromComponents(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState,
+			@NonNull final Collection<IFitnessComponent> fitnessComponents, @Nullable final Collection<IResource> affectedResources) {
 		final Set<IFitnessCore> fitnessCores = getFitnessCores(fitnessComponents);
 
-		return evaluateSequencesFromCores(sequences, fitnessCores, affectedResources);
+		return evaluateSequencesFromCores(sequences, evaluationState, fitnessCores, affectedResources);
 
 	}
 
 	@Override
-	public boolean evaluateSequencesFromCores(@NonNull final ISequences sequences, @NonNull final Collection<IFitnessCore> fitnessCores, @Nullable final Collection<IResource> affectedResources) {
+	public boolean evaluateSequencesFromCores(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final Collection<IFitnessCore> fitnessCores,
+			@Nullable final Collection<IResource> affectedResources) {
 		for (final IFitnessCore core : fitnessCores) {
-			if (!core.evaluate(sequences, affectedResources)) {
+			if (!core.evaluate(sequences, evaluationState, affectedResources)) {
 				return false;
 			}
 		}
@@ -104,16 +107,21 @@ public final class FitnessHelper implements IFitnessHelper {
 
 	@NonNull
 	@Override
-	public IAnnotatedSolution buildAnnotatedSolution(@NonNull final IOptimisationContext context, @NonNull final ISequences state, @NonNull final Collection<IFitnessComponent> fitnessComponents) {
-
-		final Set<IFitnessCore> cores = getFitnessCores(fitnessComponents);
+	public IAnnotatedSolution buildAnnotatedSolution(@NonNull final IOptimisationContext context, @NonNull final ISequences state, @NonNull final IEvaluationState evaluationState,
+			@NonNull final Collection<IFitnessComponent> fitnessComponents, @NonNull final Collection<IEvaluationProcess> evaluationProcesses) {
 
 		final AnnotatedSolution result = new AnnotatedSolution();
 		result.setSequences(state);
 		result.setContext(context);
+		result.setEvaluationState(evaluationState);
 
+		for (final IEvaluationProcess evaluationProcess : evaluationProcesses) {
+			evaluationProcess.annotate(state, evaluationState, result);
+		}
+
+		final Set<IFitnessCore> cores = getFitnessCores(fitnessComponents);
 		for (final IFitnessCore core : cores) {
-			core.annotate(state, result);
+			core.annotate(state, evaluationState, result);
 		}
 
 		return result;

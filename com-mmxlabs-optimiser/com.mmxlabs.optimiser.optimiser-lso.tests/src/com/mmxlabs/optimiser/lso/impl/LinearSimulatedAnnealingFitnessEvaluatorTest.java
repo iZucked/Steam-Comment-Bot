@@ -14,8 +14,10 @@ import org.mockito.Mockito;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
 import com.mmxlabs.optimiser.core.impl.Sequences;
@@ -47,12 +49,12 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 
 	}
 
-//	@Test(expected = IllegalStateException.class)
-//	public void testInit2() {
-//		final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator();
-//
-//		evaluator.init();
-//	}
+	// @Test(expected = IllegalStateException.class)
+	// public void testInit2() {
+	// final LinearSimulatedAnnealingFitnessEvaluator evaluator = new LinearSimulatedAnnealingFitnessEvaluator();
+	//
+	// evaluator.init();
+	// }
 
 	@Test
 	public void testCheckSequences() {
@@ -64,9 +66,11 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		final IFitnessCombiner fitnessCombiner = Mockito.mock(IFitnessCombiner.class);
 		final IFitnessHelper fitnessHelper = Mockito.mock(IFitnessHelper.class);
 
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 		final List<IFitnessComponent> fitnessComponents = Collections.emptyList();
 		assert fitnessComponents != null;
-		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, fitnessComponents)).thenReturn(true);
+		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents)).thenReturn(true);
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(1000l);
 
 		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluator(fitnessCombiner, thresholder, fitnessHelper);
@@ -76,20 +80,22 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
 
-		evaluator.setInitialSequences(source);
+		evaluator.setInitialSequences(source, evaluationState);
 
 		Assert.assertEquals(1000, evaluator.getBestFitness());
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());
 
 		Assert.assertNotNull(evaluator.getBestSequences());
-		ISequences current = evaluator.getCurrentSequences();
-		ISequences best = evaluator.getBestSequences();
+		Pair<ISequences, IEvaluationState> current = evaluator.getCurrentSequences();
+		Pair<ISequences, IEvaluationState> best = evaluator.getBestSequences();
 
 		Assert.assertNotNull(current);
 		Assert.assertNotNull(best);
+		Assert.assertNotNull(current.getFirst());
+		Assert.assertNotNull(best.getFirst());
 
-		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, fitnessComponents)).thenReturn(true);
-		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, fitnessComponents, resources)).thenReturn(true);
+		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents)).thenReturn(true);
+		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents, resources)).thenReturn(true);
 
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(500l);
 		Mockito.when(thresholder.accept(Matchers.anyLong())).thenReturn(true);
@@ -97,7 +103,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		final List<IResource> affectedResources = Collections.emptyList();
 		assert affectedResources != null;
 
-		evaluator.evaluateSequences(source, affectedResources);
+		evaluator.evaluateSequences(source, evaluationState, affectedResources);
 
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(500, evaluator.getCurrentFitness());
@@ -112,7 +118,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(700l);
 		Mockito.when(thresholder.accept(-200l)).thenReturn(true);
 
-		evaluator.evaluateSequences(source, affectedResources);
+		evaluator.evaluateSequences(source, evaluationState, affectedResources);
 
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(700, evaluator.getCurrentFitness());
@@ -122,11 +128,11 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertNotSame(current, evaluator.getCurrentSequences());
 		Assert.assertSame(best, evaluator.getBestSequences());
 
-		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, fitnessComponents, affectedResources)).thenReturn(true);
+		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents, affectedResources)).thenReturn(true);
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(600l);
 		Mockito.when(thresholder.accept(-100l)).thenReturn(false);
 
-		evaluator.evaluateSequences(source, affectedResources);
+		evaluator.evaluateSequences(source, evaluationState, affectedResources);
 
 		Assert.assertEquals(500, evaluator.getBestFitness());
 		Assert.assertEquals(700, evaluator.getCurrentFitness());
@@ -140,6 +146,9 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 	@Test
 	public void testSetInitialSequences() {
 
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
+
 		final List<IResource> resources = Collections.emptyList();
 		final ISequences source = new Sequences(resources);
 
@@ -150,7 +159,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		final IFitnessCombiner fitnessCombiner = Mockito.mock(IFitnessCombiner.class);
 		final IFitnessHelper fitnessHelper = Mockito.mock(IFitnessHelper.class);
 
-		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, fitnessComponents)).thenReturn(true);
+		Mockito.when(fitnessHelper.evaluateSequencesFromComponents(source, evaluationState, fitnessComponents)).thenReturn(true);
 		Mockito.when(fitnessCombiner.calculateFitness(fitnessComponents)).thenReturn(1000l);
 
 		final LinearSimulatedAnnealingFitnessEvaluator evaluator = createFitnessEvaluator(fitnessCombiner, thresholder, fitnessHelper);
@@ -161,7 +170,7 @@ public class LinearSimulatedAnnealingFitnessEvaluatorTest {
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getBestFitness());
 		Assert.assertEquals(Long.MAX_VALUE, evaluator.getCurrentFitness());
 
-		evaluator.setInitialSequences(source);
+		evaluator.setInitialSequences(source, evaluationState);
 
 		Assert.assertEquals(1000, evaluator.getBestFitness());
 		Assert.assertEquals(1000, evaluator.getCurrentFitness());

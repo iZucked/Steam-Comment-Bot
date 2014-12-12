@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -38,16 +39,16 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences) {
+	public boolean evaluate(final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 
-		fitness = evaluateSequences(sequences);
+		fitness = evaluateSequences(sequences, evaluationState);
 		return true;
 	}
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
 
-		fitness = evaluateSequences(sequences);
+		fitness = evaluateSequences(sequences, evaluationState);
 		return true;
 	}
 
@@ -69,7 +70,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 		return fitness;
 	}
 
-	private long evaluateSequences(@NonNull final ISequences sequences) {
+	private long evaluateSequences(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 		long fitness = 0;
 
 		final int numSequences = sequences.size();
@@ -101,7 +102,7 @@ public final class SortingFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution) {
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
 
 	}
 }

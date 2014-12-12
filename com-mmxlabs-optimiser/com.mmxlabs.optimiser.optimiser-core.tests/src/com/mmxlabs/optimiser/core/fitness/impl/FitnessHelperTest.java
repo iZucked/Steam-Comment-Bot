@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -63,15 +64,18 @@ public class FitnessHelperTest {
 		final List<IFitnessComponent> components = CollectionsUtil.makeArrayList((IFitnessComponent) new CoreWrapper(core1), (IFitnessComponent) new CoreWrapper(core2),
 				(IFitnessComponent) new CoreWrapper(core3));
 
-		Mockito.when(core1.evaluate(sequences)).thenReturn(true);
-		Mockito.when(core2.evaluate(sequences)).thenReturn(true);
-		Mockito.when(core3.evaluate(sequences)).thenReturn(true);
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 
-		helper.evaluateSequencesFromComponents(sequences, components);
+		Mockito.when(core1.evaluate(sequences, evaluationState)).thenReturn(true);
+		Mockito.when(core2.evaluate(sequences, evaluationState)).thenReturn(true);
+		Mockito.when(core3.evaluate(sequences, evaluationState)).thenReturn(true);
 
-		Mockito.verify(core1).evaluate(sequences);
-		Mockito.verify(core2).evaluate(sequences);
-		Mockito.verify(core3).evaluate(sequences);
+		helper.evaluateSequencesFromComponents(sequences, evaluationState, components);
+
+		Mockito.verify(core1).evaluate(sequences, evaluationState);
+		Mockito.verify(core2).evaluate(sequences, evaluationState);
+		Mockito.verify(core3).evaluate(sequences, evaluationState);
 
 	}
 
@@ -87,15 +91,18 @@ public class FitnessHelperTest {
 
 		final List<IFitnessCore> cores = CollectionsUtil.makeArrayList(core1, core2, core3);
 
-		Mockito.when(core1.evaluate(sequences)).thenReturn(true);
-		Mockito.when(core2.evaluate(sequences)).thenReturn(true);
-		Mockito.when(core3.evaluate(sequences)).thenReturn(true);
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 
-		helper.evaluateSequencesFromCores(sequences, cores);
+		Mockito.when(core1.evaluate(sequences, evaluationState)).thenReturn(true);
+		Mockito.when(core2.evaluate(sequences, evaluationState)).thenReturn(true);
+		Mockito.when(core3.evaluate(sequences, evaluationState)).thenReturn(true);
 
-		Mockito.verify(core1).evaluate(sequences);
-		Mockito.verify(core2).evaluate(sequences);
-		Mockito.verify(core3).evaluate(sequences);
+		helper.evaluateSequencesFromCores(sequences, evaluationState, cores);
+
+		Mockito.verify(core1).evaluate(sequences, evaluationState);
+		Mockito.verify(core2).evaluate(sequences, evaluationState);
+		Mockito.verify(core3).evaluate(sequences, evaluationState);
 	}
 
 	@Test
@@ -109,18 +116,21 @@ public class FitnessHelperTest {
 		final IFitnessCore core2 = Mockito.mock(IFitnessCore.class, "core-2");
 		final IFitnessCore core3 = Mockito.mock(IFitnessCore.class, "core-3");
 
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
+
 		final List<IFitnessComponent> components = CollectionsUtil.makeArrayList((IFitnessComponent) new CoreWrapper(core1), (IFitnessComponent) new CoreWrapper(core2),
 				(IFitnessComponent) new CoreWrapper(core3));
 
-		Mockito.when(core1.evaluate(sequences, resources)).thenReturn(true);
-		Mockito.when(core2.evaluate(sequences, resources)).thenReturn(true);
-		Mockito.when(core3.evaluate(sequences, resources)).thenReturn(true);
+		Mockito.when(core1.evaluate(sequences, evaluationState, resources)).thenReturn(true);
+		Mockito.when(core2.evaluate(sequences, evaluationState, resources)).thenReturn(true);
+		Mockito.when(core3.evaluate(sequences, evaluationState, resources)).thenReturn(true);
 
-		helper.evaluateSequencesFromComponents(sequences, components, resources);
+		helper.evaluateSequencesFromComponents(sequences, evaluationState, components, resources);
 
-		Mockito.verify(core1).evaluate(sequences, resources);
-		Mockito.verify(core2).evaluate(sequences, resources);
-		Mockito.verify(core3).evaluate(sequences, resources);
+		Mockito.verify(core1).evaluate(sequences, evaluationState, resources);
+		Mockito.verify(core2).evaluate(sequences, evaluationState, resources);
+		Mockito.verify(core3).evaluate(sequences, evaluationState, resources);
 	}
 
 	@Test
@@ -136,15 +146,18 @@ public class FitnessHelperTest {
 
 		final List<IFitnessCore> cores = CollectionsUtil.makeArrayList(core1, core2, core3);
 
-		Mockito.when(core1.evaluate(sequences, resources)).thenReturn(true);
-		Mockito.when(core2.evaluate(sequences, resources)).thenReturn(true);
-		Mockito.when(core3.evaluate(sequences, resources)).thenReturn(true);
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 
-		helper.evaluateSequencesFromCores(sequences, cores, resources);
+		Mockito.when(core1.evaluate(sequences, evaluationState, resources)).thenReturn(true);
+		Mockito.when(core2.evaluate(sequences, evaluationState, resources)).thenReturn(true);
+		Mockito.when(core3.evaluate(sequences, evaluationState, resources)).thenReturn(true);
 
-		Mockito.verify(core1).evaluate(sequences, resources);
-		Mockito.verify(core2).evaluate(sequences, resources);
-		Mockito.verify(core3).evaluate(sequences, resources);
+		helper.evaluateSequencesFromCores(sequences, evaluationState, cores, resources);
+
+		Mockito.verify(core1).evaluate(sequences, evaluationState, resources);
+		Mockito.verify(core2).evaluate(sequences, evaluationState, resources);
+		Mockito.verify(core3).evaluate(sequences, evaluationState, resources);
 	}
 
 	@Test

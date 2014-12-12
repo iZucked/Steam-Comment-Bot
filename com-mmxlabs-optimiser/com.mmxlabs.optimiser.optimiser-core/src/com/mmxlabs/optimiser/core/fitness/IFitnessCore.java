@@ -13,6 +13,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -42,7 +43,7 @@ public interface IFitnessCore {
 	 * 
 	 * @param sequences
 	 */
-	boolean evaluate(@NonNull ISequences sequences);
+	boolean evaluate(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState);
 
 	/**
 	 * Evaluates the fitness of the given sequence. This method takes a list of affected resources used to indicate that only the given resources have changed since the previous evaluation. If this is
@@ -51,7 +52,7 @@ public interface IFitnessCore {
 	 * 
 	 * @param sequences
 	 */
-	boolean evaluate(@NonNull ISequences sequences, @Nullable Collection<IResource> affectedResources);
+	boolean evaluate(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Notify the fitness core that the given sequences have been accepted. These parameters should have been given to the last invocation of {@link #evaluate(ISequences, Collection)}.
@@ -74,5 +75,5 @@ public interface IFitnessCore {
 	 * @param solution
 	 *            annotated solution for these sequences
 	 */
-	void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution);
+	void annotate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution);
 }

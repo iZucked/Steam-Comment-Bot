@@ -4,19 +4,18 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
-import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
@@ -30,12 +29,6 @@ import com.mmxlabs.optimiser.lso.IMove;
 public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	private IOptimisationData data;
 
-	IFitnessEvaluator fitnessEvaluator;
-
-	private List<IConstraintChecker> constraintCheckers;
-
-	private ISequencesManipulator manipulator;
-
 	private int numberOfMovesTried;
 
 	private int numberOfMovesAccepted;
@@ -48,9 +41,6 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 	public IAnnotatedSolution start(@NonNull final IOptimisationContext optimiserContext) {
 		setCurrentContext(optimiserContext);
 		data = optimiserContext.getOptimisationData();
-		fitnessEvaluator = getFitnessEvaluator();
-		constraintCheckers = getConstraintCheckers();
-		manipulator = getSequenceManipulator();
 		numberOfMovesTried = 0;
 		numberOfMovesAccepted = 0;
 
@@ -63,21 +53,27 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		{
 			// Apply sequence manipulators
 			final IModifiableSequences fullSequences = new ModifiableSequences(currentRawSequences);
-			manipulator.manipulate(fullSequences);
+			getSequenceManipulator().manipulate(fullSequences);
 
 			// Prime IReducingConstraintCheckers with initial state
 			for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
 				checker.sequencesAccepted(fullSequences);
 			}
+
+			final IEvaluationState evaluationState = new EvaluationState();
+			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+				evaluationProcess.evaluate(fullSequences, evaluationState);
+			}
+
 			// Prime fitness cores with initial sequences
-			fitnessEvaluator.setOptimisationData(data);
-			fitnessEvaluator.setInitialSequences(fullSequences);
+			getFitnessEvaluator().setOptimisationData(data);
+			getFitnessEvaluator().setInitialSequences(fullSequences, evaluationState);
 		}
 
 		// Set initial sequences
 		getMoveGenerator().setSequences(potentialRawSequences);
 
-		final IAnnotatedSolution annotatedBestSolution = fitnessEvaluator.getBestAnnotatedSolution(optimiserContext);
+		final IAnnotatedSolution annotatedBestSolution = getFitnessEvaluator().getBestAnnotatedSolution(optimiserContext);
 		if (annotatedBestSolution == null) {
 			return null;
 		}
@@ -124,10 +120,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			// Apply sequence manipulators
 			final IModifiableSequences potentialFullSequences = new ModifiableSequences(pinnedPotentialRawSequences);
-			manipulator.manipulate(potentialFullSequences);
+			getSequenceManipulator().manipulate(potentialFullSequences);
 
 			// Apply hard constraint checkers
-			for (final IConstraintChecker checker : constraintCheckers) {
+			for (final IConstraintChecker checker : getConstraintCheckers()) {
 				if (checker.checkConstraints(potentialFullSequences) == false) {
 					// Reject Move
 					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
@@ -136,8 +132,17 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 				}
 			}
 
+			final IEvaluationState evaluationState = new EvaluationState();
+			for (final IEvaluationProcess evaluationProcess : getEvaluationProcesses()) {
+				if (!evaluationProcess.evaluate(potentialFullSequences, evaluationState)) {
+					// Problem evaluating, reject move
+					updateSequences(pinnedCurrentRawSequences, pinnedPotentialRawSequences, move.getAffectedResources());
+					continue MAIN_LOOP;
+				}
+			}
+
 			// Test move and update state if accepted
-			if (fitnessEvaluator.evaluateSequences(potentialFullSequences, move.getAffectedResources())) {
+			if (getFitnessEvaluator().evaluateSequences(potentialFullSequences, evaluationState, move.getAffectedResources())) {
 
 				// Update IReducingConstraintCheckers with new state
 				for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {

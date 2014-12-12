@@ -14,6 +14,8 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -46,7 +48,7 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull Collection<IFitnessCore> fitnessCores);
+	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessCore> fitnessCores);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
@@ -57,7 +59,8 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull Collection<IFitnessCore> fitnessCores, @Nullable Collection<IResource> affectedResources);
+	boolean evaluateSequencesFromCores(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationStates, @NonNull Collection<IFitnessCore> fitnessCores,
+			@Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
@@ -67,7 +70,7 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull Collection<IFitnessComponent> fitnessComponents);
+	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents);
 
 	/**
 	 * Evaluate the fitness of the given sequences using the given {@link IFitnessCores}s
@@ -77,7 +80,8 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 
-	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull Collection<IFitnessComponent> fitnessComponents, @Nullable Collection<IResource> affectedResources);
+	boolean evaluateSequencesFromComponents(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IFitnessComponent> fitnessComponents,
+			@Nullable Collection<IResource> affectedResources);
 
 	/**
 	 * The {@link #accept(ISequences, Collection)} method is to be invoked when a {@link ISequences} object is accepted as the new state. The {@link ISequences} object must have been passed to the
@@ -125,5 +129,6 @@ public interface IFitnessHelper {
 	 * @return
 	 */
 	@NonNull
-	IAnnotatedSolution buildAnnotatedSolution(@NonNull IOptimisationContext context, @NonNull ISequences state, @NonNull Collection<IFitnessComponent> fitnessComponents);
+	IAnnotatedSolution buildAnnotatedSolution(@NonNull IOptimisationContext context, @NonNull ISequences state, @NonNull IEvaluationState evaluationState,
+			@NonNull Collection<IFitnessComponent> fitnessComponents, @NonNull Collection<IEvaluationProcess> evaluationProcesses);
 }

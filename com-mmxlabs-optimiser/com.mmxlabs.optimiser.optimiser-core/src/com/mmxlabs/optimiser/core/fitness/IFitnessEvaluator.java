@@ -10,11 +10,14 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
@@ -34,6 +37,9 @@ public interface IFitnessEvaluator {
 	 */
 	@NonNull
 	List<IFitnessComponent> getFitnessComponents();
+
+	@NonNull
+	List<IEvaluationProcess> getEvaluationProcesses();
 
 	/**
 	 * Set the list of {@link IFitnessComponent}s to be used by this {@link IFitnessEvaluator}. Note these {@link IFitnessComponent}s instances should not be elsewhere while using this object.
@@ -59,7 +65,7 @@ public interface IFitnessEvaluator {
 	 * 
 	 * @param sequences
 	 */
-	void setInitialSequences(@NonNull ISequences sequences);
+	void setInitialSequences(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState);
 
 	/**
 	 * Evaluate the given {@link ISequences} to determine whether or not they are accepted as a better state than the previously accepted state. If accepted, then the {@link ISequences} "state" will
@@ -68,7 +74,7 @@ public interface IFitnessEvaluator {
 	 * @param sequences
 	 * @return
 	 */
-	boolean evaluateSequences(@NonNull ISequences sequences, @NonNull Collection<IResource> affectedResources);
+	boolean evaluateSequences(@NonNull ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull Collection<IResource> affectedResources);
 
 	/**
 	 * Returns the best {@link ISequences} instance seen by this {@link IFitnessEvaluator}. The value of best is determined by the implementation.
@@ -76,7 +82,7 @@ public interface IFitnessEvaluator {
 	 * @return
 	 */
 	@Nullable
-	ISequences getBestSequences();
+	Pair<ISequences, IEvaluationState> getBestSequences();
 
 	/**
 	 * Returns the fitness value of the best {@link ISequences} instance returned by {@link #getBestSequences()};
@@ -91,7 +97,7 @@ public interface IFitnessEvaluator {
 	 * @return
 	 */
 	@Nullable
-	ISequences getCurrentSequences();
+	Pair<ISequences, IEvaluationState> getCurrentSequences();
 
 	/**
 	 * Returns the fitness value of the current {@link ISequences} instance returned by {@link #getCurrentSequences()};

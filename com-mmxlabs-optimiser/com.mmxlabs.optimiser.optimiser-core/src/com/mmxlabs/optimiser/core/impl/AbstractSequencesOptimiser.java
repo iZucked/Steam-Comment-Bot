@@ -25,6 +25,7 @@ import com.mmxlabs.optimiser.core.ISequencesOptimiser;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser {
@@ -34,6 +35,8 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	private int numberOfIterationsCompleted;
 
 	private List<IConstraintChecker> constraintCheckers;
+
+	private List<IEvaluationProcess> evaluationProcesses;
 
 	private IFitnessEvaluator fitnessEvaluator;
 
@@ -152,7 +155,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		return numberOfIterations;
 	}
 
-	public final void setConstraintCheckers(final List<IConstraintChecker> constraintCheckers) {
+	public final void setConstraintCheckers(@NonNull final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 		this.reducingConstraintCheckers = new ArrayList<IReducingContraintChecker>(constraintCheckers.size());
 		for (final IConstraintChecker checker : constraintCheckers) {
@@ -162,12 +165,24 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 		}
 	}
 
+	public final void setEvaluationProcesses(@NonNull final List<IEvaluationProcess> evaluationProcesses) {
+		this.evaluationProcesses = evaluationProcesses;
+	}
+
 	@Override
+	@NonNull
 	public final List<IConstraintChecker> getConstraintCheckers() {
 		return constraintCheckers;
 	}
 
 	@Override
+	@NonNull
+	public final List<IEvaluationProcess> getEvaluationProcesses() {
+		return evaluationProcesses;
+	}
+
+	@Override
+	@NonNull
 	public final List<IReducingContraintChecker> getReducingConstraintCheckers() {
 		return reducingConstraintCheckers;
 	}
@@ -177,6 +192,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	@Override
+	@NonNull
 	public final IFitnessEvaluator getFitnessEvaluator() {
 		return fitnessEvaluator;
 	}
@@ -186,6 +202,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	}
 
 	@Override
+	@NonNull
 	public final ISequencesManipulator getSequenceManipulator() {
 		return sequenceManipulator;
 	}

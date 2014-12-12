@@ -11,6 +11,8 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
@@ -21,7 +23,9 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessInstantiator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
@@ -31,6 +35,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public class OptimiserCoreModule extends AbstractModule {
 
+	public static final String ENABLED_EVALUATION_PROCESS_NAMES = "EnabledEvaluationProcessNames";
 	public static final String ENABLED_CONSTRAINT_NAMES = "EnabledConstraintNames";
 	public static final String ENABLED_FITNESS_NAMES = "EnabledFitnessNames";
 
@@ -40,8 +45,24 @@ public class OptimiserCoreModule extends AbstractModule {
 	}
 
 	@Provides
-	private List<IConstraintChecker> provideConstraintCheckers(final Injector injector, final IConstraintCheckerRegistry constraintCheckerRegistry,
-			@Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, IOptimisationData optimisationData) {
+	private List<IEvaluationProcess> provideEvaluationProcesses(@NonNull final Injector injector, @NonNull final IEvaluationProcessRegistry evaluationProcessRegistry,
+			@NonNull @Named(ENABLED_EVALUATION_PROCESS_NAMES) final List<String> enabledProcessNames, @NonNull final IOptimisationData optimisationData) {
+		final EvaluationProcessInstantiator evaluationProcessInstantiator = new EvaluationProcessInstantiator();
+		final List<IEvaluationProcess> evaluationProcesses = evaluationProcessInstantiator.instantiateEvaluationProcesses(evaluationProcessRegistry, enabledProcessNames, optimisationData);
+
+		final List<IEvaluationProcess> result = new ArrayList<IEvaluationProcess>(evaluationProcesses.size());
+		for (final IEvaluationProcess process : evaluationProcesses) {
+			if (process != null) {
+				result.add(process);
+				injector.injectMembers(process);
+			}
+		}
+		return result;
+	}
+
+	@Provides
+	private List<IConstraintChecker> provideConstraintCheckers(@NonNull final Injector injector, @NonNull final IConstraintCheckerRegistry constraintCheckerRegistry,
+			@NonNull @Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, @NonNull final IOptimisationData optimisationData) {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(constraintCheckerRegistry, enabledConstraintNames, optimisationData);
 
@@ -69,7 +90,7 @@ public class OptimiserCoreModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private List<IFitnessComponent> provideFitnessComponents(final Injector injector, final IFitnessFunctionRegistry fitnessFunctionRegistry,
+	private List<IFitnessComponent> provideFitnessComponents(@NonNull final Injector injector, @NonNull final IFitnessFunctionRegistry fitnessFunctionRegistry,
 			@Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();

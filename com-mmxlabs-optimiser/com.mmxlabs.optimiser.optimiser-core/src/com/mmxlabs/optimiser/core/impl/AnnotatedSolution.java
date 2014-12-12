@@ -11,6 +11,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotationsMap;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 
 /**
  * Implementation of {@link IAnnotatedSolution}.
@@ -23,6 +24,8 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 	private ISequences sequences;
 
 	private IOptimisationContext context;
+
+	private IEvaluationState evaluationState;
 
 	private IElementAnnotationsMap elementAnnotations = new HashMapAnnotations();
 
@@ -73,5 +76,14 @@ public final class AnnotatedSolution implements IAnnotatedSolution {
 			return null;
 		}
 		return clz.cast(generalAnnotations.get(key));
+	}
+
+	@Override
+	public IEvaluationState getEvaluationState() {
+		return evaluationState;
+	}
+
+	public void setEvaluationState(final IEvaluationState evaluationState) {
+		this.evaluationState = evaluationState;
 	}
 }

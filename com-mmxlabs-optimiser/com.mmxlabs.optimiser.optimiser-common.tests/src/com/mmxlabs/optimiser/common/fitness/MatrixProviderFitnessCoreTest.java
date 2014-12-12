@@ -22,6 +22,7 @@ import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.optimiser.core.impl.Resource;
@@ -52,10 +53,13 @@ public class MatrixProviderFitnessCoreTest {
 	@Test
 	public void testAccepted() {
 		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
-		
+
 		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
 
 		final OptimisationData data = new OptimisationData();
+
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 
 		core.init(data);
 		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
@@ -81,17 +85,17 @@ public class MatrixProviderFitnessCoreTest {
 		matrix.set(obj3, obj4, Double.valueOf(10.0));
 		matrix.set(obj1, obj4, Double.valueOf(15.0));
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 		Assert.assertEquals(15, core.getNewFitness());
 
 		final Collection<IResource> affectedResources1 = Collections.singletonList(r1);
 		final Collection<IResource> affectedResources2 = Collections.singletonList(r2);
 
-		core.evaluate(sequences, affectedResources1);
+		core.evaluate(sequences, evaluationState, affectedResources1);
 
 		Assert.assertEquals(15, core.getNewFitness());
 
-		core.evaluate(sequences, affectedResources2);
+		core.evaluate(sequences, evaluationState, affectedResources2);
 
 		Assert.assertEquals(15, core.getNewFitness());
 
@@ -108,24 +112,27 @@ public class MatrixProviderFitnessCoreTest {
 
 		// Test acceptance
 
-		core.evaluate(sequences2, affectedResources1);
+		core.evaluate(sequences2, evaluationState, affectedResources1);
 		Assert.assertEquals(25, core.getNewFitness());
 
 		core.accepted(sequences2, affectedResources1);
 
-		core.evaluate(sequences2, affectedResources2);
+		core.evaluate(sequences2, evaluationState, affectedResources2);
 		Assert.assertEquals(22, core.getNewFitness());
 	}
 
 	@Test
 	public void testEvaluateISequencesOfT() {
-		
+
 		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
 		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
 
 		final OptimisationData data = new OptimisationData();
 
 		core.init(data);
+
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 
 		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
@@ -145,7 +152,7 @@ public class MatrixProviderFitnessCoreTest {
 		matrix.set(obj1, obj2, Double.valueOf(5.0));
 		matrix.set(obj3, obj4, Double.valueOf(10.0));
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 
 		Assert.assertEquals(15, core.getNewFitness());
 
@@ -153,7 +160,7 @@ public class MatrixProviderFitnessCoreTest {
 		// Make sure fitness has not changed yet
 		Assert.assertEquals(15, core.getNewFitness());
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 
 		Assert.assertEquals(30, core.getNewFitness());
 	}
@@ -161,12 +168,15 @@ public class MatrixProviderFitnessCoreTest {
 	@Test
 	public void testEvaluateISequencesOfTCollectionOfIResource() {
 		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
-		
+
 		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
 
 		final OptimisationData data = new OptimisationData();
 
 		core.init(data);
+
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 
 		final ISequenceElement obj1 = Mockito.mock(ISequenceElement.class, "1");
 		final ISequenceElement obj2 = Mockito.mock(ISequenceElement.class, "2");
@@ -191,17 +201,17 @@ public class MatrixProviderFitnessCoreTest {
 		matrix.set(obj3, obj4, Double.valueOf(10.0));
 		matrix.set(obj1, obj4, Double.valueOf(15.0));
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 		Assert.assertEquals(15, core.getNewFitness());
 
 		final Collection<IResource> affectedResources1 = Collections.singletonList(r1);
 		final Collection<IResource> affectedResources2 = Collections.singletonList(r2);
 
-		core.evaluate(sequences, affectedResources1);
+		core.evaluate(sequences, evaluationState, affectedResources1);
 
 		Assert.assertEquals(15, core.getNewFitness());
 
-		core.evaluate(sequences, affectedResources2);
+		core.evaluate(sequences, evaluationState, affectedResources2);
 
 		Assert.assertEquals(15, core.getNewFitness());
 
@@ -217,10 +227,10 @@ public class MatrixProviderFitnessCoreTest {
 		}
 
 		// Test just deltas
-		core.evaluate(sequences2, affectedResources1);
+		core.evaluate(sequences2, evaluationState, affectedResources1);
 		Assert.assertEquals(25, core.getNewFitness());
 
-		core.evaluate(sequences2, affectedResources2);
+		core.evaluate(sequences2, evaluationState, affectedResources2);
 		Assert.assertEquals(12, core.getNewFitness());
 	}
 
@@ -246,7 +256,7 @@ public class MatrixProviderFitnessCoreTest {
 		final HashMapMatrixProvider<ISequenceElement, Number> matrix = new HashMapMatrixProvider<ISequenceElement, Number>();
 
 		final MatrixProviderFitnessCore core = createFitnessCore(matrix);
-		
+
 		final OptimisationData data = new OptimisationData();
 
 		core.init(data);

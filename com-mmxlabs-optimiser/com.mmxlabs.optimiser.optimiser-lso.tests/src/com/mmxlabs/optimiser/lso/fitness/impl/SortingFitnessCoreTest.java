@@ -17,6 +17,7 @@ import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -33,7 +34,7 @@ public class SortingFitnessCoreTest {
 
 		final SortingFitnessFactory factory = new SortingFitnessFactory();
 		core = factory.instantiate();
-		IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		final IOptimisationData data = Mockito.mock(IOptimisationData.class);
 		assert data != null;
 		core.init(data);
 
@@ -45,19 +46,23 @@ public class SortingFitnessCoreTest {
 
 	@Test
 	public void testSortingFitnessCore1() {
+
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), 1, 2, 3, 4);
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 
 		Assert.assertEquals(0, component.getFitness());
 	}
 
 	@Test
 	public void testSortingFitnessCore2() {
-
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), 1, 2, 4, 3);
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 
 		Assert.assertEquals(1, component.getFitness());
 	}
@@ -66,24 +71,29 @@ public class SortingFitnessCoreTest {
 	public void testSortingFitnessCore3() {
 
 		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), 4, 3, 2, 1);
-
-		core.evaluate(sequences);
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
+		core.evaluate(sequences, evaluationState);
 
 		Assert.assertEquals(3, component.getFitness());
 	}
 
 	@Test
 	public void testSortingFitnessCore4() {
-
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 		final ISequences sequences = OptimiserTestUtil.makeSequences(OptimiserTestUtil.makeResource(), new int[0]);
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 
 		Assert.assertEquals(0, component.getFitness());
 	}
 
 	@Test
 	public void testSortingFitnessCore5() {
+
+		final IEvaluationState evaluationState = Mockito.mock(IEvaluationState.class);
+		assert evaluationState != null;
 
 		final IResource r1 = OptimiserTestUtil.makeResource();
 		final IResource r2 = OptimiserTestUtil.makeResource();
@@ -92,7 +102,7 @@ public class SortingFitnessCoreTest {
 
 		final IModifiableSequences sequences = new ModifiableSequences(CollectionsUtil.makeArrayList(r1, r2), map);
 
-		core.evaluate(sequences);
+		core.evaluate(sequences, evaluationState);
 
 		Assert.assertEquals(3, component.getFitness());
 	}

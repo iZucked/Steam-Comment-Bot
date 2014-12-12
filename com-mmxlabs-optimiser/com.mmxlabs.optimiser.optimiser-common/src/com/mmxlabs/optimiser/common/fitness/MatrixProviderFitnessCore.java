@@ -20,6 +20,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -86,7 +87,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 
 		// Perform a full evaluation
 		oldFitness = 0;
@@ -105,7 +106,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
 
 		// Reset this value
 		newFitness = oldFitness;
@@ -131,7 +132,7 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 
 	@Override
 	public Collection<IFitnessComponent> getFitnessComponents() {
-		return CollectionsUtil.<IFitnessComponent>makeArrayList(component);
+		return CollectionsUtil.<IFitnessComponent> makeArrayList(component);
 	}
 
 	@Override
@@ -187,8 +188,8 @@ public final class MatrixProviderFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution) {
-		evaluate(sequences);
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
+		evaluate(sequences, evaluationState);
 		// Would annotate here
 	}
 }

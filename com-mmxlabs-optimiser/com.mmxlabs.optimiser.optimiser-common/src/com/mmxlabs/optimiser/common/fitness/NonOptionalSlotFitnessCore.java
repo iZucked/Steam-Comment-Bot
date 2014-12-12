@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -60,13 +61,13 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState) {
 		evaluation(sequences);
 		return true;
 	}
 
 	@Override
-	public boolean evaluate(@NonNull final ISequences sequences, @Nullable final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @Nullable final Collection<IResource> affectedResources) {
 		evaluation(sequences);
 		return true;
 	}
@@ -77,7 +78,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 	}
 
 	@Override
-	public void annotate(@NonNull final ISequences sequences, @NonNull final IAnnotatedSolution solution) {
+	public void annotate(@NonNull final ISequences sequences, @NonNull IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
 
 	}
 

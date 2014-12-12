@@ -16,6 +16,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+import com.google.inject.util.Modules.OverriddenModuleBuilder;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcess;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessHelper;
@@ -24,6 +26,7 @@ import com.mmxlabs.optimiser.lso.IFitnessCombiner;
 import com.mmxlabs.optimiser.lso.IThresholder;
 import com.mmxlabs.optimiser.lso.impl.LinearFitnessCombiner;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
+import com.mmxlabs.optimiser.lso.impl.thresholders.InstrumentingThresholder;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 
 /**
@@ -52,14 +55,29 @@ public class LinearFitnessEvaluatorModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IFitnessEvaluator createFitnessEvaluator(@NonNull Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator imAg,
-			@NonNull final List<IFitnessComponent> fitnessComponents) {
+	private IFitnessEvaluator createFitnessEvaluator(@NonNull final Injector injector, @NonNull final IThresholder thresholder, @NonNull final InstrumentingMoveGenerator img,
+			@NonNull final List<IFitnessComponent> fitnessComponents, 	@NonNull final List<IEvaluationProcess> evaluationProcesses) {
 		// create a linear Fitness evaluator.
+
+//		final Injector injectorToUse;
+//		if (LocalSearchOptimiserModule.instrumenting) {
+//			final IThresholder instrumentingThresholder = new InstrumentingThresholder(thresholder, img);
+//			injector.
+//			injectorToUse = injector.createChildInjector(new AbstractModule() {
+//				@Override
+//				protected void configure() {
+//					bind(IThresholder.class).toInstance(instrumentingThresholder);
+//				}
+//			});
+//		} else {
+//			injectorToUse = injector;
+//		}
 
 		final LinearSimulatedAnnealingFitnessEvaluator fitnessEvaluator = new LinearSimulatedAnnealingFitnessEvaluator();
 		injector.injectMembers(fitnessEvaluator);
 
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
+		fitnessEvaluator.setEvaluationProcesses(evaluationProcesses);
 
 		fitnessEvaluator.init();
 
