@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.google.common.collect.Lists;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -26,6 +27,8 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
+import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -236,8 +239,10 @@ public class SimpleSchedulerTest {
 
 		final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
 
+		IEvaluationState evaluationState = new EvaluationState();
+		
 		linearFitnessEvaluator.setOptimisationData(context.getOptimisationData());
-		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences());
+		linearFitnessEvaluator.setInitialSequences(context.getInitialSequences(), evaluationState);
 
 		printSequences(context.getInitialSequences());
 
@@ -252,7 +257,9 @@ public class SimpleSchedulerTest {
 		System.out.println("Final fitness " + finalFitness);
 		Assert.assertFalse(finalFitness == Long.MAX_VALUE);
 
-		printSequences(fitnessEvaluator.getBestSequences());
+		Pair<ISequences, IEvaluationState> bestSequences = fitnessEvaluator.getBestSequences();
+		Assert.assertNotNull(bestSequences);
+		printSequences(bestSequences.getFirst());
 
 		// TODO: How to verify result?
 	}

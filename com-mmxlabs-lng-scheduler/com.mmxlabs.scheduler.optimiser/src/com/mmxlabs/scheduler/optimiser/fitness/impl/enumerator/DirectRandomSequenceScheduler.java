@@ -52,7 +52,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 	@Override
 	protected final ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 
-		final long lastValue = getBestValue();
+//		final long lastValue = getBestValue();
 		random = new Random(seed);
 
 		setSequences(sequences);
@@ -67,7 +67,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		synchroniseShipToShipBindings();
 		evaluate(solution);
 
-		assert lastValue == getBestValue();
+//		assert lastValue == getBestValue();
 
 		return getBestResult();
 	}

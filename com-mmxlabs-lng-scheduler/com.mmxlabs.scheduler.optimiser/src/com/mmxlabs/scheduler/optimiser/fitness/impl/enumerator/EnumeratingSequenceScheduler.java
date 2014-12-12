@@ -170,12 +170,12 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	 */
 	private ISequences sequences;
 
-	private ScheduleFitnessEvaluator evaluator;
+//	private ScheduleFitnessEvaluator evaluator;
 
-	/**
-	 * the fitness of the best result in the cycle
-	 */
-	private long bestValue;
+//	/**
+//	 * the fitness of the best result in the cycle
+//	 */
+//	private long bestValue;
 	/**
 	 * the best result in this cycle, or null if we have just started a cycle
 	 */
@@ -186,7 +186,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	public EnumeratingSequenceScheduler() {
 		super();
 
-		createLog();
+//		createLog();
 	}
 
 	@Override
@@ -194,14 +194,14 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		setSequences(sequences);
 		resetBest();
 
-		startLogEntry(1);
+//		startLogEntry(1);
 		prepare();
 		if (RE_EVALUATE_SOLUTION) {
 			enumerate(0, 0, null);
 		} else {
 			enumerate(0, 0, solution);
 		}
-		endLogEntry();
+//		endLogEntry();
 		if (RE_EVALUATE_SOLUTION) {
 			return reEvaluateAndGetBestResult(sequences, solution);
 		} else {
@@ -210,23 +210,23 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 	}
 
 	protected ScheduledSequences reEvaluateAndGetBestResult(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
-		final long lastValue = getBestValue();
+//		final long lastValue = getBestValue();
 		setSequences(sequences);
 		resetBest();
 
-		startLogEntry(1);
+//		startLogEntry(1);
 		prepare();
 		enumerate(0, 0, solution);
-		endLogEntry();
+//		endLogEntry();
 
-		assert lastValue == getBestValue();
+//		assert lastValue == getBestValue();
 
 		return getBestResult();
 	}
 
 	protected final void resetBest() {
 		this.bestResult = null;
-		this.bestValue = Long.MAX_VALUE;
+//		this.bestValue = Long.MAX_VALUE;
 	}
 
 	protected final void setSequences(final ISequences sequences) {
@@ -652,11 +652,6 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		}
 	}
 
-	@Override
-	public void acceptLastSchedule() {
-
-	}
-
 	protected boolean evaluate(@Nullable final IAnnotatedSolution solution) {
 
 		final ScheduledSequences scheduledSequences = scheduleCalculator.schedule(sequences, arrivalTimes, solution);
@@ -664,21 +659,21 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 			return false;
 		}
 
-		if (evaluator != null) {
-			bestValue = evaluator.evaluateSchedule(sequences, scheduledSequences);
-		} else {
-			bestValue = 0;
-		}
+//		if (evaluator != null) {
+//			bestValue = evaluator.evaluateSchedule(sequences, scheduledSequences);
+//		} else {
+//			bestValue = 0;
+//		}
 
-		logValue(bestValue);
+//		logValue(bestValue);
 
 		bestResult = scheduledSequences;
 		return true;
 	}
 
-	public long getBestValue() {
-		return bestValue;
-	}
+//	public long getBestValue() {
+//		return bestValue;
+//	}
 
 	/**
 	 * Gets the earliest time at which the current vessel can arrive at the given element, given the arrival times set for the previous elements.
@@ -748,13 +743,13 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 
 	}
 
-	public ScheduleFitnessEvaluator getScheduleEvaluator() {
-		return evaluator;
-	}
-
-	public void setScheduleEvaluator(final ScheduleFitnessEvaluator evaluator) {
-		this.evaluator = evaluator;
-	}
+//	public ScheduleFitnessEvaluator getScheduleEvaluator() {
+//		return evaluator;
+//	}
+//
+//	public void setScheduleEvaluator(final ScheduleFitnessEvaluator evaluator) {
+//		this.evaluator = evaluator;
+//	}
 
 	/**
 	 * Get the approximate number of combinations of arrival times for elements from firstIndex to lastIndex inclusive, up to maxValue

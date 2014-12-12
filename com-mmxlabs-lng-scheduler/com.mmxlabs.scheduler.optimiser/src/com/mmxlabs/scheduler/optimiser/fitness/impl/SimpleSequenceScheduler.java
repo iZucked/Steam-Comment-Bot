@@ -111,8 +111,8 @@ public final class SimpleSequenceScheduler extends AbstractLoggingSequenceSchedu
 		return arrivalTimes;
 	}
 
-	@Override
-	public void acceptLastSchedule() {
-
-	}
+//	@Override
+//	public void acceptLastSchedule() {
+//
+//	}
 }

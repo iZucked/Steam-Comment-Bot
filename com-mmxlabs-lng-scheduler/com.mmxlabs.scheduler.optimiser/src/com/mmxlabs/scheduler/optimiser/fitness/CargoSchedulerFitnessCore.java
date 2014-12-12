@@ -12,15 +12,19 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationState;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcess;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
@@ -28,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ProfitAndLossAllocationComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleFitnessEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -42,16 +47,10 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	private final List<ICargoSchedulerFitnessComponent> schedulerComponents = new ArrayList<>(8);
 	private final List<ICargoFitnessComponent> allComponents = new ArrayList<>();
 
-	@Inject
-	private ISchedulerFactory schedulerFactory;
+	private final ScheduleFitnessEvaluator evaluator = new ScheduleFitnessEvaluator();
 
 	@Inject
 	private Injector injector;
-
-	/**
-	 * {@link ISequenceScheduler} instance created from the {@link ISchedulerFactory}
-	 */
-	private ISequenceScheduler scheduler;
 
 	@Inject
 	public void injectComponents() {
@@ -102,6 +101,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 				}
 			}
 		}
+		evaluator.setFitnessComponents(schedulerComponents);
 	}
 
 	@Override
@@ -111,26 +111,26 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		for (final ICargoSchedulerFitnessComponent component : schedulerComponents) {
 			component.acceptLastEvaluation();
 		}
-		scheduler.acceptLastSchedule();
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences) {
+	public boolean evaluate(final ISequences sequences, @NonNull final IEvaluationState evaluationState) {
 
-		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
-
-		return scheduledSequences != null;
+		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		if (scheduledSequences != null) {
+			return evaluator.evaluateSchedule(sequences, scheduledSequences) != Long.MAX_VALUE;
+		}
+		return false;
 	}
 
 	@Override
-	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
+	public boolean evaluate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, final Collection<IResource> affectedResources) {
+		final ScheduledSequences scheduledSequences = evaluationState.getData(SchedulerEvaluationProcess.SCHEDULED_SEQUENCES, ScheduledSequences.class);
+		if (scheduledSequences != null) {
+			return evaluator.evaluateSchedule(sequences, scheduledSequences) != Long.MAX_VALUE;
+		}
 
-		// we do this stuff with lastAffectedResources because each evaluation we will definitely need to reschedule:
-		// (a) resources that are changed by this move and (b) resources which were changed by last move which got rejected and so need recomputing again
-
-		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
-
-		return scheduledSequences != null;
+		return false;
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public void init(final IOptimisationData data) {
-		scheduler = schedulerFactory.createScheduler(data, schedulerComponents);
+		// scheduler = schedulerFactory.createScheduler(data, schedulerComponents);
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoFitnessComponent c : allComponents) {
 			c.init(data);
@@ -155,7 +155,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 		allComponents.clear();
 		schedulerComponents.clear();
-		scheduler = null;
+		// scheduler = null;
 	}
 
 	public List<ICargoFitnessComponent> getCargoSchedulerFitnessComponent() {
@@ -163,13 +163,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	}
 
 	@Override
-	public void annotate(final ISequences sequences, final IAnnotatedSolution solution) {
-		// re-evaluate everything and populate the IAnnotatedSolution
-		if (scheduler.schedule(sequences, solution) == null) {
-			throw new RuntimeException("Unable to evaluate Scenario. Check schedule level inputs (e.g. distances, vessel capacities, restrictions)");
-		}
-		
-
+	public void annotate(@NonNull final ISequences sequences, @NonNull final IEvaluationState evaluationState, @NonNull final IAnnotatedSolution solution) {
 		// set up per-route fitness map, which components can put their fitness
 		// in
 		{

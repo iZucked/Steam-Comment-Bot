@@ -29,9 +29,4 @@ public interface ISequenceScheduler {
 	 * @return
 	 */
 	ScheduledSequences schedule(@NonNull ISequences sequences, @Nullable IAnnotatedSolution solution);
-
-	/**
-	 * The caller can use this to avoid full evaluation on the next cycle if a schedule is accepted.
-	 */
-	void acceptLastSchedule();
 }

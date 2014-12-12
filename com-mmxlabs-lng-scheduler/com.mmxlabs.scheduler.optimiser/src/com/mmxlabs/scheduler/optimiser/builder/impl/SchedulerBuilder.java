@@ -637,6 +637,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	/**
 	 * Convenience function only used for testing
 	 */
+	@NonNull
 	public IXYPort createPortForTest(final String name, final boolean arriveCold, final ICooldownCalculator cooldownCalculator, final float x, final float y, final String timezoneId) {
 
 		return createPort(name, arriveCold, cooldownCalculator, x, y, timezoneId, 0, Integer.MAX_VALUE);

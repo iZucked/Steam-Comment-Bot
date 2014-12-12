@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICharterRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IVesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselBaseFuelCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.VesselStartDateCharterRateCalculator;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
@@ -49,9 +50,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 public class ScheduleTestModule extends AbstractModule {
 
 	private final static int DEFAULT_VPO_CACHE_SIZE = 20000;
-
-	private static final String ENABLED_FITNESS_NAMES = "EnabledFitnessNames";
-	private static final String ENABLED_CONSTRAINT_NAMES = "EnabledConstraintNames";
 
 	private final IOptimisationData data;
 
@@ -107,14 +105,14 @@ public class ScheduleTestModule extends AbstractModule {
 
 			@Override
 			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
-
-				final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
-				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
-				scheduleEvaluator.setFitnessComponents(schedulerComponents);
-				injector.injectMembers(scheduleEvaluator);
+//
+//				final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
+//				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
+//				scheduleEvaluator.setFitnessComponents(schedulerComponents);
+//				injector.injectMembers(scheduleEvaluator);
 
 				final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
-				scheduler.setScheduleEvaluator(scheduleEvaluator);
+//				scheduler.setScheduleEvaluator(scheduleEvaluator);
 				injector.injectMembers(scheduler);
 				return scheduler;
 			}
@@ -124,7 +122,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IConstraintCheckerRegistry createConstraintRegistry(Injector injector) {
+	private IConstraintCheckerRegistry createConstraintRegistry(final Injector injector) {
 		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
 
 		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory();
@@ -144,7 +142,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IFitnessFunctionRegistry createFitnessRegistry(Injector injector) {
+	private IFitnessFunctionRegistry createFitnessRegistry(final Injector injector) {
 		final FitnessFunctionRegistry fitnessRegistry = new FitnessFunctionRegistry();
 
 		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
@@ -156,10 +154,13 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IEvaluationProcessRegistry createEvaluationProcessRegistry() {
+	private IEvaluationProcessRegistry createEvaluationProcessRegistry(final Injector injector) {
 		final IEvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
 
-		// TODO: Fill in
+		final SchedulerEvaluationProcessFactory factory = new SchedulerEvaluationProcessFactory();
+		injector.injectMembers(factory);
+
+		evaluationProcessRegistry.registerEvaluationProcessFactory(factory);
 
 		return evaluationProcessRegistry;
 	}
@@ -188,7 +189,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	@Named(ENABLED_CONSTRAINT_NAMES)
+	@Named(OptimiserCoreModule.ENABLED_CONSTRAINT_NAMES)
 	private List<String> provideEnabledConstraintNames(final IConstraintCheckerRegistry registry) {
 		final List<String> result = new ArrayList<String>(registry.getConstraintCheckerNames());
 		return result;
@@ -196,7 +197,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	@Named(ENABLED_FITNESS_NAMES)
+	@Named(OptimiserCoreModule.ENABLED_FITNESS_NAMES)
 	private List<String> provideEnabledFitnessFunctionNames(final IFitnessFunctionRegistry registry) {
 		final List<String> result = new ArrayList<String>(registry.getFitnessComponentNames());
 		return result;
@@ -204,7 +205,15 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IInitialSequenceBuilder provideIInitialSequenceBuilder(Injector injector, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
+	@Named(OptimiserCoreModule.ENABLED_EVALUATION_PROCESS_NAMES)
+	private List<String> provideEnabledEvaluationProcessNames(final IEvaluationProcessRegistry registry) {
+		final List<String> result = new ArrayList<String>(registry.getEvaluationProcessNames());
+		return result;
+	}
+
+	@Provides
+	@Singleton
+	private IInitialSequenceBuilder provideIInitialSequenceBuilder(final Injector injector, final List<IPairwiseConstraintChecker> pairwiseCheckers) {
 		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(pairwiseCheckers);
 		injector.injectMembers(builder);
 		return builder;

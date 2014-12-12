@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
@@ -64,8 +65,8 @@ public class ScheduleFitnessEvaluator {
 	 *            output parameter containing fitnesses, in the order the iterator provides the components
 	 * @return
 	 */
-	private static boolean iterateSchedulerComponents(final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences scheduledSequences, List<ISequenceElement> unusedElements,
-			final long[] fitnesses) {
+	private static boolean iterateSchedulerComponents(@NonNull final Iterable<ICargoSchedulerFitnessComponent> components, @NonNull final ScheduledSequences scheduledSequences,
+			@NonNull List<ISequenceElement> unusedElements, final long[] fitnesses) {
 		for (final ICargoSchedulerFitnessComponent component : components) {
 			component.startEvaluation(scheduledSequences);
 		}
@@ -107,9 +108,10 @@ public class ScheduleFitnessEvaluator {
 
 		if (vpItr.hasNextObject()) {
 			final Object obj = vpItr.nextObject();
+			assert obj != null;
 			final int time = vpItr.getCurrentTime();
 			final VoyagePlan plan = vpItr.getCurrentPlan();
-
+			assert plan != null;
 			for (final ICargoSchedulerFitnessComponent component : components) {
 				if (!component.nextVoyagePlan(plan, time)) {
 					return false;
@@ -123,8 +125,11 @@ public class ScheduleFitnessEvaluator {
 		while (vpItr.hasNextObject()) {
 			if (vpItr.nextObjectIsStartOfPlan()) {
 				final Object obj = vpItr.nextObject();
+				assert obj != null;
+
 				final int time = vpItr.getCurrentTime();
 				final VoyagePlan plan = vpItr.getCurrentPlan();
+				assert plan != null;
 
 				for (final ICargoSchedulerFitnessComponent component : components) {
 					if (!component.nextVoyagePlan(plan, time)) {
@@ -136,6 +141,7 @@ public class ScheduleFitnessEvaluator {
 				}
 			} else {
 				final Object obj = vpItr.nextObject();
+				assert obj != null;
 				final int time = vpItr.getCurrentTime();
 				for (final ICargoSchedulerFitnessComponent component : components) {
 					if (!component.nextObject(obj, time)) {
