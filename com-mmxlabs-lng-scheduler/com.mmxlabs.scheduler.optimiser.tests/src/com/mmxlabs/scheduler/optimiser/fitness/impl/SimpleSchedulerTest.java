@@ -80,14 +80,14 @@ public class SimpleSchedulerTest {
 		keypoints.put(20000, 20000L);
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
-		// CV is 22800, divide by the following to get m3 to MT of 0.1 as used by this test. 
+		// CV is 22800, divide by the following to get m3 to MT of 0.1 as used by this test.
 		final int baseFuelEquivalence = 228000;
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, baseFuelEquivalence, 0, Integer.MAX_VALUE, 0, 0);
 
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
-				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator,  0);
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
 		builder.setVesselClassStateParameters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
-				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator,  0);
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), consumptionCalculator, 0);
 
 		// TODO: Setup start/end ports correctly
 		IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 150000000);
