@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
@@ -19,7 +21,7 @@ public interface ICargoFitnessComponent extends IFitnessComponent {
 	 * 
 	 * @param data
 	 */
-	void init(IOptimisationData data);
+	void init(@NonNull IOptimisationData data);
 
 	/**
 	 * Reject the last evaluation (relates to {@link IFitnessComponent#getFitness()}

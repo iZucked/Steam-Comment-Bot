@@ -6,6 +6,9 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Random;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -29,7 +32,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 	private int samplingUpperBound = 1;
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
+	public ScheduledSequences schedule(@NonNull final ISequences sequences, @Nullable final IAnnotatedSolution solution) {
 		random = new Random(seed);
 
 		setSequences(sequences);

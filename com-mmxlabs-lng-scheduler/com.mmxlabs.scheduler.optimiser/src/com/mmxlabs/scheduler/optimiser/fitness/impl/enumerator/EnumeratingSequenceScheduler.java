@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
@@ -217,7 +219,7 @@ public class EnumeratingSequenceScheduler extends AbstractLoggingSequenceSchedul
 		return reEvaluateAndGetBestResult(solution);
 	}
 
-	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
+	protected final ScheduledSequences reEvaluateAndGetBestResult(@Nullable final IAnnotatedSolution solution) {
 
 		// TODO: Trigger only if solution != null?
 
