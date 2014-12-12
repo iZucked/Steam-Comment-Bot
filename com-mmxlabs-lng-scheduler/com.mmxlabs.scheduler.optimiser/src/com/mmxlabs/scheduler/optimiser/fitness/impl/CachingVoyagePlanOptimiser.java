@@ -42,19 +42,20 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * 
 	 */
 	private final class CacheKey {
-		private final IVessel vessel;
-		private final int vesselCharterInRatePerDay;
-		private final int baseFuelPricePerMT;
-		private final int[] voyageTimes;
+
+		// Hashcode / Equals fields
 		private final IPortSlot[] slots;
+		private final int[] voyageTimes;
+		private final int dischargePrice;
+		private final int vesselCharterInRatePerDay;
+		private final IVessel vessel;
+		protected final long startHeel;
+
+		// Non hashcode fields
+		private final int baseFuelPricePerMT;
 		private final List<IOptionsSequenceElement> sequence;
 		private final List<IVoyagePlanChoice> choices;
-		// private final int startVolumeInM3;
-
-		private final int dischargePrice;
-
 		protected IPortTimesRecord portTimesRecord;
-		protected final long startHeel;
 		protected IResource resource;
 
 		public CacheKey(final IVessel vessel, final IResource resource, final int vesselCharterInRatePerDay, final int baseFuelPricePerMT, final List<IOptionsSequenceElement> sequence,
@@ -185,9 +186,8 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 				answer.setBoth(delegate.getBestPlan(), delegate.getBestCost());
 
-				return new Pair<CacheKey, Pair<VoyagePlan, Long>>(arg, answer); // don't
-																				// clone
-																				// key
+				// don't clone key
+				return new Pair<CacheKey, Pair<VoyagePlan, Long>>(arg, answer);
 			}
 		};
 		this.cache = new LHMCache<CacheKey, Pair<VoyagePlan, Long>>("VPO", evaluator, cacheSize);
@@ -198,7 +198,6 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 		final Pair<VoyagePlan, Long> best = cache.get(new CacheKey(vessel, resource, vesselCharterInRatePerDay, baseFuelPricePerMT, basicSequence, portTimesRecord, choices, startHeel));
 
-		// bestPlan = (VoyagePlan) best.getFirst().clone();
 		bestPlan = best.getFirst();
 		bestCost = best.getSecond();
 
