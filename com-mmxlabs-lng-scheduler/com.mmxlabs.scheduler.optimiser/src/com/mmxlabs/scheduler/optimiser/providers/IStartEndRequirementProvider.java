@@ -11,11 +11,11 @@ import com.mmxlabs.scheduler.optimiser.components.IEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 
 public interface IStartEndRequirementProvider extends IDataComponentProvider {
-	public IStartRequirement getStartRequirement(IResource resource);
+	IStartRequirement getStartRequirement(IResource resource);
 
-	public IEndRequirement getEndRequirement(IResource resource);
+	IEndRequirement getEndRequirement(IResource resource);
 
-	public ISequenceElement getEndElement(IResource resource);
+	ISequenceElement getEndElement(IResource resource);
 
-	public ISequenceElement getStartElement(IResource resource);
+	ISequenceElement getStartElement(IResource resource);
 }
