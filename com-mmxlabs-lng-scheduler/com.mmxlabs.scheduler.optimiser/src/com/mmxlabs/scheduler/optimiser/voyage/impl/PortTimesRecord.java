@@ -64,7 +64,7 @@ public class PortTimesRecord implements IPortTimesRecord {
 	 * @param other
 	 */
 	public PortTimesRecord(final IPortTimesRecord other) {
-		IPortSlot otherReturnSlot = other.getReturnSlot();
+		final IPortSlot otherReturnSlot = other.getReturnSlot();
 		for (final IPortSlot slot : other.getSlots()) {
 			if (otherReturnSlot == slot) {
 				this.setReturnSlotTime(slot, other.getSlotTime(slot));
@@ -118,11 +118,12 @@ public class PortTimesRecord implements IPortTimesRecord {
 		throw new IllegalArgumentException("Unknown port slot");
 	}
 
-	public void setReturnSlotTime(IPortSlot slot, final int time) {
+	public void setReturnSlotTime(final IPortSlot slot, final int time) {
 		setSlotTime(slot, time);
 		this.returnSlot = slot;
 	}
 
+	@Override
 	public void setSlotTime(final IPortSlot slot, final int time) {
 		getOrCreateSlotRecord(slot).startTime = time;
 		// Set or update the first port slot and time
@@ -141,6 +142,7 @@ public class PortTimesRecord implements IPortTimesRecord {
 		return 0;
 	}
 
+	@Override
 	public void setSlotDuration(final IPortSlot slot, final int duration) {
 		getOrCreateSlotRecord(slot).duration = duration;
 	}

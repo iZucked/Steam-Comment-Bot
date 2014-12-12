@@ -6,6 +6,8 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -25,7 +27,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	/**
 	 * Start evaluating a solution
 	 */
-	void startEvaluation();
+	void startEvaluation(@NonNull ScheduledSequences scheduledSequences);
 
 	/**
 	 * Start evaluating a sequence, which has the given resource associated with it
@@ -33,7 +35,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * @param resource
 	 *            the resource for the next sequence
 	 */
-	void startSequence(IResource resource);
+	void startSequence(@NonNull IResource resource);
 
 	/**
 	 * Consider the next voyageplan - note that the contents of the given plan will be presented to nextObject after this
@@ -42,7 +44,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * @param time
 	 * @return
 	 */
-	boolean nextVoyagePlan(final VoyagePlan voyagePlan, final int time);
+	boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time);
 
 	/**
 	 * Evaluate an object from the sequence, either a VoyageDetails or a PortDetails
@@ -53,7 +55,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 *            the time at this port
 	 * @return true if this is an OK object, or false if this solution is invalid
 	 */
-	boolean nextObject(final Object object, final int time);
+	boolean nextObject(@NonNull final Object object, final int time);
 
 	/**
 	 * Indicates the end of the current sequence
@@ -67,7 +69,7 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * 
 	 * @return true if the unused elements are OK, or false if there's a problem
 	 */
-	boolean evaluateUnusedSlots(List<ISequenceElement> unusedSlots, ScheduledSequences scheduleSequences);
+	boolean evaluateUnusedSlots(@NonNull List<ISequenceElement> unusedSlots, @NonNull ScheduledSequences scheduleSequences);
 
 	/**
 	 * Finish evaluating a solution and return its cost. The cost should also be stored for {@link IFitnessComponent#getFitness()}.
@@ -75,4 +77,5 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * @return the total cost of this solution
 	 */
 	long endEvaluationAndGetCost();
+
 }

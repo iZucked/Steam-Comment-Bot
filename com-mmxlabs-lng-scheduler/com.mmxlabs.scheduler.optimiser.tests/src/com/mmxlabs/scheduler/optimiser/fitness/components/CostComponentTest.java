@@ -13,9 +13,11 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -48,7 +50,8 @@ public class CostComponentTest {
 		fuelComponents.add(FuelComponent.NBO);
 		fuelComponents.add(FuelComponent.FBO);
 		final CostComponent c = new CostComponent(name, fuelComponents, core);
-		c.init(null);
+		IOptimisationData data = Mockito.mock(IOptimisationData.class);
+		c.init(data);
 
 		final VoyageDetails voyage = new VoyageDetails();
 		// set consumptions
@@ -72,7 +75,9 @@ public class CostComponentTest {
 
 		final IResource resource = Mockito.mock(IResource.class);
 
-		c.startEvaluation();
+		final ScheduledSequences scheduledSequences = new ScheduledSequences();
+
+		c.startEvaluation(scheduledSequences);
 		c.startSequence(resource);
 		// note, no voyage plan needs to be passed to the CostComponent for this test
 		c.nextVoyagePlan(voyagePlan, 0);

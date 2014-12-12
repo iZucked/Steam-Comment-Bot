@@ -70,20 +70,20 @@ public class ScheduleFitnessEvaluator {
 	 *            output parameter containing fitnesses, in the order the iterator provides the components
 	 * @return
 	 */
-	private static boolean iterateSchedulerComponents(final VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences,
+	private static boolean iterateSchedulerComponents(final VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences scheduledSequences,
 			List<ISequenceElement> unusedElements, final long[] fitnesses) {
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.startEvaluation();
+			component.startEvaluation(scheduledSequences);
 		}
 
-		for (final ScheduledSequence sequence : sequences) {
+		for (final ScheduledSequence sequence : scheduledSequences) {
 			if (!iterateSchedulerComponents(vpItr, components, sequence)) {
 				return false;
 			}
 		}
 
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			if (!component.evaluateUnusedSlots(unusedElements, sequences)) {
+			if (!component.evaluateUnusedSlots(unusedElements, scheduledSequences)) {
 				return false;
 			}
 		}
@@ -105,12 +105,28 @@ public class ScheduleFitnessEvaluator {
 	 */
 	private static boolean iterateSchedulerComponents(final VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequence sequence) {
 
+		
 		for (final ICargoSchedulerFitnessComponent component : components) {
 			component.startSequence(sequence.getResource());
 		}
 
 		vpItr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());
 
+		if (vpItr.hasNextObject()) {
+			final Object obj = vpItr.nextObject();
+			final int time = vpItr.getCurrentTime();
+			final VoyagePlan plan = vpItr.getCurrentPlan();
+
+			for (final ICargoSchedulerFitnessComponent component : components) {
+				if (!component.nextVoyagePlan(plan, time)) {
+					return false;
+				}
+				if (!component.nextObject(obj, time)) {
+					return false;
+				}
+			}
+		}
+		
 		while (vpItr.hasNextObject()) {
 			if (vpItr.nextObjectIsStartOfPlan()) {
 				final Object obj = vpItr.nextObject();

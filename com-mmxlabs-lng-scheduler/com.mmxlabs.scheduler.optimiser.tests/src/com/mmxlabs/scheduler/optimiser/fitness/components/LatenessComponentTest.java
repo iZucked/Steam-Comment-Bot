@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -115,8 +116,9 @@ public class LatenessComponentTest {
 		final IDetailsSequenceElement[] routeSequence = new IDetailsSequenceElement[] { startDetails, loadDetails, null, dischargeDetails, endDetails };
 		final VoyagePlan voyagePlan = new VoyagePlan();
 		voyagePlan.setSequence(routeSequence);
+		final ScheduledSequences scheduledSequences = new ScheduledSequences();
 
-		c.startEvaluation();
+		c.startEvaluation(scheduledSequences);
 		c.startSequence(resource);
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
 		c.nextObject(startDetails, 0);

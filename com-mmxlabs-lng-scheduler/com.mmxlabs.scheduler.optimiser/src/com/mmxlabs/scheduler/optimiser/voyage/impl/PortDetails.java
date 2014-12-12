@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.EnumMap;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -17,31 +16,24 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 
-public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequenceElement, Cloneable {
+public final class PortDetails implements IDetailsSequenceElement, Cloneable {
 
 	private PortOptions options;
 
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 	private final EnumMap<FuelComponent, Integer> fuelPrice = new EnumMap<FuelComponent, Integer>(FuelComponent.class);
 
-	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length,-1L);
-
-	private long totalGroupProfitAndLoss;
-
 	private long portCosts;
-	
+
 	public PortDetails() {
 
 	}
 
-	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final EnumMap<FuelComponent, Integer> fuelPrice, long portCosts,
-			final LongFastEnumMap<CapacityViolationType> capacityViolations, final long totalGroupProfitAndLoss) {
+	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final EnumMap<FuelComponent, Integer> fuelPrice, final long portCosts) {
 		this.options = options;
 		this.portCosts = portCosts;
 		this.fuelConsumption.putAll(fuelConsumption);
 		this.fuelPrice.putAll(fuelPrice);
-		this.capacityViolations.putAll(capacityViolations);
-		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -72,14 +64,6 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 		fuelPrice.put(fuel, price);
 	}
 
-	public final long getCapacityViolation(final CapacityViolationType type) {
-		return capacityViolations.get(type);
-	}
-
-	public final void setCapacityViolation(final CapacityViolationType type, final long quantity) {
-		capacityViolations.put(type, quantity);
-	}
-
 	/**
 	 */
 	public PortOptions getOptions() {
@@ -99,9 +83,7 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 			final PortDetails d = (PortDetails) obj;
 
 			// @formatter:off
-			return Objects.equal(totalGroupProfitAndLoss, d.totalGroupProfitAndLoss)
-				&& Objects.equal(fuelConsumption, d.fuelConsumption)
-				&& Objects.equal(capacityViolations, d.capacityViolations)
+			return Objects.equal(fuelConsumption, d.fuelConsumption)
 				&& Objects.equal(fuelPrice, d.fuelPrice)
 				&& Objects.equal(portCosts, d.portCosts)
 				&& Objects.equal(options, d.options)
@@ -114,7 +96,7 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(options, capacityViolations, fuelConsumption, fuelPrice, portCosts, totalGroupProfitAndLoss);
+		return Objects.hashCode(options, fuelConsumption, fuelPrice, portCosts);
 	}
 
 	@Override
@@ -125,33 +107,20 @@ public final class PortDetails implements IProfitAndLossDetails,  IDetailsSequen
 				.add("fuelConsumption", fuelConsumption)
 				.add("fuelPrice", fuelPrice)
 				.add("portCosts", portCosts)
-				.add("capacityViolations", capacityViolations)
-				.add("totalGroupProfitAndLoss", totalGroupProfitAndLoss)
 				.toString();
 		// @formatter:on
 	}
 
 	@Override
 	public PortDetails clone() {
-		return new PortDetails(new PortOptions(options), fuelConsumption, fuelPrice, portCosts, capacityViolations, totalGroupProfitAndLoss);
-	}
-
-	@Override
-	public long getTotalGroupProfitAndLoss() {
-		return totalGroupProfitAndLoss;
-	}
-
-	@Override
-	public void setTotalGroupProfitAndLoss(final long totalGroupProfitAndLoss) {
-		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
+		return new PortDetails(new PortOptions(options), fuelConsumption, fuelPrice, portCosts);
 	}
 
 	public long getPortCosts() {
 		return portCosts;
 	}
 
-	public void setPortCosts(long portCosts) {
+	public void setPortCosts(final long portCosts) {
 		this.portCosts = portCosts;
 	}
-
 }

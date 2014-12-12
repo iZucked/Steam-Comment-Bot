@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
@@ -35,8 +37,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.Capacity
 import com.mmxlabs.scheduler.optimiser.providers.INominatedVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.CapacityViolationType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
@@ -76,7 +76,7 @@ public class CapacityViolationChecker {
 	 * @param annotatedSolution
 	 */
 	public void calculateCapacityViolations(final ISequences sequences, final ScheduledSequences scheduledSequences, final Map<VoyagePlan, IAllocationAnnotation> allocations,
-			final IAnnotatedSolution annotatedSolution) {
+			@Nullable final IAnnotatedSolution annotatedSolution) {
 
 		// Loop over all sequences
 		for (final ScheduledSequence scheduledSequence : scheduledSequences) {
@@ -119,13 +119,14 @@ public class CapacityViolationChecker {
 							buy = loadOption;
 
 							if (volumeInM3 > loadOption.getMaxLoadVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume());
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_LOAD, volumeInM3 - loadOption.getMaxLoadVolume(), scheduledSequences);
 							} else if (volumeInM3 < loadOption.getMinLoadVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_LOAD, loadOption.getMinLoadVolume() - volumeInM3, scheduledSequences);
 							}
 
 							if (remainingHeelInM3 + volumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, remainingHeelInM3 + volumeInM3 - vesselCapacityInM3,
+										scheduledSequences);
 							}
 							// Reset heel as we have now taken it into account
 							remainingHeelInM3 = 0;
@@ -135,13 +136,15 @@ public class CapacityViolationChecker {
 							sell = dischargeOption;
 
 							if (volumeInM3 > dischargeOption.getMaxDischargeVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume());
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_DISCHARGE, volumeInM3 - dischargeOption.getMaxDischargeVolume(),
+										scheduledSequences);
 							} else if (volumeInM3 < dischargeOption.getMinDischargeVolume()) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume() - volumeInM3);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MIN_DISCHARGE, dischargeOption.getMinDischargeVolume() - volumeInM3,
+										scheduledSequences);
 							}
 
 							if (volumeInM3 > vesselCapacityInM3) {
-								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3);
+								addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.VESSEL_CAPACITY, volumeInM3 - vesselCapacityInM3, scheduledSequences);
 							}
 
 						} else {
@@ -167,7 +170,7 @@ public class CapacityViolationChecker {
 								// Check the voyage requirements are within the heel level
 								if (voyagePlan.getLNGFuelVolume() + remainingHeelInM3 > initialHeelInM3) {
 									addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.MAX_HEEL, voyagePlan.getLNGFuelVolume() + remainingHeelInM3
-											- initialHeelInM3);
+											- initialHeelInM3, scheduledSequences);
 								}
 							}
 						}
@@ -175,7 +178,7 @@ public class CapacityViolationChecker {
 						// Check for forced cooldowns
 						if (isForcedCooldown) {
 							// Record the previously detected forced cooldown problem
-							addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
+							addEntryToCapacityViolationAnnotation(annotatedSolution, portDetails, CapacityViolationType.FORCED_COOLDOWN, 0, scheduledSequences);
 						}
 						// Reset, do not re-record cooldown problems
 						isForcedCooldown = false;
@@ -226,13 +229,14 @@ public class CapacityViolationChecker {
 						// Alternative for period opt, just flag up if we expected heel but arrived with none. We could put a tolerance on the mismatch? E.g. only flag up if diff is greater than e.g.
 						// 500? It can be very hard for optimiser to get exactly the right m3 value, and often a small difference makes no real impact on overall P&L.
 						if (endPortSlot.isEndCold() && remainingHeelInM3 == 0) {
-							addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3);
+							addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.LOST_HEEL, endPortSlot.getTargetEndHeelInM3() - remainingHeelInM3,
+									scheduledSequences);
 						}
 					}
 				}
 				if (isForcedCooldown) {
 					// Record the previously detected forced cooldown problem
-					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, 0);
+					addEntryToCapacityViolationAnnotation(annotatedSolution, lastHeelDetails, CapacityViolationType.FORCED_COOLDOWN, 0, scheduledSequences);
 				}
 			}
 
@@ -247,9 +251,10 @@ public class CapacityViolationChecker {
 	 * @param cvt
 	 * @param volume
 	 */
-	private void addEntryToCapacityViolationAnnotation(final IAnnotatedSolution annotatedSolution, final PortDetails portDetails, final CapacityViolationType cvt, final long volume) {
+	private void addEntryToCapacityViolationAnnotation(@Nullable final IAnnotatedSolution annotatedSolution, final PortDetails portDetails, final CapacityViolationType cvt, final long volume,
+			ScheduledSequences scheduledSequences) {
 		// Set port details entry
-		portDetails.setCapacityViolation(cvt, volume);
+		scheduledSequences.addCapacityViolation(portDetails.getOptions().getPortSlot());
 
 		if (annotatedSolution != null) {
 

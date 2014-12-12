@@ -406,6 +406,16 @@ public class VoyagePlanner {
 						if (plan == null) {
 							return null;
 						}
+						{
+							final IDetailsSequenceElement[] vpSequence = plan.getSequence();
+							final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
+							if (lastVoyage.getOptions().getToPortSlot().getPortType() != PortType.End) {
+								assert arrivalTimes[idx] == portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot());
+
+							}
+						}
+						arrivalTimes[idx] = portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot());
+
 						heelVolumeInM3 = evaluateVoyagePlan(vesselAvailability, vesselStartTime, voyagePlansMap, voyagePlansList, portTimesRecord, heelVolumeInM3, plan);
 						assert heelVolumeInM3 >= 0;
 					}
@@ -463,19 +473,11 @@ public class VoyagePlanner {
 					return null;
 				}
 
-				// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the new
-				// arrival time.
+				// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the
+				// new arrival time.
 				if (!isShortsSequence) {
-					final IDetailsSequenceElement[] vpSequence = plan.getSequence();
-					final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
-					assert lastVoyage.getOptions().getToPortSlot().getPortType() == PortType.End;
-					// Idx of last element
 					final int idx = arrivalTimes.length - 1;
-					// New arrival time = Previoud element arrival time + visit duration + travel time + idle time.
-					arrivalTimes[idx] = arrivalTimes[idx - 1] + durationsProvider.getElementDuration(portSlotProvider.getElement(lastVoyage.getOptions().getFromPortSlot()), resource)
-							+ lastVoyage.getTravelTime() + lastVoyage.getIdleTime();
-					portTimesRecord.setSlotTime(lastVoyage.getOptions().getToPortSlot(), arrivalTimes[idx]);
-
+					arrivalTimes[idx] = portTimesRecord.getSlotTime(portTimesRecord.getReturnSlot());
 				}
 
 				plan.setIgnoreEnd(false);
@@ -702,7 +704,10 @@ public class VoyagePlanner {
 	// TODO: Better naming?
 	private long evaluateVoyagePlan(final IVesselAvailability vesselAvailability, final int vesselStartTime,
 			final List<Triple<VoyagePlan, Map<IPortSlot, IHeelLevelAnnotation>, IAllocationAnnotation>> voyagePlansMap, final List<VoyagePlan> voyagePlansList, final IPortTimesRecord portTimesRecord,
-			final long startHeelVolumeInM3, VoyagePlan plan) {
+			final long startHeelVolumeInM3, final VoyagePlan originalPlan) {
+
+		// Take a copy so we can retain isIgnoreEnd flag later on
+		VoyagePlan plan = originalPlan;
 		assert startHeelVolumeInM3 >= 0;
 		// TODO: Handle LNG at end of charter out
 		long endHeelVolumeInM3 = 0;
@@ -835,6 +840,8 @@ public class VoyagePlanner {
 			assert endHeelVolumeInM3 == currentHeelInM3;
 		}
 
+		// Ensure this flag is copied across!
+		plan.setIgnoreEnd(originalPlan.isIgnoreEnd());
 		voyagePlansMap.add(new Triple<>(plan, heelLevelAnnotations, allocationAnnotation));
 
 		return endHeelVolumeInM3;
@@ -1000,6 +1007,21 @@ public class VoyagePlanner {
 
 		// Reset VPO ready for next iteration
 		optimiser.reset();
+
+		// Fix up final arrival time. The VPO is permitted to change the final arrival time of certain vessels and we need to alter the arrival time array and the portTimesRecord with the new
+		// arrival time.
+		{
+			final IDetailsSequenceElement[] vpSequence = result.getSequence();
+			final VoyageDetails lastVoyage = (VoyageDetails) vpSequence[vpSequence.length - 2];
+			if (lastVoyage.getOptions().getToPortSlot().getPortType() == PortType.End) {
+				// New arrival time = Previous element arrival time + visit duration + travel time + idle time.
+
+				final IPortSlot fromSlot = lastVoyage.getOptions().getFromPortSlot();
+				final int newTime = portTimesRecord.getSlotTime(fromSlot) + portTimesRecord.getSlotDuration(fromSlot) + lastVoyage.getTravelTime() + lastVoyage.getIdleTime();
+				portTimesRecord.setSlotTime(portTimesRecord.getReturnSlot(), newTime);
+
+			}
+		}
 
 		return result;
 

@@ -5,7 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.List;
-import java.util.Map;
+
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
@@ -15,8 +16,6 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.IProfitAndLossDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.UnusedSlotDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -32,6 +31,8 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 
 	private long accumulator = 0;
 
+	private ScheduledSequences scheduledSequences;
+
 	/**
 	 */
 	public ProfitAndLossAllocationComponent(final String name, final CargoSchedulerFitnessCore core) {
@@ -39,9 +40,9 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	}
 
 	@Override
-	public void startEvaluation() {
+	public void startEvaluation(@NonNull final ScheduledSequences scheduledSequences) {
+		this.scheduledSequences = scheduledSequences;
 		accumulator = 0;
-
 	}
 
 	@Override
@@ -50,17 +51,14 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	}
 
 	@Override
-	public boolean nextVoyagePlan(final VoyagePlan voyagePlan, final int time) {
+	public boolean nextVoyagePlan(@NonNull final VoyagePlan voyagePlan, final int time) {
+
+		accumulator -= scheduledSequences.getVoyagePlanGroupValue(voyagePlan);
 		return true;
 	}
 
 	@Override
 	public boolean nextObject(final Object object, final int time) {
-		if (object instanceof IProfitAndLossDetails) {
-			final IProfitAndLossDetails details = (IProfitAndLossDetails) object;
-			// Minimising optimiser, so negate P&L
-			accumulator -= details.getTotalGroupProfitAndLoss();
-		}
 		return true;
 	}
 
@@ -70,21 +68,14 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	}
 
 	@Override
-	public boolean evaluateUnusedSlots(final List<ISequenceElement> unusedElements, final ScheduledSequences scheduleSequences) {
-
-		final Map<IPortSlot, UnusedSlotDetails> unusedSlotDetailsMap = scheduleSequences.getUnusedSlotDetails();
-		if (unusedSlotDetailsMap == null) {
-			return true;
-		}
+	public boolean evaluateUnusedSlots(@NonNull final List<ISequenceElement> unusedElements, @NonNull final ScheduledSequences scheduleSequences) {
 
 		for (final ISequenceElement element : unusedElements) {
 			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
-			final UnusedSlotDetails unusedSlotDetails = unusedSlotDetailsMap.get(portSlot);
-			if (unusedSlotDetails != null) {
-				// Minimising optimiser, so negate P&L
-				accumulator -= unusedSlotDetails.getTotalGroupProfitAndLoss();
-			}
+			assert portSlot != null;
+			accumulator -= scheduledSequences.getUnusedSlotGroupValue(portSlot);
 		}
+
 		return true;
 	}
 
@@ -95,6 +86,7 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	 */
 	@Override
 	public long endEvaluationAndGetCost() {
+		scheduledSequences = null;
 		return setLastEvaluatedFitness(accumulator / Calculator.ScaleFactor);
 	}
 }

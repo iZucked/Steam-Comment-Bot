@@ -61,7 +61,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.IDetailsSequenceElement;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortTimesRecord;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.UnusedSlotDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -185,7 +184,7 @@ public class ScheduleCalculator {
 		// but contracts need this kind of information to make up numbers with.
 		final List<IDetailsSequenceElement> currentSequence = new ArrayList<IDetailsSequenceElement>(5);
 		final VoyagePlan currentPlan = new VoyagePlan();
-
+		currentPlan.setIgnoreEnd(false);
 		final IVessel nominatedVessel = nominatedVesselProvider.getNominatedVessel(resource);
 		if (nominatedVessel != null) {
 			// Set a start and end heel for BOG estimations
@@ -202,7 +201,7 @@ public class ScheduleCalculator {
 			// Determine transfer time
 			if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 
-				// Find latest window start for all slots in FOB/DES combo. Howver if DES divertable, ignore.
+				// Find latest window start for all slots in FOB/DES combo. However if DES divertable, ignore.
 				if (thisPortSlot instanceof ILoadOption) {
 					// Divertable DES has real time window.
 					if (!shippingHoursRestrictionProvider.isDivertable(element)) {
@@ -446,13 +445,13 @@ public class ScheduleCalculator {
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
 							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, currentAllocation.getSlotTime(loadSlot), annotatedSolution);
-							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
+							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 
 						} else {
 							final PortDetails firstDetails = portDetails.get(0);
 							cargo = true;
 							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vesselAvailability, sequence.getStartTime(), annotatedSolution);
-							firstDetails.setTotalGroupProfitAndLoss(cargoGroupValue);
+							scheduledSequences.setVoyagePlanGroupValue(plan, cargoGroupValue);
 						}
 					}
 				}
@@ -460,7 +459,7 @@ public class ScheduleCalculator {
 				if (!cargo) {
 					final long otherGroupValue = entityValueCalculator.evaluate(plan, vesselAvailability, time, sequence.getStartTime(), annotatedSolution);
 					final PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
-					firstDetails.setTotalGroupProfitAndLoss(otherGroupValue);
+					scheduledSequences.setVoyagePlanGroupValue(plan, otherGroupValue);
 				}
 				time += getPlanDuration(plan);
 			}
@@ -476,8 +475,6 @@ public class ScheduleCalculator {
 
 	protected void calculateUnusedSlotPNL(final ISequences sequences, final ScheduledSequences scheduledSequences, @Nullable final IAnnotatedSolution annotatedSolution) {
 
-		final Map<IPortSlot, UnusedSlotDetails> unusedSlotDetailsMap = new HashMap<>();
-		scheduledSequences.setUnusedSlotDetails(unusedSlotDetailsMap);
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			if (element == null) {
 				continue;
@@ -486,9 +483,7 @@ public class ScheduleCalculator {
 			if (portSlot instanceof ILoadOption || portSlot instanceof IDischargeOption) {
 				// Calculate P&L
 				final long groupValue = entityValueCalculator.evaluateUnusedSlot(portSlot, annotatedSolution);
-				final UnusedSlotDetails unusedSlotDetails = new UnusedSlotDetails();
-				unusedSlotDetails.setTotalGroupProfitAndLoss(groupValue);
-				unusedSlotDetailsMap.put(portSlot, unusedSlotDetails);
+				scheduledSequences.setUnusedSlotGroupValue(portSlot, groupValue);
 			}
 		}
 	}

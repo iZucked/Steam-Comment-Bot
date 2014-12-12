@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
@@ -85,7 +87,7 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 	}
 
 	@Override
-	public void init(final IOptimisationData data) {
+	public void init(@NonNull final IOptimisationData data) {
 		if (discountCurveProvider != null) {
 			discountCurve = discountCurveProvider.getDiscountCurve(getName());
 		}
