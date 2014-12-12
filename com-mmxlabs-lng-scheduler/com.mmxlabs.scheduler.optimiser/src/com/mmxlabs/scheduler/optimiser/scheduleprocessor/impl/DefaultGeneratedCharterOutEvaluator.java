@@ -70,7 +70,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	@Override
 	public Pair<VoyagePlan, IAllocationAnnotation> processSchedule(final int vesselStartTime, final IVesselAvailability vesselAvailability, final VoyagePlan vp, final IPortTimesRecord portTimesRecord) {
 
@@ -221,6 +221,7 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 
 		// Calculate our new plan
 		final VoyagePlan newVoyagePlan = vpo.optimise();
+		assert newVoyagePlan != null;
 
 		// Calculate the P&L of both the original and the new option
 		final long originalOption;
@@ -231,7 +232,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 			// Get the new cargo allocation.
 
 			final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, vp, portTimesRecord);
+			assert currentAllocation != null;
+
 			newAllocation = cargoAllocator.allocate(vesselAvailability, vesselStartTime, newVoyagePlan, portTimesRecord);
+			assert newAllocation != null;
 
 			originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vesselAvailability, vesselStartTime, null);
 			newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vesselAvailability, vesselStartTime, null);

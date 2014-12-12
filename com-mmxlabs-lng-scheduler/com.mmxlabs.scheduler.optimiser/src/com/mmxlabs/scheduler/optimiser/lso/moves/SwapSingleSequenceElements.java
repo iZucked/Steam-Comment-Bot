@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.lso.moves;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -49,7 +51,7 @@ public class SwapSingleSequenceElements implements IMove {
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
-	public void apply(final IModifiableSequences sequences) {
+	public void apply(@NonNull final IModifiableSequences sequences) {
 		final IModifiableSequence seq = sequences.getModifiableSequence(resource);
 		final ISequenceElement elementA = seq.get(indexA);
 		final ISequenceElement elementB = seq.get(indexB);
@@ -63,7 +65,7 @@ public class SwapSingleSequenceElements implements IMove {
 	 * @see com.mmxlabs.optimiser.lso.IMove#validate(com.mmxlabs.optimiser.core.ISequences)
 	 */
 	@Override
-	public boolean validate(final ISequences sequences) {
+	public boolean validate(@NonNull final ISequences sequences) {
 
 		if (indexA == indexB) {
 			return false;
@@ -72,9 +74,9 @@ public class SwapSingleSequenceElements implements IMove {
 			return false;
 		}
 		ISequence sequence = sequences.getSequence(resource);
-		if (sequence == null) {
-			return false;
-		}
+		// if (sequence == null) {
+		// return false;
+		// }
 		if (indexA >= sequence.size() || indexB >= sequence.size()) {
 			return false;
 		}

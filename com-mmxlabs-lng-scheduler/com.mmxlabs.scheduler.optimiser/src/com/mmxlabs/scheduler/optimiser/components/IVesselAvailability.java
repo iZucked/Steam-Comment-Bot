@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.common.curves.ICurve;
 
 /**
@@ -20,6 +22,7 @@ public interface IVesselAvailability {
 	 * 
 	 * @return
 	 */
+	@NonNull
 	VesselInstanceType getVesselInstanceType();
 
 	IStartEndRequirement getStartRequirement();
@@ -32,5 +35,4 @@ public interface IVesselAvailability {
 	 * @return daily charter in price
 	 */
 	ICurve getDailyCharterInRate();
-
 }

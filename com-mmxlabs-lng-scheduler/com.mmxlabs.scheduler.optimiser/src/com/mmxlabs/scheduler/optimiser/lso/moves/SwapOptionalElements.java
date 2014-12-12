@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.lso.moves;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -24,7 +26,7 @@ public class SwapOptionalElements implements IMove {
 	final int usedElementIndex;
 	final int unusedElementIndex;
 
-	public SwapOptionalElements(final IResource resource, final int usedElementIndex, final int unusedElementIndex) {
+	public SwapOptionalElements(@NonNull final IResource resource, final int usedElementIndex, final int unusedElementIndex) {
 		super();
 		this.resource = resource;
 		this.usedElementIndex = usedElementIndex;
@@ -47,7 +49,7 @@ public class SwapOptionalElements implements IMove {
 	 * @see com.mmxlabs.optimiser.lso.IMove#apply(com.mmxlabs.optimiser.core.IModifiableSequences)
 	 */
 	@Override
-	public void apply(final IModifiableSequences sequences) {
+	public void apply(@NonNull final IModifiableSequences sequences) {
 		final ISequenceElement liveElement = sequences.getSequence(resource).get(usedElementIndex);
 		final ISequenceElement deadElement = sequences.getUnusedElements().get(unusedElementIndex);
 		sequences.getModifiableSequence(resource).set(usedElementIndex, deadElement);

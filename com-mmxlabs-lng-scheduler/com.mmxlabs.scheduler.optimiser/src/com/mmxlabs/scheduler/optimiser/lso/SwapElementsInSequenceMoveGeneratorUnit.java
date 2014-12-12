@@ -49,7 +49,7 @@ public class SwapElementsInSequenceMoveGeneratorUnit implements IConstrainedMove
 		for (int i = 0; i < sequences.size(); ++i) {
 			final int idx = RandomHelper.nextIntBetween(random, 0, sequences.size() - 1);
 			final ISequence s = sequences.getSequence(idx);
-			if (s == null || s.size() < 2) {
+			if (s.size() < 2) {
 				continue;
 			}
 			sequence = s;
