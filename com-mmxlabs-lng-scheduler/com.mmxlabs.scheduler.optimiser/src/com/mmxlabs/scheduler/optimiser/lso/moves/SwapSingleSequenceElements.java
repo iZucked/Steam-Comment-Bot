@@ -74,9 +74,9 @@ public class SwapSingleSequenceElements implements IMove {
 			return false;
 		}
 		ISequence sequence = sequences.getSequence(resource);
-		// if (sequence == null) {
-		// return false;
-		// }
+		if (sequence == null) {
+			return false;
+		}
 		if (indexA >= sequence.size() || indexB >= sequence.size()) {
 			return false;
 		}
