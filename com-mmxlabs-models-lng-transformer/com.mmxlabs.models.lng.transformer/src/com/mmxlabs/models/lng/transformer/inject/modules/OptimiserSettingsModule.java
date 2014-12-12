@@ -18,6 +18,8 @@ import com.google.inject.name.Named;
 import com.mmxlabs.models.lng.parameters.Constraint;
 import com.mmxlabs.models.lng.parameters.Objective;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessFactory;
+import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.lso.IThresholder;
@@ -46,6 +48,25 @@ public class OptimiserSettingsModule extends AbstractModule {
 				result.add(c.getName());
 			}
 		}
+
+		return result;
+	}
+
+	@Provides
+	@Singleton
+	@Named(OptimiserCoreModule.ENABLED_EVALUATION_PROCESS_NAMES)
+	private List<String> provideEnabledEvaluationProcessNames(final OptimiserSettings settings, final IEvaluationProcessRegistry registry) {
+		final List<String> result = new ArrayList<String>();
+
+		// Enable all processes.
+		for (final IEvaluationProcessFactory f : registry.getEvaluationProcessFactories()) {
+			result.add(f.getName());
+		}
+		// for (final Constraint c : settings.getConstraints()) {
+		// if (c.isEnabled()) {
+		// result.add(c.getName());
+		// }
+		// }
 
 		return result;
 	}

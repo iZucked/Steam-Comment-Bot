@@ -4,10 +4,12 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
+import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.ui.internal.ErrorViewPart;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.common.collect.Lists;
@@ -44,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraint
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.evaluation.SchedulerEvaluationProcessFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerComponentsInjectorService;
@@ -88,7 +91,11 @@ public class TransformerExtensionTestModule extends AbstractModule {
 	}
 
 	private IEvaluationProcessRegistry createEvaluationProcessRegistry() {
-		return new EvaluationProcessRegistry();
+		final EvaluationProcessRegistry registry = new EvaluationProcessRegistry();
+
+		registry.registerEvaluationProcessFactory(new SchedulerEvaluationProcessFactory());
+
+		return registry;
 	}
 
 	/**
@@ -140,7 +147,7 @@ public class TransformerExtensionTestModule extends AbstractModule {
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new RestrictedElementsConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ContractCvConstraintCheckerFactory());
-		
+
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortCvCompatibilityConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ShippingTypeRequirementConstraintCheckerFactory());

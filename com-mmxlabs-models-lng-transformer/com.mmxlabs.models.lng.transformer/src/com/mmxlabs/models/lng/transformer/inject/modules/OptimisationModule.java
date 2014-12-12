@@ -38,28 +38,9 @@ public class OptimisationModule extends AbstractModule {
 		install(new LocalSearchOptimiserModule());
 		install(new MoveGeneratorModule());
 		install(new LinearFitnessEvaluatorModule());
-	}
-
-	@Provides
-	@Singleton
-	ISchedulerFactory provideSchedulerFactory(final Injector injector) {
-		final ISchedulerFactory factory = new ISchedulerFactory() {
-
-			@Override
-			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
-
-				final ScheduleFitnessEvaluator scheduleEvaluator = new ScheduleFitnessEvaluator();
-				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
-				scheduleEvaluator.setFitnessComponents(schedulerComponents);
-				injector.injectMembers(scheduleEvaluator);
-
-				final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
-				scheduler.setScheduleEvaluator(scheduleEvaluator);
-				injector.injectMembers(scheduler);
-				return scheduler;
-			}
-		};
-		return factory;
+		bind (ScheduleFitnessEvaluator.class).in(Singleton.class);
+		bind (DirectRandomSequenceScheduler.class).in(Singleton.class);
+		bind (ISequenceScheduler.class).to(DirectRandomSequenceScheduler.class);
 	}
 
 	@Provides
