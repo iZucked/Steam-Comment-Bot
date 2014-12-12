@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -34,18 +36,16 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 	private final Set<IScenarioServiceListener> scenarioServiceListeners = new HashSet<IScenarioServiceListener>();
 
 	@Override
-	public void addScenarioServiceListener(final IScenarioServiceListener listener) {
-		if (listener != null) {
-			scenarioServiceListeners.add(listener);
-		}
+	public void addScenarioServiceListener(@NonNull final IScenarioServiceListener listener) {
+		scenarioServiceListeners.add(listener);
 	}
 
 	@Override
-	public void removeScenarioServiceListener(final IScenarioServiceListener listener) {
+	public void removeScenarioServiceListener(@NonNull final IScenarioServiceListener listener) {
 		scenarioServiceListeners.remove(listener);
 	}
 
-	protected void fireEvent(final ScenarioServiceEvent event, final ScenarioInstance scenarioInstance) {
+	protected void fireEvent(@NonNull final ScenarioServiceEvent event, @NonNull final ScenarioInstance scenarioInstance) {
 
 		// Break out early if there are no listeners
 		if (scenarioServiceListeners.isEmpty()) {

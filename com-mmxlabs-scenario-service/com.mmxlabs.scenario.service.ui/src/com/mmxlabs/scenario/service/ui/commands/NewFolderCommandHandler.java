@@ -124,7 +124,7 @@ public class NewFolderCommandHandler extends AbstractHandler {
 		});
 		if (inputDialog.open() == Window.OK) {
 			final String name = inputDialog.getValue();
-
+			assert name != null;
 			o.getScenarioService().makeFolder(o, name);
 		}
 	}

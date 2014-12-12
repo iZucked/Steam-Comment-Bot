@@ -11,6 +11,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -28,7 +29,7 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 
 	private boolean cleanUpOnDispose = true;
 
-	public DefaultDiffEditHandler(final ScenarioInstance child, final ScenarioInstance parent) {
+	public DefaultDiffEditHandler(@NonNull final ScenarioInstance child, @NonNull final ScenarioInstance parent) {
 		this.child = child;
 		this.childModelReference = child.getReference();
 		this.parent = parent;
@@ -43,7 +44,7 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 
 	@Override
 	public void onEditorCancel() {
-
+		assert child != null;
 		final IScenarioService scenarioService = child.getScenarioService();
 		scenarioService.delete(child);
 	}
@@ -97,11 +98,12 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 	}
 
 	private void cleanUp() {
-		
+
 		childModelReference.close();
 		parentModelReference.close();
-		
+
 		final IScenarioService scenarioService = child.getScenarioService();
+		assert scenarioService != null;
 		scenarioService.delete(child);
 
 		// Unset pin
