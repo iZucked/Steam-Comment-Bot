@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.transformer.its.tests;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -20,6 +22,10 @@ import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.extensions.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
+import com.mmxlabs.models.lng.transformer.its.internal.Activator;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeCustomiser;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModeExtender;
+import com.mmxlabs.models.lng.transformer.ui.parametermodes.IParameterModesRegistry;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -74,6 +80,15 @@ public class ScenarioRunner {
 
 	public void init() throws IncompleteScenarioException {
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
+		final IParameterModesRegistry parameterModesRegistry = Activator.getDefault().getParameterModesRegistry();
+
+		final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
+		if (extenders != null) {
+			for (final IParameterModeExtender extender : extenders) {
+				extender.extend(optimiserSettings, null);
+			}
+		}
+
 		init(optimiserSettings);
 	}
 

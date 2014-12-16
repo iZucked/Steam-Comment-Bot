@@ -69,12 +69,12 @@ public class OptimiserSettingsModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IThresholder provideThresholder(final OptimiserSettings settings, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed, final InstrumentingMoveGenerator img) {
+	private IThresholder provideThresholder(final OptimiserSettings settings, @Named(LocalSearchOptimiserModule.RANDOM_SEED) final long seed) {
 		// For now we are just going to generate a self-calibrating thresholder
 
 		final IThresholder thresholder = new GeometricThresholder(new Random(seed), settings.getAnnealingSettings().getEpochLength(), settings.getAnnealingSettings().getInitialTemperature(), settings
 				.getAnnealingSettings().getCooling());
-		return LocalSearchOptimiserModule.instrumenting ? new InstrumentingThresholder(thresholder, img) : thresholder;
+		return thresholder;
 
 		// return new MovingAverageThresholder(getRandom(), ts.getInitialAcceptanceRate(), ts.getAlpha(), ts.getEpochLength(), 3000);
 		// return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
