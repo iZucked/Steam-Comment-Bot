@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2014
+ * All rights reserved.
+ */
 package com.mmxlabs.optimiser.common.components.impl;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
