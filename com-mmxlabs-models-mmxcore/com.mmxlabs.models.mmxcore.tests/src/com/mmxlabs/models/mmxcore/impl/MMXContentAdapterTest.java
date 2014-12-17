@@ -299,11 +299,11 @@ public class MMXContentAdapterTest {
 			} else {
 				adapter.disable();
 			}
-			final List<EStructuralFeature> ignoredFeatures = new ArrayList<EStructuralFeature>();
+			// final List<EStructuralFeature> ignoredFeatures = new ArrayList<EStructuralFeature>();
 			// Test all ignored features are ok
-			ignoredFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
+			adapter.ignoredFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 
-			for (final EStructuralFeature feature : ignoredFeatures) {
+			for (final EStructuralFeature feature : adapter.ignoredFeatures) {
 				final Notification n = mock(Notification.class);
 				when(n.getFeature()).thenReturn(feature);
 
