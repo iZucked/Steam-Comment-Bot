@@ -28,8 +28,9 @@ public abstract class MMXContentAdapter extends EContentAdapter implements IMMXA
 	@Override
 	public void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
-		if (ignoredFeatures.contains(notification.getFeature()))
+		if (ignoredFeatures.contains(notification.getFeature())) {
 			return;
+		}
 		if (enabled) {
 			reallyNotifyChanged(notification);
 		} else {
