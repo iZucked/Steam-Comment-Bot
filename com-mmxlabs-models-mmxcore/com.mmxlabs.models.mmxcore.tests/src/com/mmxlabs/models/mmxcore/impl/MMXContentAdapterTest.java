@@ -65,10 +65,12 @@ public class MMXContentAdapterTest {
 		// Construct a MMXContentAdapter which fails should the notification methods find an ignored feature.
 		final MMXContentAdapter adapter = new MMXContentAdapter() {
 
+			@Override
 			public void reallyNotifyChanged(final Notification n) {
 				seenFeatures.add((EStructuralFeature) n.getFeature());
 			};
 
+			@Override
 			protected void missedNotifications(final java.util.List<Notification> missed) {
 				Assert.fail("Notifications are expected to be processed immediately.");
 			}
@@ -80,7 +82,6 @@ public class MMXContentAdapterTest {
 		final List<EStructuralFeature> acceptableFeatures = new ArrayList<EStructuralFeature>();
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_Name());
-		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
 
 		for (final EStructuralFeature feature : acceptableFeatures) {
 			final Notification n = mock(Notification.class);
@@ -109,11 +110,13 @@ public class MMXContentAdapterTest {
 		// Construct a MMXContentAdapter which fails should the notification methods find an ignored feature.
 		final MMXContentAdapter adapter = new MMXContentAdapter() {
 
+			@Override
 			public void reallyNotifyChanged(final Notification n) {
 				// seenFeatures.add((EStructuralFeature) n);
 				Assert.fail("Notifications are expected to be in the missed queue.");
 			};
 
+			@Override
 			protected void missedNotifications(final java.util.List<Notification> missed) {
 				for (final Notification n : missed) {
 					seenFeatures.add((EStructuralFeature) n.getFeature());
@@ -129,7 +132,6 @@ public class MMXContentAdapterTest {
 		final List<EStructuralFeature> acceptableFeatures = new ArrayList<EStructuralFeature>();
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_Name());
-		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
 
 		for (final EStructuralFeature feature : acceptableFeatures) {
 			final Notification n = mock(Notification.class);
@@ -160,10 +162,12 @@ public class MMXContentAdapterTest {
 		// Construct a MMXContentAdapter which fails should the notification methods find an ignored feature.
 		final MMXContentAdapter adapter = new MMXContentAdapter() {
 
+			@Override
 			public void reallyNotifyChanged(final Notification n) {
 				Assert.fail("Notifications are expected to be in the missed queue.");
 			};
 
+			@Override
 			protected void missedNotifications(final java.util.List<Notification> missed) {
 				for (final Notification n : missed) {
 					seenFeatures.add((EStructuralFeature) n.getFeature());
@@ -179,7 +183,6 @@ public class MMXContentAdapterTest {
 		final List<EStructuralFeature> acceptableFeatures = new ArrayList<EStructuralFeature>();
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_Name());
-		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
 
 		for (final EStructuralFeature feature : acceptableFeatures) {
 			final Notification n = mock(Notification.class);
@@ -210,10 +213,12 @@ public class MMXContentAdapterTest {
 		// Construct a MMXContentAdapter which fails should the notification methods find an ignored feature.
 		final MMXContentAdapter adapter = new MMXContentAdapter() {
 
+			@Override
 			public void reallyNotifyChanged(final Notification n) {
 				Assert.fail("Notifications are expected to be in the missed queue.");
 			};
 
+			@Override
 			protected void missedNotifications(final java.util.List<Notification> missed) {
 				for (final Notification n : missed) {
 					seenFeatures.add((EStructuralFeature) n.getFeature());
@@ -229,7 +234,6 @@ public class MMXContentAdapterTest {
 		final List<EStructuralFeature> acceptableFeatures = new ArrayList<EStructuralFeature>();
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_Name());
-		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
 
 		for (final EStructuralFeature feature : acceptableFeatures) {
 			final Notification n = mock(Notification.class);
@@ -262,9 +266,10 @@ public class MMXContentAdapterTest {
 		// Construct a MMXContentAdapter which fails should the notification methods find an ignored feature.
 		final MMXContentAdapter adapter = new MMXContentAdapter() {
 
+			@Override
 			public void reallyNotifyChanged(final Notification n) {
 
-				if (n.getFeature() == MMXCorePackage.eINSTANCE.getMMXObject_Proxies() || MMXCorePackage.eINSTANCE.getMMXProxy().getEStructuralFeatures().contains(n.getFeature())) {
+				if (n.getFeature() == MMXCorePackage.eINSTANCE.getMMXObject_Extensions()) {
 
 					Assert.fail("Ignore feature was not ignored!");
 				}
@@ -272,9 +277,10 @@ public class MMXContentAdapterTest {
 				seenFeatures.add((EStructuralFeature) n.getFeature());
 			};
 
+			@Override
 			protected void missedNotifications(final java.util.List<Notification> missed) {
 				for (final Notification n : missed) {
-					if (n.getFeature() == MMXCorePackage.eINSTANCE.getMMXObject_Proxies() || MMXCorePackage.eINSTANCE.getMMXProxy().getEStructuralFeatures().contains(n.getFeature())) {
+					if (n.getFeature() == MMXCorePackage.eINSTANCE.getMMXObject_Extensions()) {
 
 						Assert.fail("Ignore feature was not ignored!");
 					}
@@ -295,8 +301,7 @@ public class MMXContentAdapterTest {
 			}
 			final List<EStructuralFeature> ignoredFeatures = new ArrayList<EStructuralFeature>();
 			// Test all ignored features are ok
-			ignoredFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Proxies());
-			ignoredFeatures.addAll(MMXCorePackage.eINSTANCE.getMMXProxy().getEStructuralFeatures());
+			ignoredFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 
 			for (final EStructuralFeature feature : ignoredFeatures) {
 				final Notification n = mock(Notification.class);
@@ -307,10 +312,7 @@ public class MMXContentAdapterTest {
 
 			// Test some acceptable features
 			final List<EStructuralFeature> acceptableFeatures = new ArrayList<EStructuralFeature>();
-			acceptableFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 			acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_Name());
-			acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
-
 			for (final EStructuralFeature feature : acceptableFeatures) {
 				final Notification n = mock(Notification.class);
 				when(n.getFeature()).thenReturn(feature);
@@ -339,11 +341,13 @@ public class MMXContentAdapterTest {
 
 			private boolean firstMissedNotification = true;
 
+			@Override
 			public void reallyNotifyChanged(final Notification n) {
 				// seenFeatures.add((EStructuralFeature) n);
 				Assert.fail("Notifications are expected to be in the missed queue.");
 			};
 
+			@Override
 			protected void missedNotifications(final java.util.List<Notification> missed) {
 				for (final Notification n : missed) {
 					seenFeatures.add((EStructuralFeature) n.getFeature());
@@ -369,7 +373,6 @@ public class MMXContentAdapterTest {
 		final List<EStructuralFeature> acceptableFeatures = new ArrayList<EStructuralFeature>();
 		// acceptableFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_Name());
-		acceptableFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
 
 		for (final EStructuralFeature feature : acceptableFeatures) {
 			final Notification n = mock(Notification.class);
@@ -383,7 +386,6 @@ public class MMXContentAdapterTest {
 
 		final List<EStructuralFeature> expectedFeatures = new ArrayList<EStructuralFeature>();
 		expectedFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_Name());
-		expectedFeatures.add(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
 		expectedFeatures.add(MMXCorePackage.eINSTANCE.getMMXObject_Extensions());
 
 		Assert.assertEquals(expectedFeatures, seenFeatures);
