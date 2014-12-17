@@ -63,6 +63,7 @@ public class MigrateToV21 extends AbstractMigrationUnit {
 		final MetamodelLoader modelLoader = getDestinationMetamodelLoader(null);
 		modifyEquivalenceFactor(modelLoader, model);
 		migrateCooldownCosts(modelLoader, model);
+		migrateSlotRestrictions(modelLoader, model);
 	}
 
 	private void migrateCooldownCosts(final MetamodelLoader modelLoader, final EObject model) {
@@ -139,4 +140,52 @@ public class MigrateToV21 extends AbstractMigrationUnit {
 		return 22.8 / equiv;
 	}
 
+	private void migrateSlotRestrictions(final MetamodelLoader modelLoader, final EObject model) {
+		final EPackage package_ScenarioModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
+		final EPackage package_CargoModel = modelLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
+
+		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
+		final EClass class_LNGPortfolioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGPortfolioModel");
+
+		final EReference reference_LNGScenarioModel_portfolioModel = MetamodelUtils.getReference(class_LNGScenarioModel, "portfolioModel");
+		final EReference reference_LNGPortfolioModel_cargoModel = MetamodelUtils.getReference(class_LNGPortfolioModel, "cargoModel");
+
+		final EClass class_CargoModel = MetamodelUtils.getEClass(package_CargoModel, "CargoModel");
+		final EClass class_Slot = MetamodelUtils.getEClass(package_CargoModel, "Slot");
+
+		final EReference reference_CargoModel_loadSlots = MetamodelUtils.getReference(class_CargoModel, "loadSlots");
+		final EReference reference_CargoModel_dischargeSlots = MetamodelUtils.getReference(class_CargoModel, "dischargeSlots");
+
+		final EReference reference_Slot_restrictedContracts = MetamodelUtils.getReference(class_Slot, "restrictedContracts");
+		final EReference reference_Slot_restrictedPorts = MetamodelUtils.getReference(class_Slot, "restrictedPorts");
+		final EAttribute attribute_Slot_restrictedListsArePermissive = MetamodelUtils.getAttribute(class_Slot, "restrictedListsArePermissive");
+
+		final EAttribute attribute_Slot_overrideRestrictions = MetamodelUtils.getAttribute(class_Slot, "overrideRestrictions");
+
+		final EObject portfolioModel = (EObject) model.eGet(reference_LNGScenarioModel_portfolioModel);
+		if (portfolioModel == null) {
+			return;
+		}
+		final EObject cargoModel = (EObject) portfolioModel.eGet(reference_LNGPortfolioModel_cargoModel);
+		if (cargoModel == null) {
+			return;
+		}
+
+		final EList<EObject> loadSlots = MetamodelUtils.getValueAsTypedList(cargoModel, reference_CargoModel_loadSlots);
+		if (loadSlots != null) {
+			for (final EObject slot : loadSlots) {
+				if (slot.eIsSet(reference_Slot_restrictedContracts) || slot.eIsSet(reference_Slot_restrictedPorts) || slot.eIsSet(attribute_Slot_restrictedListsArePermissive)) {
+					slot.eSet(attribute_Slot_overrideRestrictions, Boolean.TRUE);
+				}
+			}
+		}
+		final EList<EObject> dischargeSlots = MetamodelUtils.getValueAsTypedList(cargoModel, reference_CargoModel_dischargeSlots);
+		if (dischargeSlots != null) {
+			for (final EObject slot : dischargeSlots) {
+				if (slot.eIsSet(reference_Slot_restrictedContracts) || slot.eIsSet(reference_Slot_restrictedPorts) || slot.eIsSet(attribute_Slot_restrictedListsArePermissive)) {
+					slot.eSet(attribute_Slot_overrideRestrictions, Boolean.TRUE);
+				}
+			}
+		}
+	}
 }

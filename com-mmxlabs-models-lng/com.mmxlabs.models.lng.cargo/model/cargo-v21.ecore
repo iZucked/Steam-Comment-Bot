@@ -83,11 +83,13 @@
         eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//BaseLegalEntity"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedContracts" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"/>
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.commercial/model/commercial.ecore#//Contract"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedPorts" upperBound="-1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"/>
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.port/model/port.ecore#//Port"
+        unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="hedges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="unitPrefix" value="$"/>
