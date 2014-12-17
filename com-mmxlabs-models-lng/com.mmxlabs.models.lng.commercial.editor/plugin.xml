@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.CommercialModel"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.CommercialModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.CommercialModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.LegalEntity"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.LegalEntityComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.LegalEntity" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.Contract"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ContractComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.Contract" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.SalesContract"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.SalesContractComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.SalesContract" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.commercial.helpers.PurchaseContract"
+			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PurchaseContractComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
+	<componentHelper
+		id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
+		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
+		inheritable="false"
+		modelClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters" />
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.BaseLegalEntityComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
+ </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.BaseEntityBookComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.BaseEntityBookComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.BaseEntityBook">
+ </componentHelper>
+ <componentHelper
+       helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleEntityBookComponentHelper"
+       id="com.mmxlabs.models.lng.commercial.presentation.composites.SimpleEntityBookComponentHelper"
+       inheritable="true"
+       modelClass="com.mmxlabs.models.lng.commercial.SimpleEntityBook">
+ </componentHelper>
+	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.PreferredPortProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.valueproviders.PreferredPortProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.commercial.Contract"
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CommercialProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.editor.contractProvider"
+          referenceEClass="com.mmxlabs.models.lng.commercial.Contract">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CommercialProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.editor.entityProvider"
+          referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
+    </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.commercial.editor.commercialModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.commercial.CommercialModel"
+          subModelImporterClass="com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.commercial.editor.jointModelEditorContribution"
+          implementation="com.mmxlabs.models.lng.commercial.ui.editorpart.CommercialModelEditorContribution"
+          priority="50"
+          subModelClass="com.mmxlabs.models.lng.commercial.CommercialModel">
+    </jointModelEditor>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+
+    <!-- Purchase Contract Factories -->
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.expressionPurchaseFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
+          label="Price Expression Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </factory>
+    <!-- Sales Contract Factories -->
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.expressionSalesFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
+          label="Price Expression Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </factory>
+	<!-- Other Factories -->
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.entityFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Entity"
+          targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+    </factory>
+
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.BaseEntityBook"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityBookDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityBookDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
+
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.Contract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory_Contract"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.SalesContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory_SalesContract"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.PurchaseContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory_PurchaseContract"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.editorfactories.DeliveryTypeValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.editorfactories.DeliveryTypeValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="CargoDeliveryType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.editorfactories.ContractTypeValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.editorfactories.ContractTypeValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="ContractType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.editorfactories.PricingEventValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.editorfactories.PricingEventValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="PricingEvent"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+ </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated commercial -->
+      <editor
+            id="com.mmxlabs.models.lng.commercial.presentation.CommercialEditorID"
+            name="%_UI_CommercialEditor_label"
+            icon="icons/full/obj16/CommercialModelFile.gif"
+            extensions="commercial"
+            class="com.mmxlabs.models.lng.commercial.presentation.CommercialEditor"
+            contributorClass="com.mmxlabs.models.lng.commercial.presentation.CommercialActionBarContributor">
+      </editor>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.attributes">
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.commercial.ContractType.importer"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="ContractType"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+         </dataType>
+      </attributeImporter>
+      <attributeImporter
+            ID="com.mmxlabs.models.lng.commercial.PricingEventType.importer"
+            attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
+         <dataType
+               attributeTypeName="PricingEvent"
+               attributeTypeURI="http://www.mmxlabs.com/models/lng/commercial/1/">
+         </dataType>
+      </attributeImporter>
+   </extension>
+   <extension
+         point="com.mmxlabs.models.util.import.classes">
+      <classImporter
+            ID="com.mmxlabs.models.lng.commercial.importer.BaseLegalEntityImporter"
+            classImporterClass="com.mmxlabs.models.lng.commercial.importer.BaseLegalEntityImporter"
+            eClassName="com.mmxlabs.models.lng.commercial.BaseLegalEntity"
+            inheritable="true">
+      </classImporter>
+      <classImporter
+            ID="com.mmxlabs.models.lng.commercial.importer.ContractClassImporter"
+            classImporterClass="com.mmxlabs.models.lng.commercial.importer.ContractClassImporter"
+            eClassName="com.mmxlabs.models.lng.commercial.Contract"
+            inheritable="true">
+      </classImporter>
+   </extension>
+
+</plugin>

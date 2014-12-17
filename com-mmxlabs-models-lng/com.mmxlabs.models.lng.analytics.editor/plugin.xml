@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.analytics.helpers.AnalyticsModel"
+			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.AnalyticsModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.analytics.helpers.UnitCostMatrix"
+			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.UnitCostMatrixComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.analytics.helpers.UnitCostLine"
+			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.UnitCostLineComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.analytics.UnitCostLine" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.JourneyComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.helpers.Journey"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.analytics.Journey">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostPlanComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostPlanComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostRowComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostRowComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.CargoSandboxComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.CargoSandboxComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.CargoSandbox">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ProvisionalCargoComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ProvisionalCargoComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ProvisionalCargo">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOpportunityComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOpportunityComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.BuyOpportunity">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellOpportunityComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellOpportunityComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.SellOpportunity">
+  </componentHelper>
+		
+	</extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.analytics.editor.analyticsModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.analytics.AnalyticsModel"
+          subModelImporterClass="com.mmxlabs.models.lng.analytics.importer.AnalyticsModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.analytics.editor.analyticsEditor"
+          implementation="com.mmxlabs.models.lng.analytics.ui.editorpart.AnalyticsModelEditorContribution"
+          priority="0"
+          subModelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel">
+    </jointModelEditor>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.editor.ucmFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Unit Cost Matrix"
+          targetEClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostPlanFactory"
+          factory="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostPlanFactory"
+          label="Shipping Cost Plan"
+          targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.ShippingCostRowFactory"
+          factory="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostRowFactory"
+          label="Shipping Cost Row"
+          targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.CargoSandboxFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Cargo Sandbox"
+          targetEClass="com.mmxlabs.models.lng.analytics.CargoSandbox">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.ProvisionalCargoFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Provisional Cargo"
+          targetEClass="com.mmxlabs.models.lng.analytics.ProvisionalCargo">
+    </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix"
+          factory="com.mmxlabs.models.lng.analytics.ui.editors.UnitCostMatrixDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.analytics.editor.ucmdcf"
+          inheritable="false">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.analytics.Journey"
+          factory="com.mmxlabs.models.lng.analytics.displaycomposites.JourneyDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.analytics.editor.jdcf"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.JourneyPortReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.editor.journeyValueProvider"
+          ownerEClass="com.mmxlabs.models.lng.analytics.Journey"
+          referenceEClass="com.mmxlabs.models.lng.port.Port">
+    </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.analytics.editorfactories.DestinationTypeValueListInlineEditorFactory"
+          id="DestinationTypeValueListInlineEditor">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="DestinationType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/analytics/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+ </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated analytics -->
+      <editor
+            id="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorID"
+            name="%_UI_AnalyticsEditor_label"
+            icon="icons/full/obj16/AnalyticsModelFile.gif"
+            extensions="analytics"
+            class="com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditor"
+            contributorClass="com.mmxlabs.models.lng.analytics.presentation.AnalyticsActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

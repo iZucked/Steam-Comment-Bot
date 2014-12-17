@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.emf.validation.constraintProviders">
+      <category
+            id="com.mmxlabs.models.lng.fleet.validation.base"
+            mandatory="true"
+            name="Fleet Validation">
+      </category>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/fleet/1/">
+         </package>
+         <constraints
+               categories=" com.mmxlabs.models.lng.fleet.validation.base">
+          
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.NullReferenceConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Null References"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  The attribute(s) {0} must be set.
+               </message>
+               <description>
+                  Some references should not be null.
+               </description>
+               <target
+                     class="Vessel">
+               </target>
+               <target
+                     class="VesselClass">
+               </target>
+               <target
+                     class="VesselClassRouteParameters">
+               </target>
+            </constraint>
+          
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.min_speed"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Minimum Speed Within Curve"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  [VesselClass|{0}] {1} knots min speed is outside the range of the speed-fuel curve ({2} to {3} knots).
+               </message>
+               <description>
+                  The minimum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselAttributesRangeConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselAttributesRangeConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Attributes Have Sensible Values"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Vessel state attributes must lie within sensible ranges.
+               </description>
+               <target
+                     class="VesselStateAttributes">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.max_speed"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Maximum Speed Within Curve"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  [VesselClass|{0}] {1} knots max speed is outside the range of the speed-fuel curve ({2} to {3} knots).
+               </message>
+               <description>
+                  The maximum speed of a vessel class must be somewhere within the upper bounds of its fuel consumption curve.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedConstraint.speed_order"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Minimum Speed is Lower than Maximum Speed"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel class|{0}: Min speed ({1}) must be lower than max speed ({2}).
+               </message>
+               <description>
+                  The minimum speed of a vessel class should be lower than its maximum speed.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint.validity"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Ship Fill Percentage is Valid"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Vessel {0} has a fill capacity of {1} percent, which is not between 0 (exclusive) and 100 (inclusive).
+               </message>
+               <description>
+                  Fill capacity should not be zero, negative or exceed 100 percent.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.ShipFillPercentageConstraint.sanity"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Ship Fill Percentage is low"
+                  severity="WARNING"
+                  statusCode="1">
+               <message>
+                  Vessel {0} has a fill capacity of {1} percent, which is less than the sensible threshold of {2} percent.
+               </message>
+               <description>
+                  Fill capacity should not be too low.
+               </description>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+          
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.BaseFuelEquivalenceConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.BaseFuelEquivalenceConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Base Fuel Constraints"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Check for valid base fuel equivalence factor
+               </description>
+               <target
+                     class="BaseFuel">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.BaseFuelPriceConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.BaseFuelPriceConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Base Fuel Price Constraints"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Check for valid base fuel price
+               </description>
+               <target
+                     class="BaseFuel">
+               </target>
+            </constraint>
+          
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.HeelOptionsConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.HeelOptionsConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Heel Options"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Heel options constraint
+               </description>
+               <target
+                     class="Vessel">
+               </target>
+               <target
+                     class="HeelOptions">
+               </target>
+            </constraint>
+         
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Class Speed Curve Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassMinHeelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Class Min Heel Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="VesselClass">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselMinHeelConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Min Heel Constraint"
+                  severity="ERROR"
+                  statusCode="0">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Vessel">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+   </extension>
+
+</plugin>

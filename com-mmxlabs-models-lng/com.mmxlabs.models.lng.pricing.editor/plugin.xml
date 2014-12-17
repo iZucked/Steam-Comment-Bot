@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+
+
+	
+<extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CommodityIndexCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
+         id="com.mmxlabs.models.lng.cargo.editor.BaseFuelIndexCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.pricing.CharterIndex"
+          factory="com.mmxlabs.models.lng.pricing.ui.displaycomposites.NamedIndexContainerCompositeFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.CharterIndexCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+</extension>
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.PricingModel"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PricingModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.PricingModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.DataIndex"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DataIndexComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.DataIndex" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.DerivedIndex"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DerivedIndexComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.DerivedIndex" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.IndexPoint"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexPointComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.IndexPoint" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.Index"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.IndexComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.Index" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.FleetCostModel"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FleetCostModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.FleetCostModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.RouteCost"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.RouteCostComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.RouteCost" />
+		
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.pricing.helpers.BaseFuelCost"
+			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelCostComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.pricing.BaseFuelCost" />
+		
+		
+
+  
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CooldownPriceComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.CooldownPrice"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
+        inheritable="true"        
+        modelClass="com.mmxlabs.models.lng.pricing.PortCost">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.CommodityIndexComponentHelper"
+        inheritable="true"        
+        modelClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CharterIndexComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.CharterIndexComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.CharterIndex">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelIndexComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.BaseFuelIndexComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.NamedIndexContainerComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.NamedIndexContainerComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.NamedIndexContainer">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortsPriceMapComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortsPriceMapComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.PortsPriceMap">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortsExpressionMapComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.presentation.composites.PortsExpressionMapComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.pricing.PortsExpressionMap">
+  </componentHelper>
+		
+	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CommodityIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.CommodityIndex">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.BaseFuelIndexReferenceValueProviderFactory"
+          referenceEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex">
+    </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.pricingModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.pricing.PricingModel"
+          subModelImporterClass="com.mmxlabs.models.lng.pricing.importers.PricingModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.pricing.editor.pricingModelEditor"
+          implementation="com.mmxlabs.models.lng.pricing.ui.editorpart.PricingModelEditorContribution"
+          priority="60"
+          subModelClass="com.mmxlabs.models.lng.pricing.PricingModel">
+    </jointModelEditor>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.dataIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.DataIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.DataIndex"
+          inheritable="false">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.CommodityIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          inheritable="false">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.importers.BaseFuelIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.BaseFuelIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          inheritable="false">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.CharterIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.CharterIndex"
+          inheritable="false">
+    </classImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Commodity Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.expressionFactory"
+           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Commodity Index Expression"
+          targetEClass="com.mmxlabs.models.lng.pricing.CommodityIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DerivedIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.cooldownPricing"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Cooldown Price"
+          targetEClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.PortCost.defaultFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Port Cost"
+          targetEClass="com.mmxlabs.models.lng.pricing.PortCost">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.charterIndex"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.CharterIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.baseFuelIndex"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Base Fuel Index"
+          targetEClass="com.mmxlabs.models.lng.pricing.BaseFuelIndex"
+          replacementEReference="data"
+          replacementEClass="com.mmxlabs.models.lng.pricing.DataIndex">
+    </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.componenthelpers">
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.pricing.composite_inject.BaseFuelPriceInjector"
+          id="com.mmxlabs.models.lng.pricing.editor.basePriceInjector"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </componentHelper>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.portCostImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.PortCostImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.PortCost"
+          inheritable="true">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.pricing.editor.indexImporter"
+          classImporterClass="com.mmxlabs.models.lng.pricing.importers.DataIndexImporter"
+          eClassName="com.mmxlabs.models.lng.pricing.Index"
+          inheritable="true">
+    </classImporter>
+ </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.CooldownCostsView"
+          id="com.mmxlabs.models.lng.pricing.editor.CooldownCostsView"
+          name="Cooldown Costs"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.PortCostsView"
+          id="com.mmxlabs.models.lng.pricing.editor.PortCostsView"
+          name="Port Costs"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.CanalCostsView"
+          id="com.mmxlabs.models.lng.pricing.editor.CanalCostsView"
+          name="Canal Costs"
+          restorable="true">
+    </view>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider"
+          id="com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider">
+    </ModelCommandProvider>
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider"
+          id="com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider">
+    </ModelCommandProvider>
+ </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated pricing -->
+      <editor
+            id="com.mmxlabs.models.lng.pricing.presentation.PricingEditorID"
+            name="%_UI_PricingEditor_label"
+            icon="icons/full/obj16/PricingModelFile.gif"
+            extensions="pricing"
+            class="com.mmxlabs.models.lng.pricing.presentation.PricingEditor"
+            contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>

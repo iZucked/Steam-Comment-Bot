@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.Vessel"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.fleet.Vessel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.VesselClass"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselClassComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.fleet.VesselClass" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.FleetModel"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FleetModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.fleet.FleetModel" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.BaseFuel"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.BaseFuelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.fleet.BaseFuel" />
+
+		<componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.HeelOptions"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.HeelOptionsComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.fleet.HeelOptions" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.VesselStateAttributes"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselStateAttributesComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.fleet.VesselStateAttributes" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.fleet.helpers.FuelConsumption"
+			helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.FuelConsumptionComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.fleet.FuelConsumption" />
+ 
+  		<componentHelper
+	        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselGroupComponentHelper"
+	        id="com.mmxlabs.models.lng.fleet.helpers.VesselGroup"
+	        inheritable="false"
+	        modelClass="com.mmxlabs.models.lng.fleet.VesselGroup"/>
+		
+	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.BaseFuelValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.baseFuelProvider"
+          referenceEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.VesselClass"
+          referenceEClass="com.mmxlabs.models.lng.fleet.VesselClass">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.VesselGroup"
+          referenceEClass="com.mmxlabs.models.lng.fleet.VesselGroup">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.fleet.ui.valueproviders.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.fleetValueProvider.Vessel"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.fleetModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.fleet.FleetModel"
+          subModelImporterClass="com.mmxlabs.models.lng.fleet.importer.FleetModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.fleet.VesselStateAttributes"
+          factory="com.mmxlabs.models.lng.fleet.ui.displaycomposites.VSADisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.attributesDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselClassFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Vessel Class"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselClass">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Vessel"
+          targetEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </factory>
+  
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.baseFuelModelFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Base Fuel"
+          targetEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselGroupFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Vessel Group"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselGroup">
+    </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselClassImporter"
+          classImporterClass="com.mmxlabs.models.lng.fleet.importer.VesselClassImporter"
+          eClassName="com.mmxlabs.models.lng.fleet.VesselClass"
+          inheritable="true">
+    </classImporter>
+    <classImporter
+          ID="com.mmxlabs.models.lng.fleet.editor.baseFuelImporter"
+          classImporterClass="com.mmxlabs.models.lng.fleet.importer.BaseFuelImporter"
+          eClassName="com.mmxlabs.models.lng.fleet.BaseFuel"
+          inheritable="true">
+    </classImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.fleet.ui.inlineeditors.RouteCostInlineEditorFactory"
+          id="com.mmxlabs.models.lng.fleet.editor.editorfactories.routeCostInlineEditorFactory">
+       <FeatureAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.fleet.VesselClassRouteParameters">
+          </EClassExtends>
+       </FeatureAnyOf>
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.fleet.VesselClass">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
+
+ </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
+          id="com.mmxlabs.models.lng.fleet.editor.views.VesselAndClassView"
+          name="Vessels"
+          restorable="true">
+    </view>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider"
+          id="com.mmxlabs.models.lng.fleet.editor.commands.RouteParametersCommandProvider">
+    </ModelCommandProvider>
+ </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated fleet -->
+      <editor
+            id="com.mmxlabs.models.lng.fleet.presentation.FleetEditorID"
+            name="%_UI_FleetEditor_label"
+            icon="icons/full/obj16/FleetModelFile.gif"
+            extensions="fleet"
+            class="com.mmxlabs.models.lng.fleet.presentation.FleetEditor"
+            contributorClass="com.mmxlabs.models.lng.fleet.presentation.FleetActionBarContributor">
+      </editor>
+   </extension>
+
+
+</plugin>

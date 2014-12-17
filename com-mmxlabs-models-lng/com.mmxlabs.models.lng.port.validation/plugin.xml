@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.emf.validation.constraintProviders">
+      <category
+            id="com.mmxlabs.models.lng.port.validation.base"
+            mandatory="true"
+            name="Port Validation">
+      </category>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/port/1/">
+         </package>
+         <constraints
+               categories=" com.mmxlabs.models.lng.port.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.NullReferenceConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.NullReferenceConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Null References"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  The attribute(s) {0} must be set.
+               </message>
+               <description>
+                  Some references should not be null.
+               </description>
+               <target
+                     class="RouteLine">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.RouteLineValidityConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.RouteLineValidityConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Distance Line From Port"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  Distance line from {0} to {1} has distance {2}
+               </message>
+               <description>
+                  Entries in the distance matrix must be non-negative and not exceed 20,000 nautical miles.
+               </description>
+               <target
+                     class="RouteLine">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortTimeZoneConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortTimeZoneConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Port TimeZone "
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  A valid timezone must be specified
+               </message>
+               <description>
+                  Checks ports have a valid time zone specified
+               </description>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortCapabilityConstraints"
+                  id="com.mmxlabs.models.lng.port.validation.PortCapabilityConstraints"
+                  lang="Java"
+                  mode="Batch"
+                  name="Port Capabilities"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Checks attributes are set for enabled capabilities
+               </description>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortWindowSizeConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortWindowSizeConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Port Window Size"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  A port must have a default window size
+               </message>
+               <description>
+                  Checks ports have a default window size
+               </description>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortCVConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortCVConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Port CV Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortCVRangeConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortCVRangeConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Port CV Range Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+         </constraints>
+      </constraintProvider>
+   </extension>
+
+</plugin>

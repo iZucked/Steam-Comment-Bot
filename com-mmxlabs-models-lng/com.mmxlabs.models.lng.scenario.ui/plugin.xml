@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            file-extensions="scn"
+            id="com.mmxlabs.shiplingo.platform.models.manifest.scnfile"
+            name="SCN File"
+            priority="normal">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.mmxlabs.models.ui.editorpart.JointModelEditorPart"
+            contributorClass="com.mmxlabs.models.ui.editorpart.JointModelEditorContributor"
+            default="true"
+            extensions="scn,sc2"
+            id="com.mmxlabs.models.lng.demo.scneditor"
+            name="SCN Editor">
+         <contentTypeBinding
+               contentTypeId="com.mmxlabs.shiplingo.platform.models.manifest.scnfile">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
+            name="LNG Scenario Import">
+      </category>
+      <wizard
+            category="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
+            class="com.mmxlabs.models.lng.scenario.importWizards.ImportCSVWizard"
+            icon="icons/sample.gif"
+            id="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
+            name="Import CSV">
+         <description>
+            Import an LNG optimiser scenario from several CSV files.
+         </description>
+      </wizard>
+   </extension>
+     <extension
+           point="org.eclipse.ui.exportWizards">
+        <wizard
+              category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              class="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizard"
+              id="com.mmxlabs.shiplingo.platform.models.manifest.csvExportWizard"
+              name="Export CSV">
+        </wizard>
+        <category
+              id="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              name="LNG Scenario Export">
+        </category>
+     </extension>
+     <extension
+           point="org.eclipse.ui.menus">
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=importers">
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <and>
+                        <count
+                              value="1">
+                        </count>
+                        <iterate>
+                           <and>
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.Folder">
+                              </instanceof>
+                              <test
+                                    forcePluginActivation="true"
+                                    property="com.mmxlabs.scenario.service.ui.caps.import">
+                              </test>
+                           </and>
+                           <or></or>
+                        </iterate>
+                     </and>
+                  </with>
+               </visibleWhen>
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <and>
+                        <count
+                              value="1">
+                        </count>
+                        <iterate>
+                           <or>
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                           </or>
+                        </iterate>
+                     </and>
+                  </with>
+               </visibleWhen>
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:file?after=additions">
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  label="Import Scenario"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=additions">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
+                  label="Import Price Curves"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
+                  label="Import Charter Curves"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
+                  label="Import Base Fuel Curves"
+                  style="push">
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
+                  label="Import Cargoes"
+                  style="push">
+            </command>
+         </menuContribution>
+          <menuContribution
+               allPopups="false"
+               locationURI="menu:data?after=com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler">
+            <command
+                  commandId="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
+                  label="Import Shared Scenario Data"
+                  style="push">
+            </command>
+         </menuContribution>
+
+     </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.ImportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+               name="Import Scenario from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.exportWizards.ExportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+               name="Export Scenario as CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportDataHandler"
+               name="Bulk Import Prices from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCharterCurveHandler"
+               name="Bulk Import Prices from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportBaseFuelCurveHandler"
+               name="Bulk Import Prices from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
+               id="com.mmxlabs.models.lng.scenario.importWizards.BulkImportCargoHandler"
+               name="Bulk Import Cargoes from CSV">
+         </command>
+           <command
+               defaultHandler="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImportWizardHandler"
+               id="com.mmxlabs.models.lng.scenario.mergeWizards.SharedScenarioDataImport"
+               name="Shared Scenario Data Import">
+         </command>
+      </extension>
+</plugin>

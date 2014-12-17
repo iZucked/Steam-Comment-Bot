@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.mmxlabs.models.lng</groupId>
+	<artifactId>com.mmxlabs.models.lng.parent</artifactId>
+	<version>3.6.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>com.mmxlabs.parent</groupId>
+		<artifactId>tycho-parent</artifactId>
+		<relativePath />
+		<version>26</version>
+	</parent>
+
+	<scm>
+		<connection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-lng.hg</connection>
+		<developerConnection>scm:hg:ssh://hg@codebasehq.com/mmxlabs/repositories/com-mmxlabs-models-lng.hg</developerConnection>
+		<url>https://mmxlabs.codebasehq.com/projects/repositories/repositories/com-mmxlabs-models-lng</url>
+	</scm>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://server1.mmxlabs.com/jenkins/job/com.mmxlabs.models.lng/</url>
+	</ciManagement>
+
+	<modules>
+		<module>com.mmxlabs.models.lng.types</module>
+		<module>com.mmxlabs.models.lng.types.edit</module>
+		<module>com.mmxlabs.models.lng.ui</module>
+		<module>com.mmxlabs.models.lng.cargo</module>
+		<module>com.mmxlabs.models.lng.cargo.edit</module>
+		<module>com.mmxlabs.models.lng.cargo.editor</module>
+		<module>com.mmxlabs.models.lng.cargo.validation</module>
+
+		<module>com.mmxlabs.models.lng.commercial</module>
+		<module>com.mmxlabs.models.lng.commercial.edit</module>
+		<module>com.mmxlabs.models.lng.commercial.editor</module>
+		<module>com.mmxlabs.models.lng.commercial.validation</module>
+
+		<module>com.mmxlabs.models.lng.fleet</module>
+		<module>com.mmxlabs.models.lng.fleet.edit</module>
+		<module>com.mmxlabs.models.lng.fleet.editor</module>
+		<module>com.mmxlabs.models.lng.fleet.validation</module>
+
+		<module>com.mmxlabs.models.lng.assignment.validation</module>
+
+		<module>com.mmxlabs.models.lng.port</module>
+		<module>com.mmxlabs.models.lng.port.edit</module>
+		<module>com.mmxlabs.models.lng.port.editor</module>
+		<module>com.mmxlabs.models.lng.port.validation</module>
+
+		<module>com.mmxlabs.models.lng.pricing</module>
+		<module>com.mmxlabs.models.lng.pricing.edit</module>
+		<module>com.mmxlabs.models.lng.pricing.editor</module>
+		<module>com.mmxlabs.models.lng.pricing.validation</module>
+
+		<module>com.mmxlabs.models.lng.schedule</module>
+		<module>com.mmxlabs.models.lng.schedule.edit</module>
+		<module>com.mmxlabs.models.lng.schedule.editor</module>
+		<module>com.mmxlabs.models.lng.schedule.validation</module>
+
+		<module>com.mmxlabs.models.lng.parameters</module>
+		<module>com.mmxlabs.models.lng.parameters.edit</module>
+		<module>com.mmxlabs.models.lng.parameters.editor</module>
+
+		<module>com.mmxlabs.models.lng.spotmarkets</module>
+		<module>com.mmxlabs.models.lng.spotmarkets.edit</module>
+		<module>com.mmxlabs.models.lng.spotmarkets.editor</module>
+		<module>com.mmxlabs.models.lng.spotmarkets.validation</module>
+
+		<module>com.mmxlabs.models.lng.analytics</module>
+		<module>com.mmxlabs.models.lng.analytics.edit</module>
+		<module>com.mmxlabs.models.lng.analytics.editor</module>
+		<module>com.mmxlabs.models.lng.analytics.validation</module>
+		<module>com.mmxlabs.models.lng.analytics.navigator</module>
+
+		<module>com.mmxlabs.models.lng.assignment.validation.tests</module>
+		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
+		<module>com.mmxlabs.models.lng.fleet.validation.tests</module>
+		<module>com.mmxlabs.models.lng.port.validation.tests</module>
+		<module>com.mmxlabs.models.lng.spotmarkets.validation.tests</module>
+
+		<module>com.mmxlabs.models.lng.scenario.model</module>
+		<module>com.mmxlabs.models.lng.scenario.model.edit</module>
+		<module>com.mmxlabs.models.lng.scenario.ui</module>
+
+		<module>com.mmxlabs.models.lng.migration</module>
+		<module>com.mmxlabs.models.lng.migration.tests</module>
+
+		<module>com.mmxlabs.models.lng.feature</module>
+		<module>com.mmxlabs.models.lng.p2</module>
+
+		<module>com.mmxlabs.models.lng.cargo.editor.tests</module>
+	</modules>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<!-- Enable tycho packaging types -->
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<configuration>
+
+					<resolver>p2</resolver>
+
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.lingo.common.target</groupId>
+							<artifactId>com.mmxlabs.lingo.common.target-definition</artifactId>
+							<version>${project.version}</version>
+						</artifact>
+					</target>
+
+					<environments>
+
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>plugin-source</id>
+						<goals>
+							<goal>plugin-source</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+	<repositories>
+		<repository>
+			<id>com-mmxlabs-common-util.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/common/com.mmxlabs.common.util.p2/2.6.1.RELEASE/com.mmxlabs.common.util.p2-2.6.1.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-optimiser.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/optimiser/com.mmxlabs.optimiser.p2/2.0.0.RELEASE/com.mmxlabs.optimiser.p2-2.0.0.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-lng-scheduler.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scheduler/com.mmxlabs.scheduler.p2/${project.version}/com.mmxlabs.scheduler.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-jobmanager.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/jobmanager/com.mmxlabs.jobmanager.p2/${project.version}/com.mmxlabs.jobmanager.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-models-mmxcore.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/mmxcore/com.mmxlabs.models.mmxcore.p2/5.0.0.RELEASE/com.mmxlabs.models.mmxcore.p2-5.0.0.RELEASE.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-rcp-common.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/rcp/common/com.mmxlabs.rcp.common.p2/${project.version}/com.mmxlabs.rcp.common.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-scenario-service.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/scenario/service/com.mmxlabs.scenario.service.p2/${project.version}/com.mmxlabs.scenario.service.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-models-migration.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/migration/com.mmxlabs.models.migration.p2/${project.version}/com.mmxlabs.models.migration.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
+			<id>com-mmxlabs-models-ui.hg</id>
+			<url>https://server1.mmxlabs.com/nexus/service/local/repositories/mmxlabs-v2-unzip/content/com/mmxlabs/models/ui/com.mmxlabs.models.ui.p2/${project.version}/com.mmxlabs.models.ui.p2-${project.version}.zip-unzip/</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+</project>
+

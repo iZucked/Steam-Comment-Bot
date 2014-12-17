@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
+      <factory
+            uri="http://www.mmxlabs.com/models/lng/scenario/1/"
+            class="com.mmxlabs.models.lng.scenario.model.provider.LNGScenarioItemProviderAdapterFactory"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.edit.childCreationExtenders">
+      <!-- @generated scenario -->
+      <extender
+            uri="http://www.mmxlabs.com/models/lng/analytics/1/"
+            class="com.mmxlabs.models.lng.scenario.model.provider.LNGScenarioItemProviderAdapterFactory$AnalyticsChildCreationExtender"/>
+   </extension>
+
+</plugin>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2014
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+
+
+	
+	<extension
+		point="com.mmxlabs.models.ui.componenthelpers">
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.port.helpers.Port"
+			helperClass="com.mmxlabs.models.lng.port.presentation.composites.PortComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.port.Port" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.port.helpers.Route"
+			helperClass="com.mmxlabs.models.lng.port.presentation.composites.RouteComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.port.Route" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.port.helpers.PortGroup"
+			helperClass="com.mmxlabs.models.lng.port.presentation.composites.PortGroupComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.port.PortGroup" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.port.helpers.RouteLine"
+			helperClass="com.mmxlabs.models.lng.port.presentation.composites.RouteLineComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.port.RouteLine" />
+		
+		<componentHelper
+			id="com.mmxlabs.models.lng.port.helpers.PortModel"
+			helperClass="com.mmxlabs.models.lng.port.presentation.composites.PortModelComponentHelper"
+			inheritable="false"
+			modelClass="com.mmxlabs.models.lng.port.PortModel" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.port.presentation.composites.CapabilityGroupComponentHelper"
+        id="com.mmxlabs.models.lng.port.helpers.CapabilityPortGroup"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.port.CapabilityGroup">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.port.presentation.composites.LocationComponentHelper"
+        id="com.mmxlabs.models.lng.port.helpers.Location"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.port.Location">
+  </componentHelper>
+		
+	</extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.port.ui.valueproviders.PortValueProviderFactory"
+          id="com.mmxlabs.models.lng.port.editor.portValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.APortSet">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.port.ui.valueproviders.RouteValueProviderFactory"
+          id="com.mmxlabs.models.lng.port.editor.routeValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.port.Route">
+    </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.port.portModelEditorContribution"
+          implementation="com.mmxlabs.models.lng.port.ui.editorpart.PortModelEditorContribution"
+          priority="2"
+          subModelClass="com.mmxlabs.models.lng.port.PortModel">
+    </jointModelEditor>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.util.import.submodels">
+    <submodelImporter
+          ID="com.mmxlabs.models.lng.port.editor.portModelImporter"
+          subModelClassName="com.mmxlabs.models.lng.port.PortModel"
+          subModelImporterClass="com.mmxlabs.models.lng.port.importer.PortModelImporter">
+    </submodelImporter>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.port.editor.portFactory"
+          factory="com.mmxlabs.models.lng.port.ui.modelfactories.PortModelFactory"
+          label="Port"
+          targetEClass="com.mmxlabs.models.lng.port.Port">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.port.editor.portGroupFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Port Group"
+          targetEClass="com.mmxlabs.models.lng.port.PortGroup">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.port.editor.portGroupFactory_port"
+          factory="com.mmxlabs.models.lng.port.ui.modelfactories.PortGroupFactory"
+          label="Port Group"
+          outputEClass="com.mmxlabs.models.lng.port.PortGroup"
+          targetEClass="com.mmxlabs.models.lng.port.Port">
+    </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.ui.dates.TimeInlineEditorFactory"
+          featureNameEquals="defaultStartTime"
+          id="com.mmxlabs.models.lng.port.editor.portTimeEditor">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.Port">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
+ </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.port.editor.views.PortView"
+          id="com.mmxlabs.models.lng.port.editor.views.PortView"
+          name="Ports">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
+          id="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
+          name="Port Groups">
+    </view>
+ </extension>
+ <extension
+       point="org.eclipse.help.contexts">
+    <contexts
+          file="contexts.xml">
+    </contexts>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortGroupContentsEditorFactory"
+          featureNameEquals="contents"
+          id="com.mmxlabs.models.lng.port.editor.portGroupEditorFactory">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.PortGroup">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.port.PortGroup"
+          factory="com.mmxlabs.models.lng.port.ui.editors.PortGroupCompositeFactory"
+          id="com.mmxlabs.models.lng.port.editor.portGroupCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory"
+          id="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory">
+       <FeatureAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.Port">
+          </EClassExtends>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.types.APortSet">
+          </EClassExtends>
+       </FeatureAnyOf>
+    </editorFactory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.common.modelcommandprovider">
+    <ModelCommandProvider
+          commandProvider="com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider"
+          id="com.mmxlabs.models.lng.port.ui.commands.RoutePortCommandProvider">
+    </ModelCommandProvider>
+ </extension>
+   <extension point="org.eclipse.ui.editors">
+      <!-- @generated port -->
+      <editor
+            id="com.mmxlabs.models.lng.port.presentation.PortEditorID"
+            name="%_UI_PortEditor_label"
+            icon="icons/full/obj16/PortModelFile.gif"
+            extensions="port"
+            class="com.mmxlabs.models.lng.port.presentation.PortEditor"
+            contributorClass="com.mmxlabs.models.lng.port.presentation.PortActionBarContributor">
+      </editor>
+   </extension>
+
+</plugin>
