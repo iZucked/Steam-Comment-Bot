@@ -14,6 +14,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -61,14 +63,11 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 		super.display(dialogContext, context, input, range);
 	}
 
-
-
-
 	@Override
 	protected Object getInitialUnsetValue() {
 		return Collections.emptyList();
 	}
-	
+
 	@Override
 	protected Control createValueControl(final Composite parent) {
 		final Composite buttonAndLabel = toolkit.createComposite(parent);
@@ -100,8 +99,12 @@ public class MultiReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected Command createSetCommand(final Object value) {
-		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
-		return setter;
+		if (value == SetCommand.UNSET_VALUE) {
+			return SetCommand.create(commandHandler.getEditingDomain(), input, feature, value);
+		} else {
+			final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
+			return setter;
+		}
 	}
 
 	@Override
