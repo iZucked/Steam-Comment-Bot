@@ -146,7 +146,8 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 				final List<Contract> restrictedContracts;
 				final List<? extends EObject> restrictedPorts;
 				boolean isPermissive = false;
-				if (slot.isSetRestrictedContracts() || slot.isSetRestrictedListsArePermissive() || slot.isSetRestrictedPorts()) {
+				// if (slot.isSetRestrictedContracts() || slot.isSetRestrictedListsArePermissive() || slot.isSetRestrictedPorts()) {
+				if (slot.isOverrideRestrictions()) {
 					isPermissive = slot.isRestrictedListsArePermissive();
 					restrictedContracts = slot.getRestrictedContracts();
 					restrictedPorts = slot.getRestrictedPorts();
@@ -173,7 +174,8 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 				final List<Contract> restrictedContracts;
 				final List<? extends EObject> restrictedPorts;
 				boolean isPermissive = false;
-				if (slot.isSetRestrictedContracts() || slot.isSetRestrictedListsArePermissive() || slot.isSetRestrictedPorts()) {
+//				if (slot.isSetRestrictedContracts() || slot.isSetRestrictedListsArePermissive() || slot.isSetRestrictedPorts()) {
+				if (slot.isOverrideRestrictions()) {
 					isPermissive = slot.isRestrictedListsArePermissive();
 					restrictedContracts = slot.getRestrictedContracts();
 					restrictedPorts = slot.getRestrictedPorts();
