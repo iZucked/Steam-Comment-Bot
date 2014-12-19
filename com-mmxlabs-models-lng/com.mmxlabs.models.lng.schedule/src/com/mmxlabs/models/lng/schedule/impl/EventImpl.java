@@ -559,8 +559,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated NOT
 	 */
 	public String getTimeZone(EAttribute attribute) {
-		if (getPort() == null) return "GMT";
-		if (getPort().getTimeZone() == null) return "GMT";
+		if (getPort() == null) return "UTC";
+		if (getPort().getTimeZone() == null) return "UTC";
 		return getPort().getTimeZone();
 	}
 
