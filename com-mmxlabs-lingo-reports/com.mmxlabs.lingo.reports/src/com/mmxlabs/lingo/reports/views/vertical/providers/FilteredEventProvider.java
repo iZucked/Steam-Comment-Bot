@@ -7,6 +7,12 @@ import org.joda.time.LocalDate;
 import com.mmxlabs.lingo.reports.views.vertical.filters.EventFilter;
 import com.mmxlabs.models.lng.schedule.Event;
 
+/**
+ * Event provider wrapper to further filter the data.
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public final class FilteredEventProvider extends EventProvider {
 
 	private final EventProvider wrapped;

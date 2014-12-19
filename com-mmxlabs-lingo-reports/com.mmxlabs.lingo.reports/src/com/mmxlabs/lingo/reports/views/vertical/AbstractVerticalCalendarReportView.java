@@ -121,7 +121,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 		};
 	}
 
-	protected IStructuredContentProvider createContentProvider() {
+	protected ReportNebulaGridManager createContentProvider() {
 		manager = new ReportNebulaGridManager(this, verticalReportVisualiser);
 		return manager;
 	}
