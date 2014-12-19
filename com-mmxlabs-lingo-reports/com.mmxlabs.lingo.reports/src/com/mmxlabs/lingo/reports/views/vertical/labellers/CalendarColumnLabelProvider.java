@@ -47,6 +47,20 @@ public class CalendarColumnLabelProvider extends GridColumnLabelProvider {
 		return result[index];
 	}
 
+	public Event[] getData(@NonNull LocalDate date) {
+		final Event[] result;
+		if (cache.containsKey(date)) {
+			result = (Event[]) cache.get(date);
+		} else {
+			result = provider.getEvents(date);
+			cache.put(date, result);
+		}
+		if (result == null) {
+			return null;
+		}
+		return result;
+	}
+
 	@Override
 	public String getRowHeaderText(final Object element) {
 		final Pair<LocalDate, Integer> pair = castPair(element);
@@ -58,7 +72,24 @@ public class CalendarColumnLabelProvider extends GridColumnLabelProvider {
 	public String getText(final Object element) {
 		final Pair<LocalDate, Integer> pair = castPair(element);
 		final LocalDate date = pair.getFirst();
+
+		if (manager.isCollapseEvents()) {
+			Event[] events = getData(pair.getFirst());
+			if (events != null) {
+				StringBuilder sb = new StringBuilder();
+				boolean first = true;
+				for (Event e : events) {
+					if (!first) {
+						sb.append("; ");
+					}
+					sb.append(labeller.getText(date, e));
+					first = false;
+				}
+				return sb.toString();
+			}
+		}
 		return labeller.getText(date, getData(pair));
+
 	}
 
 	@Override

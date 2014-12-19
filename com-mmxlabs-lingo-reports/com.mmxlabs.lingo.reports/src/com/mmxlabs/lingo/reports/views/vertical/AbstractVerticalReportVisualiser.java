@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Cooldown;
@@ -304,6 +303,7 @@ public abstract class AbstractVerticalReportVisualiser {
 
 	/**
 	 * Returns the events, if any, occurring between the two dates specified.
+	 * 
 	 */
 	public Event[] getEventsByScheduledDate(final Sequence seq, final LocalDate start, final LocalDate end) {
 		final List<Event> result = new ArrayList<>();
@@ -320,7 +320,9 @@ public abstract class AbstractVerticalReportVisualiser {
 				}
 				// otherwise, as long as the event is in the search window, add it to the results
 				// if the event ends at midnight, we do *not* count it towards this day
-				else if (start.isBefore(eventEnd)) {
+				else if (start.equals(eventStart)) {
+					result.add(event);
+				} else if (!start.isBefore(eventStart) && start.isBefore(eventEnd)) {
 					result.add(event);
 				}
 			}

@@ -42,6 +42,8 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 
 	protected LNGScenarioModel root = null;
 
+	private boolean collapseEvents = false;
+
 	public ReportNebulaGridManager(AbstractVerticalCalendarReportView verticalReport, AbstractVerticalReportVisualiser verticalReportVisualiser) {
 		this.verticalReport = verticalReport;
 		this.verticalReportVisualiser = verticalReportVisualiser;
@@ -66,10 +68,12 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 		}
 
 		int result = 1;
-		for (final CalendarColumn column : calendarColumns) {
-			final int num = getNumRowsRequired(date, column);
-			if (num > result) {
-				result = num;
+		if (!isCollapseEvents()) {
+			for (final CalendarColumn column : calendarColumns) {
+				final int num = getNumRowsRequired(date, column);
+				if (num > result) {
+					result = num;
+				}
 			}
 		}
 		rowCache.put(date, result);
@@ -185,4 +189,23 @@ public class ReportNebulaGridManager implements IStructuredContentProvider {
 	public CalendarColumn getCalendarColumn(final int columnIdx) {
 		return calendarColumns.get(columnIdx);
 	}
+
+	/**
+	 * Returns true if overlapping events should be shown on the same row or not
+	 * 
+	 * @return
+	 */
+	public boolean isCollapseEvents() {
+		return collapseEvents;
+	}
+
+	/**
+	 * Set to true to collapse events into a single row
+	 * 
+	 * @param collapseEvents
+	 */
+	public void setCollapseEvents(boolean collapseEvents) {
+		this.collapseEvents = collapseEvents;
+	}
+
 }

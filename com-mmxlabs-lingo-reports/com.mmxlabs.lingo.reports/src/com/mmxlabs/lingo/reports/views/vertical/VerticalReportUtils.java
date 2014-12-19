@@ -94,7 +94,7 @@ public final class VerticalReportUtils {
 		} else {
 			final Calendar cal2 = (Calendar) cal.clone();
 			cal2.setTimeZone(TimeZone.getTimeZone("Etc/UTC"));
-			return new LocalDate(cal.get(Calendar.YEAR), 1 + cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+			return new LocalDate(cal2.get(Calendar.YEAR), 1 + cal2.get(Calendar.MONTH), cal2.get(Calendar.DAY_OF_MONTH));
 
 		}
 	}
