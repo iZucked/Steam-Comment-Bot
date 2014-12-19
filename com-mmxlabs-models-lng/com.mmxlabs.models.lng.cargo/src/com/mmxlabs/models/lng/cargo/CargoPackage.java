@@ -497,13 +497,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__CANCELLATION_FEE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 27;
 
 	/**
+	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__OVERRIDE_RESTRICTIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 28;
+	int SLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 29;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -937,6 +946,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
+
+	/**
+	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__OVERRIDE_RESTRICTIONS = SLOT__OVERRIDE_RESTRICTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -1442,6 +1460,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__CANCELLATION_FEE = SLOT__CANCELLATION_FEE;
+
+	/**
+	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__OVERRIDE_RESTRICTIONS = SLOT__OVERRIDE_RESTRICTIONS;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -2167,6 +2194,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__CANCELLATION_FEE = LOAD_SLOT__CANCELLATION_FEE;
 
 	/**
+	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__OVERRIDE_RESTRICTIONS = LOAD_SLOT__OVERRIDE_RESTRICTIONS;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2679,6 +2715,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__CANCELLATION_FEE = DISCHARGE_SLOT__CANCELLATION_FEE;
+
+	/**
+	 * The feature id for the '<em><b>Override Restrictions</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__OVERRIDE_RESTRICTIONS = DISCHARGE_SLOT__OVERRIDE_RESTRICTIONS;
 
 	/**
 	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
@@ -4450,6 +4495,17 @@ public interface CargoPackage extends EPackage {
 
 	
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Override Restrictions</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_OverrideRestrictions();
+
+	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5563,6 +5619,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__CANCELLATION_FEE = eINSTANCE.getSlot_CancellationFee();
+
+		/**
+		 * The meta object literal for the '<em><b>Override Restrictions</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__OVERRIDE_RESTRICTIONS = eINSTANCE.getSlot_OverrideRestrictions();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.
