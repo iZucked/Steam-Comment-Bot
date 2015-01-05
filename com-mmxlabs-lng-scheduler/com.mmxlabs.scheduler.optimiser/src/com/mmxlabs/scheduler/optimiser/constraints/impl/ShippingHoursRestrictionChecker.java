@@ -150,17 +150,17 @@ public class ShippingHoursRestrictionChecker implements IPairwiseConstraintCheck
 						return false;
 					}
 					// Get notional speed
-					final int maxSpeed = nominatedVessel.getVesselClass().getMaxSpeed();
+					final int referenceSpeed = shippingHoursRestrictionProvider.getReferenceSpeed(nominatedVessel);
 
 					final int loadDuration = portVisitDurationProvider.getVisitDuration(desPurchase.getPort(), PortType.Load);
 					final int dischargeDuration = portVisitDurationProvider.getVisitDuration(desSale.getPort(), PortType.Discharge);
-					final int ballastSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ballastDistance);
+					final int ballastSailingTime = Calculator.getTimeFromSpeedDistance(referenceSpeed, ballastDistance);
 
 					// This is the upper bound on laden travel time
 					final int availableLadenTime = shippingHours - loadDuration - dischargeDuration - ballastSailingTime;
 
 					// It will take at least this amount of time to get between ports - check shipping days is big enough
-					final int minLadenSailingTime = Calculator.getTimeFromSpeedDistance(maxSpeed, ladenDistance);
+					final int minLadenSailingTime = Calculator.getTimeFromSpeedDistance(referenceSpeed, ladenDistance);
 					if (minLadenSailingTime > availableLadenTime) {
 						// Can't go fast enough
 						return false;
