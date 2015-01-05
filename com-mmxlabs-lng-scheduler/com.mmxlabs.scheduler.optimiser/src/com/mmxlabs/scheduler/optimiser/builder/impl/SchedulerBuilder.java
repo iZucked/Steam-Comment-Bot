@@ -675,7 +675,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public ITimeWindow createTimeWindow(final int start, final int end) {
 
-		if (end != Integer.MIN_VALUE  && start > end) {
+		if (end != Integer.MIN_VALUE && start > end) {
 			throw new IllegalArgumentException("Start time is greater than end time!");
 		}
 
@@ -1926,6 +1926,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
 		assert element != null;
 		shippingHoursRestrictionProviderEditor.setShippingHoursRestriction(element, baseTime, hours);
+	}
+
+	@Override
+	public void setShippingDaysRestrictionReferenceSpeed(@NonNull final IVessel vessel, final int referenceSpeed) {
+		shippingHoursRestrictionProviderEditor.setReferenceSpeed(vessel, referenceSpeed);
 	}
 
 	@Override

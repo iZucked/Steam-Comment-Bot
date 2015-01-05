@@ -677,6 +677,8 @@ public interface ISchedulerBuilder {
 	 */
 	void setShippingHoursRestriction(@NonNull IPortSlot slot, @NonNull ITimeWindow baseTime, int hours);
 
+	void setShippingDaysRestrictionReferenceSpeed(@NonNull IVessel vessel, int referenceSpeed);
+
 	/**
 	 * Freeze a {@link IPortSlot} to a single {@link IVesselAvailability}. Unlike {@link #constrainSlotToVesselAvailabilities(IPortSlot, Set)} which still permits allocations to special vessels, this
 	 * method restricts purely to the specified {@link IVessel}
