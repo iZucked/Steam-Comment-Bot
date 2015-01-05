@@ -62,6 +62,7 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -191,6 +192,9 @@ public class LNGScenarioTransformer {
 
 	@Inject
 	private TimeZoneToUtcOffsetProvider timeZoneToUtcOffsetProvider;
+
+	@Inject(optional = true)
+	IShippingDaysRestrictionSpeedProvider shippingDaysRestrictionSpeedProvider;
 
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
@@ -2226,6 +2230,12 @@ public class LNGScenarioTransformer {
 					OptimiserUnitConvertor.convertToInternalVolume((int) (eVessel.getVesselOrVesselClassCapacity() * eVessel.getVesselOrVesselClassFillCapacity())));
 			vesselAssociation.add(eVessel, vessel);
 
+			if (shippingDaysRestrictionSpeedProvider == null) {
+				builder.setShippingDaysRestrictionReferenceSpeed(vessel, vessel.getVesselClass().getMaxSpeed());
+			} else {
+				final int referenceSpeed = OptimiserUnitConvertor.convertToInternalSpeed(shippingDaysRestrictionSpeedProvider.getSpeed(eVessel.getVesselClass()));
+				builder.setShippingDaysRestrictionReferenceSpeed(vessel, referenceSpeed);
+			}
 			modelEntityMap.addModelObject(eVessel, vessel);
 			allVessels.put(eVessel, vessel);
 
