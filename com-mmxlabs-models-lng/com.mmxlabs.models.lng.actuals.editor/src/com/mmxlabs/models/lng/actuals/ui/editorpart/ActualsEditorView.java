@@ -19,11 +19,10 @@ import com.mmxlabs.models.lng.actuals.ActualsPackage;
 import com.mmxlabs.models.lng.actuals.CargoActuals;
 import com.mmxlabs.models.lng.actuals.DischargeActuals;
 import com.mmxlabs.models.lng.actuals.LoadActuals;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -51,15 +50,10 @@ public class ActualsEditorView extends ScenarioTableViewerView<ActualsTableViewe
 			if (rootObject instanceof LNGScenarioModel) {
 				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
 				final LNGPortfolioModel portfolioModel = lngScenarioModel.getPortfolioModel();
-				final CargoModel cargoModel = portfolioModel.getCargoModel();
-				for (final EObject obj : cargoModel.getExtensions()) {
-					if (obj instanceof ActualsModel) {
-						actualsModel = (ActualsModel) obj;
-					}
-				}
+				actualsModel = portfolioModel.getActualsModel();
 				if (actualsModel == null) {
 					actualsModel = ActualsFactory.eINSTANCE.createActualsModel();
-					domain.getCommandStack().execute(AddCommand.create(domain, cargoModel, MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS, actualsModel));
+					domain.getCommandStack().execute(AddCommand.create(domain, portfolioModel, LNGScenarioPackage.eINSTANCE.getLNGPortfolioModel_ActualsModel(), actualsModel));
 				}
 			}
 			pane.init(Arrays.asList(new EReference[] { ActualsPackage.eINSTANCE.getActualsModel_CargoActuals() }), null, domain.getCommandStack());

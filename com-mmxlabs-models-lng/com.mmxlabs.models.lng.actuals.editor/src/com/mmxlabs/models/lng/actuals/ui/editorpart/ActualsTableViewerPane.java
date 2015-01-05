@@ -545,7 +545,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		toolbar.update(true);
 
 		final ActualsPackage pkg = ActualsPackage.eINSTANCE;
-//		final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
+		// final IReferenceValueProviderProvider provider = scenarioEditingLocation.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = scenarioEditingLocation.getEditingDomain();
 
 		addActualsColumn(cargoColumns, "C-ID", new ReadOnlyManipulatorWrapper<BasicAttributeManipulator>(new BasicAttributeManipulator(MMXCorePackage.Literals.NAMED_OBJECT__NAME, editingDomain)),
@@ -645,9 +645,9 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		return ((LNGScenarioModel) scenarioEditingLocation.getRootObject()).getPortfolioModel();
 	}
 
-//	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addActualsColumn(final String columnName, final T manipulator, final EMFPath path) {
-//		return this.addActualsColumn(null, columnName, manipulator, path);
-//	}
+	// private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addActualsColumn(final String columnName, final T manipulator, final EMFPath path) {
+	// return this.addActualsColumn(null, columnName, manipulator, path);
+	// }
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addActualsColumn(final Set<GridColumn> group, final String columnName, final T manipulator, final EMFPath path) {
 		final GridViewerColumn col = getScenarioViewer().addColumn(columnName, manipulator, manipulator, path);
@@ -775,7 +775,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 		@Override
 		protected void populate(final Menu menu) {
 			final LNGScenarioModel scenario = ((LNGScenarioModel) scenarioEditingLocation.getRootObject());
-//			final CommercialModel commercialModel = scenario.getCommercialModel();
+			// final CommercialModel commercialModel = scenario.getCommercialModel();
 			// final FleetModel fleetModel = scenario.getFleetModel();
 
 			// final EMFPath purchaseContractPath = new RowDataEMFPath(false, ActualsModelRowTransformer.Type.LOAD, CargoPackage.Literals.SLOT__CONTRACT);
@@ -797,201 +797,202 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 
 		}
 	}
-//
-//	private class FilterAction extends DefaultMenuCreatorAction {
-//		final private EObject sourceObject;
-//		final private EStructuralFeature sourceFeature;
-//		final private EMFPath filterPath;
-//
-//		/**
-//		 * An action which updates the filter on the trades wiring table and refreshes the table.
-//		 * 
-//		 * @param label
-//		 *            The label to associate with this action (the feature from the cargo row it represents).
-//		 * @param sourceObject
-//		 *            The source object in the EMF model which holds the list of possible values for the filter.
-//		 * @param sourceFeature
-//		 *            The EMF feature of the source object where the list of possible values resides.
-//		 * @param filterPath
-//		 *            The path within a cargo row object of the field which the table is being filtered on.
-//		 */
-//		public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final EMFPath filterPath) {
-//			super(label);
-//			this.sourceObject = sourceObject;
-//			this.sourceFeature = sourceFeature;
-//			this.filterPath = filterPath;
-//		}
-//
-//		/**
-//		 * Add actions to the submenu associated with this action.
-//		 */
-//		@Override
-//		protected void populate(final Menu menu) {
-//			// Get the labels to populate the menu from the source object in the EMF model
-//			final EList<NamedObject> values = (EList<NamedObject>) sourceObject.eGet(sourceFeature);
-//
-//			// Show the list of labels (one for each item in the source object feature)
-//			for (final NamedObject value : values) {
-//				// WEIRD: action returns wrong value from isChecked() so set the checked value here
-//				// A label is checked if it is the value already selected in the trades filter
-//				final boolean checked = tradesFilter.getFilterValue(filterPath) == value;
-//				final Action action = new Action(value.getName(), IAction.AS_RADIO_BUTTON) {
-//					@Override
-//					public void run() {
-//						// When we select a checked option, we want to turn the filter off
-//						final EObject newValue = (checked) ? null : value;
-//						tradesFilter.setFilterValue(filterPath, newValue);
-//						scenarioViewer.refresh(false);
-//					}
-//				};
-//				addActionToMenu(action, menu);
-//				action.setChecked(checked);
-//			}
-//
-//		}
-//
-//	}
-//
-//	private class AddAction extends DefaultMenuCreatorAction {
-//
-//		public AddAction(final String label) {
-//			super(label);
-//		}
-//
-//		/**
-//		 * Subclasses should fill their menu with actions here.
-//		 * 
-//		 * @param menu
-//		 *            the menu which is about to be displayed
-//		 */
-//		@Override
-//		protected void populate(final Menu menu) {
-//			final ActualsModel actualsModel = getActualsModel();
-//
-//			RowData discoveredRowData = null;
-//			final ISelection selection = getScenarioViewer().getSelection();
-//			if (selection instanceof IStructuredSelection) {
-//				final Object firstElement = ((IStructuredSelection) selection).getFirstElement();
-//				if (firstElement instanceof RowData) {
-//					discoveredRowData = (RowData) firstElement;
-//				}
-//			}
-//			final RowData referenceRowData = discoveredRowData;
-//			{
-//				final Action newLoad = new Action("Cargo") {
-//					@Override
-//					public void run() {
-//
-//						final CompoundCommand cmd = new CompoundCommand("Cargo Actuals");
-//						List<Command> setCommands = new LinkedList<>();
-//						final CargoActuals newCargo = cec.createNewCargoActuals(setCommands, actualsModel);
-//						// for (final SlotActuals slot : newCargo.getActuals()) {
-//						// if (slot instanceof LoadActuals) {
-//						// final LoadActuals newLoad = (LoadActuals) slot;
-//						// initialiseSlot(newLoad, true, referenceRowData);
-//						// // newLoad.setDESPurchase(false);
-//						// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-//						// } else if (slot instanceof DischargeActuals) {
-//						// final DischargeActuals newDischarge = (DischargeActuals) slot;
-//						// initialiseSlot(newDischarge, false, referenceRowData);
-//						// // newDischarge.setFOBSale(false);
-//						// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-//						// } else {
-//						// throw new IllegalStateException("Unexpected slot type");
-//						// }
-//						// }
-//
-//						for (Command c : setCommands) {
-//							cmd.append(c);
-//						}
-//						// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getACargoModel_Cargoes(), newCargo));
-//
-//						scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-//					}
-//				};
-//				addActionToMenu(newLoad, menu);
-//			}
-//			// {
-//			// final Action newLoad = new Action("FOB Purchase") {
-//			// public void run() {
-//			//
-//			// final CompoundCommand cmd = new CompoundCommand("FOB Purchase");
-//			//
-//			// final LoadActuals newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-//			// // newLoad.setDESPurchase(false);
-//			// initialiseSlot(newLoad, true, referenceRowData);
-//			// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-//			// scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-//			// }
-//			// };
-//			// addActionToMenu(newLoad, menu);
-//			// }
-//			// {
-//			// final Action newDESPurchase = new Action("DES Purchase") {
-//			// public void run() {
-//			//
-//			// final CompoundCommand cmd = new CompoundCommand("DES Purchase");
-//			//
-//			// final LoadActuals newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-//			// newLoad.setDESPurchase(true);
-//			// initialiseSlot(newLoad, true, referenceRowData);
-//			// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-//			// scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-//			// }
-//			// };
-//			// addActionToMenu(newDESPurchase, menu);
-//			// }
-//			// {
-//			// final Action newDischarge = new Action("DES Sale") {
-//			// public void run() {
-//			//
-//			// final CompoundCommand cmd = new CompoundCommand("DES Sale");
-//			//
-//			// final DischargeActuals newDischarge = cec.createObject(ActualsPackage.eINSTANCE.getDischargeActuals(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-//			// // newDischarge.setFOBSale(false);
-//			// initialiseSlot(newDischarge, false, referenceRowData);
-//			// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-//			// scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-//			// }
-//			// };
-//			//
-//			// addActionToMenu(newDischarge, menu);
-//			// }
-//			// {
-//			// final Action newFOBSale = new Action("FOB Sale") {
-//			// public void run() {
-//			//
-//			// final CompoundCommand cmd = new CompoundCommand("FOB Sale");
-//			//
-//			// final DischargeActuals newDischarge = cec.createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-//			// // newDischarge.setFOBSale(true);
-//			// initialiseSlot(newDischarge, false, referenceRowData);
-//			// cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-//			// scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
-//			// }
-//			// };
-//			// addActionToMenu(newFOBSale, menu);
-//			// }
-//		}
-//
-//		private final void initialiseSlot(final SlotActuals newSlot, final boolean isLoad, final RowData referenceRowData) {
-//			newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-//			// newSlot.setOptional(false);
-//			// newSlot.setName("");
-//			// Set window so that via default sorting inserts new slot at current table position
-//			if (referenceRowData != null) {
-//				final SlotActuals primarySortSlot = isLoad ? referenceRowData.loadSlot : referenceRowData.dischargeSlot;
-//				final SlotActuals secondarySortSlot = isLoad ? referenceRowData.dischargeSlot : referenceRowData.loadSlot;
-//				if (primarySortSlot != null) {
-//					// newSlot.setWindowStart(primarySortSlot.getWindowStart());
-//					// newSlot.setPort(primarySortSlot.getPort());
-//				} else if (secondarySortSlot != null) {
-//					// newSlot.setWindowStart(secondarySortSlot.getWindowStart());
-//				}
-//			}
-//		}
-//
-//	}
+
+	//
+	// private class FilterAction extends DefaultMenuCreatorAction {
+	// final private EObject sourceObject;
+	// final private EStructuralFeature sourceFeature;
+	// final private EMFPath filterPath;
+	//
+	// /**
+	// * An action which updates the filter on the trades wiring table and refreshes the table.
+	// *
+	// * @param label
+	// * The label to associate with this action (the feature from the cargo row it represents).
+	// * @param sourceObject
+	// * The source object in the EMF model which holds the list of possible values for the filter.
+	// * @param sourceFeature
+	// * The EMF feature of the source object where the list of possible values resides.
+	// * @param filterPath
+	// * The path within a cargo row object of the field which the table is being filtered on.
+	// */
+	// public FilterAction(final String label, final EObject sourceObject, final EStructuralFeature sourceFeature, final EMFPath filterPath) {
+	// super(label);
+	// this.sourceObject = sourceObject;
+	// this.sourceFeature = sourceFeature;
+	// this.filterPath = filterPath;
+	// }
+	//
+	// /**
+	// * Add actions to the submenu associated with this action.
+	// */
+	// @Override
+	// protected void populate(final Menu menu) {
+	// // Get the labels to populate the menu from the source object in the EMF model
+	// final EList<NamedObject> values = (EList<NamedObject>) sourceObject.eGet(sourceFeature);
+	//
+	// // Show the list of labels (one for each item in the source object feature)
+	// for (final NamedObject value : values) {
+	// // WEIRD: action returns wrong value from isChecked() so set the checked value here
+	// // A label is checked if it is the value already selected in the trades filter
+	// final boolean checked = tradesFilter.getFilterValue(filterPath) == value;
+	// final Action action = new Action(value.getName(), IAction.AS_RADIO_BUTTON) {
+	// @Override
+	// public void run() {
+	// // When we select a checked option, we want to turn the filter off
+	// final EObject newValue = (checked) ? null : value;
+	// tradesFilter.setFilterValue(filterPath, newValue);
+	// scenarioViewer.refresh(false);
+	// }
+	// };
+	// addActionToMenu(action, menu);
+	// action.setChecked(checked);
+	// }
+	//
+	// }
+	//
+	// }
+	//
+	// private class AddAction extends DefaultMenuCreatorAction {
+	//
+	// public AddAction(final String label) {
+	// super(label);
+	// }
+	//
+	// /**
+	// * Subclasses should fill their menu with actions here.
+	// *
+	// * @param menu
+	// * the menu which is about to be displayed
+	// */
+	// @Override
+	// protected void populate(final Menu menu) {
+	// final ActualsModel actualsModel = getActualsModel();
+	//
+	// RowData discoveredRowData = null;
+	// final ISelection selection = getScenarioViewer().getSelection();
+	// if (selection instanceof IStructuredSelection) {
+	// final Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+	// if (firstElement instanceof RowData) {
+	// discoveredRowData = (RowData) firstElement;
+	// }
+	// }
+	// final RowData referenceRowData = discoveredRowData;
+	// {
+	// final Action newLoad = new Action("Cargo") {
+	// @Override
+	// public void run() {
+	//
+	// final CompoundCommand cmd = new CompoundCommand("Cargo Actuals");
+	// List<Command> setCommands = new LinkedList<>();
+	// final CargoActuals newCargo = cec.createNewCargoActuals(setCommands, actualsModel);
+	// // for (final SlotActuals slot : newCargo.getActuals()) {
+	// // if (slot instanceof LoadActuals) {
+	// // final LoadActuals newLoad = (LoadActuals) slot;
+	// // initialiseSlot(newLoad, true, referenceRowData);
+	// // // newLoad.setDESPurchase(false);
+	// // cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+	// // } else if (slot instanceof DischargeActuals) {
+	// // final DischargeActuals newDischarge = (DischargeActuals) slot;
+	// // initialiseSlot(newDischarge, false, referenceRowData);
+	// // // newDischarge.setFOBSale(false);
+	// // cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+	// // } else {
+	// // throw new IllegalStateException("Unexpected slot type");
+	// // }
+	// // }
+	//
+	// for (Command c : setCommands) {
+	// cmd.append(c);
+	// }
+	// // cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getACargoModel_Cargoes(), newCargo));
+	//
+	// scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+	// }
+	// };
+	// addActionToMenu(newLoad, menu);
+	// }
+	// // {
+	// // final Action newLoad = new Action("FOB Purchase") {
+	// // public void run() {
+	// //
+	// // final CompoundCommand cmd = new CompoundCommand("FOB Purchase");
+	// //
+	// // final LoadActuals newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+	// // // newLoad.setDESPurchase(false);
+	// // initialiseSlot(newLoad, true, referenceRowData);
+	// // cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+	// // scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+	// // }
+	// // };
+	// // addActionToMenu(newLoad, menu);
+	// // }
+	// // {
+	// // final Action newDESPurchase = new Action("DES Purchase") {
+	// // public void run() {
+	// //
+	// // final CompoundCommand cmd = new CompoundCommand("DES Purchase");
+	// //
+	// // final LoadActuals newLoad = cec.createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+	// // newLoad.setDESPurchase(true);
+	// // initialiseSlot(newLoad, true, referenceRowData);
+	// // cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+	// // scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+	// // }
+	// // };
+	// // addActionToMenu(newDESPurchase, menu);
+	// // }
+	// // {
+	// // final Action newDischarge = new Action("DES Sale") {
+	// // public void run() {
+	// //
+	// // final CompoundCommand cmd = new CompoundCommand("DES Sale");
+	// //
+	// // final DischargeActuals newDischarge = cec.createObject(ActualsPackage.eINSTANCE.getDischargeActuals(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
+	// // // newDischarge.setFOBSale(false);
+	// // initialiseSlot(newDischarge, false, referenceRowData);
+	// // cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+	// // scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+	// // }
+	// // };
+	// //
+	// // addActionToMenu(newDischarge, menu);
+	// // }
+	// // {
+	// // final Action newFOBSale = new Action("FOB Sale") {
+	// // public void run() {
+	// //
+	// // final CompoundCommand cmd = new CompoundCommand("FOB Sale");
+	// //
+	// // final DischargeActuals newDischarge = cec.createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
+	// // // newDischarge.setFOBSale(true);
+	// // initialiseSlot(newDischarge, false, referenceRowData);
+	// // cmd.append(AddCommand.create(scenarioEditingLocation.getEditingDomain(), actualsModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+	// // scenarioEditingLocation.getEditingDomain().getCommandStack().execute(cmd);
+	// // }
+	// // };
+	// // addActionToMenu(newFOBSale, menu);
+	// // }
+	// }
+	//
+	// private final void initialiseSlot(final SlotActuals newSlot, final boolean isLoad, final RowData referenceRowData) {
+	// newSlot.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+	// // newSlot.setOptional(false);
+	// // newSlot.setName("");
+	// // Set window so that via default sorting inserts new slot at current table position
+	// if (referenceRowData != null) {
+	// final SlotActuals primarySortSlot = isLoad ? referenceRowData.loadSlot : referenceRowData.dischargeSlot;
+	// final SlotActuals secondarySortSlot = isLoad ? referenceRowData.dischargeSlot : referenceRowData.loadSlot;
+	// if (primarySortSlot != null) {
+	// // newSlot.setWindowStart(primarySortSlot.getWindowStart());
+	// // newSlot.setPort(primarySortSlot.getPort());
+	// } else if (secondarySortSlot != null) {
+	// // newSlot.setWindowStart(secondarySortSlot.getWindowStart());
+	// }
+	// }
+	// }
+	//
+	// }
 
 	//
 	// private class CreateStripMenuAction extends Action implements IMenuCreator {
@@ -1102,13 +1103,7 @@ public class ActualsTableViewerPane extends ScenarioTableViewerPane {
 	}
 
 	private ActualsModel getActualsModel() {
-		final CargoModel cargoModel = getPortfolioModel().getCargoModel();
-		for (final EObject obj : cargoModel.getExtensions()) {
-			if (obj instanceof ActualsModel) {
-				return (ActualsModel) obj;
-			}
-		}
-		return null;
+		return getPortfolioModel().getActualsModel();
 	}
 
 }

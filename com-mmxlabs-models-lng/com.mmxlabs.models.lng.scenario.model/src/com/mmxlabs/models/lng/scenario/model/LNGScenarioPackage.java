@@ -253,13 +253,22 @@ public interface LNGScenarioPackage extends EPackage {
 	int LNG_PORTFOLIO_MODEL__PARAMETERS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Actuals Model</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_PORTFOLIO_MODEL__ACTUALS_MODEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>LNG Portfolio Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int LNG_PORTFOLIO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
@@ -427,6 +436,17 @@ public interface LNGScenarioPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getLNGPortfolioModel_Parameters();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel <em>Actuals Model</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Actuals Model</em>'.
+	 * @see com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel#getActualsModel()
+	 * @see #getLNGPortfolioModel()
+	 * @generated
+	 */
+	EReference getLNGPortfolioModel_ActualsModel();
 
 	/**
 	 * Returns the factory that creates the instances of the model.

@@ -44,7 +44,7 @@ public class MigrateToV22 extends AbstractMigrationUnit {
 	@Override
 	protected MetamodelLoader getSourceMetamodelLoader(final Map<URI, PackageData> extraPackages) {
 		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.createV20Loader(extraPackages);
+			sourceLoader = MetamodelVersionsUtil.createV21Loader(extraPackages);
 		}
 		return sourceLoader;
 	}

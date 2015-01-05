@@ -4,7 +4,7 @@
     templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="LNGScenario" importerID="org.eclipse.emf.importer.ecore"
     containmentProxies="true" complianceLevel="6.0" copyrightFields="false" runtimeVersion="2.8"
-    usedGenPackages="../../com.mmxlabs.models.lng.analytics/model/analytics.genmodel#//analytics ../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.parameters/model/parameters.genmodel#//parameters ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
+    usedGenPackages="../../com.mmxlabs.models.lng.actuals/model/actuals.genmodel#//actuals ../../com.mmxlabs.models.lng.analytics/model/analytics.genmodel#//analytics ../../com.mmxlabs.models.lng.cargo/model/cargo.genmodel#//cargo ../../com.mmxlabs.models.lng.commercial/model/commercial.genmodel#//commercial ../../com.mmxlabs.models.lng.fleet/model/fleet.genmodel#//fleet platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore ../../com.mmxlabs.models.lng.parameters/model/parameters.genmodel#//parameters ../../com.mmxlabs.models.lng.port/model/port.genmodel#//port ../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing ../../com.mmxlabs.models.lng.schedule/model/schedule.genmodel#//schedule ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.genmodel#//spotmarkets"
     operationReflection="true">
   <foreignModel>scenario.ecore</foreignModel>
   <genPackages prefix="LNGScenario" basePackage="com.mmxlabs.models.lng.scenario"
@@ -17,14 +17,14 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/pricingModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/commercialModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/spotMarketsModel"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/parametersModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/analyticsModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGScenarioModel/portfolioModel"/>
     </genClasses>
     <genClasses ecoreClass="scenario.ecore#//LNGPortfolioModel">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGPortfolioModel/scenarioFleetModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGPortfolioModel/cargoModel"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGPortfolioModel/scheduleModel"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGPortfolioModel/parameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.ecore#//LNGPortfolioModel/actualsModel"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

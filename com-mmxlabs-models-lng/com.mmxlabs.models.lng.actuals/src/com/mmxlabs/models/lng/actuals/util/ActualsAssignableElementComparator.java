@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.actuals.SlotActuals;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.editor.utils.AssignableElementDateComparator;
+import com.mmxlabs.models.lng.cargo.util.AssignableElementDateComparator;
 
 public class ActualsAssignableElementComparator extends AssignableElementDateComparator {
 
