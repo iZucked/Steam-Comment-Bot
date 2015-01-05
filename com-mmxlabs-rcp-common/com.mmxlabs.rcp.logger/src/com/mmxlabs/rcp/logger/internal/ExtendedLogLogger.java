@@ -14,8 +14,12 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 
 	private static final long serialVersionUID = 1L;
 
+	private boolean infoEnabled = false;
+
 	public ExtendedLogLogger(final String name) {
 		this.name = name;
+		// TODO: Hack to disable excess log messages from shiro. Build some better API
+		infoEnabled = !"org.apache.shiro.session.mgt.AbstractValidatingSessionManager".equals(name);
 	}
 
 	@Override
@@ -92,33 +96,43 @@ public class ExtendedLogLogger extends MarkerIgnoringBase {
 
 	@Override
 	public boolean isInfoEnabled() {
-		return true;
+		return infoEnabled;
 	}
 
 	@Override
 	public void info(final String msg) {
-		doLog(IStatus.INFO, msg, null);
+		if (isInfoEnabled()) {
+			doLog(IStatus.INFO, msg, null);
+		}
 	}
 
 	@Override
 	public void info(final String format, final Object arg) {
-		doLog(IStatus.INFO, String.format(format, arg), null);
+		if (isInfoEnabled()) {
+			doLog(IStatus.INFO, String.format(format, arg), null);
+		}
 	}
 
 	@Override
 	public void info(final String format, final Object arg1, final Object arg2) {
-		doLog(IStatus.INFO, String.format(format, arg1, arg2), null);
+		if (isInfoEnabled()) {
+			doLog(IStatus.INFO, String.format(format, arg1, arg2), null);
+		}
 
 	}
 
 	@Override
 	public void info(final String format, final Object[] argArray) {
-		doLog(IStatus.INFO, String.format(format, argArray), null);
+		if (isInfoEnabled()) {
+			doLog(IStatus.INFO, String.format(format, argArray), null);
+		}
 	}
 
 	@Override
 	public void info(final String msg, final Throwable t) {
-		doLog(IStatus.INFO, msg, t);
+		if (isInfoEnabled()) {
+			doLog(IStatus.INFO, msg, t);
+		}
 	}
 
 	@Override
