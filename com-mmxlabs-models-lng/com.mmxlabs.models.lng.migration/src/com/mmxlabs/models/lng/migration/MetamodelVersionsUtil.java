@@ -34,7 +34,7 @@ public class MetamodelVersionsUtil {
 		Assignment,
 		/**
 		 */
-		Parameters, Port, Pricing, Schedule, SpotMarkets
+		Parameters, Port, Pricing, Schedule, SpotMarkets, Actuals
 	}
 
 	public static ModelsLNGSet_v1 getTypeFromNS(final String nsURI) {
@@ -60,6 +60,8 @@ public class MetamodelVersionsUtil {
 			return ModelsLNGSet_v1.Schedule;
 		} else if (ModelsLNGMigrationConstants.NSURI_SpotMarketsModel.equals(nsURI)) {
 			return ModelsLNGSet_v1.SpotMarkets;
+		} else if (ModelsLNGMigrationConstants.NSURI_ActualsModel.equals(nsURI)) {
+			return ModelsLNGSet_v1.Actuals;
 		}
 		return null;
 	}
@@ -716,6 +718,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_AnalyticsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.parameters/model/parameters.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ParametersModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.scenario.model/model/scenario.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ScenarioModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.actuals/model/actuals.ecore", true), ModelsLNGMigrationConstants.PKG_DATA_ActualsModel);
 
 		if (extraPackages != null) {
 			for (final Map.Entry<URI, PackageData> e : extraPackages.entrySet()) {

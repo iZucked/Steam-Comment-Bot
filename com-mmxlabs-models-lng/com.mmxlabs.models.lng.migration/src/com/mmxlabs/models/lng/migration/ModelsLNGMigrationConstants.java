@@ -57,14 +57,13 @@ public final class ModelsLNGMigrationConstants {
 	public static final PackageData PKG_DATA_FleetModel = new PackageData(NSURI_FleetModel, "platform:/plugin/com.mmxlabs.models.lng.fleet/model/fleet.ecore",
 			"../../com.mmxlabs.models.lng.fleet/model/fleet.ecore");
 
-	
 	/**
 	 */
 	public static final String NSURI_AssignmentModel = "http://www.mmxlabs.com/models/lng/assignment/1/";
 	/**
 	 */
-	public static final PackageData PKG_DATA_AssignmentModel = new PackageData(NSURI_AssignmentModel, "platform:/plugin/com.mmxlabs.models.lng.assignment/model/assignment.ecore","platform:/plugin/com.mmxlabs.models.lng.migration/model/assignment.ecore",
-			"../../com.mmxlabs.models.lng.assignment/model/assignment.ecore");
+	public static final PackageData PKG_DATA_AssignmentModel = new PackageData(NSURI_AssignmentModel, "platform:/plugin/com.mmxlabs.models.lng.assignment/model/assignment.ecore",
+			"platform:/plugin/com.mmxlabs.models.lng.migration/model/assignment.ecore", "../../com.mmxlabs.models.lng.assignment/model/assignment.ecore");
 
 	/**
 	 */
@@ -105,4 +104,10 @@ public final class ModelsLNGMigrationConstants {
 	 */
 	public static final PackageData PKG_DATA_ScenarioModel = new PackageData(NSURI_ScenarioModel, "platform:/plugin/com.mmxlabs.models.lng.scenario/model/scenario.ecore",
 			"../../com.mmxlabs.models.lng.scenario/model/scenario.ecore");
+
+	public static final String NSURI_ActualsModel = "http://www.mmxlabs.com/models/lng/actuals/1/";
+
+	public static final PackageData PKG_DATA_ActualsModel = new PackageData(NSURI_ActualsModel, "platform:/plugin/com.mmxlabs.models.lng.actuals/model/actuals.ecore",
+			"../../com.mmxlabs.models.lng.actuals/model/actuals.ecore");
+
 }
