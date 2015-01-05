@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import static org.ops4j.peaberry.Peaberry.osgiModule;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,13 +16,20 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.NonNull;
+import org.ops4j.peaberry.Peaberry;
+import org.osgi.framework.FrameworkUtil;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
@@ -41,9 +50,25 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  */
 public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstraint {
 
+	public ShippingDaysRestrictionConstraint() {
+		Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				// TODO Auto-generated method stub
+				install(osgiModule(FrameworkUtil.getBundle(ShippingDaysRestrictionConstraint.class).getBundleContext()));
+				bind(IShippingDaysRestrictionSpeedProvider.class).toProvider(Peaberry.service(IShippingDaysRestrictionSpeedProvider.class).single());
+			}
+		});
+		injector.injectMembers(this);
+	}
+
 	private static final int MAX_SHIPPING_DAYS = 90;
 
-	private int getMinRouteTimeInHours(final Slot from, final Slot to, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double maxSpeedKnots) {
+	@Inject(optional = true)
+	private IShippingDaysRestrictionSpeedProvider shippingDaysSpeedProvider;
+
+	private int getMinRouteTimeInHours(final Slot from, final Slot to, final LNGScenarioModel lngScenarioModel, final Vessel vessel, final double referenceSpeed) {
 
 		int minDuration = Integer.MAX_VALUE;
 		for (final Route route : lngScenarioModel.getPortModel().getRoutes()) {
@@ -60,7 +85,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						extraTime = vcrp.getExtraTransitTime();
 					}
 				}
-				final double travelTime = distance / maxSpeedKnots;
+				final double travelTime = distance / referenceSpeed;
 				final int totalTime = (int) (Math.floor(travelTime) + extraTime);
 				if (totalTime < minDuration) {
 					minDuration = totalTime;
@@ -120,22 +145,22 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 				}
 			} else if (object instanceof DischargeSlot) {
 				final DischargeSlot dischargeSlot = (DischargeSlot) object;
-//				if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
-//					if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
-//						final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
-//						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-//						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-//						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
-//						failures.add(dsd);
-//					} else if (dischargeSlot.getShippingDaysRestriction() == 0) {
-//						final String message = String.format("FOB Sale|%s shipping days restriction is set to zero - unable to ship anywhere!", dischargeSlot.getName());
-//						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
-//						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
-//						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
-//						failures.add(dsd);
-//					}
-//				} else
-					if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
+				// if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale_AnyLoadPort) {
+				// if (dischargeSlot.getShippingDaysRestriction() > MAX_SHIPPING_DAYS) {
+				// final String message = String.format("FOB Sale|%s shipping days restriction is too big.", dischargeSlot.getName());
+				// final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+				// final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+				// dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+				// failures.add(dsd);
+				// } else if (dischargeSlot.getShippingDaysRestriction() == 0) {
+				// final String message = String.format("FOB Sale|%s shipping days restriction is set to zero - unable to ship anywhere!", dischargeSlot.getName());
+				// final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(message);
+				// final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status, IStatus.WARNING);
+				// dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_ShippingDaysRestriction());
+				// failures.add(dsd);
+				// }
+				// } else
+				if (SlotClassifier.classify(dischargeSlot) == SlotType.FOB_Sale) {
 					final Cargo cargo = dischargeSlot.getCargo();
 					if (cargo != null) {
 						for (final Slot slot : cargo.getSlots()) {
@@ -188,13 +213,13 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 								if (vesselClass == null) {
 									return Activator.PLUGIN_ID;
 								}
-								final double maxSpeedKnots = vesselClass.getMaxSpeed();
+								final double referenceSpeed = shippingDaysSpeedProvider == null ? vesselClass.getMaxSpeed() : shippingDaysSpeedProvider.getSpeed(vesselClass);
 
 								final int loadDurationInHours = desPurchase.getSlotOrPortDuration();
 								final int dischargeDurationInHours = dischargeSlot.getSlotOrPortDuration();
 
-								final int ladenTravelTimeInHours = getMinRouteTimeInHours(desPurchase, dischargeSlot, lngScenarioModel, vessel, maxSpeedKnots);
-								final int ballastTravelTimeInHours = getMinRouteTimeInHours(dischargeSlot, desPurchase, lngScenarioModel, vessel, maxSpeedKnots);
+								final int ladenTravelTimeInHours = getMinRouteTimeInHours(desPurchase, dischargeSlot, lngScenarioModel, vessel, referenceSpeed);
+								final int ballastTravelTimeInHours = getMinRouteTimeInHours(dischargeSlot, desPurchase, lngScenarioModel, vessel, referenceSpeed);
 
 								// Calculate minimum time due to slot windows
 								final int ladenMaxWindowInHours;
@@ -261,7 +286,7 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 					} else {
 
-						// FOB?	
+						// FOB?
 
 					}
 				}
