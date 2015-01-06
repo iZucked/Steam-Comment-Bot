@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -37,12 +37,12 @@ public class CargoSpotCharterConstraint extends AbstractModelMultiConstraint {
 			if (spotModel == null) {
 				return false;
 			}
-			for (final CharterCostModel market : spotModel.getCharteringSpotMarkets()) {
+			for (final CharterInMarket market : spotModel.getCharterInMarkets()) {
 				if (!market.isEnabled()) {
 					continue;
 				}
 
-				if (market.getVesselClasses().contains(vc)) {
+				if (market.getVesselClass().equals(vc)) {
 					return true;
 				}
 			}

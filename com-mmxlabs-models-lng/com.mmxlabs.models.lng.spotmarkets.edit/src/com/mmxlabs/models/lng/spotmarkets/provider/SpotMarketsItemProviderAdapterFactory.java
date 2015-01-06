@@ -110,29 +110,6 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CharterCostModelItemProvider charterCostModelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createCharterCostModelAdapter() {
-		if (charterCostModelItemProvider == null) {
-			charterCostModelItemProvider = new CharterCostModelItemProvider(this);
-		}
-
-		return charterCostModelItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -294,6 +271,52 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterOutMarketItemProvider charterOutMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterOutMarketAdapter() {
+		if (charterOutMarketItemProvider == null) {
+			charterOutMarketItemProvider = new CharterOutMarketItemProvider(this);
+		}
+
+		return charterOutMarketItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CharterInMarketItemProvider charterInMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCharterInMarketAdapter() {
+		if (charterInMarketItemProvider == null) {
+			charterInMarketItemProvider = new CharterInMarketItemProvider(this);
+		}
+
+		return charterInMarketItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -428,7 +451,6 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 	@Override
 	public void dispose() {
 		if (spotMarketsModelItemProvider != null) spotMarketsModelItemProvider.dispose();
-		if (charterCostModelItemProvider != null) charterCostModelItemProvider.dispose();
 		if (spotMarketGroupItemProvider != null) spotMarketGroupItemProvider.dispose();
 		if (desPurchaseMarketItemProvider != null) desPurchaseMarketItemProvider.dispose();
 		if (desSalesMarketItemProvider != null) desSalesMarketItemProvider.dispose();
@@ -436,6 +458,8 @@ public class SpotMarketsItemProviderAdapterFactory extends SpotMarketsAdapterFac
 		if (fobSalesMarketItemProvider != null) fobSalesMarketItemProvider.dispose();
 		if (spotAvailabilityItemProvider != null) spotAvailabilityItemProvider.dispose();
 		if (charterOutStartDateItemProvider != null) charterOutStartDateItemProvider.dispose();
+		if (charterOutMarketItemProvider != null) charterOutMarketItemProvider.dispose();
+		if (charterInMarketItemProvider != null) charterInMarketItemProvider.dispose();
 	}
 
 }

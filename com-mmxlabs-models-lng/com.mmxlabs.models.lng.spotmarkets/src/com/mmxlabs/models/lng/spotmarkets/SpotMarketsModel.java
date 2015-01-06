@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.spotmarkets;
-import org.eclipse.emf.common.util.EList;
-
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,8 +18,9 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getDesSalesSpotMarket <em>Des Sales Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getFobPurchasesSpotMarket <em>Fob Purchases Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getFobSalesSpotMarket <em>Fob Sales Spot Market</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharteringSpotMarkets <em>Chartering Spot Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterInMarkets <em>Charter In Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel#getCharterOutMarkets <em>Charter Out Markets</em>}</li>
  * </ul>
  * </p>
  *
@@ -134,22 +134,6 @@ public interface SpotMarketsModel extends UUIDObject {
 	void setFobSalesSpotMarket(SpotMarketGroup value);
 
 	/**
-	 * Returns the value of the '<em><b>Chartering Spot Markets</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Chartering Spot Markets</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Chartering Spot Markets</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel_CharteringSpotMarkets()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<CharterCostModel> getCharteringSpotMarkets();
-
-	/**
 	 * Returns the value of the '<em><b>Charter Out Start Date</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -174,6 +158,38 @@ public interface SpotMarketsModel extends UUIDObject {
 	 * @generated
 	 */
 	void setCharterOutStartDate(CharterOutStartDate value);
+
+	/**
+	 * Returns the value of the '<em><b>Charter In Markets</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter In Markets</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter In Markets</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel_CharterInMarkets()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CharterInMarket> getCharterInMarkets();
+
+	/**
+	 * Returns the value of the '<em><b>Charter Out Markets</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Charter Out Markets</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Charter Out Markets</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarketsModel_CharterOutMarkets()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CharterOutMarket> getCharterOutMarkets();
 
 } // end of  SpotMarketsModel
 

@@ -10,7 +10,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -85,10 +84,6 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 				return createSpotMarketsModelAdapter();
 			}
 			@Override
-			public Adapter caseCharterCostModel(CharterCostModel object) {
-				return createCharterCostModelAdapter();
-			}
-			@Override
 			public Adapter caseSpotMarketGroup(SpotMarketGroup object) {
 				return createSpotMarketGroupAdapter();
 			}
@@ -119,6 +114,18 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseCharterOutStartDate(CharterOutStartDate object) {
 				return createCharterOutStartDateAdapter();
+			}
+			@Override
+			public Adapter caseCharterOutMarket(CharterOutMarket object) {
+				return createCharterOutMarketAdapter();
+			}
+			@Override
+			public Adapter caseCharterInMarket(CharterInMarket object) {
+				return createCharterInMarketAdapter();
+			}
+			@Override
+			public Adapter caseSpotCharterMarket(SpotCharterMarket object) {
+				return createSpotCharterMarketAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -163,20 +170,6 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSpotMarketsModelAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.spotmarkets.CharterCostModel <em>Charter Cost Model</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.spotmarkets.CharterCostModel
-	 * @generated
-	 */
-	public Adapter createCharterCostModelAdapter() {
 		return null;
 	}
 
@@ -289,6 +282,48 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCharterOutStartDateAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.spotmarkets.CharterOutMarket <em>Charter Out Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterOutMarket
+	 * @generated
+	 */
+	public Adapter createCharterOutMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.spotmarkets.CharterInMarket <em>Charter In Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.spotmarkets.CharterInMarket
+	 * @generated
+	 */
+	public Adapter createCharterInMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket <em>Spot Charter Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotCharterMarket
+	 * @generated
+	 */
+	public Adapter createSpotCharterMarketAdapter() {
 		return null;
 	}
 

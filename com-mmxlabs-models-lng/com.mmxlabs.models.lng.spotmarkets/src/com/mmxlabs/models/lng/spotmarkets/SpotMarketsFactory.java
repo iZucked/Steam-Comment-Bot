@@ -33,15 +33,6 @@ public interface SpotMarketsFactory extends EFactory {
 	SpotMarketsModel createSpotMarketsModel();
 
 	/**
-	 * Returns a new object of class '<em>Charter Cost Model</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Charter Cost Model</em>'.
-	 * @generated
-	 */
-	CharterCostModel createCharterCostModel();
-
-	/**
 	 * Returns a new object of class '<em>Spot Market Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -103,6 +94,24 @@ public interface SpotMarketsFactory extends EFactory {
 	 * @generated
 	 */
 	CharterOutStartDate createCharterOutStartDate();
+
+	/**
+	 * Returns a new object of class '<em>Charter Out Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter Out Market</em>'.
+	 * @generated
+	 */
+	CharterOutMarket createCharterOutMarket();
+
+	/**
+	 * Returns a new object of class '<em>Charter In Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Charter In Market</em>'.
+	 * @generated
+	 */
+	CharterInMarket createCharterInMarket();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -79,8 +79,9 @@ public class SpotMarketsModelItemProvider
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__DES_SALES_SPOT_MARKET);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_PURCHASES_SPOT_MARKET);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET);
-			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE);
+			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
+			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
 		}
 		return childrenFeatures;
 	}
@@ -139,8 +140,9 @@ public class SpotMarketsModelItemProvider
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__DES_SALES_SPOT_MARKET:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_PURCHASES_SPOT_MARKET:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET:
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS:
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -180,13 +182,18 @@ public class SpotMarketsModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS,
-				 SpotMarketsFactory.eINSTANCE.createCharterCostModel()));
+				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE,
+				 SpotMarketsFactory.eINSTANCE.createCharterOutStartDate()));
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE,
-				 SpotMarketsFactory.eINSTANCE.createCharterOutStartDate()));
+				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS,
+				 SpotMarketsFactory.eINSTANCE.createCharterInMarket()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SpotMarketsPackage.Literals.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS,
+				 SpotMarketsFactory.eINSTANCE.createCharterOutMarket()));
 	}
 
 	/**

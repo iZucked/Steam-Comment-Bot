@@ -75,7 +75,6 @@ import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.R
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowData;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.RowDataEMFPath;
 import com.mmxlabs.models.lng.actuals.ui.editorpart.ActualsModelRowTransformer.Type;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;

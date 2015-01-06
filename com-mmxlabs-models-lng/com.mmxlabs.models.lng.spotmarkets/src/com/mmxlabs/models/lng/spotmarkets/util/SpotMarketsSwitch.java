@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -88,13 +87,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SpotMarketsPackage.CHARTER_COST_MODEL: {
-				CharterCostModel charterCostModel = (CharterCostModel)theEObject;
-				T result = caseCharterCostModel(charterCostModel);
-				if (result == null) result = caseMMXObject(charterCostModel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SpotMarketsPackage.SPOT_MARKET_GROUP: {
 				SpotMarketGroup spotMarketGroup = (SpotMarketGroup)theEObject;
 				T result = caseSpotMarketGroup(spotMarketGroup);
@@ -163,6 +155,26 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SpotMarketsPackage.CHARTER_OUT_MARKET: {
+				CharterOutMarket charterOutMarket = (CharterOutMarket)theEObject;
+				T result = caseCharterOutMarket(charterOutMarket);
+				if (result == null) result = caseSpotCharterMarket(charterOutMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SpotMarketsPackage.CHARTER_IN_MARKET: {
+				CharterInMarket charterInMarket = (CharterInMarket)theEObject;
+				T result = caseCharterInMarket(charterInMarket);
+				if (result == null) result = caseSpotCharterMarket(charterInMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SpotMarketsPackage.SPOT_CHARTER_MARKET: {
+				SpotCharterMarket spotCharterMarket = (SpotCharterMarket)theEObject;
+				T result = caseSpotCharterMarket(spotCharterMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -179,21 +191,6 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSpotMarketsModel(SpotMarketsModel object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Charter Cost Model</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Charter Cost Model</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCharterCostModel(CharterCostModel object) {
 		return null;
 	}
 
@@ -314,6 +311,51 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCharterOutStartDate(CharterOutStartDate object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter Out Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter Out Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterOutMarket(CharterOutMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Charter In Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Charter In Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCharterInMarket(CharterInMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Spot Charter Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Spot Charter Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSpotCharterMarket(SpotCharterMarket object) {
 		return null;
 	}
 

@@ -33,7 +33,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -123,9 +123,9 @@ public class CargoDateConstraint extends AbstractModelMultiConstraint {
 						usedClasses.add(vessel.getVesselClass());
 					}
 				}
-				for (final CharterCostModel charterCostModel : spotMarketsModel.getCharteringSpotMarkets()) {
+				for (final CharterInMarket charterCostModel : spotMarketsModel.getCharterInMarkets()) {
 					if (charterCostModel.getCharterInPrice() != null && charterCostModel.getSpotCharterCount() > 0) {
-						usedClasses.addAll(charterCostModel.getVesselClasses());
+						usedClasses.add(charterCostModel.getVesselClass());
 					}
 				}
 				usedClasses.remove(null);

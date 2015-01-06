@@ -28,10 +28,16 @@
 			modelClass="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.spotmarkets.helpers.CharterCostModel"
-			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterCostModelComponentHelper"
+			id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterInMarketComponentHelper"
+			helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterInMarketComponentHelper"
 			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel" />
+			modelClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketComponentHelper"
+        id="com.mmxlabs.models.lng.spotmarkets.presentation.composites.CharterOutMarketComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
+  </componentHelper>
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.spotmarkets.helpers.SpotMarketGroup"
@@ -101,12 +107,7 @@
           eClassName="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
           inheritable="true">
     </classImporter>
-    <classImporter
-          ID="com.mmxlabs.models.lng.spotmarkets.editor.importers.CharterModelImporter"
-          classImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.CharterModelImporter"
-          eClassName="com.mmxlabs.models.lng.spotmarkets.CharterCostModel"
-          inheritable="true">
-    </classImporter>
+
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
@@ -117,12 +118,18 @@
           outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"          
           targetEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket">
     </factory>
-        <factory
-          ID="com.mmxlabs.models.lng.spotmarkets.editor.CharterCostModelFactory"
+    <factory
+          ID="com.mmxlabs.models.lng.spotmarkets.editor.CharterInMarketFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Charter Price"
-          targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel">
+          targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket">
     </factory>
+	<factory
+          ID="com.mmxlabs.models.lng.spotmarkets.editor.CharterOutMarketFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Charter Price"
+          targetEClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
+    </factory>    
  </extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -140,12 +147,6 @@
           id="com.mmxlabs.models.lng..editorspotmarkets.valueproviders.SpotMarketPortValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
           referenceEClass="com.mmxlabs.models.lng.port.Port">
-    </valueProvider>
-    <valueProvider
-          factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
-          id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.CharterCostModelIndexProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.spotmarkets.CharterCostModel"
-          referenceEClass="com.mmxlabs.models.lng.pricing.CharterIndex">
     </valueProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">

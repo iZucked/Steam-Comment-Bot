@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
@@ -69,7 +68,6 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL: return createSpotMarketsModel();
-			case SpotMarketsPackage.CHARTER_COST_MODEL: return createCharterCostModel();
 			case SpotMarketsPackage.SPOT_MARKET_GROUP: return createSpotMarketGroup();
 			case SpotMarketsPackage.DES_PURCHASE_MARKET: return createDESPurchaseMarket();
 			case SpotMarketsPackage.DES_SALES_MARKET: return createDESSalesMarket();
@@ -77,6 +75,8 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 			case SpotMarketsPackage.FOB_SALES_MARKET: return createFOBSalesMarket();
 			case SpotMarketsPackage.SPOT_AVAILABILITY: return createSpotAvailability();
 			case SpotMarketsPackage.CHARTER_OUT_START_DATE: return createCharterOutStartDate();
+			case SpotMarketsPackage.CHARTER_OUT_MARKET: return createCharterOutMarket();
+			case SpotMarketsPackage.CHARTER_IN_MARKET: return createCharterInMarket();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -120,16 +120,6 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	public SpotMarketsModel createSpotMarketsModel() {
 		SpotMarketsModelImpl spotMarketsModel = new SpotMarketsModelImpl();
 		return spotMarketsModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CharterCostModel createCharterCostModel() {
-		CharterCostModelImpl charterCostModel = new CharterCostModelImpl();
-		return charterCostModel;
 	}
 
 	/**
@@ -200,6 +190,26 @@ public class SpotMarketsFactoryImpl extends EFactoryImpl implements SpotMarketsF
 	public CharterOutStartDate createCharterOutStartDate() {
 		CharterOutStartDateImpl charterOutStartDate = new CharterOutStartDateImpl();
 		return charterOutStartDate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterOutMarket createCharterOutMarket() {
+		CharterOutMarketImpl charterOutMarket = new CharterOutMarketImpl();
+		return charterOutMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CharterInMarket createCharterInMarket() {
+		CharterInMarketImpl charterInMarket = new CharterInMarketImpl();
+		return charterInMarket;
 	}
 
 	/**

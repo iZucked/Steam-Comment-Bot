@@ -16,7 +16,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -54,7 +55,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	@Inject
 	private IImporterRegistry importerRegistry;
 
-	private IClassImporter charterPriceImporter;
+	private CharterMarketImporter charterPriceImporter;
 
 	private IClassImporter spotCargoMarketImporter;
 
@@ -75,7 +76,7 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	private void registryInit() {
 		if (importerRegistry != null) {
 
-			charterPriceImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getCharterCostModel());
+			charterPriceImporter = new CharterMarketImporter();// importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getCharterCostModel());
 			spotCargoMarketImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotMarket());
 			// spotCargoMarketAvailabilityImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotAvailability());
 		}
@@ -91,9 +92,12 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 		final SpotMarketsModel spotMarketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
 
 		if (inputs.containsKey(CHARTER_PRICING_KEY)) {
-			for (final Object obj : charterPriceImporter.importObjects(SpotMarketsPackage.eINSTANCE.getCharterCostModel(), inputs.get(CHARTER_PRICING_KEY), context)) {
-				if (obj instanceof CharterCostModel) {
-					spotMarketsModel.getCharteringSpotMarkets().add((CharterCostModel) obj);
+			// Pass in an example class for importer code to obtain the package from. 
+			for (final Object obj : charterPriceImporter.importObjects(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET, inputs.get(CHARTER_PRICING_KEY), context)) {
+				if (obj instanceof CharterInMarket) {
+					spotMarketsModel.getCharterInMarkets().add((CharterInMarket) obj);
+				} else if (obj instanceof CharterOutMarket) {
+					spotMarketsModel.getCharterOutMarkets().add((CharterOutMarket) obj);
 				} else if (obj instanceof CharterOutStartDate) {
 					final CharterOutStartDate charterOutStartDate = (CharterOutStartDate) obj;
 					spotMarketsModel.setCharterOutStartDate(charterOutStartDate);
@@ -194,7 +198,8 @@ public class SpotMarketsModelImporter implements ISubmodelImporter {
 	public void exportModel(final UUIDObject model, final Map<String, Collection<Map<String, String>>> output, final IExportContext context) {
 		final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) model;
 		{
-			final List<EObject> charterObjects = new LinkedList<EObject>(spotMarketsModel.getCharteringSpotMarkets());
+			final List<EObject> charterObjects = new LinkedList<EObject>(spotMarketsModel.getCharterInMarkets());
+			charterObjects.addAll(spotMarketsModel.getCharterOutMarkets());
 			final CharterOutStartDate charterOutStartDate = spotMarketsModel.getCharterOutStartDate();
 			if (charterOutStartDate != null) {
 				charterObjects.add(charterOutStartDate);

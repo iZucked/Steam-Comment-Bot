@@ -14,7 +14,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
@@ -32,8 +33,9 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getDesSalesSpotMarket <em>Des Sales Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getFobPurchasesSpotMarket <em>Fob Purchases Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getFobSalesSpotMarket <em>Fob Sales Spot Market</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharteringSpotMarkets <em>Chartering Spot Markets</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterOutStartDate <em>Charter Out Start Date</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterInMarkets <em>Charter In Markets</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketsModelImpl#getCharterOutMarkets <em>Charter Out Markets</em>}</li>
  * </ul>
  * </p>
  *
@@ -81,16 +83,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	protected SpotMarketGroup fobSalesSpotMarket;
 
 	/**
-	 * The cached value of the '{@link #getCharteringSpotMarkets() <em>Chartering Spot Markets</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCharteringSpotMarkets()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<CharterCostModel> charteringSpotMarkets;
-
-	/**
 	 * The cached value of the '{@link #getCharterOutStartDate() <em>Charter Out Start Date</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -99,6 +91,26 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	 * @ordered
 	 */
 	protected CharterOutStartDate charterOutStartDate;
+
+	/**
+	 * The cached value of the '{@link #getCharterInMarkets() <em>Charter In Markets</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterInMarkets()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CharterInMarket> charterInMarkets;
+
+	/**
+	 * The cached value of the '{@link #getCharterOutMarkets() <em>Charter Out Markets</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCharterOutMarkets()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CharterOutMarket> charterOutMarkets;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -296,18 +308,6 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<CharterCostModel> getCharteringSpotMarkets() {
-		if (charteringSpotMarkets == null) {
-			charteringSpotMarkets = new EObjectContainmentEList<CharterCostModel>(CharterCostModel.class, this, SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS);
-		}
-		return charteringSpotMarkets;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public CharterOutStartDate getCharterOutStartDate() {
 		return charterOutStartDate;
 	}
@@ -351,6 +351,30 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<CharterInMarket> getCharterInMarkets() {
+		if (charterInMarkets == null) {
+			charterInMarkets = new EObjectContainmentEList<CharterInMarket>(CharterInMarket.class, this, SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS);
+		}
+		return charterInMarkets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<CharterOutMarket> getCharterOutMarkets() {
+		if (charterOutMarkets == null) {
+			charterOutMarkets = new EObjectContainmentEList<CharterOutMarket>(CharterOutMarket.class, this, SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS);
+		}
+		return charterOutMarkets;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -362,10 +386,12 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return basicSetFobPurchasesSpotMarket(null, msgs);
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET:
 				return basicSetFobSalesSpotMarket(null, msgs);
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS:
-				return ((InternalEList<?>)getCharteringSpotMarkets()).basicRemove(otherEnd, msgs);
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
 				return basicSetCharterOutStartDate(null, msgs);
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
+				return ((InternalEList<?>)getCharterInMarkets()).basicRemove(otherEnd, msgs);
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
+				return ((InternalEList<?>)getCharterOutMarkets()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -386,10 +412,12 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return getFobPurchasesSpotMarket();
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET:
 				return getFobSalesSpotMarket();
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS:
-				return getCharteringSpotMarkets();
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
 				return getCharterOutStartDate();
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
+				return getCharterInMarkets();
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
+				return getCharterOutMarkets();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -415,12 +443,16 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET:
 				setFobSalesSpotMarket((SpotMarketGroup)newValue);
 				return;
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS:
-				getCharteringSpotMarkets().clear();
-				getCharteringSpotMarkets().addAll((Collection<? extends CharterCostModel>)newValue);
-				return;
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
 				setCharterOutStartDate((CharterOutStartDate)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
+				getCharterInMarkets().clear();
+				getCharterInMarkets().addAll((Collection<? extends CharterInMarket>)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
+				getCharterOutMarkets().clear();
+				getCharterOutMarkets().addAll((Collection<? extends CharterOutMarket>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -446,11 +478,14 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET:
 				setFobSalesSpotMarket((SpotMarketGroup)null);
 				return;
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS:
-				getCharteringSpotMarkets().clear();
-				return;
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
 				setCharterOutStartDate((CharterOutStartDate)null);
+				return;
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
+				getCharterInMarkets().clear();
+				return;
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
+				getCharterOutMarkets().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -472,10 +507,12 @@ public class SpotMarketsModelImpl extends UUIDObjectImpl implements SpotMarketsM
 				return fobPurchasesSpotMarket != null;
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__FOB_SALES_SPOT_MARKET:
 				return fobSalesSpotMarket != null;
-			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTERING_SPOT_MARKETS:
-				return charteringSpotMarkets != null && !charteringSpotMarkets.isEmpty();
 			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_START_DATE:
 				return charterOutStartDate != null;
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_IN_MARKETS:
+				return charterInMarkets != null && !charterInMarkets.isEmpty();
+			case SpotMarketsPackage.SPOT_MARKETS_MODEL__CHARTER_OUT_MARKETS:
+				return charterOutMarkets != null && !charterOutMarkets.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

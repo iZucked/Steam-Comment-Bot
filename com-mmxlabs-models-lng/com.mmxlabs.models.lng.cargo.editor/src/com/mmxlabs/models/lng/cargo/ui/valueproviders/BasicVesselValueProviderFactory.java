@@ -32,7 +32,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -136,10 +136,10 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 					if (includeSpotVessels) {
 						final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
 						if (spotMarketsModel != null) {
-							for (final CharterCostModel charteringSpotMarket : spotMarketsModel.getCharteringSpotMarkets()) {
+							for (final CharterInMarket charteringSpotMarket : spotMarketsModel.getCharterInMarkets()) {
 								if (charteringSpotMarket.isEnabled()) {
 									if (charteringSpotMarket.getSpotCharterCount() > 0) {
-										availableSpotVesselClasses.addAll(charteringSpotMarket.getVesselClasses());
+										availableSpotVesselClasses.add(charteringSpotMarket.getVesselClass());
 									}
 								}
 							}
@@ -221,20 +221,20 @@ public class BasicVesselValueProviderFactory implements IReferenceValueProviderF
 								}
 							}
 							// Sorting time charters after fleet
-							if (v1 instanceof Vessel && v2 instanceof Vessel){
+							if (v1 instanceof Vessel && v2 instanceof Vessel) {
 								boolean isV1Charter = false;
 								boolean isV2Charter = false;
 								for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 									Vessel v = va.getVessel();
-									if (v == v1){
+									if (v == v1) {
 										isV1Charter = va.isSetTimeCharterRate();
-									} else if (v == v2){
+									} else if (v == v2) {
 										isV2Charter = va.isSetTimeCharterRate();
 									}
 								}
-								if (!isV1Charter && isV2Charter){
+								if (!isV1Charter && isV2Charter) {
 									return -1;
-								} else if (isV1Charter && !isV2Charter){
+								} else if (isV1Charter && !isV2Charter) {
 									return 1;
 								}
 							}
