@@ -764,7 +764,7 @@ public class CustomScenarioCreator {
 		pricingModel.getCommodityIndices().add(index);
 
 		final CooldownPrice price = PricingFactory.eINSTANCE.createCooldownPrice();
-		price.setIndex(index);
+		price.setExpression(index.getName());
 
 		for (final Port port : portModel.getPorts()) {
 			price.getPorts().add(port);
