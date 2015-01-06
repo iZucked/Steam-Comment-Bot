@@ -39,7 +39,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.DefaultScenarioCreator;
@@ -698,12 +698,12 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		// Create a charter-in market object
 		final SpotMarketsModel sportMarketsModel = scenario.getSpotMarketsModel();
-		final EList<CharterCostModel> charteringSpotMarkets = sportMarketsModel.getCharteringSpotMarkets();
+		final EList<CharterInMarket> charteringSpotMarkets = sportMarketsModel.getCharterInMarkets();
 
-		final CharterCostModel charterModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+		final CharterInMarket charterModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charteringSpotMarkets.add(charterModel);
 
-		charterModel.getVesselClasses().add(msc.vc);
+		charterModel.setVesselClass(msc.vc);
 		charterModel.setSpotCharterCount(1);
 		charterModel.setCharterInPrice(spotMarketRate);
 

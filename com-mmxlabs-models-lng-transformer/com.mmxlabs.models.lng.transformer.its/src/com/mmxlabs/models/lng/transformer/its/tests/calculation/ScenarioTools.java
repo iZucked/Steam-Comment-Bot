@@ -78,7 +78,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -276,12 +276,12 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+		final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterCostModel.setSpotCharterCount(spotCharterCount);
 		// Costs
-		charterCostModel.getVesselClasses().add(vc);
+		charterCostModel.setVesselClass(vc);
 
-		spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
+		spotMarketsModel.getCharterInMarkets().add(charterCostModel);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -535,12 +535,12 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+		final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charterCostModel.setSpotCharterCount(spotCharterCount);
 		// Costs
-		charterCostModel.getVesselClasses().add(vc);
+		charterCostModel.setVesselClass(vc);
 
-		spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
+		spotMarketsModel.getCharterInMarkets().add(charterCostModel);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();

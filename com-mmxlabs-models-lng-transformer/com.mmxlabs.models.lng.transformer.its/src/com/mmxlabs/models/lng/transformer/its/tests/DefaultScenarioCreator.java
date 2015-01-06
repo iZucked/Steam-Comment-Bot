@@ -71,7 +71,8 @@ import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -310,12 +311,12 @@ public class DefaultScenarioCreator {
 
 			final DefaultVesselStateAttributesCreator dvsac = new DefaultVesselStateAttributesCreator();
 
-			final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+			final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 			charterCostModel.setSpotCharterCount(spotCharterCount);
-			charterCostModel.getVesselClasses().add(vc);
+			charterCostModel.setVesselClass(vc);
 
 			final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
-			spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
+			spotMarketsModel.getCharterInMarkets().add(charterCostModel);
 
 			vc.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vc.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
@@ -719,9 +720,9 @@ public class DefaultScenarioCreator {
 			return result;
 		}
 
-		public CharterCostModel createDefaultCharterCostModel(final VesselClass vc, final Integer minDuration, final Integer price) {
-			final CharterCostModel result = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
-			result.getVesselClasses().add(vc);
+		public CharterOutMarket createDefaultCharterCostModel(final VesselClass vc, final Integer minDuration, final Integer price) {
+			final CharterOutMarket result = SpotMarketsFactory.eINSTANCE.createCharterOutMarket();
+			result.setVesselClass(vc);
 			result.setMinCharterOutDuration(minDuration);
 
 			final String indexName = String.format("Charter-out cost for vessel class %s", vc.getName());
@@ -731,7 +732,7 @@ public class DefaultScenarioCreator {
 			result.setCharterOutPrice(charterIndex);
 
 			final SpotMarketsModel marketModel = scenario.getSpotMarketsModel();
-			marketModel.getCharteringSpotMarkets().add(result);
+			marketModel.getCharterOutMarkets().add(result);
 
 			scenario.getPricingModel().getCharterIndices().add(charterIndex);
 

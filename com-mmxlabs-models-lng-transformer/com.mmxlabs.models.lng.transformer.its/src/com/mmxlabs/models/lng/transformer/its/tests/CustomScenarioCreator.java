@@ -62,7 +62,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGPortfolioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -226,12 +226,12 @@ public class CustomScenarioCreator {
 		vc.setFillCapacity(fillCapacity);
 
 		if (spotCharterCount > 0) {
-			final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
+			final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 			charterCostModel.setSpotCharterCount(spotCharterCount);
 			// Costs
-			charterCostModel.getVesselClasses().add(vc);
+			charterCostModel.setVesselClass(vc);
 
-			spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
+			spotMarketsModel.getCharterInMarkets().add(charterCostModel);
 		}
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();

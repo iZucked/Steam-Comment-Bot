@@ -92,7 +92,8 @@ import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.CharterOutStartDate;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -2307,32 +2308,41 @@ public class LNGScenarioTransformer {
 				builder.setGeneratedCharterOutStartTime(0);
 			}
 
-			for (final CharterCostModel charterCost : spotMarketsModel.getCharteringSpotMarkets()) {
+			for (final CharterInMarket charterCost : spotMarketsModel.getCharterInMarkets()) {
 
 				if (!charterCost.isEnabled()) {
 					continue;
 				}
 
-				for (final VesselClass eVesselClass : charterCost.getVesselClasses()) {
-					final ICurve charterInCurve;
-					if (charterCost.getCharterInPrice() == null) {
-						charterInCurve = new ConstantValueCurve(0);
-					} else {
-						charterInCurve = charterIndexAssociation.lookup(charterCost.getCharterInPrice());
-					}
+				final VesselClass eVesselClass = charterCost.getVesselClass();
+				final ICurve charterInCurve;
+				if (charterCost.getCharterInPrice() == null) {
+					charterInCurve = new ConstantValueCurve(0);
+				} else {
+					charterInCurve = charterIndexAssociation.lookup(charterCost.getCharterInPrice());
+				}
 
-					charterCount = charterCost.getSpotCharterCount();
-					if (charterCount > 0) {
-						final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + eVesselClass.getName(), vesselClassAssociation.lookup(eVesselClass), charterCount, charterInCurve);
-						spotVesselAvailabilitiesByClass.put(eVesselClass, spots);
-						allVesselAvailabilities.addAll(spots);
-					}
+				charterCount = charterCost.getSpotCharterCount();
+				if (charterCount > 0) {
+					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + eVesselClass.getName(), vesselClassAssociation.lookup(eVesselClass), charterCount, charterInCurve);
+					spotVesselAvailabilitiesByClass.put(eVesselClass, spots);
+					allVesselAvailabilities.addAll(spots);
+				}
 
-					if (charterCost.getCharterOutPrice() != null) {
-						final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
-						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
-						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVesselClass), charterOutCurve, minDuration);
-					}
+			}
+			for (final CharterOutMarket charterCost : spotMarketsModel.getCharterOutMarkets()) {
+
+				if (!charterCost.isEnabled()) {
+					continue;
+				}
+
+				final VesselClass eVesselClass = charterCost.getVesselClass();
+				final ICurve charterInCurve;
+
+				if (charterCost.getCharterOutPrice() != null) {
+					final ICurve charterOutCurve = charterIndexAssociation.lookup(charterCost.getCharterOutPrice());
+					final int minDuration = 24 * charterCost.getMinCharterOutDuration();
+					builder.createCharterOutCurve(vesselClassAssociation.lookup(eVesselClass), charterOutCurve, minDuration);
 				}
 			}
 		}

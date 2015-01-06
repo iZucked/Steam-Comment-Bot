@@ -14,7 +14,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterOutMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -42,7 +42,7 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 					return Activator.PLUGIN_ID;
 				}
 				boolean charterOutEnabled = false;
-				for (final CharterCostModel ccm : spotMarketsModel.getCharteringSpotMarkets()) {
+				for (final CharterOutMarket ccm : spotMarketsModel.getCharterOutMarkets()) {
 					if (ccm.getCharterOutPrice() != null) {
 						charterOutEnabled = true;
 						break;
