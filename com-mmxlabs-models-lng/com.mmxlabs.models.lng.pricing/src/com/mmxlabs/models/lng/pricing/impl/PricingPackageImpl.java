@@ -554,17 +554,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCooldownPrice_Index() {
-		return (EReference)cooldownPriceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getCooldownPrice_Lumpsum() {
-		return (EAttribute)cooldownPriceEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)cooldownPriceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -819,7 +810,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(portCostEntryEClass, PORT_COST_ENTRY__COST);
 
 		cooldownPriceEClass = createEClass(COOLDOWN_PRICE);
-		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__INDEX);
 		createEAttribute(cooldownPriceEClass, COOLDOWN_PRICE__LUMPSUM);
 
 		commodityIndexEClass = createEClass(COMMODITY_INDEX);
@@ -996,7 +986,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEAttribute(getPortCostEntry_Cost(), ecorePackage.getEInt(), "cost", null, 1, 1, PortCostEntry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cooldownPriceEClass, CooldownPrice.class, "CooldownPrice", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCooldownPrice_Index(), this.getCommodityIndex(), null, "index", null, 1, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCooldownPrice_Lumpsum(), ecorePackage.getEBoolean(), "lumpsum", null, 0, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(commodityIndexEClass, CommodityIndex.class, "CommodityIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

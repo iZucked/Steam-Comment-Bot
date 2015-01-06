@@ -644,22 +644,13 @@ public interface PricingPackage extends EPackage {
 	int COOLDOWN_PRICE__EXPRESSION = PORTS_EXPRESSION_MAP__EXPRESSION;
 
 	/**
-	 * The feature id for the '<em><b>Index</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COOLDOWN_PRICE__INDEX = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Lumpsum</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COOLDOWN_PRICE__LUMPSUM = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 1;
+	int COOLDOWN_PRICE__LUMPSUM = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Cooldown Price</em>' class.
@@ -668,7 +659,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COOLDOWN_PRICE_FEATURE_COUNT = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 2;
+	int COOLDOWN_PRICE_FEATURE_COUNT = PORTS_EXPRESSION_MAP_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
@@ -1396,17 +1387,6 @@ public interface PricingPackage extends EPackage {
 	EClass getCooldownPrice();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#getIndex <em>Index</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Index</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.CooldownPrice#getIndex()
-	 * @see #getCooldownPrice()
-	 * @generated
-	 */
-	EReference getCooldownPrice_Index();
-
-	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CooldownPrice#isLumpsum <em>Lumpsum</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1944,14 +1924,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EClass COOLDOWN_PRICE = eINSTANCE.getCooldownPrice();
-
-		/**
-		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference COOLDOWN_PRICE__INDEX = eINSTANCE.getCooldownPrice_Index();
 
 		/**
 		 * The meta object literal for the '<em><b>Lumpsum</b></em>' attribute feature.

@@ -3,9 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.CommodityIndex;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
@@ -18,7 +16,6 @@ import org.eclipse.emf.common.notify.Notification;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CooldownPriceImpl#isLumpsum <em>Lumpsum</em>}</li>
  * </ul>
  * </p>
@@ -26,15 +23,6 @@ import org.eclipse.emf.common.notify.Notification;
  * @generated
  */
 public class CooldownPriceImpl extends PortsExpressionMapImpl implements CooldownPrice {
-	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getIndex()
-	 * @generated
-	 * @ordered
-	 */
-	protected CommodityIndex index;
 	/**
 	 * The default value of the '{@link #isLumpsum() <em>Lumpsum</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -77,44 +65,6 @@ public class CooldownPriceImpl extends PortsExpressionMapImpl implements Cooldow
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommodityIndex getIndex() {
-		if (index != null && index.eIsProxy()) {
-			InternalEObject oldIndex = (InternalEObject)index;
-			index = (CommodityIndex)eResolveProxy(oldIndex);
-			if (index != oldIndex) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
-			}
-		}
-		return index;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public CommodityIndex basicGetIndex() {
-		return index;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setIndex(CommodityIndex newIndex) {
-		CommodityIndex oldIndex = index;
-		index = newIndex;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.COOLDOWN_PRICE__INDEX, oldIndex, index));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public boolean isLumpsum() {
 		return lumpsum;
 	}
@@ -139,9 +89,6 @@ public class CooldownPriceImpl extends PortsExpressionMapImpl implements Cooldow
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				if (resolve) return getIndex();
-				return basicGetIndex();
 			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
 				return isLumpsum();
 		}
@@ -156,9 +103,6 @@ public class CooldownPriceImpl extends PortsExpressionMapImpl implements Cooldow
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				setIndex((CommodityIndex)newValue);
-				return;
 			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
 				setLumpsum((Boolean)newValue);
 				return;
@@ -174,9 +118,6 @@ public class CooldownPriceImpl extends PortsExpressionMapImpl implements Cooldow
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				setIndex((CommodityIndex)null);
-				return;
 			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
 				setLumpsum(LUMPSUM_EDEFAULT);
 				return;
@@ -192,8 +133,6 @@ public class CooldownPriceImpl extends PortsExpressionMapImpl implements Cooldow
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.COOLDOWN_PRICE__INDEX:
-				return index != null;
 			case PricingPackage.COOLDOWN_PRICE__LUMPSUM:
 				return lumpsum != LUMPSUM_EDEFAULT;
 		}

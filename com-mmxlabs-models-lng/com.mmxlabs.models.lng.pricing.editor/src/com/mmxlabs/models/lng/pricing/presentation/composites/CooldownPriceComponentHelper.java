@@ -63,7 +63,6 @@ public class CooldownPriceComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_indexEditor(detailComposite, topClass);
 		add_lumpsumEditor(detailComposite, topClass);
 	}
 
