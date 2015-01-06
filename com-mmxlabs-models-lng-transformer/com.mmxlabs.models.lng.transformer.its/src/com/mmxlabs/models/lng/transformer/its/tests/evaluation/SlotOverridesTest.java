@@ -303,6 +303,9 @@ public class SlotOverridesTest {
 		final LNGScenarioModel scenario = msc.buildScenario();
 
 		// do override the contracts' restricted ports
+		msc.loadSlots[0].setOverrideRestrictions(true);
+		msc.dischargeSlots[1].setOverrideRestrictions(true);
+
 		msc.loadSlots[0].getRestrictedPorts().add(msc.dischargePorts[1]);
 		msc.loadSlots[0].getContract().getRestrictedPorts().add(msc.dischargePorts[2]);
 		msc.dischargeSlots[1].getRestrictedPorts().add(msc.loadPorts[2]);
@@ -330,6 +333,9 @@ public class SlotOverridesTest {
 		// do override the contracts' restricted contracts
 		msc.loadSlots[0].getRestrictedContracts().add(forbidden);
 		msc.loadSlots[0].getContract().getRestrictedContracts().add(msc.salesContract);
+
+		msc.loadSlots[0].setOverrideRestrictions(true);
+		msc.dischargeSlots[1].setOverrideRestrictions(true);
 
 		/*
 		 * build the optimiser data (it currently barfs when trying to construct the initial sequence, but the restrictions are built correctly)
@@ -389,6 +395,8 @@ public class SlotOverridesTest {
 		msc.loadSlots[0].getContract().getRestrictedPorts().add(msc.dischargePorts[2]);
 		msc.loadSlots[0].getContract().setRestrictedListsArePermissive(true);
 
+		msc.loadSlots[0].setOverrideRestrictions(true);
+
 		/*
 		 * build the optimiser data (it currently barfs when trying to construct the initial sequence, but the restrictions are built correctly)
 		 */
@@ -407,6 +415,8 @@ public class SlotOverridesTest {
 		// These should be ignored due to slot override
 		msc.loadSlots[0].getContract().getRestrictedPorts().add(msc.dischargePorts[2]);
 		msc.loadSlots[0].getContract().setRestrictedListsArePermissive(true);
+
+		msc.loadSlots[0].setOverrideRestrictions(true);
 
 		/*
 		 * build the optimiser data (it currently barfs when trying to construct the initial sequence, but the restrictions are built correctly)
