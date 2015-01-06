@@ -80,12 +80,19 @@ public class ScenarioRunner {
 
 	public void init() throws IncompleteScenarioException {
 		OptimiserSettings optimiserSettings = ScenarioUtils.createDefaultSettings();
-		final IParameterModesRegistry parameterModesRegistry = Activator.getDefault().getParameterModesRegistry();
+		IParameterModesRegistry parameterModesRegistry = null;
 
-		final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
-		if (extenders != null) {
-			for (final IParameterModeExtender extender : extenders) {
-				extender.extend(optimiserSettings, null);
+		Activator activator = Activator.getDefault();
+		if (activator != null) {
+			parameterModesRegistry = activator.getParameterModesRegistry();
+		}
+
+		if (parameterModesRegistry != null) {
+			final Collection<IParameterModeExtender> extenders = parameterModesRegistry.getExtenders();
+			if (extenders != null) {
+				for (final IParameterModeExtender extender : extenders) {
+					extender.extend(optimiserSettings, null);
+				}
 			}
 		}
 
