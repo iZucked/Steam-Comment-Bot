@@ -62,7 +62,7 @@ public class RowImpl extends MinimalEObjectImpl.Container implements Row {
 	 * @generated
 	 * @ordered
 	 */
-	protected static final boolean VISIBLE_EDEFAULT = false;
+	protected static final boolean VISIBLE_EDEFAULT = true;
 
 	/**
 	 * The cached value of the '{@link #isVisible() <em>Visible</em>}' attribute.

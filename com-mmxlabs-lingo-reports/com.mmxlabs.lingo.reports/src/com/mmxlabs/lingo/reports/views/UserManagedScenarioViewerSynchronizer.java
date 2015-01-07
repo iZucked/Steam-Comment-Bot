@@ -136,10 +136,10 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 						if (viewer != null) {
 							final Control control = viewer.getControl();
 							if (control != null && !control.isDisposed()) {
-//								final IScenarioViewerSynchronizerOutput data =
-										collectObjects();
-										viewer.refresh();
-//								viewer.setInput(data);
+								// final IScenarioViewerSynchronizerOutput data =
+								collectObjects();
+								// Rows are filtered in/out depending on isVisible flag. The observables could react row add/remove without this, but attribute changes do not cause a refresh.
+								viewer.refresh();
 							}
 						}
 					} finally {
@@ -197,42 +197,42 @@ public class UserManagedScenarioViewerSynchronizer implements IScenarioServiceSe
 
 		collector.endCollecting();
 
-//		return new IScenarioViewerSynchronizerOutput() {
-//			@Override
-//			public ScenarioInstance getScenarioInstance(final Object object) {
-//				return sourceScenarioByElement.get(object).getFirst();
-//			}
-//
-//			@Override
-//			public LNGScenarioModel getLNGScenarioModel(final Object object) {
-//				return sourceScenarioByElement.get(object).getSecond();
-//			}
-//
-//			@Override
-//			public LNGPortfolioModel getLNGPortfolioModel(final Object object) {
-//				return sourcePortfolioByElement.get(object).getSecond();
-//			}
-//
-//			@Override
-//			public Collection<Object> getCollectedElements() {
-//				return selectedObjects;
-//			}
-//
-//			@Override
-//			public Collection<LNGScenarioModel> getLNGScenarioModels() {
-//				return scenarioModels;
-//			}
-//
-//			@Override
-//			public Collection<LNGPortfolioModel> getLNGPortfolioModels() {
-//				return portfolioModels;
-//			}
-//
-//			@Override
-//			public boolean isPinned(final Object object) {
-//				return ScenarioViewerSynchronizer.this.selectionProvider.getPinnedInstance() == (getScenarioInstance(object));
-//			}
-//		};
+		// return new IScenarioViewerSynchronizerOutput() {
+		// @Override
+		// public ScenarioInstance getScenarioInstance(final Object object) {
+		// return sourceScenarioByElement.get(object).getFirst();
+		// }
+		//
+		// @Override
+		// public LNGScenarioModel getLNGScenarioModel(final Object object) {
+		// return sourceScenarioByElement.get(object).getSecond();
+		// }
+		//
+		// @Override
+		// public LNGPortfolioModel getLNGPortfolioModel(final Object object) {
+		// return sourcePortfolioByElement.get(object).getSecond();
+		// }
+		//
+		// @Override
+		// public Collection<Object> getCollectedElements() {
+		// return selectedObjects;
+		// }
+		//
+		// @Override
+		// public Collection<LNGScenarioModel> getLNGScenarioModels() {
+		// return scenarioModels;
+		// }
+		//
+		// @Override
+		// public Collection<LNGPortfolioModel> getLNGPortfolioModels() {
+		// return portfolioModels;
+		// }
+		//
+		// @Override
+		// public boolean isPinned(final Object object) {
+		// return ScenarioViewerSynchronizer.this.selectionProvider.getPinnedInstance() == (getScenarioInstance(object));
+		// }
+		// };
 	}
 
 	/**

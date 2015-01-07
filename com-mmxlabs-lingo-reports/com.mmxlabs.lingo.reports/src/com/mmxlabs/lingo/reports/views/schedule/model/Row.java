@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 public interface Row extends EObject {
 	/**
 	 * Returns the value of the '<em><b>Visible</b></em>' attribute.
+	 * The default value is <code>"true"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Visible</em>' attribute isn't clear,
@@ -53,7 +54,7 @@ public interface Row extends EObject {
 	 * @return the value of the '<em>Visible</em>' attribute.
 	 * @see #setVisible(boolean)
 	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getRow_Visible()
-	 * @model
+	 * @model default="true"
 	 * @generated
 	 */
 	boolean isVisible();

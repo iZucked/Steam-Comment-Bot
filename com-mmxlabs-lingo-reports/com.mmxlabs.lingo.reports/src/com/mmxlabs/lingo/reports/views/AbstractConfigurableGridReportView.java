@@ -191,8 +191,13 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 
 			viewer.getGrid().setHeaderVisible(true);
 			viewer.getGrid().setLinesVisible(true);
+
 			viewer.setContentProvider(new ObservableListContentProvider());
+
+			// table = ScheduleReportFactory.eINSTANCE.createTable();
 			table = ScheduleReportFactory.eINSTANCE.createTable();
+			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
+
 			for (final ColumnHandler handler : getBlockManager().getHandlersInOrder()) {
 				final GridColumn column = handler.createColumn(viewer).getColumn();
 				if (sortingSupport != null) {
@@ -209,15 +214,13 @@ public abstract class AbstractConfigurableGridReportView extends ViewPart implem
 			hookContextMenu();
 			contributeToActionBars();
 
-			// viewer.init(getContentProvider(), null);
-
 			getSite().setSelectionProvider(viewer);
 			if (handleSelections()) {
 				getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 			}
 
-			table = ScheduleReportFactory.eINSTANCE.createTable();
-			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
+//			table = ScheduleReportFactory.eINSTANCE.createTable();
+//			viewer.setInput(EMFProperties.list(ScheduleReportPackage.Literals.TABLE__ROWS).observe(table));
 			synchronizer = UserManagedScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 
 		}
