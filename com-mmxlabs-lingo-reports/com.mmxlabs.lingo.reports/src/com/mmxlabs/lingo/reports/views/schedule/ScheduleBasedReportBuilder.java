@@ -41,6 +41,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -103,22 +104,6 @@ public class ScheduleBasedReportBuilder {
 
 	@Inject(optional = true)
 	private Iterable<ICustomRelatedSlotHandlerExtension> customRelatedSlotHandlers;
-
-//	public ScheduleBasedReportBuilder(final ColumnBlockManager blockManager) {
-//		this.blockManager = blockManager;
-//	}
-
-	// public ConfigurableScheduleReportView getReport() {
-	// return report;
-	// }
-
-	// public void setReport(final ConfigurableScheduleReportView report) {
-	// this.report = report;
-	// }
-
-	// public void setPinDiffModeHelper(final PinDiffModeColumnManager pinDiffModeHelper) {
-	// this.pinDiffModeHelper = pinDiffModeHelper;
-	// }
 
 	/**
 	 * Replace the existing row filters with the following set.
@@ -503,6 +488,41 @@ public class ScheduleBasedReportBuilder {
 		};
 	}
 
+	public IFormatter generateChangeStringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+		return new BaseFormatter() {
+
+			@Override
+			public String format(final Object obj) {
+
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
+					if (!row.isReference()) {
+						final Row referenceRow = row.getReferenceRow();
+						if (referenceRow != null) {
+
+							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
+
+								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
+									SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
+									return String.format("Buy spot %s to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
+								} else {
+									return String.format("%s redirect from %s to %s", row.getLoadAllocation().getSlot().getName(),
+											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
+								}
+
+							}
+						} else {
+							if (row.getOpenSlotAllocation() != null) {
+								return String.format("Cancelled %s", row.getOpenSlotAllocation().getSlot().getName());
+							}
+						}
+					}
+				}
+				return "";
+			}
+		};
+	}
+
 	public IFormatter generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
 			@Override
@@ -554,71 +574,23 @@ public class ScheduleBasedReportBuilder {
 
 	public void refreshPNLColumns(List<LNGScenarioModel> rootObjects) {
 
-//		return new ITreeContentProvider() {
-//			@Override
-//			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-//				superProvider.inputChanged(viewer, oldInput, newInput);
-//				Display.getCurrent().asyncExec(new Runnable() {
-//					@Override
-//					public void run() {
-//						if (viewer.getControl().isDisposed()) {
-//							return;
-//						}
+		// Clear existing entity columns
+		for (final String s : entityColumnNames) {
+			blockManager.removeColumn(s);
+		}
 
-						// TODO: Need to be able to register a listener for columns to react to this stuff.
+		entityColumnNames.clear();
 
-						// Clear existing entity columns
-						for (final String s : entityColumnNames) {
-							blockManager.removeColumn(s);
-						}
+		for (final LNGScenarioModel rootObject : rootObjects) {
 
-						entityColumnNames.clear();
-//						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-//							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
-//							final Collection<LNGScenarioModel> rootObjects = synchronizerOutput.getLNGScenarioModels();
-
-							for (final LNGScenarioModel rootObject : rootObjects) {
-
-								final CommercialModel commercialModel = rootObject.getCommercialModel();
-								if (commercialModel != null) {
-									for (final BaseLegalEntity e : commercialModel.getEntities()) {
-										addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
-										addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
-									}
-								}
-							}
-//						}
-
-//						viewer.refresh();
-//					}
-//				});
-//			}
-//
-//			@Override
-//			public void dispose() {
-//				superProvider.dispose();
-//			}
-//
-//			@Override
-//			public Object[] getElements(final Object object) {
-//				return superProvider.getElements(object);
-//			}
-//
-//			@Override
-//			public Object[] getChildren(final Object parentElement) {
-//				return superProvider.getChildren(parentElement);
-//			}
-//
-//			@Override
-//			public Object getParent(final Object element) {
-//				return superProvider.getParent(element);
-//			}
-//
-//			@Override
-//			public boolean hasChildren(final Object element) {
-//				return superProvider.hasChildren(element);
-//			}
-//		};
+			final CommercialModel commercialModel = rootObject.getCommercialModel();
+			if (commercialModel != null) {
+				for (final BaseLegalEntity e : commercialModel.getEntities()) {
+					addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__TRADING_BOOK);
+					addPNLColumn(COLUMN_BLOCK_PNL, e.getName(), e.getName(), CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK);
+				}
+			}
+		}
 	}
 
 	public EmfBlockColumnFactory getTotalPNLColumnFactory(final String columnId, @Nullable final EStructuralFeature bookContainmentFeature) {
