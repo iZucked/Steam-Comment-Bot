@@ -6,7 +6,6 @@ package com.mmxlabs.lingo.reports.views.vertical;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.joda.time.LocalDate;
 

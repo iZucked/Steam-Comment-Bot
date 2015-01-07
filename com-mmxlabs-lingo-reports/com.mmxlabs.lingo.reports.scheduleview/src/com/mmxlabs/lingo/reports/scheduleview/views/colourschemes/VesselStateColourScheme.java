@@ -4,7 +4,17 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 
-import static com.mmxlabs.lingo.reports.ColourPalette.*;
+import static com.mmxlabs.lingo.reports.ColourPalette.Alert_Crimson;
+import static com.mmxlabs.lingo.reports.ColourPalette.FOBDES_Grey;
+import static com.mmxlabs.lingo.reports.ColourPalette.Locked_White;
+import static com.mmxlabs.lingo.reports.ColourPalette.Slot_White;
+import static com.mmxlabs.lingo.reports.ColourPalette.Vessel_Ballast_Idle;
+import static com.mmxlabs.lingo.reports.ColourPalette.Vessel_Ballast_Journey;
+import static com.mmxlabs.lingo.reports.ColourPalette.Vessel_Charter_Out;
+import static com.mmxlabs.lingo.reports.ColourPalette.Vessel_Dry_Dock;
+import static com.mmxlabs.lingo.reports.ColourPalette.Vessel_Generated_Charter_Out;
+import static com.mmxlabs.lingo.reports.ColourPalette.Vessel_Laden_Idle;
+import static com.mmxlabs.lingo.reports.ColourPalette.Vessel_Laden_Journey;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 
