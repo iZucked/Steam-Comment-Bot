@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.lingo.reports.scheduleview.views.colourschemes;
 
-import static com.mmxlabs.lingo.reports.ColourPalette.*;
+import static com.mmxlabs.lingo.reports.ColourPalette.Alert_Crimson;
+import static com.mmxlabs.lingo.reports.ColourPalette.Faded_Alpha;
+import static com.mmxlabs.lingo.reports.ColourPalette.Locked_White;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 import static com.mmxlabs.lingo.reports.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 

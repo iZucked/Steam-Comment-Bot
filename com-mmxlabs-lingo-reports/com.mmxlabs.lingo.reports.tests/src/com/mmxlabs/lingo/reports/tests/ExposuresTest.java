@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.pricing.CommodityIndex;
-import com.mmxlabs.models.lng.pricing.Index;
 
 /**
  * JUnit tests for the exposures calculations.
