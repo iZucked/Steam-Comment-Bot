@@ -17,6 +17,7 @@ import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.CycleDiffProcessor;
+import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.IDiffProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.diffprocessors.StructuralDifferencesProcessor;
 import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.RowGroup;
@@ -58,8 +59,6 @@ public class ScheduleTransformer {
 	private final EquivalanceGroupBuilder equivalanceGroupBuilder = new EquivalanceGroupBuilder();
 
 	private final List<ICustomRelatedSlotHandler> customRelatedSlotHandlers;
-	private CycleDiffProcessor cycleDiffProcessor;
-	private StructuralDifferencesProcessor structuralDifferencesProcessor;
 
 	private final ScheduleBasedReportBuilder builder;
 
@@ -74,26 +73,28 @@ public class ScheduleTransformer {
 	public IScenarioInstanceElementCollector getElementCollector(final ConfigurableScheduleReportView viewer) {
 		return new ScheduleElementCollector() {
 
-			// private Table tableDataModel;
 			private boolean isPinned = false;
 			private int numberOfSchedules;
-			List<LNGScenarioModel> rootObjects = new LinkedList<>();
+			private List<LNGScenarioModel> rootObjects = new LinkedList<>();
+			private final List<IDiffProcessor> diffProcessors = new LinkedList<>();
 
 			@Override
 			public void beginCollecting() {
 				super.beginCollecting();
+				numberOfSchedules = 0;
 				isPinned = false;
 				perScenarioElementsByKeyMap.clear();
 				elementToRowMap.clear();
+				rootObjects.clear();
 				// tableDataModel = ScheduleReportFactory.eINSTANCE.createTable();
 
 				table.getRowGroups().clear();
 				table.getRows().clear();
 				table.getCycleGroups().clear();
-				cycleDiffProcessor = new CycleDiffProcessor(customRelatedSlotHandlers);
-				structuralDifferencesProcessor = new StructuralDifferencesProcessor(builder.getScheduleDiffUtils());
-				numberOfSchedules = 0;
-				rootObjects.clear();
+				
+				diffProcessors.clear();
+				 diffProcessors.add(new CycleDiffProcessor(customRelatedSlotHandlers));
+				diffProcessors.add(new StructuralDifferencesProcessor(builder.getScheduleDiffUtils()));
 			}
 
 			@Override
@@ -102,8 +103,9 @@ public class ScheduleTransformer {
 
 				numberOfSchedules++;
 
-				structuralDifferencesProcessor.processSchedule(schedule, isPinned);
-				cycleDiffProcessor.processSchedule(schedule, isPinned);
+				for (final IDiffProcessor diffProcessor : diffProcessors) {
+					diffProcessor.processSchedule(schedule, isPinned);
+				}
 
 				rootObjects.add(findScenarioModel(schedule));
 
@@ -152,9 +154,9 @@ public class ScheduleTransformer {
 						elementToRowMap.get(element).setVisible(true);
 					}
 					// // Run diff processes.
-					structuralDifferencesProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
-					// runShippingDifferencesCheck(referenceElements);
-					cycleDiffProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
+					for (final IDiffProcessor diffProcessor : diffProcessors) {
+						diffProcessor.runDiffProcess(table, referenceElements, uniqueElements, equivalancesMap, elementToRowMap);
+					}
 				}
 				super.endCollecting();
 
@@ -299,7 +301,7 @@ public class ScheduleTransformer {
 			}
 		}
 
-		for (Row row : rows) {
+		for (final Row row : rows) {
 			row.setScenario(scenarioInstance);
 			row.setSchedule(schedule);
 		}
