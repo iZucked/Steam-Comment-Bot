@@ -216,6 +216,6 @@ public class PortRotationReportView extends AbstractConfigurableReportView {
 		}
 
 		// Create the actual columns instances.
-		manager.addColumns(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, this);
+		manager.addColumns(PortRotationBasedReportBuilder.PORT_ROTATION_REPORT_TYPE_ID, getBlockManager());
 	}
 }

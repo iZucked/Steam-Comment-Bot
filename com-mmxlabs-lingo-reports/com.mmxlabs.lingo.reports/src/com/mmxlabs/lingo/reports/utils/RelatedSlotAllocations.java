@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public class RelatedSlotAllocations {
 	private final Map<String, Set<Slot>> slotsAndTheirRelatedSets = new HashMap<>();
+	private final Map<Slot, SlotAllocation> slotAllocationMap = new HashMap<>();
 
 	public Set<Slot> getRelatedSetFor(final CargoAllocation cargoAllocation, final boolean buys) {
 		final List<SlotAllocation> slotAllocations = cargoAllocation.getSlotAllocations();
@@ -86,20 +87,25 @@ public class RelatedSlotAllocations {
 			final Slot slotA = slotAllocationA.getSlot();
 			final Slot slotB = slotAllocationB.getSlot();
 
+			slotAllocationMap.put(slotA, slotAllocationA);
+			slotAllocationMap.put(slotB, slotAllocationB);
+
 			addRelatedSlot(slotA, slotB);
 
 		}
 	}
-
+public SlotAllocation getSlotAllocation(Slot slot) {
+	return slotAllocationMap.get(slot);
+}
 	public void clear() {
 		slotsAndTheirRelatedSets.clear();
+		slotAllocationMap.clear();
 	}
 
 	public void addRelatedSlot(Slot slotA, Slot slotB) {
 		if (slotA == null || slotB == null) {
 			return;
 		}
-		
 
 		final String sA = getSlotNameKey(slotA);
 		final String sB = getSlotNameKey(slotB);

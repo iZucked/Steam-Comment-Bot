@@ -11,52 +11,36 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.lingo.reports.ScheduleElementCollector;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EMFReportView;
-import com.mmxlabs.lingo.reports.components.EMFReportView.EmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
-import com.mmxlabs.lingo.reports.utils.PinDiffModeColumnManager;
-import com.mmxlabs.lingo.reports.utils.RelatedSlotAllocations;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
+import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -70,15 +54,10 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.GroupProfitAndLoss;
 import com.mmxlabs.models.lng.schedule.OpenSlotAllocation;
 import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
-import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
  * Big helper class for any report based on {@link CargoAllocation}s, {@link OpenSlotAllocation}s, or other events. This builds the internal report data model and handles pin/diff comparison hooks.
@@ -100,10 +79,10 @@ public class ScheduleBasedReportBuilder {
 	public static final OptionInfo ROW_FILTER_VESSEL_EVENT_ROW = new OptionInfo("ROW_FILTER_VESSEL_EVENT_ROW", "Vessel Events");
 	public static final OptionInfo ROW_FILTER_CHARTER_OUT_ROW = new OptionInfo("ROW_FILTER_CHARTER_OUT_ROW", "Charter Outs (Virtual)");
 	public static final OptionInfo ROW_FILTER_CARGO_ROW = new OptionInfo("ROW_FILTER_CARGO_ROW", "Cargoes");
-	
+
 	/** All filters (note this order is also used in the {@link ConfigurableScheduleReportView} dialog */
-	public static final OptionInfo[] ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW, ROW_FILTER_CHARTER_OUT_ROW,
-			ROW_FILTER_VESSEL_START_ROW };
+	public static final OptionInfo[] ROW_FILTER_ALL = new OptionInfo[] { ROW_FILTER_CARGO_ROW, ROW_FILTER_LONG_CARGOES, ROW_FILTER_SHORT_CARGOES, ROW_FILTER_VESSEL_EVENT_ROW,
+			ROW_FILTER_CHARTER_OUT_ROW, ROW_FILTER_VESSEL_START_ROW };
 
 	public static final OptionInfo DIFF_FILTER_PINNDED_SCENARIO = new OptionInfo("DIFF_FILTER_PINNDED_SCENARIO", "Show Pinned Scenario");
 	public static final OptionInfo DIFF_FILTER_VESSEL_CHANGES = new OptionInfo("DIFF_FILTER_VESSEL_CHANGES", "Show Vessel Changes");
@@ -115,39 +94,9 @@ public class ScheduleBasedReportBuilder {
 	private static final String DIFF_FILTER_MEMENTO = "DIFF_FILTER";
 
 	private final ScheduleDiffUtils scheduleDiffUtils = new ScheduleDiffUtils();
+	private ScheduleTransformer transformer;
 
-	/**
-	 * Guava {@link Function} to convert a Slot to a String based on it's name;
-	 * 
-	 */
-	private static class SlotToStringFunction implements Function<Slot, String> {
-
-		@Override
-		public String apply(final Slot o) {
-			return o.getName();
-		}
-
-		@Override
-		public String toString() {
-			return "toString";
-		}
-
-	}
-
-	private final RelatedSlotAllocations relatedSlotAllocations = new RelatedSlotAllocations();
-
-	private PinDiffModeColumnManager pinDiffModeHelper;
-	private EMFReportView report;
-
-	// Dynamic table data model fields
-	private final EPackage tableDataModel;
-	private final EStructuralFeature nameObjectRef;
-	private final EStructuralFeature name2ObjectRef;
-	private final EStructuralFeature targetObjectRef;
-	private final EStructuralFeature cargoAllocationRef;
-	private final EStructuralFeature loadAllocationRef;
-	private final EStructuralFeature dischargeAllocationRef;
-	private final EStructuralFeature openSlotAllocationRef;
+	private ColumnBlockManager blockManager;
 
 	private final Set<String> rowFilterInfo = new HashSet<>();
 	private final Set<String> diffFilterInfo = new HashSet<>();
@@ -155,36 +104,21 @@ public class ScheduleBasedReportBuilder {
 	@Inject(optional = true)
 	private Iterable<ICustomRelatedSlotHandlerExtension> customRelatedSlotHandlers;
 
-	public ScheduleBasedReportBuilder() {
+//	public ScheduleBasedReportBuilder(final ColumnBlockManager blockManager) {
+//		this.blockManager = blockManager;
+//	}
 
-		// Create table data model with the given references.
-		tableDataModel = GenericEMFTableDataModel.createEPackage("target", "cargo", "load", "discharge", "openslot");
+	// public ConfigurableScheduleReportView getReport() {
+	// return report;
+	// }
 
-		// Get the row class
-		final EClass rowClass = GenericEMFTableDataModel.getRowClass(tableDataModel);
-		// Add additional name attributes
-		nameObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name");
-		name2ObjectRef = GenericEMFTableDataModel.createRowAttribute(rowClass, EcorePackage.Literals.ESTRING, "name2");
+	// public void setReport(final ConfigurableScheduleReportView report) {
+	// this.report = report;
+	// }
 
-		// Get the EStructuralFeature refs created above.
-		targetObjectRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "target");
-		cargoAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "cargo");
-		loadAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "load");
-		dischargeAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "discharge");
-		openSlotAllocationRef = GenericEMFTableDataModel.getRowFeature(tableDataModel, "openslot");
-	}
-
-	public EMFReportView getReport() {
-		return report;
-	}
-
-	public void setReport(final EMFReportView report) {
-		this.report = report;
-	}
-
-	public void setPinDiffModeHelper(final PinDiffModeColumnManager pinDiffModeHelper) {
-		this.pinDiffModeHelper = pinDiffModeHelper;
-	}
+	// public void setPinDiffModeHelper(final PinDiffModeColumnManager pinDiffModeHelper) {
+	// this.pinDiffModeHelper = pinDiffModeHelper;
+	// }
 
 	/**
 	 * Replace the existing row filters with the following set.
@@ -234,157 +168,47 @@ public class ScheduleBasedReportBuilder {
 		}
 	}
 
-	public EPackage getTableDataModel() {
-		return tableDataModel;
-	}
-
-	public EStructuralFeature getNameObjectRef() {
-		return nameObjectRef;
-	}
-
-	public EStructuralFeature getName2ObjectRef() {
-		return name2ObjectRef;
-	}
-
-	public EStructuralFeature getTargetObjectRef() {
-		return targetObjectRef;
-	}
-
-	public EStructuralFeature getCargoAllocationRef() {
-		return cargoAllocationRef;
-	}
-
-	public EStructuralFeature getLoadAllocationRef() {
-		return loadAllocationRef;
-	}
-
-	public EStructuralFeature getDischargeAllocationRef() {
-		return dischargeAllocationRef;
-	}
-
-	public EStructuralFeature getOpenSlotAllocationRef() {
-		return openSlotAllocationRef;
-	}
-
-	public IScenarioInstanceElementCollector getElementCollector() {
-		return new ScheduleElementCollector() {
-
-			private EObject dataModelInstance;
-
-			@Override
-			public void beginCollecting() {
-				super.beginCollecting();
-				relatedSlotAllocations.clear();
-				report.clearPinModeData();
-				dataModelInstance = GenericEMFTableDataModel.createRootInstance(tableDataModel);
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
-
-				final List<EObject> nodes = generateNodes(dataModelInstance, schedule);
-
-				report.collectPinModeElements(nodes, isPinned);
-
-				return nodes;
-			}
-		};
-	}
-
 	public List<?> adaptSelectionFromWidget(final List<?> selection) {
 		final List<Object> adaptedSelection = new ArrayList<Object>(selection.size());
 		for (final Object obj : selection) {
 			if (obj instanceof EObject) {
-				adaptedSelection.add(((EObject) obj).eGet(targetObjectRef));
+				adaptedSelection.add(((EObject) obj).eGet(ScheduleReportPackage.Literals.ROW__TARGET));
 			}
 		}
 
 		return adaptedSelection;
 	}
 
-	public void processInputs(final Object[] result) {
-		for (final Object row : result) {
+	// /**
+	// * Returns a key of some kind for the element
+	// *
+	// * @param element
+	// * @return
+	// */
+	// public String getElementKey(EObject element) {
+	//
+	// if (element.eIsSet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION)) {
+	// element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__CARGO_ALLOCATION);
+	// } else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__OPEN_SLOT_ALLOCATION)) {
+	// element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__OPEN_SLOT_ALLOCATION);
+	// } else if (element.eIsSet(ScheduleReportPackage.Literals.ROW__TARGET)) {
+	// element = (EObject) element.eGet(ScheduleReportPackage.Literals.ROW__TARGET);
+	// }
+	//
+	// if (element instanceof CargoAllocation) {
+	// return ((CargoAllocation) element).getName();
+	// } else if (element instanceof OpenSlotAllocation) {
+	// return ((OpenSlotAllocation) element).getSlot().getName();
+	// } else if (element instanceof Event) {
+	// return ((Event) element).name();
+	// }
+	// if (element instanceof NamedObject) {
+	// return ((NamedObject) element).getName();
+	// }
+	// return element.toString();
+	// }
 
-			// Map our "Node" data to the CargoAllocation object
-			if (row instanceof EObject) {
-				final EObject eObj = (EObject) row;
-				if (eObj.eIsSet(targetObjectRef)) {
-
-					final Object a = eObj.eGet(targetObjectRef);
-
-					// map to events
-					if (a instanceof CargoAllocation) {
-						final CargoAllocation allocation = (CargoAllocation) a;
-
-						final List<Object> equivalents = new LinkedList<Object>();
-						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-							equivalents.add(slotAllocation.getSlot());
-							equivalents.add(slotAllocation.getSlotVisit());
-						}
-						equivalents.addAll(allocation.getEvents());
-						equivalents.add(allocation.getInputCargo());
-						report.setInputEquivalents(row, equivalents);
-					} else if (a instanceof SlotVisit) {
-						final SlotVisit slotVisit = (SlotVisit) a;
-
-						final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
-
-						final List<Object> equivalents = new LinkedList<Object>();
-						for (final SlotAllocation slotAllocation : allocation.getSlotAllocations()) {
-							equivalents.add(slotAllocation.getSlot());
-							equivalents.add(slotAllocation.getSlotVisit());
-						}
-						equivalents.addAll(allocation.getEvents());
-						equivalents.add(allocation.getInputCargo());
-						report.setInputEquivalents(row, equivalents);
-					} else if (a instanceof VesselEventVisit) {
-						final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
-						report.setInputEquivalents(row, Lists.<Object> newArrayList(vesselEventVisit, vesselEventVisit.getVesselEvent()));
-					} else if (a instanceof StartEvent) {
-						final StartEvent startEvent = (StartEvent) a;
-						final VesselAvailability vesselAvailability = startEvent.getSequence().getVesselAvailability();
-						if (vesselAvailability != null) {
-							report.setInputEquivalents(row, Lists.<Object> newArrayList(startEvent, vesselAvailability.getVessel()));
-						}
-					} else if (a instanceof OpenSlotAllocation) {
-						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) a;
-						report.setInputEquivalents(row, Lists.<Object> newArrayList(openSlotAllocation, openSlotAllocation.getSlot()));
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Returns a key of some kind for the element
-	 * 
-	 * @param element
-	 * @return
-	 */
-	public String getElementKey(EObject element) {
-
-		if (element.eIsSet(cargoAllocationRef)) {
-			element = (EObject) element.eGet(cargoAllocationRef);
-		} else if (element.eIsSet(openSlotAllocationRef)) {
-			element = (EObject) element.eGet(openSlotAllocationRef);
-		} else if (element.eIsSet(targetObjectRef)) {
-			element = (EObject) element.eGet(targetObjectRef);
-		}
-
-		if (element instanceof CargoAllocation) {
-			return ((CargoAllocation) element).getName();
-		} else if (element instanceof OpenSlotAllocation) {
-			return ((OpenSlotAllocation) element).getSlot().getName();
-		} else if (element instanceof Event) {
-			return ((Event) element).name();
-		}
-		if (element instanceof NamedObject) {
-			return ((NamedObject) element).getName();
-		}
-		return element.toString();
-	}
-
-	private boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
+	public boolean showOpenSlot(final OpenSlotAllocation openSlotAllocation) {
 
 		if (openSlotAllocation.getSlot() instanceof LoadSlot) {
 			return rowFilterInfo.contains(ROW_FILTER_LONG_CARGOES.id);
@@ -394,7 +218,7 @@ public class ScheduleBasedReportBuilder {
 		return false;
 	}
 
-	private boolean showEvent(final Event event) {
+	public boolean showEvent(final Event event) {
 		if (event instanceof StartEvent) {
 			return rowFilterInfo.contains(ROW_FILTER_VESSEL_START_ROW.id);
 		} else if (event instanceof VesselEventVisit) {
@@ -410,47 +234,7 @@ public class ScheduleBasedReportBuilder {
 		return false;
 	}
 
-	public List<EObject> generateNodes(final EObject dataModelInstance, final Schedule schedule) {
-
-		final List<ICustomRelatedSlotHandler> relatedSlotHandlers = getCustomRelatedSlotHandlers();
-
-		final List<EObject> interestingEvents = new LinkedList<EObject>();
-		for (final Sequence sequence : schedule.getSequences()) {
-			for (final Event event : sequence.getEvents()) {
-
-				// Always consider cargoes for permutations, even if filtered out
-				if (event instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) event;
-					final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-
-					// TODO: Only required for pin/diff mode really.
-					relatedSlotAllocations.updateRelatedSetsFor(cargoAllocation);
-
-					for (final ICustomRelatedSlotHandler h : relatedSlotHandlers) {
-						h.addRelatedSlots(relatedSlotAllocations, schedule, cargoAllocation);
-					}
-				}
-
-				if (showEvent(event)) {
-					interestingEvents.add(event);
-				}
-			}
-		}
-
-		for (final OpenSlotAllocation openSlotAllocation : schedule.getOpenSlotAllocations()) {
-			// Always consider open positions for permutations, even if filtered out
-			for (final ICustomRelatedSlotHandler h : relatedSlotHandlers) {
-				h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);
-			}
-			if (showOpenSlot(openSlotAllocation)) {
-				interestingEvents.add(openSlotAllocation);
-			}
-		}
-
-		return generateNodes(dataModelInstance, schedule, interestingEvents);
-	}
-
-	private List<ICustomRelatedSlotHandler> getCustomRelatedSlotHandlers() {
+	public List<ICustomRelatedSlotHandler> getCustomRelatedSlotHandlers() {
 		final List<ICustomRelatedSlotHandler> l = new LinkedList<ICustomRelatedSlotHandler>();
 		if (customRelatedSlotHandlers != null) {
 			for (final ICustomRelatedSlotHandlerExtension h : customRelatedSlotHandlers) {
@@ -460,81 +244,82 @@ public class ScheduleBasedReportBuilder {
 		return l;
 	}
 
-	public List<EObject> generateNodes(final EObject dataModelInstance, final Schedule schedule, final List<EObject> interestingElements) {
-		final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
-
-		for (final Object element : interestingElements) {
-
-			if (element instanceof SlotVisit) {
-				final SlotVisit slotVisit = (SlotVisit) element;
-				final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
-
-				// Build up list of slots assigned to cargo, sorting into loads and discharges
-				final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
-				final List<SlotAllocation> dischargeSlots = new ArrayList<SlotAllocation>();
-				for (final SlotAllocation slot : cargoAllocation.getSlotAllocations()) {
-					if (slot.getSlot() instanceof LoadSlot) {
-						loadSlots.add(slot);
-					} else if (slot.getSlot() instanceof DischargeSlot) {
-						dischargeSlots.add(slot);
-					} else {
-						// Assume some kind of discharge?
-						// dischargeSlots.add((Slot) slot);
-					}
-
-				}
-
-				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-				// Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
-				for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
-
-					final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, cargoAllocationRef, cargoAllocation);
-					if (i < loadSlots.size()) {
-						final SlotAllocation slot = loadSlots.get(i);
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, loadAllocationRef, slot);
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
-					}
-					if (i < dischargeSlots.size()) {
-						final SlotAllocation slot = dischargeSlots.get(i);
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, dischargeAllocationRef, slot);
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
-					}
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, cargoAllocation);
-					nodes.add(node);
-				}
-			} else if (element instanceof OpenSlotAllocation) {
-
-				final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
-
-				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, openSlotAllocation);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, openSlotAllocationRef, openSlotAllocation);
-				final Slot slot = openSlotAllocation.getSlot();
-				if (slot == null) {
-					GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, "??");
-				} else {
-					if (slot instanceof DischargeSlot) {
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
-					} else {
-						GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
-					}
-				}
-				nodes.add(node);
-
-			} else if (element instanceof Event) {
-				final Event event = (Event) element;
-				final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
-
-				final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, event);
-				GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, event.name());
-				nodes.add(node);
-			}
-		}
-		return nodes;
-	}
+	//
+	// public List<EObject> generateNodes(final EObject dataModelInstance, final Schedule schedule, final List<EObject> interestingElements) {
+	// final List<EObject> nodes = new ArrayList<EObject>(interestingElements.size());
+	//
+	// for (final Object element : interestingElements) {
+	//
+	// if (element instanceof SlotVisit) {
+	// final SlotVisit slotVisit = (SlotVisit) element;
+	// final CargoAllocation cargoAllocation = slotVisit.getSlotAllocation().getCargoAllocation();
+	//
+	// // Build up list of slots assigned to cargo, sorting into loads and discharges
+	// final List<SlotAllocation> loadSlots = new ArrayList<SlotAllocation>();
+	// final List<SlotAllocation> dischargeSlots = new ArrayList<SlotAllocation>();
+	// for (final SlotAllocation slot : cargoAllocation.getSlotAllocations()) {
+	// if (slot.getSlot() instanceof LoadSlot) {
+	// loadSlots.add(slot);
+	// } else if (slot.getSlot() instanceof DischargeSlot) {
+	// dischargeSlots.add(slot);
+	// } else {
+	// // Assume some kind of discharge?
+	// // dischargeSlots.add((Slot) slot);
+	// }
+	//
+	// }
+	//
+	// final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
+	// // Create a row for each pair of load and discharge slots in the cargo. This may lead to a row with only one slot
+	// for (int i = 0; i < Math.max(loadSlots.size(), dischargeSlots.size()); ++i) {
+	//
+	// final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, cargoAllocationRef, cargoAllocation);
+	// if (i < loadSlots.size()) {
+	// final SlotAllocation slot = loadSlots.get(i);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, loadAllocationRef, slot);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
+	// }
+	// if (i < dischargeSlots.size()) {
+	// final SlotAllocation slot = dischargeSlots.get(i);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, dischargeAllocationRef, slot);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
+	// }
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, cargoAllocation);
+	// nodes.add(node);
+	// }
+	// } else if (element instanceof OpenSlotAllocation) {
+	//
+	// final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+	//
+	// final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
+	// final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, openSlotAllocation);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, openSlotAllocationRef, openSlotAllocation);
+	// final Slot slot = openSlotAllocation.getSlot();
+	// if (slot == null) {
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, "??");
+	// } else {
+	// if (slot instanceof DischargeSlot) {
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, name2ObjectRef, slot.getName());
+	// } else {
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, slot.getName());
+	// }
+	// }
+	// nodes.add(node);
+	//
+	// } else if (element instanceof Event) {
+	// final Event event = (Event) element;
+	// final EObject group = GenericEMFTableDataModel.createGroup(tableDataModel, dataModelInstance);
+	//
+	// final EObject node = GenericEMFTableDataModel.createRow(tableDataModel, dataModelInstance, group);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, targetObjectRef, event);
+	// GenericEMFTableDataModel.setRowValue(tableDataModel, node, nameObjectRef, event.name());
+	// nodes.add(node);
+	// }
+	// }
+	// return nodes;
+	// }
 
 	public Set<String> getRowFilterInfo() {
 		return rowFilterInfo;
@@ -580,11 +365,7 @@ public class ScheduleBasedReportBuilder {
 
 	public void refreshDiffOptions() {
 		scheduleDiffUtils.setCheckAssignmentDifferences(diffFilterInfo.contains(DIFF_FILTER_VESSEL_CHANGES.id));
-		pinDiffModeHelper.setShowPinnedData(diffFilterInfo.contains(DIFF_FILTER_PINNDED_SCENARIO.id));
-	}
-
-	public boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return scheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(targetObjectRef), (EObject) otherObject.eGet(targetObjectRef));
+		// pinDiffModeHelper.setShowPinnedData(diffFilterInfo.contains(DIFF_FILTER_PINNDED_SCENARIO.id));
 	}
 
 	/**
@@ -599,27 +380,21 @@ public class ScheduleBasedReportBuilder {
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-				final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = getIfCargoAllocation(obj, cargoAllocationRef);
-				if (eObjectAsCargoAllocation == null) {
-					return "";
+
+				final Row row = (Row) obj;
+				if (row.getCargoAllocation() == null) {
+					return null;
 				}
 
-				final EObject eObj = eObjectAsCargoAllocation.getFirst();
-
-				final String currentAssignment = getVesselAssignmentName(eObjectAsCargoAllocation.getSecond());
+				final String currentAssignment = getVesselAssignmentName(row.getCargoAllocation());
 
 				String result = "";
 
-				// for objects not coming from the pinned scenario,
-				// return and display the vessel used by the pinned counterpart
-				if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-
+				final Row referenceRow = row.getReferenceRow();
+				if (referenceRow != null) {
 					try {
-						final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-						if (pinnedObject != null) {
-							final CargoAllocation ca = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-							result = getVesselAssignmentName(ca);
-						}
+						final CargoAllocation ca = (CargoAllocation) referenceRow.eGet(cargoAllocationRef);
+						result = getVesselAssignmentName(ca);
 					} catch (final Exception e) {
 						log.warn("Error formatting previous assignment", e);
 					}
@@ -662,36 +437,33 @@ public class ScheduleBasedReportBuilder {
 			@Override
 			public String format(final Object obj) {
 
-				if (obj instanceof EObject) {
-					final EObject eObj = (EObject) obj;
-					if (eObj.eIsSet(cargoAllocationRef)) {
-						final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
+					if (row.getCargoAllocation() == null) {
+						return null;
+					}
 
-						final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
-
-						String result = "";
-
-						// for objects not coming from the pinned scenario,
-						// return the pinned counterpart's wiring to display as the previous wiring
-						if (!pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-
+					final Row referenceRow = row.getReferenceRow();
+					if (referenceRow != null) {
+						//
+						if (row.getCargoAllocation() != null) {
+							final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation());
+							//
+							String result = "";
+							// // for objects not coming from the pinned scenario,
+							// // return the pinned counterpart's wiring to display as the previous wiring
 							try {
-								final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-								if (pinnedObject != null) {
-									if (pinnedObject.eIsSet(cargoAllocationRef)) {
-										final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-										if (pinnedCargoAllocation != null) {
-											// convert this cargo's wiring of slot allocations to a string
-											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-										}
-									} else if (pinnedObject.eIsSet(openSlotAllocationRef)) {
-										final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) pinnedObject.eGet(openSlotAllocationRef);
-										if (openSlotAllocation != null) {
-											if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-												result = "Long";
-											} else {
-												result = "Short";
-											}
+								final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
+								if (pinnedCargoAllocation != null) {
+									// convert this cargo's wiring of slot allocations to a string
+									result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+								} else if (referenceRow.getOpenSlotAllocation() != null) {
+									final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();
+									if (openSlotAllocation != null) {
+										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
+											result = "Long";
+										} else {
+											result = "Short";
 										}
 									}
 								}
@@ -699,22 +471,18 @@ public class ScheduleBasedReportBuilder {
 								log.warn("Error formatting previous wiring", e);
 							}
 
-						}
+							// Do not display if same
+							if (currentWiring.equals(result)) {
+								return "";
+							}
 
-						// Do not display if same
-						if (currentWiring.equals(result)) {
-							return "";
-						}
+							return result;
+						} else if (row.getOpenSlotAllocation() != null) {
+							final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+							if (openSlotAllocation != null) {
 
-						return result;
-					} else if (eObj.eIsSet(openSlotAllocationRef)) {
-						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) eObj.eGet(openSlotAllocationRef);
-						if (openSlotAllocation != null) {
-
-							final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-							if (pinnedObject != null) {
-								if (pinnedObject.eIsSet(cargoAllocationRef)) {
-									final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
+								if (referenceRow.getCargoAllocation() != null) {
+									final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
 									if (pinnedCargoAllocation != null) {
 
 										final String result;
@@ -727,7 +495,6 @@ public class ScheduleBasedReportBuilder {
 									}
 								}
 							}
-
 						}
 					}
 				}
@@ -741,122 +508,18 @@ public class ScheduleBasedReportBuilder {
 			@Override
 			public String format(final Object obj) {
 
-				if (obj instanceof EObject) {
-					final EObject eObj = (EObject) obj;
-					if (eObj.eIsSet(cargoAllocationRef)) {
-						final Pair<EObject, CargoAllocation> eObjectAsCargoAllocation = new Pair<EObject, CargoAllocation>(eObj, (CargoAllocation) eObj.eGet(cargoAllocationRef));
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
 
-						// Check to see if wiring has changed.
-						boolean different = false;
-						{
-							final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(eObjectAsCargoAllocation.getSecond());
-							if (pinDiffModeHelper.pinnedObjectsContains(eObj)) {
-								final Set<EObject> unpinnedObjects = pinDiffModeHelper.getUnpinnedObjectWithTheSameKeyAsThisObject(eObj);
-								if (unpinnedObjects != null) {
-									for (final EObject unpinnedObject : unpinnedObjects) {
-										final CargoAllocation pinnedCargoAllocation = (CargoAllocation) unpinnedObject.eGet(cargoAllocationRef);
-										if (pinnedCargoAllocation != null) {
-											// convert this cargo's wiring of slot allocations to a string
-											final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+					final CycleGroup group = row.getCycleGroup();
+					if (group != null) {
+						return group.getDescription();
 
-											different = !currentWiring.equals(result);
-										} else {
-											different = true;
-										}
-										if (different) {
-											break;
-										}
-									}
-								} else {
-									different = true;
-								}
-							} else {
-								final EObject pinnedObject = pinDiffModeHelper.getPinnedObjectWithTheSameKeyAsThisObject(eObj);
-								if (pinnedObject != null) {
-									final CargoAllocation pinnedCargoAllocation = (CargoAllocation) pinnedObject.eGet(cargoAllocationRef);
-									if (pinnedCargoAllocation != null) {
-										// convert this cargo's wiring of slot allocations to a string
-										final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-										different = !currentWiring.equals(result);
-									} else {
-										different = true;
-									}
-								} else {
-									different = true;
-								}
-
-							}
-						}
-						if (!different) {
-							return "";
-						}
-
-						final CargoAllocation thisCargoAllocation = eObjectAsCargoAllocation.getSecond();
-
-						final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
-						final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
-
-						if (buysSet.isEmpty() && sellsSet.isEmpty()) {
-							return "";
-						}
-						final Set<String> buysStringsSet = slotToStringsSet(buysSet);
-						final Set<String> sellsStringsSet = slotToStringsSet(sellsSet);
-						final String buysStr = setToString(buysStringsSet);
-						final String sellsStr = setToString(sellsStringsSet);
-
-						return getPermutationGroupString(String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
-					} else if (eObj.eIsSet(openSlotAllocationRef)) {
-						final OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) eObj.eGet(openSlotAllocationRef);
-						if (openSlotAllocation != null) {
-							final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, true);
-							final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(openSlotAllocation, false);
-
-							if (buysSet.isEmpty() && sellsSet.isEmpty()) {
-								return "";
-							}
-
-							final Set<String> buysStringsSet = slotToStringsSet(buysSet);
-							final Set<String> sellsStringsSet = slotToStringsSet(sellsSet);
-							final String buysStr = setToString(buysStringsSet);
-							final String sellsStr = setToString(sellsStringsSet);
-
-							return getPermutationGroupString(String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
-						}
-					} else {
-						final Object target = eObj.eGet(targetObjectRef);
-						if (target instanceof GeneratedCharterOut) {
-							return "Charter out (Virt)";
-						}
-						if (target instanceof StartEvent) {
-							return "Orphan Ballast";
-						}
-						if (target instanceof DryDockEvent) {
-							return "Drydock";
-						}
-						if (target instanceof MaintenanceEvent) {
-							return "Maintenance";
-						}
-						if (target instanceof CharterOutEvent) {
-							return "Charter out";
-						}
-						if (target instanceof DryDockEvent) {
-							return "Event";
-						}
 					}
 				}
 				return "";
 			}
-
-			protected Set<String> slotToStringsSet(final Set<Slot> buysSet) {
-				return Sets.newTreeSet(Iterables.transform(buysSet, new SlotToStringFunction()));
-			}
-
-			protected String setToString(final Set<String> stringsSet) {
-				return "[ " + Joiner.on(", ").skipNulls().join(stringsSet) + " ]";
-			}
-
 		};
-
 	}
 
 	protected Pair<EObject, CargoAllocation> getIfCargoAllocation(final Object obj, final EStructuralFeature cargoAllocationRef) {
@@ -877,10 +540,10 @@ public class ScheduleBasedReportBuilder {
 		return new EmfBlockColumnFactory() {
 
 			@Override
-			public ColumnHandler addColumn(final EMFReportView theReport) {
-				ColumnBlock block = theReport.getBlockManager().getBlockByID(COLUMN_BLOCK_PNL);
+			public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+				ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_PNL);
 				if (block == null) {
-					block = theReport.getBlockManager().createBlock(COLUMN_BLOCK_PNL, "[P&L]", ColumnType.NORMAL);
+					block = blockManager.createBlock(COLUMN_BLOCK_PNL, "[P&L]", ColumnType.NORMAL);
 				}
 				block.setPlaceholder(true);
 				return null;
@@ -889,30 +552,30 @@ public class ScheduleBasedReportBuilder {
 		};
 	}
 
-	public ITreeContentProvider createPNLColumnssContentProvider(final ITreeContentProvider superProvider) {
+	public void refreshPNLColumns(List<LNGScenarioModel> rootObjects) {
 
-		return new ITreeContentProvider() {
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				superProvider.inputChanged(viewer, oldInput, newInput);
-				Display.getCurrent().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (viewer.getControl().isDisposed()) {
-							return;
-						}
+//		return new ITreeContentProvider() {
+//			@Override
+//			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+//				superProvider.inputChanged(viewer, oldInput, newInput);
+//				Display.getCurrent().asyncExec(new Runnable() {
+//					@Override
+//					public void run() {
+//						if (viewer.getControl().isDisposed()) {
+//							return;
+//						}
 
 						// TODO: Need to be able to register a listener for columns to react to this stuff.
 
 						// Clear existing entity columns
 						for (final String s : entityColumnNames) {
-							report.removeColumn(s);
+							blockManager.removeColumn(s);
 						}
 
 						entityColumnNames.clear();
-						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
-							final Collection<LNGScenarioModel> rootObjects = synchronizerOutput.getLNGScenarioModels();
+//						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+//							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
+//							final Collection<LNGScenarioModel> rootObjects = synchronizerOutput.getLNGScenarioModels();
 
 							for (final LNGScenarioModel rootObject : rootObjects) {
 
@@ -924,49 +587,49 @@ public class ScheduleBasedReportBuilder {
 									}
 								}
 							}
-						}
+//						}
 
-						viewer.refresh();
-					}
-				});
-			}
-
-			@Override
-			public void dispose() {
-				superProvider.dispose();
-			}
-
-			@Override
-			public Object[] getElements(final Object object) {
-				return superProvider.getElements(object);
-			}
-
-			@Override
-			public Object[] getChildren(final Object parentElement) {
-				return superProvider.getChildren(parentElement);
-			}
-
-			@Override
-			public Object getParent(final Object element) {
-				return superProvider.getParent(element);
-			}
-
-			@Override
-			public boolean hasChildren(final Object element) {
-				return superProvider.hasChildren(element);
-			}
-		};
+//						viewer.refresh();
+//					}
+//				});
+//			}
+//
+//			@Override
+//			public void dispose() {
+//				superProvider.dispose();
+//			}
+//
+//			@Override
+//			public Object[] getElements(final Object object) {
+//				return superProvider.getElements(object);
+//			}
+//
+//			@Override
+//			public Object[] getChildren(final Object parentElement) {
+//				return superProvider.getChildren(parentElement);
+//			}
+//
+//			@Override
+//			public Object getParent(final Object element) {
+//				return superProvider.getParent(element);
+//			}
+//
+//			@Override
+//			public boolean hasChildren(final Object element) {
+//				return superProvider.hasChildren(element);
+//			}
+//		};
 	}
 
 	public EmfBlockColumnFactory getTotalPNLColumnFactory(final String columnId, @Nullable final EStructuralFeature bookContainmentFeature) {
 		return new EmfBlockColumnFactory() {
 			@Override
-			public ColumnHandler addColumn(final EMFReportView theReport) {
+			public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
 				final String book = bookContainmentFeature == null ? "Total" : (bookContainmentFeature == CommercialPackage.Literals.BASE_LEGAL_ENTITY__SHIPPING_BOOK ? "Shipping" : "Trading");
 				final String title = String.format("P&L (%s)", book);
 
-				final ColumnBlock block = report.createBlock(columnId, title, ColumnType.NORMAL);
-				return theReport.createColumn(block, title, new IntegerFormatter() {
+				final ColumnBlock block = blockManager.createBlock(columnId, title, ColumnType.NORMAL);
+				return blockManager.createColumn(block, title, new IntegerFormatter() {
 					@Override
 					public Integer getIntValue(final Object object) {
 						ProfitAndLossContainer container = null;
@@ -984,8 +647,9 @@ public class ScheduleBasedReportBuilder {
 
 						return getEntityPNLEntry(container, null, bookContainmentFeature);
 					}
-				}, targetObjectRef);
+				}, ScheduleReportPackage.Literals.ROW__TARGET);
 			}
+
 		};
 
 	}
@@ -1002,7 +666,7 @@ public class ScheduleBasedReportBuilder {
 			entityColumnNames.add(title);
 		}
 
-		return report.createColumn(report.getBlockManager().getBlockByID(COLUMN_BLOCK_PNL), title, new IntegerFormatter() {
+		return blockManager.createColumn(blockManager.getBlockByID(COLUMN_BLOCK_PNL), title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ProfitAndLossContainer container = null;
@@ -1020,7 +684,7 @@ public class ScheduleBasedReportBuilder {
 
 				return getEntityPNLEntry(container, entityKey, bookContainmentFeature);
 			}
-		}, targetObjectRef);
+		}, ScheduleReportPackage.Literals.ROW__TARGET);
 	}
 
 	/**
@@ -1065,8 +729,15 @@ public class ScheduleBasedReportBuilder {
 		return null;
 	}
 
-	private String getPermutationGroupString(final String permutationGroup) {
-		final String prefix = pinDiffModeHelper.getPermutationGroupPrefix(permutationGroup);
-		return String.format("%s - %s", prefix, permutationGroup);
+	public ScheduleDiffUtils getScheduleDiffUtils() {
+		return scheduleDiffUtils;
+	}
+
+	public ColumnBlockManager getBlockManager() {
+		return blockManager;
+	}
+
+	public void setBlockManager(ColumnBlockManager blockManager) {
+		this.blockManager = blockManager;
 	}
 }

@@ -8,6 +8,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -128,7 +129,7 @@ public class ScheduleDiffUtils {
 				}
 			}
 
-			if (checkNextPortDifferences) {
+			if (checkNextPortDifferences && ref.getInputCargo().getCargoType() == CargoType.FLEET) {
 				final Event caLastEvent = ca.getEvents().get(ca.getEvents().size()-1);
 				final Event refLastEvent = ref.getEvents().get(ref.getEvents().size()-1);
 
@@ -148,6 +149,8 @@ public class ScheduleDiffUtils {
 			}
 
 			return false;
+		} else if (pinnedObject instanceof SlotAllocation && otherObject instanceof SlotAllocation) {
+			return isElementDifferent(((SlotAllocation)pinnedObject).getSlotVisit(), ((SlotAllocation)otherObject).getSlotVisit());
 		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
 			SlotVisit ref = null;
 			SlotVisit ca = null;
@@ -168,6 +171,7 @@ public class ScheduleDiffUtils {
 				}
 			}
 
+			boolean isSpot = false;
 			{
 				final Slot caSlot = ca.getSlotAllocation().getSlot();
 				final Slot refSlot = ref.getSlotAllocation().getSlot();
@@ -179,6 +183,8 @@ public class ScheduleDiffUtils {
 					if (!Equality.isEqual(caName, refName)) {
 						return true;
 					}
+				} else {
+					isSpot = true;
 				}
 			}
 
@@ -203,7 +209,7 @@ public class ScheduleDiffUtils {
 					return true;
 				}
 			}
-			return isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
+			return isSpot ? false  :isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
 		} else if (pinnedObject instanceof OpenSlotAllocation && otherObject instanceof OpenSlotAllocation) {
 			OpenSlotAllocation ref = null;
 			OpenSlotAllocation ca = null;

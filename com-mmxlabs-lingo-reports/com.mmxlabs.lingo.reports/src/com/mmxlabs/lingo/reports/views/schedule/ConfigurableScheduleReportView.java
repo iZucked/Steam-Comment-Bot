@@ -1,5 +1,4 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2014
  * All rights reserved.
  */
 package com.mmxlabs.lingo.reports.views.schedule;
@@ -10,8 +9,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 
 import com.google.inject.Inject;
@@ -20,19 +20,20 @@ import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog;
-import com.mmxlabs.lingo.reports.views.AbstractConfigurableReportView;
+import com.mmxlabs.lingo.reports.views.AbstractConfigurableGridReportView;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedColumnFactoryExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialColumn;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialDiffOption;
 import com.mmxlabs.lingo.reports.views.schedule.extpoint.IScheduleBasedReportInitialStateExtension.InitialRowType;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 
 /**
  * A customisable report for schedule based data. Extension points define the available columns for all instances and initial state for each instance of this report. Optionally a dialog is available
  * for the user to change the default settings.
  */
-public class ConfigurableScheduleReportView extends AbstractConfigurableReportView {
+public class ConfigurableScheduleReportView extends AbstractConfigurableGridReportView {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -49,14 +50,43 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 	@Inject(optional = true)
 	private Iterable<IScheduleBasedReportInitialStateExtension> initialStates;
 
+	private ScheduleTransformer transformer;
+
 	@Inject
 	public ConfigurableScheduleReportView(final ScheduleBasedReportBuilder builder) {
 		super(ID);
 
 		// Setup the builder hooks.
 		this.builder = builder;
-		builder.setReport(this);
-		builder.setPinDiffModeHelper(pinDiffModeHelper);
+		builder.setBlockManager(getBlockManager());
+		// builder.setPinDiffModeHelper(pinDiffModeHelper);
+	}
+
+	@Override
+	public void initPartControl(Composite parent) {
+		super.initPartControl(parent);
+
+		// Add a filter to only show certain rows.
+		viewer.setFilters(new ViewerFilter[] { new ViewerFilter() {
+
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+
+				if (element instanceof Row) {
+					Row row = (Row) element;
+					// Filter out reference scenario if required
+					if (!builder.getDiffFilterInfo().contains(ScheduleBasedReportBuilder.DIFF_FILTER_PINNDED_SCENARIO.id)) {
+						if (row.isReference()) {
+							return false;
+						}
+					}
+					// Only show visible rows
+					return row.isVisible();
+				}
+				return true;
+			}
+		} });
+
 	}
 
 	@Override
@@ -66,7 +96,8 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 		}
 	}
 
-	protected void initConfigMemento(IMemento configMemento) {
+	@Override
+	protected void initConfigMemento(final IMemento configMemento) {
 		if (configMemento != null) {
 			builder.initFromMemento(CONFIGURABLE_ROWS_ORDER, configMemento);
 		}
@@ -111,7 +142,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 
 				// Is this a matching view definition?
 				if (viewId != null && viewId.equals(getViewSite().getId())) {
-					// Get visibile columns and order
+					// Get visible columns and order
 					{
 						final InitialColumn[] initialColumns = ext.getInitialColumns();
 						if (initialColumns != null) {
@@ -186,37 +217,47 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 		}
 	}
 
-	@Override
-	protected ITreeContentProvider getContentProvider() {
-		final ITreeContentProvider superProvider = super.getContentProvider();
-		return builder.createPNLColumnssContentProvider(superProvider);
-	}
+	// @Override
+	// protected ITreeContentProvider getContentProvider() {
+	// final ITreeContentProvider superProvider = super.getContentProvider();
+	// return builder.createPNLColumnssContentProvider(superProvider);
+	// }
 
-	@Override
-	protected void processInputs(final Object[] result) {
-		builder.processInputs(result);
+	public void processInputs(final List<Row> result) {
+		for (final Row row : result) {
+			setInputEquivalents(row, row.getInputEquivalents());
+		}
 	}
 
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
-		return builder.getElementCollector();
+
+		transformer = new ScheduleTransformer(table, builder, builder.getCustomRelatedSlotHandlers());
+		return transformer.getElementCollector(this);
 	}
 
-	/**
-	 * Returns a key of some kind for the element
-	 * 
-	 * @param element
-	 * @return
-	 */
-	@Override
-	public String getElementKey(final EObject element) {
-		return builder.getElementKey(element);
-	}
+	// @Override
+	// public void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
+	// // Handled in ScheduleTransformer
+	// }
 
-	@Override
-	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-		return builder.isElementDifferent(pinnedObject, otherObject);
-	}
+	// /**
+	// * Returns a key of some kind for the element
+	// *
+	// * @param element
+	// * @return
+	// */
+	// @Override
+	// public String getElementKey(final EObject element) {
+	// // Handled in ScheduleTransformer
+	// return null;
+	// }
+	//
+	// @Override
+	// protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+	// // Handled in ScheduleTransformer
+	// return false;
+	// }
 
 	@Override
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
@@ -230,11 +271,13 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 		return true;
 	}
 
+	@Override
 	protected void addDialogCheckBoxes(final ColumnConfigurationDialog dialog) {
 		dialog.addCheckBoxInfo("Show rows for", ScheduleBasedReportBuilder.ROW_FILTER_ALL, builder.getRowFilterInfo());
 		dialog.addCheckBoxInfo("In diff mode", ScheduleBasedReportBuilder.DIFF_FILTER_ALL, builder.getDiffFilterInfo());
 	}
 
+	@Override
 	protected void postDialogOpen(final ColumnConfigurationDialog dialog) {
 		builder.refreshDiffOptions();
 
@@ -274,7 +317,7 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableReportVi
 		}
 
 		// Create the actual columns instances.
-		manager.addColumns(ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID, this);
+		manager.addColumns(ScheduleBasedReportBuilder.CARGO_REPORT_TYPE_ID, getBlockManager());
 	}
 
 }
