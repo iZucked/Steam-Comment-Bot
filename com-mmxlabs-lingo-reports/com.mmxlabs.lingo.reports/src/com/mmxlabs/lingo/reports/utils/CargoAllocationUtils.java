@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.lingo.reports.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,8 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
@@ -95,7 +98,16 @@ public class CargoAllocationUtils {
 		boolean first = true;
 		for (int i = 0; i < slotAllocations.size(); ++i) {
 			final SlotAllocation sa = slotAllocations.get(i);
-			if (sa.getSlot() instanceof DischargeSlot) {
+			if (sa.getSlot() instanceof SpotDischargeSlot) {
+				final SpotDischargeSlot slot = (SpotDischargeSlot) sa.getSlot();
+				if (!first) {
+					sb.append(" -- ");
+				} else {
+					first = false;
+				}
+				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+				sb.append(String.format("%s-%s", slot.getMarket().getName(), df.format(slot.getWindowStart())));
+			} else if (sa.getSlot() instanceof DischargeSlot) {
 				if (!first) {
 					sb.append(" -- ");
 				} else {
@@ -121,7 +133,16 @@ public class CargoAllocationUtils {
 		boolean first = true;
 		for (int i = 0; i < slotAllocations.size(); ++i) {
 			final SlotAllocation sa = slotAllocations.get(i);
-			if (sa.getSlot() instanceof LoadSlot) {
+			if (sa.getSlot() instanceof SpotLoadSlot) {
+				final SpotLoadSlot slot = (SpotLoadSlot) sa.getSlot();
+				if (!first) {
+					sb.append(" -- ");
+				} else {
+					first = false;
+				}
+				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+				sb.append(String.format("%s-%s", slot.getMarket().getName(), df.format(slot.getWindowStart())));
+			} else if (sa.getSlot() instanceof LoadSlot) {
 				if (!first) {
 					sb.append(" -- ");
 				} else {
