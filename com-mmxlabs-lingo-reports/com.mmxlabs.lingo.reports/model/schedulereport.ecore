@@ -11,7 +11,8 @@
         eType="#//RowGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Row">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cycleGroup" eType="#//CycleGroup"
         eOpposite="#//CycleGroup/rows"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputEquivalents" upperBound="-1"

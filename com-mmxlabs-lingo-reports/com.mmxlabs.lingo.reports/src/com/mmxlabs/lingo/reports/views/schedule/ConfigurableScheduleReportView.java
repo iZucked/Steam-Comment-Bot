@@ -59,7 +59,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		// Setup the builder hooks.
 		this.builder = builder;
 		builder.setBlockManager(getBlockManager());
-		// builder.setPinDiffModeHelper(pinDiffModeHelper);
 	}
 
 	@Override
@@ -217,12 +216,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		}
 	}
 
-	// @Override
-	// protected ITreeContentProvider getContentProvider() {
-	// final ITreeContentProvider superProvider = super.getContentProvider();
-	// return builder.createPNLColumnssContentProvider(superProvider);
-	// }
-
 	public void processInputs(final List<Row> result) {
 		for (final Row row : result) {
 			setInputEquivalents(row, row.getInputEquivalents());
@@ -235,29 +228,6 @@ public class ConfigurableScheduleReportView extends AbstractConfigurableGridRepo
 		transformer = new ScheduleTransformer(table, builder, builder.getCustomRelatedSlotHandlers());
 		return transformer.getElementCollector(this);
 	}
-
-	// @Override
-	// public void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
-	// // Handled in ScheduleTransformer
-	// }
-
-	// /**
-	// * Returns a key of some kind for the element
-	// *
-	// * @param element
-	// * @return
-	// */
-	// @Override
-	// public String getElementKey(final EObject element) {
-	// // Handled in ScheduleTransformer
-	// return null;
-	// }
-	//
-	// @Override
-	// protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
-	// // Handled in ScheduleTransformer
-	// return false;
-	// }
 
 	@Override
 	protected List<?> adaptSelectionFromWidget(final List<?> selection) {
