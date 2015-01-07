@@ -11,6 +11,7 @@ import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * Base class for things which collect stuff from the most recent schedule in a scenario.
@@ -23,20 +24,20 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public abstract class ScheduleElementCollector implements IScenarioInstanceElementCollector {
 	@Override
-	public Collection<? extends Object> collectElements(final LNGScenarioModel rootObject, final boolean pinned) {
+	public Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final boolean pinned) {
 		Schedule lastScheduleFromScenario = getLastScheduleFromScenario(rootObject);
 		if (lastScheduleFromScenario != null)
-			return collectElements(lastScheduleFromScenario, pinned);
+			return collectElements(scenarioInstance, lastScheduleFromScenario, pinned);
 		else
 			return Collections.emptySet();
 	}
 
-	protected Collection<? extends Object> collectElements(Schedule schedule) {
-		return collectElements(schedule, false);
+	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule) {
+		return collectElements(scenarioInstance, schedule, false);
 	}
 
-	protected Collection<? extends Object> collectElements(Schedule schedule, boolean pinned) {
-		return collectElements(schedule);
+	protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule, boolean pinned) {
+		return collectElements(scenarioInstance, schedule);
 	}
 
 	/**

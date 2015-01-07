@@ -52,6 +52,7 @@ import com.mmxlabs.lingo.reports.views.TotalsContentProvider.RowData;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class TotalsReportView extends ViewPart {
 	private final ArrayList<Integer> sortColumns = new ArrayList<Integer>(4);
@@ -334,7 +335,7 @@ public class TotalsReportView extends ViewPart {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 				hasPin = hasPin || pinned;
 				++numberOfSchedules;
 				return Collections.singleton(schedule);

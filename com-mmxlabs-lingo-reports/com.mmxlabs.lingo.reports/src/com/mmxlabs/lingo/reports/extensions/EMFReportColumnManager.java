@@ -11,10 +11,10 @@ import java.util.Map;
 
 import org.eclipse.emf.ecore.ETypedElement;
 
+import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EMFReportView;
-import com.mmxlabs.lingo.reports.components.EMFReportView.EmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.components.EMFReportView.SimpleEmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 
 /**
@@ -49,12 +49,12 @@ public class EMFReportColumnManager {
 	 * @param report
 	 * @param reportType
 	 */
-	public void addColumns(final String reportType, final EMFReportView report) {
+	public void addColumns(final String reportType, final ColumnBlockManager blockManager) {
 		// code here needs to add all the requisite columns to the specified report
 		// each column will be added to the appropriate managed block of columns on that report
 		if (columnsByType.containsKey(reportType)) {
 			for (EmfBlockColumnFactory factory: columnsByType.get(reportType)) {
-				factory.addColumn(report);
+				factory.addColumn(blockManager);
 			}
 		}
 	}

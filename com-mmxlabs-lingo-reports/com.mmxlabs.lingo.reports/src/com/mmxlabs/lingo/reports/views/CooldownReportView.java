@@ -102,8 +102,8 @@ public class CooldownReportView extends EMFReportView {
 				return null;
 			}
 		});
-		
-		makeAllBlocksVisible();
+
+		getBlockManager().makeAllBlocksVisible();
 
 	}
 
@@ -166,7 +166,7 @@ public class CooldownReportView extends EMFReportView {
 	}
 
 	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
-		final ColumnBlock block = createBlock(blockID, title, columnType);
-		return createColumn(block, title, formatter, path);
+		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
+		return getBlockManager().createColumn(block, title, formatter, path);
 	}
 }

@@ -41,6 +41,7 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * @author Simon Goodall
@@ -75,7 +76,7 @@ public class CapacityViolationReportView extends EMFReportView {
 		addColumn("violation", "Violation", ColumnType.NORMAL, objectFormatter, attrib_Row_Type);
 		addColumn("qty", "Quantity (m³)", ColumnType.NORMAL, objectFormatter, attrib_Row_Quantity);
 		
-		makeAllBlocksVisible();
+		getBlockManager().makeAllBlocksVisible();
 
 	}
 
@@ -150,7 +151,7 @@ public class CapacityViolationReportView extends EMFReportView {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 
 				final List<EObject> rows = new LinkedList<EObject>();
 
@@ -232,7 +233,7 @@ public class CapacityViolationReportView extends EMFReportView {
 	}
 	
 	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
-		final ColumnBlock block = createBlock(blockID, title, columnType);
-		return createColumn(block, title, formatter, path);
+		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
+		return getBlockManager().createColumn(block, title, formatter, path);
 	}
 }

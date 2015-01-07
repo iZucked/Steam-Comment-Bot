@@ -24,9 +24,9 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
@@ -92,6 +92,7 @@ import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class SchedulerView extends ViewPart implements ISelectionListener, IPreferenceChangeListener {
 
@@ -800,7 +801,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 		return new ScheduleElementCollector() {
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule) {
 				return Collections.singleton(schedule);
 			}
 
@@ -811,7 +812,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener, IPref
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean isPinned) {
 
 				final List<Event> interestingEvents = new LinkedList<Event>();
 				for (final Sequence sequence : schedule.getSequences()) {

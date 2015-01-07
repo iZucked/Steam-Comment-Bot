@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -28,6 +27,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyToClipboardActionFactory;
 import com.mmxlabs.rcp.common.actions.PackActionFactory;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * New version of the vertical report, with a separate event per display cell.
@@ -110,7 +110,7 @@ public abstract class AbstractVerticalCalendarReportView extends ViewPart {
 			}
 
 			@Override
-			public Collection<? extends Object> collectElements(final LNGScenarioModel rootObject, final boolean isPinned) {
+			public Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final LNGScenarioModel rootObject, final boolean isPinned) {
 				return Lists.newArrayList(rootObject);
 			}
 
