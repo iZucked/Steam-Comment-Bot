@@ -16,6 +16,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -34,6 +35,28 @@ public class EquivalanceGroupBuilder {
 		if (referenceElement instanceof SlotAllocation) {
 			final SlotAllocation slotAllocation = (SlotAllocation) referenceElement;
 			if (slotAllocation.getSlot() instanceof SpotLoadSlot) {
+				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
+					if (sa == slotAllocation) {
+						continue;
+					}
+
+					for (final EObject eObject : elements) {
+						if (eObject instanceof SlotAllocation) {
+							final SlotAllocation eObjectslotAllocation = (SlotAllocation) eObject;
+							final CargoAllocation eObjectcargoAllocation = eObjectslotAllocation.getCargoAllocation();
+							for (final SlotAllocation eObjectsa : eObjectcargoAllocation.getSlotAllocations()) {
+								if (getElementKey(sa).equals(getElementKey(eObjectsa))) {
+									equivalents.add(eObject);
+								}
+							}
+						}
+					}
+
+				}
+
+				return equivalents;
+			} else if (slotAllocation.getSlot() instanceof SpotDischargeSlot) {
 				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 				for (final SlotAllocation sa : cargoAllocation.getSlotAllocations()) {
 					if (sa == slotAllocation) {
