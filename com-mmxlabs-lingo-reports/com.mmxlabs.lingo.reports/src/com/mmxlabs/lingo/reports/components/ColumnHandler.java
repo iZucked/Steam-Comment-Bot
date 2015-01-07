@@ -7,9 +7,15 @@ package com.mmxlabs.lingo.reports.components;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.emf.databinding.FeaturePath;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableMapCellLabelProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -36,10 +42,12 @@ public class ColumnHandler {
 	public GridViewerColumn column;
 	public int viewIndex;
 	public final ColumnBlock block;
+	private final ETypedElement[] features;
 
 	public ColumnHandler(final ColumnBlock block, final IFormatter formatter, final ETypedElement[] features, final String title) {
 		super();
 		this.formatter = formatter;
+		this.features = features;
 		this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);
 
 		this.title = title;
@@ -86,6 +94,8 @@ public class ColumnHandler {
 	public GridViewerColumn createColumn(final GridTableViewer viewer) {
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		column.getColumn().setText(title);
+
+		// Set a default label provider
 		column.setLabelProvider(new CellLabelProvider() {
 
 			@Override
@@ -95,7 +105,45 @@ public class ColumnHandler {
 			}
 		});
 
+		// But try and create an observable based label provider for better data linkage.
+		try {
+			if (viewer.getContentProvider() instanceof ObservableListContentProvider) {
+
+				final ObservableListContentProvider contentProvider = (ObservableListContentProvider) viewer.getContentProvider();
+				// We can pass EOperations into this, if so, throw a class cast exception to break out.
+				final EStructuralFeature[] f = new EStructuralFeature[features.length];
+				int idx = 0;
+				for (final ETypedElement element : features) {
+					if (!(element instanceof EStructuralFeature)) {
+						// Fall back to non-listening approach
+						throw new ClassCastException();
+					}
+					f[idx++] = (EStructuralFeature) element;
+				}
+
+				// If idx is zero, then we have not found any features, so ignore
+				if (idx > 0) {
+					final IObservableMap[] attributeMap = new IObservableMap[1];
+					attributeMap[0] = EMFProperties.value(FeaturePath.fromList(f)).observeDetail(contentProvider.getKnownElements());
+
+					column.setLabelProvider(new ObservableMapCellLabelProvider(attributeMap) {
+
+						@Override
+						public void update(final ViewerCell cell) {
+							Object element = cell.getElement();
+							element = attributeMaps[0].get(element);
+							cell.setText(formatter.format(element));
+						}
+					}
+
+					);
+				}
+			}
+		} catch (final Exception cce) {
+			// Ignore
+		}
 		final GridColumn tc = column.getColumn();
+
 		tc.setData(COLUMN_HANDLER, this);
 		tc.setData(EObjectTableViewer.COLUMN_PATH, path);
 		tc.setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, formatter);
