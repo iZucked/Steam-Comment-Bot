@@ -10,10 +10,10 @@ import java.util.Map;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
+import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
-import com.mmxlabs.lingo.reports.components.EMFReportView;
-import com.mmxlabs.lingo.reports.components.EMFReportView.EmfBlockColumnFactory;
+import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.CostFormatter;
@@ -150,7 +150,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 					}
 					return null;
 				}
-			});//.setTooltip("$/mmBtu");
+			});// .setTooltip("$/mmBtu");
 		case "com.mmxlabs.lingo.reports.components.columns.portrotation.speed":
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, columnID, "Speed", null, ColumnType.NORMAL, new NumberOfDPFormatter(1), sp.getJourney_Speed());
 			break;
@@ -229,17 +229,17 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 			manager.registerColumn(PORT_ROTATION_REPORT_TYPE_ID, new EmfBlockColumnFactory() {
 
 				@Override
-				public ColumnHandler addColumn(final EMFReportView theReport) {
-					ColumnBlock block = theReport.getBlockManager().getBlockByID(COLUMN_BLOCK_FUELS);
+				public ColumnHandler addColumn(final ColumnBlockManager blockManager) {
+					ColumnBlock block = blockManager.getBlockByID(COLUMN_BLOCK_FUELS);
 					if (block == null) {
-						block = theReport.getBlockManager().createBlock(COLUMN_BLOCK_FUELS, "[Fuels]", ColumnType.NORMAL);
+						block = blockManager.createBlock(COLUMN_BLOCK_FUELS, "[Fuels]", ColumnType.NORMAL);
 					}
 					block.setPlaceholder(true);
 					// Create all these columns within the fuels group
 					{
 
 						for (final Fuel fuelName : Fuel.values()) {
-							theReport.createColumn(block, fuelName.toString(), new IntegerFormatter() {
+							blockManager.createColumn(block, fuelName.toString(), new IntegerFormatter() {
 								@Override
 								public Integer getIntValue(final Object object) {
 									if (object instanceof FuelUsage) {
@@ -262,7 +262,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 								}
 							}).setTooltip("In " + fuelQuanityUnits.get(fuelName));
 
-							theReport.createColumn(block, fuelName + " Unit Price", new PriceFormatter(true, 2) {
+							blockManager.createColumn(block, fuelName + " Unit Price", new PriceFormatter(true, 2) {
 								@Override
 								public Double getDoubleValue(final Object object) {
 									if (object instanceof FuelUsage) {
@@ -281,7 +281,7 @@ public class StandardPortRotationColumnFactory implements IPortRotationColumnFac
 									return null;
 								}
 							}).setTooltip("Price per " + fuelUnitPriceUnits.get(fuelName));
-							theReport.createColumn(block, fuelName + " Cost", new CostFormatter(true) {
+							blockManager.createColumn(block, fuelName + " Cost", new CostFormatter(true) {
 								@Override
 								public Integer getIntValue(final Object object) {
 									if (object instanceof FuelUsage) {

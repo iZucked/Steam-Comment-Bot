@@ -571,4 +571,12 @@
          </InitialColumn>
       </PortRotationBasedReportInitialState>
    </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated schedulereport -->
+      <package
+            uri="http://www.mmxlabs.com/models/lingo/reports/schedule/1"
+            class="com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage"
+            genModel="model/schedulereport.genmodel"/>
+   </extension>
+
 </plugin>

@@ -4,9 +4,11 @@
  */
 package com.mmxlabs.lingo.reports.views.formatters;
 
+import com.mmxlabs.models.ui.tabular.IComparableProvider;
+
 /**
  */
-public interface IFormatter {
+public interface IFormatter extends IComparableProvider {
 	public String format(final Object object);
 
 	public Comparable getComparable(final Object object);
