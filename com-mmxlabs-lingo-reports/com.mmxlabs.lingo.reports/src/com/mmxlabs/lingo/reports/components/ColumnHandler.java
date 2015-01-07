@@ -8,9 +8,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.swt.SWT;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
@@ -26,7 +31,7 @@ public class ColumnHandler {
 	private static final String COLUMN_HANDLER = "COLUMN_HANDLER";
 	private final IFormatter formatter;
 	private final EMFPath path;
-	final String title;
+	public final String title;
 	private String tooltip;
 	public GridViewerColumn column;
 	public int viewIndex;
@@ -36,6 +41,7 @@ public class ColumnHandler {
 		super();
 		this.formatter = formatter;
 		this.path = new CompiledEMFPath(getClass().getClassLoader(), true, features);
+
 		this.title = title;
 		this.block = block;
 	}
@@ -66,6 +72,33 @@ public class ColumnHandler {
 
 		final GridColumn tc = column.getColumn();
 		tc.setData(COLUMN_HANDLER, this);
+		this.column = column;
+
+		if (tooltip != null) {
+			column.getColumn().setHeaderTooltip(tooltip);
+		}
+
+		column.getColumn().setVisible(false);
+
+		return column;
+	}
+
+	public GridViewerColumn createColumn(final GridTableViewer viewer) {
+		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+		column.getColumn().setText(title);
+		column.setLabelProvider(new CellLabelProvider() {
+
+			@Override
+			public void update(final ViewerCell cell) {
+				final Object element = cell.getElement();
+				cell.setText(formatter.format(path.get((EObject) element)));
+			}
+		});
+
+		final GridColumn tc = column.getColumn();
+		tc.setData(COLUMN_HANDLER, this);
+		tc.setData(EObjectTableViewer.COLUMN_PATH, path);
+		tc.setData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER, formatter);
 		this.column = column;
 
 		if (tooltip != null) {

@@ -49,6 +49,7 @@ import com.mmxlabs.lingo.reports.views.KPIContentProvider.RowData;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class KPIReportView extends ViewPart {
 
@@ -329,7 +330,7 @@ public class KPIReportView extends ViewPart {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 				hasPin = hasPin || pinned;
 				++numberOfSchedules;
 				return Collections.singleton(schedule);

@@ -46,6 +46,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTreeColumnsAction;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * A view which displays the cost breakdown as a hierarchy, thus
@@ -507,7 +508,7 @@ public class TotalsHierarchyView extends ViewPart {
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 			@Override
-			protected Collection<? extends Object> collectElements(Schedule schedule) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, Schedule schedule) {
 				return Collections.singleton(schedule);
 			}
 		});

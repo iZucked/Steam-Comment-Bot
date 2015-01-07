@@ -182,7 +182,7 @@ public class ScenarioViewerSynchronizer implements IScenarioServiceSelectionChan
 					final LNGScenarioModel rootObject = (LNGScenarioModel) instance;
 					scenarioModels.add(rootObject);
 					portfolioModels.add(rootObject.getPortfolioModel());
-					final Collection<? extends Object> viewerContent = collector.collectElements(rootObject, isPinned);
+					final Collection<? extends Object> viewerContent = collector.collectElements(job, rootObject, isPinned);
 					for (final Object o : viewerContent) {
 						sourceScenarioByElement.put(o, new Pair<ScenarioInstance, LNGScenarioModel>(job, rootObject));
 						sourcePortfolioByElement.put(o, new Pair<ScenarioInstance, LNGPortfolioModel>(job, rootObject.getPortfolioModel()));

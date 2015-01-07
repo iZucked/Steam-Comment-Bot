@@ -106,7 +106,7 @@ public class LatenessReportView extends EMFReportView {
 		});
 		addColumn("scheduledtime", "Scheduled time", ColumnType.NORMAL, calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
 
-		makeAllBlocksVisible();
+		getBlockManager().makeAllBlocksVisible();
 	}
 
 	private Calendar getWindowStartDate(final Object object) {
@@ -294,7 +294,7 @@ public class LatenessReportView extends EMFReportView {
 	}
 
 	public ColumnHandler addColumn(final String blockID, final String title, final ColumnType columnType, final IFormatter formatter, final ETypedElement... path) {
-		final ColumnBlock block = createBlock(blockID, title, columnType);
-		return createColumn(block, title, formatter, path);
+		final ColumnBlock block = getBlockManager().createBlock(blockID, title, columnType);
+		return getBlockManager().createColumn(block, title, formatter, path);
 	}
 }

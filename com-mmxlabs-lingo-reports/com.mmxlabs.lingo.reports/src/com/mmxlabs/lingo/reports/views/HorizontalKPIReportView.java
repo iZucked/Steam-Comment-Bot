@@ -337,7 +337,7 @@ public class HorizontalKPIReportView extends ViewPart {
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
+			protected Collection<? extends Object> collectElements(final ScenarioInstance scenarioInstance, final Schedule schedule, final boolean pinned) {
 
 				if (pinned || (scheduleModel != null && schedule == scheduleModel.getSchedule())) {
 					// ++numberOfSchedules;
