@@ -56,11 +56,12 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  */
 public class EObjectTableViewer extends GridTreeViewer {
 
-	protected static final String COLUMN_PATH = "COLUMN_PATH";
-	protected static final String COLUMN_RENDERER = "COLUMN_RENDERER";
-	protected static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
-	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
-	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
+	public static final String COLUMN_PATH = "COLUMN_PATH";
+	public static final String COLUMN_RENDERER = "COLUMN_RENDERER";
+	public static final String COLUMN_COMPARABLE_PROVIDER = "COLUMN_COMPARABLE_PROVIDER";
+	public static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
+	public static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
+	public static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
 	/**
 	 */
@@ -279,6 +280,7 @@ public class EObjectTableViewer extends GridTreeViewer {
 
 		// store the renderer here, so that we can use it in sorting later.
 		tColumn.setData(COLUMN_RENDERER, renderer);
+		tColumn.setData(COLUMN_COMPARABLE_PROVIDER, renderer);
 		tColumn.setData(COLUMN_PATH, path);
 		tColumn.setData(COLUMN_MANIPULATOR, manipulator);
 

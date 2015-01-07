@@ -17,7 +17,7 @@ import com.mmxlabs.common.Pair;
  * @author hinton
  * 
  */
-public interface ICellRenderer {
+public interface ICellRenderer extends IComparableProvider {
 	/**
 	 * Render the given object for viewing in a table cell.
 	 * 
@@ -26,13 +26,13 @@ public interface ICellRenderer {
 	 */
 	String render(Object object);
 
-	/**
-	 * Get a comparable representation of the object, for sorting
-	 * 
-	 * @param object
-	 * @return comparable for sorting object by this cell.
-	 */
-	Comparable getComparable(Object object);
+//	/**
+//	 * Get a comparable representation of the object, for sorting
+//	 * 
+//	 * @param object
+//	 * @return comparable for sorting object by this cell.
+//	 */
+//	Comparable getComparable(Object object);
 
 	/**
 	 * Get a representation useful for filtering.
