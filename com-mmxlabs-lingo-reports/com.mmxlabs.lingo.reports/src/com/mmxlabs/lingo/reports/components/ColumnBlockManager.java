@@ -300,6 +300,31 @@ public class ColumnBlockManager {
 
 		block.columnHandlers.add(handler);
 		GridColumn column = null;
+		// TODO: This should be wrapped up behind an interface to avoid directly referencing table types.
+		if (eObjectTableViewer != null) {
+			column = handler.createColumn(eObjectTableViewer).getColumn();
+
+		} else if (gridTableViewer != null) {
+			column = handler.createColumn(gridTableViewer).getColumn();
+			if (sortingSupport != null) {
+				sortingSupport.addSortableColumn(gridTableViewer, handler.column, column);
+			}
+		}
+		if (column != null) {
+			column.setVisible(block.getVisible());
+			column.pack();
+		}
+		return handler;
+	}
+
+	public ColumnHandler createColumn(final ColumnBlock block, final String title, final IFormatter formatter, final ETypedElement[][] path) {
+		final ColumnHandler handler = new ColumnHandler(block, formatter, path, title);
+
+		handlers.add(handler);
+		handlersInOrder.add(handler);
+
+		block.columnHandlers.add(handler);
+		GridColumn column = null;
 		if (eObjectTableViewer != null) {
 			column = handler.createColumn(eObjectTableViewer).getColumn();
 
