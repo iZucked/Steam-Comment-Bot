@@ -11,7 +11,6 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.GridColumn;
@@ -31,7 +30,8 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * 
  */
 public class EObjectTableViewerSortingSupport {
-	private static final Logger log = LoggerFactory.getLogger(new Object(){}.getClass().getEnclosingClass());
+	private static final Logger log = LoggerFactory.getLogger(new Object() {
+	}.getClass().getEnclosingClass());
 
 	/**
 	 * Overridding sort order of objects. Any change in column sort order will set this back to null.
@@ -98,23 +98,23 @@ public class EObjectTableViewerSortingSupport {
 		columnSortOrder.clear();
 	}
 
-	//BE category (ie bin) support for sorting
-	private Function<Object,Integer> categoryFunction = null;
-	
-	public void setCategoryFunction(Function<Object,Integer> categoryFunction) {
+	// BE category (ie bin) support for sorting
+	private Function<Object, Integer> categoryFunction = null;
+
+	public void setCategoryFunction(Function<Object, Integer> categoryFunction) {
 		this.categoryFunction = categoryFunction;
 	}
-	
-	public Function<Object,Integer> getCategoryFunction() {
+
+	public Function<Object, Integer> getCategoryFunction() {
 		return categoryFunction;
 	}
-	
+
 	private int getCategory(Object object) {
 		return categoryFunction.apply(object);
 	}
-	//BE
-	
-	
+
+	// BE
+
 	/**
 	 * Create a {@link ViewerComparator} to install in the {@link EObjectTableViewer} to define the sort order
 	 * 
@@ -122,12 +122,15 @@ public class EObjectTableViewerSortingSupport {
 	 */
 	public ViewerComparator createViewerComparer() {
 		return new ViewerComparator() {
-			@Override //BE for completeness -- this one's not actually used, see compare() below
-			public int category(Object object) { return getCategory(object); }
-			
+			@Override
+			// BE for completeness -- this one's not actually used, see compare() below
+			public int category(Object object) {
+				return getCategory(object);
+			}
+
 			@Override
 			public int compare(final Viewer viewer, final Object leftObject, final Object rightObject) {
-				//BE take the categories (ie bins) into account while
+				// BE take the categories (ie bins) into account while
 				if (categoryFunction != null) {
 					int cat1 = getCategory(leftObject);
 					int cat2 = getCategory(rightObject);
@@ -136,8 +139,8 @@ public class EObjectTableViewerSortingSupport {
 						return cat1 - cat2;
 					}
 				}
-				//BE
-				
+				// BE
+
 				// If there is a fixed sort order use that.
 				if (fixedSortOrder != null) {
 					final int idx1 = fixedSortOrder.indexOf(leftObject);
@@ -149,33 +152,32 @@ public class EObjectTableViewerSortingSupport {
 				int comparison = 0;
 				while (iterator.hasNext() && (comparison == 0)) {
 					final GridColumn column = iterator.next();
-					
+
 					// additional text rendering information and comparison information
 					final IComparableProvider renderer = (IComparableProvider) column.getData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER);
-					
+
 					final EMFPath sortPath = (EMFPath) column.getData(EObjectTableViewer.COLUMN_SORT_PATH);
 					// ???
 					final EMFPath path = sortPath != null ? sortPath : (EMFPath) column.getData(EObjectTableViewer.COLUMN_PATH);
-					
+
 					final Object leftOwner;
 					final Object rightOwner;
-					
+
 					if (path == null) {
 						leftOwner = leftObject;
 						rightOwner = rightObject;
-					}
-					else {
+					} else {
 						leftOwner = path.get((EObject) leftObject);
 						rightOwner = path.get((EObject) rightObject);
 					}
-					
+
 					final Comparable left = renderer.getComparable(leftOwner);
 					final Comparable right = renderer.getComparable(rightOwner);
-					
+
 					if (left == right) {
 						return 0;
 					}
-					
+
 					if (left == null) {
 						return -1;
 					} else if (right == null) {
