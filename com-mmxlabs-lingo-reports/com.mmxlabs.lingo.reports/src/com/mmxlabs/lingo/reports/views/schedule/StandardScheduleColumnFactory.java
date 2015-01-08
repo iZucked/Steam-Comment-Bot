@@ -9,14 +9,20 @@ import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilde
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
+import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.Formatters;
+import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.PriceFormatter;
+import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
+import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -26,6 +32,7 @@ import com.mmxlabs.models.lng.cargo.DryDockEvent;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -49,6 +56,8 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
+	private static final Logger log = LoggerFactory.getLogger(StandardScheduleColumnFactory.class);
+	
 	@Override
 	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, final ScheduleBasedReportBuilder builder) {
 
@@ -425,16 +434,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			}, targetObjectRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevvessel":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, builder.generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. Vessel", null, ColumnType.DIFF, generatePreviousVesselAssignmentColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_prevwiring":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. discharge", null, ColumnType.DIFF, builder.generatePreviousWiringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Prev. discharge", null, ColumnType.DIFF, generatePreviousWiringColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, builder.generatePermutationColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, generatePermutationColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring":
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Change", null, ColumnType.DIFF, builder.generateChangeStringColumnFormatter(cargoAllocationRef));
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Change", null, ColumnType.DIFF, generateChangeStringColumnFormatter(cargoAllocationRef));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, builder.getEmptyPNLColumnBlockFactory());
@@ -489,5 +498,194 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 		}
 		return null;
+	}
+
+	public IFormatter generateChangeStringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+		return new BaseFormatter() {
+	
+			@Override
+			public String format(final Object obj) {
+	
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
+					if (!row.isReference()) {
+						final Row referenceRow = row.getReferenceRow();
+						if (referenceRow != null) {
+	
+							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
+	
+								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
+									SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
+									return String.format("Buy spot %s to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
+								} else {
+									return String.format("%s redirect from %s to %s", row.getLoadAllocation().getSlot().getName(),
+											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
+								}
+	
+							}
+						} else {
+							if (row.getOpenSlotAllocation() != null) {
+								return String.format("Cancelled %s", row.getOpenSlotAllocation().getSlot().getName());
+							}
+						}
+					}
+				}
+				return "";
+			}
+		};
+	}
+
+	public IFormatter generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+		return new BaseFormatter() {
+			@Override
+			public String format(final Object obj) {
+	
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
+	
+					final CycleGroup group = row.getCycleGroup();
+					if (group != null) {
+						return group.getDescription();
+	
+					}
+				}
+				return "";
+			}
+		};
+	}
+
+	/**
+	 * Generate a new formatter for the previous-vessel-assignment column
+	 * 
+	 * Used in pin/diff mode.
+	 * 
+	 * @param cargoAllocationRef
+	 * @return
+	 */
+	public IFormatter generatePreviousVesselAssignmentColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+		return new BaseFormatter() {
+			@Override
+			public String format(final Object obj) {
+	
+				final Row row = (Row) obj;
+				if (row.getCargoAllocation() == null) {
+					return null;
+				}
+	
+				final String currentAssignment = getVesselAssignmentName(row.getCargoAllocation());
+	
+				String result = "";
+	
+				final Row referenceRow = row.getReferenceRow();
+				if (referenceRow != null) {
+					try {
+						final CargoAllocation ca = (CargoAllocation) referenceRow.eGet(cargoAllocationRef);
+						result = getVesselAssignmentName(ca);
+					} catch (final Exception e) {
+						log.warn("Error formatting previous assignment", e);
+					}
+				}
+	
+				// Only show if different.
+				if (currentAssignment.equals(result)) {
+					return "";
+				}
+				return result;
+			}
+	
+			protected String getVesselAssignmentName(final CargoAllocation ca) {
+				if (ca == null) {
+					return "";
+				}
+				final Cargo inputCargo = ca.getInputCargo();
+				if (inputCargo == null) {
+					return "";
+				}
+				final AVesselSet<? extends Vessel> l = inputCargo.getAssignment();
+				if (l != null) {
+					return l.getName();
+				}
+				return "";
+			}
+		};
+	}
+
+	/**
+	 * Generate a new formatter for the previous-wiring column
+	 * 
+	 * Used in pin/diff mode.
+	 * 
+	 * @param cargoAllocationRef
+	 * @return
+	 */
+	public IFormatter generatePreviousWiringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+		return new BaseFormatter() {
+			@Override
+			public String format(final Object obj) {
+	
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
+					if (row.getCargoAllocation() == null) {
+						return null;
+					}
+	
+					final Row referenceRow = row.getReferenceRow();
+					if (referenceRow != null) {
+						//
+						if (row.getCargoAllocation() != null) {
+							final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation());
+							//
+							String result = "";
+							// // for objects not coming from the pinned scenario,
+							// // return the pinned counterpart's wiring to display as the previous wiring
+							try {
+								final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
+								if (pinnedCargoAllocation != null) {
+									// convert this cargo's wiring of slot allocations to a string
+									result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+								} else if (referenceRow.getOpenSlotAllocation() != null) {
+									final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();
+									if (openSlotAllocation != null) {
+										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
+											result = "Long";
+										} else {
+											result = "Short";
+										}
+									}
+								}
+							} catch (final Exception e) {
+								log.warn("Error formatting previous wiring", e);
+							}
+	
+							// Do not display if same
+							if (currentWiring.equals(result)) {
+								return "";
+							}
+	
+							return result;
+						} else if (row.getOpenSlotAllocation() != null) {
+							final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
+							if (openSlotAllocation != null) {
+	
+								if (referenceRow.getCargoAllocation() != null) {
+									final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
+									if (pinnedCargoAllocation != null) {
+	
+										final String result;
+										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
+											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
+										} else {
+											result = CargoAllocationUtils.getPurchaseWiringAsString(pinnedCargoAllocation);
+										}
+										return result;
+									}
+								}
+							}
+						}
+					}
+				}
+				return "";
+			}
+		};
 	}
 }
