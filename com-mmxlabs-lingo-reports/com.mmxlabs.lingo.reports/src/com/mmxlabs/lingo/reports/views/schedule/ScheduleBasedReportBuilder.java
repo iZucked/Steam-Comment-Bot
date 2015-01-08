@@ -5,7 +5,6 @@
 package com.mmxlabs.lingo.reports.views.schedule;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,14 +13,12 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IMemento;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.lingo.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.lingo.reports.components.ColumnBlock;
 import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
@@ -62,8 +59,6 @@ public class ScheduleBasedReportBuilder {
 	public static final String CARGO_REPORT_TYPE_ID = "CARGO_REPORT_TYPE_ID";
 
 	public static final String COLUMN_BLOCK_PNL = "com.mmxlabs.lingo.reports.components.columns.schedule.pnl_group";
-
-	private static final Logger log = LoggerFactory.getLogger(ScheduleBasedReportBuilder.class);
 
 	public static final OptionInfo ROW_FILTER_LONG_CARGOES = new OptionInfo("ROW_FILTER_LONG_CARGOES", "Longs");
 	public static final OptionInfo ROW_FILTER_SHORT_CARGOES = new OptionInfo("ROW_FILTER_SHORT_CARGOES", "Shorts");

@@ -9,10 +9,12 @@ import static com.mmxlabs.lingo.reports.views.schedule.ScheduleBasedReportBuilde
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.lingo.reports.components.ColumnType;
+import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.extensions.EMFReportColumnManager;
 import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
@@ -57,7 +59,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 	private static final Logger log = LoggerFactory.getLogger(StandardScheduleColumnFactory.class);
-	
+
 	@Override
 	public void registerColumn(final String columnID, final EMFReportColumnManager columnManager, final ScheduleBasedReportBuilder builder) {
 
@@ -100,7 +102,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.cargotype":
 			columnManager.registerColumn(
 					CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "TEST", ColumnType.NORMAL, Formatters.objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c
+					new SimpleEmfBlockColumnFactory(columnID, "Cargo Type", "", ColumnType.NORMAL, Formatters.objectFormatter, cargoAllocationRef, s.getCargoAllocation_InputCargo(), c
 							.getCargo__GetCargoType()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.vessel":
@@ -197,26 +199,28 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 			}, targetObjectRef));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate":
-
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Load Date", null, ColumnType.NORMAL, Formatters.datePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart()));
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.loaddate": {
+			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation__GetLocalStart() }, { targetObjectRef, s.getEvent__GetLocalStart() } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Load/Start Date", null, ColumnType.NORMAL, Formatters.datePartFormatter, paths));
+		}
 
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.loadtime":
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.loadtime": {
+			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation__GetLocalStart() }, { targetObjectRef, s.getEvent__GetLocalStart() } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Load/Start Time", null, ColumnType.NORMAL, Formatters.timePartFormatter, paths));
+		}
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Load Time", null, ColumnType.NORMAL, Formatters.timePartFormatter, loadAllocationRef, s.getSlotAllocation__GetLocalStart()));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate":
-
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Discharge Date", null, ColumnType.NORMAL, Formatters.datePartFormatter,
-					dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd()));
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargedate": {
+			final ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation__GetLocalStart() }, { targetObjectRef, s.getEvent__GetLocalEnd() } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Discharge/End Date", null, ColumnType.NORMAL, Formatters.datePartFormatter, paths));
+		}
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargetime":
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.dischargetime": {
+			final ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation__GetLocalStart() }, { targetObjectRef, s.getEvent__GetLocalEnd() } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Discharge/End Time", null, ColumnType.NORMAL, Formatters.timePartFormatter, paths));
+		}
 
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Discharge Time", null, ColumnType.NORMAL, Formatters.timePartFormatter,
-					dischargeAllocationRef, s.getSlotAllocation__GetLocalEnd()));
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyprice":
 
@@ -242,16 +246,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new SimpleEmfBlockColumnFactory(columnID, "Sales Contract", null, ColumnType.NORMAL, Formatters.objectFormatter, dischargeAllocationRef,
 					s.getSlotAllocation_Slot(), c.getSlot_Contract(), name));
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyport":
-
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Buy Port", null, ColumnType.NORMAL, Formatters.objectFormatter, loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name));
-
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyport": {
+			final ETypedElement[][] paths = new ETypedElement[][] { { loadAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name }, { targetObjectRef, s.getEvent_Port(), name } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Buy/Start Port", null, ColumnType.NORMAL, Formatters.objectFormatter, paths));
+		}
 			break;
-		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellport":
-
-			columnManager.registerColumn(CARGO_REPORT_TYPE_ID,
-					new SimpleEmfBlockColumnFactory(columnID, "Sell Port", null, ColumnType.NORMAL, Formatters.objectFormatter, dischargeAllocationRef,s.getSlotAllocation_Slot(), c.getSlot_Port(), name));
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellport": {
+			ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name },
+					{ targetObjectRef, s.getVesselEventVisit_VesselEvent(), c.getCharterOutEvent_RelocateTo(), name } };
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Sell/End Port", null, ColumnType.NORMAL, Formatters.objectFormatter, paths));
+		}
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.buyvolume_m3":
 
@@ -502,18 +506,18 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 	public IFormatter generateChangeStringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
 		return new BaseFormatter() {
-	
+
 			@Override
 			public String format(final Object obj) {
-	
+
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;
 					if (!row.isReference()) {
 						final Row referenceRow = row.getReferenceRow();
 						if (referenceRow != null) {
-	
+
 							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
-	
+
 								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 									SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
 									return String.format("Buy spot %s to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
@@ -521,7 +525,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 									return String.format("%s redirect from %s to %s", row.getLoadAllocation().getSlot().getName(),
 											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
 								}
-	
+
 							}
 						} else {
 							if (row.getOpenSlotAllocation() != null) {
@@ -539,14 +543,14 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-	
+
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;
-	
+
 					final CycleGroup group = row.getCycleGroup();
 					if (group != null) {
 						return group.getDescription();
-	
+
 					}
 				}
 				return "";
@@ -566,16 +570,16 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-	
+
 				final Row row = (Row) obj;
 				if (row.getCargoAllocation() == null) {
 					return null;
 				}
-	
+
 				final String currentAssignment = getVesselAssignmentName(row.getCargoAllocation());
-	
+
 				String result = "";
-	
+
 				final Row referenceRow = row.getReferenceRow();
 				if (referenceRow != null) {
 					try {
@@ -585,14 +589,14 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						log.warn("Error formatting previous assignment", e);
 					}
 				}
-	
+
 				// Only show if different.
 				if (currentAssignment.equals(result)) {
 					return "";
 				}
 				return result;
 			}
-	
+
 			protected String getVesselAssignmentName(final CargoAllocation ca) {
 				if (ca == null) {
 					return "";
@@ -622,13 +626,13 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		return new BaseFormatter() {
 			@Override
 			public String format(final Object obj) {
-	
+
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;
 					if (row.getCargoAllocation() == null) {
 						return null;
 					}
-	
+
 					final Row referenceRow = row.getReferenceRow();
 					if (referenceRow != null) {
 						//
@@ -656,21 +660,21 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 							} catch (final Exception e) {
 								log.warn("Error formatting previous wiring", e);
 							}
-	
+
 							// Do not display if same
 							if (currentWiring.equals(result)) {
 								return "";
 							}
-	
+
 							return result;
 						} else if (row.getOpenSlotAllocation() != null) {
 							final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
 							if (openSlotAllocation != null) {
-	
+
 								if (referenceRow.getCargoAllocation() != null) {
 									final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
 									if (pinnedCargoAllocation != null) {
-	
+
 										final String result;
 										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
 											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
