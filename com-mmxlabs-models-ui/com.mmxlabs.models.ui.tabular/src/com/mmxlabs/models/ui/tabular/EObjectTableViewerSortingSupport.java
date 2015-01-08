@@ -157,20 +157,46 @@ public class EObjectTableViewerSortingSupport {
 					final IComparableProvider renderer = (IComparableProvider) column.getData(EObjectTableViewer.COLUMN_COMPARABLE_PROVIDER);
 
 					final EMFPath sortPath = (EMFPath) column.getData(EObjectTableViewer.COLUMN_SORT_PATH);
-					// ???
-					final EMFPath path = sortPath != null ? sortPath : (EMFPath) column.getData(EObjectTableViewer.COLUMN_PATH);
+					Object leftOwner = null;
+					Object rightOwner = null;
 
-					final Object leftOwner;
-					final Object rightOwner;
-
-					if (path == null) {
-						leftOwner = leftObject;
-						rightOwner = rightObject;
+					if (sortPath != null) {
+						leftOwner = sortPath.get((EObject) leftObject);
+						rightOwner = sortPath.get((EObject) rightObject);
 					} else {
-						leftOwner = path.get((EObject) leftObject);
-						rightOwner = path.get((EObject) rightObject);
-					}
+						Object data = column.getData(EObjectTableViewer.COLUMN_PATH);
+						if (data instanceof EMFPath) {
+							final EMFPath path = (EMFPath) data;
+							leftOwner = path.get((EObject) leftObject);
+							rightOwner = path.get((EObject) rightObject);
+						} else if (data instanceof EMFPath[]) {
 
+							leftOwner = leftObject;
+							rightOwner = rightObject;
+
+							EMFPath[] paths = (EMFPath[]) data;
+							for (final EMFPath p : paths) {
+								final Object x = p.get((EObject) leftObject);
+								if (x != null) {
+									leftOwner = x;
+									break;
+								}
+							}
+
+							for (final EMFPath p : paths) {
+								final Object x = p.get((EObject) rightObject);
+								if (x != null) {
+									rightOwner = x;
+									break;
+								}
+							}
+						} else {
+							leftOwner = leftObject;
+							rightOwner = rightObject;
+
+						}
+
+					}
 					final Comparable left = renderer.getComparable(leftOwner);
 					final Comparable right = renderer.getComparable(rightOwner);
 
