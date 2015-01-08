@@ -27,26 +27,18 @@ import com.mmxlabs.lingo.reports.components.ColumnBlockManager;
 import com.mmxlabs.lingo.reports.components.ColumnHandler;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.EmfBlockColumnFactory;
-import com.mmxlabs.lingo.reports.utils.CargoAllocationUtils;
 import com.mmxlabs.lingo.reports.utils.ColumnConfigurationDialog.OptionInfo;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandler;
 import com.mmxlabs.lingo.reports.utils.ICustomRelatedSlotHandlerExtension;
 import com.mmxlabs.lingo.reports.utils.ScheduleDiffUtils;
-import com.mmxlabs.lingo.reports.views.formatters.BaseFormatter;
-import com.mmxlabs.lingo.reports.views.formatters.IFormatter;
 import com.mmxlabs.lingo.reports.views.formatters.IntegerFormatter;
-import com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup;
-import com.mmxlabs.lingo.reports.views.schedule.model.Row;
 import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.commercial.BaseEntityBook;
 import com.mmxlabs.models.lng.commercial.BaseLegalEntity;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EntityProfitAndLoss;
@@ -58,7 +50,6 @@ import com.mmxlabs.models.lng.schedule.ProfitAndLossContainer;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.AVesselSet;
 
 /**
  * Big helper class for any report based on {@link CargoAllocation}s, {@link OpenSlotAllocation}s, or other events. This builds the internal report data model and handles pin/diff comparison hooks.
@@ -351,195 +342,6 @@ public class ScheduleBasedReportBuilder {
 	public void refreshDiffOptions() {
 		scheduleDiffUtils.setCheckAssignmentDifferences(diffFilterInfo.contains(DIFF_FILTER_VESSEL_CHANGES.id));
 		// pinDiffModeHelper.setShowPinnedData(diffFilterInfo.contains(DIFF_FILTER_PINNDED_SCENARIO.id));
-	}
-
-	/**
-	 * Generate a new formatter for the previous-vessel-assignment column
-	 * 
-	 * Used in pin/diff mode.
-	 * 
-	 * @param cargoAllocationRef
-	 * @return
-	 */
-	public IFormatter generatePreviousVesselAssignmentColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String format(final Object obj) {
-
-				final Row row = (Row) obj;
-				if (row.getCargoAllocation() == null) {
-					return null;
-				}
-
-				final String currentAssignment = getVesselAssignmentName(row.getCargoAllocation());
-
-				String result = "";
-
-				final Row referenceRow = row.getReferenceRow();
-				if (referenceRow != null) {
-					try {
-						final CargoAllocation ca = (CargoAllocation) referenceRow.eGet(cargoAllocationRef);
-						result = getVesselAssignmentName(ca);
-					} catch (final Exception e) {
-						log.warn("Error formatting previous assignment", e);
-					}
-				}
-
-				// Only show if different.
-				if (currentAssignment.equals(result)) {
-					return "";
-				}
-				return result;
-			}
-
-			protected String getVesselAssignmentName(final CargoAllocation ca) {
-				if (ca == null) {
-					return "";
-				}
-				final Cargo inputCargo = ca.getInputCargo();
-				if (inputCargo == null) {
-					return "";
-				}
-				final AVesselSet<? extends Vessel> l = inputCargo.getAssignment();
-				if (l != null) {
-					return l.getName();
-				}
-				return "";
-			}
-		};
-	}
-
-	/**
-	 * Generate a new formatter for the previous-wiring column
-	 * 
-	 * Used in pin/diff mode.
-	 * 
-	 * @param cargoAllocationRef
-	 * @return
-	 */
-	public IFormatter generatePreviousWiringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String format(final Object obj) {
-
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-					if (row.getCargoAllocation() == null) {
-						return null;
-					}
-
-					final Row referenceRow = row.getReferenceRow();
-					if (referenceRow != null) {
-						//
-						if (row.getCargoAllocation() != null) {
-							final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation());
-							//
-							String result = "";
-							// // for objects not coming from the pinned scenario,
-							// // return the pinned counterpart's wiring to display as the previous wiring
-							try {
-								final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
-								if (pinnedCargoAllocation != null) {
-									// convert this cargo's wiring of slot allocations to a string
-									result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-								} else if (referenceRow.getOpenSlotAllocation() != null) {
-									final OpenSlotAllocation openSlotAllocation = referenceRow.getOpenSlotAllocation();
-									if (openSlotAllocation != null) {
-										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-											result = "Long";
-										} else {
-											result = "Short";
-										}
-									}
-								}
-							} catch (final Exception e) {
-								log.warn("Error formatting previous wiring", e);
-							}
-
-							// Do not display if same
-							if (currentWiring.equals(result)) {
-								return "";
-							}
-
-							return result;
-						} else if (row.getOpenSlotAllocation() != null) {
-							final OpenSlotAllocation openSlotAllocation = row.getOpenSlotAllocation();
-							if (openSlotAllocation != null) {
-
-								if (referenceRow.getCargoAllocation() != null) {
-									final CargoAllocation pinnedCargoAllocation = referenceRow.getCargoAllocation();
-									if (pinnedCargoAllocation != null) {
-
-										final String result;
-										if (openSlotAllocation.getSlot() instanceof LoadSlot) {
-											result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
-										} else {
-											result = CargoAllocationUtils.getPurchaseWiringAsString(pinnedCargoAllocation);
-										}
-										return result;
-									}
-								}
-							}
-						}
-					}
-				}
-				return "";
-			}
-		};
-	}
-
-	public IFormatter generateChangeStringColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-
-			@Override
-			public String format(final Object obj) {
-
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-					if (!row.isReference()) {
-						final Row referenceRow = row.getReferenceRow();
-						if (referenceRow != null) {
-
-							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
-
-								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
-									SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
-									return String.format("Buy spot %s to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
-								} else {
-									return String.format("%s redirect from %s to %s", row.getLoadAllocation().getSlot().getName(),
-											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
-								}
-
-							}
-						} else {
-							if (row.getOpenSlotAllocation() != null) {
-								return String.format("Cancelled %s", row.getOpenSlotAllocation().getSlot().getName());
-							}
-						}
-					}
-				}
-				return "";
-			}
-		};
-	}
-
-	public IFormatter generatePermutationColumnFormatter(final EStructuralFeature cargoAllocationRef) {
-		return new BaseFormatter() {
-			@Override
-			public String format(final Object obj) {
-
-				if (obj instanceof Row) {
-					final Row row = (Row) obj;
-
-					final CycleGroup group = row.getCycleGroup();
-					if (group != null) {
-						return group.getDescription();
-
-					}
-				}
-				return "";
-			}
-		};
 	}
 
 	protected Pair<EObject, CargoAllocation> getIfCargoAllocation(final Object obj, final EStructuralFeature cargoAllocationRef) {
