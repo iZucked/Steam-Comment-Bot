@@ -336,6 +336,15 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getCycleGroup_Index() {
+		return (EAttribute)cycleGroupEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getRowGroup() {
 		return rowGroupEClass;
 	}
@@ -403,6 +412,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		cycleGroupEClass = createEClass(CYCLE_GROUP);
 		createEAttribute(cycleGroupEClass, CYCLE_GROUP__DESCRIPTION);
 		createEReference(cycleGroupEClass, CYCLE_GROUP__ROWS);
+		createEAttribute(cycleGroupEClass, CYCLE_GROUP__INDEX);
 
 		rowGroupEClass = createEClass(ROW_GROUP);
 		createEReference(rowGroupEClass, ROW_GROUP__ROWS);
@@ -467,6 +477,7 @@ public class ScheduleReportPackageImpl extends EPackageImpl implements ScheduleR
 		initEClass(cycleGroupEClass, CycleGroup.class, "CycleGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getCycleGroup_Description(), ecorePackage.getEString(), "description", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCycleGroup_Rows(), this.getRow(), this.getRow_CycleGroup(), "rows", null, 0, -1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCycleGroup_Index(), ecorePackage.getEInt(), "index", null, 0, 1, CycleGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(rowGroupEClass, RowGroup.class, "RowGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRowGroup_Rows(), this.getRow(), this.getRow_RowGroup(), "rows", null, 0, -1, RowGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -312,13 +312,22 @@ public interface ScheduleReportPackage extends EPackage {
 	int CYCLE_GROUP__ROWS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CYCLE_GROUP__INDEX = 2;
+
+	/**
 	 * The number of structural features of the '<em>Cycle Group</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CYCLE_GROUP_FEATURE_COUNT = 2;
+	int CYCLE_GROUP_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Cycle Group</em>' class.
@@ -629,6 +638,17 @@ public interface ScheduleReportPackage extends EPackage {
 	EReference getCycleGroup_Rows();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Index</em>'.
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex()
+	 * @see #getCycleGroup()
+	 * @generated
+	 */
+	EAttribute getCycleGroup_Index();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.lingo.reports.views.schedule.model.RowGroup <em>Row Group</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -869,6 +889,14 @@ public interface ScheduleReportPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CYCLE_GROUP__ROWS = eINSTANCE.getCycleGroup_Rows();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CYCLE_GROUP__INDEX = eINSTANCE.getCycleGroup_Index();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.RowGroupImpl <em>Row Group</em>}' class.

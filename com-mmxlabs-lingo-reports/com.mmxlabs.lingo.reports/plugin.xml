@@ -305,6 +305,10 @@
       </ScheduleBasedColumn>
       <ScheduleBasedColumn
             handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
+            id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
+      </ScheduleBasedColumn>
+      <ScheduleBasedColumn
+            handlerID="com.mmxlabs.lingo.reports.components.columns.StandardScheduleColumnFactory"
             id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
       </ScheduleBasedColumn>
    </extension>
@@ -384,6 +388,9 @@
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation">
+         </InitialColumn>
+         <InitialColumn
+               id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group">
          </InitialColumn>
          <InitialColumn
                id="com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring">
