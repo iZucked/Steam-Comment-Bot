@@ -10,6 +10,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -64,5 +65,15 @@ public class MarkToMarketVesselAvailability implements IVesselAvailability {
 	@Override
 	public IStartEndRequirement getEndRequirement() {
 		return null;
+	}
+
+	@Override
+	public ISpotCharterInMarket getSpotCharterInMarket() {
+		return null;
+	}
+
+	@Override
+	public int getSpotIndex() {
+		return -1;
 	}
 }

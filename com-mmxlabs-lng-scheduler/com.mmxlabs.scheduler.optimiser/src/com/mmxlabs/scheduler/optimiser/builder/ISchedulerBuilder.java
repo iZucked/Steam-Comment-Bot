@@ -20,7 +20,6 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.common.components.impl.MutableTimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -37,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -426,27 +426,20 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param namePrefix
 	 *            the common prefix for all these vessels' names
-	 * @param vesselClass
-	 *            the class of spot charter to create
-	 * @param count
-	 *            the number of spot charters to create
-	 * @param hourlyCharterPrice
-	 *            $/Hour rate to charter-in vessels
+	 * @param spotCharterInMarket
 	 * @return
 	 */
-	List<IVesselAvailability> createSpotVessels(String namePrefix, @NonNull IVesselClass vesselClass, int count, ICurve dailyCharterInPrice);
+	List<IVesselAvailability> createSpotVessels(String namePrefix, @NonNull ISpotCharterInMarket spotCharterInMarket);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
 	 * {@code createVessel(name, vesselClass, VesselInstanceType.SPOT_CHARTER, createStartEndRequirement(), createStartEndRequirement())} .
 	 * 
 	 * @param name
-	 * @param vesselClass
-	 *            * @param hourlyCharterPrice $/Hour rate to charter-in vessel
 	 * @return
 	 */
 	@NonNull
-	IVesselAvailability createSpotVessel(String name, @NonNull IVesselClass vesselClass, ICurve dailyCharterInPrice);
+	IVesselAvailability createSpotVessel(String name, int spotIndex, @NonNull ISpotCharterInMarket spotCharterInMarket);
 
 	/**
 	 * Set the list of ports this vessel is not permitted to travel to.
@@ -694,5 +687,8 @@ public interface ISchedulerBuilder {
 	 * @param charterOutStartTime
 	 */
 	void setGeneratedCharterOutStartTime(int charterOutStartTime);
+
+	@NonNull
+	ISpotCharterInMarket createSpotCharterInMarket(@NonNull String name, @NonNull IVesselClass oVesselClass, @NonNull ICurve charterInCurve, int charterCount);
 
 }

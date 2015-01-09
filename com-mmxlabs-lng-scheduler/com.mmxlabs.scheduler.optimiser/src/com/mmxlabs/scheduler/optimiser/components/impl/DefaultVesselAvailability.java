@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -26,6 +29,10 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 
 	private IStartEndRequirement startRequirement;
 	private IStartEndRequirement endRequirement;
+
+	private ISpotCharterInMarket spotCharterInMarket;
+
+	private int spotIndex;
 
 	@Override
 	public IVessel getVessel() {
@@ -77,4 +84,23 @@ public final class DefaultVesselAvailability implements IVesselAvailability {
 		this.endRequirement = endRequirement;
 	}
 
+	@Nullable
+	@Override
+	public ISpotCharterInMarket getSpotCharterInMarket() {
+		return spotCharterInMarket;
+	}
+
+	public void setSpotCharterInMarket(final ISpotCharterInMarket spotCharterInMarket) {
+		this.spotCharterInMarket = spotCharterInMarket;
+	}
+
+	@Override
+	public int getSpotIndex() {
+		return spotIndex;
+	}
+
+	public void setSpotIndex(final int spotIndex) {
+		this.spotIndex = spotIndex;
+
+	}
 }

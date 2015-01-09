@@ -50,6 +50,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.IXYPortDistanceCalculator;
+import com.mmxlabs.scheduler.optimiser.components.DefaultSpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -61,6 +62,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -705,10 +707,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @return
 	 */
 	@Override
-	public List<IVesselAvailability> createSpotVessels(final String namePrefix, @NonNull final IVesselClass vesselClass, final int count, final ICurve dailyCharterInPrice) {
-		final List<IVesselAvailability> answer = new ArrayList<>(count);
-		for (int i = 0; i < count; i++) {
-			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), vesselClass, dailyCharterInPrice));
+	public List<IVesselAvailability> createSpotVessels(final String namePrefix, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
+		final List<IVesselAvailability> answer = new ArrayList<>(spotCharterInMarket.getAvailabilityCount());
+		for (int i = 0; i < spotCharterInMarket.getAvailabilityCount(); i++) {
+			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), i, spotCharterInMarket));
 		}
 		return answer;
 	}
@@ -722,13 +724,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	@NonNull
-	public IVesselAvailability createSpotVessel(final String name, @NonNull final IVesselClass vesselClass, final ICurve dailyCharterInPrice) {
+	public IVesselAvailability createSpotVessel(final String name, final int spotIndex, @NonNull final ISpotCharterInMarket spotCharterInMarket) {
 		final IStartRequirement start = createStartRequirement(ANYWHERE, null, null);
 		final IEndRequirement end = createEndRequirement(Collections.singletonList(ANYWHERE), null, /* endCold */true, 0);
-
+		final IVesselClass vesselClass = spotCharterInMarket.getVesselClass();
+		final ICurve dailyCharterInPrice = spotCharterInMarket.getDailyCharterInRateCurve();
 		final IVessel spotVessel = createVessel(name, vesselClass, vesselClass.getCargoCapacity());
 		// End cold already enforced in VoyagePlanner#getVoyageOptionsAndSetVpoChoices
-		return createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end);
+		return createVesselAvailability(spotVessel, dailyCharterInPrice, VesselInstanceType.SPOT_CHARTER, start, end, spotCharterInMarket, spotIndex);
 	}
 
 	@Override
@@ -758,7 +761,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@NonNull
 	public IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ICurve dailyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartRequirement start,
 			final IEndRequirement end) {
+		return createVesselAvailability(vessel, dailyCharterInRate, vesselInstanceType, start, end, null, -1);
+	}
 
+	@NonNull
+	private IVesselAvailability createVesselAvailability(@NonNull final IVessel vessel, final ICurve dailyCharterInRate, final VesselInstanceType vesselInstanceType, final IStartRequirement start,
+			final IEndRequirement end, @Nullable final ISpotCharterInMarket spotCharterInMarket, final int spotIndex) {
 		if (!vessels.contains(vessel)) {
 			throw new IllegalArgumentException("IVessel was not created using this builder");
 		}
@@ -853,6 +861,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
 		startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
+
+		if (spotCharterInMarket != null) {
+			vesselAvailability.setSpotCharterInMarket(spotCharterInMarket);
+			vesselAvailability.setSpotIndex(spotIndex);
+		}
 
 		return vesselAvailability;
 	}
@@ -1937,5 +1950,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void freezeSlotToVesselAvailability(@NonNull final IPortSlot portSlot, @NonNull final IVesselAvailability vesselAvailability) {
 		constrainSlotToVesselAvailabilities(portSlot, Collections.singleton(vesselAvailability));
 		this.frozenSlots.add(portSlot);
+	}
+
+	@Override
+	public ISpotCharterInMarket createSpotCharterInMarket(final String name, final IVesselClass vesselClass, final ICurve dailyCharterInRateCurve, final int availabilityCount) {
+		return new DefaultSpotCharterInMarket(name, vesselClass, dailyCharterInRateCurve, availabilityCount);
 	}
 }

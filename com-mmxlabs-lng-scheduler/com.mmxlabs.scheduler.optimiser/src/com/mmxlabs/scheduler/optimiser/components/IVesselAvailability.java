@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.common.curves.ICurve;
 
@@ -16,6 +17,16 @@ import com.mmxlabs.common.curves.ICurve;
 public interface IVesselAvailability {
 
 	IVessel getVessel();
+
+	@Nullable
+	ISpotCharterInMarket getSpotCharterInMarket();
+
+	/**
+	 * If {@link #getSpotCharterInMarket()} is not null, then this is the instance counter for the charter market.
+	 * 
+	 * @return
+	 */
+	int getSpotIndex();
 
 	/**
 	 * Returns the {@link VesselInstanceType} of this {@link IVessel} instance.
@@ -35,4 +46,5 @@ public interface IVesselAvailability {
 	 * @return daily charter in price
 	 */
 	ICurve getDailyCharterInRate();
+
 }
