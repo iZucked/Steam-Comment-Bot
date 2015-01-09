@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.ETypedElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.lingo.reports.components.ColumnType;
 import com.mmxlabs.lingo.reports.components.MultiObjectEmfBlockColumnFactory;
 import com.mmxlabs.lingo.reports.components.SimpleEmfBlockColumnFactory;
@@ -528,18 +529,32 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
 
-								String elementString = CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation());
-								String referenceString = CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation());
+								final String elementString = CargoAllocationUtils.getWiringAsString(row.getCargoAllocation());
+								final String referenceString = CargoAllocationUtils.getWiringAsString(referenceRow.getCargoAllocation());
 								if (elementString.equals(referenceString)) {
+
+									if (!Equality.isEqual(CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation()),
+											CargoAllocationUtils.getVesselAssignmentName(referenceRow.getCargoAllocation()))) {
+
+										// Highlight vessel changes.
+										// return String
+										// .format("Allocate '%s' : '%s' to '%s'", row.getLoadAllocation().getSlot().getName(),
+										// CargoAllocationUtils.getVesselAssignmentName(referenceRow.getCargoAllocation()),
+										// CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation()));
+									}
+
 									return "";
 								}
 								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
 									final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
-									return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), elementString);
+									return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
 								} else {
 									return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(),
 											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
 								}
+							}
+							if (row.getOpenSlotAllocation() != null && referenceRow.getOpenSlotAllocation() == null) {
+								return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
 							}
 						} else {
 							if (row.getOpenSlotAllocation() != null) {
@@ -590,7 +605,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 			}
 
 			@Override
-			public Comparable getComparable(Object obj) {
+			public Comparable getComparable(final Object obj) {
 				if (obj instanceof Row) {
 					final Row row = (Row) obj;
 
@@ -623,7 +638,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					return null;
 				}
 
-				final String currentAssignment = getVesselAssignmentName(row.getCargoAllocation());
+				final String currentAssignment = CargoAllocationUtils.getVesselAssignmentName(row.getCargoAllocation());
 
 				String result = "";
 
@@ -631,7 +646,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				if (referenceRow != null) {
 					try {
 						final CargoAllocation ca = (CargoAllocation) referenceRow.eGet(cargoAllocationRef);
-						result = getVesselAssignmentName(ca);
+						result = CargoAllocationUtils.getVesselAssignmentName(ca);
 					} catch (final Exception e) {
 						log.warn("Error formatting previous assignment", e);
 					}
@@ -642,33 +657,6 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					return "";
 				}
 				return result;
-			}
-
-			// FIXME: This is duplicated here a few times.
-			protected String getVesselAssignmentName(final CargoAllocation ca) {
-				if (ca == null) {
-					return "";
-				}
-				final Cargo inputCargo = ca.getInputCargo();
-				if (inputCargo == null) {
-					return "";
-				}
-				final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
-
-				if (vesselAssignmentType instanceof VesselAvailability) {
-					final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
-					final Vessel vessel = vesselAvailability.getVessel();
-					if (vessel != null) {
-						return vessel.getName();
-					}
-				} else if (vesselAssignmentType instanceof CharterInMarket) {
-					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
-					final VesselClass vesselClass = charterInMarket.getVesselClass();
-					if (vesselClass != null) {
-						return vesselClass.getName();
-					}
-				}
-				return "";
 			}
 		};
 	}

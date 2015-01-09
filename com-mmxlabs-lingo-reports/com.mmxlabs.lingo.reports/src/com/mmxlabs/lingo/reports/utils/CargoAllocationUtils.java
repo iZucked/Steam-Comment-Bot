@@ -11,12 +11,18 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.tabular.generic.GenericEMFTableDataModel;
 
 /**
@@ -75,7 +81,7 @@ public class CargoAllocationUtils {
 		final StringBuffer sb = new StringBuffer();
 
 		final SlotAllocation sa0 = slotAllocations.get(0);
-		sb.append(sa0 != null ? "'" + sa0.getName() + "'": "()");
+		sb.append(sa0 != null ? "'" + sa0.getName() + "'" : "()");
 
 		for (int i = 1; i < slotAllocations.size(); ++i) {
 			final SlotAllocation sa = slotAllocations.get(i);
@@ -155,4 +161,29 @@ public class CargoAllocationUtils {
 		return sb.toString();
 	}
 
+	public static String getVesselAssignmentName(final CargoAllocation ca) {
+		if (ca == null) {
+			return "";
+		}
+		final Cargo inputCargo = ca.getInputCargo();
+		if (inputCargo == null) {
+			return "";
+		}
+		final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
+
+		if (vesselAssignmentType instanceof VesselAvailability) {
+			final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+			final Vessel vessel = vesselAvailability.getVessel();
+			if (vessel != null) {
+				return vessel.getName();
+			}
+		} else if (vesselAssignmentType instanceof CharterInMarket) {
+			final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+			final VesselClass vesselClass = charterInMarket.getVesselClass();
+			if (vesselClass != null) {
+				return vesselClass.getName();
+			}
+		}
+		return "";
+	}
 }
