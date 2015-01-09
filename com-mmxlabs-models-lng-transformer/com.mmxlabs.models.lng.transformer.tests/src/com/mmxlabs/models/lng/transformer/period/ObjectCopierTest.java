@@ -42,7 +42,7 @@ public class ObjectCopierTest {
 		// Set some arbitrary attributes.
 		sourceLoad1.setName("LoadSlot1");
 		sourceLoad1.setArriveCold(true);
-		sourceLoad1.setAssignment(null);
+		sourceLoad1.setNominatedVessel(null);
 		sourceLoad1.setCancellationFee(1000);
 		sourceLoad1.setPricingEvent(PricingEvent.START_DISCHARGE);
 

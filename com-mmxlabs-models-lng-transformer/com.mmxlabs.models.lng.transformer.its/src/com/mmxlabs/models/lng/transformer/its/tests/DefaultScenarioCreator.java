@@ -311,12 +311,13 @@ public class DefaultScenarioCreator {
 
 			final DefaultVesselStateAttributesCreator dvsac = new DefaultVesselStateAttributesCreator();
 
-			final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-			charterCostModel.setSpotCharterCount(spotCharterCount);
-			charterCostModel.setVesselClass(vc);
+			final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+			charterInMarket.setName("market-" + vc.getName());
+			charterInMarket.setSpotCharterCount(spotCharterCount);
+			charterInMarket.setVesselClass(vc);
 
 			final SpotMarketsModel spotMarketsModel = scenario.getSpotMarketsModel();
-			spotMarketsModel.getCharterInMarkets().add(charterCostModel);
+			spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 
 			vc.setLadenAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));
 			vc.setBallastAttributes(dvsac.createVesselStateAttributes(defaultMinSpeed, defaultMaxSpeed));

@@ -102,7 +102,7 @@ public class CustomScenarioCreator {
 
 	public CustomScenarioCreator(final float dischargePrice, String timeZone) {
 		this.timeZone = timeZone;
-		
+
 		scenario = ManifestJointModel.createEmptyInstance(null);
 
 		portModel = scenario.getPortModel();
@@ -146,6 +146,7 @@ public class CustomScenarioCreator {
 	public CustomScenarioCreator(final float dischargePrice) {
 		this(dischargePrice, TimeZone.getDefault().getID());
 	}
+
 	/**
 	 * Add a simple vessel to the scenario.
 	 * 
@@ -226,12 +227,13 @@ public class CustomScenarioCreator {
 		vc.setFillCapacity(fillCapacity);
 
 		if (spotCharterCount > 0) {
-			final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-			charterCostModel.setSpotCharterCount(spotCharterCount);
+			final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+			charterInMarket.setName("market-" + vc.getName());
+			charterInMarket.setSpotCharterCount(spotCharterCount);
 			// Costs
-			charterCostModel.setVesselClass(vc);
+			charterInMarket.setVesselClass(vc);
 
-			spotMarketsModel.getCharterInMarkets().add(charterCostModel);
+			spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 		}
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -461,9 +463,9 @@ public class CustomScenarioCreator {
 
 	public Cargo addCargo(final String cargoID, final Port loadPort, final Port dischargePort, final int loadPrice, final float dischargePrice, final float cvValue, final Date loadWindowStart,
 			final int travelTime) {
-		return addCargo(cargoID, loadPort, dischargePort, Float.toString(loadPrice), Float.toString(dischargePrice), cvValue, loadWindowStart,
-				 travelTime);
+		return addCargo(cargoID, loadPort, dischargePort, Float.toString(loadPrice), Float.toString(dischargePrice), cvValue, loadWindowStart, travelTime);
 	}
+
 	public DryDockEvent addDryDock(final Port startPort, final Date start, final int durationDays) {
 
 		if (!portModel.getPorts().contains(startPort)) {
@@ -728,8 +730,8 @@ public class CustomScenarioCreator {
 
 		return result;
 	}
-	
-	public CommodityIndex addCommodityIndex(final String name){
+
+	public CommodityIndex addCommodityIndex(final String name) {
 		final CommodityIndex ci = PricingFactory.eINSTANCE.createCommodityIndex();
 		ci.setName(name);
 		pricingModel.getCommodityIndices().add(ci);
@@ -737,8 +739,8 @@ public class CustomScenarioCreator {
 		ci.setData(di);
 		return ci;
 	}
-	
-	public void addDataToCommodity(CommodityIndex ci, Date date, double value){
+
+	public void addDataToCommodity(CommodityIndex ci, Date date, double value) {
 		DataIndex<Double> di = (DataIndex<Double>) ci.getData();
 		List<IndexPoint<Double>> points = di.getPoints();
 		IndexPoint<Double> ip = PricingFactory.eINSTANCE.createIndexPoint();

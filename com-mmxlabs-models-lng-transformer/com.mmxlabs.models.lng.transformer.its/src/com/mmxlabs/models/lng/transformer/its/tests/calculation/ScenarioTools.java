@@ -276,12 +276,14 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-		charterCostModel.setSpotCharterCount(spotCharterCount);
-		// Costs
-		charterCostModel.setVesselClass(vc);
+		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		charterInMarket.setName("market-" + vc.getName());
 
-		spotMarketsModel.getCharterInMarkets().add(charterCostModel);
+		charterInMarket.setSpotCharterCount(spotCharterCount);
+		// Costs
+		charterInMarket.setVesselClass(vc);
+
+		spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -535,12 +537,13 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterInMarket charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
-		charterCostModel.setSpotCharterCount(spotCharterCount);
+		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		charterInMarket.setName("market-" + vc.getName());
+		charterInMarket.setSpotCharterCount(spotCharterCount);
 		// Costs
-		charterCostModel.setVesselClass(vc);
+		charterInMarket.setVesselClass(vc);
 
-		spotMarketsModel.getCharterInMarkets().add(charterCostModel);
+		spotMarketsModel.getCharterInMarkets().add(charterInMarket);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();

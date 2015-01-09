@@ -7,12 +7,10 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.inject.Inject;
 
@@ -23,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -37,6 +34,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
@@ -48,7 +46,6 @@ import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -154,7 +151,6 @@ public class AnnotatedSolutionExporter {
 		final Map<String, Long> desFitnessMap = new LinkedHashMap<String, Long>();
 		final Map<String, Long> fobFitnessMap = new LinkedHashMap<String, Long>();
 
-		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
 		for (final IResource resource : resources) {
 			final IVesselAvailability vesselAvailability = vesselProvider.getVesselAvailability(resource);
 
@@ -170,7 +166,7 @@ public class AnnotatedSolutionExporter {
 			case FLEET:
 				eSequence.setSequenceType(SequenceType.VESSEL);
 				eSequence.setVesselAvailability(modelEntityMap.getModelObject(vesselAvailability, VesselAvailability.class));
-				eSequence.unsetVesselClass();
+				eSequence.unsetCharterInMarket();
 				break;
 			case FOB_SALE:
 				fobSequence.setSequenceType(SequenceType.FOB_SALE);
@@ -197,18 +193,9 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 2)
 					continue;
 
-				eSequence.setVesselClass(modelEntityMap.getModelObject(vesselAvailability.getVessel().getVesselClass(), VesselClass.class));
+				eSequence.setCharterInMarket(modelEntityMap.getModelObject(vesselAvailability.getSpotCharterInMarket(), CharterInMarket.class));
 				eSequence.unsetVesselAvailability();
-				final AtomicInteger ai = counter.get(vesselAvailability.getVessel().getVesselClass());
-				int ix = 0;
-
-				if (ai == null) {
-					counter.put(vesselAvailability.getVessel().getVesselClass(), new AtomicInteger(ix));
-				} else {
-					ix = ai.incrementAndGet();
-				}
-
-				eSequence.setSpotIndex(ix);
+				eSequence.setSpotIndex(vesselAvailability.getSpotIndex());
 				break;
 			case CARGO_SHORTS:
 				eSequence.setSequenceType(SequenceType.CARGO_SHORTS);
@@ -223,7 +210,7 @@ public class AnnotatedSolutionExporter {
 			}
 
 			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vesselAvailability.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
-				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVesselAvailability() == null && eSequence.getVesselClass() == null)) {
+				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVesselAvailability() == null && eSequence.getCharterInMarket() == null)) {
 					log.error("No vessel set on sequence!?");
 				}
 			}
@@ -426,7 +413,7 @@ public class AnnotatedSolutionExporter {
 			}
 			final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 			openSlotExporter.export(element, annotations);
-//			mtmExporter.export(element, annotations);
+			// mtmExporter.export(element, annotations);
 		}
 
 		@SuppressWarnings("unchecked")

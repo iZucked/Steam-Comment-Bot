@@ -109,7 +109,7 @@ public class LddScenarioCreator extends DefaultScenarioCreator {
 
 		this.vesselAvailability = fleetCreator.setAvailability(portfolioModel.getCargoModel(), vessel, originPort, startDate, originPort, endDate);
 
-		cargo.setAssignment(vessel);
+		cargo.setVesselAssignmentType(vesselAvailability);
 	}
 
 }

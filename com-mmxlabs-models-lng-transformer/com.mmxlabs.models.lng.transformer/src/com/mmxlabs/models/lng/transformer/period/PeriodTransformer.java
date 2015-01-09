@@ -79,6 +79,7 @@ import com.mmxlabs.models.lng.transformer.period.InclusionChecker.Position;
 import com.mmxlabs.models.lng.transformer.period.extensions.IPeriodTransformerExtension;
 import com.mmxlabs.models.lng.transformer.util.LNGSchedulerJobUtils;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 
 /***
@@ -179,7 +180,7 @@ public class PeriodTransformer {
 		final EditingDomain internalDomain = evaluateScenario(optimiserSettings, output);
 
 		final CargoModel cargoModel = output.getPortfolioModel().getCargoModel();
-		final FleetModel fleetModel = output.getFleetModel();
+		final SpotMarketsModel spotMarketsModel = output.getSpotMarketsModel();
 
 		// Generate the schedule map - maps cargoes and events to schedule information for date, port and heel data extraction
 		final Map<AssignableElement, PortVisit> startConditionMap = new HashMap<>();
@@ -190,7 +191,7 @@ public class PeriodTransformer {
 		generateSlotAllocationMap(output, slotAllocationMap);
 
 		// Update vessel availabilities
-		updateVesselAvailabilities(periodRecord, cargoModel, fleetModel, startConditionMap, endConditionMap);
+		updateVesselAvailabilities(periodRecord, cargoModel, spotMarketsModel, startConditionMap, endConditionMap);
 
 		// List of new vessel availabilities for cargoes outside normal range
 		final List<VesselAvailability> newVesselAvailabilities = new LinkedList<>();
@@ -332,16 +333,17 @@ public class PeriodTransformer {
 						slotsToRemove.removeAll(depCargo.getSlots());
 						cargoesToRemove.remove(depCargo);
 						if (depCargo.getCargoType() == CargoType.FLEET) {
-							final AVesselSet<? extends Vessel> assignment = depCargo.getAssignment();
-							if (assignment instanceof Vessel) {
-								final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
-								vesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-								vesselAvailability.setVessel((Vessel) assignment);
+							final VesselAssignmentType vesselAssignmentType = depCargo.getVesselAssignmentType();
+							if (vesselAssignmentType instanceof VesselAvailability) {
+								VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+								final VesselAvailability newVesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+								newVesselAvailability.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
+								newVesselAvailability.setVessel(vesselAvailability.getVessel());
 
 								// TODO: set charter rate, set entity. Once multiple avail complete, grab from assignment.
 
-								newVesselAvailabilities.add(vesselAvailability);
-								updateVesselAvailabilityConditions(vesselAvailability, depCargo, startConditionMap, endConditionMap);
+								newVesselAvailabilities.add(newVesselAvailability);
+								updateVesselAvailabilityConditions(newVesselAvailability, depCargo, startConditionMap, endConditionMap);
 							}
 
 						}
@@ -434,10 +436,10 @@ public class PeriodTransformer {
 		return extraDependencies;
 	}
 
-	public void updateVesselAvailabilities(final PeriodRecord periodRecord, final CargoModel cargoModel, final FleetModel fleetModel, final Map<AssignableElement, PortVisit> startConditionMap,
-			final Map<AssignableElement, PortVisit> endConditionMap) {
+	public void updateVesselAvailabilities(final PeriodRecord periodRecord, final CargoModel cargoModel, final SpotMarketsModel spotMarketsModel,
+			final Map<AssignableElement, PortVisit> startConditionMap, final Map<AssignableElement, PortVisit> endConditionMap) {
 
-		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
+		final List<CollectedAssignment> collectedAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 
 		updateVesselAvailabilities(periodRecord, collectedAssignments, startConditionMap, endConditionMap);
 	}
@@ -689,10 +691,10 @@ public class PeriodTransformer {
 	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketsModel spotMarketsModel, final IScenarioEntityMapping mapping) {
 
 		// Not quite ready yet...
-//		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesPurchaseSpotMarket(), mapping);
-//		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesSalesSpotMarket(), mapping);
-//		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobPurchasesSpotMarket(), mapping);
-//		trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), mapping);
+		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesPurchaseSpotMarket(), mapping);
+		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getDesSalesSpotMarket(), mapping);
+		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobPurchasesSpotMarket(), mapping);
+		// trimSpotMarketCurves(internalDomain, periodRecord, spotMarketsModel.getFobSalesSpotMarket(), mapping);
 	}
 
 	public void trimSpotMarketCurves(final EditingDomain internalDomain, final PeriodRecord periodRecord, final SpotMarketGroup spotMarketGroup, final IScenarioEntityMapping mapping) {
@@ -723,10 +725,9 @@ public class PeriodTransformer {
 			}
 			curve.getPoints().removeAll(pointsToRemove);
 
-//			TODO: If bounds are missing, then we need to do something different.
+			// TODO: If bounds are missing, then we need to do something different.
 			// Set the constant, and add curve data across known period instead
-			
-			
+
 			// Fill in curve gaps with the original constant value.
 			if (constantValue != 0) {
 				final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));

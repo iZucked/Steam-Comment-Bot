@@ -702,6 +702,7 @@ public class ShippingCalculationsTest extends AbstractShippingCalculationsTestCl
 
 		final CharterInMarket charterModel = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
 		charteringSpotMarkets.add(charterModel);
+		charterModel.setName("market-" + msc.vc.getName());
 
 		charterModel.setVesselClass(msc.vc);
 		charterModel.setSpotCharterCount(1);

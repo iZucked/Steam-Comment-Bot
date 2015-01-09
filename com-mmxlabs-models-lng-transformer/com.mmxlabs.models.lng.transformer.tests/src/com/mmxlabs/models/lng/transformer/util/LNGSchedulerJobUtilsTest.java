@@ -37,7 +37,7 @@ public class LNGSchedulerJobUtilsTest {
 		final Schedule schedule;
 		final CargoModel cargoModel;
 
-		final Vessel vessel2;
+		final VesselAvailability availability2;
 		final Cargo cargo;
 		// Build simple single cargo scenario
 		{
@@ -58,18 +58,21 @@ public class LNGSchedulerJobUtilsTest {
 			final Vessel vessel1 = FleetFactory.eINSTANCE.createVessel();
 			vessel1.setName("VESSEL1");
 
-			vessel2 = FleetFactory.eINSTANCE.createVessel();
+			Vessel vessel2 = FleetFactory.eINSTANCE.createVessel();
 			vessel2.setName("VESSEL2");
 
-			cargo.setAssignment(vessel1);
+			final VesselAvailability availability1 = CargoFactory.eINSTANCE.createVesselAvailability();
+			availability1.setVessel(vessel1);
+
+			availability2 = CargoFactory.eINSTANCE.createVesselAvailability();
+			availability2.setVessel(vessel2);
+
+			cargo.setVesselAssignmentType(availability1);
 
 			schedule = ScheduleFactory.eINSTANCE.createSchedule();
 
-			final VesselAvailability availability = CargoFactory.eINSTANCE.createVesselAvailability();
-			availability.setVessel(vessel2);
-
 			final Sequence sequence = ScheduleFactory.eINSTANCE.createSequence();
-			sequence.setVesselAvailability(availability);
+			sequence.setVesselAvailability(availability2);
 			sequence.setSequenceType(SequenceType.VESSEL);
 			schedule.getSequences().add(sequence);
 
@@ -110,7 +113,7 @@ public class LNGSchedulerJobUtilsTest {
 		domain.getCommandStack().execute(cmd);
 
 		// Check output
-		Assert.assertEquals(vessel2, cargo.getAssignment());
+		Assert.assertEquals(availability2, cargo.getVesselAssignmentType());
 
 	}
 }

@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
@@ -140,8 +141,11 @@ public class PeriodExporterTest {
 
 		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
+		
+		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
+		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel2);
 
-		cargo1.setAssignment(vessel1);
+		cargo1.setVesselAssignmentType(vesselAvailability1);
 		cargo1.setSequenceHint(1);
 
 		// Create period copy
@@ -156,8 +160,8 @@ public class PeriodExporterTest {
 		// Perform changes -- change assignment
 		{
 			final Cargo copyCargo1 = mapping.getCopyFromOriginal(cargo1);
-			final Vessel copyVessel2 = mapping.getCopyFromOriginal(vessel2);
-			copyCargo1.setAssignment(copyVessel2);
+			final VesselAvailability copyVesselAvailability2 = mapping.getCopyFromOriginal(vesselAvailability2);
+			copyCargo1.setVesselAssignmentType(copyVesselAvailability2);
 			copyCargo1.setSequenceHint(2);
 		}
 
@@ -169,7 +173,7 @@ public class PeriodExporterTest {
 
 		// Check original scenario state
 		{
-			Assert.assertSame(vessel2, cargo1.getAssignment());
+			Assert.assertSame(vesselAvailability2, cargo1.getVesselAssignmentType());
 			Assert.assertEquals(2, cargo1.getSequenceHint());
 		}
 	}
@@ -367,6 +371,7 @@ public class PeriodExporterTest {
 		final DischargeSlot discharge1 = PeriodTestUtils.createDischargeSlot(originalScenario, "discharge1");
 
 		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
+		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
 		// Create period copy
 		{
 			final Copier copier = new Copier();
@@ -386,8 +391,8 @@ public class PeriodExporterTest {
 			// Create our new wiring
 			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, "cargo1", copyLoad1, copyDischarge1);
 
-			final Vessel copyVessel1 = mapping.getCopyFromOriginal(vessel1);
-			copyCargo.setAssignment(copyVessel1);
+			final VesselAvailability copyVesselAvailability1 = mapping.getCopyFromOriginal(vesselAvailability1);
+			copyCargo.setVesselAssignmentType(copyVesselAvailability1);
 			copyCargo.setSequenceHint(2);
 
 		}
@@ -404,7 +409,7 @@ public class PeriodExporterTest {
 			Assert.assertFalse(originalScenario.getPortfolioModel().getCargoModel().getCargoes().isEmpty());
 			final Cargo newCargo = originalScenario.getPortfolioModel().getCargoModel().getCargoes().get(0);
 
-			Assert.assertSame(vessel1, newCargo.getAssignment());
+			Assert.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
 
 			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
 			Assert.assertSame(discharge1, originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0));
@@ -430,6 +435,7 @@ public class PeriodExporterTest {
 		final LoadSlot load1 = PeriodTestUtils.createLoadSlot(originalScenario, "load1");
 
 		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
+		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
 		// Create period copy
 		{
 			final Copier copier = new Copier();
@@ -450,8 +456,8 @@ public class PeriodExporterTest {
 			// Create our new wiring
 			final Cargo copyCargo = PeriodTestUtils.createCargo(periodScenario, "cargo1", copyLoad1, copySpotDischarge1);
 
-			final Vessel copyVessel1 = mapping.getCopyFromOriginal(vessel1);
-			copyCargo.setAssignment(copyVessel1);
+			final VesselAvailability copyVesselAvailability1 = mapping.getCopyFromOriginal(vesselAvailability1);
+			copyCargo.setVesselAssignmentType(copyVesselAvailability1);
 			copyCargo.setSequenceHint(2);
 
 		}
@@ -472,7 +478,7 @@ public class PeriodExporterTest {
 			final DischargeSlot newDischarge = originalScenario.getPortfolioModel().getCargoModel().getDischargeSlots().get(0);
 			Assert.assertTrue(newDischarge instanceof SpotSlot);
 
-			Assert.assertSame(vessel1, newCargo.getAssignment());
+			Assert.assertSame(vesselAvailability1, newCargo.getVesselAssignmentType());
 
 			Assert.assertSame(load1, originalScenario.getPortfolioModel().getCargoModel().getLoadSlots().get(0));
 
@@ -568,8 +574,11 @@ public class PeriodExporterTest {
 
 		final Vessel vessel1 = PeriodTestUtils.createVessel(originalScenario, "vessel1");
 		final Vessel vessel2 = PeriodTestUtils.createVessel(originalScenario, "vessel2");
+		
+		final VesselAvailability vesselAvailability1 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel1);
+		final VesselAvailability vesselAvailability2 = PeriodTestUtils.createVesselAvailability(originalScenario, vessel2);
 
-		event1.setAssignment(vessel1);
+		event1.setVesselAssignmentType(vesselAvailability1);
 		event1.setSequenceHint(1);
 
 		// Create period copy
@@ -584,8 +593,8 @@ public class PeriodExporterTest {
 		// Perform changes -- change assignment
 		{
 			final CharterOutEvent copyEvent1 = mapping.getCopyFromOriginal(event1);
-			final Vessel copyVessel2 = mapping.getCopyFromOriginal(vessel2);
-			copyEvent1.setAssignment(copyVessel2);
+			final VesselAvailability copyVesselAvailability2 = mapping.getCopyFromOriginal(vesselAvailability2);
+			copyEvent1.setVesselAssignmentType(copyVesselAvailability2);
 			copyEvent1.setSequenceHint(2);
 		}
 
@@ -597,7 +606,7 @@ public class PeriodExporterTest {
 
 		// Check original scenario state
 		{
-			Assert.assertSame(vessel2, event1.getAssignment());
+			Assert.assertSame(vesselAvailability2, event1.getVesselAssignmentType());
 			Assert.assertEquals(2, event1.getSequenceHint());
 		}
 	}
