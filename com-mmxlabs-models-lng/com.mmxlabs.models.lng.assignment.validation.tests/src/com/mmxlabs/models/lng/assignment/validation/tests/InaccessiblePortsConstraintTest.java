@@ -22,11 +22,14 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.CharterOutEvent;
 import com.mmxlabs.models.lng.cargo.DryDockEvent;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 
 public class InaccessiblePortsConstraintTest {
 
@@ -40,11 +43,13 @@ public class InaccessiblePortsConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
+		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
-		cargo.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(cargo, true);
 	}
@@ -59,13 +64,15 @@ public class InaccessiblePortsConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
+		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
 		vessel1.getInaccessiblePorts().add(port1);
 
-		cargo.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(cargo, false);
 	}
@@ -80,7 +87,7 @@ public class InaccessiblePortsConstraintTest {
 		vessel1.setVesselClass(vesselClass1);
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
+		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
@@ -88,7 +95,9 @@ public class InaccessiblePortsConstraintTest {
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		cargo.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		cargo.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(cargo, false);
 	}
@@ -101,7 +110,7 @@ public class InaccessiblePortsConstraintTest {
 		final VesselClass vesselClass1 = FleetFactory.eINSTANCE.createVesselClass();
 
 		final Cargo cargo = CargoFactory.eINSTANCE.createCargo();
-		LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
+		final LoadSlot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		slot.setPort(port1);
 		cargo.getSlots().add(slot);
 
@@ -109,8 +118,9 @@ public class InaccessiblePortsConstraintTest {
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
-		cargo.setAssignment(vesselClass1);
-
+		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		charterInMarket.setVesselClass(vesselClass1);
+		cargo.setVesselAssignmentType(charterInMarket);
 		checkConstraint(cargo, false);
 	}
 
@@ -126,7 +136,9 @@ public class InaccessiblePortsConstraintTest {
 		final DryDockEvent event = CargoFactory.eINSTANCE.createDryDockEvent();
 		event.setPort(port1);
 
-		event.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(event, true);
 	}
@@ -145,7 +157,9 @@ public class InaccessiblePortsConstraintTest {
 
 		vessel1.getInaccessiblePorts().add(port1);
 
-		event.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(event, false);
 	}
@@ -166,7 +180,9 @@ public class InaccessiblePortsConstraintTest {
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		event.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(event, false);
 	}
@@ -185,12 +201,12 @@ public class InaccessiblePortsConstraintTest {
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
-		event.setAssignment(vesselClass1);
+		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		charterInMarket.setVesselClass(vesselClass1);
+		event.setVesselAssignmentType(charterInMarket);
 
 		checkConstraint(event, false);
 	}
-	
-	
 
 	@Test
 	public void testCharterOut_OK() {
@@ -204,7 +220,9 @@ public class InaccessiblePortsConstraintTest {
 		final CharterOutEvent event = CargoFactory.eINSTANCE.createCharterOutEvent();
 		event.setRelocateTo(port1);
 
-		event.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(event, true);
 	}
@@ -223,7 +241,9 @@ public class InaccessiblePortsConstraintTest {
 
 		vessel1.getInaccessiblePorts().add(port1);
 
-		event.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(event, false);
 	}
@@ -244,7 +264,9 @@ public class InaccessiblePortsConstraintTest {
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Keep vessel assigned
-		event.setAssignment(vessel1);
+		final VesselAvailability vesselAvailability = CargoFactory.eINSTANCE.createVesselAvailability();
+		vesselAvailability.setVessel(vessel1);
+		event.setVesselAssignmentType(vesselAvailability);
 
 		checkConstraint(event, false);
 	}
@@ -263,14 +285,13 @@ public class InaccessiblePortsConstraintTest {
 		vesselClass1.getInaccessiblePorts().add(port1);
 
 		// Test vessel class as assignment
-		event.setAssignment(vesselClass1);
+		final CharterInMarket charterInMarket = SpotMarketsFactory.eINSTANCE.createCharterInMarket();
+		charterInMarket.setVesselClass(vesselClass1);
+		event.setVesselAssignmentType(charterInMarket);
 
 		checkConstraint(event, false);
 	}
 
-	
-	
-	
 	private void checkConstraint(final EObject target, final boolean expectSuccess) {
 		final IConstraintStatus successStatus = mock(IConstraintStatus.class);
 		when(successStatus.isOK()).thenReturn(Boolean.TRUE);

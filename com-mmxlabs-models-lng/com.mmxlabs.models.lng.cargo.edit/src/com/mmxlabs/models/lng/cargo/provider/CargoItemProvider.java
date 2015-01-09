@@ -62,9 +62,9 @@ public class CargoItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addAssignmentPropertyDescriptor(object);
-			addSpotIndexPropertyDescriptor(object);
 			addSequenceHintPropertyDescriptor(object);
+			addVesselAssignmentTypePropertyDescriptor(object);
+			addSpotIndexPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addAllowRewiringPropertyDescriptor(object);
 			addSlotsPropertyDescriptor(object);
@@ -90,28 +90,6 @@ public class CargoItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Assignment feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAssignmentPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AssignableElement_assignment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_assignment_feature", "_UI_AssignableElement_type"),
-				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}
@@ -178,6 +156,28 @@ public class CargoItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Assignment Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselAssignmentTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_vesselAssignmentType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_vesselAssignmentType_feature", "_UI_AssignableElement_type"),
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -294,8 +294,8 @@ public class CargoItemProvider
 
 		switch (notification.getFeatureID(Cargo.class)) {
 			case CargoPackage.CARGO__NAME:
-			case CargoPackage.CARGO__SPOT_INDEX:
 			case CargoPackage.CARGO__SEQUENCE_HINT:
+			case CargoPackage.CARGO__SPOT_INDEX:
 			case CargoPackage.CARGO__LOCKED:
 			case CargoPackage.CARGO__ALLOW_REWIRING:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

@@ -745,7 +745,10 @@ public class SpotMarketsPackageImpl extends EPackageImpl implements SpotMarketsP
 		fobPurchasesMarketEClass.getESuperTypes().add(this.getSpotMarket());
 		fobSalesMarketEClass.getESuperTypes().add(this.getSpotMarket());
 		charterOutMarketEClass.getESuperTypes().add(this.getSpotCharterMarket());
+		charterOutMarketEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		charterInMarketEClass.getESuperTypes().add(this.getSpotCharterMarket());
+		charterInMarketEClass.getESuperTypes().add(theTypesPackage.getVesselAssignmentType());
+		charterInMarketEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(spotMarketsModelEClass, SpotMarketsModel.class, "SpotMarketsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

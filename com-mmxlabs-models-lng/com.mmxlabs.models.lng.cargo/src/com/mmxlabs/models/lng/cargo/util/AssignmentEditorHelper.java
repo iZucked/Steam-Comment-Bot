@@ -24,15 +24,14 @@ import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 
 /**
@@ -75,11 +74,11 @@ public class AssignmentEditorHelper {
 		}
 	}
 
-	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel) {
-		return collectAssignments(cargoModel, fleetModel, new AssignableElementDateComparator());
+	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final SpotMarketsModel spotMarketsModel) {
+		return collectAssignments(cargoModel, spotMarketsModel, new AssignableElementDateComparator());
 	}
 
-	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final FleetModel fleetModel, IAssignableElementComparator assignableElementComparator) {
+	public static List<CollectedAssignment> collectAssignments(final CargoModel cargoModel, final SpotMarketsModel spotMarketsModel, final IAssignableElementComparator assignableElementComparator) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
 		// Enforce consistent order
 		final Map<Pair<VesselAvailability, Integer>, List<AssignableElement>> fleetGrouping = new TreeMap<Pair<VesselAvailability, Integer>, List<AssignableElement>>(
@@ -97,60 +96,60 @@ public class AssignmentEditorHelper {
 						return c;
 					}
 				});
-		final Map<Triple<VesselClass, Integer, Integer>, List<AssignableElement>> spotGrouping = new TreeMap<Triple<VesselClass, Integer, Integer>, List<AssignableElement>>(
-				new Comparator<Triple<VesselClass, Integer, Integer>>() {
+		final Map<Triple<CharterInMarket, Integer, Integer>, List<AssignableElement>> spotGrouping = new TreeMap<>(new Comparator<Triple<CharterInMarket, Integer, Integer>>() {
 
-					@Override
-					public int compare(final Triple<VesselClass, Integer, Integer> o1, final Triple<VesselClass, Integer, Integer> o2) {
+			@Override
+			public int compare(final Triple<CharterInMarket, Integer, Integer> o1, final Triple<CharterInMarket, Integer, Integer> o2) {
 
-						int c = o1.getSecond() - o2.getSecond();
-						if (c == 0) {
-							if (o1.getThird() == o2.getThird()) {
-								c = 0;
-							} else if (o1.getThird() == null) {
-								c = -1;
-							} else if (o2.getThird() == null) {
-								return 1;
-							} else {
-								c = o1.getThird() - o2.getThird();
-							}
-						}
-
-						if (c == 0) {
-							// Hmm, this could be bad, will we loose elements in the TreeMap?
-							final int ii = 0; // Set a breakpoint!
-						}
-
-						return c;
+				int c = o1.getSecond() - o2.getSecond();
+				if (c == 0) {
+					if (o1.getThird() == o2.getThird()) {
+						c = 0;
+					} else if (o1.getThird() == null) {
+						c = -1;
+					} else if (o2.getThird() == null) {
+						return 1;
+					} else {
+						c = o1.getThird() - o2.getThird();
 					}
-				});
+				}
+
+				if (c == 0) {
+					// Hmm, this could be bad, will we loose elements in the TreeMap?
+					final int ii = 0; // Set a breakpoint!
+				}
+
+				return c;
+			}
+		});
 
 		int index = 0;
 		final List<VesselAvailability> vesselAvailabilityOrder = new ArrayList<>();
-		final List<VesselClass> vesselClassOrder = new ArrayList<>();
 		for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 			vesselAvailabilityOrder.add(va);
 			fleetGrouping.put(new Pair<VesselAvailability, Integer>(va, index++), new ArrayList<AssignableElement>());
 		}
-		for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
-			vesselClassOrder.add(vesselClass);
-			spotGrouping.put(new Triple<VesselClass, Integer, Integer>(vesselClass, index++, 0), new ArrayList<AssignableElement>());
+		final List<CharterInMarket> charterInMarketOrder = new ArrayList<>();
+		for (final CharterInMarket charterInMarket : spotMarketsModel.getCharterInMarkets()) {
+			charterInMarketOrder.add(charterInMarket);
+			spotGrouping.put(new Triple<CharterInMarket, Integer, Integer>(charterInMarket, index++, 0), new ArrayList<AssignableElement>());
 		}
 
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
 		assignableElements.addAll(cargoModel.getCargoes());
-		assignableElements.addAll(cargoModel.getLoadSlots());
-		assignableElements.addAll(cargoModel.getDischargeSlots());
+		// assignableElements.addAll(cargoModel.getLoadSlots());
+		// assignableElements.addAll(cargoModel.getDischargeSlots());
 		assignableElements.addAll(cargoModel.getVesselEvents());
 		for (final AssignableElement assignableElement : assignableElements) {
-			if (assignableElement.getAssignment() == null) {
+			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
+			if (vesselAssignmentType == null) {
 				continue;
 			}
 
-			if (assignableElement.isSetSpotIndex()) {
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
 				// Use vessel index normally, but for spots include spot index
-				final Triple<VesselClass, Integer, Integer> key = new Triple<VesselClass, Integer, Integer>((VesselClass) assignableElement.getAssignment(), vesselClassOrder.indexOf(assignableElement
-						.getAssignment()), assignableElement.getSpotIndex());
+				final Triple<CharterInMarket, Integer, Integer> key = new Triple<>(charterInMarket, charterInMarketOrder.indexOf(charterInMarket), assignableElement.getSpotIndex());
 				List<AssignableElement> l = spotGrouping.get(key);
 				if (l == null) {
 					l = new ArrayList<AssignableElement>();
@@ -158,9 +157,8 @@ public class AssignmentEditorHelper {
 				}
 				l.add(assignableElement);
 
-			} else {
-				final Vessel vessel = (Vessel) assignableElement.getAssignment();
-				final VesselAvailability vesselAvailability = findVesselAvailability(vessel, assignableElement, cargoModel.getVesselAvailabilities());
+			} else if (vesselAssignmentType instanceof VesselAvailability) {
+				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
 
 				// Use vessel index normally, but for spots include spot index
 				final Pair<VesselAvailability, Integer> key = new Pair<>(vesselAvailability, vesselAvailabilityOrder.indexOf(vesselAvailability));
@@ -176,34 +174,11 @@ public class AssignmentEditorHelper {
 		for (final Pair<VesselAvailability, Integer> k : fleetGrouping.keySet()) {
 			result.add(new CollectedAssignment(fleetGrouping.get(k), k.getFirst(), assignableElementComparator));
 		}
-		for (final Triple<VesselClass, Integer, Integer> k : spotGrouping.keySet()) {
+		for (final Triple<CharterInMarket, Integer, Integer> k : spotGrouping.keySet()) {
 			result.add(new CollectedAssignment(spotGrouping.get(k), k.getFirst(), k.getThird()));
 		}
 
 		return result;
-	}
-
-	public static VesselAvailability findVesselAvailability(final Vessel vessel, final AssignableElement assignableElement, final List<VesselAvailability> vesselAvailabilities) {
-
-		int mightMatchCount = 0;
-		for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-			if (vesselAvailability.getVessel() == vessel) {
-				mightMatchCount++;
-				if (isElementInVesselAvailability(assignableElement, vesselAvailability)) {
-					return vesselAvailability;
-				}
-			}
-		}
-		// Passed through first loop with out finding a vessel availability covering the assigned element. However if we did find a single availability matching the vessel, return that. If multiple, give up.
-		if (mightMatchCount == 1) {
-			for (final VesselAvailability vesselAvailability : vesselAvailabilities) {
-				if (vesselAvailability.getVessel() == vessel) {
-					return vesselAvailability;
-				}
-			}
-		}
-
-		return null;
 	}
 
 	private static boolean isElementInVesselAvailability(final AssignableElement element, final VesselAvailability vesselAvailability) {
@@ -244,35 +219,18 @@ public class AssignmentEditorHelper {
 		return true;
 	}
 
-
 	public static int getMaxSpot(final CargoModel cargoModel) {
 		int maxSpot = 0;
 		for (final Cargo cargo : cargoModel.getCargoes()) {
-			if (cargo.getAssignment() != null) {
-				if (cargo.isSetSpotIndex()) {
-					maxSpot = Math.max(maxSpot, cargo.getSpotIndex());
-				}
-			}
-		}
-		for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
-			if (loadSlot.getAssignment() != null) {
-				if (loadSlot.isSetSpotIndex()) {
-					maxSpot = Math.max(maxSpot, loadSlot.getSpotIndex());
-				}
-			}
-		}
-		for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
-			if (dischargeSlot.getAssignment() != null) {
-				if (dischargeSlot.isSetSpotIndex()) {
-					maxSpot = Math.max(maxSpot, dischargeSlot.getSpotIndex());
-				}
+			final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				maxSpot = Math.max(maxSpot, cargo.getSpotIndex());
 			}
 		}
 		for (final VesselEvent vesselEvent : cargoModel.getVesselEvents()) {
-			if (vesselEvent.getAssignment() != null) {
-				if (vesselEvent.isSetSpotIndex()) {
-					maxSpot = Math.max(maxSpot, vesselEvent.getSpotIndex());
-				}
+			final VesselAssignmentType vesselAssignmentType = vesselEvent.getVesselAssignmentType();
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				maxSpot = Math.max(maxSpot, vesselEvent.getSpotIndex());
 			}
 		}
 		maxSpot++;
@@ -283,7 +241,53 @@ public class AssignmentEditorHelper {
 		// The slot intersection may mean no vessels are permitted at all!
 		boolean noVesselsAllowed = false;
 		// populate the list of allowed vessels for the target object
-		if (target instanceof Cargo) {
+
+		if (target instanceof Slot) {
+			final Slot s = (Slot) target;
+			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
+			boolean first = true;
+			final List<AVesselSet<Vessel>> slotVessels = s.getAllowedVessels();
+			if (slotVessels == null || slotVessels.isEmpty()) {
+				return noVesselsAllowed;
+			}
+			if (first) {
+				vessels.addAll(slotVessels);
+				first = false;
+			} else {
+				// TODO: hmm, should we check classes vs vessels here?
+				final Set<AVesselSet<Vessel>> matchedByClass = new LinkedHashSet<>();
+				//
+				for (final AVesselSet<Vessel> v1 : vessels) {
+					if (v1 instanceof Vessel) {
+						for (final AVesselSet<Vessel> v2 : slotVessels) {
+							if (SetUtils.getObjects(v2).contains(v1)) {
+								matchedByClass.add(v1);
+							}
+						}
+					}
+				}
+				// Reverse map
+				for (final AVesselSet<Vessel> v1 : slotVessels) {
+					if (v1 instanceof Vessel) {
+						for (final AVesselSet<Vessel> v2 : vessels) {
+							if (SetUtils.getObjects(v2).contains(v1)) {
+								matchedByClass.add(v1);
+							}
+						}
+					}
+				}
+
+				// Exact matches
+				vessels.retainAll(slotVessels);
+				// Add in VesselClass/Group hits
+				vessels.addAll(matchedByClass);
+			}
+			allowedVessels.addAll(vessels);
+			if (vessels.isEmpty() && first == false) {
+				// Uh oh - set intersection resulted in nothing!
+				noVesselsAllowed = true;
+			}
+		} else if (target instanceof Cargo) {
 			final Cargo cargo = (Cargo) target;
 			final Set<AVesselSet<Vessel>> vessels = new LinkedHashSet<>();
 			boolean first = true;
@@ -338,5 +342,4 @@ public class AssignmentEditorHelper {
 		}
 		return noVesselsAllowed;
 	}
-
 }

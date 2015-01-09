@@ -48,6 +48,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getAllowedVessels <em>Allowed Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getCancellationFee <em>Cancellation Fee</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOverrideRestrictions <em>Override Restrictions</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}</li>
  * </ul>
  * </p>
  *
@@ -55,7 +56,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  * @generated
  */
-public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, AssignableElement {
+public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider {
 	/**
 	 * Returns the value of the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
@@ -984,6 +985,32 @@ public interface Slot extends UUIDObject, NamedObject, ITimezoneProvider, Assign
 	 * @generated
 	 */
 	void setOverrideRestrictions(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Nominated Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Nominated Vessel</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Nominated Vessel</em>' reference.
+	 * @see #setNominatedVessel(Vessel)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_NominatedVessel()
+	 * @model
+	 * @generated
+	 */
+	Vessel getNominatedVessel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getNominatedVessel <em>Nominated Vessel</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Nominated Vessel</em>' reference.
+	 * @see #getNominatedVessel()
+	 * @generated
+	 */
+	void setNominatedVessel(Vessel value);
 
 	/**
 	 * <!-- begin-user-doc -->

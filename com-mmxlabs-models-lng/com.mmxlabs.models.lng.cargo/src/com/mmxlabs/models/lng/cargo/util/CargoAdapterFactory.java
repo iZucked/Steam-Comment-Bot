@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -84,6 +85,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	protected CargoSwitch<Adapter> modelSwitch =
 		new CargoSwitch<Adapter>() {
 			@Override
+			public Adapter caseCargoModel(CargoModel object) {
+				return createCargoModelAdapter();
+			}
+			@Override
 			public Adapter caseCargo(Cargo object) {
 				return createCargoAdapter();
 			}
@@ -98,10 +103,6 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseDischargeSlot(DischargeSlot object) {
 				return createDischargeSlotAdapter();
-			}
-			@Override
-			public Adapter caseCargoModel(CargoModel object) {
-				return createCargoModelAdapter();
 			}
 			@Override
 			public Adapter caseSpotSlot(SpotSlot object) {
@@ -166,6 +167,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
 				return createITimezoneProviderAdapter();
+			}
+			@Override
+			public Adapter caseVesselAssignmentType(VesselAssignmentType object) {
+				return createVesselAssignmentTypeAdapter();
 			}
 			@Override
 			public <T extends ObjectSet<T, U>, U> Adapter caseObjectSet(ObjectSet<T, U> object) {
@@ -486,6 +491,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.VesselAssignmentType <em>Vessel Assignment Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.VesselAssignmentType
+	 * @generated
+	 */
+	public Adapter createVesselAssignmentTypeAdapter() {
 		return null;
 	}
 

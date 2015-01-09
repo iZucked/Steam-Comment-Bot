@@ -254,7 +254,7 @@ public class CargoEditingCommands {
 
 			if (cargo != null && dischargeSlot.isFOBSale()) {
 				// Cargo assignments should be removed.
-				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_Assignment(), SetCommand.UNSET_VALUE));
+				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), SetCommand.UNSET_VALUE));
 				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_Locked(), Boolean.FALSE));
 				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SequenceHint(), SetCommand.UNSET_VALUE));
 				setCommands.add(SetCommand.create(editingDomain, cargo, CargoPackage.eINSTANCE.getAssignableElement_SpotIndex(), SetCommand.UNSET_VALUE));

@@ -6,10 +6,7 @@
  */
 package com.mmxlabs.models.lng.cargo;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
-
-import com.mmxlabs.models.lng.types.AVesselSet;
-
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -20,9 +17,9 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getAssignment <em>Assignment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSequenceHint <em>Sequence Hint</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.AssignableElement#isLocked <em>Locked</em>}</li>
  * </ul>
  * </p>
@@ -33,32 +30,6 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface AssignableElement extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Assignment</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Assignment</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Assignment</em>' reference.
-	 * @see #setAssignment(AVesselSet)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getAssignableElement_Assignment()
-	 * @model
-	 * @generated
-	 */
-	AVesselSet<? extends Vessel> getAssignment();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getAssignment <em>Assignment</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Assignment</em>' reference.
-	 * @see #getAssignment()
-	 * @generated
-	 */
-	void setAssignment(AVesselSet<? extends Vessel> value);
-
-	/**
 	 * Returns the value of the '<em><b>Spot Index</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -67,11 +38,9 @@ public interface AssignableElement extends EObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Spot Index</em>' attribute.
-	 * @see #isSetSpotIndex()
-	 * @see #unsetSpotIndex()
 	 * @see #setSpotIndex(int)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getAssignableElement_SpotIndex()
-	 * @model unsettable="true"
+	 * @model
 	 * @generated
 	 */
 	int getSpotIndex();
@@ -81,35 +50,10 @@ public interface AssignableElement extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Spot Index</em>' attribute.
-	 * @see #isSetSpotIndex()
-	 * @see #unsetSpotIndex()
 	 * @see #getSpotIndex()
 	 * @generated
 	 */
 	void setSpotIndex(int value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetSpotIndex()
-	 * @see #getSpotIndex()
-	 * @see #setSpotIndex(int)
-	 * @generated
-	 */
-	void unsetSpotIndex();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getSpotIndex <em>Spot Index</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Spot Index</em>' attribute is set.
-	 * @see #unsetSpotIndex()
-	 * @see #getSpotIndex()
-	 * @see #setSpotIndex(int)
-	 * @generated
-	 */
-	boolean isSetSpotIndex();
 
 	/**
 	 * Returns the value of the '<em><b>Sequence Hint</b></em>' attribute.
@@ -162,5 +106,31 @@ public interface AssignableElement extends EObject {
 	 * @generated
 	 */
 	void setLocked(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Assignment Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Assignment Type</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Assignment Type</em>' reference.
+	 * @see #setVesselAssignmentType(VesselAssignmentType)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getAssignableElement_VesselAssignmentType()
+	 * @model
+	 * @generated
+	 */
+	VesselAssignmentType getVesselAssignmentType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.AssignableElement#getVesselAssignmentType <em>Vessel Assignment Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Assignment Type</em>' reference.
+	 * @see #getVesselAssignmentType()
+	 * @generated
+	 */
+	void setVesselAssignmentType(VesselAssignmentType value);
 
 } // AssignableElement

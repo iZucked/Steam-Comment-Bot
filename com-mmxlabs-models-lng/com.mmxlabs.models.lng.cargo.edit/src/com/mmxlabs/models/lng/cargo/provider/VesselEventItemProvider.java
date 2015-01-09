@@ -66,9 +66,9 @@ public class VesselEventItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
-			addAssignmentPropertyDescriptor(object);
-			addSpotIndexPropertyDescriptor(object);
 			addSequenceHintPropertyDescriptor(object);
+			addVesselAssignmentTypePropertyDescriptor(object);
+			addSpotIndexPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 			addDurationInDaysPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
@@ -97,28 +97,6 @@ public class VesselEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Assignment feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAssignmentPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AssignableElement_assignment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_assignment_feature", "_UI_AssignableElement_type"),
-				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}
@@ -185,6 +163,28 @@ public class VesselEventItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Vessel Assignment Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselAssignmentTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_vesselAssignmentType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_vesselAssignmentType_feature", "_UI_AssignableElement_type"),
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
@@ -326,8 +326,8 @@ public class VesselEventItemProvider
 
 		switch (notification.getFeatureID(VesselEvent.class)) {
 			case CargoPackage.VESSEL_EVENT__NAME:
-			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
 			case CargoPackage.VESSEL_EVENT__SEQUENCE_HINT:
+			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
 			case CargoPackage.VESSEL_EVENT__LOCKED:
 			case CargoPackage.VESSEL_EVENT__DURATION_IN_DAYS:
 			case CargoPackage.VESSEL_EVENT__START_AFTER:

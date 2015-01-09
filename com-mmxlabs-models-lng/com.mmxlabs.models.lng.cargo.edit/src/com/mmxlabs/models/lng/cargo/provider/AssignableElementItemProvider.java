@@ -65,34 +65,12 @@ public class AssignableElementItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addAssignmentPropertyDescriptor(object);
-			addSpotIndexPropertyDescriptor(object);
 			addSequenceHintPropertyDescriptor(object);
+			addVesselAssignmentTypePropertyDescriptor(object);
+			addSpotIndexPropertyDescriptor(object);
 			addLockedPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Assignment feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAssignmentPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AssignableElement_assignment_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_assignment_feature", "_UI_AssignableElement_type"),
-				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -162,6 +140,28 @@ public class AssignableElementItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Vessel Assignment Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselAssignmentTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AssignableElement_vesselAssignmentType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AssignableElement_vesselAssignmentType_feature", "_UI_AssignableElement_type"),
+				 CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -170,7 +170,7 @@ public class AssignableElementItemProvider
 	@Override
 	public String getText(Object object) {
 		AssignableElement assignableElement = (AssignableElement)object;
-		return getString("_UI_AssignableElement_type") + " " + assignableElement.getAssignment();
+		return getString("_UI_AssignableElement_type") + " " + assignableElement.getVesselAssignmentType();
 	}
 
 	/**
@@ -185,8 +185,8 @@ public class AssignableElementItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AssignableElement.class)) {
-			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
 			case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
+			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
 			case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

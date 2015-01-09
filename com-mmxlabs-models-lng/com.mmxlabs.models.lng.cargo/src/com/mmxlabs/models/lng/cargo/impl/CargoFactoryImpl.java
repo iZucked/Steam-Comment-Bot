@@ -67,10 +67,10 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case CargoPackage.CARGO_MODEL: return createCargoModel();
 			case CargoPackage.CARGO: return createCargo();
 			case CargoPackage.LOAD_SLOT: return createLoadSlot();
 			case CargoPackage.DISCHARGE_SLOT: return createDischargeSlot();
-			case CargoPackage.CARGO_MODEL: return createCargoModel();
 			case CargoPackage.SPOT_LOAD_SLOT: return createSpotLoadSlot();
 			case CargoPackage.SPOT_DISCHARGE_SLOT: return createSpotDischargeSlot();
 			case CargoPackage.CARGO_GROUP: return createCargoGroup();

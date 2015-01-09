@@ -9,10 +9,7 @@ package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
-
-import com.mmxlabs.models.lng.types.AVesselSet;
-
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EClass;
@@ -28,9 +25,9 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getAssignment <em>Assignment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getSequenceHint <em>Sequence Hint</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.AssignableElementImpl#isLocked <em>Locked</em>}</li>
  * </ul>
  * </p>
@@ -39,14 +36,34 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  */
 public abstract class AssignableElementImpl extends EObjectImpl implements AssignableElement {
 	/**
-	 * The cached value of the '{@link #getAssignment() <em>Assignment</em>}' reference.
+	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssignment()
+	 * @see #getSequenceHint()
 	 * @generated
 	 * @ordered
 	 */
-	protected AVesselSet<? extends Vessel> assignment;
+	protected static final int SEQUENCE_HINT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSequenceHint()
+	 * @generated
+	 * @ordered
+	 */
+	protected int sequenceHint = SEQUENCE_HINT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getVesselAssignmentType() <em>Vessel Assignment Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselAssignmentType()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselAssignmentType vesselAssignmentType;
 
 	/**
 	 * The default value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
@@ -67,35 +84,6 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * @ordered
 	 */
 	protected int spotIndex = SPOT_INDEX_EDEFAULT;
-
-	/**
-	 * This is true if the Spot Index attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean spotIndexESet;
-
-	/**
-	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSequenceHint()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SEQUENCE_HINT_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSequenceHint()
-	 * @generated
-	 * @ordered
-	 */
-	protected int sequenceHint = SEQUENCE_HINT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
@@ -141,45 +129,6 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	public AVesselSet<? extends Vessel> getAssignment() {
-		if (assignment != null && assignment.eIsProxy()) {
-			InternalEObject oldAssignment = (InternalEObject)assignment;
-			assignment = (AVesselSet<? extends Vessel>)eResolveProxy(oldAssignment);
-			if (assignment != oldAssignment) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT, oldAssignment, assignment));
-			}
-		}
-		return assignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AVesselSet<? extends Vessel> basicGetAssignment() {
-		return assignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAssignment(AVesselSet<? extends Vessel> newAssignment) {
-		AVesselSet<? extends Vessel> oldAssignment = assignment;
-		assignment = newAssignment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT, oldAssignment, assignment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -192,33 +141,8 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
-		boolean oldSpotIndexESet = spotIndexESet;
-		spotIndexESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX, oldSpotIndex, spotIndex, !oldSpotIndexESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetSpotIndex() {
-		int oldSpotIndex = spotIndex;
-		boolean oldSpotIndexESet = spotIndexESet;
-		spotIndex = SPOT_INDEX_EDEFAULT;
-		spotIndexESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX, oldSpotIndex, SPOT_INDEX_EDEFAULT, oldSpotIndexESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetSpotIndex() {
-		return spotIndexESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX, oldSpotIndex, spotIndex));
 	}
 
 	/**
@@ -268,16 +192,54 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public VesselAssignmentType getVesselAssignmentType() {
+		if (vesselAssignmentType != null && vesselAssignmentType.eIsProxy()) {
+			InternalEObject oldVesselAssignmentType = (InternalEObject)vesselAssignmentType;
+			vesselAssignmentType = (VesselAssignmentType)eResolveProxy(oldVesselAssignmentType);
+			if (vesselAssignmentType != oldVesselAssignmentType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, oldVesselAssignmentType, vesselAssignmentType));
+			}
+		}
+		return vesselAssignmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselAssignmentType basicGetVesselAssignmentType() {
+		return vesselAssignmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselAssignmentType(VesselAssignmentType newVesselAssignmentType) {
+		VesselAssignmentType oldVesselAssignmentType = vesselAssignmentType;
+		vesselAssignmentType = newVesselAssignmentType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, oldVesselAssignmentType, vesselAssignmentType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT:
-				if (resolve) return getAssignment();
-				return basicGetAssignment();
-			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
-				return getSpotIndex();
 			case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
 				return getSequenceHint();
+			case CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE:
+				if (resolve) return getVesselAssignmentType();
+				return basicGetVesselAssignmentType();
+			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
+				return getSpotIndex();
 			case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED:
 				return isLocked();
 		}
@@ -293,14 +255,14 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT:
-				setAssignment((AVesselSet<? extends Vessel>)newValue);
+			case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
+				setSequenceHint((Integer)newValue);
+				return;
+			case CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE:
+				setVesselAssignmentType((VesselAssignmentType)newValue);
 				return;
 			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
 				setSpotIndex((Integer)newValue);
-				return;
-			case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
-				setSequenceHint((Integer)newValue);
 				return;
 			case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED:
 				setLocked((Boolean)newValue);
@@ -317,14 +279,14 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT:
-				setAssignment((AVesselSet<? extends Vessel>)null);
-				return;
-			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
-				unsetSpotIndex();
-				return;
 			case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
 				setSequenceHint(SEQUENCE_HINT_EDEFAULT);
+				return;
+			case CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE:
+				setVesselAssignmentType((VesselAssignmentType)null);
+				return;
+			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
+				setSpotIndex(SPOT_INDEX_EDEFAULT);
 				return;
 			case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED:
 				setLocked(LOCKED_EDEFAULT);
@@ -341,12 +303,12 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT:
-				return assignment != null;
-			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
-				return isSetSpotIndex();
 			case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT:
 				return sequenceHint != SEQUENCE_HINT_EDEFAULT;
+			case CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE:
+				return vesselAssignmentType != null;
+			case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX:
+				return spotIndex != SPOT_INDEX_EDEFAULT;
 			case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED:
 				return locked != LOCKED_EDEFAULT;
 		}
@@ -363,10 +325,10 @@ public abstract class AssignableElementImpl extends EObjectImpl implements Assig
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (spotIndex: ");
-		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
-		result.append(", sequenceHint: ");
+		result.append(" (sequenceHint: ");
 		result.append(sequenceHint);
+		result.append(", spotIndex: ");
+		result.append(spotIndex);
 		result.append(", locked: ");
 		result.append(locked);
 		result.append(')');

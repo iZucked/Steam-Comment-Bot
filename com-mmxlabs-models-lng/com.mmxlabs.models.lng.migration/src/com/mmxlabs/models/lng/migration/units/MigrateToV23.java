@@ -63,6 +63,10 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 
 		final MetamodelLoader loader = getDestinationMetamodelLoader(null);
 
+		final EPackage package_MMXCore = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		final EClass class_NamedObject = MetamodelUtils.getEClass(package_MMXCore, "NamedObject");
+		final EAttribute attribute_NamedObject_name = MetamodelUtils.getAttribute(class_NamedObject, "name");
+
 		final EPackage package_ScenarioModel = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScenarioModel);
 
 		final EClass class_LNGScenarioModel = MetamodelUtils.getEClass(package_ScenarioModel, "LNGScenarioModel");
@@ -113,14 +117,20 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 			for (final EObject charterCostModel : charterCostModels) {
 				final List<EObject> vesselClasses = MetamodelUtils.getValueAsTypedList(charterCostModel, reference_CharterCostModel_vesselClasses);
 				if (vesselClasses != null) {
+					int charterInCounter = 1;
+					int charterOutCounter = 1;
 					for (final EObject vesselClass : vesselClasses) {
 						if (charterCostModel.eIsSet(reference_CharterCostModel_charterInPrice)) {
 							final EObject charterInMarket = package_SpotMarketsModel.getEFactoryInstance().create(class_CharterInMarket);
 
 							charterInMarket.eSet(attribute_CharterInMarket_enabled, charterCostModel.eGet(attribute_CharterCostModel_enabled));
 							charterInMarket.eSet(reference_CharterInMarket_vesselClass, vesselClass);
-							charterInMarket.eSet(reference_CharterInMarket_charterInPrice, charterCostModel.eGet(reference_CharterCostModel_charterInPrice));
+							final EObject curve = (EObject) charterCostModel.eGet(reference_CharterCostModel_charterInPrice);
+							charterInMarket.eSet(reference_CharterInMarket_charterInPrice, curve);
 							charterInMarket.eSet(attribute_CharterInMarket_spotCharterCount, charterCostModel.eGet(attribute_CharterCostModel_spotCharterCount));
+
+							final String name = String.format("%s-%s-%s", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name), charterInCounter++);
+							charterInMarket.eSet(attribute_NamedObject_name, name);
 
 							charterInMarkets.add(charterInMarket);
 						}
@@ -129,8 +139,12 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 
 							charterOutMarket.eSet(attribute_CharterOutMarket_enabled, charterCostModel.eGet(attribute_CharterCostModel_enabled));
 							charterOutMarket.eSet(reference_CharterOutMarket_vesselClass, vesselClass);
-							charterOutMarket.eSet(reference_CharterOutMarket_charterOutPrice, charterCostModel.eGet(reference_CharterCostModel_charterOutPrice));
+							final EObject curve = (EObject) charterCostModel.eGet(reference_CharterCostModel_charterOutPrice);
+							charterOutMarket.eSet(reference_CharterOutMarket_charterOutPrice, curve);
 							charterOutMarket.eSet(attribute_CharterOutMarket_minCharterOutDuration, charterCostModel.eGet(attribute_CharterCostModel_minCharterOutDuration));
+
+							final String name = String.format("%s-%s-%s", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name), charterOutCounter++);
+							charterOutMarket.eSet(attribute_NamedObject_name, name);
 
 							charterOutMarkets.add(charterOutMarket);
 						}

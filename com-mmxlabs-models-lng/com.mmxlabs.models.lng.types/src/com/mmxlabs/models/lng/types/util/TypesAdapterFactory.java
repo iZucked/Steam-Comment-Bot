@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types.util;
 
+import com.mmxlabs.models.lng.types.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -94,6 +95,11 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseVesselAssignmentType(VesselAssignmentType object) {
+			return createVesselAssignmentTypeAdapter();
+		}
+
+		@Override
 		public Adapter caseMMXObject(MMXObject object) {
 			return createMMXObjectAdapter();
 		}
@@ -166,6 +172,20 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.VesselAssignmentType <em>Vessel Assignment Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.VesselAssignmentType
+	 * @generated
+	 */
+	public Adapter createVesselAssignmentTypeAdapter() {
 		return null;
 	}
 

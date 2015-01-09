@@ -81,7 +81,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 	@Override
 	protected boolean shouldImportReference(final EReference reference) {
-		return reference != CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT;
+		return reference != CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE;
 	}
 
 	@Override
@@ -506,7 +506,7 @@ public class CargoImporter extends DefaultClassImporter {
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
 
-			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
+			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE.getName().toLowerCase());
 
 			if (vesselName != null && !vesselName.isEmpty()) {
 				context.doLater(new IDeferment() {

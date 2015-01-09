@@ -87,8 +87,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselAvailability" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.cargo/model/cargo.ecore#//VesselAvailability"
         unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
-        eType="ecore:EClass ../../com.mmxlabs.models.lng.fleet/model/fleet.ecore#//VesselClass"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charterInMarket" lowerBound="1"
+        eType="ecore:EClass ../../com.mmxlabs.models.lng.spotmarkets/model/spotmarkets.ecore#//CharterInMarket"
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fitnesses" upperBound="-1"
         eType="#//Fitness" containment="true"/>

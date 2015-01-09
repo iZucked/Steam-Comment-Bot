@@ -33,9 +33,9 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.ui.editorpart.trades.ITradesTableContextMenuExtension;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -163,8 +163,9 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 					final CargoActuals cargoActuals = ActualsFactory.eINSTANCE.createCargoActuals();
 					cargoActuals.setCargo(cargo);
 					cargoActuals.setCargoReference(cargo.getName());
-					if (cargo.getAssignment() instanceof Vessel) {
-						cargoActuals.setVessel((Vessel) cargo.getAssignment());
+					if (cargo.getVesselAssignmentType() instanceof VesselAvailability) {
+						VesselAvailability vesselAvailability = (VesselAvailability) cargo.getVesselAssignmentType();
+						cargoActuals.setVessel(vesselAvailability.getVessel());
 					}
 
 					final Map<Slot, SlotActuals> slotActualMap = new HashMap<>();
@@ -184,11 +185,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 							slotActuals = ActualsFactory.eINSTANCE.createLoadActuals();
 							if (loadSlot.isDESPurchase()) {
 								isDivertableDESPurchase = loadSlot.isDivertible();
-
-								if (slot.getAssignment() instanceof Vessel) {
-									cargoActuals.setVessel((Vessel) slot.getAssignment());
-								}
-							} else {
+								cargoActuals.setVessel(slot.getNominatedVessel());
 							}
 							slotActuals.setCV(((LoadSlot) slot).getSlotOrDelegatedCV());
 
@@ -198,9 +195,7 @@ public class ActualsTradesContextMenu implements ITradesTableContextMenuExtensio
 							dischargePort = dischargeSlot.getPort();
 							slotActuals = ActualsFactory.eINSTANCE.createDischargeActuals();
 							if (dischargeSlot.isFOBSale()) {
-								if (slot.getAssignment() instanceof Vessel) {
-									cargoActuals.setVessel((Vessel) slot.getAssignment());
-								}
+								cargoActuals.setVessel(slot.getNominatedVessel());
 							}
 
 							((DischargeActuals) slotActuals).setDeliveryType(dischargeSlot.isFOBSale() ? "FOB" : "DES");

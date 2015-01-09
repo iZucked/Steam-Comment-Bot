@@ -14,6 +14,7 @@ import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.editor.SlotContractRestrictionsWrapper;
+import com.mmxlabs.models.lng.cargo.ui.inlineeditors.NominatedVesselEditorWrapper;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -53,7 +54,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		{
 			superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 			superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
-			superClassesHelpers.addAll(registry.getComponentHelpers(CargoPackage.Literals.ASSIGNABLE_ELEMENT));
 		}
 		// {
 		// final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
@@ -103,6 +103,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		add_allowedVesselsEditor(detailComposite, topClass);
 		add_cancellationFeeEditor(detailComposite, topClass);
 		add_overrideRestrictionsEditor(detailComposite, topClass);
+		add_nominatedVesselEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -215,6 +216,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_overrideRestrictionsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__OVERRIDE_RESTRICTIONS));
+	}
+
+	/**
+	 * Create the editor for the nominatedVessel feature on Slot
+	 *
+	 * @generated NOT
+	 */
+	protected void add_nominatedVesselEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new NominatedVesselEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__NOMINATED_VESSEL)));
 	}
 
 	/**

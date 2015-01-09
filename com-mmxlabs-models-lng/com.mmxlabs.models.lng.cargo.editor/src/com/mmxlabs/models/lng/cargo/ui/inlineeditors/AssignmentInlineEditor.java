@@ -17,12 +17,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.edit.utils.AssignableElementCommandHelper;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.editors.impl.ReferenceInlineEditor;
 
 public final class AssignmentInlineEditor extends ReferenceInlineEditor {
@@ -49,23 +49,24 @@ public final class AssignmentInlineEditor extends ReferenceInlineEditor {
 						// Uh oh.....
 						if (elementAssignment != null) {
 							if (vessel == null) {
-								commandHandler.handleCommand(
-										SetCommand.create(commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE),
-										elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
-							} else if (vessel instanceof VesselClass) {
+								commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
+										SetCommand.UNSET_VALUE), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+							} else if (vessel instanceof CharterInMarket) {
 								// assign to a new spot
 								if (rootObject instanceof LNGScenarioModel) {
 
 									final CargoModel cargoModel = ((LNGScenarioModel) rootObject).getPortfolioModel().getCargoModel();
 									final int maxSpot = AssignmentEditorHelper.getMaxSpot(cargoModel) + 1;
 
-									commandHandler.handleCommand(AssignableElementCommandHelper.reassignElement(commandHandler.getEditingDomain(), (AVesselSet<Vessel>) vessel, elementAssignment, maxSpot),
-											elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+									commandHandler.handleCommand(
+											AssignableElementCommandHelper.reassignElement(commandHandler.getEditingDomain(), (VesselAssignmentType) vessel, elementAssignment, maxSpot),
+											elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 									return;
 								}
-							} else if (vessel instanceof Vessel) {
-								commandHandler.handleCommand(SetCommand.create(commandHandler.getEditingDomain(), elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment(), vessel),
-										elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+							} else if (vessel instanceof VesselAvailability) {
+								commandHandler.handleCommand(
+										SetCommand.create(commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, vessel),
+										elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 							} else {
 								throw new RuntimeException("Unexpected vessel assignment type");
 							}

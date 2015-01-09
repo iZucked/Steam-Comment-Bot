@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.spotmarkets.util;
 
 import com.mmxlabs.models.lng.spotmarkets.*;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -138,6 +139,10 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
 				return createNamedObjectAdapter();
+			}
+			@Override
+			public Adapter caseVesselAssignmentType(VesselAssignmentType object) {
+				return createVesselAssignmentTypeAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -366,6 +371,20 @@ public class SpotMarketsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.VesselAssignmentType <em>Vessel Assignment Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.VesselAssignmentType
+	 * @generated
+	 */
+	public Adapter createVesselAssignmentTypeAdapter() {
 		return null;
 	}
 

@@ -18,9 +18,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.dialogs.IDialogEditingContext;
@@ -34,6 +33,9 @@ import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapper {
 	private boolean enabled = false;
 	private Control control;
+	private IDialogEditingContext dialogContext;
+	private MMXRootObject scenario;
+	private Collection<EObject> range;
 
 	public AssignableElementEditorWrapper(@NonNull final IInlineEditor wrapped) {
 		super(wrapped);
@@ -42,7 +44,26 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 	@Override
 	protected boolean respondToNotification(final Notification notification) {
 
-		// TODO: Cargo/Slot state does not change in editor, so no need to respond to notifications
+		if (wrapped.getFeature() == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX) {
+			if (notification.getFeature() == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {
+				if (notification.getNewValue() instanceof CharterInMarket) {
+					enabled = true;
+				} else {
+					enabled = false;
+				}
+				EObject editorTarget = getEditorTarget();
+				if (enabled) {
+					super.display(dialogContext, scenario, editorTarget, range);
+					dialogContext.getDialogController().setEditorVisibility(editorTarget, getFeature(), true);
+					getLabel().pack();
+				} else {
+					super.display(dialogContext, scenario, editorTarget, range);
+					dialogContext.getDialogController().setEditorVisibility(editorTarget, getFeature(), false);
+					getLabel().pack();
+
+				}
+			}
+		}
 
 		return false;
 	}
@@ -54,33 +75,27 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 
 	@Override
 	public void display(final IDialogEditingContext dialogContext, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+		this.dialogContext = dialogContext;
+		this.scenario = scenario;
+		this.range = range;
 
 		enabled = false;
 		final EStructuralFeature feature = wrapped.getFeature();
 		if (object instanceof Cargo) {
 			final Cargo cargo = (Cargo) object;
 			if (cargo.getCargoType() == CargoType.FLEET) {
-				if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT || feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
+				if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE || feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED) {
 					enabled = true;
-				}
-			}
-		} else if (object instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) object;
-			if (loadSlot.isDESPurchase()) {
-				if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
-					enabled = true;
-				}
-			}
-		} else if (object instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) object;
-			if (dischargeSlot.isFOBSale()) {
-				if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
-					enabled = true;
+				} else if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX) {
+					enabled = cargo.getVesselAssignmentType() instanceof CharterInMarket;
 				}
 			}
 		} else if (object instanceof VesselEvent) {
-			if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT) {
+			VesselEvent vesselEvent = (VesselEvent) object;
+			if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE) {
 				enabled = true;
+			} else if (feature == CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX) {
+				enabled = vesselEvent.getVesselAssignmentType() instanceof CharterInMarket;
 			}
 		}
 
@@ -88,7 +103,7 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 			super.display(dialogContext, scenario, object, range);
 			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), true);
 		} else {
-			super.display(dialogContext, scenario, null, range);
+			super.display(dialogContext, scenario, object, range);
 			dialogContext.getDialogController().setEditorVisibility(object, getFeature(), false);
 		}
 	}
@@ -100,11 +115,9 @@ public class AssignableElementEditorWrapper extends IInlineEditorEnablementWrapp
 	}
 
 	@Override
-	public Object createLayoutData(MMXRootObject root, EObject value,
-			Control control) {
+	public Object createLayoutData(MMXRootObject root, EObject value, Control control) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

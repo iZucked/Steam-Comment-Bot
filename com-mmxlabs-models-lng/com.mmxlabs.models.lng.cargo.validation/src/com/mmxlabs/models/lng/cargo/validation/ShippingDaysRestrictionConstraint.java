@@ -55,7 +55,6 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 
 			@Override
 			protected void configure() {
-				// TODO Auto-generated method stub
 				install(osgiModule(FrameworkUtil.getBundle(ShippingDaysRestrictionConstraint.class).getBundleContext()));
 				bind(IShippingDaysRestrictionSpeedProvider.class).toProvider(Peaberry.service(IShippingDaysRestrictionSpeedProvider.class).single());
 			}
@@ -206,8 +205,8 @@ public class ShippingDaysRestrictionConstraint extends AbstractModelMultiConstra
 						// Found a slot to validate
 						if (desPurchase != null && dischargeSlot != null) {
 
-							if (desPurchase.getAssignment() instanceof Vessel) {
-								final Vessel vessel = (Vessel) desPurchase.getAssignment();
+							if (desPurchase.getNominatedVessel() != null) {
+								final Vessel vessel = desPurchase.getNominatedVessel();
 
 								final VesselClass vesselClass = vessel.getVesselClass();
 								if (vesselClass == null) {

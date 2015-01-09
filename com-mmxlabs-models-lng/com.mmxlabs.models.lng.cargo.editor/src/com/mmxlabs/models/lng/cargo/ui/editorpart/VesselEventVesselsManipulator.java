@@ -11,12 +11,9 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.common.Equality;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.tabular.manipulators.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -34,9 +31,7 @@ public class VesselEventVesselsManipulator extends MultipleReferenceManipulator 
 
 	@Override
 	public void doSetValue(final Object object, final Object value) {
-		AssignableElement assignableElement = (AssignableElement)object;
-		
-		
+
 		final Object currentValue = getValue(object);
 		if (Equality.isEqual(currentValue, value)) {
 			return;
@@ -46,14 +41,6 @@ public class VesselEventVesselsManipulator extends MultipleReferenceManipulator 
 		final Collection<?> collection = (Collection<?>) value;
 		cmd.append(CommandUtil.createMultipleAttributeSetter(editingDomain, (EObject) object, field, collection));
 
-		if (collection.size() == 1) {
-			final Object newAssignment = collection.iterator().next();
-			cmd.append(SetCommand.create(editingDomain, assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, newAssignment));
-		} else {
-			if (!collection.contains(assignableElement.getAssignment())) {
-				cmd.append(SetCommand.create(editingDomain, assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
-			}
-		}
 		editingDomain.getCommandStack().execute(cmd);
 	}
 }

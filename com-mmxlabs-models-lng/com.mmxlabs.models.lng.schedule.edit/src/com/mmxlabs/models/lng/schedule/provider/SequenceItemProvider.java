@@ -62,7 +62,7 @@ public class SequenceItemProvider
 			super.getPropertyDescriptors(object);
 
 			addVesselAvailabilityPropertyDescriptor(object);
-			addVesselClassPropertyDescriptor(object);
+			addCharterInMarketPropertyDescriptor(object);
 			addSpotIndexPropertyDescriptor(object);
 			addSequenceTypePropertyDescriptor(object);
 		}
@@ -92,19 +92,19 @@ public class SequenceItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Class feature.
+	 * This adds a property descriptor for the Charter In Market feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselClassPropertyDescriptor(Object object) {
+	protected void addCharterInMarketPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Sequence_vesselClass_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_vesselClass_feature", "_UI_Sequence_type"),
-				 SchedulePackage.Literals.SEQUENCE__VESSEL_CLASS,
+				 getString("_UI_Sequence_charterInMarket_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_charterInMarket_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__CHARTER_IN_MARKET,
 				 true,
 				 false,
 				 true,

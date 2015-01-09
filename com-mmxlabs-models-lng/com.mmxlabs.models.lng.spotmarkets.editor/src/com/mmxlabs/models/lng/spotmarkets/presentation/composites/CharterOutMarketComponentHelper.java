@@ -4,6 +4,7 @@ package com.mmxlabs.models.lng.spotmarkets.presentation.composites;
 
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -41,6 +42,7 @@ public class CharterOutMarketComponentHelper extends BaseComponentHelper {
 	public CharterOutMarketComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(SpotMarketsPackage.Literals.SPOT_CHARTER_MARKET));
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**

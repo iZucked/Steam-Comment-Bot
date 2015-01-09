@@ -372,6 +372,34 @@ public interface TypesPackage extends EPackage {
 	int ITIMEZONE_PROVIDER_OPERATION_COUNT = 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.VesselAssignmentType <em>Vessel Assignment Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.VesselAssignmentType
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getVesselAssignmentType()
+	 * @generated
+	 */
+	int VESSEL_ASSIGNMENT_TYPE = 4;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Assignment Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_ASSIGNMENT_TYPE_FEATURE_COUNT = 0;
+
+	/**
+	 * The number of operations of the '<em>Vessel Assignment Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_ASSIGNMENT_TYPE_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -379,7 +407,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
 	 * @generated
 	 */
-	int PORT_CAPABILITY = 4;
+	int PORT_CAPABILITY = 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
@@ -389,7 +417,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
 	 * @generated
 	 */
-	int CARGO_DELIVERY_TYPE = 5;
+	int CARGO_DELIVERY_TYPE = 6;
 
 	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
@@ -399,7 +427,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 6;
+	int ITERABLE = 7;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APortSet <em>APort Set</em>}'.
@@ -440,6 +468,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getITimezoneProvider__GetTimeZone__EAttribute();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.VesselAssignmentType <em>Vessel Assignment Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Assignment Type</em>'.
+	 * @see com.mmxlabs.models.lng.types.VesselAssignmentType
+	 * @generated
+	 */
+	EClass getVesselAssignmentType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ObjectSet <em>Object Set</em>}'.
@@ -552,6 +590,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.VesselAssignmentType <em>Vessel Assignment Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.VesselAssignmentType
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getVesselAssignmentType()
+		 * @generated
+		 */
+		EClass VESSEL_ASSIGNMENT_TYPE = eINSTANCE.getVesselAssignmentType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ObjectSetImpl <em>Object Set</em>}' class.

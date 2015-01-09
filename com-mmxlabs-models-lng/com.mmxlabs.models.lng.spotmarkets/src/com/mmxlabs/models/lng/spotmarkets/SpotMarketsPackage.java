@@ -954,13 +954,31 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_OUT_MARKET__VESSEL_CLASS = SPOT_CHARTER_MARKET__VESSEL_CLASS;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_MARKET__EXTENSIONS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_MARKET__NAME = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Charter Out Price</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_MARKET__CHARTER_OUT_PRICE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 0;
+	int CHARTER_OUT_MARKET__CHARTER_OUT_PRICE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Min Charter Out Duration</b></em>' attribute.
@@ -969,7 +987,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
+	int CHARTER_OUT_MARKET__MIN_CHARTER_OUT_DURATION = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Charter Out Market</em>' class.
@@ -978,7 +996,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_OUT_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+	int CHARTER_OUT_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.CharterInMarketImpl <em>Charter In Market</em>}' class.
@@ -1009,13 +1027,31 @@ public interface SpotMarketsPackage extends EPackage {
 	int CHARTER_IN_MARKET__VESSEL_CLASS = SPOT_CHARTER_MARKET__VESSEL_CLASS;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__EXTENSIONS = SPOT_CHARTER_MARKET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_IN_MARKET__NAME = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Charter In Price</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__CHARTER_IN_PRICE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 0;
+	int CHARTER_IN_MARKET__CHARTER_IN_PRICE = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Spot Charter Count</b></em>' attribute.
@@ -1024,7 +1060,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 1;
+	int CHARTER_IN_MARKET__SPOT_CHARTER_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Charter In Market</em>' class.
@@ -1033,7 +1069,7 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 2;
+	int CHARTER_IN_MARKET_FEATURE_COUNT = SPOT_CHARTER_MARKET_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.SpotType <em>Spot Type</em>}' enum.

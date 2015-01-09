@@ -3,6 +3,8 @@
 package com.mmxlabs.models.lng.spotmarkets;
 
 import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,7 +23,7 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
  * @model
  * @generated
  */
-public interface CharterInMarket extends SpotCharterMarket {
+public interface CharterInMarket extends SpotCharterMarket, VesselAssignmentType, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Charter In Price</b></em>' reference.
 	 * <!-- begin-user-doc -->

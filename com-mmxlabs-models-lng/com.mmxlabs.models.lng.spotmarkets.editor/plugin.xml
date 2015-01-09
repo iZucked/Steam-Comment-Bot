@@ -148,6 +148,16 @@
           ownerEClass="com.mmxlabs.models.lng.spotmarkets.SpotMarket"
           referenceEClass="com.mmxlabs.models.lng.port.Port">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketsCharterValueProviderFactory"
+          id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketsCharterValueProviderFactory_CharterInMarket"
+          referenceEClass="com.mmxlabs.models.lng.spotmarkets.CharterInMarket">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketsCharterValueProviderFactory"
+          id="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketsCharterValueProviderFactory_CharterOutMarket"
+          referenceEClass="com.mmxlabs.models.lng.spotmarkets.CharterOutMarket">
+    </valueProvider>
  </extension>
    <extension point="org.eclipse.ui.editors">
       <!-- @generated spotmarkets -->

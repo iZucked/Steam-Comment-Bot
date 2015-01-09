@@ -18,11 +18,11 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -76,13 +76,13 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					}
 
 					// make sure cargo is assigned to a vessel
-					boolean isAssigned = cargo.getAssignment() != null;
+					boolean isAssigned = cargo.getVesselAssignmentType() != null;
 
 					if (!isAssigned) {
 						final String failureMessage = String.format("Cargo '%s' must be assigned a vessel", cargo.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
-						dsd.addEObjectAndFeature(transferTo.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
-						dsd.addEObjectAndFeature(transferFrom.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+						dsd.addEObjectAndFeature(transferTo.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+						dsd.addEObjectAndFeature(transferFrom.getCargo(), CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 						failures.add(dsd);
 					}
 				}
@@ -167,19 +167,17 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject instanceof LNGScenarioModel) {
 
-				final LNGScenarioModel lngScenarioModel = (LNGScenarioModel) rootObject;
-
-				final AVesselSet<? extends Vessel> loadVesselSet = loadCargo.getAssignment();
-				final AVesselSet<? extends Vessel> dischargeVesselSet = dischargeCargo.getAssignment();
+				final VesselAssignmentType loadVesselSet = loadCargo.getVesselAssignmentType();
+				final VesselAssignmentType dischargeVesselSet = dischargeCargo.getVesselAssignmentType();
 
 				boolean problem = false;
-				if (loadVesselSet instanceof Vessel && dischargeVesselSet instanceof Vessel) {
+				if (loadVesselSet instanceof VesselAvailability && dischargeVesselSet instanceof VesselAvailability) {
 					if (loadVesselSet.equals(dischargeVesselSet)) {
 						problem = true;
 					}
 				}
 
-				else if (loadVesselSet instanceof VesselClass && dischargeVesselSet instanceof VesselClass) {
+				else if (loadVesselSet instanceof CharterInMarket && dischargeVesselSet instanceof CharterInMarket) {
 					if (loadVesselSet.equals(dischargeVesselSet)) {
 						if (loadCargo.getSpotIndex() == dischargeCargo.getSpotIndex()) {
 							problem = true;
@@ -192,8 +190,8 @@ public class STSCargoConstraint extends AbstractModelMultiConstraint {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), severity);
 					dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getSlot_Cargo());
 					dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Cargo());
-					dsd.addEObjectAndFeature(loadCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
-					dsd.addEObjectAndFeature(dischargeCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+					dsd.addEObjectAndFeature(loadCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+					dsd.addEObjectAndFeature(dischargeCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 
 					failures.add(dsd);
 

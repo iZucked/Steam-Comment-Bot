@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.ObjectSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -83,6 +84,14 @@ public class CargoSwitch<T1> extends Switch<T1> {
 	@Override
 	protected T1 doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case CargoPackage.CARGO_MODEL: {
+				CargoModel cargoModel = (CargoModel)theEObject;
+				T1 result = caseCargoModel(cargoModel);
+				if (result == null) result = caseUUIDObject(cargoModel);
+				if (result == null) result = caseMMXObject(cargoModel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case CargoPackage.CARGO: {
 				Cargo cargo = (Cargo)theEObject;
 				T1 result = caseCargo(cargo);
@@ -99,7 +108,6 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(slot);
 				if (result == null) result = caseNamedObject(slot);
 				if (result == null) result = caseITimezoneProvider(slot);
-				if (result == null) result = caseAssignableElement(slot);
 				if (result == null) result = caseMMXObject(slot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -111,7 +119,6 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(loadSlot);
 				if (result == null) result = caseNamedObject(loadSlot);
 				if (result == null) result = caseITimezoneProvider(loadSlot);
-				if (result == null) result = caseAssignableElement(loadSlot);
 				if (result == null) result = caseMMXObject(loadSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -123,16 +130,7 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(dischargeSlot);
 				if (result == null) result = caseNamedObject(dischargeSlot);
 				if (result == null) result = caseITimezoneProvider(dischargeSlot);
-				if (result == null) result = caseAssignableElement(dischargeSlot);
 				if (result == null) result = caseMMXObject(dischargeSlot);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CargoPackage.CARGO_MODEL: {
-				CargoModel cargoModel = (CargoModel)theEObject;
-				T1 result = caseCargoModel(cargoModel);
-				if (result == null) result = caseUUIDObject(cargoModel);
-				if (result == null) result = caseMMXObject(cargoModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -152,7 +150,6 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(spotLoadSlot);
 				if (result == null) result = caseNamedObject(spotLoadSlot);
 				if (result == null) result = caseITimezoneProvider(spotLoadSlot);
-				if (result == null) result = caseAssignableElement(spotLoadSlot);
 				if (result == null) result = caseMMXObject(spotLoadSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -166,7 +163,6 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				if (result == null) result = caseUUIDObject(spotDischargeSlot);
 				if (result == null) result = caseNamedObject(spotDischargeSlot);
 				if (result == null) result = caseITimezoneProvider(spotDischargeSlot);
-				if (result == null) result = caseAssignableElement(spotDischargeSlot);
 				if (result == null) result = caseMMXObject(spotDischargeSlot);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -183,6 +179,7 @@ public class CargoSwitch<T1> extends Switch<T1> {
 				VesselAvailability vesselAvailability = (VesselAvailability)theEObject;
 				T1 result = caseVesselAvailability(vesselAvailability);
 				if (result == null) result = caseUUIDObject(vesselAvailability);
+				if (result == null) result = caseVesselAssignmentType(vesselAvailability);
 				if (result == null) result = caseMMXObject(vesselAvailability);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -573,6 +570,21 @@ public class CargoSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseITimezoneProvider(ITimezoneProvider object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Assignment Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Assignment Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseVesselAssignmentType(VesselAssignmentType object) {
 		return null;
 	}
 

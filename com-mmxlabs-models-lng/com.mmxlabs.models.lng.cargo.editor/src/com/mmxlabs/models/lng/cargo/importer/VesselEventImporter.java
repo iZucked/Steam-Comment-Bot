@@ -31,7 +31,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 public class VesselEventImporter extends DefaultClassImporter {
 
 	protected boolean shouldImportReference(final EReference reference) {
-		return reference != CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT;
+		return reference != CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE;
 	}
 
 	protected Map<String, String> exportObject(final EObject object, final IExportContext context) {
@@ -86,7 +86,7 @@ public class VesselEventImporter extends DefaultClassImporter {
 		if (target instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) target;
 
-			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT.getName().toLowerCase());
+			final String vesselName = fields.get(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE.getName().toLowerCase());
 
 			if (vesselName != null && !vesselName.isEmpty()) {
 				context.doLater(new IDeferment() {

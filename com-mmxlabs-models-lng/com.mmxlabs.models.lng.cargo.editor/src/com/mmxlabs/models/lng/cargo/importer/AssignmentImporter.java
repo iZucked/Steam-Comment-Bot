@@ -59,7 +59,11 @@ public class AssignmentImporter {
 									if (o instanceof LoadSlot) {
 										final LoadSlot loadSlot = (LoadSlot) o;
 										if (loadSlot.isDESPurchase()) {
-											assignableElement = loadSlot;
+											final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+											if (v != null) {
+												loadSlot.setNominatedVessel(v);
+											}
+											return;
 										}
 									}
 								}
@@ -67,7 +71,11 @@ public class AssignmentImporter {
 									if (o instanceof DischargeSlot) {
 										final DischargeSlot dischargeSlot = (DischargeSlot) o;
 										if (dischargeSlot.isFOBSale()) {
-											assignableElement = dischargeSlot;
+											final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+											if (v != null) {
+												dischargeSlot.setNominatedVessel(v);
+											}
+											return;
 										}
 									}
 								}
@@ -79,13 +87,21 @@ public class AssignmentImporter {
 											if (s instanceof LoadSlot) {
 												final LoadSlot loadSlot = (LoadSlot) s;
 												if (loadSlot.isDESPurchase()) {
-													assignableElement = loadSlot;
+													final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+													if (v != null) {
+														loadSlot.setNominatedVessel(v);
+													}
+													return;
 													break;
 												}
 											} else if (s instanceof DischargeSlot) {
 												final DischargeSlot dischargeSlot = (DischargeSlot) s;
 												if (dischargeSlot.isFOBSale()) {
-													assignableElement = dischargeSlot;
+													final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
+													if (v != null) {
+														dischargeSlot.setNominatedVessel(v);
+													}
+													return;
 													break;
 												}
 											}
@@ -99,13 +115,13 @@ public class AssignmentImporter {
 										// Try named vessel first...
 										final Vessel v = (Vessel) context.getNamedObject(vesselName.trim(), FleetPackage.eINSTANCE.getVessel());
 										if (v != null) {
-											assignableElement.setAssignment(v);
+//											assignableElement.setAssignment(v);
 											assignableElement.unsetSpotIndex();
 										}
 									} else {
 										final NamedObject v2 = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
 										if (v2 instanceof VesselClass) {
-											assignableElement.setAssignment((VesselClass) v2);
+//											assignableElement.setAssignment((VesselClass) v2);
 											assignableElement.setSpotIndex(spotIndex);
 										}
 									}

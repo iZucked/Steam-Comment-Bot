@@ -37,12 +37,12 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -66,7 +66,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 		if (target instanceof ActualsModel) {
 			final ActualsModel actualsModel = (ActualsModel) target;
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-			final FleetModel fleetModel = scenarioModel.getFleetModel();
+			final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
 			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
 
 			// Build up lookup tables
@@ -97,7 +97,7 @@ public class ActualsSequencingConstraint extends AbstractModelMultiConstraint {
 				}
 			}
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, new ActualsAssignableElementComparator(actualsModel));
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel, new ActualsAssignableElementComparator(actualsModel));
 
 			// Check sequencing for each grouping
 			for (final CollectedAssignment collectedAssignment : collectAssignments) {

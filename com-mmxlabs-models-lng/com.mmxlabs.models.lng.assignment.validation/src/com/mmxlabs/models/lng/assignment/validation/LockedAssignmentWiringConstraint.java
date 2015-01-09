@@ -12,9 +12,9 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -43,12 +43,12 @@ public class LockedAssignmentWiringConstraint extends AbstractModelMultiConstrai
 							failures.add(failure);
 						}
 					}
-					if (elementAssignment.getAssignment() == null && elementAssignment.isLocked()) {
+					if (elementAssignment.isLocked() && elementAssignment.getVesselAssignmentType() == null) {
 						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName()
 								+ " is locked to a vessel, but no vessel is assigned."));
 
-						failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Locked());
-						failure.addEObjectAndFeature(elementAssignment, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+						failure.addEObjectAndFeature(elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED);
+						failure.addEObjectAndFeature(elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 
 						failures.add(failure);
 					}

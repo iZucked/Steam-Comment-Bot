@@ -127,13 +127,13 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterOutMarket" eSuperTypes="#//SpotCharterMarket">
+  <eClassifiers xsi:type="ecore:EClass" name="CharterOutMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterOutPrice" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CharterIndex"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCharterOutDuration"
         lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CharterInMarket" eSuperTypes="#//SpotCharterMarket">
+  <eClassifiers xsi:type="ecore:EClass" name="CharterInMarket" eSuperTypes="#//SpotCharterMarket ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="charterInPrice" lowerBound="1"
         eType="ecore:EClass ../../com.mmxlabs.models.lng.pricing/model/pricing.ecore#//CharterIndex"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotCharterCount" lowerBound="1"

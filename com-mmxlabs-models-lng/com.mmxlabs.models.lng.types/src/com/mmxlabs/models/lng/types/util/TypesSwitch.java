@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.types.util;
 
+import com.mmxlabs.models.lng.types.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -124,6 +125,13 @@ public class TypesSwitch<T1> extends Switch<T1> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case TypesPackage.VESSEL_ASSIGNMENT_TYPE: {
+			VesselAssignmentType vesselAssignmentType = (VesselAssignmentType) theEObject;
+			T1 result = caseVesselAssignmentType(vesselAssignmentType);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -171,6 +179,21 @@ public class TypesSwitch<T1> extends Switch<T1> {
 	 * @generated
 	 */
 	public T1 caseITimezoneProvider(ITimezoneProvider object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Assignment Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Assignment Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T1 caseVesselAssignmentType(VesselAssignmentType object) {
 		return null;
 	}
 

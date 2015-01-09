@@ -25,10 +25,13 @@ import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -49,23 +52,18 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 		if (object instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) object;
 
-			final AVesselSet<? extends Vessel> vesselAssignment = assignableElement.getAssignment();
-			if (vesselAssignment == null) {
+			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
+
+			if (vesselAssignmentType == null) {
 				if (assignableElement instanceof VesselEvent) {
 					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
-					status.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+					status.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 					failures.add(status);
 					return Activator.PLUGIN_ID;
-				} else
+				} else {
 					return Activator.PLUGIN_ID;
-			}
-
-			// This will be a single vessel or a vessel class
-			if (!(vesselAssignment instanceof Vessel || vesselAssignment instanceof VesselClass)) {
-				// Unsupported case - bail out!
-				log.error("Assignment is not a Vessel or VesselClass - unable to validate");
-				return Activator.PLUGIN_ID;
+				}
 			}
 
 			final Set<EObject> targets = new HashSet<>();
@@ -76,6 +74,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 			} else {
 				targets.add(assignableElement);
 			}
+
 			for (final EObject target : targets) {
 				EList<AVesselSet<Vessel>> allowedVessels = null;
 				if (target instanceof Slot) {
@@ -101,6 +100,18 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 						// This is ok as other impl (VesselGroup and VesselTypeGroup) only permit contained Vessels
 						expandedVessels.addAll(SetUtils.getObjects(s));
 					}
+				}
+
+				AVesselSet<Vessel> vesselAssignment = null;
+				if (vesselAssignmentType instanceof VesselAvailability) {
+					VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+					vesselAssignment = vesselAvailability.getVessel();
+				} else if (vesselAssignmentType instanceof CharterInMarket) {
+					CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+					vesselAssignment = charterInMarket.getVesselClass();
+				} else {
+					log.error("Assignment is not a VesselAvailability or CharterInMarket - unable to validate");
+					return Activator.PLUGIN_ID;
 				}
 
 				boolean permitted = false;
@@ -130,7 +141,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelMultiConstra
 					}
 					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					failure.addEObjectAndFeature(assignableElement, CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+					failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
 					if (target instanceof Cargo) {
 						failure.addEObjectAndFeature(target, CargoPackage.eINSTANCE.getSlot_AllowedVessels());
 					} else if (target instanceof VesselEvent) {

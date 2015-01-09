@@ -1167,13 +1167,13 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__VESSEL_AVAILABILITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * The feature id for the '<em><b>Charter In Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE__VESSEL_CLASS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int SEQUENCE__CHARTER_IN_MARKET = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Fitnesses</b></em>' containment reference list.
@@ -4305,15 +4305,15 @@ public interface SchedulePackage extends EPackage {
 	EReference getSequence_VesselAvailability();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Vessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Sequence#getVesselClass()
+	 * @return the meta object for the reference '<em>Charter In Market</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket()
 	 * @see #getSequence()
 	 * @generated
 	 */
-	EReference getSequence_VesselClass();
+	EReference getSequence_CharterInMarket();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}'.
@@ -5753,12 +5753,12 @@ public interface SchedulePackage extends EPackage {
 		EReference SEQUENCE__VESSEL_AVAILABILITY = eINSTANCE.getSequence_VesselAvailability();
 
 		/**
-		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Charter In Market</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SEQUENCE__VESSEL_CLASS = eINSTANCE.getSequence_VesselClass();
+		EReference SEQUENCE__CHARTER_IN_MARKET = eINSTANCE.getSequence_CharterInMarket();
 
 		/**
 		 * The meta object literal for the '<em><b>Fitnesses</b></em>' containment reference list feature.

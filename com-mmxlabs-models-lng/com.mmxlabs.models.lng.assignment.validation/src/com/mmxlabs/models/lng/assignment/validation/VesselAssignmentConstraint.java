@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -21,12 +22,16 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
+import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
@@ -42,12 +47,21 @@ public class VesselAssignmentConstraint extends AbstractModelMultiConstraint {
 		if (object instanceof AssignableElement) {
 			final AssignableElement assignment = (AssignableElement) object;
 
-
-			if (assignment.getAssignment() == null) {
+			final VesselAssignmentType vesselAssignmentType = assignment.getVesselAssignmentType();
+			if (vesselAssignmentType == null) {
 				return Activator.PLUGIN_ID;
 			}
 
-			final Set<? extends Vessel> vessels = SetUtils.getObjects(assignment.getAssignment());
+			final Set<? extends Vessel> vessels;
+			if (vesselAssignmentType instanceof CharterInMarket) {
+				final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+				vessels = SetUtils.<AVesselSet<Vessel>, Vessel> getObjects(charterInMarket.getVesselClass());
+			} else if (vesselAssignmentType instanceof VesselAvailability) {
+				final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+				vessels = Collections.singleton(vesselAvailability.getVessel());
+			} else {
+				return Activator.PLUGIN_ID;
+			}
 
 			final Set<Port> restrictedPorts = new HashSet<Port>();
 			boolean firstPass = true;

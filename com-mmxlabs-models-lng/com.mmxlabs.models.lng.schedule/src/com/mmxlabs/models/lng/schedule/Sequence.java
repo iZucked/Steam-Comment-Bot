@@ -6,7 +6,7 @@ package com.mmxlabs.models.lng.schedule;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
-import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
@@ -19,7 +19,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getEvents <em>Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselAvailability <em>Vessel Availability</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSequenceType <em>Sequence Type</em>}</li>
@@ -103,57 +103,57 @@ public interface Sequence extends MMXObject {
 	boolean isSetVesselAvailability();
 
 	/**
-	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
+	 * Returns the value of the '<em><b>Charter In Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
+	 * If the meaning of the '<em>Charter In Market</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Class</em>' reference.
-	 * @see #isSetVesselClass()
-	 * @see #unsetVesselClass()
-	 * @see #setVesselClass(VesselClass)
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_VesselClass()
+	 * @return the value of the '<em>Charter In Market</em>' reference.
+	 * @see #isSetCharterInMarket()
+	 * @see #unsetCharterInMarket()
+	 * @see #setCharterInMarket(CharterInMarket)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_CharterInMarket()
 	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
-	VesselClass getVesselClass();
+	CharterInMarket getCharterInMarket();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Vessel Class</em>' reference.
-	 * @see #isSetVesselClass()
-	 * @see #unsetVesselClass()
-	 * @see #getVesselClass()
+	 * @param value the new value of the '<em>Charter In Market</em>' reference.
+	 * @see #isSetCharterInMarket()
+	 * @see #unsetCharterInMarket()
+	 * @see #getCharterInMarket()
 	 * @generated
 	 */
-	void setVesselClass(VesselClass value);
+	void setCharterInMarket(CharterInMarket value);
 
 	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}' reference.
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #isSetVesselClass()
-	 * @see #getVesselClass()
-	 * @see #setVesselClass(VesselClass)
+	 * @see #isSetCharterInMarket()
+	 * @see #getCharterInMarket()
+	 * @see #setCharterInMarket(CharterInMarket)
 	 * @generated
 	 */
-	void unsetVesselClass();
+	void unsetCharterInMarket();
 
 	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getVesselClass <em>Vessel Class</em>}' reference is set.
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getCharterInMarket <em>Charter In Market</em>}' reference is set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Vessel Class</em>' reference is set.
-	 * @see #unsetVesselClass()
-	 * @see #getVesselClass()
-	 * @see #setVesselClass(VesselClass)
+	 * @return whether the value of the '<em>Charter In Market</em>' reference is set.
+	 * @see #unsetCharterInMarket()
+	 * @see #getCharterInMarket()
+	 * @see #setCharterInMarket(CharterInMarket)
 	 * @generated
 	 */
-	boolean isSetVesselClass();
+	boolean isSetCharterInMarket();
 
 	/**
 	 * Returns the value of the '<em><b>Fitnesses</b></em>' containment reference list.

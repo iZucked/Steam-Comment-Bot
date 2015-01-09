@@ -66,18 +66,10 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_assignmentEditor(detailComposite, topClass);
-		add_spotIndexEditor(detailComposite, topClass);
 		add_sequenceHintEditor(detailComposite, topClass);
+		add_vesselAssignmentTypeEditor(detailComposite, topClass);
+		add_spotIndexEditor(detailComposite, topClass);
 		add_lockedEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the assignment feature on AssignableElement
-	 *
-	 * @generated NOT
-	 */
-	protected void add_assignmentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(new AssignmentInlineEditor(CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT)));
 	}
 	/**
 	 * Create the editor for the spotIndex feature on AssignableElement
@@ -85,7 +77,7 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX)));
+		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX)));
 	}
 	/**
 	 * Create the editor for the sequenceHint feature on AssignableElement
@@ -102,5 +94,15 @@ public class AssignableElementComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_lockedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.ASSIGNABLE_ELEMENT__LOCKED)));
+	}
+
+	/**
+	 * Create the editor for the vesselAssignmentType feature on AssignableElement
+	 *
+	 * @generated NOT
+	 */
+	protected void add_vesselAssignmentTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new AssignableElementEditorWrapper(new AssignmentInlineEditor(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE)));
+
 	}
 }

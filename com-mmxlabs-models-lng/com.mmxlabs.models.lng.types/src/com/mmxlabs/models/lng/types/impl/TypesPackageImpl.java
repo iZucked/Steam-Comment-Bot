@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.types.ObjectSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import java.lang.Iterable;
 
@@ -51,6 +52,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EClass iTimezoneProviderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass vesselAssignmentTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -185,6 +193,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getVesselAssignmentType() {
+		return vesselAssignmentTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getObjectSet() {
 		return objectSetEClass;
 	}
@@ -263,6 +280,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		iTimezoneProviderEClass = createEClass(ITIMEZONE_PROVIDER);
 		createEOperation(iTimezoneProviderEClass, ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE);
+
+		vesselAssignmentTypeEClass = createEClass(VESSEL_ASSIGNMENT_TYPE);
 
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
@@ -351,6 +370,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		op = initEOperation(getITimezoneProvider__GetTimeZone__EAttribute(), ecorePackage.getEString(), "getTimeZone", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEAttribute(), "attribute", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(vesselAssignmentTypeEClass, VesselAssignmentType.class, "VesselAssignmentType", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals
 		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");

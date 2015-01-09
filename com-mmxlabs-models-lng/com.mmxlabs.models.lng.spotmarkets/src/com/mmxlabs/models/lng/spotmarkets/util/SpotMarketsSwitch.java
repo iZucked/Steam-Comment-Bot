@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.spotmarkets.util;
 
 import com.mmxlabs.models.lng.spotmarkets.*;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -159,6 +160,8 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				CharterOutMarket charterOutMarket = (CharterOutMarket)theEObject;
 				T result = caseCharterOutMarket(charterOutMarket);
 				if (result == null) result = caseSpotCharterMarket(charterOutMarket);
+				if (result == null) result = caseNamedObject(charterOutMarket);
+				if (result == null) result = caseMMXObject(charterOutMarket);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -166,6 +169,9 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 				CharterInMarket charterInMarket = (CharterInMarket)theEObject;
 				T result = caseCharterInMarket(charterInMarket);
 				if (result == null) result = caseSpotCharterMarket(charterInMarket);
+				if (result == null) result = caseVesselAssignmentType(charterInMarket);
+				if (result == null) result = caseNamedObject(charterInMarket);
+				if (result == null) result = caseMMXObject(charterInMarket);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -401,6 +407,21 @@ public class SpotMarketsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamedObject(NamedObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Vessel Assignment Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Vessel Assignment Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseVesselAssignmentType(VesselAssignmentType object) {
 		return null;
 	}
 

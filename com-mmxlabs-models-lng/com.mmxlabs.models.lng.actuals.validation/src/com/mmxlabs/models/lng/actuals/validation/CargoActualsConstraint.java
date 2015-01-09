@@ -25,8 +25,11 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -67,11 +70,18 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						failures.add(status);
 					}
 
-					if (cargo.getAssignment() != null && !cargo.getAssignment().equals(cargoActuals.getVessel())) {
-						final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
-						status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
-						status.addEObjectAndFeature(cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
-						failures.add(status);
+					final VesselAssignmentType vesselAssignmentType = cargo.getVesselAssignmentType();
+					if (vesselAssignmentType instanceof VesselAvailability) {
+
+						final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+						final Vessel vessel = vesselAvailability.getVessel();
+
+						if (vessel != null && vessel.equals(cargoActuals.getVessel())) {
+							final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
+							status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
+							status.addEObjectAndFeature(cargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+							failures.add(status);
+						}
 					}
 				} else {
 
@@ -79,10 +89,10 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						if (slot instanceof LoadSlot) {
 							final LoadSlot loadSlot = (LoadSlot) slot;
 							if (loadSlot.isDESPurchase()) {
-								if (loadSlot.getAssignment() != null && !loadSlot.getAssignment().equals(cargoActuals.getVessel())) {
+								if (loadSlot.getNominatedVessel() != null && !loadSlot.getNominatedVessel().equals(cargoActuals.getVessel())) {
 									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
 									status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
-									status.addEObjectAndFeature(loadSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+									status.addEObjectAndFeature(loadSlot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 									failures.add(status);
 								}
 
@@ -90,10 +100,10 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 						} else if (slot instanceof DischargeSlot) {
 							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 							if (dischargeSlot.isFOBSale()) {
-								if (!dischargeSlot.getAssignment().equals(cargoActuals.getVessel())) {
+								if (dischargeSlot.getNominatedVessel() != null && !dischargeSlot.getNominatedVessel().equals(cargoActuals.getVessel())) {
 									final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Assigned and Actual vessel differ"));
 									status.addEObjectAndFeature(cargoActuals, ActualsPackage.Literals.CARGO_ACTUALS__VESSEL);
-									status.addEObjectAndFeature(dischargeSlot, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+									status.addEObjectAndFeature(dischargeSlot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 									failures.add(status);
 								}
 							}
@@ -104,6 +114,7 @@ public class CargoActualsConstraint extends AbstractModelMultiConstraint {
 				boolean distanceNeeded = true;
 
 				for (final Slot slot : cargo.getSlots()) {
+					assert slot != null;
 					final SlotType slotClassification = SlotClassifier.classify(slot);
 					if (slotClassification == SlotType.FOB_Sale) {
 						distanceNeeded = false;

@@ -52,10 +52,10 @@ public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 		if (elementAssignment != null) {
 			if (list.size() == 1) {
 				final Object newAssignment = list.get(0);
-				cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, newAssignment));
+				cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, newAssignment));
 			} else {
-				if (!list.contains(elementAssignment.getAssignment())) {
-					cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+				if (!list.contains(elementAssignment.getVesselAssignmentType())) {
+					cmd.append(SetCommand.create(this.commandHandler.getEditingDomain(), elementAssignment, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
 				}
 			}
 		}

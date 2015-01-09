@@ -3,6 +3,7 @@
 package com.mmxlabs.models.lng.spotmarkets;
 
 import com.mmxlabs.models.lng.pricing.CharterIndex;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,7 +22,7 @@ import com.mmxlabs.models.lng.pricing.CharterIndex;
  * @model
  * @generated
  */
-public interface CharterOutMarket extends SpotCharterMarket {
+public interface CharterOutMarket extends SpotCharterMarket, NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Charter Out Price</b></em>' reference.
 	 * <!-- begin-user-doc -->

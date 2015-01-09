@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.assignment.validation;
 
+import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_AVAILABILITY__END_AT;
+import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.VESSEL_AVAILABILITY__START_AT;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,20 +30,18 @@ import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-
-import static com.mmxlabs.models.lng.cargo.CargoPackage.Literals.*;
 
 /**
  * A constraint to problem EMF level support for the TimeSortConstraintChecker to avoid getting scenarios which do not optimise when there is certain kinds of lateness.
@@ -57,10 +58,10 @@ public class AssignableElementMissingDistancesConstraint extends AbstractModelMu
 		final MMXRootObject rootObject = extraContext.getRootObject();
 		if (target instanceof CargoModel) {
 			final LNGScenarioModel scenarioModel = (LNGScenarioModel) rootObject;
-			final FleetModel fleetModel = scenarioModel.getFleetModel();
+			final SpotMarketsModel spotMarketsModel = scenarioModel.getSpotMarketsModel();
 			final CargoModel cargoModel = scenarioModel.getPortfolioModel().getCargoModel();
 
-			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
+			final List<CollectedAssignment> collectAssignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 
 			@SuppressWarnings("unchecked")
 			Map<Pair<Port, Port>, Boolean> hasDistanceMap = (Map<Pair<Port, Port>, Boolean>) ctx.getCurrentConstraintData();

@@ -178,10 +178,16 @@
           referenceEClass="com.mmxlabs.models.lng.cargo.Slot">
     </valueProvider>
     <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.NominatedVesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.NominatedVesselValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
+          referenceEClass="com.mmxlabs.models.lng.fleet.Vessel">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.BasicVesselValueProviderFactory"
           ownerEClass="com.mmxlabs.models.lng.cargo.AssignableElement"
-          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+          referenceEClass="com.mmxlabs.models.lng.types.VesselAssignmentType">
     </valueProvider>
     <valueProvider
           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.VesselAvailabilityVesselValueProviderFactory"
@@ -205,6 +211,11 @@
            id="com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotEntityValueProviderFactory"
            ownerEClass="com.mmxlabs.models.lng.cargo.Slot"
            referenceEClass="com.mmxlabs.models.lng.commercial.BaseLegalEntity">
+     </valueProvider>
+     <valueProvider
+           factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+           id="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory_VesselAvailability"
+           referenceEClass="com.mmxlabs.models.lng.cargo.VesselAvailability">
      </valueProvider>
  </extension>
  <extension

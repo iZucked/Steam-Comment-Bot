@@ -511,10 +511,10 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	 * @generated
 	 */
 	public void dispose() {
+		if (cargoModelItemProvider != null) cargoModelItemProvider.dispose();
 		if (cargoItemProvider != null) cargoItemProvider.dispose();
 		if (loadSlotItemProvider != null) loadSlotItemProvider.dispose();
 		if (dischargeSlotItemProvider != null) dischargeSlotItemProvider.dispose();
-		if (cargoModelItemProvider != null) cargoModelItemProvider.dispose();
 		if (spotLoadSlotItemProvider != null) spotLoadSlotItemProvider.dispose();
 		if (spotDischargeSlotItemProvider != null) spotDischargeSlotItemProvider.dispose();
 		if (cargoGroupItemProvider != null) cargoGroupItemProvider.dispose();

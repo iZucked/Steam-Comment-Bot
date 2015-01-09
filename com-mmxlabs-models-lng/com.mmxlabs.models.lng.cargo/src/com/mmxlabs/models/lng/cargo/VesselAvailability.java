@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.port.Port;
 
 import com.mmxlabs.models.lng.types.APortSet;
 
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 import java.util.Date;
@@ -47,7 +48,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface VesselAvailability extends UUIDObject {
+public interface VesselAvailability extends UUIDObject, VesselAssignmentType {
 	/**
 	 * Returns the value of the '<em><b>Vessel</b></em>' reference.
 	 * <!-- begin-user-doc -->

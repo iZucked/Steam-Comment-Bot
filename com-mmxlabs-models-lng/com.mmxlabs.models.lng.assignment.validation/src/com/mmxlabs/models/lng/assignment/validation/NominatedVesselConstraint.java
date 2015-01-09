@@ -13,15 +13,10 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.assignment.validation.internal.Activator;
-import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier;
 import com.mmxlabs.models.lng.cargo.util.SlotClassifier.SlotType;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -31,29 +26,20 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 	public String validate(final IValidationContext ctx, final IExtraValidationContext extraContext, final List<IStatus> failures) {
 		final EObject object = ctx.getTarget();
 
-		if (object instanceof AssignableElement) {
-			final AssignableElement assignableElement = (AssignableElement) object;
+		final LoadSlot slot = getValidObject(object);
+		if (slot == null) {
+			return Activator.PLUGIN_ID;
+		}
 
-			final Slot slot = getValidObject(assignableElement);
-			if (slot == null) {
-				return Activator.PLUGIN_ID;
-			}
+		// DES Purchase
+		if (SlotClassifier.classify(slot) == SlotType.DES_Buy_AnyDisPort) {
 
-			final AVesselSet<? extends Vessel> vessel = assignableElement.getAssignment();
-
-			if (slot instanceof LoadSlot) {
-				// DES Purchase
-				final LoadSlot loadSlot = (LoadSlot) slot;
-				if (SlotClassifier.classify(loadSlot) == SlotType.DES_Buy_AnyDisPort) {
-
-					if (vessel == null) {
-						final String type = loadSlot.isDESPurchase() ? "DES" : "FOB";
-						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-								"Divertable %s Purchase|%s needs a nominated vessel", type, loadSlot.getName())));
-						failure.addEObjectAndFeature(assignableElement, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
-						failures.add(failure);
-					}
-				}
+			if (slot.getNominatedVessel() == null) {
+				final String type = slot.isDESPurchase() ? "DES" : "FOB";
+				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
+						"Divertable %s Purchase|%s needs a nominated vessel", type, slot.getName())));
+				failure.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
+				failures.add(failure);
 			}
 		}
 
@@ -61,18 +47,12 @@ public class NominatedVesselConstraint extends AbstractModelMultiConstraint {
 	}
 
 	private @Nullable
-	Slot getValidObject(@Nullable final EObject eObj) {
+	LoadSlot getValidObject(@Nullable final EObject eObj) {
 
 		if (eObj instanceof LoadSlot) {
 			final LoadSlot loadSlot = (LoadSlot) eObj;
 			if (loadSlot.isDESPurchase()) {
 				return loadSlot;
-			}
-		}
-		if (eObj instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) eObj;
-			if (dischargeSlot.isFOBSale()) {
-				return dischargeSlot;
 			}
 		}
 		return null;

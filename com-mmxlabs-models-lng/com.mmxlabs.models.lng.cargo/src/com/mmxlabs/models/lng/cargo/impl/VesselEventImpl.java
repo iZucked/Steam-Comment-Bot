@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TypesPackage;
 
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
@@ -48,9 +49,9 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getAssignment <em>Assignment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getSequenceHint <em>Sequence Hint</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getDurationInDays <em>Duration In Days</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.VesselEventImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
@@ -84,14 +85,34 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAssignment() <em>Assignment</em>}' reference.
+	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssignment()
+	 * @see #getSequenceHint()
 	 * @generated
 	 * @ordered
 	 */
-	protected AVesselSet<? extends Vessel> assignment;
+	protected static final int SEQUENCE_HINT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSequenceHint()
+	 * @generated
+	 * @ordered
+	 */
+	protected int sequenceHint = SEQUENCE_HINT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getVesselAssignmentType() <em>Vessel Assignment Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselAssignmentType()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselAssignmentType vesselAssignmentType;
 
 	/**
 	 * The default value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
@@ -112,35 +133,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * @ordered
 	 */
 	protected int spotIndex = SPOT_INDEX_EDEFAULT;
-
-	/**
-	 * This is true if the Spot Index attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean spotIndexESet;
-
-	/**
-	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSequenceHint()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SEQUENCE_HINT_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSequenceHint()
-	 * @generated
-	 * @ordered
-	 */
-	protected int sequenceHint = SEQUENCE_HINT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
@@ -287,45 +279,6 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	public AVesselSet<? extends Vessel> getAssignment() {
-		if (assignment != null && assignment.eIsProxy()) {
-			InternalEObject oldAssignment = (InternalEObject)assignment;
-			assignment = (AVesselSet<? extends Vessel>)eResolveProxy(oldAssignment);
-			if (assignment != oldAssignment) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_EVENT__ASSIGNMENT, oldAssignment, assignment));
-			}
-		}
-		return assignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AVesselSet<? extends Vessel> basicGetAssignment() {
-		return assignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAssignment(AVesselSet<? extends Vessel> newAssignment) {
-		AVesselSet<? extends Vessel> oldAssignment = assignment;
-		assignment = newAssignment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_EVENT__ASSIGNMENT, oldAssignment, assignment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -338,33 +291,8 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
-		boolean oldSpotIndexESet = spotIndexESet;
-		spotIndexESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_EVENT__SPOT_INDEX, oldSpotIndex, spotIndex, !oldSpotIndexESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetSpotIndex() {
-		int oldSpotIndex = spotIndex;
-		boolean oldSpotIndexESet = spotIndexESet;
-		spotIndex = SPOT_INDEX_EDEFAULT;
-		spotIndexESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.VESSEL_EVENT__SPOT_INDEX, oldSpotIndex, SPOT_INDEX_EDEFAULT, oldSpotIndexESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetSpotIndex() {
-		return spotIndexESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_EVENT__SPOT_INDEX, oldSpotIndex, spotIndex));
 	}
 
 	/**
@@ -407,6 +335,44 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		locked = newLocked;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_EVENT__LOCKED, oldLocked, locked));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselAssignmentType getVesselAssignmentType() {
+		if (vesselAssignmentType != null && vesselAssignmentType.eIsProxy()) {
+			InternalEObject oldVesselAssignmentType = (InternalEObject)vesselAssignmentType;
+			vesselAssignmentType = (VesselAssignmentType)eResolveProxy(oldVesselAssignmentType);
+			if (vesselAssignmentType != oldVesselAssignmentType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE, oldVesselAssignmentType, vesselAssignmentType));
+			}
+		}
+		return vesselAssignmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselAssignmentType basicGetVesselAssignmentType() {
+		return vesselAssignmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselAssignmentType(VesselAssignmentType newVesselAssignmentType) {
+		VesselAssignmentType oldVesselAssignmentType = vesselAssignmentType;
+		vesselAssignmentType = newVesselAssignmentType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE, oldVesselAssignmentType, vesselAssignmentType));
 	}
 
 	/**
@@ -542,13 +508,13 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		switch (featureID) {
 			case CargoPackage.VESSEL_EVENT__NAME:
 				return getName();
-			case CargoPackage.VESSEL_EVENT__ASSIGNMENT:
-				if (resolve) return getAssignment();
-				return basicGetAssignment();
-			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
-				return getSpotIndex();
 			case CargoPackage.VESSEL_EVENT__SEQUENCE_HINT:
 				return getSequenceHint();
+			case CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE:
+				if (resolve) return getVesselAssignmentType();
+				return basicGetVesselAssignmentType();
+			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
+				return getSpotIndex();
 			case CargoPackage.VESSEL_EVENT__LOCKED:
 				return isLocked();
 			case CargoPackage.VESSEL_EVENT__DURATION_IN_DAYS:
@@ -578,14 +544,14 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 			case CargoPackage.VESSEL_EVENT__NAME:
 				setName((String)newValue);
 				return;
-			case CargoPackage.VESSEL_EVENT__ASSIGNMENT:
-				setAssignment((AVesselSet<? extends Vessel>)newValue);
+			case CargoPackage.VESSEL_EVENT__SEQUENCE_HINT:
+				setSequenceHint((Integer)newValue);
+				return;
+			case CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE:
+				setVesselAssignmentType((VesselAssignmentType)newValue);
 				return;
 			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
 				setSpotIndex((Integer)newValue);
-				return;
-			case CargoPackage.VESSEL_EVENT__SEQUENCE_HINT:
-				setSequenceHint((Integer)newValue);
 				return;
 			case CargoPackage.VESSEL_EVENT__LOCKED:
 				setLocked((Boolean)newValue);
@@ -621,14 +587,14 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 			case CargoPackage.VESSEL_EVENT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case CargoPackage.VESSEL_EVENT__ASSIGNMENT:
-				setAssignment((AVesselSet<? extends Vessel>)null);
-				return;
-			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
-				unsetSpotIndex();
-				return;
 			case CargoPackage.VESSEL_EVENT__SEQUENCE_HINT:
 				setSequenceHint(SEQUENCE_HINT_EDEFAULT);
+				return;
+			case CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE:
+				setVesselAssignmentType((VesselAssignmentType)null);
+				return;
+			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
+				setSpotIndex(SPOT_INDEX_EDEFAULT);
 				return;
 			case CargoPackage.VESSEL_EVENT__LOCKED:
 				setLocked(LOCKED_EDEFAULT);
@@ -662,12 +628,12 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		switch (featureID) {
 			case CargoPackage.VESSEL_EVENT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CargoPackage.VESSEL_EVENT__ASSIGNMENT:
-				return assignment != null;
-			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
-				return isSetSpotIndex();
 			case CargoPackage.VESSEL_EVENT__SEQUENCE_HINT:
 				return sequenceHint != SEQUENCE_HINT_EDEFAULT;
+			case CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE:
+				return vesselAssignmentType != null;
+			case CargoPackage.VESSEL_EVENT__SPOT_INDEX:
+				return spotIndex != SPOT_INDEX_EDEFAULT;
 			case CargoPackage.VESSEL_EVENT__LOCKED:
 				return locked != LOCKED_EDEFAULT;
 			case CargoPackage.VESSEL_EVENT__DURATION_IN_DAYS:
@@ -704,9 +670,9 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		}
 		if (baseClass == AssignableElement.class) {
 			switch (derivedFeatureID) {
-				case CargoPackage.VESSEL_EVENT__ASSIGNMENT: return CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
-				case CargoPackage.VESSEL_EVENT__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
 				case CargoPackage.VESSEL_EVENT__SEQUENCE_HINT: return CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
+				case CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE: return CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE;
+				case CargoPackage.VESSEL_EVENT__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
 				case CargoPackage.VESSEL_EVENT__LOCKED: return CargoPackage.ASSIGNABLE_ELEMENT__LOCKED;
 				default: return -1;
 			}
@@ -734,9 +700,9 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		}
 		if (baseClass == AssignableElement.class) {
 			switch (baseFeatureID) {
-				case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.VESSEL_EVENT__ASSIGNMENT;
-				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.VESSEL_EVENT__SPOT_INDEX;
 				case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.VESSEL_EVENT__SEQUENCE_HINT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE: return CargoPackage.VESSEL_EVENT__VESSEL_ASSIGNMENT_TYPE;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.VESSEL_EVENT__SPOT_INDEX;
 				case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.VESSEL_EVENT__LOCKED;
 				default: return -1;
 			}
@@ -796,10 +762,10 @@ public abstract class VesselEventImpl extends UUIDObjectImpl implements VesselEv
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", spotIndex: ");
-		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
 		result.append(", sequenceHint: ");
 		result.append(sequenceHint);
+		result.append(", spotIndex: ");
+		result.append(spotIndex);
 		result.append(", locked: ");
 		result.append(locked);
 		result.append(", durationInDays: ");

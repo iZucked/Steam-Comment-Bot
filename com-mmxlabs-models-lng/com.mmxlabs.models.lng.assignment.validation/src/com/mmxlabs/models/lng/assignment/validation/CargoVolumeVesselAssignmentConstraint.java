@@ -16,8 +16,11 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -34,22 +37,31 @@ public class CargoVolumeVesselAssignmentConstraint extends AbstractModelMultiCon
 
 		if (object instanceof AssignableElement) {
 			final AssignableElement assignableElement = (AssignableElement) object;
+			VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
 
-			if (assignableElement.getAssignment() == null) {
+			if (vesselAssignmentType == null) {
 				return Activator.PLUGIN_ID;
 			}
 
 			int capacity = -1;
-			if (assignableElement.getAssignment() instanceof Vessel) {
-				final Vessel vessel = (Vessel) assignableElement.getAssignment();
-				capacity = vessel.getVesselOrVesselClassCapacity();
-			} else if (assignableElement.getAssignment() instanceof VesselClass) {
-				final VesselClass vesselClass = (VesselClass) assignableElement.getAssignment();
-				capacity = vesselClass.getCapacity();
+			if (vesselAssignmentType instanceof VesselAvailability) {
+				VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+
+				final Vessel vessel = vesselAvailability.getVessel();
+				if (vessel != null) {
+					capacity = vessel.getVesselOrVesselClassCapacity();
+				}
+			} else if (vesselAssignmentType instanceof CharterInMarket) {
+				CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+				final VesselClass vesselClass = charterInMarket.getVesselClass();
+				if (vesselClass != null) {
+					capacity = vesselClass.getCapacity();
+				}
 			} else {
 				// Can't do much here, no capacity...
 				return Activator.PLUGIN_ID;
 			}
+
 			Cargo cargo = null;
 			Slot slot = null;
 			if (assignableElement instanceof Slot) {

@@ -19,13 +19,8 @@ import org.eclipse.swt.widgets.Composite;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
-import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -41,7 +36,8 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
-		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_Assignment());
+		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
+				CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType());
 	}
 
 	private List<Pair<String, EObject>> getAllowedValues(final EObject target, List<Pair<String, EObject>> storage) {
@@ -50,7 +46,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		} else {
 			storage.clear();
 		}
-		storage.addAll(valueProvider.getAllowedValues(target, CargoPackage.eINSTANCE.getAssignableElement_Assignment()));
+		storage.addAll(valueProvider.getAllowedValues(target, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType()));
 
 		return storage;
 	}
@@ -58,19 +54,19 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public void setValue(final Object object, final Object value) {
 		// grar.
-		AssignableElement target = getTarget(object);
+		AssignableElement target = castTarget(object);
 		allowedValues = getAllowedValues(target, allowedValues);
 
 		// locate the appropriate value in the list of options
-		final AVesselSet<Vessel> set = (AVesselSet<Vessel>) (allowedValues.get((Integer) value).getSecond());
+		final VesselAssignmentType set = (VesselAssignmentType) (allowedValues.get((Integer) value).getSecond());
 		final EditingDomain ed = location.getEditingDomain();
 
-		ed.getCommandStack().execute(SetCommand.create(ed, target, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, set));
+		ed.getCommandStack().execute(SetCommand.create(ed, target, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, set));
 	}
 
 	@Override
 	public CellEditor getCellEditor(final Composite parent, final Object object) {
-		allowedValues = getAllowedValues(getTarget(object), allowedValues);
+		allowedValues = getAllowedValues(castTarget(object), allowedValues);
 		final String[] items = new String[allowedValues.size()];
 		for (int i = 0; i < items.length; i++) {
 			items[i] = allowedValues.get(i).getFirst();
@@ -80,10 +76,10 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	@Override
 	public Integer getValue(final Object object) {
-		final AssignableElement assignableElement = getTarget(object);
+		final AssignableElement assignableElement = castTarget(object);
 		allowedValues = getAllowedValues((EObject) assignableElement, allowedValues);
 		for (int i = 0; i < allowedValues.size(); i++) {
-			if (Equality.isEqual(allowedValues.get(i).getSecond(), assignableElement.getAssignment())) {
+			if (Equality.isEqual(allowedValues.get(i).getSecond(), assignableElement.getVesselAssignmentType())) {
 				return i;
 			}
 		}
@@ -94,19 +90,19 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public boolean canEdit(final Object object) {
 
-		return getTarget(object) != null;
+		return castTarget(object) != null;
 	}
 
 	@Override
 	public String render(final Object object) {
 
-		final AssignableElement target = getTarget(object);
+		final AssignableElement target = castTarget(object);
 		if (target == null) {
 			return "";
 		}
 
 		// get the VesselSet currently attached to the cargo
-		final AVesselSet<? extends Vessel> vs = target.getAssignment();
+		final VesselAssignmentType vs = target.getVesselAssignmentType();
 		// by preference, find the string attached to this object by the value provider
 		for (final Pair<String, EObject> pair : getAllowedValues(target, allowedValues)) {
 			if (pair.getSecond() == vs) {
@@ -118,8 +114,9 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 			// this case should not occur, since the value provider should offer null as an option
 			return "(Null)";
 		} else {
+			assert false;
 			// fall back on displaying the VesselSet's name
-			return vs.getName();
+			return "Unknown vessel assignment";
 		}
 
 		// This case can happen in e.g. the wiring editor row slot only rows
@@ -142,34 +139,10 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	 * @return
 	 */
 	protected @Nullable
-	AssignableElement getTarget(@Nullable final Object object) {
-		if (object instanceof Cargo) {
-			final Cargo cargo = (Cargo) object;
-
-			for (final Slot s : cargo.getSlots()) {
-				if (s instanceof LoadSlot) {
-					final LoadSlot loadSlot = (LoadSlot) s;
-					if (loadSlot.isDESPurchase()) {
-						return loadSlot;
-					}
-				} else if (s instanceof DischargeSlot) {
-					final DischargeSlot dischargeSlot = (DischargeSlot) s;
-					if (dischargeSlot.isFOBSale()) {
-						return dischargeSlot;
-					}
-				}
-			}
-			return cargo;
-		} else if (object instanceof LoadSlot) {
-			final LoadSlot loadSlot = (LoadSlot) object;
-			if (loadSlot.isDESPurchase()) {
-				return loadSlot;
-			}
-		} else if (object instanceof DischargeSlot) {
-			final DischargeSlot dischargeSlot = (DischargeSlot) object;
-			if (dischargeSlot.isFOBSale()) {
-				return dischargeSlot;
-			}
+	AssignableElement castTarget(@Nullable final Object object) {
+		if (object instanceof AssignableElement) {
+			AssignableElement assignableElement = (AssignableElement) object;
+			return assignableElement;
 		}
 		return null;
 	}

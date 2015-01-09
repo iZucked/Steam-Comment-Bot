@@ -24,8 +24,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.util.CargoSlotSorter;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
@@ -38,9 +37,9 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getName <em>Name</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAssignment <em>Assignment</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSequenceHint <em>Sequence Hint</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getVesselAssignmentType <em>Vessel Assignment Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSpotIndex <em>Spot Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isLocked <em>Locked</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getSlots <em>Slots</em>}</li>
@@ -71,14 +70,34 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	protected String name = NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAssignment() <em>Assignment</em>}' reference.
+	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAssignment()
+	 * @see #getSequenceHint()
 	 * @generated
 	 * @ordered
 	 */
-	protected AVesselSet<? extends Vessel> assignment;
+	protected static final int SEQUENCE_HINT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSequenceHint()
+	 * @generated
+	 * @ordered
+	 */
+	protected int sequenceHint = SEQUENCE_HINT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getVesselAssignmentType() <em>Vessel Assignment Type</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselAssignmentType()
+	 * @generated
+	 * @ordered
+	 */
+	protected VesselAssignmentType vesselAssignmentType;
 
 	/**
 	 * The default value of the '{@link #getSpotIndex() <em>Spot Index</em>}' attribute.
@@ -99,35 +118,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * @ordered
 	 */
 	protected int spotIndex = SPOT_INDEX_EDEFAULT;
-
-	/**
-	 * This is true if the Spot Index attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean spotIndexESet;
-
-	/**
-	 * The default value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSequenceHint()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int SEQUENCE_HINT_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getSequenceHint() <em>Sequence Hint</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSequenceHint()
-	 * @generated
-	 * @ordered
-	 */
-	protected int sequenceHint = SEQUENCE_HINT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #isLocked() <em>Locked</em>}' attribute.
@@ -224,45 +214,6 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
-	public AVesselSet<? extends Vessel> getAssignment() {
-		if (assignment != null && assignment.eIsProxy()) {
-			InternalEObject oldAssignment = (InternalEObject)assignment;
-			assignment = (AVesselSet<? extends Vessel>)eResolveProxy(oldAssignment);
-			if (assignment != oldAssignment) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__ASSIGNMENT, oldAssignment, assignment));
-			}
-		}
-		return assignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AVesselSet<? extends Vessel> basicGetAssignment() {
-		return assignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAssignment(AVesselSet<? extends Vessel> newAssignment) {
-		AVesselSet<? extends Vessel> oldAssignment = assignment;
-		assignment = newAssignment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__ASSIGNMENT, oldAssignment, assignment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getSpotIndex() {
 		return spotIndex;
 	}
@@ -275,33 +226,8 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 	public void setSpotIndex(int newSpotIndex) {
 		int oldSpotIndex = spotIndex;
 		spotIndex = newSpotIndex;
-		boolean oldSpotIndexESet = spotIndexESet;
-		spotIndexESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__SPOT_INDEX, oldSpotIndex, spotIndex, !oldSpotIndexESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetSpotIndex() {
-		int oldSpotIndex = spotIndex;
-		boolean oldSpotIndexESet = spotIndexESet;
-		spotIndex = SPOT_INDEX_EDEFAULT;
-		spotIndexESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.CARGO__SPOT_INDEX, oldSpotIndex, SPOT_INDEX_EDEFAULT, oldSpotIndexESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetSpotIndex() {
-		return spotIndexESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__SPOT_INDEX, oldSpotIndex, spotIndex));
 	}
 
 	/**
@@ -344,6 +270,44 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		locked = newLocked;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__LOCKED, oldLocked, locked));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselAssignmentType getVesselAssignmentType() {
+		if (vesselAssignmentType != null && vesselAssignmentType.eIsProxy()) {
+			InternalEObject oldVesselAssignmentType = (InternalEObject)vesselAssignmentType;
+			vesselAssignmentType = (VesselAssignmentType)eResolveProxy(oldVesselAssignmentType);
+			if (vesselAssignmentType != oldVesselAssignmentType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE, oldVesselAssignmentType, vesselAssignmentType));
+			}
+		}
+		return vesselAssignmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselAssignmentType basicGetVesselAssignmentType() {
+		return vesselAssignmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselAssignmentType(VesselAssignmentType newVesselAssignmentType) {
+		VesselAssignmentType oldVesselAssignmentType = vesselAssignmentType;
+		vesselAssignmentType = newVesselAssignmentType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE, oldVesselAssignmentType, vesselAssignmentType));
 	}
 
 	/**
@@ -450,13 +414,13 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__NAME:
 				return getName();
-			case CargoPackage.CARGO__ASSIGNMENT:
-				if (resolve) return getAssignment();
-				return basicGetAssignment();
-			case CargoPackage.CARGO__SPOT_INDEX:
-				return getSpotIndex();
 			case CargoPackage.CARGO__SEQUENCE_HINT:
 				return getSequenceHint();
+			case CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE:
+				if (resolve) return getVesselAssignmentType();
+				return basicGetVesselAssignmentType();
+			case CargoPackage.CARGO__SPOT_INDEX:
+				return getSpotIndex();
 			case CargoPackage.CARGO__LOCKED:
 				return isLocked();
 			case CargoPackage.CARGO__ALLOW_REWIRING:
@@ -479,14 +443,14 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 			case CargoPackage.CARGO__NAME:
 				setName((String)newValue);
 				return;
-			case CargoPackage.CARGO__ASSIGNMENT:
-				setAssignment((AVesselSet<? extends Vessel>)newValue);
+			case CargoPackage.CARGO__SEQUENCE_HINT:
+				setSequenceHint((Integer)newValue);
+				return;
+			case CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE:
+				setVesselAssignmentType((VesselAssignmentType)newValue);
 				return;
 			case CargoPackage.CARGO__SPOT_INDEX:
 				setSpotIndex((Integer)newValue);
-				return;
-			case CargoPackage.CARGO__SEQUENCE_HINT:
-				setSequenceHint((Integer)newValue);
 				return;
 			case CargoPackage.CARGO__LOCKED:
 				setLocked((Boolean)newValue);
@@ -513,14 +477,14 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 			case CargoPackage.CARGO__NAME:
 				setName(NAME_EDEFAULT);
 				return;
-			case CargoPackage.CARGO__ASSIGNMENT:
-				setAssignment((AVesselSet<? extends Vessel>)null);
-				return;
-			case CargoPackage.CARGO__SPOT_INDEX:
-				unsetSpotIndex();
-				return;
 			case CargoPackage.CARGO__SEQUENCE_HINT:
 				setSequenceHint(SEQUENCE_HINT_EDEFAULT);
+				return;
+			case CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE:
+				setVesselAssignmentType((VesselAssignmentType)null);
+				return;
+			case CargoPackage.CARGO__SPOT_INDEX:
+				setSpotIndex(SPOT_INDEX_EDEFAULT);
 				return;
 			case CargoPackage.CARGO__LOCKED:
 				setLocked(LOCKED_EDEFAULT);
@@ -545,12 +509,12 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		switch (featureID) {
 			case CargoPackage.CARGO__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case CargoPackage.CARGO__ASSIGNMENT:
-				return assignment != null;
-			case CargoPackage.CARGO__SPOT_INDEX:
-				return isSetSpotIndex();
 			case CargoPackage.CARGO__SEQUENCE_HINT:
 				return sequenceHint != SEQUENCE_HINT_EDEFAULT;
+			case CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE:
+				return vesselAssignmentType != null;
+			case CargoPackage.CARGO__SPOT_INDEX:
+				return spotIndex != SPOT_INDEX_EDEFAULT;
 			case CargoPackage.CARGO__LOCKED:
 				return locked != LOCKED_EDEFAULT;
 			case CargoPackage.CARGO__ALLOW_REWIRING:
@@ -576,9 +540,9 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		}
 		if (baseClass == AssignableElement.class) {
 			switch (derivedFeatureID) {
-				case CargoPackage.CARGO__ASSIGNMENT: return CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT;
-				case CargoPackage.CARGO__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
 				case CargoPackage.CARGO__SEQUENCE_HINT: return CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT;
+				case CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE: return CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE;
+				case CargoPackage.CARGO__SPOT_INDEX: return CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX;
 				case CargoPackage.CARGO__LOCKED: return CargoPackage.ASSIGNABLE_ELEMENT__LOCKED;
 				default: return -1;
 			}
@@ -601,9 +565,9 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		}
 		if (baseClass == AssignableElement.class) {
 			switch (baseFeatureID) {
-				case CargoPackage.ASSIGNABLE_ELEMENT__ASSIGNMENT: return CargoPackage.CARGO__ASSIGNMENT;
-				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.CARGO__SPOT_INDEX;
 				case CargoPackage.ASSIGNABLE_ELEMENT__SEQUENCE_HINT: return CargoPackage.CARGO__SEQUENCE_HINT;
+				case CargoPackage.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE: return CargoPackage.CARGO__VESSEL_ASSIGNMENT_TYPE;
+				case CargoPackage.ASSIGNABLE_ELEMENT__SPOT_INDEX: return CargoPackage.CARGO__SPOT_INDEX;
 				case CargoPackage.ASSIGNABLE_ELEMENT__LOCKED: return CargoPackage.CARGO__LOCKED;
 				default: return -1;
 			}
@@ -639,10 +603,10 @@ public class CargoImpl extends UUIDObjectImpl implements Cargo {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
-		result.append(", spotIndex: ");
-		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
 		result.append(", sequenceHint: ");
 		result.append(sequenceHint);
+		result.append(", spotIndex: ");
+		result.append(spotIndex);
 		result.append(", locked: ");
 		result.append(locked);
 		result.append(", allowRewiring: ");
