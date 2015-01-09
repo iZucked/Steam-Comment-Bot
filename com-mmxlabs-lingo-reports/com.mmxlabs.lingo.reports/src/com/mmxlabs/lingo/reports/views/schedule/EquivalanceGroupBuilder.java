@@ -32,6 +32,7 @@ public class EquivalanceGroupBuilder {
 	private Set<EObject> checkElementEquivalence(final EObject referenceElement, final List<EObject> elements) {
 
 		final Set<EObject> equivalents = new HashSet<>();
+		String keyB = getElementKey(referenceElement);
 		if (referenceElement instanceof SlotAllocation) {
 			final SlotAllocation slotAllocation = (SlotAllocation) referenceElement;
 			if (slotAllocation.getSlot() instanceof SpotLoadSlot) {
@@ -62,7 +63,6 @@ public class EquivalanceGroupBuilder {
 					if (sa == slotAllocation) {
 						continue;
 					}
-
 					for (final EObject eObject : elements) {
 						if (eObject instanceof SlotAllocation) {
 							final SlotAllocation eObjectslotAllocation = (SlotAllocation) eObject;
@@ -80,18 +80,10 @@ public class EquivalanceGroupBuilder {
 				return equivalents;
 			}
 		}
-		// TODO: Similar for spot discharge?
-		// if (referenceElement instanceof SpotDischargeSlot) {
-		// for (EObject eObject : elements) {
-		// if (getElementKey(eObject).equals(getElementKey(referenceElement))) {
-		// equivalents.add(eObject);
-		// }
-		// }
-		// }
 
 		{
 			for (final EObject eObject : elements) {
-				if (getElementKey(eObject).equals(getElementKey(referenceElement))) {
+				if (getElementKey(eObject).equals(keyB)) {
 					equivalents.add(eObject);
 				}
 			}
@@ -135,6 +127,7 @@ public class EquivalanceGroupBuilder {
 		// Find all the equivalents from the reference to the other scenarios
 		final Map<String, List<EObject>> reference = maps.get(0);
 		for (final String key : allKeys) {
+
 			final List<EObject> referenceElements = reference.get(key);
 			if (referenceElements == null || referenceElements.isEmpty()) {
 
@@ -256,7 +249,23 @@ public class EquivalanceGroupBuilder {
 		} else if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
 		} else if (element instanceof OpenSlotAllocation) {
-			return ((OpenSlotAllocation) element).getSlot().getName();
+			OpenSlotAllocation openSlotAllocation = (OpenSlotAllocation) element;
+			String prefix = "";
+			final Slot slot = openSlotAllocation.getSlot();
+			if (slot instanceof LoadSlot) {
+				prefix = "load";
+			} else {
+				prefix = "discharge";
+			}
+			if (slot instanceof SpotSlot) {
+				final SpotMarket market = ((SpotSlot) slot).getMarket();
+				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
+				return String.format("%s-%s-%s-%s", prefix, market.eClass().getName(), market.getName(), df.format(slot.getWindowStart()));
+
+			} else {
+				final String baseName = openSlotAllocation.getSlot().getName();
+				return prefix + "-" + baseName;
+			}
 		} else if (element instanceof Event) {
 			return ((Event) element).name();
 		}

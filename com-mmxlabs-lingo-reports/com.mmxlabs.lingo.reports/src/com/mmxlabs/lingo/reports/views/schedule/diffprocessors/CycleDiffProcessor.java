@@ -70,6 +70,8 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			for (final ICustomRelatedSlotHandler h : customRelatedSlotHandlers) {
 				h.addRelatedSlots(relatedSlotAllocations, schedule, openSlotAllocation);
 			}
+			relatedSlotAllocations.updateRelatedSetsFor(openSlotAllocation);
+
 		}
 
 	}
@@ -77,13 +79,14 @@ public class CycleDiffProcessor implements IDiffProcessor {
 	private void generateCycleDiffForElement(final Table table, final Map<EObject, Set<EObject>> equivalancesMap, final Map<EObject, Row> elementToRowMap, final EObject referenceElement) {
 
 		final Row referenceRow = elementToRowMap.get(referenceElement);
-		final CargoAllocation rowCargoAllocation = referenceRow.getCargoAllocation();
-		if (rowCargoAllocation != null) {
+
+		final CargoAllocation referenceRowCargoAllocation = referenceRow.getCargoAllocation();
+		if (referenceRowCargoAllocation != null) {
 
 			// Check to see if wiring has changed.
 			boolean different = false;
 			{
-				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(rowCargoAllocation);
+				final String currentWiring = CargoAllocationUtils.getSalesWiringAsString(referenceRowCargoAllocation);
 				// if (referenceRow == null) {
 				for (final Row referringRow : referenceRow.getReferringRows()) {
 					final CargoAllocation pinnedCargoAllocation = referringRow.getCargoAllocation();
@@ -92,6 +95,7 @@ public class CycleDiffProcessor implements IDiffProcessor {
 						final String result = CargoAllocationUtils.getSalesWiringAsString(pinnedCargoAllocation);
 
 						different = !currentWiring.equals(result);
+
 					} else {
 						different = true;
 					}
@@ -106,13 +110,16 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				cycleGroup.getRows().add(referenceRow);
 				table.getCycleGroups().add(cycleGroup);
 
-				final CargoAllocation thisCargoAllocation = rowCargoAllocation;
+				final CargoAllocation thisCargoAllocation = referenceRowCargoAllocation;
 
 				final Set<Slot> buysSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, true);
 				final Set<Slot> sellsSet = relatedSlotAllocations.getRelatedSetFor(thisCargoAllocation, false);
 
 				for (final Slot s : buysSet) {
-					final SlotAllocation a = relatedSlotAllocations.getSlotAllocation(s);
+					Object a = relatedSlotAllocations.getSlotAllocation(s);
+					if (a == null) {
+						a = relatedSlotAllocations.getOpenSlotAllocation(s);
+					}
 					if (a == null) {
 						continue;
 					}
@@ -123,7 +130,10 @@ public class CycleDiffProcessor implements IDiffProcessor {
 					cycleGroup.getRows().add(r);
 				}
 				for (final Slot s : sellsSet) {
-					final SlotAllocation a = relatedSlotAllocations.getSlotAllocation(s);
+					Object a = relatedSlotAllocations.getSlotAllocation(s);
+					if (a == null) {
+						a = relatedSlotAllocations.getOpenSlotAllocation(s);
+					}
 					if (a == null) {
 						continue;
 					}
@@ -152,7 +162,10 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				table.getCycleGroups().add(cycleGroup);
 
 				for (final Slot s : buysSet) {
-					final SlotAllocation a = relatedSlotAllocations.getSlotAllocation(s);
+					Object a = relatedSlotAllocations.getSlotAllocation(s);
+					if (a == null) {
+						a = relatedSlotAllocations.getOpenSlotAllocation(s);
+					}
 					if (a == null) {
 						continue;
 					}
@@ -163,7 +176,10 @@ public class CycleDiffProcessor implements IDiffProcessor {
 					cycleGroup.getRows().add(r);
 				}
 				for (final Slot s : sellsSet) {
-					final SlotAllocation a = relatedSlotAllocations.getSlotAllocation(s);
+					Object a = relatedSlotAllocations.getSlotAllocation(s);
+					if (a == null) {
+						a = relatedSlotAllocations.getOpenSlotAllocation(s);
+					}
 					if (a == null) {
 						continue;
 					}
@@ -277,53 +293,16 @@ public class CycleDiffProcessor implements IDiffProcessor {
 			}
 
 			group.setIndex(goupCounter++);
-			group.setDescription(String.format("Rewire %d x %d; Buys %s, Sells %s",  buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
+			group.setDescription(String.format("Rewire %d x %d; Buys %s, Sells %s", buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
 		}
 	}
 
-	protected String setToString(final Set<String> stringsSet) {
+	private String setToString(final Set<String> stringsSet) {
 		return "[ " + Joiner.on(", ").skipNulls().join(stringsSet) + " ]";
 	}
 
-	// boolean isElementDifferent(EObject reference, EObject element) {
-	// }
-
-	// public void process(List<EObject> elements, boolean pinnedScenario) {
-	//
-	// Map<String, List<EObject>> map = generateElementNameGroups(elements);
-	// if (pinnedScenario) {
-	// dataLists.add(0, map);
-	// } else {
-	// dataLists.add(map);
-	// }
-	// }
-
-	//
-	// public boolean isElementDifferent(final Row pinnedObject, final Row otherObject) {
-	// return scheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(ReportsPackage.Literals.ROW__TARGET), (EObject) otherObject.eGet(ReportsPackage.Literals.ROW__TARGET));
-	// }
-
-	protected Set<String> slotToStringsSet(final Set<Slot> buysSet) {
+	private Set<String> slotToStringsSet(final Set<Slot> buysSet) {
 		return Sets.newTreeSet(Iterables.transform(buysSet, new SlotToStringFunction()));
 	}
 
 }
-
-// boolean isElementDifferent(EObject reference, EObject element) {
-// }
-
-// public void process(List<EObject> elements, boolean pinnedScenario) {
-//
-// Map<String, List<EObject>> map = generateElementNameGroups(elements);
-// if (pinnedScenario) {
-// dataLists.add(0, map);
-// } else {
-// dataLists.add(map);
-// }
-// }
-
-//
-// public boolean isElementDifferent(final Row pinnedObject, final Row otherObject) {
-// return scheduleDiffUtils.isElementDifferent((EObject) pinnedObject.eGet(ReportsPackage.Literals.ROW__TARGET), (EObject) otherObject.eGet(ReportsPackage.Literals.ROW__TARGET));
-// }
-
