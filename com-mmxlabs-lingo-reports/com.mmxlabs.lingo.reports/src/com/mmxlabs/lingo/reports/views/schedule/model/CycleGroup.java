@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getRows <em>Rows</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
  *
@@ -66,5 +67,58 @@ public interface CycleGroup extends EObject {
 	 * @generated
 	 */
 	EList<Row> getRows();
+
+	/**
+	 * Returns the value of the '<em><b>Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Index</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Index</em>' attribute.
+	 * @see #isSetIndex()
+	 * @see #unsetIndex()
+	 * @see #setIndex(int)
+	 * @see com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage#getCycleGroup_Index()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	int getIndex();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Index</em>' attribute.
+	 * @see #isSetIndex()
+	 * @see #unsetIndex()
+	 * @see #getIndex()
+	 * @generated
+	 */
+	void setIndex(int value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetIndex()
+	 * @see #getIndex()
+	 * @see #setIndex(int)
+	 * @generated
+	 */
+	void unsetIndex();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.lingo.reports.views.schedule.model.CycleGroup#getIndex <em>Index</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Index</em>' attribute is set.
+	 * @see #unsetIndex()
+	 * @see #getIndex()
+	 * @see #setIndex(int)
+	 * @generated
+	 */
+	boolean isSetIndex();
 
 } // CycleGroup

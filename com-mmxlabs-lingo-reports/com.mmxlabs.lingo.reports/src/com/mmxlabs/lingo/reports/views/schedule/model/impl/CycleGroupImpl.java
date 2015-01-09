@@ -27,6 +27,7 @@ import com.mmxlabs.lingo.reports.views.schedule.model.ScheduleReportPackage;
  * <ul>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getRows <em>Rows</em>}</li>
+ *   <li>{@link com.mmxlabs.lingo.reports.views.schedule.model.impl.CycleGroupImpl#getIndex <em>Index</em>}</li>
  * </ul>
  * </p>
  *
@@ -62,6 +63,35 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * @ordered
 	 */
 	protected EList<Row> rows;
+
+	/**
+	 * The default value of the '{@link #getIndex() <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int INDEX_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected int index = INDEX_EDEFAULT;
+
+	/**
+	 * This is true if the Index attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean indexESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -120,6 +150,52 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getIndex() {
+		return index;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIndex(int newIndex) {
+		int oldIndex = index;
+		index = newIndex;
+		boolean oldIndexESet = indexESet;
+		indexESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScheduleReportPackage.CYCLE_GROUP__INDEX, oldIndex, index, !oldIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetIndex() {
+		int oldIndex = index;
+		boolean oldIndexESet = indexESet;
+		index = INDEX_EDEFAULT;
+		indexESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, ScheduleReportPackage.CYCLE_GROUP__INDEX, oldIndex, INDEX_EDEFAULT, oldIndexESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetIndex() {
+		return indexESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -156,6 +232,8 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 				return getDescription();
 			case ScheduleReportPackage.CYCLE_GROUP__ROWS:
 				return getRows();
+			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
+				return getIndex();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -176,6 +254,9 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 				getRows().clear();
 				getRows().addAll((Collection<? extends Row>)newValue);
 				return;
+			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
+				setIndex((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -194,6 +275,9 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 			case ScheduleReportPackage.CYCLE_GROUP__ROWS:
 				getRows().clear();
 				return;
+			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
+				unsetIndex();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -210,6 +294,8 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
 			case ScheduleReportPackage.CYCLE_GROUP__ROWS:
 				return rows != null && !rows.isEmpty();
+			case ScheduleReportPackage.CYCLE_GROUP__INDEX:
+				return isSetIndex();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -226,6 +312,8 @@ public class CycleGroupImpl extends MinimalEObjectImpl.Container implements Cycl
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (description: ");
 		result.append(description);
+		result.append(", index: ");
+		if (indexESet) result.append(index); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

@@ -75,7 +75,7 @@ public class CargoAllocationUtils {
 		final StringBuffer sb = new StringBuffer();
 
 		final SlotAllocation sa0 = slotAllocations.get(0);
-		sb.append(sa0 != null ? sa0.getName() : "()");
+		sb.append(sa0 != null ? "'" + sa0.getName() + "'": "()");
 
 		for (int i = 1; i < slotAllocations.size(); ++i) {
 			final SlotAllocation sa = slotAllocations.get(i);
@@ -106,14 +106,14 @@ public class CargoAllocationUtils {
 					first = false;
 				}
 				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
-				sb.append(String.format("%s-%s", slot.getMarket().getName(), df.format(slot.getWindowStart())));
+				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.format(slot.getWindowStart())));
 			} else if (sa.getSlot() instanceof DischargeSlot) {
 				if (!first) {
 					sb.append(" -- ");
 				} else {
 					first = false;
 				}
-				sb.append(sa.getName());
+				sb.append("'" + sa.getName() + "'");
 			}
 		}
 
@@ -141,14 +141,14 @@ public class CargoAllocationUtils {
 					first = false;
 				}
 				final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");
-				sb.append(String.format("%s-%s", slot.getMarket().getName(), df.format(slot.getWindowStart())));
+				sb.append(String.format("'%s-%s'", slot.getMarket().getName(), df.format(slot.getWindowStart())));
 			} else if (sa.getSlot() instanceof LoadSlot) {
 				if (!first) {
 					sb.append(" -- ");
 				} else {
 					first = false;
 				}
-				sb.append(sa.getName());
+				sb.append("'" + sa.getName() + "'");
 			}
 		}
 

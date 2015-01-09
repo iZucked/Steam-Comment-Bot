@@ -276,7 +276,8 @@ public class CycleDiffProcessor implements IDiffProcessor {
 				r.setVisible(true);
 			}
 
-			group.setDescription(String.format("%d - Rewire %d x %d; Buys %s, Sells %s", goupCounter++, buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
+			group.setIndex(goupCounter++);
+			group.setDescription(String.format("Rewire %d x %d; Buys %s, Sells %s",  buysStringsSet.size(), sellsStringsSet.size(), buysStr, sellsStr));
 		}
 	}
 

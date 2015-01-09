@@ -252,7 +252,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		}
 			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.sellport": {
-			ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name },
+			final ETypedElement[][] paths = new ETypedElement[][] { { dischargeAllocationRef, s.getSlotAllocation_Slot(), c.getSlot_Port(), name },
 					{ targetObjectRef, s.getVesselEventVisit_VesselEvent(), c.getCharterOutEvent_RelocateTo(), name } };
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, new MultiObjectEmfBlockColumnFactory(columnID, "Sell/End Port", null, ColumnType.NORMAL, Formatters.objectFormatter, paths));
 		}
@@ -446,6 +446,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation", null, ColumnType.DIFF, generatePermutationColumnFormatter(cargoAllocationRef));
 			break;
+		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_permutation_group":
+			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Permutation Group", null, ColumnType.DIFF, generatePermutationGroupColumnFormatter(cargoAllocationRef));
+			break;
 		case "com.mmxlabs.lingo.reports.components.columns.schedule.diff_changestring":
 			columnManager.registerColumn(CARGO_REPORT_TYPE_ID, columnID, "Change", null, ColumnType.DIFF, generateChangeStringColumnFormatter(cargoAllocationRef));
 			break;
@@ -518,18 +521,22 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 
 							if (row.getCargoAllocation() != null && referenceRow.getCargoAllocation() != null) {
 
+								String elementString = CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation());
+								String referenceString = CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation());
+								if (elementString.equals(referenceString)) {
+									return "";
+								}
 								if (row.getLoadAllocation().getSlot() instanceof SpotLoadSlot) {
-									SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
-									return String.format("Buy spot %s to %s", spotLoadSlot.getMarket().getName(), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
+									final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) row.getLoadAllocation().getSlot();
+									return String.format("Buy spot '%s' to %s", spotLoadSlot.getMarket().getName(), elementString);
 								} else {
-									return String.format("%s redirect from %s to %s", row.getLoadAllocation().getSlot().getName(),
+									return String.format("Redirect '%s' : %s -> %s", row.getLoadAllocation().getSlot().getName(),
 											CargoAllocationUtils.getSalesWiringAsString(referenceRow.getCargoAllocation()), CargoAllocationUtils.getSalesWiringAsString(row.getCargoAllocation()));
 								}
-
 							}
 						} else {
 							if (row.getOpenSlotAllocation() != null) {
-								return String.format("Cancelled %s", row.getOpenSlotAllocation().getSlot().getName());
+								return String.format("Cancelled '%s'", row.getOpenSlotAllocation().getSlot().getName());
 							}
 						}
 					}
@@ -554,6 +561,39 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 					}
 				}
 				return "";
+			}
+		};
+	}
+
+	public IFormatter generatePermutationGroupColumnFormatter(final EStructuralFeature cargoAllocationRef) {
+		return new BaseFormatter() {
+			@Override
+			public String format(final Object obj) {
+
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
+
+					final CycleGroup group = row.getCycleGroup();
+					if (group != null && group.isSetIndex()) {
+						return Integer.toString(group.getIndex());
+
+					}
+				}
+				return "";
+			}
+
+			@Override
+			public Comparable getComparable(Object obj) {
+				if (obj instanceof Row) {
+					final Row row = (Row) obj;
+
+					final CycleGroup group = row.getCycleGroup();
+					if (group != null && group.isSetIndex()) {
+						return group.getIndex();
+
+					}
+				}
+				return Integer.MAX_VALUE;
 			}
 		};
 	}
