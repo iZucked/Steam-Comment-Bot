@@ -35,9 +35,11 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.MaintenanceEvent;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
@@ -52,7 +54,8 @@ import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -115,7 +118,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						// final Sequence sequence = cargoAllocation.getSequence();
 						// if (sequence != null) {
 						// if (!sequence.isFleetVessel()) {
-						Cargo inputCargo = cargoAllocation.getInputCargo();
+						final Cargo inputCargo = cargoAllocation.getInputCargo();
 						if (inputCargo == null) {
 							return null;
 						}
@@ -123,9 +126,9 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 						case DES:
 							for (final Slot slot : inputCargo.getSortedSlots()) {
 								if (slot instanceof LoadSlot) {
-									LoadSlot loadSlot = (LoadSlot) slot;
+									final LoadSlot loadSlot = (LoadSlot) slot;
 									if (loadSlot.isDESPurchase()) {
-										final AVesselSet<? extends Vessel> assignment = slot.getAssignment();
+										final Vessel assignment = slot.getNominatedVessel();
 										if (assignment != null) {
 											return assignment.getName();
 										}
@@ -138,7 +141,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								if (slot instanceof DischargeSlot) {
 									final DischargeSlot dischargeSlot = (DischargeSlot) slot;
 									if (dischargeSlot.isFOBSale()) {
-										final AVesselSet<? extends Vessel> assignment = slot.getAssignment();
+										final Vessel assignment = slot.getNominatedVessel();
 										if (assignment != null) {
 											return assignment.getName();
 										}
@@ -147,18 +150,22 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 								}
 							}
 						case FLEET:
-							// for (final Slot slot : inputCargo.getSortedSlots()) {
-							// if (slot instanceof DischargeSlot) {
-							// final DischargeSlot dischargeSlot = (DischargeSlot) slot;
-							// if (dischargeSlot.isFOBSale()) {
-							final AVesselSet<? extends Vessel> assignment = inputCargo.getAssignment();
-							if (assignment != null) {
-								return assignment.getName();
+							final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
+
+							if (vesselAssignmentType instanceof VesselAvailability) {
+								final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+								final Vessel vessel = vesselAvailability.getVessel();
+								if (vessel != null) {
+									return vessel.getName();
+								}
+							} else if (vesselAssignmentType instanceof CharterInMarket) {
+								final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+								final VesselClass vesselClass = charterInMarket.getVesselClass();
+								if (vesselClass != null) {
+									return vesselClass.getName();
+								}
 							}
 							break;
-						// }
-						// }
-						// }
 						default:
 							break;
 						}
@@ -637,6 +644,7 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				return result;
 			}
 
+			// FIXME: This is duplicated here a few times.
 			protected String getVesselAssignmentName(final CargoAllocation ca) {
 				if (ca == null) {
 					return "";
@@ -645,9 +653,20 @@ public class StandardScheduleColumnFactory implements IScheduleColumnFactory {
 				if (inputCargo == null) {
 					return "";
 				}
-				final AVesselSet<? extends Vessel> l = inputCargo.getAssignment();
-				if (l != null) {
-					return l.getName();
+				final VesselAssignmentType vesselAssignmentType = inputCargo.getVesselAssignmentType();
+
+				if (vesselAssignmentType instanceof VesselAvailability) {
+					final VesselAvailability vesselAvailability = (VesselAvailability) vesselAssignmentType;
+					final Vessel vessel = vesselAvailability.getVessel();
+					if (vessel != null) {
+						return vessel.getName();
+					}
+				} else if (vesselAssignmentType instanceof CharterInMarket) {
+					final CharterInMarket charterInMarket = (CharterInMarket) vesselAssignmentType;
+					final VesselClass vesselClass = charterInMarket.getVesselClass();
+					if (vesselClass != null) {
+						return vesselClass.getName();
+					}
 				}
 				return "";
 			}

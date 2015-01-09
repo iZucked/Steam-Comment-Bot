@@ -55,12 +55,12 @@ public class ScheduleDiffUtils {
 				// Check vessel
 				if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
 					return true;
-				} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+				} else if ((ca.getSequence().getCharterInMarket() == null) != (ref.getSequence().getCharterInMarket() == null)) {
 					return true;
 				} else if (ca.getSequence().getVesselAvailability() != null
 						&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 					return true;
-				} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+				} else if (ca.getSequence().getCharterInMarket() != null && (!ca.getSequence().getCharterInMarket().getName().equals(ref.getSequence().getCharterInMarket().getName()))) {
 					return true;
 				}
 			}
@@ -161,12 +161,12 @@ public class ScheduleDiffUtils {
 
 				if ((ca.getSequence().getVesselAvailability() == null) != (ref.getSequence().getVesselAvailability() == null)) {
 					return true;
-				} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+				} else if ((ca.getSequence().getCharterInMarket() == null) != (ref.getSequence().getCharterInMarket() == null)) {
 					return true;
 				} else if (ca.getSequence().getVesselAvailability() != null
 						&& (!ca.getSequence().getVesselAvailability().getVessel().getName().equals(ref.getSequence().getVesselAvailability().getVessel().getName()))) {
 					return true;
-				} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+				} else if (ca.getSequence().getCharterInMarket() != null && (!ca.getSequence().getCharterInMarket().getName().equals(ref.getSequence().getCharterInMarket().getName()))) {
 					return true;
 				}
 			}

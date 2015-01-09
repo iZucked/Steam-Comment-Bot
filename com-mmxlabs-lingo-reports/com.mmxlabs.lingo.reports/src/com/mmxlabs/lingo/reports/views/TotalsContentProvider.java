@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -87,14 +88,17 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		for (final Sequence seq : schedule.getSequences()) {
 
 			int vesselCapacity = Integer.MAX_VALUE;
-			VesselAvailability vesselAvailability = seq.getVesselAvailability();
+			final VesselAvailability vesselAvailability = seq.getVesselAvailability();
 			if (vesselAvailability != null) {
 				final Vessel vessel = vesselAvailability.getVessel();
 				vesselCapacity = vessel.getVesselOrVesselClassCapacity();
 			} else {
-				final VesselClass vesselClass = seq.getVesselClass();
-				if (vesselClass != null) {
-					vesselCapacity = vesselClass.getCapacity();
+				final CharterInMarket charterInMarket = seq.getCharterInMarket();
+				if (charterInMarket != null) {
+					final VesselClass vesselClass = charterInMarket.getVesselClass();
+					if (vesselClass != null) {
+						vesselCapacity = vesselClass.getCapacity();
+					}
 				}
 			}
 
@@ -127,7 +131,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 				if (evt instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) evt;
 
-					SlotAllocation slotAllocation = visit.getSlotAllocation();
+					final SlotAllocation slotAllocation = visit.getSlotAllocation();
 					if (visit.getStart().after(slotAllocation.getSlot().getWindowEndWithSlotOrPortTime())) {
 
 						final long late = visit.getStart().getTime() - slotAllocation.getSlot().getWindowEndWithSlotOrPortTime().getTime();
@@ -135,7 +139,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 					}
 
 					if (slotAllocation.getSlot() != null) {
-						Slot slot = slotAllocation.getSlot();
+						final Slot slot = slotAllocation.getSlot();
 						final int minQuantity = slot.getMinQuantity();
 						final int maxQuantity = slot.getMaxQuantity();
 						if (maxQuantity != 0 && maxQuantity < slotAllocation.getVolumeTransferred()) {

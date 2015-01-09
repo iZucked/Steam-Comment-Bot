@@ -25,52 +25,68 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
 
 public class ColourSchemeUtil {
 
 	/**
-	 * Checks to see if a journey is "tight", i.e. when idle time after the journey is taken into consideration,
-	 * is there less than a specified amount of leeway travelling at a vessel-specified "service speed"?
+	 * Checks to see if a journey is "tight", i.e. when idle time after the journey is taken into consideration, is there less than a specified amount of leeway travelling at a vessel-specified
+	 * "service speed"?
 	 * 
 	 * @param journey
 	 * @return
 	 */
 	public static boolean isJourneyTight(final Journey journey, final int leewayInHrs) {
-		if (journey == null) return false;
-		
-		int distance = journey.getDistance();
-		int journeyPlusIdleTime = journey.getDuration(); 
-		
-		Sequence sequence = journey.getSequence();		
-		if (sequence == null) return false;
+		if (journey == null) {
+			return false;
+		}
+
+		final int distance = journey.getDistance();
+		int journeyPlusIdleTime = journey.getDuration();
+
+		final Sequence sequence = journey.getSequence();
+		if (sequence == null) {
+			return false;
+		}
+		VesselClass vesselClass = null;
+
 		// get vessel class directly from the sequence if it is a spot charter
-		VesselClass vesselClass = sequence.getVesselClass();
+		CharterInMarket charterInMarket = sequence.getCharterInMarket();
+		if (charterInMarket != null) {
+			vesselClass = charterInMarket.getVesselClass();
+		}
 		// otherwise get it from the vessel allocation
-		if (vesselClass == null) {		
-			VesselAvailability avail = sequence.getVesselAvailability();
-			if (avail == null) return false;
-			Vessel vessel = avail.getVessel();
-			if (vessel == null) return false;
+		if (vesselClass == null) {
+			final VesselAvailability avail = sequence.getVesselAvailability();
+			if (avail == null) {
+				return false;
+			}
+			final Vessel vessel = avail.getVessel();
+			if (vessel == null) {
+				return false;
+			}
 			vesselClass = vessel.getVesselClass();
 		}
-		
-		
-		VesselStateAttributes attr = journey.isLaden() ? vesselClass.getLadenAttributes() : vesselClass.getBallastAttributes();
-		double speed = attr.getServiceSpeed();
-		
-		Event nextEvent = journey.getNextEvent();
+		if (vesselClass == null) {
+			return false;
+		}
+
+		final VesselStateAttributes attr = journey.isLaden() ? vesselClass.getLadenAttributes() : vesselClass.getBallastAttributes();
+		final double speed = attr.getServiceSpeed();
+
+		final Event nextEvent = journey.getNextEvent();
 		if (nextEvent instanceof Idle) {
 			journeyPlusIdleTime += nextEvent.getDuration();
 		}
-								
-		double serviceTime = distance / speed;
-		
-		return journeyPlusIdleTime - serviceTime < leewayInHrs;		
+
+		final double serviceTime = distance / speed;
+
+		return journeyPlusIdleTime - serviceTime < leewayInHrs;
 	}
-	
-	public static boolean isOutsideTimeWindow(Event ev) {
-		Date start = ev.getStart();
-		if ((ev instanceof VesselEventVisit) && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())) {
+
+	public static boolean isOutsideTimeWindow(final Event ev) {
+		final Date start = ev.getStart();
+		if (ev instanceof VesselEventVisit && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())) {
 			return true;
 		}
 
@@ -86,15 +102,15 @@ public class ColourSchemeUtil {
 		return false;
 	}
 
-	public static boolean isLocked(final Event event, GanttChartViewer viewer) {
+	public static boolean isLocked(final Event event, final GanttChartViewer viewer) {
 		// Stage 1: Find the cargo
 		final Sequence sequence = event.getSequence();
 		int index = sequence.getEvents().indexOf(event);
 		Cargo cargo = null;
 		while (cargo == null && index >= 0) {
-			Object obj = sequence.getEvents().get(index);
+			final Object obj = sequence.getEvents().get(index);
 			if (obj instanceof SlotVisit) {
-				final SlotVisit slotVisit = ((SlotVisit) obj);
+				final SlotVisit slotVisit = (SlotVisit) obj;
 				final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 				cargo = cargoAllocation.getInputCargo();
@@ -136,26 +152,19 @@ public class ColourSchemeUtil {
 	}
 
 	/*
-	static boolean isRiskyVoyage(final Journey journey, final Idle idle, float IdleRisk_speed, float IdleRisk_threshold) {
-
-		if (journey == null) {
-			return false;
-		}
-
-		final int distance = journey.getDistance();
-		int totalTime = journey.getDuration();
-		if (idle != null) {
-			totalTime += idle.getDuration();
-		}
-
-		final int travelTime = Math.round(distance / IdleRisk_speed);
-
-		return (travelTime / totalTime > IdleRisk_threshold);
-	}
-	*/
+	 * static boolean isRiskyVoyage(final Journey journey, final Idle idle, float IdleRisk_speed, float IdleRisk_threshold) {
+	 * 
+	 * if (journey == null) { return false; }
+	 * 
+	 * final int distance = journey.getDistance(); int totalTime = journey.getDuration(); if (idle != null) { totalTime += idle.getDuration(); }
+	 * 
+	 * final int travelTime = Math.round(distance / IdleRisk_speed);
+	 * 
+	 * return (travelTime / totalTime > IdleRisk_threshold); }
+	 */
 
 	public static boolean isSpot(final SlotVisit visit) {
-		Slot slot = visit.getSlotAllocation().getSlot();
+		final Slot slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof SpotSlot) {
 			return true;
 		}
@@ -164,7 +173,7 @@ public class ColourSchemeUtil {
 
 	public static boolean isFOBSaleCargo(final SlotVisit visit) {
 		boolean isFOB;
-		Slot slot = visit.getSlotAllocation().getSlot();
+		final Slot slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof LoadSlot) {
 			return visit.getSlotAllocation().getCargoAllocation().getInputCargo().getCargoType() == CargoType.FOB;
 		} else {
@@ -174,7 +183,7 @@ public class ColourSchemeUtil {
 	}
 
 	public static boolean isDESPurchaseCargo(final SlotVisit visit) {
-		Slot slot = visit.getSlotAllocation().getSlot();
+		final Slot slot = visit.getSlotAllocation().getSlot();
 		if (slot instanceof LoadSlot) {
 			return ((LoadSlot) slot).isDESPurchase();
 		} else {

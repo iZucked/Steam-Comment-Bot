@@ -70,8 +70,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			final Sequence s2 = (Sequence) e2;
 
 			// Group by fleet/spot
-			final boolean s1Spot = s1.isSetVesselClass();
-			final boolean s2Spot = s2.isSetVesselClass();
+			final boolean s1Spot = s1.isSetCharterInMarket();
+			final boolean s2Spot = s2.isSetCharterInMarket();
 
 			if (s1Spot != s2Spot) {
 				return s1Spot ? 1 : -1;
@@ -93,8 +93,8 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				final Sequence s2 = (Sequence) e2;
 
 				// Group by fleet/spot
-				final boolean s1Spot = s1.isSetVesselClass();
-				final boolean s2Spot = s2.isSetVesselClass();
+				final boolean s1Spot = s1.isSetCharterInMarket();
+				final boolean s2Spot = s2.isSetCharterInMarket();
 
 				if (s1Spot != s2Spot) {
 					return s1Spot ? 1 : -1;
