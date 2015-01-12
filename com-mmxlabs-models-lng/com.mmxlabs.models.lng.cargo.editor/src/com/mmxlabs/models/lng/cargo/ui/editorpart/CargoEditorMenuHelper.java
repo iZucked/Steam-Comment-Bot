@@ -291,9 +291,9 @@ public class CargoEditorMenuHelper {
 			menuManager.add(reassignMenuManager);
 
 			class AssignAction extends Action {
-				private final AVesselSet<Vessel> vessel;
+				private final Vessel vessel;
 
-				public AssignAction(final String label, final AVesselSet<Vessel> vessel) {
+				public AssignAction(final String label, final Vessel vessel) {
 					super(label);
 					this.vessel = vessel;
 				}
@@ -307,13 +307,14 @@ public class CargoEditorMenuHelper {
 			}
 
 			final IReferenceValueProviderFactory valueProviderFactory = Activator.getDefault().getReferenceValueProviderFactoryRegistry()
-					.getValueProviderFactory(CargoPackage.eINSTANCE.getAssignableElement(), CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType());
-			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
-					CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType(), scenarioModel);
+					.getValueProviderFactory(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel());
+
+			final IReferenceValueProvider valueProvider = valueProviderFactory.createReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel(),
+					scenarioModel);
 
 			for (final Pair<String, EObject> p : valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_NominatedVessel())) {
 				if (p.getSecond() != slot.getNominatedVessel()) {
-					reassignMenuManager.add(new AssignAction(p.getFirst(), (AVesselSet<Vessel>) p.getSecond()));
+					reassignMenuManager.add(new AssignAction(p.getFirst(), (Vessel) p.getSecond()));
 				}
 			}
 
@@ -341,7 +342,7 @@ public class CargoEditorMenuHelper {
 			menuManager.add(reassignMenuManager);
 
 			class AssignAction extends Action {
-				private final VesselAssignmentType  vessel;
+				private final VesselAssignmentType vessel;
 
 				public AssignAction(final String label, final VesselAssignmentType vessel) {
 					super(label);

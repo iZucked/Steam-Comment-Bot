@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.swt.widgets.Composite;
@@ -20,7 +20,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.AssignableElement;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.types.VesselAssignmentType;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -31,13 +31,16 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	 * 
 	 */
 	private final IScenarioEditingLocation location;
-	private final IReferenceValueProvider valueProvider;
+	private final IReferenceValueProvider slotValueProvider;
+	private final IReferenceValueProvider cargoValueProvider;
 	private List<Pair<String, EObject>> allowedValues;
+	private EReference reference;
 
 	public AssignmentManipulator(final IScenarioEditingLocation location) {
 		this.location = location;
-		this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
+		this.cargoValueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getAssignableElement(),
 				CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType());
+		this.slotValueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_NominatedVessel());
 	}
 
 	private List<Pair<String, EObject>> getAllowedValues(final EObject target, List<Pair<String, EObject>> storage) {
@@ -46,7 +49,16 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		} else {
 			storage.clear();
 		}
-		storage.addAll(valueProvider.getAllowedValues(target, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType()));
+
+		if (target instanceof Slot) {
+			storage.addAll(slotValueProvider.getAllowedValues(target, CargoPackage.eINSTANCE.getSlot_NominatedVessel()));
+			reference = CargoPackage.Literals.SLOT__NOMINATED_VESSEL;
+		} else if (target instanceof AssignableElement) {
+			storage.addAll(cargoValueProvider.getAllowedValues(target, CargoPackage.eINSTANCE.getAssignableElement_VesselAssignmentType()));
+			reference = CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE;
+		} else {
+			reference = null;
+		}
 
 		return storage;
 	}
@@ -54,19 +66,18 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public void setValue(final Object object, final Object value) {
 		// grar.
-		AssignableElement target = castTarget(object);
-		allowedValues = getAllowedValues(target, allowedValues);
-
-		// locate the appropriate value in the list of options
-		final VesselAssignmentType set = (VesselAssignmentType) (allowedValues.get((Integer) value).getSecond());
 		final EditingDomain ed = location.getEditingDomain();
+		allowedValues = getAllowedValues((EObject) object, allowedValues);
 
-		ed.getCommandStack().execute(SetCommand.create(ed, target, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, set));
+		if (reference != null) {
+			// locate the appropriate value in the list of options
+			ed.getCommandStack().execute(SetCommand.create(ed, object, reference, allowedValues.get((Integer) value).getSecond()));
+		}
 	}
 
 	@Override
 	public CellEditor getCellEditor(final Composite parent, final Object object) {
-		allowedValues = getAllowedValues(castTarget(object), allowedValues);
+		allowedValues = getAllowedValues((EObject) object, allowedValues);
 		final String[] items = new String[allowedValues.size()];
 		for (int i = 0; i < items.length; i++) {
 			items[i] = allowedValues.get(i).getFirst();
@@ -76,10 +87,9 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	@Override
 	public Integer getValue(final Object object) {
-		final AssignableElement assignableElement = castTarget(object);
-		allowedValues = getAllowedValues((EObject) assignableElement, allowedValues);
+		allowedValues = getAllowedValues((EObject) object, allowedValues);
 		for (int i = 0; i < allowedValues.size(); i++) {
-			if (Equality.isEqual(allowedValues.get(i).getSecond(), assignableElement.getVesselAssignmentType())) {
+			if (Equality.isEqual(allowedValues.get(i).getSecond(), ((EObject) object).eGet(reference))) {
 				return i;
 			}
 		}
@@ -90,27 +100,27 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public boolean canEdit(final Object object) {
 
-		return castTarget(object) != null;
+		return true;
 	}
 
 	@Override
 	public String render(final Object object) {
-
-		final AssignableElement target = castTarget(object);
-		if (target == null) {
-			return "";
+		if (object == null) {
+			return null;
 		}
 
+		// Refresh cache / references
+		allowedValues = getAllowedValues((EObject) object, allowedValues);
 		// get the VesselSet currently attached to the cargo
-		final VesselAssignmentType vs = target.getVesselAssignmentType();
+		final Object current = ((EObject) object).eGet(reference);
 		// by preference, find the string attached to this object by the value provider
-		for (final Pair<String, EObject> pair : getAllowedValues(target, allowedValues)) {
-			if (pair.getSecond() == vs) {
+		for (final Pair<String, EObject> pair : allowedValues) {
+			if (pair.getSecond() == current) {
 				return pair.getFirst();
 			}
 		}
 		// if no string has been attached to the object, return a default string representation
-		if (vs == null) {
+		if (current == null) {
 			// this case should not occur, since the value provider should offer null as an option
 			return "(Null)";
 		} else {
@@ -130,21 +140,6 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public Object getFilterValue(final Object object) {
 		return render(object);
-	}
-
-	/**
-	 * Returns the object we expect the ElementAssignment to be linked to.
-	 * 
-	 * @param object
-	 * @return
-	 */
-	protected @Nullable
-	AssignableElement castTarget(@Nullable final Object object) {
-		if (object instanceof AssignableElement) {
-			AssignableElement assignableElement = (AssignableElement) object;
-			return assignableElement;
-		}
-		return null;
 	}
 
 	@Override
