@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IElementAnnotation;
@@ -379,6 +380,9 @@ public class AnnotatedSolutionExporter {
 				desSequenceFitness.add(sf);
 			}
 		}
+		
+		// Fix up start events with no port.
+		fixUpStartEventPorts(output);
 		// patch up idle events with no port
 		for (final Sequence eSequence : output.getSequences()) {
 			Idle firstIdle = null;
@@ -426,7 +430,7 @@ public class AnnotatedSolutionExporter {
 			}
 			final Map<String, IElementAnnotation> annotations = elementAnnotations.getAnnotations(element);
 			openSlotExporter.export(element, annotations);
-//			mtmExporter.export(element, annotations);
+			// mtmExporter.export(element, annotations);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -464,5 +468,23 @@ public class AnnotatedSolutionExporter {
 		}
 
 		return output;
+	}
+
+	private void fixUpStartEventPorts(Schedule schedule) {
+		for (Sequence sequence : schedule.getSequences()) {
+			if (sequence.getEvents().isEmpty()) {
+				continue;
+			}
+			Event event = sequence.getEvents().get(0);
+			if (event instanceof StartEvent) {
+				StartEvent startEvent = (StartEvent) event;
+				if (startEvent.getPort() == null) {
+					Event nextEvent = startEvent.getNextEvent();
+					if (nextEvent.getPort() != null) {
+						startEvent.setPort(nextEvent.getPort());
+					}
+				}
+			}
+		}
 	}
 }
