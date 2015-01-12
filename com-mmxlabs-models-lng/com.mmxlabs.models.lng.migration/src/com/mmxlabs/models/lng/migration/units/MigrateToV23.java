@@ -117,8 +117,6 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 			for (final EObject charterCostModel : charterCostModels) {
 				final List<EObject> vesselClasses = MetamodelUtils.getValueAsTypedList(charterCostModel, reference_CharterCostModel_vesselClasses);
 				if (vesselClasses != null) {
-					int charterInCounter = 1;
-					int charterOutCounter = 1;
 					for (final EObject vesselClass : vesselClasses) {
 						if (charterCostModel.eIsSet(reference_CharterCostModel_charterInPrice)) {
 							final EObject charterInMarket = package_SpotMarketsModel.getEFactoryInstance().create(class_CharterInMarket);
@@ -129,7 +127,7 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 							charterInMarket.eSet(reference_CharterInMarket_charterInPrice, curve);
 							charterInMarket.eSet(attribute_CharterInMarket_spotCharterCount, charterCostModel.eGet(attribute_CharterCostModel_spotCharterCount));
 
-							final String name = String.format("%s-%s-%s", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name), charterInCounter++);
+							final String name = String.format("%s - %s ", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name));
 							charterInMarket.eSet(attribute_NamedObject_name, name);
 
 							charterInMarkets.add(charterInMarket);
@@ -143,7 +141,7 @@ public class MigrateToV23 extends AbstractMigrationUnit {
 							charterOutMarket.eSet(reference_CharterOutMarket_charterOutPrice, curve);
 							charterOutMarket.eSet(attribute_CharterOutMarket_minCharterOutDuration, charterCostModel.eGet(attribute_CharterCostModel_minCharterOutDuration));
 
-							final String name = String.format("%s-%s-%s", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name), charterOutCounter++);
+							final String name = String.format("%s - %s", vesselClass.eGet(attribute_NamedObject_name), curve.eGet(attribute_NamedObject_name));
 							charterOutMarket.eSet(attribute_NamedObject_name, name);
 
 							charterOutMarkets.add(charterOutMarket);
