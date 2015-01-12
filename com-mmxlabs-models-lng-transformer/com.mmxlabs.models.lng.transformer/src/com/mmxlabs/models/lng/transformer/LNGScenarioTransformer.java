@@ -61,7 +61,6 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
-import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.IShippingDaysRestrictionSpeedProvider;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PricingEvent;
@@ -107,8 +106,8 @@ import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.TransformerHelper;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -124,6 +123,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IMarkToMarket;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IStartRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
@@ -613,7 +613,7 @@ public class LNGScenarioTransformer {
 			for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
 
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(loadSlot, IPortSlot.class);
-				final IVessel vessel = allVessels.get(loadSlot.getAssignment());
+				final IVessel vessel = allVessels.get(loadSlot.getNominatedVessel());
 				if (vessel != null && portSlot != null) {
 					builder.setNominatedVessel(portSlot, vessel);
 				}
@@ -621,7 +621,7 @@ public class LNGScenarioTransformer {
 			for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
 
 				final IPortSlot portSlot = modelEntityMap.getOptimiserObject(dischargeSlot, IPortSlot.class);
-				final IVessel vessel = allVessels.get(dischargeSlot.getAssignment());
+				final IVessel vessel = allVessels.get(dischargeSlot.getNominatedVessel());
 				if (vessel != null && portSlot != null) {
 					builder.setNominatedVessel(portSlot, vessel);
 				}
@@ -635,13 +635,11 @@ public class LNGScenarioTransformer {
 
 		final Set<AssignableElement> assignableElements = new LinkedHashSet<>();
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getCargoes());
-		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getLoadSlots());
-		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getDischargeSlots());
 		assignableElements.addAll(rootObject.getPortfolioModel().getCargoModel().getVesselEvents());
 
 		for (final AssignableElement assignableElement : assignableElements) {
-			final AVesselSet<? extends Vessel> vesselSet = assignableElement.getAssignment();
-			if (vesselSet == null) {
+			final VesselAssignmentType vesselAssignmentType = assignableElement.getVesselAssignmentType();
+			if (vesselAssignmentType == null) {
 				continue;
 			}
 			final boolean freeze = assignableElement.isLocked();
@@ -650,10 +648,8 @@ public class LNGScenarioTransformer {
 			}
 
 			IVesselAvailability vesselAvailability = null;
-			if (vesselSet instanceof Vessel) {
-				// Find a relevant vessel availability.
-				final VesselAvailability va = AssignmentEditorHelper.findVesselAvailability((Vessel) vesselSet, assignableElement, rootObject.getPortfolioModel().getCargoModel()
-						.getVesselAvailabilities());
+			if (vesselAssignmentType instanceof VesselAvailability) {
+				final VesselAvailability va = (VesselAvailability) vesselAssignmentType;
 				vesselAvailability = modelEntityMap.getOptimiserObject(va, IVesselAvailability.class);
 			}
 
@@ -2324,7 +2320,11 @@ public class LNGScenarioTransformer {
 
 				charterCount = charterCost.getSpotCharterCount();
 				if (charterCount > 0) {
-					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + eVesselClass.getName(), vesselClassAssociation.lookup(eVesselClass), charterCount, charterInCurve);
+					final IVesselClass oVesselClass = vesselClassAssociation.lookup(eVesselClass);
+					final ISpotCharterInMarket spotCharterInMarket = builder.createSpotCharterInMarket(charterCost.getName(), oVesselClass, charterInCurve, charterCount);
+					modelEntityMap.addModelObject(charterCost, spotCharterInMarket);
+
+					final List<IVesselAvailability> spots = builder.createSpotVessels("SPOT-" + eVesselClass.getName(), spotCharterInMarket);
 					spotVesselAvailabilitiesByClass.put(eVesselClass, spots);
 					allVesselAvailabilities.addAll(spots);
 				}

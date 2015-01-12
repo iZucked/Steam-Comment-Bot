@@ -14,6 +14,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.parameters.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
@@ -97,6 +98,14 @@ public class PeriodOptimiserTest {
 			// create a few vessels and add them to the list of vessels created.
 			// createVessels creates and adds the vessels to the scenario.
 			final Vessel[] vessels = csc.addVesselSimple("classOne", 2, fuelPrice, 25, 1000000, 10, 10, 0, 500, false);
+			final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
+			for (int i = 0; i < vessels.length; ++i) {
+				for (VesselAvailability vesselAvailability : scenario.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
+					if (vesselAvailability.getVessel() == vessels[i]) {
+						vesselAvailabilities[i] = vesselAvailability;
+					}
+				}
+			}
 
 			// create two different cargoes
 			cargoA1 = csc.addCargo("Cargo-A1", loadPort, dischargePort, 5, 5.0f, 20.f, csc.createDate(2014, 7, 1), 50);
@@ -117,13 +126,13 @@ public class PeriodOptimiserTest {
 			cargoB3.setAllowRewiring(true);
 
 			// Set current assignment
-			cargoA1.setAssignment(vessels[0]);
-			cargoA2.setAssignment(vessels[0]);
-			cargoA3.setAssignment(vessels[0]);
+			cargoA1.setVesselAssignmentType(vesselAvailabilities[0]);
+			cargoA2.setVesselAssignmentType(vesselAvailabilities[0]);
+			cargoA3.setVesselAssignmentType(vesselAvailabilities[0]);
 
-			cargoB1.setAssignment(vessels[1]);
-			cargoB2.setAssignment(vessels[1]);
-			cargoB3.setAssignment(vessels[1]);
+			cargoB1.setVesselAssignmentType(vesselAvailabilities[1]);
+			cargoB2.setVesselAssignmentType(vesselAvailabilities[1]);
+			cargoB3.setVesselAssignmentType(vesselAvailabilities[1]);
 
 			// Fix loads to vessel
 			cargoA1.getSlots().get(0).getAllowedVessels().add(vessels[0]);
@@ -158,7 +167,7 @@ public class PeriodOptimiserTest {
 			scenario = csc.buildScenario();
 		}
 
-		public  void setEquidistantDistances(final CustomScenarioCreator csc, final Port[] ports, int distance) {
+		public void setEquidistantDistances(final CustomScenarioCreator csc, final Port[] ports, int distance) {
 
 			for (final Port portX : ports) {
 				for (final Port portY : ports) {

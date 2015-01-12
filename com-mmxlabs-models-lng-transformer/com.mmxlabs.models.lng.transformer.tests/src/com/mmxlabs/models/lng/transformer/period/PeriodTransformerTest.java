@@ -168,7 +168,7 @@ public class PeriodTransformerTest {
 		{
 			final Cargo c1 = PeriodTestUtils.createCargo(scenarioModel, "v1-cargo1", port1, PeriodTestUtils.createDate(2013, Calendar.NOVEMBER, 1), port2,
 					PeriodTestUtils.createDate(2013, Calendar.DECEMBER, 1));
-			c1.setAssignment(vessel1);
+			c1.setVesselAssignmentType(vesselAvailability1);
 
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
 			endConditionMap.put(c1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1)));
@@ -225,8 +225,8 @@ public class PeriodTransformerTest {
 			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v2-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1), port4,
 					PeriodTestUtils.createDate(2014, Calendar.APRIL, 1));
 
-			c1.setAssignment(vessel2);
-			c2.setAssignment(vessel2);
+			c1.setVesselAssignmentType(vesselAvailability2);
+			c2.setVesselAssignmentType(vesselAvailability2);
 
 			endConditionMap.put(c1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1)));
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1)));
@@ -285,8 +285,8 @@ public class PeriodTransformerTest {
 					PeriodTestUtils.createDate(2014, Calendar.JUNE, 1));
 			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v3-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.JULY, 1), port4,
 					PeriodTestUtils.createDate(2014, Calendar.AUGUST, 1));
-			c1.setAssignment(vessel3);
-			c2.setAssignment(vessel3);
+			c1.setVesselAssignmentType(vesselAvailability3);
+			c2.setVesselAssignmentType(vesselAvailability3);
 
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.JULY, 1)));
 			endConditionMap.put(c1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.MAY, 1)));
@@ -352,12 +352,12 @@ public class PeriodTransformerTest {
 			final Cargo c6 = PeriodTestUtils.createCargo(scenarioModel, "v4-cargo6", port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), port4,
 					PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
 
-			c1.setAssignment(vessel4);
-			c2.setAssignment(vessel4);
-			c3.setAssignment(vessel4);
-			c4.setAssignment(vessel4);
-			c5.setAssignment(vessel4);
-			c6.setAssignment(vessel4);
+			c1.setVesselAssignmentType(vesselAvailability4);
+			c2.setVesselAssignmentType(vesselAvailability4);
+			c3.setVesselAssignmentType(vesselAvailability4);
+			c4.setVesselAssignmentType(vesselAvailability4);
+			c5.setVesselAssignmentType(vesselAvailability4);
+			c6.setVesselAssignmentType(vesselAvailability4);
 
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1)));
 			endConditionMap.put(c1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1)));
@@ -430,12 +430,12 @@ public class PeriodTransformerTest {
 			final Cargo c6 = PeriodTestUtils.createCargo(scenarioModel, "v5-cargo6", port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), port4,
 					PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
 
-			c1.setAssignment(vessel5);
-			c2.setAssignment(vessel5);
-			c3.setAssignment(vessel5);
-			c4.setAssignment(vessel5);
-			c5.setAssignment(vessel5);
-			c6.setAssignment(vessel5);
+			c1.setVesselAssignmentType(vesselAvailability5);
+			c2.setVesselAssignmentType(vesselAvailability5);
+			c3.setVesselAssignmentType(vesselAvailability5);
+			c4.setVesselAssignmentType(vesselAvailability5);
+			c5.setVesselAssignmentType(vesselAvailability5);
+			c6.setVesselAssignmentType(vesselAvailability5);
 
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.MARCH, 1)));
 			endConditionMap.put(c1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.JANUARY, 1)));
@@ -503,8 +503,8 @@ public class PeriodTransformerTest {
 					PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1));
 			final Cargo c2 = PeriodTestUtils.createCargo(scenarioModel, "v6-cargo2", port3, PeriodTestUtils.createDate(2014, Calendar.NOVEMBER, 1), port4,
 					PeriodTestUtils.createDate(2014, Calendar.DECEMBER, 1));
-			c1.setAssignment(vessel6);
-			c2.setAssignment(vessel6);
+			c1.setVesselAssignmentType(vesselAvailability6);
+			c2.setVesselAssignmentType(vesselAvailability6);
 
 			startConditionMap.put(c1, PeriodTestUtils.createPortVisit(port4, PeriodTestUtils.createDate(2014, Calendar.OCTOBER, 1)));
 			endConditionMap.put(c1, PeriodTestUtils.createPortVisit(port3, PeriodTestUtils.createDate(2014, Calendar.SEPTEMBER, 1)));
@@ -603,8 +603,8 @@ public class PeriodTransformerTest {
 		{
 			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
 			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
-			event1.setAssignment(vessel);
-			event2.setAssignment(vessel);
+			event1.setVesselAssignmentType(vesselAvailability);
+			event2.setVesselAssignmentType(vesselAvailability);
 
 			startConditionMap.put(event1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1)));
 			endConditionMap.put(event1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
@@ -656,8 +656,8 @@ public class PeriodTransformerTest {
 		{
 			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
 			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
-			event1.setAssignment(vessel);
-			event2.setAssignment(vessel);
+			event1.setVesselAssignmentType(vesselAvailability);
+			event2.setVesselAssignmentType(vesselAvailability);
 
 			startConditionMap.put(event1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1)));
 			endConditionMap.put(event1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));
@@ -710,8 +710,8 @@ public class PeriodTransformerTest {
 		{
 			final VesselEvent event1 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event1", port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1), 30);
 			final VesselEvent event2 = PeriodTestUtils.createCharterOutEvent(scenarioModel, "event2", port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1), 30);
-			event1.setAssignment(vessel);
-			event2.setAssignment(vessel);
+			event1.setVesselAssignmentType(vesselAvailability);
+			event2.setVesselAssignmentType(vesselAvailability);
 
 			startConditionMap.put(event1, PeriodTestUtils.createPortVisit(port2, PeriodTestUtils.createDate(2014, Calendar.JUNE, 1)));
 			endConditionMap.put(event1, PeriodTestUtils.createPortVisit(port1, PeriodTestUtils.createDate(2014, Calendar.APRIL, 1)));

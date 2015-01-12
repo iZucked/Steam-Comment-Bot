@@ -50,7 +50,8 @@ public class ExhaustiveLNGScenarioChecker extends ExhaustiveModelChecker {
 	protected List<EStructuralFeature> createExcludedFeatures() {
 		List<EStructuralFeature> result = super.createExcludedFeatures();
 		result.add(MMXCorePackage.Literals.MMX_OBJECT__EXTENSIONS);
-		result.add(CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT);
+		result.add(CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE);
+		result.add(CargoPackage.Literals.SLOT__NOMINATED_VESSEL);
 		return result;
 	}
 	

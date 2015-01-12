@@ -394,7 +394,9 @@ public class LNGSchedulerJobUtils {
 					// if (!loadSlot.isOptional()) {
 					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 					// }
-					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, SetCommand.UNSET_VALUE));
+					cmd.append(SetCommand.create(domain, c, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
 			}
@@ -416,7 +418,7 @@ public class LNGSchedulerJobUtils {
 		// Create all the new vessel assignment objects.
 		for (final Sequence sequence : schedule.getSequences()) {
 
-			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
+//			final AVesselSet<Vessel> assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : (sequence.isSetVesselAvailability() ? sequence.getVesselAvailability().getVessel() : null);
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
 				AssignableElement object = null;
@@ -436,12 +438,14 @@ public class LNGSchedulerJobUtils {
 				}
 
 				if (object != null) {
-					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, assignment));
 					cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, index++));
-					if (sequence.isSetSpotIndex()) {
-						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, sequence.getSpotIndex()));
-					} else {
+					if (sequence.isSetVesselAvailability()){
+						
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, sequence.getVesselAvailability()));
 						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
+					} else {
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, sequence.getCharterInMarket()));
+						cmd.append(SetCommand.create(domain, object, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, sequence.getSpotIndex()));
 					}
 				}
 			}

@@ -33,6 +33,8 @@ import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioPackage;
+import com.mmxlabs.models.lng.spotmarkets.CharterInMarket;
+import com.mmxlabs.models.lng.types.VesselAssignmentType;
 
 /***
  * 
@@ -55,13 +57,17 @@ public class PeriodExporter {
 					continue;
 				}
 				// Update vessel assignment bits.
-				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, mapping.getOriginalFromCopy(newVesselEvent.getAssignment())));
-				if (newVesselEvent.isSetSpotIndex()) {
+
+				final VesselAssignmentType vesselAssignmentType = newVesselEvent.getVesselAssignmentType();
+				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE,
+						mapping.getOriginalFromCopy(newVesselEvent.getVesselAssignmentType())));
+				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newVesselEvent.getSequenceHint()));
+
+				if (vesselAssignmentType instanceof CharterInMarket) {
 					cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, newVesselEvent.getSpotIndex()));
 				} else {
 					cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 				}
-				cmd.append(SetCommand.create(editingDomain, oldVesselEvent, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newVesselEvent.getSequenceHint()));
 			}
 
 		}
@@ -111,8 +117,8 @@ public class PeriodExporter {
 							if (usedIDStrings.contains(oldSlot.getName())) {
 
 								// Expect string in form MARKET_NAME-YYYY-MM-n. Strip off the "n" part.
-								Pattern pattern = Pattern.compile("(.*-[0-9][0-9][0-9][0-9]-[0-1][0-9]-)[0-9]*");
-								Matcher matcher = pattern.matcher(oldSlot.getName());
+								final Pattern pattern = Pattern.compile("(.*-[0-9][0-9][0-9][0-9]-[0-1][0-9]-)[0-9]*");
+								final Matcher matcher = pattern.matcher(oldSlot.getName());
 
 								final String idPrefix;
 								if (matcher.find()) {
@@ -157,13 +163,17 @@ public class PeriodExporter {
 				}
 
 				// Update vessel assignment bits.
-				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__ASSIGNMENT, mapping.getOriginalFromCopy(newCargo.getAssignment())));
-				if (newCargo.isSetSpotIndex()) {
+
+				final VesselAssignmentType vesselAssignmentType = newCargo.getVesselAssignmentType();
+				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__VESSEL_ASSIGNMENT_TYPE, mapping.getOriginalFromCopy(newCargo.getVesselAssignmentType())));
+				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newCargo.getSequenceHint()));
+
+				if (vesselAssignmentType instanceof CharterInMarket) {
 					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, newCargo.getSpotIndex()));
 				} else {
 					cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SPOT_INDEX, SetCommand.UNSET_VALUE));
 				}
-				cmd.append(SetCommand.create(editingDomain, oldCargo, CargoPackage.Literals.ASSIGNABLE_ELEMENT__SEQUENCE_HINT, newCargo.getSequenceHint()));
+
 			}
 
 			final List<Cargo> originalCargoes = new LinkedList<>();
@@ -226,5 +236,4 @@ public class PeriodExporter {
 
 		return cmd;
 	}
-
 }

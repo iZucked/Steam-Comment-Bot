@@ -8,6 +8,7 @@ import java.util.Date;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.VesselAvailability;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -64,6 +65,14 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		vc = fleetCreator.createDefaultVesselClass(null);
 		// create two vessels in that class
 		vessels = fleetCreator.createMultipleDefaultVessels(vc, 2, shippingEntity);
+		final VesselAvailability[] vesselAvailabilities = new VesselAvailability[vessels.length];
+		for (int i = 0; i < vessels.length; ++i) {
+			for (VesselAvailability vesselAvailability : scenario.getPortfolioModel().getCargoModel().getVesselAvailabilities()) {
+				if (vesselAvailability.getVessel() == vessels[i]) {
+					vesselAvailabilities[i] = vesselAvailability;
+				}
+			}
+		}
 
 		// need to create a default route
 		addRoute(ScenarioTools.defaultRouteName);
@@ -123,7 +132,7 @@ public class StsScenarioCreator extends DefaultScenarioCreator {
 		//final Date postDischargeDate = addHours(dischargeDate, 2 * getTravelTime(dischargePort, originPort, null, (int) maxSpeed));
 		//fleetCreator.setAvailability(portfolioModel.getScenarioFleetModel(), vessels[1], transferPort, postLoadDate, originPort, postDischargeDate);		
 		
-		loadCargo.setAssignment(vessels[0]);
+		loadCargo.setVesselAssignmentType(vesselAvailabilities[0]);
 
 		/*
 		assignment = AssignmentFactory.eINSTANCE.createElementAssignment();

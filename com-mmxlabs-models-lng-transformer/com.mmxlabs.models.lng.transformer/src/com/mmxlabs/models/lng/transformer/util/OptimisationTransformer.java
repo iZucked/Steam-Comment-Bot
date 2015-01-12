@@ -29,8 +29,8 @@ import com.mmxlabs.models.lng.cargo.VesselEvent;
 import com.mmxlabs.models.lng.cargo.editor.utils.IAssignableElementComparatorFactory;
 import com.mmxlabs.models.lng.cargo.util.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.cargo.util.CollectedAssignment;
-import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.scenario.model.LNGScenarioModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -41,8 +41,8 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.ISpotCharterInMarket;
 import com.mmxlabs.scheduler.optimiser.components.IVesselAvailability;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
@@ -155,7 +155,9 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						final EList<Slot> slots = cargo.getSortedSlots();
 						for (final Slot currentSlot : slots) {
 							final IPortSlot slotObject = mem.getOptimiserObject(currentSlot, IPortSlot.class);
+							assert slotObject != null;
 							final ISequenceElement slotElement = psp.getElement(slotObject);
+							assert slotElement != null;
 							advice.getModifiableSequence(resource).add(slotElement);
 						}
 					}
@@ -172,15 +174,15 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
 						final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
 						final IVesselAvailability vesselAvailability = virtualVesselSlotProvider.getVesselAvailabilityForElement(dischargeElement);
-						final IResource res = vp.getResource(vesselAvailability);
-						assert (res != null);
-
 						final IResource resource = vp.getResource(vesselAvailability);
+						assert resource != null;
 
 						final EList<Slot> slots = cargo.getSortedSlots();
 						for (final Slot currentSlot : slots) {
 							final IPortSlot slotObject = mem.getOptimiserObject(currentSlot, IPortSlot.class);
+							assert slotObject != null;
 							final ISequenceElement slotElement = psp.getElement(slotObject);
+							assert slotElement != null;
 							advice.getModifiableSequence(resource).add(slotElement);
 						}
 					}
@@ -191,7 +193,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		IVesselAvailability shortCargoVesselAvailability = null;
 
 		// Build up spot vessel maps
-		final Map<IVesselClass, List<IVesselAvailability>> spotVesselsByClass = new HashMap<>();
+		final Map<ISpotCharterInMarket, List<IVesselAvailability>> spotAvailabilitiesByMarket = new HashMap<>();
 
 		for (final IResource resource : data.getResources()) {
 			final IVesselAvailability vesselAvailability = vp.getVesselAvailability(resource);
@@ -201,22 +203,22 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 				continue;
 			}
 
-			if (vesselAvailability.getVesselInstanceType() != VesselInstanceType.SPOT_CHARTER) {
-				continue;
-			}
-			final IVesselClass vesselClass = vesselAvailability.getVessel().getVesselClass();
+			if (vesselAvailability.getVesselInstanceType() == VesselInstanceType.SPOT_CHARTER) {
+				final ISpotCharterInMarket spotCharterInMarket = vesselAvailability.getSpotCharterInMarket();
+				assert spotCharterInMarket != null;
 
-			List<IVesselAvailability> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-			if (vesselsOfClass == null) {
-				vesselsOfClass = new LinkedList<IVesselAvailability>();
-				spotVesselsByClass.put(vesselClass, vesselsOfClass);
+				List<IVesselAvailability> vesselsOfClass = spotAvailabilitiesByMarket.get(spotCharterInMarket);
+				if (vesselsOfClass == null) {
+					vesselsOfClass = new LinkedList<IVesselAvailability>();
+					spotAvailabilitiesByMarket.put(spotCharterInMarket, vesselsOfClass);
+				}
+				vesselsOfClass.add(vesselAvailability);
 			}
 
-			vesselsOfClass.add(vesselAvailability);
 		}
 
 		// final Map<Vessel, VesselAvailability> vesselAvailabilityMap = new HashMap<Vessel, VesselAvailability>();
-		final FleetModel fleetModel = rootObject.getFleetModel();
+		final SpotMarketsModel spotMarketsModel = rootObject.getSpotMarketsModel();
 		final CargoModel cargoModel = rootObject.getPortfolioModel().getCargoModel();
 		// for (final VesselAvailability va : cargoModel.getVesselAvailabilities()) {
 		// vesselAvailabilityMap.put(va.getVessel(), va);
@@ -225,30 +227,31 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		// Process initial vessel assignments list
 		final List<CollectedAssignment> assignments;
 		if (assignableElementComparator != null) {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel, assignableElementComparator.create(rootObject));
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel, assignableElementComparator.create(rootObject));
 		} else {
-			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, fleetModel);
+			assignments = AssignmentEditorHelper.collectAssignments(cargoModel, spotMarketsModel);
 		}
 		for (final CollectedAssignment seq : assignments) {
 			IVesselAvailability vesselAvailability = null;
 			if (seq.getVesselAvailability() != null) {
-				final VesselAvailability eVesselAvailability = (VesselAvailability) seq.getVesselAvailability();
+				final VesselAvailability eVesselAvailability = seq.getVesselAvailability();
 				vesselAvailability = mem.getOptimiserObject(eVesselAvailability, IVesselAvailability.class);
 			} else {
-				final IVesselClass vesselClass = mem.getOptimiserObject(seq.getVesselClass(), IVesselClass.class);
+				final ISpotCharterInMarket charterInMarket = mem.getOptimiserObject(seq.getCharterInMarket(), ISpotCharterInMarket.class);
 
-				final List<IVesselAvailability> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-				if (!(vesselsOfClass == null || vesselsOfClass.isEmpty())) {
+				final List<IVesselAvailability> availabilitiesForMarket = spotAvailabilitiesByMarket.get(charterInMarket);
+				if (!(availabilitiesForMarket == null || availabilitiesForMarket.isEmpty())) {
 					// Assign to same spot index if possible
 					int idx = 0;
-					if (vesselsOfClass.size() > seq.getSpotIndex()) {
+					if (availabilitiesForMarket.size() > seq.getSpotIndex()) {
 						idx = seq.getSpotIndex();
 					}
-					vesselAvailability = vesselsOfClass.get(idx);
+					vesselAvailability = availabilitiesForMarket.get(idx);
 				}
 			}
 			if (vesselAvailability != null) {
 				final IResource resource = vp.getResource(vesselAvailability);
+				assert resource != null;
 				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 
 				for (final AssignableElement assignedObject : seq.getAssignedObjects()) {
@@ -256,11 +259,12 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 						continue;
 					}
 					for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
+						assert element != null;
 						sequence.add(element);
 					}
 				}
-//			} else {
-//				log.debug("Vessel is missing: " + seq.getVesselOrClass().getName());
+				// } else {
+				// log.debug("Vessel is missing: " + seq.getVesselOrClass().getName());
 			}
 		}
 
@@ -268,11 +272,12 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 			final IResource resource = vp.getResource(shortCargoVesselAvailability);
 			final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 			for (final Cargo cargo : cargoModel.getCargoes()) {
-				if (cargo.getAssignment() == null) {
+				if (cargo.getVesselAssignmentType() == null) {
 					if (cargo.getCargoType() != CargoType.FLEET) {
 						continue;
 					}
 					for (final ISequenceElement element : getElements(cargo, psp, mem)) {
+						assert element != null;
 						sequence.add(element);
 					}
 				}
